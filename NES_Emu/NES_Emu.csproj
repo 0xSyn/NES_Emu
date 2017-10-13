@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CPU.cs" />
+    <Compile Include="CPU_Memory.cs" />
+    <Compile Include="PPU.cs" />
+    <Compile Include="PPU_Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
