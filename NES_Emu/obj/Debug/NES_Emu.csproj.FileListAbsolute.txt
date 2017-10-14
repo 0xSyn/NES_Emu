@@ -1,0 +1,7 @@
+D:\Projects\NES_Emu\NES_Emu\bin\Debug\NES_Emu.exe.config
+D:\Projects\NES_Emu\NES_Emu\bin\Debug\NES_Emu.exe
+D:\Projects\NES_Emu\NES_Emu\bin\Debug\NES_Emu.pdb
+D:\Projects\NES_Emu\NES_Emu\obj\Debug\NES_Emu.csprojResolveAssemblyReference.cache
+D:\Projects\NES_Emu\NES_Emu\obj\Debug\NES_Emu.csproj.CoreCompileInputs.cache
+D:\Projects\NES_Emu\NES_Emu\obj\Debug\NES_Emu.exe
+D:\Projects\NES_Emu\NES_Emu\obj\Debug\NES_Emu.pdb

@@ -42,6 +42,9 @@ namespace NES_Emu {
 
 
 */
-        UInt16[] memory = new UInt16[0x4000];
+        public static UInt16[] memory = new UInt16[0x4000];
+        public static void Init_memory() {
+            for (int i = 0; i < memory.Length; i++) { memory[i] = 0; }
+        }
     }
 }
