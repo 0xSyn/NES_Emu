@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:NSFe</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:NSFe</h1><div class="article">
+<h2><span class="mw-headline" id="chunk_suggestions">chunk suggestions</span></h2>
+<p>Suggestion for &quot;auth&quot; chunk: Add extra fields for composer of original and composer of cover. Another suggestion, for &quot;vrc7&quot; chunk: Specify the VRC7 built-in instrument settings which this file is meant to be played (there are a few different patch sets due to inaccuracy, and some might intend certain ones to sound better as they were written). Also suggestion a &quot;JF13&quot; chunk, which if it exists, contains ADPCM encoded audio, which is controlled by a register at $7FFF. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 03:22, 25 January 2013 (MST)
+</p>
+<dl><dd>Many people who make NSF covers already put both in the existing artist field, or use the Copyright field with it, often prefixing the cover artist with &quot;cv:&quot;. Since in NSFe there is no length limit on the strings in the &quot;auth&quot; chunk there's plenty of room for multiple names in there already. People have suggested a lot of extra fields to add, but I personally just think this makes UI implementation for it annoying, which is why  I just added a &quot;text&quot; field instead where any arbitrary information could be added and displayed at the author likes. Currently only NSFPlay will show it, and only in the infobox window, though I plan to make a breakout window for it so you don't have to scroll through that tiny box to see it. As for the Jaleco-JF-13 sound board, that's been kinda low priority to me for pretty obvious reasons (i.e. only used in one game, not for music, only for baseball gameplay sounds, lack of implementation details, scarcity of ROM, unrippable ROM, etc.). - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 08:05, 27 January 2013 (MST)</dd></dl>
+<dl><dd><dl><dd>But, what about &quot;vrc7&quot; chunk? Different emulators will play the built-in VRC7 patches differently, and some files which are tested with older emulators may be made to sound best with certain patch sets, which is what it is for, which is why it is lowercase. (If someone wants to use it to make up completely their own instrument sets, you could make up a uppercase &quot;VRC7&quot; chunk for that but then it won't be really VRC7, and it won't really be the expansion audio which is actually used with Famicom.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 22:01, 2 February 2013 (MST)</dd></dl></dd></dl>
+<dl><dd> I never did get an explanation as to how providing the ability to customize the built-in VRC7 instruments is a good thing. Would you humor me? —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 17:36, 2 February 2013 (MST)</dd></dl>
+<p>Furthermore, another suggestion for &quot;mixe&quot; chunk which tells the volume and panning of each channel, specifying the ratio of the master volume with the maximum volume that the channel can have. Another chunk is &quot;MULT&quot; which combines multiple files into one; each record is an address and length of the ROM data (within the &quot;DATA&quot; block) corresponding to each one. The &quot;INFO&quot; and &quot;BANK&quot; data are copied the same number of times each within their chunks, so if the first block specifies 5 songs and the next 2 songs, then songs 0 to 4 are using the first ROM address/data and INFO and BANK headers, while the songs 5 and 6 use the second one and subtracts 5 to write the accumulator initially. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 16:21, 2 February 2013 (MST)
+</p>
+<dl><dd> re: &quot;mixe&quot; I'm a little wary of providing features that can't be implemented in hardware: as long as we assume a 2A03 as the sound generator (and if not, why does this belong in a <b>N</b>SF specification?), grouping mixing by &quot;both square waves&quot;, &quot;triangle, noise, and DPCM&quot;, and &quot;expansion&quot; would be something I could defend, but more fine-grained panning/volume control seems untrue. (I guess the sole exception would be I also see an argument for &quot;individually pan-able and volume-control-able channels of the 5B&quot;, because we know it's identical to a YM2149F.)</dd></dl>
+<dl><dd> While your NSF combiner has evidently been greatly useful, I find myself a little troubled &quot;MULT&quot; turning NSFe into a almost-general archive format… —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 17:36, 2 February 2013 (MST)</dd></dl>
+<dl><dd><dl><dd>I know it cannot be implemented in standard 2A03 hardware which is why it is lowercased (my idea about the $4009 register for stereo (which does the grouping like you said) could be implemented in a hardware modification, though?); it is not required, and is supposed to play in mono as well. NSFplay can do volume/panning of individual channels in the setting menu but cannot load it from the NSFe file. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 22:01, 2 February 2013 (MST)</dd></dl></dd></dl>
+<p>I think these have come up before but here's my thoughts on those features:
+</p>
+<ol><li> I don't think custom VRC7 patches is worth doing. It has nothing to do with Famicom hardware, or any existing hardware, and I don't consider the NSF/NSFe format to be a dumping ground for fantasy hardware features.</li>
+<li> A panning/mix option is similar; has no relevance to the actual hardware, ripping games, preserving emulation, etc. the only purpose of this is for people to compose music that requires something the hardware does not have, and I don't see the point of this. Just write music for hardware that doesn't have this limitation.</li>
+<li> I also don't particularly see the advantage of packing multiple NSFs into one. It isn't relevant to ripping any game, and would make it more complicated to use with something like the PowerPak. I would recommend .zip/.rar/.7z if you need a way to put multiple NSFs in one file.</li></ol>
+<p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 23:14, 3 February 2013 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:981-1!*!0!*!*!*!* and timestamp 20160208224317 and revision id 5471
+ -->
+</div></body></html>

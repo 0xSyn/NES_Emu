@@ -1,0 +1,111 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU memory map</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU memory map</h1><div class="article">
+<h3><span class="mw-headline" id="PPU_memory_map">PPU memory map</span></h3>
+<p>The <a href="PPU.xhtml" title="PPU">PPU</a> addresses a 16kB space, $0000-3FFF, completely separate from the CPU's address bus. It is either directly accessed by the PPU itself, or via the CPU with <a href="PPU_registers.xhtml" title="PPU registers">memory mapped registers</a> at $2006 and $2007.
+</p><p>The NES has 2kB of RAM dedicated to the PPU, normally mapped to the nametable address space from $2000-2FFF, but this can be rerouted through custom cartridge wiring.
+</p>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $0000-$0FFF </td>
+<td> $1000 </td>
+<td> <a href="PPU_pattern_tables.xhtml" title="PPU pattern tables">Pattern table</a> 0
+</td></tr>
+<tr>
+<td> $1000-$1FFF </td>
+<td> $1000 </td>
+<td> Pattern Table 1
+</td></tr>
+<tr>
+<td> $2000-$23FF  </td>
+<td> $0400 </td>
+<td> <a href="PPU_nametables.xhtml" title="PPU nametables">Nametable</a> 0
+</td></tr>
+<tr>
+<td> $2400-$27FF  </td>
+<td> $0400 </td>
+<td> Nametable 1
+</td></tr>
+<tr>
+<td> $2800-$2BFF  </td>
+<td> $0400 </td>
+<td> Nametable 2
+</td></tr>
+<tr>
+<td> $2C00-$2FFF  </td>
+<td> $0400 </td>
+<td> Nametable 3
+</td></tr>
+<tr>
+<td> $3000-$3EFF  </td>
+<td> $0F00 </td>
+<td> Mirrors of $2000-$2EFF
+</td></tr>
+<tr>
+<td> $3F00-$3F1F  </td>
+<td> $0020 </td>
+<td> <a href="PPU_palettes.xhtml" title="PPU palettes">Palette RAM</a> indexes
+</td></tr>
+<tr>
+<td> $3F20-$3FFF  </td>
+<td> $00E0 </td>
+<td> Mirrors of $3F00-$3F1F
+</td></tr></table>
+<p>In addition, the PPU internally contains 256 bytes of memory known as <a href="PPU_OAM.xhtml" title="PPU OAM">Object Attribute Memory</a> which determines how sprites are rendered. The CPU can manipulate this memory through <a href="PPU_registers.xhtml" title="PPU registers">memory mapped registers</a> at <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003), <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004), and <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> ($4014).
+</p>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $00-$0C (0 of 4) </td>
+<td> $40 </td>
+<td> Sprite Y coordinate
+</td></tr>
+<tr>
+<td> $01-$0D (1 of 4) </td>
+<td> $40 </td>
+<td> Sprite tile #
+</td></tr>
+<tr>
+<td> $02-$0E (2 of 4) </td>
+<td> $40 </td>
+<td> Sprite attribute
+</td></tr>
+<tr>
+<td> $03-$0F (3 of 4) </td>
+<td> $40 </td>
+<td> Sprite X coordinate
+</td></tr></table>
+<h2><span class="mw-headline" id="Hardware_mapping">Hardware mapping</span></h2>
+<p>The mappings above are the fixed addresses from which the PPU uses to fetch data during rendering. The actual device that the PPU fetches data from, however, may be configured by the cartridge.
+</p>
+<ul><li> $0000-1FFF is normally mapped by the cartridge to a <a href="CHR_ROM_vs__CHR_RAM.xhtml" title="CHR ROM vs. CHR RAM">CHR-ROM or CHR-RAM</a>, often with a bank switching mechanism.</li></ul>
+<ul><li> $2000-2FFF is normally mapped to the 2kB NES internal VRAM, providing 2 nametables with a <a href="Mirroring.xhtml#Nametable_Mirroring" title="Mirroring">mirroring</a> configuration controlled by the cartridge, but it can be partly or fully remapped to RAM on the cartridge, allowing up to 4 simultaneous nametables.</li></ul>
+<ul><li> $3000-3EFF is usually a mirror of the 2kB region from $2000-2EFF. The PPU does not render from this address range, so this space has negligible utility.</li></ul>
+<ul><li> $3F00-3FFF is not configurable, always mapped to the internal palette control.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:413-1!*!0!!*!*!* and timestamp 20160208222655 and revision id 9735
+ -->
+</div></body></html>

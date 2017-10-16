@@ -1,0 +1,195 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC4</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC4</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>MMC4</b>
+<br/><b>FxROM</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Nintendo
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=10&amp;group=groupid" rel="nofollow">3 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> FJROM, FKROM
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 16K + 16K fixed
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> <i>unknown</i>
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 128K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 4K + 4K (triggered)
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H or V, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="MMC4.xhtml" title="INES Mapper 010">010</a>
+</td></tr></table>
+</div>
+<p>The <b>Nintendo MMC4</b> is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>, used on the <a href="FxROM.xhtml" title="FxROM">FxROM</a> board set. The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>mapper 10</b> to these boards. The chip first appeared in August 1988.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#PRG_ROM_bank_select_.28.24A000-.24AFFF.29"><span class="tocnumber">2.1</span> <span class="toctext">PRG ROM bank select ($A000-$AFFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#CHR_ROM_.24FD.2F0000_bank_select_.28.24B000-.24BFFF.29"><span class="tocnumber">2.2</span> <span class="toctext">CHR ROM $FD/0000 bank select ($B000-$BFFF)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CHR_ROM_.24FE.2F0000_bank_select_.28.24C000-.24CFFF.29"><span class="tocnumber">2.3</span> <span class="toctext">CHR ROM $FE/0000 bank select ($C000-$CFFF)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_ROM_.24FD.2F1000_bank_select_.28.24D000-.24DFFF.29"><span class="tocnumber">2.4</span> <span class="toctext">CHR ROM $FD/1000 bank select ($D000-$DFFF)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#CHR_ROM_.24FE.2F1000_bank_select_.28.24E000-.24EFFF.29"><span class="tocnumber">2.5</span> <span class="toctext">CHR ROM $FE/1000 bank select ($E000-$EFFF)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Mirroring_.28.24F000-.24FFFF.29"><span class="tocnumber">2.6</span> <span class="toctext">Mirroring ($F000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Variants"><span class="tocnumber">4</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: 8 KB fixed PRG RAM bank</li>
+<li> CPU $8000-$BFFF: 16 KB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$0FFF: Two 4 KB switchable CHR ROM banks</li>
+<li> PPU $1000-$1FFF: Two 4 KB switchable CHR ROM banks</li></ul>
+<p>When the PPU reads from specific tiles in the pattern table during rendering, the MMC4 sets a latch that tells it to use a different 4 KB bank number. On the background layer, this has the effect of setting a different bank for all tiles to the right of a given tile, virtually increasing the tile count limit from 256 to 512 without monopolising the CPU.
+</p>
+<ul><li>PPU reads $0FD8 through $0FDF: latch 0 is set to $FD</li>
+<li>PPU reads $0FE8 through $0FEF: latch 0 is set to $FE</li>
+<li>PPU reads $1FD8 through $1FDF: latch 1 is set to $FD</li>
+<li>PPU reads $1FE8 through $1FEF: latch 1 is set to $FE</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="PRG_ROM_bank_select_.28.24A000-.24AFFF.29">PRG ROM bank select ($A000-$AFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx PPPP
+     ||||
+     ++++- Select 16 KB PRG ROM bank for CPU $8000-$BFFF
+</pre>
+<h3><span class="mw-headline" id="CHR_ROM_.24FD.2F0000_bank_select_.28.24B000-.24BFFF.29">CHR ROM $FD/0000 bank select ($B000-$BFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxC CCCC
+   | ||||
+   +-++++- Select 4 KB CHR ROM bank for PPU $0000-$0FFF
+           used when latch 0 = $FD
+</pre>
+<h3><span class="mw-headline" id="CHR_ROM_.24FE.2F0000_bank_select_.28.24C000-.24CFFF.29">CHR ROM $FE/0000 bank select ($C000-$CFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxC CCCC
+   | ||||
+   +-++++- Select 4 KB CHR ROM bank for PPU $0000-$0FFF
+           used when latch 0 = $FE
+</pre>
+<h3><span class="mw-headline" id="CHR_ROM_.24FD.2F1000_bank_select_.28.24D000-.24DFFF.29">CHR ROM $FD/1000 bank select ($D000-$DFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxC CCCC
+   | ||||
+   +-++++- Select 4 KB CHR ROM bank for PPU $1000-$1FFF
+           used when latch 1 = $FD
+</pre>
+<h3><span class="mw-headline" id="CHR_ROM_.24FE.2F1000_bank_select_.28.24E000-.24EFFF.29">CHR ROM $FE/1000 bank select ($E000-$EFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxC CCCC
+   | ||||
+   +-++++- Select 4 KB CHR ROM bank for PPU $1000-$1FFF
+           used when latch 1 = $FE
+</pre>
+<h3><span class="mw-headline" id="Mirroring_.28.24F000-.24FFFF.29">Mirroring ($F000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxM
+        |
+        +- Select nametable mirroring (0: vertical; 1: horizontal)
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The MMC4 is implemented in a 44-pin TQFP package: <a href="MMC4_pinout.xhtml" title="MMC4 pinout">MMC4 pinout</a>
+</p><p>Only one revision is known to exist.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>Nintendo's <a href="MMC2.xhtml" title="MMC2">MMC2</a>, used in <a class="mw-redirect" href="MMC2.xhtml" title="PxROM">PxROM</a> boards, is a similar mapper with 8 KB switchable PRG ROM banks, a 24 KB fixed PRG ROM bank, no PRG RAM, and a slightly different behaviour in auto-switching on the left (low) pattern table.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li> <a class="external text" href="http://nesdev.com/mmc4.txt" rel="nofollow">Nintendo MMC4</a> (author unknown)</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.096 seconds
+Real time usage: 0.099 seconds
+Preprocessor visited node count: 145/1000000
+Preprocessor generated node count: 655/1000000
+Post‐expand include size: 1146/2097152 bytes
+Template argument size: 164/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:90-1!*!0!!en!*!* and timestamp 20160730152127 and revision id 12767
+ -->
+<p class="categories">Categories: <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a></p></div></body></html>

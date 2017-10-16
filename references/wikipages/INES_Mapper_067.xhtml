@@ -1,0 +1,110 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 067</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 067</h1><div class="article">
+<p><br/>
+<b>iNES Mapper 067</b> represents the <b>Sunsoft-3</b> mapper, used in <i>Fantasy Zone II</i> (J), <i>Mito Koumon II - Sekai Manyuu Ki</i>, and the <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> game <i>Vs. Platoon</i>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#CHR_bank_0_.28.248800.29"><span class="tocnumber">3.1</span> <span class="toctext">CHR bank 0 ($8800)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CHR_bank_1_.28.249800.29"><span class="tocnumber">3.2</span> <span class="toctext">CHR bank 1 ($9800)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_bank_2_.28.24A800.29"><span class="tocnumber">3.3</span> <span class="toctext">CHR bank 2 ($A800)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#CHR_bank_3_.28.24B800.29"><span class="tocnumber">3.4</span> <span class="toctext">CHR bank 3 ($B800)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#IRQ_load_.28.24C800.2C_write_twice.29"><span class="tocnumber">3.5</span> <span class="toctext">IRQ load ($C800, write twice)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#IRQ_enable_.28.24D800.29"><span class="tocnumber">3.6</span> <span class="toctext">IRQ enable ($D800)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Mirroring_.28.24E800.29"><span class="tocnumber">3.7</span> <span class="toctext">Mirroring ($E800)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#PRG_bank_.28.24F800.29"><span class="tocnumber">3.8</span> <span class="toctext">PRG bank ($F800)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#IRQ_Operation"><span class="tocnumber">4</span> <span class="toctext">IRQ Operation</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Hardware supports at least 128 KiB, emulators may support up to 4 MiB</li>
+<li> PRG ROM bank size: 16 KiB</li>
+<li> PRG RAM: None</li>
+<li> CHR bank size: 2 KiB</li>
+<li> CHR ROM size: Hardware supports at least 128 KiB, emulators may support up to 512 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper (Horizontal, Vertical, 1-screen)</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>All extant games used 128 KiB PRG-ROM, and 128 KiB CHR-ROM. The actual internal size of the Sunsoft-3's banking registers is unknown, but support for at least 128 KiB is demonstrated by the existing games.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$BFFF: 16 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$07FF: 2 KiB switchable CHR bank</li>
+<li> PPU $0800-$0FFF: 2 KiB switchable CHR bank</li>
+<li> PPU $1000-$17FF: 2 KiB switchable CHR bank</li>
+<li> PPU $1800-$1FFF: 2 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="CHR_bank_0_.28.248800.29">CHR bank 0 ($8800)</span></h3>
+<p>The value written here selects a 2 KiB CHR ROM bank at PPU $0000-$07FF.
+</p>
+<h3><span class="mw-headline" id="CHR_bank_1_.28.249800.29">CHR bank 1 ($9800)</span></h3>
+<p>The value written here selects a 2 KiB CHR ROM bank at PPU $0800-$0FFF.
+</p>
+<h3><span class="mw-headline" id="CHR_bank_2_.28.24A800.29">CHR bank 2 ($A800)</span></h3>
+<p>The value written here selects a 2 KiB CHR ROM bank at PPU $1000-$17FF.
+</p>
+<h3><span class="mw-headline" id="CHR_bank_3_.28.24B800.29">CHR bank 3 ($B800)</span></h3>
+<p>The value written here selects a 2 KiB CHR ROM bank at PPU $1800-$1FFF.
+</p>
+<h3><span class="mw-headline" id="IRQ_load_.28.24C800.2C_write_twice.29">IRQ load ($C800, write twice)</span></h3>
+<p>Write the high then low byte of a 16-bit CPU cycle count, much like <a href="PPU_registers.xhtml" title="PPU registers">PPUADDR</a>. This directly affects the current count, not a reload value. The write state is reset by writing to the register at $D800.
+</p>
+<h3><span class="mw-headline" id="IRQ_enable_.28.24D800.29">IRQ enable ($D800)</span></h3>
+<pre>7  bit  0
+...P ....
+   |
+   +------ 0: Pause counter; 1: Count
+</pre>
+<p>While bit 4 is true, the 16-bit count decreases by 1 every CPU cycle.
+Whenever the count wraps from $0000 to $FFFF, the mapper asserts an IRQ and pauses itself.
+Writes also acknowledge IRQ and reset a latch such that the next $C800 write goes to the <i>high</i> byte of the count.
+</p>
+<h3><span class="mw-headline" id="Mirroring_.28.24E800.29">Mirroring ($E800)</span></h3>
+<pre>7  bit  0
+.... ..MM
+       ||
+       ++- Nametable mirroring (0=vertical, 1=horizontal, 2=1scA, 3=1scB)
+            aka connect VRAM A10 to (0=PPU A10, 1=PPU A11, 2=Gnd, 3=Vcc)
+</pre>
+<h3><span class="mw-headline" id="PRG_bank_.28.24F800.29">PRG bank ($F800)</span></h3>
+<p>The value written here selects a 16 KiB CHR ROM bank at CPU $8000-$BFFF. As in mapper 2, $C000-$FFFF is fixed to the last bank of PRG ROM.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="IRQ_Operation">IRQ Operation</span></h2>
+<p>$C800 is a write-twice register (similar to $2005 and $2006).  The first write sets the *high* 8 bits of the
+IRQ counter, and the second write sets the *low* 8 bits.  This directly changes the actual IRQ counter -- not
+a reload value.
+</p><p>Any write to $D800 will acknowledge the IRQ, and will also reset the toggle so that the next write to
+$C800 will be the first write.  $D800, of course, also enables/disables IRQs (bit 4).
+</p><p>The IRQ counter, when enabled, counts down every CPU cycle.  When it wraps ($0000-&gt;FFFF), it disables
+itself and triggers an IRQ.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">Disch's Mapper Notes</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 53/1000000
+Preprocessor generated node count: 64/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:582-1!*!0!!en!*!* and timestamp 20160208225134 and revision id 10738
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Power Pad</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Power Pad</h1><div class="article">
+<p>The Power Pad exercise mat for the Nintendo Entertainment System has twelve sensors arranged in a 3x4 grid, which the player steps on to control the action on the screen.
+</p><p>The Power Pad can be used in either <a href="Controller_port_pinout.xhtml" title="Controller port pinout">controller port</a>, though most games will only allow you to use it in controller port #2, leaving port #1 for a standard controller used for navigating through options.
+</p>
+<pre>
+          |                        |
+,---------+---------.    ,---------+---------.
+| POWER PAD  side B |    | POWER PAD  side A |
+|  (1) (2) (3) (4)  |    |      (O) (O)      |
+|                   |    |                   |
+|  (5) (6) (7) (8)  |    |  (O) (X) (X) (O)  |
+|                   |    |                   |
+|  (9) (10)(11)(12) |    |      (O) (O)      |
+|                   |    |                   |
+`-------------------'    `-------------------'
+</pre>
+<p>The sensors are spaced at 252 mm across by 285 mm front and back.
+</p><p>Most games used side B, with the numbers on top. A few games turned the pad over to side A, whose markings lack numerals and lack markings for spaces 1, 4, 9, and 12 entirely (but they still send a signal). There is a third possible configuration, which no official game used, but which may be useful for homebrew dance simulation games in the style of Dance Dance Revolution: side B rotated 90 degrees anticlockwise, placing sensors 4, 8, and 12 toward the display.
+</p>
+<pre>
+| ,---------------.           | ,---------------.
+| |  SIDE B       |           | |  SIDE DDR     |
+| |  (4) (8) (12) |           | | (Sel)    (St) |
+| |               |           | |               |
+| |  (3) (7) (11) |    ____   | |  (X) (U) (O)  |
+`-+               |    ____   `-+               |
+  |  (2) (6) (10) |             |  (L)     (R)  |
+  |               |             |               |
+  |  (1) (5) (9)  |             |      (D)      |
+  |               |             |               |
+  `---------------'             `---------------'
+</pre>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Hardware_interface"><span class="tocnumber">1</span> <span class="toctext">Hardware interface</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Input_.28.244016_write.29"><span class="tocnumber">1.1</span> <span class="toctext">Input ($4016 write)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Output_.28.244016.2F.244017_read.29"><span class="tocnumber">1.2</span> <span class="toctext">Output ($4016/$4017 read)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Family_Trainer_Mat"><span class="tocnumber">2</span> <span class="toctext">Family Trainer Mat</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Input_.28.244016_write.29_2"><span class="tocnumber">2.1</span> <span class="toctext">Input ($4016 write)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Output_.28.244017_read.29"><span class="tocnumber">2.2</span> <span class="toctext">Output ($4017 read)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Hardware_interface">Hardware interface</span></h2>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxS
+        |
+        +- Controller shift register strobe
+</pre>
+<p>Writing 1 to this bit will record the state of each button.
+Writing 0 afterwards will allow the buttons to be read back, two at a time.
+</p>
+<h3><span class="mw-headline" id="Output_.28.244016.2F.244017_read.29">Output ($4016/$4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxH Lxxx
+   | |
+   | +---- Serial data from buttons 2, 1, 5, 9, 6, 10, 11, 7
+   +------ Serial data from buttons 4, 3, 12, 8 (following 4 bits read as H=1)
+</pre>
+<p>The first 8 reads will indicate which buttons are pressed (1 if pressed, 0 if not pressed); all subsequent reads will return H=1 and L=1.
+</p><p>Remember to save <i>both</i> bits that you get from each read.
+If you're playing <a href="APU_DMC.xhtml" title="APU DMC">samples</a>, beware of <a href="Standard_controller.xhtml#Evil_Details" title="Standard controller">bit deletions</a>.
+</p>
+<h2><span class="mw-headline" id="Family_Trainer_Mat">Family Trainer Mat</span></h2>
+<p>The Famicom's version of the Power Pad looked similar, but had an entirely different protocol that took advantage of the greater number of digital outputs on the <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">Famicom expansion port</a>:
+</p>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29_2">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xABC
+      |||
+      ||+-- 1: Ignore bottom row, 0: include bottom row (buttons 9-12)
+      |+--- 1: Ignore middle row, 0: include middle row (buttons 5-8)
+      +---- 1: Ignore top row, 0: include top row (buttons 1-4)
+</pre>
+<h3><span class="mw-headline" id="Output_.28.244017_read.29">Output ($4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxD EFGx
+   | |||
+   | ||+-- right-most column (buttons 4,8,12)
+   | |+--- right-center column (buttons 3,7,11)
+   | +---- left-center column (buttons 2,6,10)
+   +------ left-most column (buttons 1,5,9)
+</pre>
+<p>If a button is pressed in the currently selected rows, then the output returns 1.
+</p><p>The Famicom must manually scan the matrix; additionally it seems that there are quite large parasitic capacitances so you may need to wait a whole millisecond before going on to the next row.
+</p><p>It is not known whether the Family Trainer mat has included diodes for n-key-rollover, or whether pressing buttons on three corners of a square will cause a ghost press on the last corner.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.041 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 41/1000000
+Preprocessor generated node count: 68/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:69-1!*!0!!en!*!* and timestamp 20160715211403 and revision id 12731
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

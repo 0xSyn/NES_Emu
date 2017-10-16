@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:MMC5 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:MMC5 pinout</h1><div class="article">
+<p>Will the colors still scroll in CL mode even if the pattern isn't? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:52, 28 April 2013 (MDT)
+</p><p>CL mode =&gt; PPU controls CHR A0, CHR A1, CHR A2.
+SL mode =&gt; MMC5 controls those lines instead (passing the signal through when vertical split is not used, with a delay).
+</p><p>In both cases (scrolling or not), the vertical split section have the MMC5 trick the PPU by feeding name and attributes fetches with tiles from EXRAM instead of VRAM (while disabling the real VRAM). When scrolling is used as well, it just fetch from a different address for the coarse scrolling (adding a row to the fetched tile every 8 pixels), and shift the address of the CHR-ROM for fine scrolling.
+</p><p>So, in CL mode, the MMC5 decides which tile to display while the PPU choose which line of the tile is displaying, while in SL mode the MMC5 decides everything. If ones tries to use a different fine scroll for the main area and the vertical split (EXRAM) area, then the tile themselves will scroll smoothly, but their content won't, and will stick to the main background. This will lead to a quite interesting effect !
+</p><p>As for attributes, the MMC5 has to &quot;guess&quot; which attribute byte is fetched basing on the fine scrolling. If it scrolls fine in SL mode (let's assume it does) then it means the colour data is fetched form the correct place within EXRAM, so it will scroll the same way in CL mode, because the CHR-ROM is not involved in any way.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 15:35, 8 February 2014 (MST)
+</p>
+<dl><dd>Yes, this is exactly what I expected it would do. Is the delay ever significant? What exactly do pins 97 and 98 do, then? Are they used for saving power or something like that? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 01:07, 9 February 2014 (MST)</dd></dl>
+<h2><span class="mw-headline" id="CHR_enable_lines...where.3F">CHR enable lines...where?</span></h2>
+<p>It seems like pins 29-30 would be the logical place to put them, but is that right? Where are those? Surely they're signals that the MMC5 generates? Is a /WE implemented so as to make CHR-RAM easy?<a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 18:52, 12 July 2016 (MDT)
+</p>
+<dl><dd>I think Rockman 4 Minus Infinity, which uses MMC5 with CHR RAM, just runs /WE from the cart edge directly to the CHR RAM chip. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 20:42, 12 July 2016 (MDT)</dd></dl>
+<dl><dd>Because the MMC5 can't do anything peculiar with its pattern table (e.g. no ROM nametables), the carts just normally connect PPU A13 to ROM /CE and PPU /RD to ROM /OE. I wouldn't be surprised if one of pin 29 or pin 30 were (PPU A13 OR PPU /RD), though, to accommodate a never-released board with a 28-pin 128 KiB mask ROM. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 22:58, 12 July 2016 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.151 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1041-1!*!0!*!*!*!* and timestamp 20160713134906 and revision id 12719
+ -->
+</div></body></html>

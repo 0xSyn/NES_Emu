@@ -1,0 +1,178 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/Mapper thoughts</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/Mapper thoughts</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#EtherNES_1"><span class="tocnumber">1</span> <span class="toctext">EtherNES 1</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Option_1"><span class="tocnumber">1.1</span> <span class="toctext">Option 1</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Parts"><span class="tocnumber">1.1.1</span> <span class="toctext">Parts</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Memory_map"><span class="tocnumber">1.1.2</span> <span class="toctext">Memory map</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-5"><a href="#Option_2"><span class="tocnumber">1.2</span> <span class="toctext">Option 2</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Easier_nametables.2C_finer_palette_zones"><span class="tocnumber">2</span> <span class="toctext">Easier nametables, finer palette zones</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Pixel-perfect_IRQs_with_clockslides"><span class="tocnumber">3</span> <span class="toctext">Pixel-perfect IRQs with clockslides</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Fake_sprite_0_IRQs"><span class="tocnumber">4</span> <span class="toctext">Fake sprite 0 IRQs</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Very_fine-grained_CHR_banking"><span class="tocnumber">5</span> <span class="toctext">Very fine-grained CHR banking</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#8.C3.978_attributes"><span class="tocnumber">6</span> <span class="toctext">8×8 attributes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#8x16_attributes.2C_compatible_with_all_famiclones"><span class="tocnumber">6.1</span> <span class="toctext">8x16 attributes, compatible with all famiclones</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Hardware_vertical_parallax"><span class="tocnumber">7</span> <span class="toctext">Hardware vertical parallax</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Oversize_PRG_for_some_ASIC_mappers"><span class="tocnumber">8</span> <span class="toctext">Oversize PRG for some ASIC mappers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#MMC4"><span class="tocnumber">8.1</span> <span class="toctext">MMC4</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Sunsoft_3_and_Sunsoft_4"><span class="tocnumber">8.2</span> <span class="toctext">Sunsoft 3 and Sunsoft 4</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#VRC3"><span class="tocnumber">8.3</span> <span class="toctext">VRC3</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#LZ93D50"><span class="tocnumber">8.4</span> <span class="toctext">LZ93D50</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#TAM-S1"><span class="tocnumber">8.5</span> <span class="toctext">TAM-S1</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#FCG-1_and_-2"><span class="tocnumber">8.6</span> <span class="toctext">FCG-1 and -2</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="EtherNES_1">EtherNES 1</span></h2>
+<p>A cartridge designed to provide ethernet in as simple a manner as practical, for use with <a class="external text" href="http://www.contiki-os.org/" rel="nofollow">Contiki</a>.
+</p>
+<h3><span class="mw-headline" id="Option_1">Option 1</span></h3>
+<p>The design is intentionally similar to the <a class="external text" href="http://www.go4retro.com/products/64nic/" rel="nofollow">64NIC+ ethernet cartridge for the Commodore 64</a>, even though the CS8900A is comparatively expensive.
+</p>
+<h4><span class="mw-headline" id="Parts">Parts</span></h4>
+<ul><li> 1 × SST39SF010A, 128 KiB FLASH EEPROM, for booting</li>
+<li> 2 × AS6C1008, 128 KiB static RAM, one each for PRG RAM and CHR RAM</li>
+<li> 2 × 74'161, both set up to clear on reset.
+<ul><li> One selects a 32 KiB slice of PRG</li>
+<li> The other selects an 8 KiB slice of CHR RAM.</li></ul></li>
+<li> 1 × 74'139</li>
+<li> 1 × 74'20
+<ul><li> One NAND4 produces /INTSEL=NAND4(M2,/ROMSEL,A14,A13) and one decoder produces /RD6xxx, /WR6xxx, /RD7xxx, and /WR7xxx.</li>
+<li> Other NAND4 produces /RD.</li>
+<li> 2nd decoder selects RAM or ROM as appropriate.</li></ul></li>
+<li> CS8900A or LAN91C96 already have drivers in the Contiki source tree
+<ul><li> Other cheaper options: RTL8029, CP2200, ENC424J600, AX88796</li></ul></li>
+<li> Ethernet transformer</li></ul>
+<h4><span class="mw-headline" id="Memory_map">Memory map</span></h4>
+<ul><li> $7xxx - CS8900A
+<ul><li> <a class="external free" href="http://www.cirrus.com/en/products/cs8900a.html" rel="nofollow">http://www.cirrus.com/en/products/cs8900a.html</a></li>
+<li> Unlike the C64 NIC, use the memory-mappable portion of the CS8900A.</li>
+<li> CS8900A does not have a separate enable, just /{MEM,IO}{R,W}; the address bus must be stable before these signals fall.</li>
+<li> Why does the 64NIC+ not connect /IRQ ?</li>
+<li> Obviously no DMA controller.</li></ul></li>
+<li> READS from $6xxx - latching CPU A0..A3: PRG bank '161 (0,1,2,3 = ROM; C,D,E,F=RAM). Q3 determines which IC. Cleared on hardware reset.</li>
+<li> WRITES to $6xxx - latching CPU D0..D3: CHR bank '161</li>
+<li> $8000-$FFFF: PRG ROM or RAM, according to value at $7xxx.</li></ul>
+<h3><span class="mw-headline" id="Option_2">Option 2</span></h3>
+<p>The ENCx24J600 is a still-actively manufactured parallel I/O network IC made by Microchip. Fortunately, it can support the 6502's R/W interface, but unfortunately it uses +ve sense signalling for all other signals.
+</p>
+<ol><li> Possibility: This IC supports a 15-bit address memory-mapped form; allowing mapping the NIC into $8000-$FFFF.
+<ul><li> Problem: the 6502 vectors now point at garbage. Ask Microchip what reading from those addresses do? If not acceptable, invert A14?</li>
+<li> Another problem: The driver has to either fit in the NIC's RAM, or do everything via trampolines</li>
+<li> Nifty feature: stream DPCM over ethernet. (Packets will have to be realigned, but this IC has an internal DMA feature that could do copies accordingly)</li></ul></li>
+<li> Possibility: Re-use the PRG or CHR bank to select a 4 KiB slice to map.
+<ul><li> Weird feature: stream OAM over ethernet (why?)</li></ul></li>
+<li> Possibility: Only allow I/O to the the 512 bytes starting at $7Exx; all access to the internal memory is via the indirect registers.
+<ul><li> If the NIC's A9..A11 are tied high, a latch and an OR gate lets us hijack OAM DMA (which writes to $2004) to write data to the NIC (pointer writes via 0x7E84) ... but is it useful to be able to transfer data to the NIC rapidly?</li></ul></li>
+<li> Possibility: Use multiplexed bus, latching the 8 LSBs while directly driving the 7 MSBs. Need a 4th write trigger (ethernet ALE, ethernet CE, CHR bank, PRG bank) or to combine PRG/CHR banking register.</li>
+<li> Simplest possible option #1: NOT self-writable NROM with a 74'21 (quad AND) to map the NIC from $6000-$7FFF. Slightly clever rewiring (CPU A12→NIC A14,CPU A11→NIC A13,12,11) allows 6 KiB of the 24 KiB of RAM inside the NIC (0x0000-0x07FF, 0x3800-0x47FF) to be directly available to the NES, while ensuring that the NIC registers (0x7E00-0x7FFF) are always available.</li>
+<li> Option #1a: 74'20 and 74'04, allows self-writable NROM, and increasing available RAM to 12 KiB. Maps NIC 0x0XXX to $7XXX, 0x3XXX to $6XXX, 0x4XXX to $5XXX, and NIC registers at $4E00-$4FFF.</li>
+<li> Simplest possible option #2: use NIC RAM in lieu of CHR-RAM. Addressing NIC becomes a total PITA because of the PPU's auto-increment. But streaming graphic data becomes very easy.</li></ol>
+<p>Unfortunately, the shape of the front-loader means that the ethernet jack itself will have to be mounted both rotated 90°, and at the very top of the cartridge (22mm clearance, 16mm wide jacks)
+</p>
+<h2><span class="mw-headline" id="Easier_nametables.2C_finer_palette_zones">Easier nametables, finer palette zones</span></h2>
+<p>Replace standard PPU nametable/attribute table with just one nametable, 32x30 tiles in size, each tile is 16x16 and uses 8x1 palette zones.
+</p>
+<ul><li> using 32×30 allows us to reuse the scroll registers, rather than having fine X be magically somewhere else</li>
+<li> Each tile is thus 72 bytes (256 pixels × (18 bits/8 pixels)).</li>
+<li> Total memory for tiles in this manner: 18 KiB.</li></ul>
+<h2><span class="mw-headline" id="Pixel-perfect_IRQs_with_clockslides">Pixel-perfect IRQs with clockslides</span></h2>
+<p>An interface to fire an IRQ at a specific X/Y coordinate that works by
+</p>
+<ul><li> firing the IRQ approximately 14cy too early</li>
+<li> uses an injected clockslide to fix up any slop in initial IRQ firing time</li></ul>
+<p>Since there's already 3 pixels of intrinsic slop, the two axes can be X/2 and Y. Y is ever-so-slightly larger than a byte, so setting (255=scanline before NMI) and not allowing interrupts during the first 6 scanlines of vblank is an ok compromise.
+</p>
+<h2><span class="mw-headline" id="Fake_sprite_0_IRQs">Fake sprite 0 IRQs</span></h2>
+<ol><li> IRQ when PPU address reads from a specific address, or</li>
+<li> Snoop on CPU reads, monitoring for reads from $2002, and fire an IRQ</li></ol>
+<h2><span class="mw-headline" id="Very_fine-grained_CHR_banking">Very fine-grained CHR banking</span></h2>
+<p>64 banks of 64 bytes (4 tiles) each, allowing changing the bank a sprite comes from mid-render. Not clear if useful for anything but masking sprites.
+</p><p>Could be combined with some amount of address-line math to prevent sprite pop-on on PAL systems, and with a barrel shifter to prevent sprite pop-on on the left side of the screen without using the PPU's native masking.
+</p>
+<h2><span class="mw-headline" id="8.C3.978_attributes">8×8 attributes</span></h2>
+<p>Assuming a mapper with 4 banks of 8 KiB each of CHR-RAM.
+</p><p>On nametable reads: latch y and x in address: 1x YXYY YYyX XXXx
+</p><p>Detect attribute reads: 1x YX11 11YY YXXX
+</p><p>On attribute reads, disable NTRAM and select one of four banks depending on y and x.
+</p>
+<ul><li> /AttrIO = NAND4(PPU A9..A6)</li>
+<li> CIRAM/OE = NAND2(PPU A13,/AttrIO)</li>
+<li> NTread = '139 (/RD=0, PPU A13=1, /AttrIO=1)
+<ul><li> NTread: latch PPU A0, A5 in a 74'75 or whatever</li></ul></li>
+<li> ATTRread = '139 (/RD=0, PPU A13=1, /AttrIO=0)</li>
+<li> CHRRAM/OE = PPU A13 AND /AttrIO</li>
+<li> CHRRAM A13,A14 = multiplex(ATTRread,BankedA13..A14,LatchedA0A5)</li>
+<li> Separately, use other half of NAND4 and/or 74'139 and 74'75 to latch requested CHR bank from CPU</li></ul>
+<p>Total parts: ½ 74'20, ½ 74'139, 74'00, 74'75, 74'153
+</p><p>With both 4KiB and 8KiB banking, all four nametables will have different attributes, ignoring what CIRAM A10 is connected to.
+If used with a mapper that supported 1 or 2 KiB banking will, it would allow something with more finesse.
+</p>
+<h3><span class="mw-headline" id="8x16_attributes.2C_compatible_with_all_famiclones">8x16 attributes, compatible with all famiclones</span></h3>
+<p>Compatible with all famiclones because CIRAM/CE is still tied to ground.
+</p><p>Using three 74xx ICs:
+</p>
+<ul><li> 74'21: AttrIO = AND4(PPU.A9..A6)</li>
+<li> 74'161: 74161./PE = AttrIO ; 74161.CP = PPU./RD ; 74161.D0 = PPU.A0 ; LA0 = 74161.Q0</li>
+<li> 74'153: CIRAMA10 = AttrIO?LA0:PPUA11</li></ul>
+<p>Using PPU A5 instead of A0 allows for 16x8 attribute zones.
+</p><p>Latching both A0 and A5, changing AttrIO to include PPU A13, and connecting to CHR ROM address lines allows for 1024 different tiles per nametable.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Hardware_vertical_parallax">Hardware vertical parallax</span></h2>
+<p>Putting an N-bit adder between PPU and CHR A0…A2,A4…A11 would allow for tiles to be scrolled independently. Inverting the result of that adder would flip that set of tiles vertically.
+</p><p>In combination with a mapper that provided 1 KiB banks, and depending on how many address lines passed through the adder vs just directly connected to CHR, it would allow 1,2,4,8,16,32, or 64 independent 8-pixel-wide scrolling regions that were 512,256,128,64,32,16, or 8 pixels high, respectively.
+</p>
+<h2><span class="mw-headline" id="Oversize_PRG_for_some_ASIC_mappers">Oversize PRG for some ASIC mappers</span></h2>
+<p>Almost all ASIC mappers that support 16+16F banking can trivially be extended to a full 8 bits of PRG address space.
+</p><p>For example:
+</p>
+<h3><span class="mw-headline" id="MMC4"><a href="MMC4.xhtml" title="MMC4">MMC4</a></span></h3>
+<p>74'138, 4+ bit latch, 74'32. 74'138 decodes writes to $Axxx. Latch latches D4 through D7 during those writes. 74'32 implements fixed upper bank.
+</p>
+<h3><span class="mw-headline" id="Sunsoft_3_and_Sunsoft_4"><a href="INES_Mapper_067.xhtml" title="INES Mapper 067">Sunsoft 3</a> and <a href="INES_Mapper_068.xhtml" title="INES Mapper 068">Sunsoft 4</a></span></h3>
+<p>Same hardware. 74'138 decodes writes to $F8xx or $Fxxx, respectively. Otherwise identical.
+</p>
+<h3><span class="mw-headline" id="VRC3"><a href="VRC3.xhtml" title="VRC3">VRC3</a></span></h3>
+<p>Same hardware, decode writes to $Fxxx. ASIC only implements three bits, so to maximize the address space, a full five bits of latch and OR gates are needed.
+</p>
+<h3><span class="mw-headline" id="LZ93D50"><a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">LZ93D50</a></span></h3>
+<p>Same hardware. Decode writes when (A &amp; 0x800F) == 0x8008
+</p>
+<h3><span class="mw-headline" id="TAM-S1"><a href="INES_Mapper_097.xhtml" title="INES Mapper 097">TAM-S1</a></span></h3>
+<p>74'161, 74'00. Invert D4 and D5 using two NAND gates. Latch /D4 and /D5 on /ROMSEL=0 &amp; R/W=0 (standard discrete logic mapper '161 circuit). Generate PRG A18 and A19 as NAND2(/Q4,A14) and NAND2(/Q5,A15).
+</p>
+<h3><span class="mw-headline" id="FCG-1_and_-2"><a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">FCG-1 and -2</a></span></h3>
+<p>Decode writes when (A &amp; 0x200F) == 0x2008; this just fits into the 7 inputs on a 74'138 + 74'161. One mirror of this register overlaps a mirror of the PPU, and two mirrors overlap the PRG, but that shouldn't matter.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.055 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 76/1000000
+Preprocessor generated node count: 84/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1473-1!*!0!!en!*!* and timestamp 20160208230418 and revision id 11917
+ -->
+</div></body></html>

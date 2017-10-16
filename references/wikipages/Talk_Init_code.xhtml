@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Init code</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Init code</h1><div class="article">
+<h2><span class="mw-headline" id="Prophylactic_read_of_.242002">Prophylactic read of $2002</span></h2>
+<p>Is this bit of code necessary? I'm having trouble finding any original NES game that does it. Are there any known examples of a startup problem caused by this?
+</p>
+<pre>; Clear the vblank flag, so we know that we are waiting for the
+; start of a vertical blank and not powering on with the
+; vblank flag spuriously set
+bit $2002
+</pre>
+<p>If it isn't a problem, does anyone have an explanation as to why it isn't? If it is, can anyone point to an example of the problem? (Maybe I'll write a test if I have time later...) - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 12:09, 28 May 2015 (MDT)
+</p>
+<dl><dd> Yes, it's necessary, and a problem, see <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a>. There's a thread on the forum of at least one homebrew that failed to boot sometimes because it would immediately fall through the first wait and not wait long enough after the second wait before it started trying to write to PPU registers. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:49, 28 May 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> The power up state article doesn't have enough information to answer my question. There is &quot;The PPU comes out of reset at the top of the picture&quot; but it's unclear whether this applies to power on. It says $2002 often powers on set, but is unclear whether this is because the PPU starts in vblank. &quot;The VBL flag (PPUSTATUS bit 7) is usually clear at power, and unchanged by reset. It is next set around 27384, then around 57165.&quot;  Is that consistent? Why &quot;around&quot;? Is &quot;ignored if earlier than ~29658 CPU&quot; an upper bound, or an average?</dd></dl></dd></dl>
+<dl><dd><dl><dd> I'm trying to understand why it doesn't seem to be a problem for commercial games. So far I haven't found any that don't just do 2x $2002 poll loops, but also all of them seem to do a bit of extra initialization work before they start hitting the PPU. If it's the case that the $2002 vblank flag powers on randomized, and the next set is always at 27384 consistently, then the margin of error for failure is &lt;3000 cycles?</dd></dl></dd></dl>
+<dl><dd><dl><dd> Trying to think of a good way to test this and demonstrate the failure. Can you remember anything else about the homebrew in question that might help me search for it? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 13:04, 28 May 2015 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> The only thing I remember is someone saying something like ~and now I will always wait for $2002.7 <i>three</i> times in my init code~.</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> Anyway, order of events:
+<ol><li> PPU always comes out of reset at Y=0</li>
+<li> PPUSTATUS.7 may or may not be set when it comes out of reset</li>
+<li> CPU can only detect when Y=240, because that's when the PPU sets PPUSTATUS.7</li>
+<li> PPU is not available for pertinent writes until Y=262=0</li>
+<li> Waiting for PPUSTATUS.7 twice without clearing the register on startup could therefore sometimes have the CPU think the PPU is ready when Y=240, instead of Y=262+240 —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:18, 28 May 2015 (MDT)</li></ol></dd></dl></dd></dl></dd></dl>
+<p>Found this post by Blargg claiming to have tested it and basically verifying what I just asked. <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=3958" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=3958</a> i.e. the idea that there is a 3000 cycle margin of failure if you don't pre-clear. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 13:19, 28 May 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.027 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1548-1!*!0!*!*!*!* and timestamp 20160208224209 and revision id 11009
+ -->
+</div></body></html>

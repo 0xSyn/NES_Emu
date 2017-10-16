@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>.pal</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>.pal</h1><div class="article">
+<p><b>.pal</b> is an extension used by palette files for NES emulators.
+Palette files are required for emulation of the RGB PPUs of the VS Unisystem, PlayChoice 10, and Famicom Titler systems.
+Before <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> was fully understood, emulators also used palette files to translate the <a href="PPU_palettes.xhtml" title="PPU palettes">PPU's HSV color values</a> into sRGB values for the PC display.
+</p><p>Most palette files used by NES emulators are 192 bytes in size, consisting of 64 3-byte entries, one for each of 64 NES color values.
+</p><p>Each entry consists of three unsigned 8-bit bytes, in this order:
+</p>
+<ol><li> red intensity</li>
+<li> green intensity</li>
+<li> blue intensity</li></ol>
+<p>Intensity is most commonly ranged from 0 (black) to 255 (full intensity), presuming the <a class="extiw" href="http://en.wikipedia.org/wiki/sRGB" title="wikipedia:sRGB">sRGB</a> color space used by most monitors.
+</p><p>Most emulators will ignore any entries past the first 64, but an optional extension of the .pal format (currently only known to be supported by Nintendulator 0.965 and later) lengthens the file to 1536 bytes in order to store each palette value when colour (de-)emphasis bits are applied. This allows customization of the emphasis behaviour, and is particularly useful for representing the alternative emphasis behaviour of the RGB PPU used in the <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> and PlayChoice.
+</p>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a href="PPU_palettes.xhtml" title="PPU palettes">PPU palettes</a></li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://www.shikadi.net/moddingwiki/VGA_Palette" rel="nofollow">VGA Palette on ModdingWiki</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:224-1!*!0!!*!*!* and timestamp 20160208224641 and revision id 10934
+ -->
+<p class="categories">Categories: <a href="Category_File_formats.xhtml">File formats</a></p></div></body></html>

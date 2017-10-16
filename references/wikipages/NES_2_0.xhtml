@@ -1,0 +1,433 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES 2.0</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES 2.0</h1><div class="article">
+<p><b>NES 2.0</b> is an extension to the <a href="INES.xhtml" title="INES">iNES</a> ROM format, originally <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=17727#p17727" rel="nofollow">proposed</a> by Kevin Horton on 2006-09-18.
+</p><p>It adds extra header information to disambiguate ROMs that incompatibly require the same iNES <a href="Mapper.xhtml" title="Mapper">mapper</a>, or supplemental information for ROMs that are otherwise inadequately described by the original format.
+</p><p>This extension is backwards compatible with the original format, identified by two bits in <a href="#Byte_7_.28Flags_7.29">byte 7</a> of the header.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Existing_header"><span class="tocnumber">2</span> <span class="toctext">Existing header</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Byte_6_.28Flags_6.29"><span class="tocnumber">2.1</span> <span class="toctext">Byte 6 (Flags 6)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Byte_7_.28Flags_7.29"><span class="tocnumber">2.2</span> <span class="toctext">Byte 7 (Flags 7)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#The_problem_cases"><span class="tocnumber">3</span> <span class="toctext">The problem cases</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Vs._Unisystem"><span class="tocnumber">3.1</span> <span class="toctext">Vs. Unisystem</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Big_ROMs"><span class="tocnumber">3.2</span> <span class="toctext">Big ROMs</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Submappers"><span class="tocnumber">3.3</span> <span class="toctext">Submappers</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Mapper_number_exhaustion"><span class="tocnumber">3.4</span> <span class="toctext">Mapper number exhaustion</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#WRAM"><span class="tocnumber">3.5</span> <span class="toctext">WRAM</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#The_proposed_solution"><span class="tocnumber">4</span> <span class="toctext">The proposed solution</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Byte_8_.28Mapper_variant.29"><span class="tocnumber">4.1</span> <span class="toctext">Byte 8 (Mapper variant)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Byte_9_.28Upper_bits_of_ROM_size.29"><span class="tocnumber">4.2</span> <span class="toctext">Byte 9 (Upper bits of ROM size)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Byte_10_.28RAM_size.29"><span class="tocnumber">4.3</span> <span class="toctext">Byte 10 (RAM size)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Byte_11_.28Video_RAM_Size.29"><span class="tocnumber">4.4</span> <span class="toctext">Byte 11 (Video RAM Size)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Byte_12_.28TV_system.29"><span class="tocnumber">4.5</span> <span class="toctext">Byte 12 (TV system)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Byte_13_.28Vs._hardware.29"><span class="tocnumber">4.6</span> <span class="toctext">Byte 13 (Vs. hardware)</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Byte_14_and_15_.28Reserved.29"><span class="tocnumber">4.7</span> <span class="toctext">Byte 14 and 15 (Reserved)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Emulator_support"><span class="tocnumber">5</span> <span class="toctext">Emulator support</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#See_also"><span class="tocnumber">6</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li>Written by K.Horton</li>
+<li>Thanks to Quietust for ideas and proofing and help</li></ul>
+<p>NES 2.0 is an addition to the standard .NES file format that most emulators use.
+It is designed to disambiguate certain ROMs that formerly could have been only be discerned via a CRC-32 or similar hash check.
+Naturally, this caused problems for new ROMs that are not in the database but need special handling, such as fan translations, other ROM hacks, and new homebrew on compatible boards.
+</p><p>There are four goals for this specification:
+</p>
+<ol><li>Retain 100% backwards compatibility with existing emulators/ROMs/etc. (*this includes &quot;dirty ROMs&quot; with crap such as &quot;DiskDude!&quot; in the header and other atrocities*)</li>
+<li>The format must be &quot;future proof&quot;.</li>
+<li>The changes made must be very carefully documented and make sense.</li>
+<li>Said changes must make sense from both a hardware and software standpoint.</li></ol>
+<p>The name of this specification is &quot;NES 2.0&quot;.
+Do not confuse with &quot;iNES 2.0&quot; which is an emulator that does not support extended features of NES 2.0 headers.
+</p>
+<h2><span class="mw-headline" id="Existing_header">Existing header</span></h2>
+<p>The standard specification as popularized by the iNES emulator is presented below:
+</p>
+<pre>
+ 0-3: string    &quot;NES&quot;&lt;EOF&gt;
+   4: byte      Number of 16384 byte program ROM pages
+   5: byte      Number of 8192 byte character ROM pages (0 indicates CHR RAM)
+   6: bitfield  Flags 6
+   7: bitfield  Flags 7
+8-15: byte      These bytes are not used, and should be 00h.
+</pre>
+<p>The PRG ROM size is in 16384 byte units, and the CHR ROM size is in 8192 byte units.
+If the actual game's data is smaller, such as 8192-byte PRG for Galaxian or 4096-byte CHR for Slappin', double it up and call it a day.
+For example, if the PRG ROM data is 16384 bytes long, and the first 8192 bytes of the PRG ROM data match the second 8192 bytes, the PRG ROM is an 8Kx8 chip.
+</p>
+<h3><span class="mw-headline" id="Byte_6_.28Flags_6.29">Byte 6 (Flags 6)</span></h3>
+<pre>
+7       0
+---------
+NNNN FTBM
+
+N: Lower 4 bits of the mapper number
+F: Four screen mode. 0 = no, 1 = yes. (When set, the M bit has no effect)
+T: Trainer.  0 = no trainer present, 1 = 512 byte trainer at 7000-71FFh
+B: SRAM at 6000-7FFFh battery backed.  0= no, 1 = yes
+M: Mirroring.  0 = horizontal, 1 = vertical.
+</pre>
+<p>None of this changes in NES 2.0.
+KH discovered that very few existing ROMs have a trainer, and most of these aren't real trainers at all but subroutines used by a mapper hack.
+</p>
+<h3><span class="mw-headline" id="Byte_7_.28Flags_7.29">Byte 7 (Flags 7)</span></h3>
+<p>Later versions of the iNES emulator introduced a second byte of flags.
+</p>
+<pre>
+7       0
+---------
+NNNN xxPV
+
+N: Upper 4 bits of the mapper number
+P: Playchoice 10.  When set, this is a PC-10 game
+V: Vs. Unisystem.  When set, this is a Vs. game
+x: these bits are not used in iNES.
+</pre>
+<p>Early ROM processing tools were not aware of Flags 7 because the earliest emulators ignored it.
+For example, one tool put 0x44 (ASCII for 'D', the first character of &quot;DiskDude!&quot;) here.
+This confuses newer emulators, which combine the nibbles from Flags 6 and Flags 7 to form an incorrect mapper number.
+NES 2.0 redefines the unused bits to always equal binary 10, which happens not to match any of the patterns used by these ROM processing tools:
+</p>
+<pre>
+7       0
+---------
+NNNN SSPV
+
+N: Upper 4 bits of the mapper number
+S: When equal to binary 10, use NES 2.0 rules; otherwise, use other rules.
+P: Playchoice 10.  When set, this is a PC-10 game
+V: Vs. Unisystem.  When set, this is a Vs. game
+</pre>
+<p>That is the &quot;how&quot; of determining whether we are dealing with a valid NES 2.0
+file.  Now that that is done, the desired aspects of such a thing need to
+be considered.  Kevin has tested over 4000 ROMs and have dumped at least a
+thousand more, and reverse engineered probably 60-70 different mappers.
+This has given him a front row seat into the shortcomings of the original,
+and a good idea of where additional information is needed.
+</p>
+<h2><span class="mw-headline" id="The_problem_cases">The problem cases</span></h2>
+<p>The new specification needs to clarify five areas:
+</p>
+<h3><span class="mw-headline" id="Vs._Unisystem">Vs. Unisystem</span></h3>
+<p>The Vs. Unisystem is one of the two Nintendo arcade machine series produced
+which use &quot;mostly NES/famicom&quot; hardware.  These games will run fine on
+emulators if a little extra things are stored in the header.
+</p><p>Nintendo wanted to make life difficult for arcade operators when it came to
+copy protection.  Three main schemes were devised. (See the &quot;<a href="#Byte_13_.28Vs._hardware.29">Vs. system byte</a>&quot;
+description below for a detailed analysis)
+</p>
+<h3><span class="mw-headline" id="Big_ROMs">Big ROMs</span></h3>
+<p>PRG ROM has already surpassed 2 MiB, and CHR ROM has already surpassed 1 MiB, especially on pirate multicarts.
+So far, the hack has been to set PRG ROM to 00h to indicate 4Mbytes of ROM (since FFh is 16K short of 4Mbytes).
+And in the case of exceeding the 2Mbyte-8K CHR barrier, ROMs have been allocating the CHR in the PRG space.
+This can get very messy for an emulator to sort out, especially by 2015 now that pirates are making monstrosities like the CoolBoy <i>400 in 1 Real Game</i> multicart<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> dumped by TeamEurope, which is 32 MB.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>.
+</p>
+<h3><span class="mw-headline" id="Submappers">Submappers</span></h3>
+<p>See: <a href="NES_2_0_submappers.xhtml" title="NES 2.0 submappers">NES 2.0 submappers</a>
+</p><p>Occasionally, two mappers get one number.
+Sometimes, an emulator can distinguish them easily: <a href="INES_Mapper_034.xhtml" title="INES Mapper 034">34</a> covers both <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> and <a href="BNROM.xhtml" title="BNROM">BNROM</a>, but NINA-001 has CHR ROM, and BNROM has CHR RAM.
+But other mappers are messier: <a href="INES_Mapper_083.xhtml" title="INES Mapper 083">mapper 83</a> (two styles of CHR ROM banking), <a href="SxROM.xhtml" title="SxROM">mapper 1</a> (various ROM/RAM hacks), <a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">mapper 16</a> (EEPROM/WRAM/light pen/etc).
+</p><p>Currently, the only fix for this is to CRC the games and then hack the mapper
+if the CRC or other hash matches.  This of course fails if the game is not
+in the database, especially newly developed homebrew games.
+</p>
+<h3><span class="mw-headline" id="Mapper_number_exhaustion">Mapper number exhaustion</span></h3>
+<p>Face it: we're running out.
+In the early days of iNES, 16 mappers seemed like it would be enough, but they were quickly exhausted.
+Then 256 mappers seemed like a vast space to work on.
+But now, we are getting near the end of the line, and running out of mapper numbers.
+Mr. Horton alone has assigned at least 50 or 60 of them, which is almost a quarter of the total mapper space.
+</p>
+<h3><span class="mw-headline" id="WRAM">WRAM</span></h3>
+<p>Not all carts that support PRG RAM support 8K of it.
+Some support less, some support more, and <a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">some by Bandai</a> even have EEPROM!
+Heck, some carts even battery backed the stupid CHR RAM.
+This last one was a very recent find at the time NES 2.0 was first written and goes to show that a workable extension needs to reasonably cover all possible bases.
+</p>
+<h2><span class="mw-headline" id="The_proposed_solution">The proposed solution</span></h2>
+<h3><span class="mw-headline" id="Byte_8_.28Mapper_variant.29">Byte 8 (Mapper variant)</span></h3>
+<pre>
+7       0
+---------
+SSSS MMMM
+
+S: Submapper number.  Mappers not using submappers set this to zero.
+M: Bits 11-8 of mapper number.
+</pre>
+<p><a href="NES_2_0_submappers.xhtml" title="NES 2.0 submappers">Submappers</a> are used to disambiguate iNES 1 mappers that require multiple incompatible implementations.
+Most mappers will not use submappers; they set S to 0.
+</p><p>It's not recommended yet as of 2015 to assign mapper numbers greater than 255.
+There were still a couple dozen existing numbers left in <a href="Mapper.xhtml" title="Mapper">the current iNES mapper space</a> as of 2013.
+Mapper numbers up to 511 should hold us until they stop making <i>Ice Age</i> films;
+mapper numbers up to 4095 should hold us until the next <i>literal</i> ice age.
+</p><p>In 2013, there was a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=9854" rel="nofollow">proposal on the BBS</a> to break up the expanded mapper space into &quot;planes&quot;, much like those of <a class="extiw" href="https://en.wikipedia.org/wiki/Plane_(Unicode)" title="wikipedia:Plane (Unicode)">Unicode when it expanded past UCS-2</a>.
+Each M value would thus correspond to one plane:
+</p>
+<ul><li> Plane 0 (0-255): Basic Multilingual Plane, the current mess</li>
+<li> <a href="Mapper.xhtml#Plane_1" title="Mapper">Plane 1</a> (256-511): Mostly for new homebrew mappers.</li>
+<li> <a href="Mapper.xhtml#Plane_2" title="Mapper">Plane 2</a> (512-767): For new dumps of East Asian games.</li>
+<li> Plane 15: Private use area (not for publicly distributed dumps)</li></ul>
+<h3><span class="mw-headline" id="Byte_9_.28Upper_bits_of_ROM_size.29">Byte 9 (Upper bits of ROM size)</span></h3>
+<pre>
+7       0
+---------
+CCCC PPPP
+
+C: 4 more CHR ROM size bits
+P: 4 more PRG ROM size bits
+</pre>
+<p>These combine with the existing 8 bits of each to form 12 bits total
+for the number of PRG and CHR banks... this is enough for 64Mbytes-16K
+of PRG data and 32Mbytes-8K of CHR data.
+</p><p>Only a few mappers, mostly multicart mappers, support non-power-of-two sizes for PRG and CHR.
+The behavior of a ROM with a Nintendo MMC and a non-power-of-two ROM size is undefined.
+</p>
+<h3><span class="mw-headline" id="Byte_10_.28RAM_size.29">Byte 10 (RAM size)</span></h3>
+<pre>
+7       0
+---------
+pppp PPPP
+
+p: Quantity of PRG RAM which is battery backed (or serial EEPROM, see below)
+P: Quantity of PRG RAM which is NOT battery backed
+</pre>
+<p>The PRG RAM need not be actual RAM; it may also be <a href="ROM.xhtml" title="ROM">EEPROM</a>.
+Serial EEPROMs are familiar to developers of Game Boy Advance and Nintendo DS emulators.
+But they're older than that:
+some <a href="INES_Mapper_016.xhtml" title="INES Mapper 016">mapper 16</a> (Bandai) games use serial EEPROMs to store the game data,
+rather than a battery backed SRAM.
+They most often used the 24C01 (with 128 bytes) or 24C02 (with 256 bytes), but there's no practical limitation on total size. Both ICs use the <a class="extiw" href="https://en.wikipedia.org/wiki/I%C2%B2C" title="wikipedia:I²C">I²C</a> bus.
+</p><p>Some games on <a href="SxROM.xhtml" title="SxROM">SOROM</a> or <a href="ExROM.xhtml" title="ExROM">ETROM</a> have two PRG RAM chips, one battery-backed and one not.
+Which chip appears earlier in PRG RAM address space depends on the mapper.
+For example, SOROM (mapper 1, no CHR ROM, 8192 byte CHR RAM, 8192+8192 byte PRG RAM) puts the battery-backed chip at bank 2 and the other chip at bank 0.
+</p><p>Most discrete logic mappers lacked specific support for PRG RAM.
+For these mappers, emulators should continue the iNES tradition of extending the stock mappers' functionality in the same way that <i>Family BASIC</i> extended that of mapper 0.
+A cartridge can have up to 8192 bytes of either battery-backed or non-battery-backed RAM at $6000-$7FFF,<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup> decoded with an <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">74HC20 or 74LS139</a>.
+But some mappers have registers in $6000-$7FFF and do not define a mapping for PRG RAM or serial EEPROM, such as <a href="INES_Mapper_086.xhtml" title="INES Mapper 086">Jaleco's JF-13</a>.
+Headers for ROMs using these mappers MUST specify 0 for both PRG RAM sizes.
+</p><p>Bytes 10 and 11 of the header define the size of the RAM segments exponentially using 4-bit values:
+</p>
+<table class="tabular">
+
+<tr>
+<th> value </th>
+<th> RAM size in bytes
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 128
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 256
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 512
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 1024
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> 2048
+</td></tr>
+<tr>
+<td> 6 </td>
+<td> 4096
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> 8192
+</td></tr>
+<tr>
+<td> 8 </td>
+<td> 16384
+</td></tr>
+<tr>
+<td> 9 </td>
+<td> 32768
+</td></tr>
+<tr>
+<td> 10 </td>
+<td> 65536
+</td></tr>
+<tr>
+<td> 11 </td>
+<td> 131072
+</td></tr>
+<tr>
+<td> 12 </td>
+<td> 262144
+</td></tr>
+<tr>
+<td> 13 </td>
+<td> 524288
+</td></tr>
+<tr>
+<td> 14 </td>
+<td> 1048576
+</td></tr>
+<tr>
+<td> 15 </td>
+<td> Reserved; do not use
+</td></tr></table>
+<p>Sizes that are not a power of two, such as the 5120 byte battery-backed RAM of <a href="INES_Mapper_082.xhtml" title="INES Mapper 082">Taito's X1-017</a>, are rounded up.
+</p>
+<h3><span class="mw-headline" id="Byte_11_.28Video_RAM_Size.29">Byte 11 (Video RAM Size)</span></h3>
+<pre>
+7       0
+---------
+cccc CCCC
+
+c: Quantity of CHR RAM which is battery backed (yes it exists! see below)
+C: Quantity of CHR RAM which is NOT battery backed
+</pre>
+<p>The majority of games with no CHR ROM will have $07 (8192 bytes, not battery backed) in this byte.
+Use of $00 with no CHR ROM implies that the game is wired to map nametable memory in CHR space. The value $00 MUST NOT be used if a mapper isn't defined to allow this.
+</p><p>Battery-backed CHR RAM exists. The <a class="external text" href="http://www.nesmuseum.com/racermate.html" rel="nofollow">RacerMate Challenge II</a> cartridge has 64K of CHR RAM total:
+32K is battery backed, and 32K of it is not.
+They store all the stats and such in it.
+KH traced out the circuit and couldn't believe it.
+It probably simplified the routing or power off protection.
+</p><p>For backward compatibility, the battery bit in the original <a href="INES.xhtml" title="INES">iNES</a> header (byte 6, bit 1) MUST be true if the upper nibble of byte 10 or 11 is nonzero or false otherwise.
+</p>
+<h3><span class="mw-headline" id="Byte_12_.28TV_system.29">Byte 12 (TV system)</span></h3>
+<p>Different TV systems have different <a href="Clock_rate.xhtml" title="Clock rate">clock rates</a>, and a game's raster effects and difficulty tuning might expect one or the other.
+</p>
+<pre>
+7       0
+---------
+xxxx xxBP
+</pre>
+<p>P: 0 indicates NTSC mode; 1 is for PAL mode.
+</p>
+<dl><dt>NTSC mode</dt>
+<dd>262 lines, NMI on line 241, 3 dots per CPU clock</dd>
+<dt>PAL mode</dt>
+<dd>312 lines, NMI on line 241, 3.2 dots per CPU clock</dd>
+<dt>Dendy PAL mode</dt>
+<dd>312 lines, NMI on line 291, 3 dots per CPU clock, designed for maximum compatibility with NTSC ROMs, but NES 2.0 does not yet indicate that a game is designed for this mode</dd></dl>
+<p>B: When set, indicates this ROM works on both PAL and NTSC machines.
+Some of the Codemasters games actually will adjust the game depending on if it <a href="Detect_TV_system.xhtml" title="Detect TV system">detects you running on a PAL or NTSC machine</a> - it adjusts the timing of the game and transposes the music.
+Not many games would have this B flag set; those that do would be labeled (UE) or the like in GoodNES.
+</p>
+<h3><span class="mw-headline" id="Byte_13_.28Vs._hardware.29">Byte 13 (Vs. hardware)</span></h3>
+<pre>
+7       0
+---------
+MMMM PPPP
+
+This byte is reserved for the Vs. system only.  If this is not
+a Vs. system ROM, the value of this byte must be $00, which
+signifies RP2C03B (used in PlayChoice, Famicom Titler, and a
+few TVs with built-in Famicom) and no Vs.-specific submapper.
+
+P: PPU.  There are 13 Vs. PPUs that can be found on the games:
+
+ 0 - RP2C03B     (bog standard RGB palette)
+ 1 - RP2C03G     (similar pallete to above, might have 1 changed colour)
+ 2 - RP2C04-0001 (scrambled palette + new colours)
+ 3 - RP2C04-0002 (same as above, different scrambling)
+ 4 - RP2C04-0003 (similar to above)
+ 5 - RP2C04-0004 (similar to above)
+ 6 - RC2C03B     (bog standard palette, seems identical to RP2C03B)
+ 7 - RC2C03C     (similar to above, but with 1 changed colour or so)
+ 8 - RC2C05-01   (all five of these have the normal palette...
+ 9 - RC2C05-02   (...but with different bits returned on 2002)
+10 - RC2C05-03
+11 - RC2C05-04
+12 - RC2C05-05
+13 - not defined (do not use these)
+14 - not defined
+15 - not defined
+
+KH has a good cross-section of Vs. games and has dumped bit-for-bit
+palettes from all thirteen of these PPUs.  The last 5 PPUs (RC2C05)
+have the standard NES palette in them, however they return a specific
+word in the lower 5 bits of PPUSTATUS ($2002), and the PPUCTRL ($2000)
+and PPUMASK ($2001) ports are flipped around (PPUMASK at $2000 and 
+PPUCTRL at $2001).
+
+Nocash and MESS report:
+ RC2C05-01 (with ID ([2002h] AND ??h)=1Bh)
+ RC2C05-02 (with ID ([2002h] AND 3Fh)=3Dh)
+ RC2C05-03 (with ID ([2002h] AND 1Fh)=1Ch)
+ RC2C05-04 (with ID ([2002h] AND 1Fh)=1Bh)
+ and cannot find the 2C05-05
+
+
+M: Vs. mode:
+
+ 0 - Normal- no special mode(s)
+ 1 - RBI Baseball  (protection hardware at port 5E0xh)
+ 2 - TKO Boxing    (other protection hardware at port 5E0xh)
+ 3 - Super Xevious (protection hardware at port 5xxxh)
+ 4 - ...
+</pre>
+<p>Nintendo did a few things to make piracy difficult for arcade operators:
+</p>
+<dl><dt>Different PPUs</dt>
+<dd> There are 13 different PPU chips found on Vs. arcade boards.</dd>
+<dt>Different controller pinouts</dt>
+<dd> Some games came with new control panels you had to install with the game.  This was pretty basic stuff and just remapped a few of the buttons. (FIXME: which games do use what special control panels?)</dd></dl>
+<h3><span class="mw-headline" id="Byte_14_and_15_.28Reserved.29">Byte 14 and 15 (Reserved)</span></h3>
+<p>Reserved, these two bytes must be zero.
+</p>
+<h2><span class="mw-headline" id="Emulator_support">Emulator support</span></h2>
+<ul><li>BizHawk as of r6313</li>
+<li>FCEUX as of r3071</li>
+<li><a href="Nintendulator.xhtml" title="Nintendulator">Nintendulator</a> 0.975 Beta</li>
+<li>MESS (per <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=62428#p62428" rel="nofollow">BBS post 62428</a>)</li>
+<li>no$nes v1.1</li>
+<li><a class="external text" href="https://kkfos.aspekt.fi/" rel="nofollow">PowerMappers</a> v23 for PowerPak</li>
+<li>puNES v.0.90</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="NES_2_0_header_for_ca65.xhtml" title="NES 2.0 header for ca65">NES 2.0 header for ca65</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text">SomeRussianMarioDude's <a class="external text" href="http://somerussianmariodude.blogspot.ru/2014/02/400-in-1-real-game-famicom-review.html" rel="nofollow">review</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text">CaH4e3's <a class="external text" href="http://cah4e3.shedevr.org.ru/dumping_2015.php" rel="nofollow">Dumping 2015</a></span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text">possibly a dumb iNES 2.0 header question :-): <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=77288#p77288" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=77288#p77288</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.161 seconds
+Real time usage: 0.166 seconds
+Preprocessor visited node count: 237/1000000
+Preprocessor generated node count: 522/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:382-1!*!0!!en!*!* and timestamp 20160804122420 and revision id 12773
+ -->
+<p class="categories">Categories: <a href="Category_File_formats.xhtml">File formats</a></p></div></body></html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 151</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 151</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 151</strong> represents the <a href="VRC1.xhtml" title="VRC1">VRC1</a> on the <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a>. Given that the iNES format <a href="INES.xhtml#Flags_7" title="INES">has a bit to mark</a> &quot;For Vs. System&quot;, this assignment was erroneous and any games marked thus should be <b>mapper 75</b> instead.
+</p><p>Several emulators treat this as &quot;mapper 75 with hardwired mirroring&quot;, rather than letting the &quot;four screen&quot; or &quot;Vs. System&quot; flags override mapper 75's normal ASIC-controlled mirroring. Since Vs. System <i>by definition</i> has 4K of NTRAM, and no games have hardwired mirroring without 4K of NTRAM, this separation is artificial.
+</p><p>FCEUX-2.1.5's and Nestopia-1.4.0's implementations of mapper 151 do not attach the <a href="VRC1.xhtml#Mirroring_Control.2C_CHR_bits_.28.249000-.249FFF.29" title="VRC1">5th bit of CHR bank</a> onto the lower 4 and instead emulate all registers as 8 bits wide because no Vs. System VRC1-using games have more than 64KiB of CHR.
+</p><p>Pictures of relevant Vs. System modules (<a class="external text" href="http://www.johnsarcade.com/nintendo_vs_ppu_info.php" rel="nofollow">here</a> or <a class="external text" href="http://playchoice.riemen.net/vs_list.html" rel="nofollow">here</a>; scroll down to &quot;Vs. Gradius&quot; or &quot;Vs. The Goonies&quot;) show the same VRC1 as in <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3040" rel="nofollow">NesCartDB</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:911-1!*!0!*!*!*!* and timestamp 20160208225301 and revision id 8646
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Bad_iNES_Mappers.xhtml">Bad iNES Mappers</a></p></div></body></html>

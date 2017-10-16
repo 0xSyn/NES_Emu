@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Pulse Channel frequency chart</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Pulse Channel frequency chart</h1><div class="article">
+<h2><span class="mw-headline" id="Merge">Merge</span></h2>
+<p>Isn't this the same as <a href="APU_period_table.xhtml" title="APU period table">APU period table</a>? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 20:27, 14 October 2013 (MDT)
+</p><p>Sort of, just a little more user-friendly. It's a simple reference for people who want to know which two bytes to plug into $4006-7 (et al.) in order to obtain a desired musical pitch, without getting bogged down in tables, calculations, formulas, ASCII diagrams, etc. Every reference I've been able to find seems to consist heavily of the latter, when all I want are those two little bytes! --<s>Dr. Floppy</s> (<s>talk</s>) 22:30, 14 October 2013 (MDT)
+</p>
+<dl><dd>In my experience, someone developing a music engine doesn't want <i>a</i> pitch but instead a <i>set</i> of pitches to use for all the notes that will be played over the course of the program. Does your music engine store pitches in musical phrases as two bytes (a literal period) or as one (a note number)? I understand that the latter is more common in real music engines. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 07:58, 15 October 2013 (MDT)</dd></dl>
+<dl><dd><dl><dd>Yes, my engine (which officially became &quot;real&quot; over the weekend) uses a complete set of pitches from A-1 to B-7, invoked by single bytes. My lookup tables are arranged in a nonstandard fashion due to the aesthetic design choice I made early on: #$C4 indicates &quot;play Note-C in the fourth octave&quot;, so the two relevant bytes need to be the C4th entries in their respective data tables. It was this nonlinear approach that had me wishing for a cut-and-dry reference like the one I eventually created and submitted. --<s>Dr. Floppy</s> (<s>talk</s>) 23:37, 17 October 2013 (MDT)
+<dl><dd>Approaches that I've used to transcribe music in a readable text file involve either constants and macros (e.g. N_A0 = 0, N_AS0 = N_BB0 = 1, N_B0 = 2, N_C1 = 3, N_C5 = 51) or a domain-specific language translated by a PC-side program into music sequence source code. How would you do sharps and flats in your format? Or transpositions of a musical phrase? Or transpositions in an arpeggio envelope? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 13:33, 18 October 2013 (MDT)
+<dl><dd>I, too, want to know how to do the black keys (are they 1,2,3,4,5?). However from what I can tell, Retrodriver is done in entirely hex coding and does not use any assembler or MML or whatever. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:23, 19 October 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd>I assigned the five accidentals (&quot;black keys&quot;) according to my synaesthesia. High nybbles 4-, 5-, 6-, 7-, 8- correspond to C-sharp, E-flat, F-sharp, A-flat and B-flat (respectively). As always, the low-nybble determines the octave. Rhythm offsets utilize high nybbles 2- and 3-, allowing for 32 different note-durations for any given song. The $1x-block is used for selective repeats within a part, and the $0x-block is reserved for special control codes (d7-d3 of the fourth register and timbre/volume changes for the pulse channels, hard rests, soft rests and jumps). --<s>Dr. Floppy</s> (<s>talk</s>) 21:59, 19 October 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd>What purpose is this user-friendly for? This table isn't good for someone looking to code an NES music engine. It can't be copy-pasted into code, and typing all of them by hand would be rather tedious and error prone. The <a href="APU_period_table.xhtml" title="APU period table">other page</a> provides both a ready-made code block and also a program to generate them for you, both of which are directly useful for that purpose. Having a table like this is maybe useful if you want to look up a single pitch at a time for some reason, but who would want to do this? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 08:27, 15 October 2013 (MDT)</dd></dl>
+<dl><dd><dl><dd>It's useful for those who are using a non-linear format for their frequency storage in order to make actual music <i>coding</i> easier. To illustrate, the C-Major scale in Retrodriver™ format is C4-D4-E4-F4-94-A4-B4-C5. --<s>Dr. Floppy</s> (<s>talk</s>) 23:37, 17 October 2013 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd>I'm not sure how that makes it useful though. Any driver will need to represent the entire scale. With the table on this page you will need to copy-paste 84 individual values to make your driver. It is much better to write a program to generate the table for you- it reduces the time needed and likelihood of human error. At any rate, I would highly recommend revising your table into a grid with the octaves in rows or columns, which would make it much quicker to look up individual values. After doing that, I would suggest we merge that table into <a href="APU_period_table.xhtml" title="APU period table">APU period table</a>. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 16:47, 18 October 2013 (MDT)</dd></dl></dd></dl></dd></dl>
+<dl><dd>Another one to potentially merge with as well: <a href="Celius_NTSC_table.xhtml" title="Celius NTSC table">Celius NTSC table</a> - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 08:25, 17 October 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Tuning">Tuning</span></h2>
+<p>If you're going to have a chart like this you should declare the nature of the tuning used. Presumably this is equal temperament using A-440Hz but this should be explicitly stated, as it is an arbitrary choice. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 08:23, 15 October 2013 (MDT)
+</p>
+<dl><dd>Also, when generating your table, consider rounding to the nearest integer, rather than rounding only down. The resulting error vs. target pitch will be smaller. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 00:06, 2 November 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.049 seconds
+Real time usage: 0.051 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1223-1!*!0!!*!*!* and timestamp 20160208224416 and revision id 7693
+ -->
+</div></body></html>

@@ -1,0 +1,301 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES 2.0 submappers/Proposals</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES 2.0 submappers/Proposals</h1><div class="article">
+<p>This page collects proposals for <a href="NES_2_0_submappers.xhtml" title="NES 2.0 submappers">NES 2.0 submappers</a> that are not yet ready for implementation.
+</p>
+<ol><li> Explain what game or ROM is incompatible with existing submappers.</li>
+<li> Explain how the proposed submapper should be implemented.</li>
+<li> Allow one or more other members of the community to independently verify that both 1 and 2 are correct. (We'll perform peer review, commentary, and possible revision/iteration here.)</li>
+<li> Allocate and document the new submapper, listing the relevant game/ROM.</li></ol>
+<p>When allocating new submappers, please consult kevtris' original proposal before choosing a number. If it is something he already assigned that we have just not adopted yet, use his existing assignment: <a class="external text" href="http://blog.kevtris.org/blogfiles/nes/submappers.txt" rel="nofollow">submappers.txt</a>
+</p><p>If there is no existing game or ROM that requires a submapper, it should not yet be allocated. There is no end to possible variations of hardware, and there is no need to speculate on the future. If you want to work on a project that will require a new mapper, engage the community and/or seek help from others. Do not pre-emptively add a new mapper to the spec until there is something we can run with it. The spec will still be here when you're finished your project.
+</p><p><br/>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#021.2C_023.2C_025:_VRC2_.2F_VRC4"><span class="tocnumber">1</span> <span class="toctext">021, 023, 025: VRC2 / VRC4</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Submapper_assignment"><span class="tocnumber">1.1</span> <span class="toctext">Submapper assignment</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Alternative_Submapper_Assignment"><span class="tocnumber">1.2</span> <span class="toctext">Alternative Submapper Assignment</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#021_.2F_023_.2F_025:_0"><span class="tocnumber">1.3</span> <span class="toctext">021 / 023 / 025: 0</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#021_.2F_023_.2F_025:_1.2C_3.2C_8.2C_9.2C_10.2C_14_VRC4"><span class="tocnumber">1.4</span> <span class="toctext">021 / 023 / 025: 1, 3, 8, 9, 10, 14 VRC4</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#023:_8_VRC4f"><span class="tocnumber">1.5</span> <span class="toctext">023: 8 VRC4f</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#023:_15_VRC2b"><span class="tocnumber">1.6</span> <span class="toctext">023: 15 VRC2b</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#025:_15_VRC2c"><span class="tocnumber">1.7</span> <span class="toctext">025: 15 VRC2c</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#005:_MMC5"><span class="tocnumber">2</span> <span class="toctext">005: MMC5</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#019:_Namco_129_and_163"><span class="tocnumber">3</span> <span class="toctext">019: Namco 129 and 163</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#083:_Cony"><span class="tocnumber">4</span> <span class="toctext">083: Cony</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#083:_0"><span class="tocnumber">4.1</span> <span class="toctext">083: 0</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#083:_1"><span class="tocnumber">4.2</span> <span class="toctext">083: 1</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#083:_2"><span class="tocnumber">4.3</span> <span class="toctext">083: 2</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#iNES_Mapper_185"><span class="tocnumber">5</span> <span class="toctext">iNES Mapper 185</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="021.2C_023.2C_025:_VRC2_.2F_VRC4"><a href="INES_Mapper_021.xhtml" title="INES Mapper 021">021</a>, <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">023</a>, <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">025</a>: <a href="VRC2.xhtml" title="VRC2">VRC2</a> / <a href="VRC4.xhtml" title="VRC4">VRC4</a></span></h2>
+<p><b>these submappers are fully specified, allocation is pending the existence of test ROMs</b>
+</p><p><b>additional review and consensus for the allocation numbering scheme is requested</b>
+</p><p>These three mappers collect various configurations of <a href="VRC2.xhtml" title="VRC2">VRC2</a> and <a href="VRC4.xhtml" title="VRC4">VRC4</a> boards.
+</p><p>VRC2 is mostly a subset of VRC4, with differences including:
+</p>
+<ul><li> VRC2 has a single bit of memory mapped at $6000-6FFF that the VRC4 does not<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>, though it is redundant if WRAM is used.</li>
+<li> VRC4 has an interrupt device that VRC2 does not.</li></ul>
+<p>Additionally, different boards connect the address lines for the registers in various arrangements. The three iNES mappers 21, 23, and 25 each combine multiple boards whose addresses overlap. This is enough for game compatibility, but it creates an ugly combination that does not accurately describe the original hardware of either board.
+</p>
+<h3><span class="mw-headline" id="Submapper_assignment">Submapper assignment</span></h3>
+<p>Konami's <a href="VRC4.xhtml" title="VRC4">VRC4</a> mapper has five known variations (and one additional pirate variation) of how the board connects low CPU address lines among A7-A0 to the port select lines of the mapper.
+These are spread across three mappers: two for <a href="INES_Mapper_021.xhtml" title="INES Mapper 021">21</a>, two for <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a>, and one for <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>.
+There are theoretically 8 * 7 = 56 ways to wire these, but in all five extant possibilities, two adjacent address lines are used: A2 and A1, A0 and A1, A7 and A6, A2 and A3, and A3 and A2.
+All 14 ways to pick two subsequent integers easily fit in a submapper number:
+</p>
+<pre>
+3210
+||||
+|+++- Which address line corresponds is wired to the A1 in the VRC4a
++---- 0: Use next lower address line for VRC4a A2; 1: use next higher line
+</pre>
+<p>The values 0 (A0 and next lower) and 15 (A7 and next higher) are impossible. 15 is used to indicate VRC2 for the two mappers that it shares with VRC4.
+</p><p>The <a href="VRC4.xhtml" title="VRC4">VRC4</a> article describes the ports by mapping them to the variant called &quot;VRC4a&quot; on that page, which uses A2 and A1, putting the four <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC IRQ</a> ports (IRQ Latch low, IRQ Latch high, IRQ Control, and IRQ Acknowledge) at $F000, $F002, $F004, and $F006.
+</p>
+<table class="tabular">
+<tr>
+<th> Nickname </th>
+<th> A2 </th>
+<th> A1 </th>
+<th> Registers </th>
+<th> iNES mapper </th>
+<th> NES 2.0 submapper
+</th></tr>
+<tr>
+<td> VRC4a </td>
+<td> A2 </td>
+<td> A1 </td>
+<td> $x000, $x002, $x004, $x006 </td>
+<td> 21 </td>
+<td> 9
+</td></tr>
+<tr>
+<td> VRC4b </td>
+<td> A0 </td>
+<td> A1 </td>
+<td> $x000, $x002, $x001, $x003 </td>
+<td> 25 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> VRC4c </td>
+<td> A7 </td>
+<td> A6 </td>
+<td> $x000, $x040, $x080, $x0C0 </td>
+<td> 21 </td>
+<td> 14
+</td></tr>
+<tr>
+<td> VRC4d </td>
+<td> A2 </td>
+<td> A3 </td>
+<td> $x000, $x008, $x004, $x00C </td>
+<td> 25 </td>
+<td> 3
+</td></tr>
+<tr>
+<td> VRC4e </td>
+<td> A3 </td>
+<td> A2 </td>
+<td> $x000, $x004, $x008, $x00C </td>
+<td> 23 </td>
+<td> 10
+</td></tr>
+<tr>
+<td> VRC4f </td>
+<td> A1 </td>
+<td> A0 </td>
+<td> $x000, $x001, $x002, $x003 </td>
+<td> 23 </td>
+<td> 8
+</td></tr></table>
+<p>There are three variations of the <a href="VRC2.xhtml" title="VRC2">VRC2</a> boards:
+</p>
+<table class="tabular">
+<tr>
+<th> Nickname </th>
+<th> A2 </th>
+<th> A1 </th>
+<th> Registers </th>
+<th> iNES mapper </th>
+<th> NES 2.0 submapper
+</th></tr>
+<tr>
+<td> VRC2a* </td>
+<td> A1 </td>
+<td> A0 </td>
+<td> $x000, $x002, $x001, $x003 </td>
+<td> <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">22</a> </td>
+<td> 0
+</td></tr>
+<tr>
+<td> VRC2b </td>
+<td> A0 </td>
+<td> A1 </td>
+<td> $x000, $x001, $x002, $x003 </td>
+<td> 23 </td>
+<td> 15
+</td></tr>
+<tr>
+<td> VRC2c </td>
+<td> A1 </td>
+<td> A0 </td>
+<td> $x000, $x002, $x001, $x003 </td>
+<td> 25 </td>
+<td> 15
+</td></tr></table>
+<dl><dd> * Note that VRC2a is exclusively assigned to <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">mapper 22</a>, because it has an CHR bank select implementation that is incompatible with the others.</dd></dl>
+<h3><span class="mw-headline" id="Alternative_Submapper_Assignment">Alternative Submapper Assignment</span></h3>
+<p>Each of the 3 mappers represents only 2 addressing schemes. Any new addressing schemes are not backward compatible with iNES anyway so don't need their own submapper numbers. A newly discovered board would be a new mapper, not a submapper. There's no need to make space for future boards, the only potential variants for existing boards is VRC2 vs VRC4.
+</p><p>I would instead propose:
+</p>
+<ul><li> 021: 1 VRC4a (A2, A1)</li>
+<li> 021: 2 VRC4c (A7, A6)</li>
+<li> 021: 3 unseen VRC2 (A2, A1)</li>
+<li> 021: 4 unseen VRC2 (A7, A6)</li>
+<li> 023: 1 VRC4f (A1, A0)</li>
+<li> 023: 2 VRC4e (A3, A2)</li>
+<li> 023: 3 VRC2b (A1, A0)</li>
+<li> 023: 4 unseen VRC2 (A3, A2)</li>
+<li> 025: 1 VRC4b (A0, A1)</li>
+<li> 025: 2 VRC4d (A2, A3)</li>
+<li> 025: 3 VRC2c (A0, A1)</li>
+<li> 025: 4 unseen VRC2 (A2, A3)</li></ul>
+<p>This covers all known variants, and any potential undiscovered VRC2 variants that could fit the existing iNES mappers.
+</p>
+<h3><span class="mw-headline" id="021_.2F_023_.2F_025:_0">021 / 023 / 025: 0</span></h3>
+<p>The default implementation acts as a VRC4 (mostly compatible superset of VRC2), and responds to register writes in one or more configurations simultaneously (supporting both boards at once).
+</p>
+<h3><span class="mw-headline" id="021_.2F_023_.2F_025:_1.2C_3.2C_8.2C_9.2C_10.2C_14_VRC4">021 / 023 / 025: 1, 3, 8, 9, 10, 14 VRC4</span></h3>
+<p>These allocations each request a single specific addressing scheme for VRC4, rather than the combined version used by submapper 0.
+</p><p>Test ROMs:
+</p>
+<ul><li> 021: 9 VRC4a - <b>please create a test ROM before allocating this submapper</b></li>
+<li> 025: 1 VRC4b - <b>please create a test ROM before allocating this submapper</b></li>
+<li> 021: 14 VRC4c - <b>please create a test ROM before allocating this submapper</b></li>
+<li> 025: 3 VRC4d - <b>please create a test ROM before allocating this submapper</b></li>
+<li> 023: 10 VRC4e - <b>please create a test ROM before allocating this submapper</b></li>
+<li> 023: 8 VRC4f - <b>please create a test ROM before allocating this submapper</b></li></ul>
+<h3><span class="mw-headline" id="023:_8_VRC4f">023: 8 VRC4f</span></h3>
+<p>Some second-source VRC4 clones used a memory layout that was identical to the VRC2b (the simplest contiguous in-order interpretation: 0,1,2,3). This was used in <i>World Hero</i>.
+</p><p>Test ROM:
+</p>
+<ul><li> <b>please create a test ROM before allocating this submapper</b></li></ul>
+<h3><span class="mw-headline" id="023:_15_VRC2b">023: 15 VRC2b</span></h3>
+<p>Some games rely on a single bit of memory mapped in the region from $6000-$6FFF on VRC2. These games were previously supported with submapper 0 by implementing WRAM in this region (despite these games not having WRAM). Additionally, VRC2 does not implement VRC4's interrupts. This board was used in <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3986" rel="nofollow">Contra (J)</a></i> and <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1568" rel="nofollow">Ganbare Goemon 2</a></i>.
+</p><p>Test ROM:
+</p>
+<ul><li> <b>please create a test ROM before allocating this submapper</b></li></ul>
+<h3><span class="mw-headline" id="025:_15_VRC2c">025: 15 VRC2c</span></h3>
+<p><i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3823" rel="nofollow">Ganbare Goemon Gaiden: Keita Ougon Kiseru</a></i> uses VRC2c. It is compatible with submapper 0, but VRC4 has an additional interrupt capability (unused by this game).
+</p><p>Test ROM:
+</p>
+<ul><li> <b>please create a test ROM before allocating this submapper</b></li></ul>
+<h2><span class="mw-headline" id="005:_MMC5">005: <a href="MMC5.xhtml" title="MMC5">MMC5</a></span></h2>
+<p>Status: Wishlist
+</p><p>Vertical split mode: <br/>
+0: SL (all known hardware) <br/>
+1: CL <br/>
+</p><p>If only one kind (battery or non-battery) of PRG-RAM present: <br/>
+0: PRG-RAM is contiguous (EKROM, EWROM) <br/>
+2: PRG-RAM is not contiguous; is split in half across two chips <br/>
+</p><p>If both kinds of PRG-RAM present: <br/>
+0: Chip 0 is battery-backed (ETROM (note: verify this)) <br/>
+2: Chip 1 is battery-backed <br/>
+</p><p>Pulse waves volume: <br/>
+0: R1 is 6.8kΩ (as in all games that use expansion audio) <br/>
+4: R1 is 15kΩ (the nominal value of this resistor) <br/>
+</p><p>It is safe to leave the submapper number at 0 for all known games.
+</p>
+<h2><span class="mw-headline" id="019:_Namco_129_and_163">019: Namco 129 and 163</span></h2>
+<p>Status: Problem outline
+</p><p><a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">Mapper 19</a> designates the <a href="Namco_163.xhtml" title="Namco 163">Namco 129 and 163</a>, which supports <a href="Namco_163_audio.xhtml" title="Namco 163 audio">expansion sound</a>, IRQs, and ROM nametables.
+</p><p>Different 163-using PCBs used a different resistor to change the volume of the expansion audio relative to the internal 2A03 audio. It is unclear if this variation warrants a submapper.
+</p><p>KH allocated a submapper specifically for the N163-using game Mindseeker. It is not known what is different about this game.
+</p><p>Tentative suggestion:<br/>
+Mapper 19:<br/>
+1: N163, expansion audio unused (mixing resistor: 0Ω)<br/>
+2: N163, mixing resistor:  4.7kΩ<br/>
+3: N163, mixing resistor: 10kΩ<br/>
+4: N163, mixing resistor: 15kΩ<br/>
+9: N129. Expansion audio is known buggy relative to N163, but other differences are not known.<br/>
+</p><p>Source: <a class="external text" href="http://blog.kevtris.org/blogfiles/nes/submappers.txt" rel="nofollow">KH's submappers</a>
+</p>
+<h2><span class="mw-headline" id="083:_Cony"><a href="INES_Mapper_083.xhtml" title="INES Mapper 083">083</a>: Cony</span></h2>
+<p>There's actually three different versions of the hardware, all assigned to the same mapper.
+</p><p>Unfortunately, we have no idea which is which.
+</p><p>Here's Kevtris's assignments:
+</p>
+<h3><span class="mw-headline" id="083:_0">083: 0</span></h3>
+<p>&quot;Bog-standard Cony mapper.  1K CHR ROM banks, no WRAM.&quot;
+</p>
+<h3><span class="mw-headline" id="083:_1">083: 1</span></h3>
+<p>&quot;Same, but with 2K CHR ROM banks instead.&quot;
+</p>
+<h3><span class="mw-headline" id="083:_2">083: 2</span></h3>
+<p>&quot;This is the standard Cony mapper with the following changes:
+</p>
+<ol><li> 1K CHR ROM banks (like 83.0)</li></ol>
+<ol><li> a 4 bit 256K CHR/PRG bank select register:
+<ul><li> B000h:  bits 6 and 7 select the 256K superbank</li></ul></li></ol>
+<ol><li> 1 byte of RAM at 5103h (stores the last game played) Game will not start without this RAM byte.</li></ol>
+<ol><li> WRAM at 6000-7FFFh.  WRAM is banked with the PRG/CHR superbank.  This gives a total of 32K.  It is battery backed.</li></ol>
+<h2><span class="mw-headline" id="iNES_Mapper_185"><a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a></span></h2>
+<p>Status: Draft
+</p><p>A few NROM-like games were released on CNROM boards where all four bits of the latch were solely used as an anti-piracy measure. While a documented heuristic exists for which values were used, we tentatively suggest that the submapper here indicate the value to be written to the latch for normal operation (<tt>submapper = (latch&amp;0x30)/4+(latch&amp;3)</tt>)
+</p>
+<pre>
+3210  
+||||
+|||+- Bit 0 (bank number)
+||+-- Bit 1 (bank number)
+|+--- Bit 4 (diode config)
++---- Bit 5 (diode config)
+</pre>
+<p>In the case that any of the bits are &quot;don't care&quot;, use 0.
+</p>
+<hr/>
+<p>On second thought, lidnariq would be happier with
+</p>
+<pre>
+3210
+xxCC
+||||
+|||+- Bit 0 (bank number)
+||+-- Bit 1 (bank number)
+++--- Always &quot;01&quot;, so that submapper 0 (use heuristic) doesn't collide with &quot;write 0 for correct operation&quot;
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=8274" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=8274</a> VRC2 memory bit at $6000-$6FFF</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.110 seconds
+Real time usage: 0.115 seconds
+Preprocessor visited node count: 114/1000000
+Preprocessor generated node count: 218/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1577-1!*!0!!en!*!* and timestamp 20160811225854 and revision id 12787
+ -->
+</div></body></html>

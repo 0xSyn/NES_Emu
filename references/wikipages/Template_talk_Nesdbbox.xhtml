@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Template talk:Nesdbbox</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Template talk:Nesdbbox</h1><div class="article">
+<p>If you can set unif's search type to be &quot;unif_op=LIKE+`%25%40%25`&quot; then we can use SQL GLOBs in the template rather than having to enumerate all the variants, q.v. &quot;<a class="external free" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+%60%25%40%25%60&amp;unif=A%25ROM" rel="nofollow">http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+%60%25%40%25%60&amp;unif=A%25ROM</a>&quot; —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 04:01, 23 April 2015 (MDT)
+</p>
+<dl><dd>Well, technically you could make any search string you like, the form is just &quot;PARAM1&quot;=&quot;PARAM2&quot; so you could just cram &quot;unif_op&quot;=&quot;LIKE+%60%25%40%25%60&amp;unif=A%25ROM&quot; into the string, but if you can explain how that URL you just made work I could try and make an easy-to-use form of this for the template. What does unif_op do? What does &quot;LIKE+`%@%`&quot; mean? Is the % in A%ROM a wildcard character that the LIKE operation expands? (Is this documented somewhere?)</dd>
+<dd>What would you like the template code to look like? Something like this?</dd></dl>
+<pre>{{nesdblink|unif_wildcard|A%ROM|AxROM}}</pre>
+<dl><dd>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 10:56, 23 April 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> In SQL-ese, &quot;LIKE&quot; gets you globs like filename ? and *, and &quot;_&quot; and &quot;%&quot; are equivalent to ? and *. @ here is substituted with the value of the unif parameter. (But &quot;LIKE&quot; is case-insensitive, while &quot;GLOB&quot; is case-insensitive.)</dd>
+<dd> But, yes, something like your example would be lovely. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:48, 23 April 2015 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> Added. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 13:40, 23 April 2015 (MDT)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd> Something that might make things easier for making queries sufficiently restrictive would be to change it to &quot;LIKE `@`&quot; and the query to &quot;%-A%ROM&quot;, i.e. move the globs into the query and out of the &quot;op&quot;eration. On the other hand, searching for &quot;LIKE `%A%ROM%`&quot; produces 128 hits, for &quot;LIKE `%A%ROM`&quot; produces 112, and for mapper 7 produces 76 hits, so it's still rather inadequate. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:25, 23 April 2015 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1526-1!*!0!*!*!*!* and timestamp 20160208230254 and revision id 10418
+ -->
+</div></body></html>

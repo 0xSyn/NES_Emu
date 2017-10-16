@@ -1,0 +1,203 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC6 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC6 pinout</h1><div class="article">
+<pre>     48   33
+     |    |
+    .------.
+ 49-|      |-32
+    | MMC6 |
+ 64-|      |-17
+    \------'
+     |    |
+     01   16
+</pre>
+<table border="1">
+<tr>
+<th> Pin </th>
+<th> Function </th>
+<th> Pin </th>
+<th> Function </th>
+<th> Pin </th>
+<th> Function </th>
+<th> Pin </th>
+<th> Function
+</th></tr>
+<tr>
+<td> 01 </td>
+<td> CPU A13 </td>
+<td> 17 </td>
+<td> CHR A10 </td>
+<td> 33 </td>
+<td> R/W </td>
+<td> 49 </td>
+<td> CPU A4
+</td></tr>
+<tr>
+<td> 02 </td>
+<td> M2 </td>
+<td> 18 </td>
+<td> CHR A16 </td>
+<td> 34 </td>
+<td> CPU D2 </td>
+<td> 50 </td>
+<td> PRG A16
+</td></tr>
+<tr>
+<td> 03 </td>
+<td> GND </td>
+<td> 19 </td>
+<td> CHR A11 </td>
+<td> 35 </td>
+<td> CPU D3 </td>
+<td> 51 </td>
+<td> CPU A5
+</td></tr>
+<tr>
+<td> 04 </td>
+<td> GND </td>
+<td> 20 </td>
+<td> PPU A12 </td>
+<td> 36 </td>
+<td> CPU D1 </td>
+<td> 52 </td>
+<td> CPU A6
+</td></tr>
+<tr>
+<td> 05 </td>
+<td> GND </td>
+<td> 21 </td>
+<td> CHR A13 </td>
+<td> 37 </td>
+<td> GND </td>
+<td> 53 </td>
+<td> CPU A9
+</td></tr>
+<tr>
+<td> 06 </td>
+<td> NC </td>
+<td> 22 </td>
+<td> CHR A12 </td>
+<td> 38 </td>
+<td> +batt </td>
+<td> 54 </td>
+<td> CPU A7
+</td></tr>
+<tr>
+<td> 07 </td>
+<td> GND </td>
+<td> 23 </td>
+<td> CHR A14 </td>
+<td> 39 </td>
+<td> CPU D4 </td>
+<td> 55 </td>
+<td> CPU A8
+</td></tr>
+<tr>
+<td> 08 </td>
+<td> VCC </td>
+<td> 24 </td>
+<td> GND </td>
+<td> 40 </td>
+<td> CPU D0 </td>
+<td> 56 </td>
+<td> +batt
+</td></tr>
+<tr>
+<td> 09 </td>
+<td> VCC </td>
+<td> 25 </td>
+<td> +batt </td>
+<td> 41 </td>
+<td> CPU D5 </td>
+<td> 57 </td>
+<td> GND
+</td></tr>
+<tr>
+<td> 10 </td>
+<td> +batt </td>
+<td> 26 </td>
+<td> CHR /CE? </td>
+<td> 42 </td>
+<td> CPU A0 </td>
+<td> 58 </td>
+<td> CPU A12
+</td></tr>
+<tr>
+<td> 11 </td>
+<td> GND </td>
+<td> 27 </td>
+<td> VRAM A10 </td>
+<td> 43 </td>
+<td> CPU D6 </td>
+<td> 59 </td>
+<td> PRG A13
+</td></tr>
+<tr>
+<td> 12 </td>
+<td> VCC </td>
+<td> 28 </td>
+<td> PPU /RD </td>
+<td> 44 </td>
+<td> CPU A1 </td>
+<td> 60 </td>
+<td> PRG A15
+</td></tr>
+<tr>
+<td> 13 </td>
+<td> threshold* </td>
+<td> 29 </td>
+<td> PPU A13 </td>
+<td> 45 </td>
+<td> CPU D7 </td>
+<td> 61 </td>
+<td> PRG A14
+</td></tr>
+<tr>
+<td> 14 </td>
+<td> PPU A10 </td>
+<td> 30 </td>
+<td> CHR A17 </td>
+<td> 46 </td>
+<td> CPU A2 </td>
+<td> 62 </td>
+<td> PRG A18
+</td></tr>
+<tr>
+<td> 15 </td>
+<td> PPU A11 </td>
+<td> 31 </td>
+<td> /IRQ </td>
+<td> 47 </td>
+<td> PRG /CE </td>
+<td> 63 </td>
+<td> CPU A14
+</td></tr>
+<tr>
+<td> 16 </td>
+<td> NC </td>
+<td> 32 </td>
+<td> CPU /CE </td>
+<td> 48 </td>
+<td> CPU A3 </td>
+<td> 64 </td>
+<td> PRG A17
+</td></tr></table>
+<ul><li>Threshold: tied to a resistor divider between +5V and GND; resistor to +5V is 180 ohms, resistor to ground is 470 ohms.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:171-1!*!*!*!*!*!* and timestamp 20160208225607 and revision id 5433
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

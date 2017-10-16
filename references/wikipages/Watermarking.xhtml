@@ -1,0 +1,84 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Watermarking</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Watermarking</h1><div class="article">
+<p><b>Watermarking</b> is <a class="extiw" href="http://en.wikipedia.org/wiki/Digital_watermarking" title="wikipedia:Digital watermarking">defined by Wikipedia</a> as &quot;the process of embedding information into a digital signal in a way that is difficult to remove.&quot;
+In some cases, the developer of an unreleased NES program wants to distribute copies to beta testers but still <a class="extiw" href="http://en.wikipedia.org/wiki/Traitor_tracing" title="wikipedia:Traitor tracing">trace</a> any <a class="extiw" href="http://en.wikipedia.org/wiki/Internet_leak" title="wikipedia:Internet leak">leaked</a> copies of the program to the tester who broke the non-disclosure agreement.
+There are several ways to produce binaries that can be traced back to a particular recipient.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Shuffling"><span class="tocnumber">1</span> <span class="toctext">Shuffling</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Instruction_encoding"><span class="tocnumber">2</span> <span class="toctext">Instruction encoding</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Graphics_changes"><span class="tocnumber">3</span> <span class="toctext">Graphics changes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Compression"><span class="tocnumber">4</span> <span class="toctext">Compression</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#External_links"><span class="tocnumber">6</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Shuffling">Shuffling</span></h2>
+<p>One way to make each copy unique is to shuffle, or randomly rearrange, pieces of a program at compile time.
+</p><p>A code preprocessor can randomize the order of statically allocated variables in a program.
+This causes the addresses embedded in the code to change every time the program is compiled.
+It has benefits beyond watermarking: as the program is shuffled, a randomly chosen variable acts as a <a class="extiw" href="http://en.wikipedia.org/wiki/Buffer_overflow_protection" title="wikipedia:Buffer overflow protection">canary</a> for the variable before it, and the effects of a <a class="extiw" href="http://en.wikipedia.org/wiki/buffer_overflow" title="wikipedia:buffer overflow">buffer overflow</a> may become more apparent.
+</p><p>A code preprocessor can shuffle the order of subroutines or lookup tables in a program.
+Watch out: A common technique on the NES is the &quot;<a class="extiw" href="http://en.wikipedia.org/wiki/Inline_expansion" title="wikipedia:Inline expansion">inline</a> <a class="extiw" href="http://en.wikipedia.org/wiki/tail_call" title="wikipedia:tail call">tail call</a>&quot;, in which a subroutine doesn't return but instead falls off the end into the following subroutine.
+You'll need to take this into account when adding markup to control the preprocessor.
+</p><p>A code preprocessor can shuffle the order of instructions in a subroutine.
+In a lot of cases, the order of instructions doesn't matter, such as <code>LDA</code> vs. <code>CLC</code>, or <code>LDX</code> vs. <code>LDY</code> where neither is indexed, or <code>STA (d),Y</code> vs. <code>DEX</code>, or STA of the same value to several different variables.
+Writes to some <a href="PPU_registers.xhtml" title="PPU registers">PPU registers</a> act similarly: when setting up <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000) and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> ($2001) at the end of vertical blanking, it doesn't matter which is written first.
+The markup for such &quot;bundles of instructions&quot; resembles the markup for stop bits in <a class="extiw" href="http://en.wikipedia.org/wiki/explicitly_parallel_instruction_computing" title="wikipedia:explicitly parallel instruction computing">explicitly parallel instruction computing</a>.
+Adding the required markup also has a benefit beyond watermarking: thinking about what instructions affect others forces a code review, which allows a programmer to refamiliarize himself with a code base and possibly discover defects.
+</p><p>A common method to cope with bus conflicts on discrete <a href="Mapper.xhtml" title="Mapper">mappers</a> brings in another trick.
+For example, a game using UNROM might load from a table and write back to that table to make sure that the written bits match the bits in ROM.
+(See the <code>banktable</code> example at <a href="Programming_UNROM.xhtml" title="Programming UNROM">Programming UNROM</a>.)
+But if you shuffle the data in banks 0 through 6 and shuffle the bank numbers in the table, you can make 7! = 5040 different binaries from this alone.
+</p><p>Even in a game no bigger than <a href="NROM.xhtml" title="NROM">NROM</a>-128, shuffling alone allows for more distinct binaries than the number of atoms in the known universe squared.
+With the size of NES games and with modern solid archiving tools such as 7-Zip, you can save each binary that you send out to each tester and still not fill a 4 GB USB flash drive.
+As long as the binary doesn't get leaked to someone with the knowledge to disassemble and reassemble a binary (as in <a class="external text" href="http://www.romhacking.net/docs/344/" rel="nofollow">SMBDis</a>), computing the <a class="extiw" href="http://en.wikipedia.org/wiki/Hamming_distance" title="wikipedia:Hamming distance">Hamming distance</a> between the leaked copy and your saved copies is likely to result in a high-confidence match to the leaker.
+</p>
+<h2><span class="mw-headline" id="Instruction_encoding">Instruction encoding</span></h2>
+<p>A few instructions have <a href="Programming_with_unofficial_opcodes.xhtml#Watermarking_instructions" title="Programming with unofficial opcodes">multiple encodings</a>.
+A code preprocessor can introduce any of several NOP instructions at random points in a non-time-critical subroutine.
+</p><p>The addresses of the PPU's ports, almost every mapper without <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>, and the internal WRAM are all <a href="Mirroring.xhtml" title="Mirroring">incompletely decoded</a>.
+Because the NES PPU is configured to ignore A12 through A3, each PPU port appears 1024 times in the range $2000-$3FFF. 
+Likewise, the <a href="MMC3.xhtml" title="MMC3">MMC3</a> ignores A12 through A1, and each port appears 4096 times.
+The <a href="MMC1.xhtml" title="MMC1">MMC1</a> ignores A14 through A0 for the first four writes and A12 through A0 for the last, or 73 bits in all, but many games use only one subroutine to handle all writes to each of its four ports.
+The internal RAM appears only 4 times in $0000-$1FFF, but any non-zero-page instruction could be changed to use one of the mirrors. 
+A code preprocessor could randomize these address bits in any instruction that reads or writes these ports. 
+This would also serve to hinder a cracker's use of an in-emulator debugger that doesn't take mirroring into account.
+</p><p>Use of multiple instruction encoding and multiple address decoding might also be used if you want to store the program and data in the same place (although this is difficult), or to use the mirrored registers for some purpose in a mapper that you might make up or in a debugger.
+</p>
+<h2><span class="mw-headline" id="Graphics_changes">Graphics changes</span></h2>
+<p>Graphics can depend on the build:
+</p>
+<ul><li>Choose one of several alternatives for <a class="external text" href="http://www.petesqbsite.com/sections/tutorials/tuts/tsugumo/chapter1.htm" rel="nofollow">grass</a> and other <a class="external text" href="http://www.petesqbsite.com/sections/tutorials/tuts/tsugumo/chapter3.htm" rel="nofollow">noisy tiles</a></li>
+<li>Rearrange the order in which sets of tiles appear in the CHR ROM</li>
+<li>Tester's name or something derived from tester's name on the title screen. This is easy to remove, but it acts as a deterrent.</li>
+<li>Tester's name or something derived from tester's name on a sign in a building in the game</li></ul>
+<h2><span class="mw-headline" id="Compression">Compression</span></h2>
+<p>If your program includes compressed data, you can change the interpretation of bits in the data format.
+For example, in RLE <a href="Tile_compression.xhtml" title="Tile compression">tile compression</a>, the sense of bits denoting a run of repeated pixels vs. bits denoting a run of several literal pixels can be inverted.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="Concentration_Room.xhtml" title="Concentration Room">Concentration Room</a>: Version 0.02 includes a Python program to shuffle source code, and an example of how to work it into a makefile.</li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li>Based on BBS topics <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=6046" rel="nofollow">6046</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=6197" rel="nofollow">6197</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.108 seconds
+Real time usage: 0.119 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:535-1!*!0!!en!*!* and timestamp 20160208222752 and revision id 11889
+ -->
+</div></body></html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Attribute Zone</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Attribute Zone</h1><div class="article">
+<p>This game is a puzzle game designed based around the limitation of the <a href="PPU.xhtml" title="PPU">PPU</a>, such as 2x2 blocks of tiles have a single attribute, and that no more than eight sprites per scanline are possible.
+</p><p>It is possible to save levels to ROM if using an emulator that writes RAM images such that the 2K RAM is contiguous and unencoded in the save file (although I do not expect any emulator to save RAM images in any other way). It is <b>not</b> possible to save levels to ROM if running the cartridge on a real Famicom hardware (although, you can save them to tape instead in that case).
+</p><p>Warning: Game uses several <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">unofficial opcodes</a>. Also, it probably will not work on an actual Color Dreams board, since this program does not do anything with the lockout defeat.
+</p><p>Note: This program is designed to work whether or not there are bus conflicts. Therefore, if someone wishes to implement this game in a Famicom cartridge, they can decide whether or not to implement bus conflict avoidance.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Instructions"><span class="tocnumber">2</span> <span class="toctext">Instructions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Compression"><span class="tocnumber">3</span> <span class="toctext">Compression</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#External"><span class="tocnumber">4</span> <span class="toctext">External</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> Status: Editor done, gameplay done, partially music done, partially levels done</li>
+<li> Project owner: <a href="User_Zzo38.xhtml" title="User:Zzo38">User:Zzo38</a></li>
+<li> Developer: <a href="User_Zzo38.xhtml" title="User:Zzo38">User:Zzo38</a></li>
+<li> Compiler: <s>Unofficial MagicKit</s></li>
+<li> Other tools: Csound, CsoundMML, &quot;lvlcopy.c&quot;, &quot;huffer.c&quot;, &quot;mkperiod.bas&quot;</li>
+<li> Sound driver: Custom, using CsoundMML</li>
+<li> Soundtrack by: <a href="User_Zzo38.xhtml" title="User:Zzo38">User:Zzo38</a></li>
+<li> Graphics by: <a href="User_Zzo38.xhtml" title="User:Zzo38">User:Zzo38</a></li>
+<li> Started on: December, 2013</li>
+<li> Cart made: No</li>
+<li> Will make cart: It is intended to be possible although I probably won't do it by myself</li>
+<li> Mapper: iNES Mapper #11: <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a></li>
+<li> PRG ROM: 32K</li>
+<li> CHR ROM: Unknown</li>
+<li> PRG RAM: 0</li>
+<li> CHR RAM: 0</li>
+<li> Players: 1</li>
+<li> Input devices: <a href="Family_BASIC_Keyboard.xhtml" title="Family BASIC Keyboard">Family BASIC Keyboard</a> is supported in all modes; <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> can play ROM levels only</li>
+<li> License: Public domain</li>
+<li> Tested on official hardware: No (I am unable to)</li></ul>
+<h2><span class="mw-headline" id="Instructions">Instructions</span></h2>
+<p>There is tiles and sprites. Tiles can be white, blue, green, red, or yellow. Each 2x2 block (which are clearly marked as such) cannot contain non-white tiles of more than one color. It is also impossible for more than eight sprites in one row. Any condition resulting in one of these impossible conditions, instead causes the objects to stay where it is, instead of being moved/changed.
+</p><p>Square brackets can be used for previous/next level, and F1 will go back to title screen. If you push RETURN, the current level is reset, so that you can try again.
+</p><p>Tiles:
+</p>
+<ul><li> Empty: Objects can pass through.</li>
+<li> Wall: Objects cannot pass through.</li>
+<li> Key: Indirectly pushable. Can be used to open door of the same color of a key.</li>
+<li> Door: If you have the key, you can open the door.</li>
+<li> Box: Pushable in any direction. Otherwise, just blocks movement.</li>
+<li> Slider: Pushable, but can move only in direction of arrow is pointing at.</li>
+<li> One Step: If you step on here, it becomes a wall next time, you you cannot step on a second time (or any subsequent time).</li>
+<li> Ball: Move a far distance. Can splash in water, destroying both a ball and water.</li>
+<li> Gem: Indirectly pushable. Collect the remaining gem on the level to win.</li>
+<li> Paintbrush: Move it to touch object you want to change the color, and become a same color of paint.</li>
+<li> Gate: The player can step on here, but other objects mostly don't.</li>
+<li> Bomb: Can be moved around. Explodes when the &quot;X&quot; key is pushed, or if non-player sprite objects run into it. Does not explode a white wall, and also does not explode any waters regardless of the colors.</li>
+<li> Ghost Block: Can be moved around, and prevent a ghost from passing through.</li>
+<li> Puller: If a player moves directly away, the puller attempts to follow (possibly blocking the path to go back).</li>
+<li> Water: Blocks movement, but some things can remove it.</li></ul>
+<p>Sprites:
+</p>
+<ul><li> Player: Move by arrow keys or &quot;H&quot;, &quot;J&quot;, &quot;K&quot;, &quot;L&quot; keys.</li>
+<li> Other Player: Upsidedown, but can be made rightsideup (and normal player upsidedown) by pushing a &quot;Z&quot; key.</li>
+<li> Pusher: Move in direction of pointing. Will try to push objects which are in the way.</li>
+<li> Ghost: Chase player. You lose if the player is touched by a ghost. Move through nearly any tiles, except ghost blocks.</li>
+<li> Chaser: Chase player. You lose if the player is touched by a chaser.</li>
+<li> Runner: Run back and forth. It can cause bombs to explode, and you also lose if it touches a player.</li>
+<li> Rock: Can be moved around, and can fall on water, which removes both the water and rock.</li>
+<li> Bubble: Does nothing by itself, but can be removed simply by player touched it.</li>
+<li> Timer: Moves and wraps around the screen to next line/column. If it is stuck, you lose.</li></ul>
+<h2><span class="mw-headline" id="Compression">Compression</span></h2>
+<p>Here is a description of the compression used for level data in this program, in case it helps anyone.
+</p><p>Compressed level data is stored in CHR ROM, using Huffman coding. The program &quot;huffer.c&quot; will Huffman encode the data and generate the corresponding Huffman decoder in assembly language. Controlled by an external file, it will also generate Huffman encoding for RLE for some kinds of tiles.
+</p><p>Pointers into CHR ROM are then stored in PRG ROM. Some of the bits are used for bankswitching and are written to the bankswitching register. Since the mapper has four bits for CHR bankswitching but there is only three bits available in the table (since it is mapped to PPU address space $0000-$1FFF), there is one additional value recorded which decides which level number starts with the high bit of the bank register set.
+</p><p>Storing compressed data in CHR ROM means that the software does not need to keep track of the current address and to perform address increments, since that is done by the hardware, therefore speeding up loading of compressed level data, which can therefore cross 256 byte pages as much as you want.
+</p>
+<h2><span class="mw-headline" id="External">External</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=10913" rel="nofollow">Forum</a></li>
+<li> <a class="external text" href="http://zzo38computer.org/nes_program/attrzone.zip" rel="nofollow">Download</a> (includes source-codes, iNES ROM image, NSF, INI, and a few other things)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1309-1!*!0!!en!*!* and timestamp 20160208224754 and revision id 8913
+ -->
+<p class="categories">Categories: <a href="Category_Homebrew_games.xhtml">Homebrew games</a></p></div></body></html>

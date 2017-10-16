@@ -1,0 +1,207 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Game bugs</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Game bugs</h1><div class="article">
+<p>Listed are games that have been tested on NES or Famicom hardware and verified to look wrong or odd, due to things like NES hardware limitations or programming errors. Refer to this if you're developing an emulator and find a game that looks wrong, before you look for a problem in your emulator. If you are attempting to give your emulator <a href="Accuracy.xhtml" title="Accuracy">&quot;bug for bug&quot; compatibility</a>, you'll want to make sure that these glitches (or unusual behaviors) appear the same in your emulator as they do on the NES.
+</p><p>This is an incomplete list that concentrates on commercial games. For a list of homebrew programs that don't work on the NES, or which have glitches on the NES, see <a class="mw-redirect" href="Program_compatibility.xhtml" title="Program Compatibility">Program Compatibility</a>.
+Sometimes, a bug slips into a game to make it rely on less-than-intentional features of the hardware; for those, see <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">Tricky-to-emulate games</a>.
+</p>
+<table class="wikitable sortable">
+<tr>
+<th style="width: 18%"> Game
+</th>
+<th class="unsortable"> Problem
+</th></tr>
+<tr>
+<td><i>Akumajou Densetsu</i></td>
+<td> When a door is opened/shut when the player goes through them, the screen shakes by one pixel.
+</td></tr>
+<tr>
+<td><i>Akumajou Special</i></td>
+<td> After game over at the bidirectional scroll stages, sometimes game over screen is glitched. (Validated in the Game Center CX)
+</td></tr>
+<tr>
+<td><i>Armadillo</i></td>
+<td> The in-game status bar occasionally bumps vertically by 1 pixel. This game also often suffers from slowdown.
+</td></tr>
+<tr>
+<td><i>Castlevania</i></td>
+<td> The PRG 0 version sometimes freezes right before the Grim Reaper. (Fixed in PRG 1 and PAL)
+</td></tr>
+<tr>
+<td><i>Castlevania II - Simon's Quest</i></td>
+<td> Sometimes incorrect tiles are shown on the playfield.
+</td></tr>
+<tr>
+<td> <i>Castlevania III - Dracula's Curse</i></td>
+<td>
+<ul><li> The <a href="APU_DMC.xhtml" title="APU DMC">DMC channel</a> in music sometimes mutes.</li>
+<li> When pressing the 'B' button at the exact time that Trevor falls off a block, you hear the whip sound, but Trevor doesn't attack.</li></ul>
+</td></tr>
+<tr>
+<td><i>Chip 'n Dale Rescue Rangers</i></td>
+<td> After reading the intro to the last, garbage sprites will appear in the upper left (right) corner of the screen.
+</td></tr>
+<tr>
+<td><i>Commando</i></td>
+<td> There are many bugs that may look like emulator glitches but aren't.
+</td></tr>
+<tr>
+<td><i>Crystalis</i></td>
+<td> The scanline above the status bar and above text boxes looks wrong.
+</td></tr>
+<tr>
+<td><i>Dizzy The Adventurer</i></td>
+<td> Resets the sound phase every frame, causing a nasty 60hz buzz.
+</td></tr>
+<tr>
+<td><i>Donald Land</i></td>
+<td> When the player progresses too quickly by boosting off of apples, the background loads fall behind and the scroll seam becomes visible.
+</td></tr>
+<tr>
+<td><i>Double Dragon</i></td>
+<td>
+<ul><li> A garbage sprite (Probably <a class="mw-redirect" href="PPU_OAM.xhtml" title="Sprite-0 hit">sprite-0 hit</a>?) can be seen on the lower right of the game screen.</li>
+<li> The screen will sometimes shake vertically on heavy sprite usage.</li></ul>
+</td></tr>
+<tr>
+<td><i>Double Dragon II</i></td>
+<td> The status bar may suddenly change colors: sometimes when scrolling vertically it shows incorrectly for a couple of frames.
+</td></tr>
+<tr>
+<td><i>Double Dragon III</i></td>
+<td> Same status bar issue as <i>Double Dragon II</i>.
+</td></tr>
+<tr>
+<td><i>Exed Exes</i></td>
+<td> When pausing, the immediate next note of the music will play after the pause jingle completes.
+</td></tr>
+<tr>
+<td><i>Ghostbusters (J)</i></td>
+<td> The Japanese version of Ghostbusters loads the ending text from the wrong CHR bank, causing it to display a blank screen that eventually scrolls the hiragana 'riri' on the screen.
+</td></tr>
+<tr>
+<td><i>Ghosts 'n Goblins</i></td>
+<td>
+<ul><li> Sometimes appear garbage sprites of 8x8 pixel on the in-game screen.</li>
+<li> Sometimes it will hit the pixels that are invisible.</li></ul>
+</td></tr>
+<tr>
+<td><i>Hebereke</i></td>
+<td>
+<ul><li> After switching to the password screen from the title screen, and then returning to the title screen to exit from the password screen, the triangle channel is glitched.</li>
+<li> When a player touches the HUD, it may make the HUD disappear.</li></ul>
+</td></tr>
+<tr>
+<td><i>Hottarman no Chitei Tanken</i></td>
+<td> During the game, when it caused a deceleration in when you are using a lot of heavy sprite, sometimes caused by a glitch in the scroll on the game suddenly it is paused and garbage sprites.
+</td></tr>
+<tr>
+<td><i>Ironsword: Wizards and Warriors II</i></td>
+<td> Noise channel doesn't work properly, sometimes plays longer notes and sometimes mutes.
+</td></tr>
+<tr>
+<td><i>Kirby's Adventure</i></td>
+<td> When Kirby of copy capability has changed, it attributed the icon flickers glitch representing the Kirby of the state, which is displayed in the status bar.
+</td></tr>
+<tr>
+<td><i>Legend of Zelda</i></td>
+<td> The screen &quot;jumps&quot; off 2 pixels at the start and end of vertical fast scrolling.
+</td></tr>
+<tr>
+<td><i>Mega Man 3</i></td>
+<td>
+<ul><li> On the boss select screen, the scanline above Shadow Man looks wrong.</li>
+<li> The first scanline of the menu is glitched.</li></ul>
+</td></tr>
+<tr>
+<td><i>Mega Man 5</i></td>
+<td> In Gyro Man's stage, inside the two elevators, the floor moves up by a few pixels when the elevator goes up, and move back down when the screen is fast-scrolled.
+</td></tr>
+<tr>
+<td><i>Mitsume ga Tooru</i></td>
+<td> Garbage data is visible in the upper side of the status bar by mistake when shaken by an earthquake, due to the status bar and playfield both sharing the nametables.
+</td></tr>
+<tr>
+<td><i>Panic Restaurant</i></td>
+<td> The in-game status bar, always bumps up by 1 pixel.
+</td></tr>
+<tr>
+<td><i>Rad Racer</i></td>
+<td> Steer to the far left, and a background scanline will be seen on the road.
+</td></tr>
+<tr>
+<td><i>Rambo</i></td>
+<td>One scanline is occasionally glitched, for the same reason as in <i>Super Mario Bros.</i><a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=154894#p154894" rel="nofollow">[1]</a>
+</td></tr>
+<tr>
+<td><i>Rampart</i> (Jaleco) </td>
+<td> During build phase, the drums (on the noise channel) drop out fairly early.
+</td></tr>
+<tr>
+<td><i>Snow Bros.</i></td>
+<td> When you clear the stage to rise to the next floor, the cause of it of CHR bank switching, glitches before the floor of the graphic will be due.
+</td></tr>
+<tr>
+<td><i>StarTropics</i></td>
+<td> The island map music (NSF track 1) has a problem with the second square channel: it is intermittently silent or playing the wrong notes after the first minute or two, because the music data was not made to fit/repeat properly.
+</td></tr>
+<tr>
+<td><i>Super Mario Bros.</i></td>
+<td>
+<ul><li> The status bar shakes horizontally on heavy sprite usage and the music slows down. This can be seen especially in worlds 6-4, 7-4 and 8-4, where the large number of hammer objects created by Bowser's code causes the processing time to overshoot a frame. NMIs are disabled on entry to the NMI code and only reenabled when the CPU is &quot;idle&quot;, thus when the overshoot occurs, the CPU &quot;misses&quot; a frame, causing general slowdown and status bar shakiness.</li>
+<li> At various parts of 1-2, in certain CPU/PPU alignments, a single scanline gets glitched. This is caused by <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=112424#p112424" rel="nofollow">writing $2000 to reenable NMI at the exact end of the previous scanline</a>, causing the PPU to begin that scanline from the first nametable instead of the second.</li></ul>
+</td></tr>
+<tr>
+<td><i>Super Mario Bros. 3</i> (U)</td>
+<td>
+<ul><li> The first scanline after a scroll split is glitched. This shows up as garbage above the left side of the status bar and as incorrectly scrolled lines in the &quot;spade&quot; (not N-spade) bonus game.</li>
+<li> Note blocks containing items become squarer for a second while the item is popping out. (This is an artifact of the <a class="mw-redirect" href="PPU_sprite_priority.xhtml" title="Sprite priority">sprite priority</a> exploit that it uses.)</li>
+<li> If a Hammer Bros. battle ends precisely when a note is starting, the note will freeze on an incorrect duty cycle.</li>
+<li> Big fat attribute glitch on the right side of most levels, because this game uses horizontal scrolling with horizontal <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>. Discussed heavily.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?f=10&amp;t=7844" rel="nofollow">[2]</a></li></ul>
+</td></tr>
+<tr>
+<td><i>Teenage Mutant Ninja Turtles</i></td>
+<td> The status bar flashes to a situation where you are using a heavy sprite in most action levels.
+</td></tr>
+<tr>
+<td><i>The Addams Family</i></td>
+<td> The in-game status bar occasionally bumps vertically by 1 pixel, caused by non-solid background pixels overlapping the sprite zero that is used for the status bar split.
+</td></tr>
+<tr>
+<td><i>Zelda II: The Adventure of Link</i> (U)</td>
+<td>
+<p>Reads from $2007 during the title screen twice, moving the background upward by 2 scanlines after the split point.
+</p>
+</td></tr></table>
+<h2><span class="mw-headline" id=".22Impossible.22_controller_input">&quot;Impossible&quot; controller input</span></h2>
+<p>Many games do weird and buggy things when button combinations that would be impossible (or at least very hard) to input on a real controller are pressed. This comprises pressing left+right and up+down simultaneously.
+You probably want to prevent impossible controller input by default in an emulator, but have an option to allow it for those feeling experimental.
+</p>
+<ul><li> In <i>Zelda II: The Adventure of Link</i>, Link can gain tremendous speed when pressing left+right.</li>
+<li> In <i>Tiny Toon Adventures</i>, the player can gain unusual speed when pressing left+right.</li>
+<li> In <i>Spy vs. Spy</i>, the character turns into an airplane when pressing left+right.</li>
+<li> In <i>Battletoads</i>, pressing up+down in the vertical tunnel level kills the player instantly. Additionally, pressing left+right causes the player to walk up/back even when in pure 2D stages, which can result in certain areas becoming impossible to complete.</li>
+<li> In <i>Mega Man 1</i>, <i>2</i>, by pressing up+down at the top of a ladder, one may enter the &quot;climbing ladder&quot; state briefly above the top of the ladder. This allows &quot;zipping&quot; through walls.</li>
+<li> In <i>Panic Restaurant</i>, pressing up while crouching (by pressing down, thus pressing up+down simultaneously) the player character's sprite uses garbage data including the damage sprite. This does not occur if up is pressed before down; the player chef merely stands still.</li>
+<li> In <i>Teenage Mutant Ninja Turtles</i>, If you press the attack button while you jump while pressing up+down, the player character uses a garbage sprite, and attacks will use unusual (i.e. garbage data) hitboxes.</li>
+<li> In <i>Teenage Mutant Ninja Turtles II: The Arcade Game</i>, when you jump with a left or right move while pressing up+down, the player character will move in unusual directions and speeds, possibly screen-wrapping.</li></ul>
+<h2><span class="mw-headline" id="Overscan_ugliness">Overscan ugliness</span></h2>
+<p>Some games display junk tiles in the <a href="Overscan.xhtml" title="Overscan">overscan</a> area, which is usually not seen (or is at least partially obstructed) on real TV sets. Examples include the NTSC versions of <i>Metal Gear</i> (e.g. in the jungle area when gameplay starts) and <i>Solstice</i> (on the title screen).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.085 seconds
+Real time usage: 0.089 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:235-1!*!0!!*!*!* and timestamp 20160607010243 and revision id 12599
+ -->
+</div></body></html>

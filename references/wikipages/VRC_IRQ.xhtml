@@ -1,0 +1,80 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC IRQ</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC IRQ</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#IRQ_Latch"><span class="tocnumber">2.1</span> <span class="toctext">IRQ Latch</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#IRQ_Control"><span class="tocnumber">2.2</span> <span class="toctext">IRQ Control</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#IRQ_Acknowledge"><span class="tocnumber">2.3</span> <span class="toctext">IRQ Acknowledge</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Operation"><span class="tocnumber">3</span> <span class="toctext">Operation</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>Konami's <a href="VRC4.xhtml" title="VRC4">VRC4</a>, <a href="VRC6.xhtml" title="VRC6">VRC6</a>, and <a href="VRC7.xhtml" title="VRC7">VRC7</a> share the same IRQ system.
+</p><p>This system is fairly unique, in that it is driven by CPU cycles, yet it can imitate a scanline counter.  It does this by having a prescaler that divides the cycles by 113⅔, the number of cycles in each scanline on <a href="Clock_rate.xhtml" title="Clock rate">Famicom, NTSC NES, and Dendy-style PAL famiclones</a>. The scanline on an authentic PAL NES is slightly shorter (106⁵⁄₁₆); if PAL games were to use a VRC, scanline counts would need to be rescaled by ¹⁵/₁₆.  Since it is a CPU cycle counter and not a true scanline counter, when enabled it will run even during VBlank, or even when PPU rendering is disabled.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>There are 3 control registers for VRC IRQs:  <b>IRQ Latch</b>, <b>IRQ Control</b>, and <b>IRQ Acknowledge</b> (see desired mapper page for which addresses correspond to which register).
+</p>
+<h3><span class="mw-headline" id="IRQ_Latch">IRQ Latch</span></h3>
+<pre>7  bit  0
+---------
+LLLL LLLL
+|||| ||||
+++++-++++- IRQ Latch (reload value)
+</pre>
+<p>Note that on VRC4, this register is split across two addresses:  one for the high 4 bits, and one for the low 4 bits.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="IRQ_Control">IRQ Control</span></h3>
+<pre>7  bit  0
+---------
+.... .MEA
+      |||
+      ||+- IRQ Enable after acknowledgement (see <b>IRQ Acknowledge</b>)
+      |+-- IRQ Enable (1 = enabled)
+      +--- IRQ Mode (1 = cycle mode, 0 = scanline mode)
+</pre>
+<p>Any write to this register will acknowledge the pending IRQ.  If this register is written to with 'E' set, the IRQ counter is reloaded with the latch value, and the IRQ prescaler is reset.  If 'E' is clear, the IRQ counter and prescaler remain unchanged.  The 'A' bit here has no immediate effect, and remains unused until <b>IRQ Acknowledge</b> is written to. It can be used to distinguish a one-shot IRQ from a repeated IRQ.
+</p>
+<h3><span class="mw-headline" id="IRQ_Acknowledge">IRQ Acknowledge</span></h3>
+<pre>7  bit  0
+---------
+.... ....
+</pre>
+<p>Any write to this register will acknowledge the pending IRQ.  In addition, the 'A' control bit moves to the 'E' control bit, enabling or disabling IRQs.  Writes to this register do not affect the current state of the IRQ counter or prescaler.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Operation">Operation</span></h2>
+<p>When in scanline mode ('M' bit clear), a prescaler divides the passing CPU cycles by 114, 114, then 113 (and repeats that order).  This approximates 113+2/3 CPU cycles, which is one NTSC scanline.  When the prescaler is reset (by writing to the <b>IRQ Control</b> register with 'E' set), the sequence is reset and it will be 114 CPU cycles before the IRQ counter will be clocked.
+</p><p>A simple way to emulate this behavior is to have the prescaler start at 341 and subtract 3 every CPU cycle.  When it drops to or below 0, increment it by 341 and clock the IRQ counter.
+</p><p>When in cycle mode ('M' bit set), the prescaler is effectively bypassed, and the IRQ counter gets clocked every CPU cycle.
+</p><p>When the IRQ counter is clocked:
+</p>
+<ul><li> If IRQ counter is $FF, reload IRQ counter with latch value 'L', trip IRQ</li>
+<li> otherwise, increment IRQ counter by 1</li></ul>
+<p>If IRQs are disabled ('E' bit clear), neither the prescaler nor IRQ counter gets clocked.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.040 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:100-1!*!0!!en!*!* and timestamp 20160208222801 and revision id 9617
+ -->
+</div></body></html>

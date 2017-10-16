@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Emulator tests</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Emulator tests</h1><div class="article">
+<p>The <a class="external free" href="http://blargg.parodius.com" rel="nofollow">http://blargg.parodius.com</a> links are broken (e.g., instr_test-v3.zip). --<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> 21:30, 17 January 2013 (MST)
+</p>
+<dl><dd>They'll <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=106293#p106293" rel="nofollow">remain broken until slack.net comes back</a>. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 06:38, 18 January 2013 (MST)</dd></dl>
+<p>Breaking out the &quot;Hard-to-emulate games&quot; section into its own page might be nice. While they make good &quot;emulator tests&quot; in a sense, there's no indication that you'll find them here. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 14:20, 1 April 2013 (MDT)
+</p>
+<dl><dd>I went ahead. Hopefully not too controversial. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 07:55, 2 April 2013 (MDT)</dd></dl>
+<p>The Nintendulator log for the nestest.nes file appears to contain inaccuracies. For example, line 103 (opcode 0x28: PLP) should pull 0xFF from the stack and set the processor status to 0xFF, but as you can see in the next line, the processor status is 0xEF. This is wrong according to sources such as <a class="external text" href="http://visual6502.org" rel="nofollow">visual6502</a>, <a class="external text" href="http://www.e-tradition.net/bytes/6502/index.html" rel="nofollow">e-tradition</a>, and <a class="external text" href="http://www.obelisk.demon.co.uk/6502/reference.html#PLP" rel="nofollow">obelisk's 6502 reference</a> -- a random contributor at <s>129.120.53.184</s> 15:33, 24 July 2013 (MDT)
+</p>
+<dl><dd> The BRK bit <i>does not exist</i>. P is a <i>six-bit</i> register, and the other two bits only have defined values when in the stack. In this case, any of 0xCF, 0xDF, 0xEF, and 0xFF are valid values for the fictionalized eight-bit version of P. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:06, 24 July 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Mouse_test_link_is_broken">Mouse test link is broken</span></h2>
+<p>The mouse test at <a class="external free" href="http://rdev.g-pw.org/makimura/homebrew" rel="nofollow">http://rdev.g-pw.org/makimura/homebrew</a> cannot be found. The page (and site) is down.<s>184.97.70.230</s> 12:50, 31 January 2015 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1087-1!*!0!*!*!*!* and timestamp 20160208224006 and revision id 9474
+ -->
+</div></body></html>

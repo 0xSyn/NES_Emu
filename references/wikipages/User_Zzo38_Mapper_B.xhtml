@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper B</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper B</h1><div class="article">
+<p><br/>
+This mapper was originally described by tepples as &quot;Mapper 670&quot; after its use of a 74HC670 prior to the division of the <a href="NES_2_0.xhtml#Byte_8_.28Mapper_variant.29" title="NES 2.0">NES 2.0 expanded mapper space</a> into <a href="Mapper.xhtml#Supplementary_Multilingual_Plane" title="Mapper">planes</a>.
+</p><p>CPU address space:
+</p>
+<ul><li> $8000-$9FFF: Switchable bank 0</li>
+<li> $A000-$BFFF: Switchable bank 1</li>
+<li> $C000-$DFFF: Switchable bank 2</li>
+<li> $E000-$EFFF: Switchable bank 3</li>
+<li> $F000-$FFFF: Fixed to last bank</li></ul>
+<p>Banks are switched by writing the 8K bank number into the low four bits of registers in the same address space where the banks are at. There is no bus conflicts.
+</p><p>Sometimes there may be PRG RAM at $6000-$7FFF. Usually there is 8K CHR RAM, although it would also work with 8K CHR ROM.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=2669" rel="nofollow">Original forum post</a> (November 2006)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1118-1!*!0!*!*!*!* and timestamp 20160208230558 and revision id 7951
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a></p></div></body></html>

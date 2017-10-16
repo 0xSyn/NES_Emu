@@ -1,0 +1,727 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU unofficial opcodes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU unofficial opcodes</h1><div class="article">
+<p><b>Unofficial opcodes</b>, sometimes called <b>illegal opcodes</b> or <b>undocumented opcodes</b>, are <a href="6502_instructions.xhtml" title="6502 instructions">CPU instructions</a> that were officially left unused by the original design. The 6502 family datasheet from MOS Technology does not specify or document their function, but they actually do perform various operations.
+</p><p>Some of these instructions are useful; some are not predictable; some do nothing but burn cycles; some halt the CPU until reset.
+Most NMOS 6502 cores interpret them the same way, although there are slight differences with the less stable instructions.
+CMOS variants of the 6502 handle them completely differently, and later CPUs in the same family (e.g. 65C02, HuC6280, 65C816) were free to implement new instructions in the place of the unused ones.
+</p><p>An <a href="Accuracy.xhtml" title="Accuracy">accurate</a> NES emulator must implement all instructions, not just the official ones. A small number of games use them (see <a href="#Games_using_unofficial_opcodes">below</a>).
+</p><p>The following documents may provide reference for these instructions:
+</p>
+<ul><li> <a class="external text" href="http://www.oxyron.de/html/opcodes02.html" rel="nofollow">6502/6510/8500/8502 Opcode matrix</a></li>
+<li> <a class="external text" href="http://www.romhacking.net/documents/318/" rel="nofollow">65xx Processor Data</a></li>
+<li> <a class="external text" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">6502_cpu.txt</a></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Arrangement"><span class="tocnumber">1</span> <span class="toctext">Arrangement</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Games_using_unofficial_opcodes"><span class="tocnumber">2</span> <span class="toctext">Games using unofficial opcodes</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#External_links"><span class="tocnumber">4</span> <span class="toctext">External links</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Arrangement">Arrangement</span></h2>
+<p>The microcode of the 6502 is compressed into a 130-entry decode ROM.
+Instead of 256 entries telling how to process each separate opcode, it's encoded as combinational logic post-processing the output of a &quot;sparse&quot; ROM that acts in some ways like a programmable logic array (PLA).
+Each entry in the ROM means &quot;if these bits are on, and these bits are off, do things on these six cycles.&quot; <a class="external autonumber" href="http://www.pagetable.com/?p=39" rel="nofollow">[1]</a>
+Many instructions activate multiple lines of the decode ROM at once.
+Often this is on purpose, such as one line for the addressing mode and one for the opcode part.
+But many of the unofficial opcodes simultaneously trigger parts of the ROM that were intended for completely unrelated instructions.
+</p><p>Perhaps the pattern is easier to see by shuffling the 6502's opcode matrix.
+This table lists all 6502 opcodes, 32 columns per row.
+The columns are colored by bits 1 and 0:
+00 red, 01 green, 10 blue, and 11 gray.
+</p>
+<table>
+<tr>
+<th> </th>
+<th>+00</th>
+<th>+01</th>
+<th>+02</th>
+<th>+03</th>
+<th>+04</th>
+<th>+05</th>
+<th>+06</th>
+<th>+07</th>
+<th>+08</th>
+<th>+09</th>
+<th>+0A</th>
+<th>+0B</th>
+<th>+0C</th>
+<th>+0D</th>
+<th>+0E</th>
+<th>+0F</th>
+<th>+10</th>
+<th>+11</th>
+<th>+12</th>
+<th>+13</th>
+<th>+14</th>
+<th>+15</th>
+<th>+16</th>
+<th>+17</th>
+<th>+18</th>
+<th>+19</th>
+<th>+1A</th>
+<th>+1B</th>
+<th>+1C</th>
+<th>+1D</th>
+<th>+1E</th>
+<th>+1F
+</th></tr>
+<tr valign="top">
+<td>00</td>
+<td style="background:#FCC">BRK<br/></td>
+<td style="background:#CFC">ORA<br/>(d,x)</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>SLO</b><br/>(d,x)</td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#CFC">ORA<br/>d</td>
+<td style="background:#CCF">ASL<br/>d</td>
+<td style="background:#DDD"><b>SLO</b><br/>d</td>
+<td style="background:#FCC">PHP<br/></td>
+<td style="background:#CFC">ORA<br/>#i</td>
+<td style="background:#CCF">ASL<br/></td>
+<td style="background:#DDD"><b>ANC</b><br/>#i</td>
+<td style="background:#FCC"><b>NOP</b><br/>a</td>
+<td style="background:#CFC">ORA<br/>a</td>
+<td style="background:#CCF">ASL<br/>a</td>
+<td style="background:#DDD"><b>SLO</b><br/>a</td>
+<td style="background:#FCC">BPL<br/>*+d</td>
+<td style="background:#CFC">ORA<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>SLO</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">ORA<br/>d,x</td>
+<td style="background:#CCF">ASL<br/>d,x</td>
+<td style="background:#DDD"><b>SLO</b><br/>d,x</td>
+<td style="background:#FCC">CLC<br/></td>
+<td style="background:#CFC">ORA<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>SLO</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">ORA<br/>a,x</td>
+<td style="background:#CCF">ASL<br/>a,x</td>
+<td style="background:#DDD"><b>SLO</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>20</td>
+<td style="background:#FCC">JSR<br/>a</td>
+<td style="background:#CFC">AND<br/>(d,x)</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>RLA</b><br/>(d,x)</td>
+<td style="background:#FCC">BIT<br/>d</td>
+<td style="background:#CFC">AND<br/>d</td>
+<td style="background:#CCF">ROL<br/>d</td>
+<td style="background:#DDD"><b>RLA</b><br/>d</td>
+<td style="background:#FCC">PLP<br/></td>
+<td style="background:#CFC">AND<br/>#i</td>
+<td style="background:#CCF">ROL<br/></td>
+<td style="background:#DDD"><b>ANC</b><br/>#i</td>
+<td style="background:#FCC">BIT<br/>a</td>
+<td style="background:#CFC">AND<br/>a</td>
+<td style="background:#CCF">ROL<br/>a</td>
+<td style="background:#DDD"><b>RLA</b><br/>a</td>
+<td style="background:#FCC">BMI<br/>*+d</td>
+<td style="background:#CFC">AND<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>RLA</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">AND<br/>d,x</td>
+<td style="background:#CCF">ROL<br/>d,x</td>
+<td style="background:#DDD"><b>RLA</b><br/>d,x</td>
+<td style="background:#FCC">SEC<br/></td>
+<td style="background:#CFC">AND<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>RLA</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">AND<br/>a,x</td>
+<td style="background:#CCF">ROL<br/>a,x</td>
+<td style="background:#DDD"><b>RLA</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>40</td>
+<td style="background:#FCC">RTI<br/></td>
+<td style="background:#CFC">EOR<br/>(d,x)</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>SRE</b><br/>(d,x)</td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#CFC">EOR<br/>d</td>
+<td style="background:#CCF">LSR<br/>d</td>
+<td style="background:#DDD"><b>SRE</b><br/>d</td>
+<td style="background:#FCC">PHA<br/></td>
+<td style="background:#CFC">EOR<br/>#i</td>
+<td style="background:#CCF">LSR<br/></td>
+<td style="background:#DDD"><b>ALR</b><br/>#i</td>
+<td style="background:#FCC">JMP<br/>a</td>
+<td style="background:#CFC">EOR<br/>a</td>
+<td style="background:#CCF">LSR<br/>a</td>
+<td style="background:#DDD"><b>SRE</b><br/>a</td>
+<td style="background:#FCC">BVC<br/>*+d</td>
+<td style="background:#CFC">EOR<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>SRE</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">EOR<br/>d,x</td>
+<td style="background:#CCF">LSR<br/>d,x</td>
+<td style="background:#DDD"><b>SRE</b><br/>d,x</td>
+<td style="background:#FCC">CLI<br/></td>
+<td style="background:#CFC">EOR<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>SRE</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">EOR<br/>a,x</td>
+<td style="background:#CCF">LSR<br/>a,x</td>
+<td style="background:#DDD"><b>SRE</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>60</td>
+<td style="background:#FCC">RTS<br/></td>
+<td style="background:#CFC">ADC<br/>(d,x)</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>RRA</b><br/>(d,x)</td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#CFC">ADC<br/>d</td>
+<td style="background:#CCF">ROR<br/>d</td>
+<td style="background:#DDD"><b>RRA</b><br/>d</td>
+<td style="background:#FCC">PLA<br/></td>
+<td style="background:#CFC">ADC<br/>#i</td>
+<td style="background:#CCF">ROR<br/></td>
+<td style="background:#DDD"><b>ARR</b><br/>#i</td>
+<td style="background:#FCC">JMP<br/>(a)</td>
+<td style="background:#CFC">ADC<br/>a</td>
+<td style="background:#CCF">ROR<br/>a</td>
+<td style="background:#DDD"><b>RRA</b><br/>a</td>
+<td style="background:#FCC">BVS<br/>*+d</td>
+<td style="background:#CFC">ADC<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>RRA</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">ADC<br/>d,x</td>
+<td style="background:#CCF">ROR<br/>d,x</td>
+<td style="background:#DDD"><b>RRA</b><br/>d,x</td>
+<td style="background:#FCC">SEI<br/></td>
+<td style="background:#CFC">ADC<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>RRA</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">ADC<br/>a,x</td>
+<td style="background:#CCF">ROR<br/>a,x</td>
+<td style="background:#DDD"><b>RRA</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>80</td>
+<td style="background:#FCC"><b>NOP</b><br/>#i</td>
+<td style="background:#CFC">STA<br/>(d,x)</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#DDD"><b>SAX</b><br/>(d,x)</td>
+<td style="background:#FCC">STY<br/>d</td>
+<td style="background:#CFC">STA<br/>d</td>
+<td style="background:#CCF">STX<br/>d</td>
+<td style="background:#DDD"><b>SAX</b><br/>d</td>
+<td style="background:#FCC">DEY<br/></td>
+<td style="background:#CFC"><b>NOP</b><br/>#i</td>
+<td style="background:#CCF">TXA<br/></td>
+<td style="background:#DDD"><b>XAA</b><br/>#i</td>
+<td style="background:#FCC">STY<br/>a</td>
+<td style="background:#CFC">STA<br/>a</td>
+<td style="background:#CCF">STX<br/>a</td>
+<td style="background:#DDD"><b>SAX</b><br/>a</td>
+<td style="background:#FCC">BCC<br/>*+d</td>
+<td style="background:#CFC">STA<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>AHX</b><br/>(d),y</td>
+<td style="background:#FCC">STY<br/>d,x</td>
+<td style="background:#CFC">STA<br/>d,x</td>
+<td style="background:#CCF">STX<br/>d,y</td>
+<td style="background:#DDD"><b>SAX</b><br/>d,y</td>
+<td style="background:#FCC">TYA<br/></td>
+<td style="background:#CFC">STA<br/>a,y</td>
+<td style="background:#CCF">TXS<br/></td>
+<td style="background:#DDD"><b>TAS</b><br/>a,y</td>
+<td style="background:#FCC"><b>SHY</b><br/>a,x</td>
+<td style="background:#CFC">STA<br/>a,x</td>
+<td style="background:#CCF"><b>SHX</b><br/>a,y</td>
+<td style="background:#DDD"><b>AHX</b><br/>a,y
+</td></tr>
+<tr valign="top">
+<td>A0</td>
+<td style="background:#FCC">LDY<br/>#i</td>
+<td style="background:#CFC">LDA<br/>(d,x)</td>
+<td style="background:#CCF">LDX<br/>#i</td>
+<td style="background:#DDD"><b>LAX</b><br/>(d,x)</td>
+<td style="background:#FCC">LDY<br/>d</td>
+<td style="background:#CFC">LDA<br/>d</td>
+<td style="background:#CCF">LDX<br/>d</td>
+<td style="background:#DDD"><b>LAX</b><br/>d</td>
+<td style="background:#FCC">TAY<br/></td>
+<td style="background:#CFC">LDA<br/>#i</td>
+<td style="background:#CCF">TAX<br/></td>
+<td style="background:#DDD"><b>LAX</b><br/>#i</td>
+<td style="background:#FCC">LDY<br/>a</td>
+<td style="background:#CFC">LDA<br/>a</td>
+<td style="background:#CCF">LDX<br/>a</td>
+<td style="background:#DDD"><b>LAX</b><br/>a</td>
+<td style="background:#FCC">BCS<br/>*+d</td>
+<td style="background:#CFC">LDA<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>LAX</b><br/>(d),y</td>
+<td style="background:#FCC">LDY<br/>d,x</td>
+<td style="background:#CFC">LDA<br/>d,x</td>
+<td style="background:#CCF">LDX<br/>d,y</td>
+<td style="background:#DDD"><b>LAX</b><br/>d,y</td>
+<td style="background:#FCC">CLV<br/></td>
+<td style="background:#CFC">LDA<br/>a,y</td>
+<td style="background:#CCF">TSX<br/></td>
+<td style="background:#DDD"><b>LAS</b><br/>a,y</td>
+<td style="background:#FCC">LDY<br/>a,x</td>
+<td style="background:#CFC">LDA<br/>a,x</td>
+<td style="background:#CCF">LDX<br/>a,y</td>
+<td style="background:#DDD"><b>LAX</b><br/>a,y
+</td></tr>
+<tr valign="top">
+<td>C0</td>
+<td style="background:#FCC">CPY<br/>#i</td>
+<td style="background:#CFC">CMP<br/>(d,x)</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#DDD"><b>DCP</b><br/>(d,x)</td>
+<td style="background:#FCC">CPY<br/>d</td>
+<td style="background:#CFC">CMP<br/>d</td>
+<td style="background:#CCF">DEC<br/>d</td>
+<td style="background:#DDD"><b>DCP</b><br/>d</td>
+<td style="background:#FCC">INY<br/></td>
+<td style="background:#CFC">CMP<br/>#i</td>
+<td style="background:#CCF">DEX<br/></td>
+<td style="background:#DDD"><b>AXS</b><br/>#i</td>
+<td style="background:#FCC">CPY<br/>a</td>
+<td style="background:#CFC">CMP<br/>a</td>
+<td style="background:#CCF">DEC<br/>a</td>
+<td style="background:#DDD"><b>DCP</b><br/>a</td>
+<td style="background:#FCC">BNE<br/>*+d</td>
+<td style="background:#CFC">CMP<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>DCP</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">CMP<br/>d,x</td>
+<td style="background:#CCF">DEC<br/>d,x</td>
+<td style="background:#DDD"><b>DCP</b><br/>d,x</td>
+<td style="background:#FCC">CLD<br/></td>
+<td style="background:#CFC">CMP<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>DCP</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">CMP<br/>a,x</td>
+<td style="background:#CCF">DEC<br/>a,x</td>
+<td style="background:#DDD"><b>DCP</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>E0</td>
+<td style="background:#FCC">CPX<br/>#i</td>
+<td style="background:#CFC">SBC<br/>(d,x)</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#DDD"><b>ISC</b><br/>(d,x)</td>
+<td style="background:#FCC">CPX<br/>d</td>
+<td style="background:#CFC">SBC<br/>d</td>
+<td style="background:#CCF">INC<br/>d</td>
+<td style="background:#DDD"><b>ISC</b><br/>d</td>
+<td style="background:#FCC">INX<br/></td>
+<td style="background:#CFC">SBC<br/>#i</td>
+<td style="background:#CCF">NOP<br/></td>
+<td style="background:#DDD"><b>SBC</b><br/>#i</td>
+<td style="background:#FCC">CPX<br/>a</td>
+<td style="background:#CFC">SBC<br/>a</td>
+<td style="background:#CCF">INC<br/>a</td>
+<td style="background:#DDD"><b>ISC</b><br/>a</td>
+<td style="background:#FCC">BEQ<br/>*+d</td>
+<td style="background:#CFC">SBC<br/>(d),y</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#DDD"><b>ISC</b><br/>(d),y</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#CFC">SBC<br/>d,x</td>
+<td style="background:#CCF">INC<br/>d,x</td>
+<td style="background:#DDD"><b>ISC</b><br/>d,x</td>
+<td style="background:#FCC">SED<br/></td>
+<td style="background:#CFC">SBC<br/>a,y</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#DDD"><b>ISC</b><br/>a,y</td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">SBC<br/>a,x</td>
+<td style="background:#CCF">INC<br/>a,x</td>
+<td style="background:#DDD"><b>ISC</b><br/>a,x
+</td></tr></table>
+<p>Key: a is a 16-bit absolute address, and d is an 8-bit zero page address.
+</p><p>But if we rearrange it so that columns with the same bits 1-0
+are close together, correlations become easier to see:
+</p>
+<table>
+<tr>
+<th> </th>
+<th>+00</th>
+<th>+04</th>
+<th>+08</th>
+<th>+0C</th>
+<th>+10</th>
+<th>+14</th>
+<th>+18</th>
+<th>+1C</th>
+<th>+01</th>
+<th>+05</th>
+<th>+09</th>
+<th>+0D</th>
+<th>+11</th>
+<th>+15</th>
+<th>+19</th>
+<th>+1D</th>
+<th>+02</th>
+<th>+06</th>
+<th>+0A</th>
+<th>+0E</th>
+<th>+12</th>
+<th>+16</th>
+<th>+1A</th>
+<th>+1E</th>
+<th>+03</th>
+<th>+07</th>
+<th>+0B</th>
+<th>+0F</th>
+<th>+13</th>
+<th>+17</th>
+<th>+1B</th>
+<th>+1F
+</th></tr>
+<tr valign="top">
+<td>00</td>
+<td style="background:#FCC">BRK<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#FCC">PHP<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a</td>
+<td style="background:#FCC">BPL<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">CLC<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">ORA<br/>(d,x)</td>
+<td style="background:#CFC">ORA<br/>d</td>
+<td style="background:#CFC">ORA<br/>#i</td>
+<td style="background:#CFC">ORA<br/>a</td>
+<td style="background:#CFC">ORA<br/>(d),y</td>
+<td style="background:#CFC">ORA<br/>d,x</td>
+<td style="background:#CFC">ORA<br/>a,y</td>
+<td style="background:#CFC">ORA<br/>a,x</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ASL<br/>d</td>
+<td style="background:#CCF">ASL<br/></td>
+<td style="background:#CCF">ASL<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ASL<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">ASL<br/>a,x</td>
+<td style="background:#DDD"><b>SLO</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>SLO</b><br/>d</td>
+<td style="background:#DDD"><b>ANC</b><br/>#i</td>
+<td style="background:#DDD"><b>SLO</b><br/>a</td>
+<td style="background:#DDD"><b>SLO</b><br/>(d),y</td>
+<td style="background:#DDD"><b>SLO</b><br/>d,x</td>
+<td style="background:#DDD"><b>SLO</b><br/>a,y</td>
+<td style="background:#DDD"><b>SLO</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>20</td>
+<td style="background:#FCC">JSR<br/>a</td>
+<td style="background:#FCC">BIT<br/>d</td>
+<td style="background:#FCC">PLP<br/></td>
+<td style="background:#FCC">BIT<br/>a</td>
+<td style="background:#FCC">BMI<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">SEC<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">AND<br/>(d,x)</td>
+<td style="background:#CFC">AND<br/>d</td>
+<td style="background:#CFC">AND<br/>#i</td>
+<td style="background:#CFC">AND<br/>a</td>
+<td style="background:#CFC">AND<br/>(d),y</td>
+<td style="background:#CFC">AND<br/>d,x</td>
+<td style="background:#CFC">AND<br/>a,y</td>
+<td style="background:#CFC">AND<br/>a,x</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ROL<br/>d</td>
+<td style="background:#CCF">ROL<br/></td>
+<td style="background:#CCF">ROL<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ROL<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">ROL<br/>a,x</td>
+<td style="background:#DDD"><b>RLA</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>RLA</b><br/>d</td>
+<td style="background:#DDD"><b>ANC</b><br/>#i</td>
+<td style="background:#DDD"><b>RLA</b><br/>a</td>
+<td style="background:#DDD"><b>RLA</b><br/>(d),y</td>
+<td style="background:#DDD"><b>RLA</b><br/>d,x</td>
+<td style="background:#DDD"><b>RLA</b><br/>a,y</td>
+<td style="background:#DDD"><b>RLA</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>40</td>
+<td style="background:#FCC">RTI<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#FCC">PHA<br/></td>
+<td style="background:#FCC">JMP<br/>a</td>
+<td style="background:#FCC">BVC<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">CLI<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">EOR<br/>(d,x)</td>
+<td style="background:#CFC">EOR<br/>d</td>
+<td style="background:#CFC">EOR<br/>#i</td>
+<td style="background:#CFC">EOR<br/>a</td>
+<td style="background:#CFC">EOR<br/>(d),y</td>
+<td style="background:#CFC">EOR<br/>d,x</td>
+<td style="background:#CFC">EOR<br/>a,y</td>
+<td style="background:#CFC">EOR<br/>a,x</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">LSR<br/>d</td>
+<td style="background:#CCF">LSR<br/></td>
+<td style="background:#CCF">LSR<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">LSR<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">LSR<br/>a,x</td>
+<td style="background:#DDD"><b>SRE</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>SRE</b><br/>d</td>
+<td style="background:#DDD"><b>ALR</b><br/>#i</td>
+<td style="background:#DDD"><b>SRE</b><br/>a</td>
+<td style="background:#DDD"><b>SRE</b><br/>(d),y</td>
+<td style="background:#DDD"><b>SRE</b><br/>d,x</td>
+<td style="background:#DDD"><b>SRE</b><br/>a,y</td>
+<td style="background:#DDD"><b>SRE</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>60</td>
+<td style="background:#FCC">RTS<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>d</td>
+<td style="background:#FCC">PLA<br/></td>
+<td style="background:#FCC">JMP<br/>(a)</td>
+<td style="background:#FCC">BVS<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">SEI<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">ADC<br/>(d,x)</td>
+<td style="background:#CFC">ADC<br/>d</td>
+<td style="background:#CFC">ADC<br/>#i</td>
+<td style="background:#CFC">ADC<br/>a</td>
+<td style="background:#CFC">ADC<br/>(d),y</td>
+<td style="background:#CFC">ADC<br/>d,x</td>
+<td style="background:#CFC">ADC<br/>a,y</td>
+<td style="background:#CFC">ADC<br/>a,x</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ROR<br/>d</td>
+<td style="background:#CCF">ROR<br/></td>
+<td style="background:#CCF">ROR<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">ROR<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">ROR<br/>a,x</td>
+<td style="background:#DDD"><b>RRA</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>RRA</b><br/>d</td>
+<td style="background:#DDD"><b>ARR</b><br/>#i</td>
+<td style="background:#DDD"><b>RRA</b><br/>a</td>
+<td style="background:#DDD"><b>RRA</b><br/>(d),y</td>
+<td style="background:#DDD"><b>RRA</b><br/>d,x</td>
+<td style="background:#DDD"><b>RRA</b><br/>a,y</td>
+<td style="background:#DDD"><b>RRA</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>80</td>
+<td style="background:#FCC"><b>NOP</b><br/>#i</td>
+<td style="background:#FCC">STY<br/>d</td>
+<td style="background:#FCC">DEY<br/></td>
+<td style="background:#FCC">STY<br/>a</td>
+<td style="background:#FCC">BCC<br/>*+d</td>
+<td style="background:#FCC">STY<br/>d,x</td>
+<td style="background:#FCC">TYA<br/></td>
+<td style="background:#FCC"><b>SHY</b><br/>a,x</td>
+<td style="background:#CFC">STA<br/>(d,x)</td>
+<td style="background:#CFC">STA<br/>d</td>
+<td style="background:#CFC"><b>NOP</b><br/>#i</td>
+<td style="background:#CFC">STA<br/>a</td>
+<td style="background:#CFC">STA<br/>(d),y</td>
+<td style="background:#CFC">STA<br/>d,x</td>
+<td style="background:#CFC">STA<br/>a,y</td>
+<td style="background:#CFC">STA<br/>a,x</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#CCF">STX<br/>d</td>
+<td style="background:#CCF">TXA<br/></td>
+<td style="background:#CCF">STX<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">STX<br/>d,y</td>
+<td style="background:#CCF">TXS<br/></td>
+<td style="background:#CCF"><b>SHX</b><br/>a,y</td>
+<td style="background:#DDD"><b>SAX</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>SAX</b><br/>d</td>
+<td style="background:#DDD"><b>XAA</b><br/>#i</td>
+<td style="background:#DDD"><b>SAX</b><br/>a</td>
+<td style="background:#DDD"><b>AHX</b><br/>(d),y</td>
+<td style="background:#DDD"><b>SAX</b><br/>d,y</td>
+<td style="background:#DDD"><b>TAS</b><br/>a,y</td>
+<td style="background:#DDD"><b>AHX</b><br/>a,y
+</td></tr>
+<tr valign="top">
+<td>A0</td>
+<td style="background:#FCC">LDY<br/>#i</td>
+<td style="background:#FCC">LDY<br/>d</td>
+<td style="background:#FCC">TAY<br/></td>
+<td style="background:#FCC">LDY<br/>a</td>
+<td style="background:#FCC">BCS<br/>*+d</td>
+<td style="background:#FCC">LDY<br/>d,x</td>
+<td style="background:#FCC">CLV<br/></td>
+<td style="background:#FCC">LDY<br/>a,x</td>
+<td style="background:#CFC">LDA<br/>(d,x)</td>
+<td style="background:#CFC">LDA<br/>d</td>
+<td style="background:#CFC">LDA<br/>#i</td>
+<td style="background:#CFC">LDA<br/>a</td>
+<td style="background:#CFC">LDA<br/>(d),y</td>
+<td style="background:#CFC">LDA<br/>d,x</td>
+<td style="background:#CFC">LDA<br/>a,y</td>
+<td style="background:#CFC">LDA<br/>a,x</td>
+<td style="background:#CCF">LDX<br/>#i</td>
+<td style="background:#CCF">LDX<br/>d</td>
+<td style="background:#CCF">TAX<br/></td>
+<td style="background:#CCF">LDX<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">LDX<br/>d,y</td>
+<td style="background:#CCF">TSX<br/></td>
+<td style="background:#CCF">LDX<br/>a,y</td>
+<td style="background:#DDD"><b>LAX</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>LAX</b><br/>d</td>
+<td style="background:#DDD"><b>LAX</b><br/>#i</td>
+<td style="background:#DDD"><b>LAX</b><br/>a</td>
+<td style="background:#DDD"><b>LAX</b><br/>(d),y</td>
+<td style="background:#DDD"><b>LAX</b><br/>d,y</td>
+<td style="background:#DDD"><b>LAS</b><br/>a,y</td>
+<td style="background:#DDD"><b>LAX</b><br/>a,y
+</td></tr>
+<tr valign="top">
+<td>C0</td>
+<td style="background:#FCC">CPY<br/>#i</td>
+<td style="background:#FCC">CPY<br/>d</td>
+<td style="background:#FCC">INY<br/></td>
+<td style="background:#FCC">CPY<br/>a</td>
+<td style="background:#FCC">BNE<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">CLD<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">CMP<br/>(d,x)</td>
+<td style="background:#CFC">CMP<br/>d</td>
+<td style="background:#CFC">CMP<br/>#i</td>
+<td style="background:#CFC">CMP<br/>a</td>
+<td style="background:#CFC">CMP<br/>(d),y</td>
+<td style="background:#CFC">CMP<br/>d,x</td>
+<td style="background:#CFC">CMP<br/>a,y</td>
+<td style="background:#CFC">CMP<br/>a,x</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#CCF">DEC<br/>d</td>
+<td style="background:#CCF">DEX<br/></td>
+<td style="background:#CCF">DEC<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">DEC<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">DEC<br/>a,x</td>
+<td style="background:#DDD"><b>DCP</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>DCP</b><br/>d</td>
+<td style="background:#DDD"><b>AXS</b><br/>#i</td>
+<td style="background:#DDD"><b>DCP</b><br/>a</td>
+<td style="background:#DDD"><b>DCP</b><br/>(d),y</td>
+<td style="background:#DDD"><b>DCP</b><br/>d,x</td>
+<td style="background:#DDD"><b>DCP</b><br/>a,y</td>
+<td style="background:#DDD"><b>DCP</b><br/>a,x
+</td></tr>
+<tr valign="top">
+<td>E0</td>
+<td style="background:#FCC">CPX<br/>#i</td>
+<td style="background:#FCC">CPX<br/>d</td>
+<td style="background:#FCC">INX<br/></td>
+<td style="background:#FCC">CPX<br/>a</td>
+<td style="background:#FCC">BEQ<br/>*+d</td>
+<td style="background:#FCC"><b>NOP</b><br/>d,x</td>
+<td style="background:#FCC">SED<br/></td>
+<td style="background:#FCC"><b>NOP</b><br/>a,x</td>
+<td style="background:#CFC">SBC<br/>(d,x)</td>
+<td style="background:#CFC">SBC<br/>d</td>
+<td style="background:#CFC">SBC<br/>#i</td>
+<td style="background:#CFC">SBC<br/>a</td>
+<td style="background:#CFC">SBC<br/>(d),y</td>
+<td style="background:#CFC">SBC<br/>d,x</td>
+<td style="background:#CFC">SBC<br/>a,y</td>
+<td style="background:#CFC">SBC<br/>a,x</td>
+<td style="background:#CCF"><b>NOP</b><br/>#i</td>
+<td style="background:#CCF">INC<br/>d</td>
+<td style="background:#CCF">NOP<br/></td>
+<td style="background:#CCF">INC<br/>a</td>
+<td style="background:#CCF"><b>STP</b><br/></td>
+<td style="background:#CCF">INC<br/>d,x</td>
+<td style="background:#CCF"><b>NOP</b><br/></td>
+<td style="background:#CCF">INC<br/>a,x</td>
+<td style="background:#DDD"><b>ISC</b><br/>(d,x)</td>
+<td style="background:#DDD"><b>ISC</b><br/>d</td>
+<td style="background:#DDD"><b>SBC</b><br/>#i</td>
+<td style="background:#DDD"><b>ISC</b><br/>a</td>
+<td style="background:#DDD"><b>ISC</b><br/>(d),y</td>
+<td style="background:#DDD"><b>ISC</b><br/>d,x</td>
+<td style="background:#DDD"><b>ISC</b><br/>a,y</td>
+<td style="background:#DDD"><b>ISC</b><br/>a,x
+</td></tr></table>
+<p>Thus the 00 (red) block is mostly control instructions,
+01 (green) is ALU operations,
+and 10 (blue) is read-modify-write (RMW) operations and data movement instructions involving X.
+The RMW instructions (all but row 80 and A0) in columns +06, +0E, +16, and +1E
+have the same addressing modes as the corresponding ALU operations.
+</p><p>The 11 (gray) block is unofficial opcodes combining the operations of instructions from the ALU and RMW blocks.
+all of them having the same addressing mode as the corresponding ALU opcode.
+The RMW+ALU instructions that affect memory are easiest to understand
+because their RMW part completes during the opcode and the ALU part completes during the next opcode's fetch.
+Column +0B, on the other hand, has no extra cycles; everything completes during the next opcode's fetch.
+This causes instructions to have strange mixing properties.
+Some even <a class="external text" href="http://visual6502.org/wiki/index.php?title=6502_Opcode_8B_%28XAA,_ANE%29" rel="nofollow">differ based on analog effects</a>.
+</p>
+<h2><span class="mw-headline" id="Games_using_unofficial_opcodes">Games using unofficial opcodes</span></h2>
+<p>The use of unofficial opcodes is rare in NES games. It appears to occur mostly in late or unlicensed titles:
+</p>
+<ul><li><i>Puzznic</i> (all regions) (US release November 1990) uses $89, which is a 2-byte NOP on 6502.</li>
+<li><i>F-117A Stealth Fighter</i> and <i>Infiltrator</i> also use $89.</li>
+<li><i>Beauty and the Beast</i> (E) (1994) uses a different 2-byte NOP ($80).<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup></li>
+<li><i>Dynowarz</i> uses 1-byte NOPs $DA and $FA on the first level when your dino throws his fist.</li>
+<li><i>Super Cars</i> (U) (February 1991) uses LAX ($B3)</li>
+<li><i>Disney's Aladdin</i> (E) (December 1994) uses SLO ($07). This is Virgin's port of the Game Boy game, itself a port of the Genesis game, not any of the <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Special:PrefixIndex/Aladdin" title="wikia:c:bootleggames:Special:PrefixIndex/Aladdin">pirate originals</a>.</li></ul>
+<p>As hobbyists became aware of what these instructions could do, homebrew games started to use them:
+</p>
+<ul><li>The MUSE music engine, used in <i>Driar</i> and <i>STREEMERZ: Super Strength Emergency Squad Zeta</i>, uses the unofficial opcodes $8F (SAX), $B3 (LAX), and $CB (AXS) <a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=100957#p100957" rel="nofollow">[2]</a></li>
+<li><i><a href="Attribute_Zone.xhtml" title="Attribute Zone">Attribute Zone</a></i> uses $0B (ANC), $2F (RLA), $4B (ALR), $A7 (LAX), $B3 (LAX), $CB (AXS), $D3 (DCP), $DB (DCP).</li>
+<li>The port of Zork to the Famicom uses a few unofficial opcodes.</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="Programming_with_unofficial_opcodes.xhtml" title="Programming with unofficial opcodes">Programming with unofficial opcodes</a></li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://www.oxyron.de/html/opcodes02.html" rel="nofollow">6502 opcode matrix including unofficial opcodes</a></li>
+<li><a class="external text" href="http://www.oxyron.de/html/opcodesc02.html" rel="nofollow">65C02</a> and <a class="external text" href="http://www.oxyron.de/html/opcodes816.html" rel="nofollow">65816</a></li>
+<li><a class="extiw" href="https://en.wikipedia.org/wiki/Illegal_opcode" title="wikipedia:Illegal opcode">Illegal opcodes</a> at Wikipedia.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=6928" rel="nofollow">puNES 0.20 changelog</a> indicating $80 opcode in <i>Beauty and the Beast</i>.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.392 seconds
+Real time usage: 0.400 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 114/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:492-1!*!0!!en!*!* and timestamp 20160530141710 and revision id 12430
+ -->
+</div></body></html>

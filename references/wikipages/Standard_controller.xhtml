@@ -1,0 +1,134 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Standard controller</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Standard controller</h1><div class="article">
+<p>All NES units come with at least one standard controller - without it, you wouldn't be able to play any games!
+</p><p>Standard controllers can be used in both controller ports, or in a <a class="mw-redirect" href="Four_Score.xhtml" title="Four score">Four score</a> accessory.
+</p>
+<dl><dd><i>For code examples, see: <a href="Controller_Reading.xhtml" title="Controller Reading">Controller Reading</a></i></dd></dl>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Input_.28.244016_write.29"><span class="tocnumber">1</span> <span class="toctext">Input ($4016 write)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Output_.28.244016.2F.244017_read.29"><span class="tocnumber">2</span> <span class="toctext">Output ($4016/$4017 read)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#APU_DMC_conflict_glitch"><span class="tocnumber">4</span> <span class="toctext"><span>APU DMC conflict glitch</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Multiple_Read_Solution"><span class="tocnumber">4.1</span> <span class="toctext">Multiple Read Solution</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Synchronized_OAM_Solution"><span class="tocnumber">4.2</span> <span class="toctext">Synchronized OAM Solution</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Turbo"><span class="tocnumber">5</span> <span class="toctext">Turbo</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#See_also"><span class="tocnumber">6</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxS
+        |
+        +- Controller shift register strobe
+</pre>
+<p>While S (<a href="Glossary.xhtml" title="Glossary">strobe</a>) is high, the shift registers in the controllers are continuously reloaded from the button states, and reading $4016/$4017 will keep returning the current state of the first button (A). Once S goes low, this reloading will stop. Hence a 1/0 write sequence is required to get the button states, after which the buttons can be read back one at a time.
+</p><p>(Note that bits 2-0 of $4016/write are stored in internal latches in the 2A03/07.)
+</p>
+<h3><span class="mw-headline" id="Output_.28.244016.2F.244017_read.29">Output ($4016/$4017 read)</span></h3>
+<pre>Front-loading NES $4016 and $4017, and Top-loading NES $4017
+7  bit  0
+---- ----
+OOOx xxxD
+|||| ||||
+|||| |||+- Serial controller data
+|||+-+++-- Always 0
++++------- Open bus
+</pre>
+<pre>Famicom $4016 and Top-loading NES $4016:
+7  bit  0
+---- ----
+OOOx xMFD
+|||| ||||
+|||| |||+- Player 1 serial controller data
+|||| ||+-- If connected to expansion port (and available), player 3 serial controller data (0 otherwise)
+|||| |+--- Microphone in controller 2 on traditional Famicom, <b>open bus</b> on AV Famicom and top-loader
+|||+-+---- Open bus on traditional Famicom, all 0s on AV Famicom and top-loader
++++------- Open bus
+</pre>
+<pre>Famicom $4017:
+7  bit  0
+---- ----
+OOOx xxFD
+|||| ||||
+|||| |||+- Player 2 serial controller data
+|||| ||+-- If connected to expansion port, player 4 serial controller data (0 otherwise)
+|||+-+++-- Returns 0 unless something is plugged into the <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">Famicom expansion port</a>
++++------- Open bus
+</pre>
+<p>The first 8 reads will indicate which buttons are pressed (1 if pressed, 0 if not pressed); all subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers.
+</p><p>Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right.
+On plug-in controllers (the NES and AV Famicom) and the first controller of the original Famicom, all buttons are present.
+But on the original Famicom's second controller, the Select and Start buttons are completely missing, and the encoder chip returns 0 instead: A, B, 0, 0, Up, Down, Left, Right.
+Because these buttons are missing, games for the Famicom should not require the second player to press Select or Start.
+</p><p>In the NES and Famicom, the top three (or five) bits are not driven, and so retain the bits of the previous byte on the bus. Usually this is the most significant byte of the address of the controller port—0x40. Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate.
+</p><p>Due to the presence of internal pull-up resistors, and the internal inverter, any pin without power connected will return zero, as shown above in the diagrams.
+</p><p>Because the Famicom controllers are permanently attached, some games, such as Simon's Quest, allow the use of the player 3 and 4 data for players 1 and 2.
+</p><p>A Super NES controller can be wired to the NES controller port, and it returns a 16-bit report in a similar order: B, Y, Select, Start, Up, Down, Left, Right, A, X, L, R, then four 0 bits.
+</p>
+<h3><span class="mw-headline" id="Hardware">Hardware</span></h3>
+<p>The 4021 (or <a class="external text" href="http://www.datasheetcatalog.org/datasheet/philips/74HC_HCT165_CNV_2.pdf" rel="nofollow">74LS165</a>) IC is an 8-bit parallel-to-serial shift
+register. It has a pin &quot;serial input&quot;, ordinarily used to chain the output of one shift register into the next one as seen in the Four Score or the Super NES controller. The serial input on the tail end of such a chain (or the only one in the case of an NES) can be tied to ground or Vcc, which determines the state of the output after all bits have been shifted out. If this is grounded, the shift register produces a 0 after all bits have been shifted out; if it's tied to Vcc, it produces a 1.
+</p><p>In the NES controller, this input is grounded. But because the signals from the controllers pass through an inverter before reaching the CPU, the register produces a 1 for all reads after the first eight.
+</p><p><span id="Bit_deletion"/><span id="Double_clock"/>
+</p>
+<h3><span class="mw-headline" id="APU_DMC_conflict_glitch"><span id="Evil_Details">APU DMC conflict glitch</span></span></h3>
+<p>The CLK line for controller port is <i>R/W nand (ADDRESS == $4016/$4017)</i> (i.e., CLK is low only when reading $4016/$4017, since R/W high means read). When this transitions from high to low, the buffer inside the NES latches the output of the controller data lines, and when it transitions from low to high, the shift register in the controller shifts one bit.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p><p>This can cause glitches if the <a href="APU_DMC.xhtml" title="APU DMC">DMC</a> DMA is running, and happens to start a read in the same cycle that the CPU is trying to read from $4016 or $4017. Since the address bus will change for one cycle, the shift register will see an extra rising clock edge (a &quot;double clock&quot;), and the shift register will drop a bit out.
+The program will see this as a <b>bit deletion</b> from the serial data.
+Not correcting for this results in spurious presses, especially of Right.
+</p><p>This glitch is fixed in the 2A07 CPU used in the PAL NES.
+</p><p>This detail is poorly represented in emulators. Because it is not normally a compatibility issue, many emulators do not simulate this glitch at all.
+</p>
+<h4><span class="mw-headline" id="Multiple_Read_Solution">Multiple Read Solution</span></h4>
+<p>The standard solution used in most games using DMC will read the controller multiple times and compare the results to avoid this problem.
+</p><p>See <a href="Controller_Reading.xhtml" title="Controller Reading">Controller Reading</a> for examples.
+</p>
+<h4><span class="mw-headline" id="Synchronized_OAM_Solution">Synchronized OAM Solution</span></h4>
+<p>Because OAM DMA synchronizes the CPU and APU such that reads on an &quot;even&quot; CPU cycle never overlap a glitch, a program on an NTSC NES can miss all the glitches by triggering an OAM DMA as the last thing in vblank just before reading the controller, so long as all the reads are spaced an even number of cycles apart.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p><p>Because this is a relatively new discovery, many current emulated implementations of the DMC glitch may be inadequate for testing this technique<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup>. Hardware testing is recommended.
+</p>
+<h3><span class="mw-headline" id="Turbo">Turbo</span></h3>
+<p>A <b>turbo controller</b> such as the NES Max or NES Advantage is read just like a standard controller, but the user can switch some of its buttons to be toggled by an oscillator.
+Such an oscillator turns the button on and off at 15 to 30 Hz, producing rapid fire in games.
+</p><p>A controller should not toggle the button states on each strobe pulse.
+Doing so will cause problems for games that poll the controller in a loop until they get two identical consecutive reads (see DMC conflict above). The game may halt while the turbo button is held, or crash, or cause other unknown behaviour.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="Controller_Reading.xhtml" title="Controller Reading">Controller Reading</a></li>
+<li><a href="Controller_detection.xhtml" title="Controller detection">Controller detection</a></li>
+<li><a href="Controller_port_pinout.xhtml" title="Controller port pinout">Controller port pinout</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=4116" rel="nofollow">Forum post:</a> DPCM generates extra $4016 read pulse</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=171971" rel="nofollow">Forum post:</a> Rahsennor's OAM-synchronized controller read</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=14319&amp;start=15#p172194" rel="nofollow">Forum post:</a> as of May 2016, Nintendulator and Nestopia do not accurately emulate OAM-synchronized controller reading.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.140 seconds
+Real time usage: 0.160 seconds
+Preprocessor visited node count: 102/1000000
+Preprocessor generated node count: 280/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:70-1!*!0!!en!*!* and timestamp 20160601033348 and revision id 12458
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

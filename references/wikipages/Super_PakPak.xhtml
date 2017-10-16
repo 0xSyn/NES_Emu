@@ -1,0 +1,116 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Super PakPak</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Super PakPak</h1><div class="article">
+<p>SUPER PAKPAK is a 2-4 player Spacewar!/Thrust/Gravity force style game for Nintendo Entertainment System and Famicom.
+</p><p>It was programmed in a few weeks during the year 2010, and was submitted as an official entry for the Assembly Summer 2010 Game Development competition (Ranked 7th out of 19) in Helsinki, Finland.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Gameplay_and_rules"><span class="tocnumber">2</span> <span class="toctext">Gameplay and rules</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Multi-player_game"><span class="tocnumber">3</span> <span class="toctext">Multi-player game</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Analog_controller"><span class="tocnumber">4</span> <span class="toctext">Analog controller</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#External_links"><span class="tocnumber">5</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<div class="thumb tright"><div class="thumbinner" style="width:256px;"><a class="image" href="File_Superpakpak_png.xhtml"><img alt="" class="thumbimage" height="222" src="../wiki-images/Superpakpak.png" width="254"/></a>  <div class="thumbcaption">Screenshot from Super PakPak</div></div></div>
+<ul><li>Project owner: fuzb (artoh @ the forum)</li>
+<li>Programmer: fuzb (artoh @ the forum)</li>
+<li>Logo and label artwork: lowhiz</li>
+<li>Soundtrack by: quarren</li>
+<li>Compiler : NESASM</li>
+<li>Sound driver: Famitracker player</li>
+<li>Started on: December, 2010</li>
+<li>Release date: July 28, 2010</li>
+<li>Cart made: No</li>
+<li>Mapper: iNES Mapper #2: <a href="UxROM.xhtml" title="UxROM">UNROM</a></li>
+<li>PRG Memory: 64 KB</li>
+<li>CHR Memory: 0 KB</li>
+<li>MD5 checksum of original ROM: 9f4c7dab70be2af37cadc5be0166023d</li></ul>
+<h2><span class="mw-headline" id="Gameplay_and_rules">Gameplay and rules</span></h2>
+<p>At least two players are needed to start the game. HOLD button A at the start menu to begin a game. The game will begin after the counter counts to zero.
+In two player games, you need to get two kills in a round before the level ends. In three or four player games, the level ends when there is only one ship remaining.
+</p><p>During the game you can use the following keys:
+</p><p>START - Pause (during a pause you can return to the main menu by pressing the buttons DOWN, SELECT, A and B at the same time)
+</p><p>LEFT, RIGHT - Turn the ship
+</p><p>A - Throttle button increases the speed. When the ship has suffered enough damage, it bursts into flames and can not gain enough speed, hence it becomes harder to maneuver.
+</p><p>B - Fire button fires the basic weapon.
+</p><p>DOWN - Launches the secondary weapon. If you are landed on a base, this button changes the secondary weapon. Note that you can't fire the secondary weapon while touching the base, and it is momentarily inactive right after you leave the base or right after launching it. The weapon icon is shown on the statusbar, and it will flash when the weapon is unavailable.
+</p><p><br/>
+The secondary weapons are the following:
+</p><p>BOMB - Drops down from the ship, explodes and emits 4 bullets upwards. Be careful not to launch this while you are near the ground or the enemy. The bomb itself does not do much direct damage (twice a bullet's).
+</p><p>SPRAY CANNON - Emits a 4-bullet spray
+</p><p>MINE - Could be planted anywhere. Does very high damage (3x a bullet's) and disappears after a while.
+</p><p>VORTEX CANNON - Shoots thru any object, except the impenetrable walls. This does twice a bullet's damage.
+</p><p>TELEPORT - Transports the ship to a random starting location. This is useful when trying to avoid a tight spot.
+</p><p><br/>
+You get a point by destroying another ship. If a ship gets destroyed indirectly (lava or crashing into a wall), the ship that damaged it the last time during the round will get a point.
+If a ship shoots itself or gets blown by an explosive in the level triggered by the ship itself, no one gets a point.
+There are 12 scenes in the game, after the 12th scene the game is reverted back to the first scene.
+After any player gets 50 points, the game ends and an end screen will appear.
+</p>
+<h2><span class="mw-headline" id="Multi-player_game">Multi-player game</span></h2>
+<p>You can play with a NES Four Score/NES Satellite adapter, or if you have a Famicom System, you can use regular Famicom multi-player controllers.
+</p><p>If you have a regular NES, and you don't have a Four Score/Satellite, it is possible to hack two more controllers into the expansion port at the bottom of the NES (this actually adds Famicom multi-player feature to your NES, which is supported by some Japanese games).
+</p>
+<h2><span class="mw-headline" id="Analog_controller">Analog controller</span></h2>
+<p>SUPER PAKPAK supports an analog controller! Too bad this analog controller
+does not exist yet. The analog controller DOES NOT work with a Four Score,
+only with the Famicom style multitap.
+</p><p>If you want to try to make one, here are the shift register bits:
+</p>
+<pre>
++--------------------------------------------------------+
+|Read# 1 | 2 |   3    |   4   | 5  |  6   |  7   |   8   |
++----+---------------------------------------------------+
+     |                     Joy#1/Joy#2                   |
+     +---------------------------------------------------+
+     | A | B | Select | Start | Up | Down | Left | Right |
+     +---------------------------------------------------+
+
++-----------------------------------------------+
+|  9  | 10  | 11  | 12  | 13  | 14  | 15  | 16  | 
++-----------------------------------------------+
+|                     Analog                    |
++-----------------------------------------------+
+| D7  | D6  | D5  | D4  | D3  | D2  | D1  | D0  |
++-----------------------------------------------+
+
++---------------------------------------+
+| 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 |
++---------------------------------------+
+|             Adapter info              |
++---------------------------------------+
+| 1  | 1  | 0  | 0  | 1  | 0  | 1  | 1  |
++---------------------------------------+
+</pre>
+<p>A good candidate would be a microcontroller with AD and a potentiometer
+with the stopper inside removed, so it rotates 360 degrees. You could also
+implement it in pure TTL logic and use an old AD080x AD-converter!
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="ftp://ftp.scene.org/pub/parties/2010/assembly10/gamedev/super_pakpak_by_aoh_games.zip" rel="nofollow">Download from ftp.scene.org</a></li>
+<li><a class="external text" href="http://media.assembly.org/gamedev/2010/super_pakpak_by_aoh_games.zip" rel="nofollow">Download from Assembly homepage</a></li>
+<li><a class="external text" href="http://www.pouet.net/prod.php?which=55543" rel="nofollow">Super PakPak at Pouet</a></li>
+<li><a class="external text" href="http://www.youtube.com/watch?v=TnYQN7FUVLU" rel="nofollow">Gameplay video - Retrospelsmässan @ Kulturkalaset 2010</a></li>
+<li><a class="external text" href="http://www.youtube.com/watch?v=o5kFEW5MqIM" rel="nofollow">Gameplay video - Assembly Summer 2010 Compo Video (has sound sync problems)</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.102 seconds
+Real time usage: 0.106 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:497-1!*!0!!en!5!* and timestamp 20160405130029 and revision id 1907
+ -->
+<p class="categories">Categories: <a href="Category_Homebrew_games.xhtml">Homebrew games</a>, <a href="Category_Games_released_in_2010.xhtml">Games released in 2010</a>, <a href="Category_Games_by_artoh.xhtml">Games by artoh</a></p></div></body></html>

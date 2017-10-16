@@ -1,0 +1,49 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Controller port pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Controller port pinout</h1><div class="article">
+<p>The NES controller pinout:
+</p>
+<pre>        .-
+ GND -- |O\
+ CLK &lt;- |OO\ -- +5V
+ OUT &lt;- |OO| &lt;- D3
+  D0 -&gt; |OO| &lt;- D4
+        '--'
+</pre>
+<p>(Directions are relative to the jack on the front of the NES)
+</p><p>The <a class="extiw" href="http://en.wikipedia.org/wiki/FC_Twin" title="wikipedia:FC Twin">FC Twin</a> NES/SNES combo clone uses Super NES controllers, whose pinout is as follows: (source: <a class="external text" href="http://wiki.superfamicom.org/snes/show/Ports+%26+Pinouts" rel="nofollow">superfamicom.org</a>)
+</p>
+<pre> 1 [oooo|ooo) 7  1:+5V  2:Clk  3:Out  4:D0  5:D1  6: I/O  7:Gnd
+</pre>
+<p>An adapter to use Super NES controllers on an NES (or NES controllers on an FC Twin) could be constructed as follows (leaving D3 and D4 unconnected):
+</p>
+<pre>        .-
+ GND -- |<b>7</b>\
+ CLK &lt;- |<b>21</b>\ -- +5V
+ OUT &lt;- |<b>3</b>o| -- (D3)
+  D0 -&gt; |<b>4</b>o| -- (D4)
+        '--'
+</pre>
+<ol><li> Buy two controller extension cables, one for NES and one for Super NES, and cut them apart. Strip the cut ends to reveal a small amount of bare wire.</li>
+<li> Using <a class="external text" href="http://www.instructables.com/id/Master-a-perfect-inline-wire-splice-everytime/?ALLSTEPS" rel="nofollow">inline splice technique</a>, wrap each wire from one cable with the corresponding wire from the other cable.</li>
+<li> With solder and a soldering iron, glue each wrapped pair together.</li>
+<li> With electrical tape, wrap each joint to insulate it from the other wires.</li>
+<li> Apply heat shrink around the whole assembly.</li></ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:72-1!*!*!*!*!*!* and timestamp 20160208222623 and revision id 9993
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a>, <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

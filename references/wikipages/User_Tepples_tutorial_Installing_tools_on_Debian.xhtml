@@ -1,0 +1,62 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Tepples/tutorial/Installing tools on Debian</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Tepples/tutorial/Installing tools on Debian</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#apt-get"><span class="tocnumber">1</span> <span class="toctext">apt-get</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Install_cc65"><span class="tocnumber">2</span> <span class="toctext">Install cc65</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Install_FCEUX_for_Windows"><span class="tocnumber">3</span> <span class="toctext">Install FCEUX for Windows</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Configure_a_text_editor"><span class="tocnumber">4</span> <span class="toctext">Configure a text editor</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="apt-get">apt-get</span></h2>
+<p>Debian GNU/Linux and derivatives include the APT package manager, which makes installing the majority of tools easy.
+</p><p>Connect to the Internet, paste the following into a terminal, enter your password, and a few
+</p>
+<pre>sudo apt-get install build-essential python3-imaging gimp gedit fceux wine
+</pre>
+<p>This installs several things:
+</p>
+<ul><li> <code>build-essential</code> <a class="external text" href="https://www.gnu.org/software/make/" rel="nofollow">GNU Make</a>, a program that determines which parts of your project have changed, such as assembly language source code or game graphics, and rebuilds only those parts, and a C compiler, needed for building cc65.</li>
+<li> <code>python3-imaging</code> is Pillow (Python Imaging Library), a component used by Python programs that manipulate image data, such as PNG, JPEG, and BMP files.</li>
+<li> <code>gimp</code> is GIMP (GNU Image Manipulation Program), a paint program distributed as free software. You can use it to create game graphics.</li>
+<li> <code>fceux</code> is FCEUX (Family Computer Emulator Ultra Extended), an emulator that interprets NES programs and displays their output.</li>
+<li> <code>wine</code> is Wine (Wine Is Not an Emulator), which allows use of Windows desktop applications on X11/Linux. You will need this to run the debugging version of FCEUX.</li>
+<li> <code>gedit</code> is the GNOME text editor.</li></ul>
+<h2><span class="mw-headline" id="Install_cc65">Install cc65</span></h2>
+<p>cc65 is a C compiler targeting the MOS Technology 6502 CPU.
+In this tutorial, you won't be using the C compiler, but you will be using the assembler (ca65) and the linker (ld65) that come with it.
+</p><p>Because there is no Debian package for cc65 as of the third quarter of 2015, you'll need to compile it from source.
+The source code for cc65 is in <a class="external text" href="https://github.com/cc65/cc65" rel="nofollow">a GitHub repository</a>.
+If you are already familiar with Git or Subversion, you can clone the project to your computer.
+Otherwise, visit the repository, follow the &quot;Download ZIP&quot; link at the right, and unzip it somewhere convenient.
+</p><p>TODO: make
+</p><p>TODO: make install, and prefix/PATH issues
+</p>
+<h2><span class="mw-headline" id="Install_FCEUX_for_Windows">Install FCEUX for Windows</span></h2>
+<p>The version of FCEUX included with Debian unfortunately does not include a debugger.
+Instead, you can run FCEUX for Windows.
+</p><p>TODO
+</p>
+<h2><span class="mw-headline" id="Configure_a_text_editor">Configure a text editor</span></h2>
+<p>Now we'll configure a text editor so that you can press one key and see your ROM come to life.
+</p><p>TODO
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 14/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1588-1!*!*!!en!*!* and timestamp 20160208230519 and revision id 11644
+ -->
+</div></body></html>

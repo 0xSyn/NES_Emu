@@ -1,0 +1,287 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES 2.0 header for ca65</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES 2.0 header for ca65</h1><div class="article">
+<p>This macro pack for ca65 constructs a 16-byte <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header.
+</p>
+<pre>
+;
+; NES 2.0 header generator for ca65 (nes2header.inc)
+; 
+; Copyright 2016 Damian Yerrick
+; Copying and distribution of this file, with or without
+; modification, are permitted in any medium without royalty provided
+; the copyright notice and this notice are preserved in all source
+; code copies.  This file is offered as-is, without any warranty.
+;
+
+;;
+; Puts ceil(log2(sz / 64)) in logsz, which should be
+; local to the calling macro.  Used for NES 2 RAM sizes.
+.macro _nes2_logsize sz, logsz
+  .assert sz &gt;= 0 .and sz &lt;= 1048576, error, &quot;RAM size must be 0 to 1048576&quot;
+  .if sz &lt; 1
+    logsz = 0
+  .elseif sz &lt;= 128
+    logsz = 1
+  .elseif sz &lt;= 256
+    logsz = 2
+  .elseif sz &lt;= 512
+    logsz = 3
+  .elseif sz &lt;= 1024
+    logsz = 4
+  .elseif sz &lt;= 2048
+    logsz = 5
+  .elseif sz &lt;= 4096
+    logsz = 6
+  .elseif sz &lt;= 8192
+    logsz = 7
+  .elseif sz &lt;= 16384
+    logsz = 8
+  .elseif sz &lt;= 32768
+    logsz = 9
+  .elseif sz &lt;= 65536
+    logsz = 10
+  .elseif sz &lt;= 131072
+    logsz = 11
+  .elseif sz &lt;= 262144
+    logsz = 12
+  .elseif sz &lt;= 524288
+    logsz = 13
+  .else
+    logsz = 14
+  .endif
+.endmacro
+
+;;
+; Sets the PRG ROM size to sz bytes. Must be multiple of 16384;
+; should be a power of 2.
+; example: nes2prg 131072
+.macro nes2prg sz
+.local sz1
+  sz1 = (sz) / 16384
+_nes2_prgsize = &lt;sz1
+_nes2_prgsizehi = &gt;sz1
+.endmacro
+
+;;
+; Sets the CHR ROM size to sz bytes. Must be multiple of 8192;
+; should be a power of 2.
+; example: nes2chr 32768
+.macro nes2chr sz
+.local sz1
+  sz1 = (sz) / 8192
+_nes2_chrsize = &lt;sz1
+_nes2_chrsizehi = &gt;sz1
+.endmacro
+
+;;
+; Sets the (not battery-backed) work RAM size in bytes.
+; Default is 0.
+.macro nes2wram sz
+.local logsz
+  _nes2_logsize sz, logsz
+  _nes2_wramsize = logsz
+.endmacro
+
+;;
+; Sets the battery-backed work RAM size in bytes.  Default is 0.
+.macro nes2bram sz
+.local logsz
+  _nes2_logsize sz, logsz
+  _nes2_bramsize = logsz
+.endmacro
+
+;;
+; Sets the (not battery-backed) CHR RAM size in bytes.  Default is 0
+; if CHR ROM or battery-backed CHR RAM is defined; otherwise 8192.
+.macro nes2chrram sz
+.local logsz
+  _nes2_logsize sz, logsz
+  _nes2_chrramsize = logsz
+.endmacro
+
+;;
+; Sets the battery-backed CHR RAM size in bytes.  Default is 0.
+.macro nes2chrbram sz
+.local logsz
+  _nes2_logsize sz, logsz
+  _nes2_chrbramsize = logsz
+.endmacro
+
+;;
+; Sets the mirroring to one of these values:
+; 'H' (horizontal mirroring, vertical arrangement)
+; 'V' (vertical mirroring, horizontal arrangement)
+; '4' (four-screen VRAM)
+.macro nes2mirror mir
+.local mi1
+  mi1 = mir
+  .if mi1 = 'h' .or mi1 = 'H'
+    _nes2_mirror = 0
+  .elseif mi1 = 'v' .or mi1 = 'V'
+    _nes2_mirror = 1
+  .elseif mi1 = '4'
+    _nes2_mirror = 8
+  .else
+    .assert 0, error, &quot;Mirroring mode must be 'H', 'V', or '4'&quot;
+  .endif
+.endmacro
+
+;;
+; Sets the mapper (board class) ID.  For example, MMC3 is usually
+; mapper 4, but TLSROM is 118 and TQROM is 119.  Some mappers have
+; variants.
+.macro nes2mapper mapperid, submapper
+.local mi1, ms1
+  mi1 = mapperid
+  .assert mi1 &gt;= 0 .and mi1 &lt; 4096, error, &quot;Mapper must be 0 to 4095&quot;
+  .ifnblank submapper
+    .assert ms1 &gt;= 0 .and ms1 &lt; 16, error, &quot;Submapper must be 0 to 15&quot;
+    ms1 = submapper
+  .else
+    ms1 = 0
+  .endif
+  _nes2_mapper6 = (mi1 &amp; $0F) &lt;&lt; 4
+  _nes2_mapper7 = mi1 &amp; $F0
+  _nes2_mapper8 = (mi1 &gt;&gt; 8) | (ms1 &lt;&lt; 4)
+.endmacro
+
+;;
+; Sets the ROM's intended TV system:
+; 'N' for NTSC NES/FC/PC10
+; 'P' for PAL NES
+; 'N','P' for dual compatible, preferring NTSC
+; 'P','N' for dual compatible, preferring PAL NES
+.macro nes2tv tvsystem, dual_compatible
+.local tv1, tv2
+  tv1 = tvsystem
+  .ifnblank dual_compatible
+    tv2 = $02
+  .else
+    tv2 = $00
+  .endif
+  .if tv1 = 'n' .or tv1 = 'N'
+    _nes2_tvsystem = $00 | tv2
+  .elseif mi1 = 'p' .or mi1 = 'P'
+    _nes2_tvsystem = $01 | tv2
+  .else
+    .assert 0, error, &quot;TV system must be 'N' or 'P'&quot;
+  .endif
+.endmacro
+
+;;
+; Writes the header configured by previous nes2 macros.
+.macro nes2end
+.local battery_bit
+  ; Apply defaults
+  .ifndef _nes2_chrsize
+    nes2chr 0
+  .endif
+  .ifndef _nes2_mirror
+    nes2mirror 'H'
+  .endif
+  .ifndef _nes2_wramsize
+    nes2wram 0
+  .endif
+  .ifndef _nes2_bramsize
+    nes2bram 0
+  .endif
+  .ifndef _nes2_chrbramsize
+    nes2chrbram 0
+  .endif
+  .ifndef _nes2_chrramsize
+    .if _nes2_chrsize .or _nes2_chrsizehi .or _nes2_chrbramsize
+      nes2chrram 0
+    .else
+      nes2chrram 8192
+    .endif
+  .endif
+  .ifndef _nes2_tvsystem
+    nes2tv 'N'
+  .endif
+  .if _nes2_bramsize .or _nes2_chrbramsize
+    battery_bit = $02
+  .else
+    battery_bit = $00
+  .endif
+
+  .pushseg
+  .segment &quot;INESHDR&quot;
+  .byte &quot;NES&quot;,$1A
+  .byte _nes2_prgsize, _nes2_chrsize
+  .byte _nes2_mapper6 | _nes2_mirror | battery_bit
+  .byte _nes2_mapper7 | $08  ; not supporting vs/pc10 yet
+
+  .byte _nes2_mapper8
+  .byte (_nes2_chrsizehi &lt;&lt; 4) | _nes2_prgsizehi
+  .byte (_nes2_bramsize &lt;&lt; 4) | _nes2_wramsize
+  .byte (_nes2_chrbramsize &lt;&lt; 4) | _nes2_chrramsize
+
+  .byte _nes2_tvsystem, 0, 0, 0
+  .popseg
+.endmacro
+</pre>
+<h2><span class="mw-headline" id="Linker_script_requirement">Linker script requirement</span></h2>
+<p>Your linker configuration file will need to have a segment called <code>INESHDR</code> in the first ROM memory area.
+</p>
+<pre>
+MEMORY {
+  HEADER: start = 0, size = $0010, type = ro, file = %O, fill=yes, fillval=$00;
+  # Other memory area definitions appropriate for your board
+}
+SEGMENTS {
+  INESHDR:  load = HEADER, type = ro, align = $10;
+  # Other segment definitions appropriate for your board
+}
+</pre>
+<h2><span class="mw-headline" id="Examples">Examples</span></h2>
+<p>A <a href="CNROM.xhtml" title="CNROM">CNROM</a> board with horizontal <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> (V pad) for NTSC systems:
+</p>
+<pre>
+.include &quot;nes2header.inc&quot;
+nes2mapper 3
+nes2prg 32768
+nes2chr 32768
+nes2mirror 'H'
+nes2tv 'N'
+nes2end
+</pre>
+<p>An <a href="SxROM.xhtml" title="SxROM">SLROM</a> board with 128 KiB PRG ROM, 128 KiB CHR ROM, 8 KiB battery-backed WRAM, and PAL-preferred but dual-compatible program:
+</p>
+<pre>
+.include &quot;nes2header.inc&quot;
+nes2mapper 1
+nes2prg 131072
+nes2chr 131072
+nes2bram 8192
+nes2tv 'P','N'
+nes2end
+</pre>
+<p>An <a href="MMC3.xhtml" title="MMC3">MMC3</a> board with 512 KiB PRG ROM, 32 KiB CHR RAM, and NTSC-only program:
+</p>
+<pre>
+.include &quot;nes2header.inc&quot;
+nes2mapper 4
+nes2prg 524288
+nes2chrram 32768
+nes2tv 'N'
+nes2end
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 34/1000000
+Preprocessor generated node count: 112/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1642-1!*!0!!*!*!* and timestamp 20160603204849 and revision id 12578
+ -->
+</div></body></html>

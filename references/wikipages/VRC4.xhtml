@@ -1,0 +1,212 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC4</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC4</h1><div class="article">
+<p>The Konami VRC4 is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>.
+</p><p><br/>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Revisions"><span class="tocnumber">3</span> <span class="toctext">Revisions</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#PRG_Swap_Mode_control_.28.249004.2C_.249006.29"><span class="tocnumber">4.1</span> <span class="toctext">PRG Swap Mode control ($9004, $9006)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#PRG_Select_0_.28.248000.2C_.248002.2C_.248004.2C_.248006.29"><span class="tocnumber">4.2</span> <span class="toctext">PRG Select 0 ($8000, $8002, $8004, $8006)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#PRG_Select_1_.28.24A000.2C_.24A002.2C_.24A004.2C_.24A006.29"><span class="tocnumber">4.3</span> <span class="toctext">PRG Select 1 ($A000, $A002, $A004, $A006)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Mirroring_Control_.28.249000.2C_.249002.29"><span class="tocnumber">4.4</span> <span class="toctext">Mirroring Control ($9000, $9002)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#CHR_Select_0_low.28.24B000.29.2C_high.28.24B002.29"><span class="tocnumber">4.5</span> <span class="toctext">CHR Select 0 low($B000), high($B002)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#CHR_Select_1_low.28.24B004.29.2C_high.28.24B006.29"><span class="tocnumber">4.6</span> <span class="toctext">CHR Select 1 low($B004), high($B006)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#CHR_Select_2.E2.80.A67_.28.24C000-.24EFFF.29"><span class="tocnumber">4.7</span> <span class="toctext">CHR Select 2…7 ($C000-$EFFF)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#IRQ_Control_.28.24F00x.29"><span class="tocnumber">4.8</span> <span class="toctext">IRQ Control ($F00x)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 256 KiB</li>
+<li> PRG ROM bank size: 8 KiB at $A000, and $8000 OR $C000</li>
+<li> PRG RAM: none, 2 KiB, or 8 KiB</li>
+<li> CHR ROM size: Up to 512 KiB</li>
+<li> CHR bank size: 1 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>The Konami VRC4 is almost identical to the <a href="VRC2.xhtml" title="VRC2">VRC2</a>, but with a bit more capabilities, such as the option to swap PRG at $C000 instead of $8000 and an IRQ counter.
+</p><p>See <a class="mw-redirect" href="VRC2_pinout.xhtml" title="VRC4 pinout">VRC4 pinout</a> for chip pinout.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$6FFF: optional 2 KiB PRG RAM bank (mirrored once), or</li>
+<li> CPU $6000-$7FFF: optional 8 KiB PRG RAM bank</li>
+<li> CPU $8000-$9FFF (or $C000-$DFFF): 8 KiB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF (or $8000-$9FFF): 8 KiB PRG ROM bank, fixed to the second-last bank</li>
+<li> CPU $E000-$FFFF: 8 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$03FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0400-$07FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0800-$0BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $0C00-$0FFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1000-$13FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1400-$17FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1800-$1BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1C00-$1FFF: 1 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Revisions">Revisions</span></h2>
+<p>This mapper has been used with several board revisions, each of which uses different address lines.
+All boards use A15-A12 the same way, along with two lines from A7-A0.
+Here is a listing of known revisions, which address lines are used, and which <a href="INES.xhtml" title="INES">iNES</a> mapper number is used to represent it:
+</p>
+<pre>variant   lines     registers                       iNES Mapper Number
+----------------------------------------------------------------------
+VRC4a     A1, A2    $x000, $x002, $x004, $x006      <a href="INES_Mapper_021.xhtml" title="INES Mapper 021">021</a>
+VRC4b     A1, A0    $x000, $x002, $x001, $x003      025
+VRC4c     A6, A7    $x000, $x040, $x080, $x0C0      021
+VRC4d     A3, A2    $x000, $x008, $x004, $x00C      025
+VRC4e     A2, A3    $x000, $x004, $x008, $x00C      023
+VRC4 #27  A0, A1    $x000, $x001, $x002, $x003      <a href="INES_Mapper_027.xhtml" title="INES Mapper 027">027</a>
+</pre>
+<p>Some variants that use the same address lines use them in different ways.  For example, VRC4d and VRC4e both use A2 and A3, however VRC4d has them reversed.
+</p><p>For historical reasons, some variants share a mapper number.
+These may be detected with a hash of the PRG ROM, or the address lines used may be expressed in NES 2.0 with <a href="NES_2_0_submappers.xhtml#VRC4" title="NES 2.0 submappers">submappers</a>.
+</p><p>The RAM decoding circuit that's part of the VRC4 itself only decodes RAM from $6000-$6FFF. For the <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1573" rel="nofollow">one game</a> with 8 KiB of RAM, an external <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">circuit was added</a>.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>This page lists registers as they are in the VRC4a variant.  For other variants, you can use the diagram above for determining which registers are used.
+</p>
+<h3><span class="mw-headline" id="PRG_Swap_Mode_control_.28.249004.2C_.249006.29">PRG Swap Mode control ($9004, $9006)</span></h3>
+<pre>7  bit  0
+---------
+.... ..M.
+       |
+       +-- Swap Mode
+</pre>
+<p>When 'M' is clear:
+</p>
+<ul><li> the 8 KiB page at $8000 is controlled by the $800x register</li>
+<li> the 8 KiB page at $C000 is fixed to the second last 8 KiB in the ROM</li></ul>
+<p>When 'M' is set:
+</p>
+<ul><li> the 8 KiB page at $8000 is fixed to the second last 8 KiB in the ROM</li>
+<li> the 8 KiB page at $C000 is controlled by the $800x register</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="PRG_Select_0_.28.248000.2C_.248002.2C_.248004.2C_.248006.29">PRG Select 0 ($8000, $8002, $8004, $8006)</span></h3>
+<pre>7  bit  0
+---------
+...P PPPP
+   | ||||
+   +-++++- Select 8 KiB PRG bank at $8000 or $C000 depending on Swap Mode
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_1_.28.24A000.2C_.24A002.2C_.24A004.2C_.24A006.29">PRG Select 1 ($A000, $A002, $A004, $A006)</span></h3>
+<pre>7  bit  0
+---------
+...P PPPP
+   | ||||
+   +-++++- Select 8 KiB PRG bank at $A000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Mirroring_Control_.28.249000.2C_.249002.29">Mirroring Control ($9000, $9002)</span></h3>
+<pre>7  bit  0
+---------
+.... ..MM
+       ||
+       ++- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> (0: vertical; 1: horizontal; 2: one-screen, lower bank; 3: one-screen, upper bank)
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_0_low.28.24B000.29.2C_high.28.24B002.29">CHR Select 0 low($B000), high($B002)</span></h3>
+<pre>  $B000        $B002
+7  bit  0    7  bit  0
+---------    ---------
+.... LLLL    ...H HHHH
+     ||||       | ||||
+     ||||       +-++++- High 5 bits of 1 KiB CHR bank at PPU $0000
+     ++++-------------- Low 4 bits
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="CHR_Select_1_low.28.24B004.29.2C_high.28.24B006.29">CHR Select 1 low($B004), high($B006)</span></h3>
+<pre>  $B004        $B006
+7  bit  0    7  bit  0
+---------    ---------
+.... LLLL    ...H HHHH
+     ||||       | ||||
+     ||||       +-++++- High 5 bits of 1 KiB CHR bank at PPU $0400
+     ++++-------------- Low 4 bits
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="CHR_Select_2.E2.80.A67_.28.24C000-.24EFFF.29">CHR Select 2…7 ($C000-$EFFF)</span></h3>
+<p>The other six CHR bank selects continue the pattern:
+</p>
+<table class="wikitable">
+<tr>
+<th colspan="2">Write to CPU address
+</th></tr>
+<tr>
+<th> (low 4 bits) </th>
+<th> (high 5 bits) </th>
+<th> 1KB CHR bank affected
+</th></tr>
+<tr>
+<td> $C000 </td>
+<td> $C002 </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> $C004 </td>
+<td> $C006 </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> $D000 </td>
+<td> $D002 </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> $D004 </td>
+<td> $D006 </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> $E000 </td>
+<td> $E002 </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> $E004 </td>
+<td> $E006 </td>
+<td> $1C00-$1FFF
+</td></tr></table>
+<h3><span class="mw-headline" id="IRQ_Control_.28.24F00x.29">IRQ Control ($F00x)</span></h3>
+<pre>$F000:  IRQ Latch, low 4 bits
+$F002:  IRQ Latch, high 4 bits
+$F004:  IRQ Control
+$F006:  IRQ Acknowledge
+</pre>
+<p>Many VRC mappers use the same IRQ system.  For details on IRQ operation, see <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC IRQs</a>.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/konami-e.txt" rel="nofollow">Konami Mapper</a> by goroh, translated by Sgt. Bowhack</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li>
+<li> The CHR registers really are 9 bits: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=8569" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=8569</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.065 seconds
+Real time usage: 0.067 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:97-1!*!0!!en!*!* and timestamp 20160728174723 and revision id 12758
+ -->
+<p class="categories">Categories: <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

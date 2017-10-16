@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES-EVENT</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES-EVENT</h1><div class="article">
+<p><b>NES-EVENT</b> is the <a href="MMC1.xhtml" title="MMC1">MMC1</a>-based board used for <i>Nintendo World Championships</i>, a multicart including timed versions of <i>Super Mario Bros.</i>, <i>Rad Racer</i>, and <i>Tetris</i>.
+Like <a class="mw-redirect" href="SxROM.xhtml" title="SUROM">SUROM</a> and <a class="mw-redirect" href="SxROM.xhtml" title="SXROM">SXROM</a>, it repurposes the MMC1 CHR address bits, and MMC1 wired this way is <a href="INES_Mapper_105.xhtml" title="INES Mapper 105">mapper 105</a>.
+</p><p>The menu music resembles selected tracks from <i>Hello Kitty World</i>.
+</p>
+<h2><span class="mw-headline" id="Parts">Parts</span></h2>
+<ul><li>256K of PRG ROM as two 27C010 UV EPROMs</li>
+<li>8K of CHR RAM</li>
+<li>8K of PRG RAM</li>
+<li>Several 4000-series and 7400-series discrete ICs</li></ul>
+<h2><span class="mw-headline" id="Register">Register</span></h2>
+<p>MMC1 register $A000 is mapped like this:
+</p>
+<pre>43210
+|||||
+||||+- Not used (ordinarily selects bottom or top half of CHR RAM)
+|+++-- 0-3: Select 32 KiB bank in $8000-$FFFF from lower 128KB ROM
+|      4-7: Normal MMC1 behavior from upper 128KB ROM
++----- 0: Run timer
+       1: Reset timer
+</pre>
+<p>The first 32 KiB is hardwired until the timer is started (write 0 then 1 to bit 4) for the first time.
+</p><p>The other ICs implement a 30-bit up counter clocked by M2 that fires an IRQ when it reaches a high enough value. DIP switches set bits 28-25 of the counter's initial value. This results in a range of roughly 5 to 10 minutes on an NTSC console.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://kevtris.org/mappers/nes_custom/NES_EVENT.html" rel="nofollow">Kevin Horton's reverse engineering of NES-EVENT</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:290-1!*!0!!*!*!* and timestamp 20160208225630 and revision id 8230
+ -->
+</div></body></html>

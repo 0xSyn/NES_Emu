@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Division by a constant integer</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Division by a constant integer</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Divide_by_a_power_of_two"><span class="tocnumber">1</span> <span class="toctext">Divide by a power of two</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Division_by_a_constant"><span class="tocnumber">2</span> <span class="toctext">Division by a constant</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Division_of_a_constant_by_a_variable_ratio"><span class="tocnumber">3</span> <span class="toctext">Division of a constant by a variable ratio</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Chain_multiply_by_a_variable"><span class="tocnumber">4</span> <span class="toctext">Chain multiply by a variable</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Divide_by_a_power_of_two">Divide by a power of two</span></h2>
+<p>In binary arithmetic, division by 2^n is equivalent to shifting right n times (technically this is true even if n is negative). For this reason, it is recommended that you design your NES project in a way that takes advantage of this fact.
+The rest of the division by 2^n can be easily obtainged by ANDing the original value by (2^n)-1.
+</p><p>For signed numbers, it is required that the bit shiting &quot;in&quot; the number at the left is the previous sign bit and not a '0'. This is commonly called an &quot;arithmetic shift right&quot; as opposed to a &quot;logical shift right&quot;. Since the 6502 doesn't have any logical shift right instruction, it can be achevied that way :
+</p>
+<pre>
+    cmp #$80
+    ror A
+</pre>
+<p>This will be true for all divisions discussed in this article, which focuses on unsigned numbers.
+</p>
+<h2><span class="mw-headline" id="Division_by_a_constant">Division by a constant</span></h2>
+<p>When you want to divide 2 numbers, if the denominator is constant, it is possible take advantage of this to optimize code (as opposed to use the general purpose <a href="8_bit_Divide.xhtml" title="8-bit Divide">division by 2 variables</a>).
+</p><p>First thing is to decompose the constant number into sum-of-power-of-two (i.e. write it in binary form).
+Then you'll need to know how many bits of the result you need, let's call this number n and let's call c your constant divisor.
+Take the variable number, and for each bit k, compare it to c&lt;&lt;k (= c*2^k) (in the order k = n-1, n-2, ... downto 0 included).
+If the comparaison bit is set, substract c&lt;&lt;k, and in all cases rotate the result left (note that after the substraction c will always be set).
+For example this division code divide the variable in A by 14 and keeps the lower 4 bit of results.
+</p>
+<pre>
+;Division by 14
+      pha
+      lda #$00
+      sta Res      ;Init the res varialbe (needed because we're doing less than 8 shifts)
+      pla
+      cmp #$70     ;Compare to 14&lt;&lt;3 and set bit
+      bcc + 
+      sbc #$70 
++     rol Res 
+      cmp #$38     ;14&lt;&lt;2
+      bcc + 
+      sbc #$38 
++     rol Res 
+      cmp #$1c     ;14&lt;&lt;1
+      bcc + 
+      sbc #$1c 
++     rol Res 
+      cmp #$0e     ;14&lt;&lt;0
+      bcc + 
+      sbc #$0e 
++     rol Res      ;A = remainder, Res = quotient
+</pre>
+<p>Of couse the result will only be correct if if fits in 4-bit in the above example (because it does 4 compare/shift operations), if you except a larger number of bits you should adapt your code to take that into account.
+</p><p>See also: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=11336" rel="nofollow">Unsigned Integer Division Routines</a> - NESDev forum post with a collection of efficient 8-bit division by constant routines.
+</p>
+<h2><span class="mw-headline" id="Division_of_a_constant_by_a_variable_ratio">Division of a constant by a variable ratio</span></h2>
+<p>When you divide 2 numbers, is it possible to optimize the algorithm if the numerator is constant and the denominator variable ?
+To be written.
+</p>
+<h2><span class="mw-headline" id="Chain_multiply_by_a_variable">Chain multiply by a variable</span></h2>
+<p>If you want to do an algorithm that does a really great number of divisions by a variable, but that the value of the variable is constant for the whole algorithm, it could be faster to write a code that generate the above code in RAM and execute it that way instead of doing the slower variable / variable code.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 32/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:365-1!*!0!!en!*!* and timestamp 20160606132014 and revision id 11600
+ -->
+</div></body></html>

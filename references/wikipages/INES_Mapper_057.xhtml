@@ -1,0 +1,63 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 057</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 057</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 057          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ GK 47-in-1
+ 6-in-1 (SuperGK)
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range,Mask:   $8000-FFFF, $8800
+ 
+   $8000:  [.H.. .AAA]
+      H = High bit of CHR reg (bit 4)
+      A = Low 3 bits of CHR Reg (OR with 'B' bits)
+ 
+   $8800:  [PPPO MBBB]
+      P = PRG Reg
+      O = PRG Mode
+      M = Mirroring (0=Vert, 1=Horz)
+      B = Low 3 bits of CHR Reg (OR with 'A' bits)
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 'A' and 'B' bits combine with an OR to get the low 3 bits of the desired page, and the 'H' bit is the high
+ bit.  This 4-bit value selects an 8k page @ $0000
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+                $8000   $A000   $C000   $E000  
+              +---------------+---------------+
+ PRG Mode 0:  |     $8800     |     $8800     |
+              +-------------------------------+
+ PRG Mode 1:  |            &lt;$8800&gt;            |
+              +-------------------------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.008 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:659-1!*!*!*!*!*!* and timestamp 20160208225122 and revision id 4635
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

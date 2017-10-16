@@ -1,0 +1,645 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PowerPak</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PowerPak</h1><div class="article">
+<p>The <b>PowerPak</b> is a flash cartridge made by <s>RetroUSB</s>. It uses an <s>FPGA</s> to emulate a wide variety of <a class="mw-redirect" href="Mapper.xhtml" title="Mappers">mappers</a>, allowing the user to store a large collection of ROMs on a single Compact Flash card and run them on an NES. It is widely used by homebrew NES developers to test their software.
+</p><p>In addition to NES ROMs, the PowerPak is able to play <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="FDS">FDS</a> disk images, as well as <a href="NSF.xhtml" title="NSF">NSF</a> music files.
+</p><p>Famicom expansion audio is supported, and output on the EXP 6 expansion pin on the <a href="Cartridge_connector.xhtml" title="Cartridge connector">cartridge connector</a>. A simple modification to the NES allows the expansion audio to be mixed with its output.
+</p><p>Specifications:
+</p>
+<ul><li> PRG size: 512 KB (252 KB for NSF)</li>
+<li> CHR size: 512 KB</li></ul>
+<p>Product page: <a class="external free" href="http://www.retrousb.com/product_info.php?products_id=34" rel="nofollow">http://www.retrousb.com/product_info.php?products_id=34</a>
+</p><p>See also: <a href="Everdrive_N8.xhtml" title="Everdrive N8">Everdrive N8</a> - A similar product by Krikzz.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Mapper_Compatibility"><span class="tocnumber">1</span> <span class="toctext">Mapper Compatibility</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Power_Mappers"><span class="tocnumber">1.1</span> <span class="toctext">Power Mappers</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Loopy.27s_Mappers"><span class="tocnumber">1.2</span> <span class="toctext">Loopy's Mappers</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Offical_Mappers_V1.34"><span class="tocnumber">1.3</span> <span class="toctext">Offical Mappers V1.34</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Software_development_limitations"><span class="tocnumber">2</span> <span class="toctext">Software development limitations</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#PowerPak_development_resources"><span class="tocnumber">3</span> <span class="toctext">PowerPak development resources</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Mapper_Compatibility">Mapper Compatibility</span></h2>
+<p>The PowerPak mappers have undergone several revisions, gradually improving compatibility. After official development ceased in 2010, Loopy and TheFox have each created a supplemental set of PowerPak mappers to improve its capabilities.
+</p>
+<h3><span class="mw-headline" id="Power_Mappers">Power Mappers</span></h3>
+<p>TheFox created a set of revised PowerPak mappers to supplement or augment the existing ones, most notably adding a savestate feature.
+</p><p>Download: <a class="external free" href="http://kkfos.aspekt.fi/projects/nes/powerpak/powermappers/" rel="nofollow">http://kkfos.aspekt.fi/projects/nes/powerpak/powermappers/</a>
+</p>
+<ul><li> <a href="NROM.xhtml" title="NROM">NROM</a>        (<a class="mw-redirect" href="NROM.xhtml" title="INES Mapper 000">0</a>)</li>
+<li> <a href="MMC1.xhtml" title="MMC1">MMC1</a>        (<a class="mw-redirect" href="MMC1.xhtml" title="INES Mapper 001">1</a>)</li>
+<li> <a href="UxROM.xhtml" title="UxROM">UxROM</a>       (<a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">2</a>)</li>
+<li> <a href="CxROM.xhtml" title="CxROM">CxROM</a>       (<a href="INES_Mapper_003.xhtml" title="INES Mapper 003">3</a>)</li>
+<li> <a href="MMC3.xhtml" title="MMC3">MMC3</a>        (<a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">4</a>)</li>
+<li> <a href="AxROM.xhtml" title="AxROM">AxROM</a>       (<a class="mw-redirect" href="AxROM.xhtml" title="INES Mapper 007">7</a>)</li>
+<li> <a href="MMC2.xhtml" title="MMC2">MMC2</a>        (<a class="mw-redirect" href="MMC2.xhtml" title="INES Mapper 009">9</a>)</li>
+<li> <a href="MMC4.xhtml" title="MMC4">MMC4</a>        (<a class="mw-redirect" href="MMC4.xhtml" title="INES Mapper 010">10</a>)</li>
+<li> <a class="mw-redirect" href="Color_Dreams.xhtml" title="ColorDreams">ColorDreams</a> (<a class="mw-redirect" href="Color_Dreams.xhtml" title="INES Mapper 011">11</a>)</li>
+<li> <a class="mw-redirect" href="BNROM.xhtml" title="BxROM">BxROM</a>       (<a href="INES_Mapper_034.xhtml" title="INES Mapper 034">34</a>)</li>
+<li> <a href="GxROM.xhtml" title="GxROM">GxROM</a>       (<a class="mw-redirect" href="GxROM.xhtml" title="INES Mapper 066">66</a>)</li>
+<li> <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="FME-7">FME-7</a>       (<a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="INES Mapper 069">69</a>, no expansion audio)</li>
+<li> <a class="mw-redirect" href="INES_Mapper_071.xhtml" title="Codemasters">Codemasters</a> (<a href="INES_Mapper_071.xhtml" title="INES Mapper 071">71</a>)</li>
+<li> MMC3/<a class="mw-redirect" href="INES_Mapper_118.xhtml" title="TxSROM">TxSROM</a> (<a href="INES_Mapper_118.xhtml" title="INES Mapper 118">118</a>)</li>
+<li> MMC3/<a class="mw-redirect" href="INES_Mapper_119.xhtml" title="TQROM">TQROM</a>  (<a href="INES_Mapper_119.xhtml" title="INES Mapper 119">119</a>)</li></ul>
+<p>Known problems:
+</p>
+<ul><li> Mapper 4 IRQ is has a reliability problem on some systems, causing shaky status bars and other similar problems.</li>
+<li> Mapper 69 does not support the <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B expansion audio</a> used in Gimmick!</li></ul>
+<h3><span class="mw-headline" id="Loopy.27s_Mappers">Loopy's Mappers</span></h3>
+<p>Loopy released a set of revised PowerPak mappers in 2011, adding fixes and additional support for several mappers:
+</p><p>Download: <a class="external free" href="http://3dscapture.com/NES/powerpak_loopy.zip" rel="nofollow">http://3dscapture.com/NES/powerpak_loopy.zip</a>
+</p>
+<ul><li> <a href="CNROM.xhtml" title="CNROM">CNROM</a>       (<a href="INES_Mapper_003.xhtml" title="INES Mapper 003">3</a>)</li>
+<li> <a href="MMC3.xhtml" title="MMC3">MMC3</a>        (<a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">4</a>)</li>
+<li> <a href="MMC5.xhtml" title="MMC5">MMC5</a>        (<a class="mw-redirect" href="MMC5.xhtml" title="INES Mapper 005">5</a>, no expansion audio)</li>
+<li> <a class="mw-redirect" href="Namco_163.xhtml" title="N163">N163</a>        (<a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">19</a>)</li>
+<li> <a href="VRC4.xhtml" title="VRC4">VRC4</a>        (<a href="INES_Mapper_021.xhtml" title="INES Mapper 021">21</a>, <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>, <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a>)</li>
+<li> <a href="VRC6.xhtml" title="VRC6">VRC6</a>        (<a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 024">24</a>, <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 026">26</a>)</li>
+<li> <a class="mw-redirect" href="BNROM.xhtml" title="BxROM">BxROM</a>       (<a href="INES_Mapper_034.xhtml" title="INES Mapper 034">34</a>)</li>
+<li> <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="Sunsoft-5B">Sunsoft-5B</a>  (<a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="INES Mapper 069">69</a>)</li>
+<li> <a class="mw-redirect" href="INES_Mapper_071.xhtml" title="Codemasters">Codemasters</a> (<a href="INES_Mapper_071.xhtml" title="INES Mapper 071">71</a>)</li>
+<li> <a href="JY_Company.xhtml" title="JY Company">JY Company</a>  (<a href="INES_Mapper_090.xhtml" title="INES Mapper 090">90</a>, partial)</li>
+<li> <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="FDS">FDS</a></li>
+<li> <a href="NSF.xhtml" title="NSF">NSF</a>         (no MMC5 audio, no VRC7 audio)</li></ul>
+<p>Notes:
+</p>
+<ul><li> Mapper 3 now supports unlicensed oversize variants (e.g. used by Panesian games).</li>
+<li> Mapper 4 now supports Startropics.</li>
+<li> Mapper 5 does not support the <a href="MMC5_audio.xhtml" title="MMC5 audio">MMC5 expansion audio</a>.</li></ul>
+<h3><span class="mw-headline" id="Offical_Mappers_V1.34">Offical Mappers V1.34</span></h3>
+<p>The last official release of mappers was in 2010. It supports a wide variety of popular mappers.
+</p><p>Download: <a class="external free" href="http://www.retrousb.com/product_info.php?products_id=34" rel="nofollow">http://www.retrousb.com/product_info.php?products_id=34</a>
+</p><p>Supported mappers:
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <a class="mw-redirect" href="NROM.xhtml" title="INES Mapper 000">000</a>
+</td>
+<td> <a class="mw-redirect" href="MMC1.xhtml" title="INES Mapper 001">001</a>
+</td>
+<td> <a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">002</a>
+</td>
+<td> <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">003</a>
+</td>
+<td> <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">004</a>
+</td>
+<td> <a class="mw-redirect" href="MMC5.xhtml" title="INES Mapper 005">005</a>
+</td>
+<td> ---
+</td>
+<td> <a class="mw-redirect" href="AxROM.xhtml" title="INES Mapper 007">007</a>
+</td>
+<td> ---
+</td>
+<td> <a class="mw-redirect" href="MMC2.xhtml" title="INES Mapper 009">009</a>
+</td>
+<td> <a class="mw-redirect" href="MMC4.xhtml" title="INES Mapper 010">010</a>
+</td>
+<td> <a class="mw-redirect" href="Color_Dreams.xhtml" title="INES Mapper 011">011</a>
+</td>
+<td> ---
+</td>
+<td> <a class="mw-redirect" href="CPROM.xhtml" title="INES Mapper 013">013</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">019</a>
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_021.xhtml" title="INES Mapper 021">021</a>
+</td>
+<td> <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">022</a>
+</td>
+<td> <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">023</a>
+</td>
+<td> <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 024">024</a>
+</td>
+<td> <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">025</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_034.xhtml" title="INES Mapper 034">034</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_040.xhtml" title="INES Mapper 040">040</a>
+</td>
+<td> <a href="INES_Mapper_041.xhtml" title="INES Mapper 041">041</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_047.xhtml" title="INES Mapper 047">047</a>
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_050.xhtml" title="INES Mapper 050">050</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_061.xhtml" title="INES Mapper 061">061</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="RAMBO_1.xhtml" title="INES Mapper 064">064</a>
+</td>
+<td> ---
+</td>
+<td> <a class="mw-redirect" href="GxROM.xhtml" title="INES Mapper 066">066</a>
+</td>
+<td> <a href="INES_Mapper_067.xhtml" title="INES Mapper 067">067</a>
+</td>
+<td> <a href="INES_Mapper_068.xhtml" title="INES Mapper 068">068</a>
+</td>
+<td> <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="INES Mapper 069">069</a>
+</td>
+<td> <a href="INES_Mapper_070.xhtml" title="INES Mapper 070">070</a>
+</td>
+<td> <a href="INES_Mapper_071.xhtml" title="INES Mapper 071">071</a>
+</td>
+<td> <a href="INES_Mapper_072.xhtml" title="INES Mapper 072">072</a>
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_074.xhtml" title="INES Mapper 074">074</a>
+</td>
+<td> <a class="mw-redirect" href="VRC1.xhtml" title="INES Mapper 075">075</a>
+</td>
+<td> <a href="INES_Mapper_076.xhtml" title="INES Mapper 076">076</a>
+</td>
+<td> <a href="INES_Mapper_077.xhtml" title="INES Mapper 077">077</a>
+</td>
+<td> <a href="INES_Mapper_078.xhtml" title="INES Mapper 078">078</a>
+</td>
+<td> <a class="mw-redirect" href="NINA_003_006.xhtml" title="INES Mapper 079">079</a>
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_080.xhtml" title="INES Mapper 080">080</a>
+</td>
+<td> <s>081</s>
+</td>
+<td> <a href="INES_Mapper_082.xhtml" title="INES Mapper 082">082</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_086.xhtml" title="INES Mapper 086">086</a>
+</td>
+<td> <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">087</a>
+</td>
+<td> <a href="INES_Mapper_088.xhtml" title="INES Mapper 088">088</a>
+</td>
+<td> <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">089</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_092.xhtml" title="INES Mapper 092">092</a>
+</td>
+<td> <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">093</a>
+</td>
+<td> <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">094</a>
+</td>
+<td> <a href="INES_Mapper_095.xhtml" title="INES Mapper 095">095</a>
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_096.xhtml" title="INES Mapper 096">096</a>
+</td>
+<td> <a href="INES_Mapper_097.xhtml" title="INES Mapper 097">097</a>
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">099</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_105.xhtml" title="INES Mapper 105">105</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_112.xhtml" title="INES Mapper 112">112</a>
+</td>
+<td> <a href="INES_Mapper_113.xhtml" title="INES Mapper 113">113</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_118.xhtml" title="INES Mapper 118">118</a>
+</td>
+<td> <a href="INES_Mapper_119.xhtml" title="INES Mapper 119">119</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_133.xhtml" title="INES Mapper 133">133</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_144.xhtml" title="INES Mapper 144">144</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_151.xhtml" title="INES Mapper 151">151</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> <s>161</s>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_180.xhtml" title="INES Mapper 180">180</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">184</a>
+</td>
+<td> <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">185</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_188.xhtml" title="INES Mapper 188">188</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_228.xhtml" title="INES Mapper 228">228</a>
+</td>
+<td> <s>229</s>
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_231.xhtml" title="INES Mapper 231">231</a>
+</td>
+<td> <a href="INES_Mapper_232.xhtml" title="INES Mapper 232">232</a>
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_234.xhtml" title="INES Mapper 234">234</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_240.xhtml" title="INES Mapper 240">240</a>
+</td>
+<td> <a href="INES_Mapper_241.xhtml" title="INES Mapper 241">241</a>
+</td>
+<td> <a href="INES_Mapper_242.xhtml" title="INES Mapper 242">242</a>
+</td>
+<td> <a href="INES_Mapper_243.xhtml" title="INES Mapper 243">243</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> <a href="INES_Mapper_246.xhtml" title="INES Mapper 246">246</a>
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td>
+<td> ---
+</td></tr></table>
+<p>Known problems:
+</p>
+<ul><li> Mapper 3 limited to CNROM support, excluding unlicensed oversize variants (e.g. used by Panesian games).</li>
+<li> Mapper 4 does not support Startropics. (See <a href="MMC3.xhtml#iNES_Mapper_004_and_MMC6" title="MMC3">mapper 4 and MMC6</a>.)</li>
+<li> Mapper 5 (MMC5) is incomplete, and fails to run most MMC5 games.</li>
+<li> Mapper 23 (VRC2/4 variants) is listed as buggy.</li>
+<li> Mapper 92 (Jaleco-JF variant) is listed as buggy.</li>
+<li> Mapper 95 (Namcot-3425) is listed as buggy.</li>
+<li> Mapper 96 (Oeka Kids) is listed as buggy.</li></ul>
+<h2><span class="mw-headline" id="Software_development_limitations">Software development limitations</span></h2>
+<p>Aside from mapper incompatibility, there are minor differences between running NES programs on the PowerPak versus a traditional single-game cartridge.
+</p>
+<ul><li> The PowerPak does not accurately simulate power-on state. Because power-on always boots the PowerPak menu, RAM and various registers will be initialized to a consistent state before any NES ROM is chosen to run. (Reset state, however, is not affected by this problem.)</li>
+<li> <s>Open bus behavior</s> may be different in several memory regions that are used by the PowerPak, but would not be connected on a regular cartridge. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=12549" rel="nofollow">forum post</a>)</li></ul>
+<h2><span class="mw-headline" id="PowerPak_development_resources">PowerPak development resources</span></h2>
+<ul><li> Collection of information and photos, source code for menu and loader: <a class="external free" href="http://nespowerpak.com/" rel="nofollow">http://nespowerpak.com/</a></li>
+<li> Source code for CNROM example (Xilinx ISE Webpack 9.1): <a class="external text" href="http://www.nespowerpak.com/powerpakdev1.zip" rel="nofollow">powerpakdev1.zip</a></li>
+<li> Source code for some of Loopy's mappers (Verilog): <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=173302#p173302" rel="nofollow">powerpak_loopy_src.zip</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.210 seconds
+Real time usage: 0.214 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:229-1!*!0!!en!*!* and timestamp 20160612173057 and revision id 12632
+ -->
+</div></body></html>

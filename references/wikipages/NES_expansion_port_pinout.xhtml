@@ -1,0 +1,55 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES expansion port pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES expansion port pinout</h1><div class="article">
+<h2><span class="mw-headline" id="Pinout_of_48-pin_NES_expansion_port">Pinout of 48-pin NES expansion port</span></h2>
+<pre>                                        +-------\
+                                 +5V -- |01   48| -- +5V
+                                 Gnd -- |02   47| -- Gnd
+                            Audio in -&gt; |03   46| -- NC
+                                /NMI &lt;- |04   45| -&gt; out 2 ($4016 write data, bit 2)
+                                 A15 &lt;- |05   44| -&gt; out 1 ($4016 write data, bit 1)
+                                EXP9 ?? |06   43| -&gt; out 0 ($4016 write data, bit 0, strobe on sticks)
+                                EXP8 ?? |07   42| ?? EXP0
+                                EXP7 ?? |08   41| ?? EXP1
+                                EXP6 ?? |09   40| ?? EXP2
+                                EXP5 ?? |10   39| ?? EXP3
+($4017 read strobe) /OE for joypad 2 &lt;- |11   38| ?? EXP4
+                         joypad 1 D1 -&gt; |12   37| -&gt; /OE for joypad 1 ($4016 read strobe)
+                         joypad 1 D3 xx |13   36| xx joypad 1 D4 (before inverting buffer)
+                                /IRQ &lt;&gt; |14   35| xx joypad 1 D0 (likewise)
+                         joypad 2 D2 -&gt; |15   34| -&gt; duplicate of pin 37
+                         joypad 2 D3 xx |16   33| &lt;- joypad 1 D2
+                 duplicate of pin 11 &lt;- |17   32| &lt;&gt; CPU D0
+                         joypad 2 D4 xx |18   31| &lt;&gt; CPU D1
+                         joypad 2 D0 xx |19   30| &lt;&gt; CPU D2
+                         joypad 2 D1 -&gt; |20   29| &lt;&gt; CPU D3
+                           Video out &lt;- |21   28| &lt;&gt; CPU D4
+                           Audio out &lt;- |22   27| &lt;&gt; CPU D5
+       unregulated power adapter vdd -- |23   26| &lt;&gt; CPU D6
+                     4.00MHz CIC CLK &lt;- |24   25| &lt;&gt; CPU D7
+                                        +-------/
+</pre>
+<h3><span class="mw-headline" id="Extra_notes">Extra notes</span></h3>
+<ul><li> See <a href="Cartridge_connector.xhtml#Signal_descriptions" title="Cartridge connector">Cartridge connector#Signal descriptions</a> for notes about the ten EXP pins</li>
+<li> /NMI is an output because the PPU uses a push-pull driver, not open-drain signalling</li>
+<li> Joypad 1 and 2 D0, D3, and D4 are available as an input if no peripheral is connected to the corresponding joystick port that uses those bits:
+<ul><li> e.g. D0 is unavailable if a <a href="Standard_controller.xhtml" title="Standard controller">Standard controller</a> or <a class="mw-redirect" href="Four_Score.xhtml" title="Four score">Four score</a> is plugged in, and</li>
+<li> D3 and D4 are unavailable if a <a href="Zapper.xhtml" title="Zapper">Zapper</a>, <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a>, or <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a> is plugged in.</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.048 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:73-1!*!0!!*!*!* and timestamp 20160716102003 and revision id 12743
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

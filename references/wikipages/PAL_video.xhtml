@@ -1,0 +1,41 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PAL video</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PAL video</h1><div class="article">
+<p>The 2A07 PPU in the PAL NES and the 6538 PPU in PAL famiclones generate composite <b>PAL video</b> in much the same way that the 2C02 generates <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a>: as a square wave between &quot;high&quot; and &quot;low&quot; levels, offset by 0 to 5.5 master clock cycles from the phase of color burst.
+</p><p>PAL NES video has six key differences from NTSC NES video:
+</p>
+<ul><li>The phase of the V subcarrier inverts between each scanline and the next (hence the name: <a class="extiw" href="https://en.wikipedia.org/wiki/PAL" title="wikipedia:PAL">Phase Alternating Line</a>).</li>
+<li>Color burst is ideally at 135 degrees relative to the <a class="extiw" href="https://en.wikipedia.org/wiki/YUV" title="wikipedia:YUV">UV plane</a>, not 180. This allows the TV to detect the phase of the V subcarrier by comparing the phase of color burst to that of the previous line.</li>
+<li>Pixels are 5 master clock cycles long (5/6 of a pixel), rather than 4.</li>
+<li>Each field contains 312 lines, not 262, producing vertical <a href="Overscan.xhtml" title="Overscan">underscan</a> and a pixel aspect ratio close to 1.386:1, which is wider than 1.143:1 of NTSC.</li>
+<li>No missing dot at end of pre-render scanline. This combined with the fact that 312 is a multiple of 6 causes the chroma dot pattern not to vary from one field to the next, producing dirty stills but OK movement.</li>
+<li>The border is always black regardless of $3F00, and it covers the top scanline and the left and right 2 pixels of each remaining scanline.</li></ul>
+<p>The 2A07 and 6538 additionally have minor timing differences related to post-render length and OAM refresh; see <a href="Clock_rate.xhtml" title="Clock rate">Clock rate</a>.
+</p><p>There are two different ways that a TV can <i>decode</i> PAL video.
+The simple way treats PAL as if it were NTSC, modulo the five differences above.
+In areas of poor RF television reception, this produces an artifact called <a class="extiw" href="https://en.wikipedia.org/wiki/Hanover_bars" title="wikipedia:Hanover bars">Hanover bars</a>.
+The other way is a comb filter: average the received scanline's chroma (U and V channels) with the chroma from the received scanline immediately above it in the same field and use that.
+This method, invented by an engineer at Telefunken, eliminates Hanover bars at the expense of a 62.5 microsecond quartz delay line, a royalty payable to Telefunken, and blurred vertical color detail.
+Less expensive PAL TVs used the simple method and relied on the change in color burst phase over time to cancel out the Hanover bars, though this technique may not be effective with the slightly nonstandard scanline length in the PAL signal from an NES.
+</p><p>Emulator developers planning to simulate PAL video decoding can use a signal captured from a 6538 to test the decoder:
+</p>
+<ul><li> <a href="File_PAL_signal_6538_250MHz_png.xhtml" title="File:PAL signal 6538 250MHz.png">250 MHz capture</a></li>
+<li> <a href="File_PAL_signal_6538_53_2MHz_png.xhtml" title="File:PAL signal 6538 53.2MHz.png">Same capture downsampled to twelve times the subcarrier frequency (53.2 MHz)</a>, with one pixel per rise or fall of the master clock</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.051 seconds
+Real time usage: 0.055 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1675-1!*!0!*!*!*!* and timestamp 20160620141833 and revision id 12662
+ -->
+</div></body></html>

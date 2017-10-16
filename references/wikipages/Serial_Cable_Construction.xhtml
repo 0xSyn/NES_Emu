@@ -1,0 +1,190 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Serial Cable Construction</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Serial Cable Construction</h1><div class="article">
+<p>This page describes how to construct a serial cable for connecting a NES/Famicom to a PC. See <a href="Serial_Cable_Specification.xhtml" title="Serial Cable Specification">Serial Cable Specification</a> for more about pin assignments and rationale.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#RS-232-TTL_level_conversion"><span class="tocnumber">2</span> <span class="toctext">RS-232-TTL level conversion</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#FTDI_TTL-232R"><span class="tocnumber">2.1</span> <span class="toctext">FTDI TTL-232R</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#MAX232"><span class="tocnumber">2.2</span> <span class="toctext">MAX232</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Cheap"><span class="tocnumber">2.3</span> <span class="toctext">Cheap</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Connection_to_NES.2FFamicom"><span class="tocnumber">3</span> <span class="toctext">Connection to NES/Famicom</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#NES_controller_cable"><span class="tocnumber">3.1</span> <span class="toctext">NES controller cable</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Famicom_expansion_cable"><span class="tocnumber">3.2</span> <span class="toctext">Famicom expansion cable</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#NES_expansion_port"><span class="tocnumber">3.3</span> <span class="toctext">NES expansion port</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Overview">Overview</span></h1>
+<p>RS-232 serial communication uses +12 and -12V signals, while the NES/Famicom console uses +5V and 0V, commonly referred to as TTL. Connecting RS-232 directly would damage the console, so the RS-232 levels must be translated to/from TTL. RS-232 is also inverted from normal, so a converter inverts the signals as well. Thus, a converter translates +12V to/from 0V, and -12V to/from +5V. There are a few ways to do this conversion, described below. There are also a few ways to connect the converted signals to the NES/Famicom consoles, described separately. A cable is a combination of a conversion method and connection method, so there are even more possibilities.
+</p><p>RS-232 signals are named TxD, RxD, CTS, and GND. Inverted TTL-level signals are named TX, RX, /CTS, GND, and +5V. The NES should <i>never</i> be connected directly to any RS-232 signals, except GND.
+</p>
+<h1><span class="mw-headline" id="RS-232-TTL_level_conversion">RS-232-TTL level conversion</span></h1>
+<h2><span class="mw-headline" id="FTDI_TTL-232R">FTDI TTL-232R</span></h2>
+<p>The FTDI TTL-232R cable plugs into a USB port on almost any computer and provides the necessary TTL signals for the NES. This cable is by far the simplest to use and has high-quality drivers for modern operating systems (Windows, OS X, Linux). It is well worth its cost. You'll also need a male header, 0.1 inch spacing, with 5 pins in a row (if more, you can cut off the extras). Cutting and stripping the wires is not recommended, because you might want to use the FTDI cable for other devices which have a header connector as well, like the popular Arduino microcontroller boards.
+</p><p><i>Do not</i> connect the red or green wires to anything. Also, <i>avoid</i> the TTL-232R-3V3 cable which uses 3.3V signals and will not work with the NES.
+</p>
+<pre>      ___
+     | _ |
+ GND ||_|| Black
+/CTS ||_|| Brown
+     ||_|| Red
+  TX ||_|| Orange
+  RX ||_|| Yellow
+     |'_'| Green
+     |___|
+ FTDI TTL-232R
+</pre>
+<p>TODO: mention the cheaper PL2303-based cables, even though they are nearly identical, just different wire colors.
+</p><p>TODO: mention 1K resistor between TX and NES to reduce current when NES is off but serial is plugged into USB.
+</p>
+<h2><span class="mw-headline" id="MAX232">MAX232</span></h2>
+<p>The MAX232 level converter chip internally generates the RS-232 +/-12V, ensuring compatibility with any serial port. Pay close attention to the counter-intuitive capacitor polarities. If possible, also connect pins 1, 4, and 6 of the RS-232 connector together, which helps the PC determine that something is connected.
+</p><p><a class="image" href="File_Max232_png.xhtml" title="MAX232 RS-232-TTL schematic"><img alt="MAX232 RS-232-TTL schematic" height="220" src="../wiki-images/Max232.png" width="265"/></a>
+</p>
+<table class="tabular">
+
+<tr>
+<th> Quantity	</th>
+<th> Part		</th>
+<th> Comments
+</th></tr>
+<tr>
+<td> 1			</td>
+<td> MAX232	</td>
+<td> Could use variations, like MAX232A etc. See [<a class="external text" href="http://www.maxim-ic.com/datasheet/index.mvp/id/1798" rel="nofollow">| datasheet</a>]
+</td></tr>
+<tr>
+<td> 5			</td>
+<td> 1 μF 16V or greater capacitor	</td>
+<td> Polarized electrolytic or tantalum
+</td></tr></table>
+<pre>GND     TxD   RxD
+.-------------------.
+\ 5   4   3   2   1 /
+ \                 /
+  \ o   8   o   6 /
+   `-------------'
+       CTS
+
+9-pin RS-232 cable (female)
+</pre>
+<h2><span class="mw-headline" id="Cheap">Cheap</span></h2>
+<p>Two transistor-based inverters convert well enough to work with many current serial ports.
+</p><p>For a one-way PC to NES cable, construct an inverter that converts -12V to +5V and +12V to 0V (left-hand schematic). A diode prevents a -12V input from exceeding the transistor's reverse breakdown voltage, which would damage the transistor over time (note diode's orientation).  If possible, also connect pins 1, 4, and 6 of the RS-232 connector together, which helps the PC determine that something is connected.
+</p><p>For a two-way cable that allows NES to PC as well, additionally construct a second inverter on the NES output (right-hand schematic). While this only goes down to 0V instead of -12V, it works with many modern serial ports. This has worked on everything I've tried so far, including a few PL2303-based USB serial adaptors, and the built-in serial port on a Dell PC. It's only the NES to PC direction that doesn't follow the spec exactly; PC to NES will work with all serial ports.
+</p><p><a class="image" href="File_Rs232_to_ttl_png.xhtml" title="RS-232 to TTL schematic"><img alt="RS-232 to TTL schematic" height="183" src="../wiki-images/Rs232_to_ttl.png" width="198"/></a>
+</p><p><a class="image" href="File_Ttl_to_rs232_png.xhtml" title="TTL to RS-232 schematic"><img alt="TTL to RS-232 schematic" height="183" src="../wiki-images/Ttl_to_rs232.png" width="190"/></a>
+</p>
+<table class="tabular">
+
+<tr>
+<th> Quantity	</th>
+<th> Part					</th>
+<th> Comments
+</th></tr>
+<tr>
+<td> 2			</td>
+<td> 2N3904 transistor	</td>
+<td> Any general-purpose NPN transistor will do, like the 2N2222, etc.
+</td></tr>
+<tr>
+<td> 2			</td>
+<td> 1k resistor			</td>
+<td> 1/4 or 1/8 watt, brown-black-red
+</td></tr>
+<tr>
+<td> 2			</td>
+<td> 4k7 resistor			</td>
+<td> 1/4 or 1/8 watt, yellow-violet-red
+</td></tr>
+<tr>
+<td> 1			</td>
+<td> 1N914 diode			</td>
+<td> Other small-signal silicon diode will also work, like the 1N4148, etc.
+</td></tr></table>
+<h1><span class="mw-headline" id="Connection_to_NES.2FFamicom">Connection to NES/Famicom</span></h1>
+<p>The TTL signals from one of the above circuits can be connected to the NES via a controller cable, or the NES/Famicom via the expansion port. For clarity, unused pins are not numbered or labeled.
+</p>
+<h2><span class="mw-headline" id="NES_controller_cable">NES controller cable</span></h2>
+<p>The simplest method of connecting to a NES is through a normal controller cable. Colors are for standard NES controller cable, not third-party cables. Verify pin connections if possible.
+</p>
+<pre>              _
+             /1| GND (brown)
+(white) +5V |5.| 
+            |.3| RX and /CTS (orange)
+            |.4| TX (yellow)
+            '--'
+      NES controller cable
+</pre>
+<h2><span class="mw-headline" id="Famicom_expansion_cable">Famicom expansion cable</span></h2>
+<p>The expansion port is the only way to connect on the Famicom. If desired, an external controller can still be connected at the same time as serial, as serial uses D4. A Neo-Geo controller extension cable can be used, as it has the same connector. A PC joystick connector <i>will not work</i>, due to having insufficient depth.
+</p>
+<pre>                   TX         GND
+-----------------------------------
+\  o   o   o   o   4   o   o   1  /
+ \                               /
+  \  15  o   o  12   o   o   o  /
+   `---------------------------'
+    +5V      RX &amp; /CTS  
+
+Famicom female expansion cable
+</pre>
+<h2><span class="mw-headline" id="NES_expansion_port">NES expansion port</span></h2>
+<p>Connecting to the expansion port avoids disruption of the second controller entirely, but connectors are hard to find, if they exist at all. Another option is to solder directly to the circuit board, and put the serial circuit inside the NES.
+</p>
+<pre>          ------- 
+         |  ___  | 
+     +5V | 1  48 | +5V
+     GND | 2  47 | GND
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [  43 | RX &amp; /CTS
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+(back)   | [   ] |   (front of NES)
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+      TX | 20  ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         |  ---  |
+          -------
+NES expansion port on bottom of console
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.076 seconds
+Real time usage: 0.080 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1292-1!*!0!!en!5!* and timestamp 20160208225828 and revision id 8058
+ -->
+</div></body></html>

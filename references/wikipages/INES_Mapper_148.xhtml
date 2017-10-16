@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 148</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 148</h1><div class="article">
+<p>Nestopia and Санчез say that <strong class="selflink">iNES Mapper 148</strong> is a cost-reduced version of mapper <a href="INES_Mapper_146.xhtml" title="INES Mapper 146">146</a>=<b>79</b>=<a href="NINA_003_006.xhtml" title="NINA-003-006">NINA-06</a> that omits the bus conflict prevention circuitry.
+This is also known as the hardware that Tengen used in their PCB <b>800008</b>, containing their version of <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=671" rel="nofollow">Tetris</a>.
+</p><p>The <i>only</i> game we’ve found anywhere that actually needs this definition is Sachen’s <i>Mahjong World</i>. <b>Everything</b> else that uses this hardware is accurately emulated using <a href="CNROM.xhtml" title="CNROM">CNROM</a>. Pedantically, Nestopia’s database decided it was more correct to put Panesian’s <a href="Oversize.xhtml" title="Oversize">oversize</a> CNROM games here instead, but failed to also refile Tengen’s Tetris.
+</p>
+<pre> Mask: $8000
+ Bus conflicts:
+ $8000: [.... PCCC] - Select 32 KiB PRG bank and 8 KiB CHR bank
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external free" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt</a></li>
+<li> <a class="external text" href="http://kevtris.org/mappers/tengen/800008.html" rel="nofollow">Kev's analysis of Tengen 800008</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 5/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1370-1!*!0!*!*!*!* and timestamp 20160208225255 and revision id 8836
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

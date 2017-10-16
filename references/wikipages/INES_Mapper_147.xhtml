@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 147</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 147</h1><div class="article">
+<p>Санчез says that <strong class="selflink">iNES Mapper 147</strong> is yet another <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Sachen" title="wikia:c:bootleggames:Sachen">Sachen</a> board, used for the game <i>Challenge of the Dragon</i> and its localization <i>Chinese Kungfu</i> ( 少林武者 )
+</p>
+<pre> Mask: $4103
+ Bus conflicts in the mirror at $C102-$FFFE (don't do that)
+ $4102: [PCCC CP..] - Select 32 KiB PRG bank and 8 KiB CHR bank
+</pre>
+<p>The localization (<i>Chinese Kungfu</i>) seems to be defective, despite its verified status is GoodNES (“[!]”)—the wrong CHR banks are selected during attract mode and in the second area of gameplay. Looking at the actual graphics, CHR banks 4 &amp; 6, 5 &amp; 7, 12 &amp; 14, 13 &amp; 15 are duplicates of 2, 3, 10, 11 respectively. Taking the last 120KiB of CHR from Challenge of the Dragon and using it to replace the corresponding bytes in Chinese Kungfu seems to produce graphics that function as intended.
+</p><p>Sources:
+</p>
+<ul><li> <a class="external free" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt</a></li>
+<li> <a class="external free" href="http://sourceforge.net/p/fceultra/code/3072/tree/fceu/trunk/src/boards/sachen.cpp#l322" rel="nofollow">http://sourceforge.net/p/fceultra/code/3072/tree/fceu/trunk/src/boards/sachen.cpp#l322</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1374-1!*!*!*!*!*!* and timestamp 20160208225253 and revision id 8765
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

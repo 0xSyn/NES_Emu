@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 089</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 089</h1><div class="article">
+<p>This is part of a family of Sunsoft mappers used largely by Japanese games: (<strong class="selflink">iNES Mapper 089</strong>, <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">iNES Mapper 093</a>, <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">iNES Mapper 184</a>)
+</p><p>This mapper is used by Tenka no Goikenban: Mito Koumon (J). This game uses the <a href="Sunsoft_2_pinout.xhtml" title="Sunsoft 2 pinout">Sunsoft-2</a> chip on the Sunsoft-3 board, and so works differently than <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">Mapper 93</a>
+</p><p>Here is the documentation in <a href="INES_Mapper_DischDocs.xhtml" title="INES Mapper DischDocs">disch's original style</a>:    
+</p>
+<pre> Registers **BUS CONFLICTS**:
+ --------------------------
+ 
+   $8000-FFFF:  [CPPP MCCC]
+     C = Select 8k CHR @ $0000
+     P = Select 16k PRG @ $8000
+     M = Mirroring:
+       0 = 1ScA
+       1 = 1ScB
+ 
+ 
+ PRG Setup:
+ --------------------------
+ 
+       $8000   $A000   $C000   $E000  
+     +---------------+---------------+
+     |     $8000     |     { -1}     |
+     +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:676-1!*!0!*!*!*!* and timestamp 20160208225204 and revision id 4053
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

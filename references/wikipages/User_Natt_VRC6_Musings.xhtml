@@ -1,0 +1,92 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Natt/VRC6 Musings</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Natt/VRC6 Musings</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#This_page_was_created_from_incorrect_data_and_is_not_relevant._Will_redo_later."><span class="tocnumber">1</span> <span class="toctext">This page was created from incorrect data and is not relevant.  Will redo later.</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Step_1:_Choose_your_pattern_table_mapping_choice:"><span class="tocnumber">1.1</span> <span class="toctext">Step 1:  Choose your pattern table mapping choice:</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Step_2:_Choose_CIRAM_nametables_.28N_.3D_0.29_or_CHRROM_nametables_.28N_.3D_1.29"><span class="tocnumber">1.2</span> <span class="toctext">Step 2:  Choose CIRAM nametables (N = 0) or CHRROM nametables (N = 1)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Step_3:_Consider_your_options"><span class="tocnumber">1.3</span> <span class="toctext">Step 3:  Consider your options</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Scratch"><span class="tocnumber">1.4</span> <span class="toctext">Scratch</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="This_page_was_created_from_incorrect_data_and_is_not_relevant._Will_redo_later.">This page was created from incorrect data and is not relevant.  Will redo later.</span></h1>
+<p>(This isn't really finished or ready for general consumption)
+</p><p>Assume here that the VRC6 has not been rewired at all (although something like Mapper 076 might make sense in some cases.)
+</p>
+<pre>7  bit  0
+---- ----
+W.PN MMDD
+</pre>
+<h2><span class="mw-headline" id="Step_1:_Choose_your_pattern_table_mapping_choice:">Step 1:  Choose your pattern table mapping choice:</span></h2>
+<pre>D = 0  01234567
+D = 1  00112233
+D =2,3 01234455
+</pre>
+<h2><span class="mw-headline" id="Step_2:_Choose_CIRAM_nametables_.28N_.3D_0.29_or_CHRROM_nametables_.28N_.3D_1.29">Step 2:  Choose CIRAM nametables (N = 0) or CHRROM nametables (N = 1)</span></h2>
+<h2><span class="mw-headline" id="Step_3:_Consider_your_options">Step 3:  Consider your options</span></h2>
+<ul><li>D=0,N=0: The standard usage.  Nothing is gained by setting P = 0, so set P = 1 and use M to choose V\H\1sca\1scb.</li>
+<li>D=0,N=1: Your options will be very limited here, as r6 and r7 will be simultaneously setting pattern and nametables.  Nothing to be done about this; a limitation of the mapper.  Use the low bit of M to choose 6677 vs 6767 in nametables.  P = 0 or P = 1 will make no difference to pattern tables, so you can use either P = 0, or P = 1 with toggling the high bit of M to let you change the low bit of r6 and 67 in the nametables.  The only use I could see for this is having r6 and r7 point to 2KiB areas with a nametable in one KiB and matching patterns in the other KiB.</li>
+<li>D=1: P=0 makes no sense, so choose P=1.  With N=0, you can choose any CIRAM mapping, including L and Diagonal.  With N=1, you have full freedom to do 4screen CHRROM nametables.  M has no effect in any case.</li>
+<li>D=2 or 3,N=0: There is no reason to use these modes.  You do not gain any CIRAM nametable mappings beyond those in D=0,N=0, regardless of other bits, and you lose pattern table mappings.</li>
+<li>D=2,N=1: As in D=0,N=1, use the low bit of M to choose 6677 vs 6767 in the nametables.  You can freely choose P=0 or P=1 while only affecting the pattern tables.  The high bit of M is irrelevant.</li>
+<li>D=3,N=1: This mode doesn't appear to gain anything over D=2,N=1, so should not be used.  You can use P=1 to change low bits of r6,r7; but those registers are only used in nametables, and so can freely be specified already.</li></ul>
+<p><br/>
+That's all a bit of a mess and needs to be clarified some, but it seems like the only options with any real value are:
+</p>
+<ul><li>D=0,N=0: Standard</li>
+<li>D=1,N=0: If you MUST have L-mirroring or Diagonal mirroring</li>
+<li>D=1,N=1: CHRROM nametables with full 4-screen nametables</li>
+<li>D=2,N=1: 2 screens of CHRROM nametables, but more pattern banking options than D=1,N=1</li></ul>
+<p>The rest are redundant or bad.  One thing to note is that you can never have CHRROM nametables with the A10 override not &quot;matching&quot; the nametable configuration (6677 with CHR A10 replaced by PPU A11 or 6767 with CHR A10 replaced by PPU A10).  This is probably a limitation in the silicon, and extra gates would be needed to allow this.  The only way to get that level of control is to use the D=1 mode.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Scratch">Scratch</span></h2>
+<pre>ppu  DD=0 DD=1 DD=2,3
+0000  r0   r0   r0
+0400  r1   r0   r1
+0800  r2   r1   r2
+0c00  r3   r1   r3
+1000  r4   r2   r4
+1400  r5   r2   r4
+1800  r6   r3   r5
+1c00  r7   r3   r5
+</pre>
+<pre>000 6767 A
+11? 6767 B
+01? 6677 C
+100 6677 D
+?01 4567
+</pre>
+<pre>replacements:
+MMDD nbit bank x
+0000 0101 6767 A 'V'
+0111 0101 6767 B 'V'
+0011 0011 6677 C 'H'
+0100 0011 6677 D 'H'
+1000 0000 6767 A 'A'
+1111 0000 6767 B 'A'
+1011 1111 6677 C 'B'
+1100 1111 6677 D 'B'
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1306-1!*!*!!en!*!* and timestamp 20160208230446 and revision id 8148
+ -->
+</div></body></html>

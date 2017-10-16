@@ -1,0 +1,67 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 189</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 189</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 189          =
+ ========================
+ 
+ 
+ Example Game:
+ --------------------------
+ Thunder Warrior
+ 
+ 
+ Notes:
+ ---------------------------
+ This mapper is a modified <a href="MMC3.xhtml" title="MMC3">MMC3</a>.  Everything operates just as it does on the MMC3, only the normal PRG regs
+ (R:6,R:7) are ignored, and a new PRG Reg is used instead.
+ 
+ For details on MMC3, see <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 004</a>
+ 
+ 
+ Registers:
+ ---------------------------
+ Regs at $6000-7FFF means no SRAM
+ 
+ 
+   $4120-7FFF:  [AAAA BBBB]
+      A,B:  PRG Reg
+ 
+ 
+   $8000-FFFF:  Same as on MMC3
+ 
+ 
+ PRG Setup:
+ --------------------------
+ 
+ 'A' and 'B' bits of the $4120 reg seem to be effectively OR'd.
+ That is... $30, $03, and $21  will all select page 3
+ 
+      $8000   $A000   $C000   $E000  
+     +-------------------------------+
+     |             $4120             |
+     +-------------------------------+
+</pre>
+<p>This mapper seems to be for HKOs and pirate backports.
+</p><p>FCEUX's source comments that there are actually two different PRG mappers here; one pays attention to only the upper nybble while the other pays attention to only the lower nybble. Fortunately, all(?) games that use this mapper write 0 in the unused bits, so the OR behavior described above actually works. If a game ever writes something where the upper and lower nybbles are both nonzero and nonidentical, and the game is 512 KiB or smaller, it's not actually clear what to do. 
+</p><p><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=4266" rel="nofollow">One game</a> (a romhack of an HKO) is present in NesCartDB; it shows a PT8154 (<a href="INES_Mapper_206.xhtml" title="INES Mapper 206">Namco 108</a> clone), a 74175 (which only provides 4 bits of PRG banking), and a <a href="74138.xhtml" title="74138">74138</a> (to decode the PRG register). At least /ROMSEL, A14, M2, R/W, and one additional address line must connect to the '138, but which exact lines are used vary from game to game.
+All four games found in GoodNES do reliably write with A8 high and A6, A7, A9, A10, A11, and A12 low.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:696-1!*!0!*!*!*!* and timestamp 20160506210422 and revision id 12262
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

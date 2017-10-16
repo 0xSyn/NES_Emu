@@ -1,0 +1,168 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Color Dreams</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Color Dreams</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>Color Dreams</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Color Dreams/Wisdom Tree
+</td></tr>
+
+
+
+
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> COLORDREAMS
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 128K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 8k
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> Fixed H or V, controlled by solder pads
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="Color_Dreams.xhtml" title="INES Mapper 011">011</a>
+</td></tr></table>
+</div>
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=11" rel="nofollow">iNES 011</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<p>The <b>Color Dreams Mapper</b> was a mapper used by the <b>Color Dreams</b> company. The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>mapper 11</b> to these boards.
+</p><p>The mapper is a board with <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">discrete logic</a> that provides up to four 32 KB banks of PRG ROM, up to sixteen 8 KB banks of CHR ROM, and controls a charge pump to defeat the <a class="mw-redirect" href="CIC_lockout_chip.xhtml" title="CIC">CIC</a> lockout chip. 
+</p><p><b>Color Dreams</b> was a company that developed and published unlicensed NES games. They also operated with the alternate labels <b>Wisdom Tree</b> which produced games with Christianity themes (primarily sold in Christian bookstores), and <b>Bunch Games</b> which produced lower budget games. American Game Cartridges also used the Color Dreams mapper for their port of Exidy's <i>Chiller</i>.
+</p><p>Example games:
+</p>
+<ul><li> <i>Bible Adventures</i></li>
+<li> <i>Chiller</i></li>
+<li> <i>Crystal Mines</i></li>
+<li> <i>Menace Beach</i></li>
+<li> <i>Metal Fighter</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bank_select_.28.248000-.24FFFF.29"><span class="tocnumber">2.1</span> <span class="toctext">Bank select ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Variants"><span class="tocnumber">4</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$FFFF: 32 KB switchable PRG ROM bank</li>
+<li> PPU $0000-$1FFF: 8 KB switchable CHR ROM bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.24FFFF.29">Bank select ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+CCCC LLPP
+|||| ||||
+|||| ||++- Select 32 KB PRG ROM bank for CPU $8000-$FFFF
+|||| ++--- Used for lockout defeat
+++++------ Select 8 KB CHR ROM bank for PPU $0000-$1FFF
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The Color Dreams board contains a <a href="74377.xhtml" title="74377">74LS377</a> octal D latch (8-bit register) to select the current PRG and CHR banks.
+</p><p>The lockout defeat is not necessary for emulator implementation. See <a href="#References">references</a> below for more information.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>Nintendo's own <a href="GxROM.xhtml" title="GxROM">GxROM</a> family of boards is nearly identical in function to the Color Dreams board.
+</p><p>A multicart mapper based on this mapper is <a href="INES_Mapper_046.xhtml" title="INES Mapper 046">iNES Mapper 046</a>, with an outer bank register at $6000-$7FFF.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://kevtris.org/mappers/cdreams/" rel="nofollow">Color Dreams</a> - documentation of mapper by Kevin Horton</li>
+<li><a class="external text" href="http://kevtris.org/mappers/lockout/" rel="nofollow">Lockout</a> - documentation of lockout mechanisms by Kevtris</li>
+<li><a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=11" rel="nofollow">Games</a> - list of games using the Color Dreams mapper at NesCartDB</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.127 seconds
+Real time usage: 0.134 seconds
+Preprocessor visited node count: 197/1000000
+Preprocessor generated node count: 1797/1000000
+Post‐expand include size: 998/2097152 bytes
+Template argument size: 141/2097152 bytes
+Highest expansion depth: 9/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:166-1!*!0!!en!*!* and timestamp 20160208215524 and revision id 10995
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

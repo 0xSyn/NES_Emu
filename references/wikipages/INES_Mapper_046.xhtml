@@ -1,0 +1,58 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 046</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 046</h1><div class="article">
+<p>This mapper represents the <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Rumble_Station" title="wikia:c:bootleggames:Rumble Station">Rumble Station</a>, a combined NES-on-a-Chip and multicart of licensed <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a> games.
+The outer mapper, selecting 64K CHR ROM banks (bits 7-4) and 64K PRG ROM banks (bits 3-0), is at $6000-$7FFF, and the inner mapper is a size-reduced subset of Color Dreams (#11).
+Together, this supports up to 1 MB PRG ROM and 1 MB CHR ROM.
+</p>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 046          =
+ ========================
+ 
+ Example Game:
+ --------------------------
+ Rumblestation 15-in-1
+ 
+ 
+ Bus Conflicts?:
+ ---------------------------
+ No idea whether or not this mapper suffers from bus conflicts.  Use caution!
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Regs at $6000-7FFF means no PRG-RAM.
+ 
+ 
+   $6000-7FFF:  [CCCC PPPP]   High CHR, PRG bits
+   $8000-FFFF:  [.CCC ...P]   Low CHR, PRG bits
+ 
+ 'C' selects 8k CHR @ $0000
+ 'P' select 32k PRG @ $8000
+ 
+ 
+ Powerup:
+ ---------------------------
+ $6000 set to 0 on powerup.
+</pre>
+<p>Nestopia and FCEUX reset both registers, not just the outer bank.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:653-1!*!0!*!*!*!* and timestamp 20160208225108 and revision id 8616
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sachen 74LS374N pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sachen 74LS374N pinout</h1><div class="article">
+<p>Sachen “74LS374N”: 20-pin 0.3&quot; DIP or epoxy blob on daughterboard (Canonically <a href="INES_Mapper_243.xhtml" title="INES Mapper 243">iNES Mapper 243</a>)
+</p><p>Most of Sachen's mapper ICs have names that collide with other well-known ICs, presumably as an initial round of misdirection to confuse would-be mass copiers. The 74LS374N is canonically an octal latch (Unlike the <a href="74377.xhtml" title="74377">74377</a>, the actual '374 would require other support hardware to be used on the NES)
+</p>
+<pre>             .---V---.
+  PRG A15 &lt;- | 01 20 | -- Vcc
+CIRAM A10 &lt;- | 02 19 | &lt;- CPU A8
+  PPU A11 -&gt; | 03 18 | &lt;- R/W
+        ? ?? | 04 17 | &lt;- M2
+  CPU A14 -&gt; | 05 16 | &lt;- PPU A10
+  CPU  A0 -&gt; | 06 15 | &lt;- /ROMSEL
+  CPU  D0 &lt;&gt; | 07 14 | &lt;&gt; CPU  D2
+  CPU  D1 &lt;&gt; | 08 13 | -&gt; CHR A16/A14
+  CHR A13 &lt;- | 09 12 | -&gt; CHR A15/A13
+      Gnd -- | 10 11 | -&gt; CHR A14/A15
+             '-------'
+</pre>
+<p>Nestopia's source asserts that at least one variant of this mapper can be
+read from.
+</p><p>Санчез denoted two different connectivities for the CHR pins. They correspond to the values of the actual hardware, and as exists in current documented dumps (although which is which is not known).
+</p><p>Reference: Санчез ( <a class="external free" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt</a> )
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1320-1!*!0!*!*!*!* and timestamp 20160208225819 and revision id 8778
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

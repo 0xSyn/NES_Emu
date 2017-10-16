@@ -1,0 +1,74 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 031</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 031</h1><div class="article">
+<p><b>iNES Mapper 031</b> represents a mapper created to facilitate cartridge compilations of <a href="NSF.xhtml" title="NSF">NSF</a> music. It implements a common subset of the features used by NSFs.
+</p><p>PRG-ROM is bankswitched in 8 x 4 kB banks from $8000-FFFF. These are controlled by registers at $5FF8-$5FFF like the NSF mapper. The high bank at $F000-FFFF is initialized to the last bank at power-on.
+</p><p>There is no CHR banking, so it is recommended to use 8 kB CHR-RAM with this mapper.
+</p><p>As with <a href="BNROM.xhtml" title="BNROM">BNROM</a> and <a href="UxROM.xhtml" title="UxROM">UxROM</a>, there is no mirroring, CHR bank, or IRQ control; this mapper has hardwired H or V mirroring.
+</p><p>Examples:
+</p>
+<ul><li> <i>2A03 Puritans</i> (<a class="external text" href="http://rainwarrior.ca/projects/nes/2a03puritans.html" rel="nofollow">ROM</a>)</li>
+<li> <i>Famicompo Pico 2014</i> (<a class="external text" href="http://rainwarrior.ca/projects/nes/pico.html" rel="nofollow">ROM</a>)</li>
+<li> <i>RNDM</i> (<a class="external text" href="http://megaranmusic.com/album/rndm" rel="nofollow">info</a>)</li>
+<li> <i>Test ROMs</i> (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=13120" rel="nofollow">forum post</a>)</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#PRG_bank_select_.245000-.245FFF"><span class="tocnumber">2.1</span> <span class="toctext">PRG bank select $5000-$5FFF</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Emulator_support"><span class="tocnumber">4</span> <span class="toctext">Emulator support</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 1024 kB</li>
+<li> PRG ROM bank size: 4 kB</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 8 kB RAM/ROM</li>
+<li> CHR bank size: Not bankswitched </li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: horizontal or vertical, hard wired.</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="PRG_bank_select_.245000-.245FFF">PRG bank select $5000-$5FFF</span></h3>
+<pre>address              data
+15      bit       0  7  bit  0
+-------------------  ---------
+0101 .... .... .AAA  PPPP PPPP
+                |||  |||| ||||
+                |||  ++++-++++- Select 4 kB PRG ROM bank at slot specified by write address.
+                +++------------ Specify 4 kB bank slot at: $8000 + (AAA * $1000)
+</pre>
+<p>The canonical write position for these registers is $5FF8-$5FFF, as used in <a href="NSF.xhtml" title="NSF">NSFs</a>.
+</p><p>At power on, the register at $5FFF is set to $FF. Startup code should be placed in the last bank. There is no change to this register on reset.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=128137#p128137" rel="nofollow">Excerpt from readme.txt describing the mapper</a></li></ul>
+<h2><span class="mw-headline" id="Emulator_support">Emulator support</span></h2>
+<ul><li>BizHawk r6492</li>
+<li>MESS r30137</li>
+<li>puNES 0.84</li>
+<li>FCEUX r3094</li>
+<li>Nintendulator 0.975</li>
+<li>Everdrive N8 (w/<a class="external text" href="http://krikzz.com/forum/index.php?topic=3288.0" rel="nofollow">custom mapper</a>)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.049 seconds
+Real time usage: 0.052 seconds
+Preprocessor visited node count: 20/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1356-1!*!0!!en!*!* and timestamp 20160208225038 and revision id 11836
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

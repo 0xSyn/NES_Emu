@@ -1,0 +1,89 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU</h1><div class="article">
+<p>The NES CPU core is based on the 6502 processor and runs at approximately 1.79 MHz (1.66 MHz in a PAL NES). It is made by <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh" rel="nofollow">Ricoh</a> and lacks the MOS6502's decimal mode. In the NTSC NES, the <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh_2A03" rel="nofollow">RP2A03</a> chip contains the CPU and APU; in the PAL NES, the CPU and APU are contained within the <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh_2A03" rel="nofollow">RP2A07</a> chip. 
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Sections"><span class="tocnumber">1</span> <span class="toctext">Sections</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#CPU_signals_and_frequencies"><span class="tocnumber">2</span> <span class="toctext">CPU signals and frequencies</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#See_also"><span class="tocnumber">4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Sections">Sections</span></h3>
+<ul><li> <a href="6502_instructions.xhtml" title="6502 instructions">CPU instructions</a></li>
+<li> <a href="CPU_addressing_modes.xhtml" title="CPU addressing modes">CPU addressing modes</a></li>
+<li> <a href="CPU_memory_map.xhtml" title="CPU memory map">CPU memory map</a></li>
+<li> <a href="CPU_power_up_state.xhtml" title="CPU power up state">CPU power-up state</a></li>
+<li> <a href="CPU_registers.xhtml" title="CPU registers">CPU registers</a></li>
+<li> <a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">CPU status flag behavior</a></li>
+<li> <a href="CPU_interrupts.xhtml" title="CPU interrupts">CPU interrupts</a></li>
+<li> <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">Unofficial opcodes</a></li>
+<li> <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">CPU pin-out and signals</a>, and other <a href="Hardware_pinout.xhtml" title="Hardware pinout">hardware pin-outs</a></li></ul>
+<h3><span class="mw-headline" id="CPU_signals_and_frequencies">CPU signals and frequencies</span></h3>
+<p>The CPU generates its clock signal by dividing the master clock signal.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Rate </th>
+<th> NTSC NES/Famicom </th>
+<th> PAL NES </th>
+<th> PAL Famiclone
+</th></tr>
+<tr>
+<td> Color subcarrier frequency <i>f<sub>sc</sub></i> (exact) </td>
+<td> 39375000/11 Hz </td>
+<td> 4433618.75 Hz </td>
+<td> 4433618.75 Hz
+</td></tr>
+<tr>
+<td> Color subcarrier frequency <i>f<sub>sc</sub></i> (approx.) </td>
+<td> 3.579545 MHz </td>
+<td> 4.433619 MHz </td>
+<td> 4.433619 MHz
+</td></tr>
+<tr>
+<td> Master clock frequency 6<i>f<sub>sc</sub></i> </td>
+<td> 21.477272 MHz </td>
+<td> 26.601712 MHz </td>
+<td> 26.601712 MHz
+</td></tr>
+<tr>
+<td> Clock divisor <i>d</i> </td>
+<td> 12 </td>
+<td> 16 </td>
+<td> 15
+</td></tr>
+<tr>
+<td> CPU clock frequency 6<i>f<sub>sc</sub></i>/<i>d</i> </td>
+<td> 1.789773 MHz (~559 ns per cycle) </td>
+<td> 1.662607 MHz (~601 ns per cycle) </td>
+<td> 1.773448 MHz (~564 ns per cycle)
+</td></tr></table>
+<h3><span class="mw-headline" id="Notes">Notes</span></h3>
+<ul><li> Kevtris has confirmed that all illegal 6502 opcodes execute identically on the 2A03/2A07. He has even went as far as to integrate them into the CopyNES BIOS.</li>
+<li> Every cycle on 6502 is either a read or a write cycle.</li>
+<li> A printer friendly version covering all section is available <a href="CPU_ALL.xhtml" title="CPU ALL">here</a>.</li></ul>
+<h3><span class="mw-headline" id="See_also">See also</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/2A03%20technical%20reference.txt" rel="nofollow">2A03 technical reference</a> by Brad Taylor. (Pretty old at this point; information on the wiki might be more up-to-date.)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.044 seconds
+Real time usage: 0.046 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 104/1000000
+Post‐expand include size: 52/2097152 bytes
+Template argument size: 8/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:10-1!*!0!!en!*!* and timestamp 20160208224825 and revision id 9530
+ -->
+</div></body></html>

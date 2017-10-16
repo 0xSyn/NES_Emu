@@ -1,0 +1,73 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 227</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 227</h1><div class="article">
+<p>The Chinese unlicensed game <i>[NJXXX] Xiang Shuai Chuan Qi</i> will fail to load pattern data if the below notes on write protection are employed. Is this feature only on some 227 carts (more likely multicarts)? The write protection has been temporarily disabled in fceux and bizhawk until more evidence is gathered. It should be noted that VirtuaNES doesn't use the write protection.
+</p><p>In r2750 of fceux this support was rewritten; it should still work. It supposedly works in nestopia as well.
+</p>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 227          =
+ ========================
+ 
+ 
+ Example Game:
+ --------------------------
+ 1200-in-1
+ 
+ 
+ Notes:
+ ---------------------------
+ This mapper has 8k CHR-RAM, and also has the ability to write protect it's CHR-RAM!
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+   $8000-FFFF:  A~[.... ..LP  OPPP PPMS]
+     L = Last PRG Page Mode
+     P = PRG Reg
+     O = Mode
+     M = Mirroring (0=Vert, 1=Horz)
+     S = PRG Size
+ 
+ 
+ Setup:
+ ---------------------------
+ 
+ When 'O' is set, CHR-RAM is write protected (writes have no effect).  'O' also changes the PRG mode.
+ 
+ Note there is funky ANDs and ORs going on below depending on the modes:
+ 
+ 
+                   $8000   $A000   $C000   $E000  
+                 +---------------+---------------+
+ O=1, S=0:       |       P       |       P       |
+                 +-------------------------------+
+ O=1, S=1:       |             &lt; P &gt;             |
+                 +-------------------------------+
+ O=0, S=0, L=0:  |       P       |   P AND $38   |
+                 +---------------+---------------+
+ O=0, S=1, L=0:  |   P AND $3E   |   P AND $38   |
+                 +---------------+---------------+
+ O=0, S=0, L=1:  |       P       |   P  OR $07   |
+                 +---------------+---------------+
+ O=0, S=1, L=1:  |   P AND $3E   |   P  OR $07   |
+                 +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:709-1!*!*!*!*!*!* and timestamp 20160208225447 and revision id 5144
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

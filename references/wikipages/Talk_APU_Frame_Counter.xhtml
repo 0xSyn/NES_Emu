@@ -1,0 +1,68 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU Frame Counter</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU Frame Counter</h1><div class="article">
+<p>The frame counter <a class="external text" href="http://uxul.org/~noname/chips/cpu-2/no-metal/stitched/final/" rel="nofollow">on the die</a> (upper-right, just below the joypad strobe pin) seems to be a 15-bit linear feedback shift register (with taps at the 14th and 15th bits); when the LFSR is initialized with all 1s and clocked every other CPU cycle, a decoder appears to generate signals at 7456, 14912 (+7456), 22370 (+7458), 29828 (+7458), and 37280 (+7452) cycles. I have not yet determined how these relate to the 2 different sequence modes. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 17:09, 23 January 2011 (UTC)
+</p>
+<dl><dd>Both the 4th and 5th stages (29828 and 32780) trigger the &quot;quarter&quot; and &quot;half&quot; frame signals and reset the LFSR, but the 4th stage is skipped entirely if it's in the 5-step sequence mode. The decode table also has a special case - when all of the bits are 0, it forces 1 into the LFSR's input, presumably to prevent it from stalling (likely triggered on power-up). I can also see some logic that looks like it'll forcefully clock the &quot;quarter&quot; and &quot;half&quot; frame signals upon writing $4017 if D7 is set, which would probably explain the behavior observed (but also result in slightly different timing between the first loop and subsequent loops). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 15:46, 10 May 2011 (UTC)
+<dl><dd>When writing to $4017, the frame counter reset and the quarter/half frame triggers happen simultaneously, but only on &quot;odd&quot; cycles (and only after the first &quot;even&quot; cycle after the write occurs) - thus, it happens either 2 or 3 cycles after the write (i.e. on the 2nd or 3rd cycle of the next instruction). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 18:41, 29 June 2011 (UTC)</dd></dl></dd></dl>
+<p>With your permission, Quietust, I'd like to incorporate this information into the article. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 22:38, 11 July 2011 (UTC)
+</p>
+<dl><dd>Most of it already has been added. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 13:07, 12 July 2011 (UTC)</dd></dl>
+<p>My emu doesn't pass in the blargg's frame IRQ flag test if the IRQ is set at 29828, which <i>should be</i> at 29829. Plus, the step 4 reset <i>should be</i> 29831 <i>minus</i> 29828, and not a wrap to zero. What do you think? --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 17:39, 12 July 2011 (UTC)
+</p>
+<dl><dd>Perhaps your emulator has issues with interrupt latency? Also, once your counter reaches 29828, it should reset to zero after two cycles - the actual counter in the APU is only updated every other CPU cycle, and when it reaches 14914 (step 4) it resets to 0 <b>instead of incrementing to 14915</b> (but it isn't really incrementing, since it's a linear feedback shift register as mentioned above). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 19:33, 12 July 2011 (UTC)</dd></dl>
+<p>It should also be noted that APU cycles happen when M2 is low - since CPU reads and writes happen when M2 is high, this means that APU cycles and APU writes can never happen at exactly the same time. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 03:20, 13 July 2011 (UTC)
+</p><p>I disagree about taking a lower level for emulation purposes. What's wrong about using a CPU cycle based counter? Plus, how does such <i>APU</i> LFSR work? How each value (?) is checked for the APU operations, like the next step? The article in the wikipedia brings various types of shift register. Perhaps not everyone that has such level of knowledge, from an <i>hardware circuit level</i>.--<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 04:05, 13 July 2011 (UTC)
+</p>
+<dl><dd>I'm under the assumption that a 16-bit LFSR will generate a string of perfectly-unique 16-bit numbers before the string wraps around to the beginning again. A regular up-counter does the exact same thing. In both cases, you'd just be looking at the contents of the register to see if it matches one of the 5 (I'm guessing) steps. As for why it's a LFSR specifically, I can only speculate that it was cheaper/simpler than a counter, whilst providing the same functionality (since it just needs to count, it doesn't matter if the numbers are in pseudorandom order, just as long as they're in the same pseudorandom order every time).</dd>
+<dd>I don't see any reason why you <i>couldn't</i> use a simple CPU cycle counter for the sequencer in an emulator; as long as your timings are correct, you can completely disregard that the hardware uses an LFSR. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 06:43, 13 July 2011 (UTC)
+<dl><dd>If you really want to see how it works, look <a class="external text" href="http://www.qmtpro.com/~nes/visual2a03/expert.html" rel="nofollow">here</a> and ask it to find &quot;frm_t0&quot;. Also, in case you're curious, the noise and DPCM frequency counters are also LFSRs (since they get loaded from lookup tables). Interestingly, the NES lockout chip even uses an LFSR for its <b>program counter</b>. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 12:37, 13 July 2011 (UTC)</dd></dl></dd></dl>
+<p>Fact: there is a $4015 read at CPU 29828 <b>and</b> a frame IRQ being requested. Well, it appears in every APU test; that's why the frame IRQ <i>should</i> take effect at 2982<b>9</b>, possibly because of the CPU/APU clock ratio (2 CPU clocks = 1 APU clock): it take effect on other CPU cycle. Unless, of course, I'm messing up the things. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 16:38, 30 July 2011 (UTC)
+</p><p>There's no <i>$4015 read</i> with a <i>frame IRQ flag rise</i>. It was a timing bug in my pAPU driver. Because of my software architecture, the modules are clocked in this order: APU,PPU,CPU. So, the length counter clock is 1 cycle late, but it was fixed with an easy flag set/clear at each pAPU clock. Sorry for the trouble. Such pAPU debugging was a nice exercise, very additive. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 02:35, 5 August 2011 (UTC)
+</p>
+<h2><span class="mw-headline" id="Some_times_off_by_.5.3F">Some times off by .5?</span></h2>
+<p>The IRQ firing at 14914 seems correct (when looking at the circuitry too), but blargg's apu_tests seem to assume that the length counters (and possibly other stuff too) update at 7456.5, etc. Would be easy to confirm if that's the case in Visual 2A03, but it always crashes before I can simulate to the first frame counter clock in both Firefox and Chrome (perhaps due to a memory leak). :/ -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 05:50, 13 August 2013 (MDT)
+</p>
+<dl><dd> Through repeated getState()/setState() and reloading in Visual 2A03 I managed to get to APU tick 7456. The log around that point also suggests that the correct update tick is 7456.5. Each row is half a CPU cycle, and time flows from bottom to top. You see the frm_half and frm_quarter signals being generated one CPU cycle after frm_t (the LFSR that implements the frame counter) changes, and at the same time sq0_len is decremented:</dd></dl>
+<pre>
+sq0_len  frm_t   frm_half   frm_quarter
+1c       580e    1          1
+1c       580e    1          1
+1c       6c07    1          1
+1c       6c07    1          1
+1c       6c07    1          1
+1c       6c07    1          1
+1c       3603    1          1
+1c       3603    0          0
+1d       3603    1          1
+1d       3603    1          1
+1d       5b01    1          1
+1d       5b01    1          1
+1d       5b01    1          1
+1d       5b01    1          1
+1d       2d80    1          1
+1d       2d80    1          1
+</pre>
+<dl><dd> I'll wait a few days before I update the wiki to see if anyone screams. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 08:28, 13 August 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="PAL">PAL</span></h2>
+<p>What are the cycle counts for the 2A07 (PAL NES CPU)? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 15:22, 18 August 2014 (MDT)
+</p>
+<dl><dd>Once an RP2A07 is depackaged and delayered, we'll find out. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 07:41, 3 November 2014 (MST)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.045 seconds
+Real time usage: 0.047 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:991-1!*!0!!*!*!* and timestamp 20160208223904 and revision id 9210
+ -->
+</div></body></html>

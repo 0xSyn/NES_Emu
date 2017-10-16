@@ -1,0 +1,402 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU registers</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU registers</h1><div class="article">
+<p>The PPU exposes eight memory-mapped registers to the CPU. These nominally sit at $2000 through $2007 in the CPU's address space, but because they're incompletely decoded, they're <a href="Mirroring.xhtml" title="Mirroring">mirrored</a> in every 8 bytes from $2008 through $3FFF, so a write to $3456 is the same as a write to $2006.
+</p><p>Immediately after powerup, the PPU isn't necessarily in a usable state.
+The program needs to do a few things to get it going; see <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a> and <a href="Init_code.xhtml" title="Init code">Init code</a>. 
+</p><p><br/>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Ports"><span class="tocnumber">2</span> <span class="toctext">Ports</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Controller_.28.242000.29_.3E_write"><span class="tocnumber">2.1</span> <span class="toctext"><span><span>Controller ($2000) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Master.2Fslave_mode_and_the_EXT_pins"><span class="tocnumber">2.1.1</span> <span class="toctext">Master/slave mode and the EXT pins</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Bit_0_bus_conflict"><span class="tocnumber">2.1.2</span> <span class="toctext">Bit 0 bus conflict</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#Mask_.28.242001.29_.3E_write"><span class="tocnumber">2.2</span> <span class="toctext"><span><span>Mask ($2001) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Render_Control"><span class="tocnumber">2.2.1</span> <span class="toctext">Render Control</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Color_Control"><span class="tocnumber">2.2.2</span> <span class="toctext">Color Control</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Status_.28.242002.29_.3C_read"><span class="tocnumber">2.3</span> <span class="toctext"><span><span>Status ($2002) &lt; read</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Notes"><span class="tocnumber">2.3.1</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#OAM_address_.28.242003.29_.3E_write"><span class="tocnumber">2.4</span> <span class="toctext"><span><span>OAM address ($2003) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-12"><a href="#Values_during_rendering"><span class="tocnumber">2.4.1</span> <span class="toctext">Values during rendering</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#OAMADDR_precautions"><span class="tocnumber">2.4.2</span> <span class="toctext">OAMADDR precautions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#OAM_data_.28.242004.29_.3C.3E_read.2Fwrite"><span class="tocnumber">2.5</span> <span class="toctext"><span><span>OAM data ($2004) &lt;&gt; read/write</span></span></span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Scroll_.28.242005.29_.3E.3E_write_x2"><span class="tocnumber">2.6</span> <span class="toctext"><span><span>Scroll ($2005) &gt;&gt; write x2</span></span></span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Address_.28.242006.29_.3E.3E_write_x2"><span class="tocnumber">2.7</span> <span class="toctext"><span><span>Address ($2006) &gt;&gt; write x2</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-17"><a href="#note"><span class="tocnumber">2.7.1</span> <span class="toctext">note</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-18"><a href="#Data_.28.242007.29_.3C.3E_read.2Fwrite"><span class="tocnumber">2.8</span> <span class="toctext"><span><span>Data ($2007) &lt;&gt; read/write</span></span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-19"><a href="#The_PPUDATA_read_buffer_.28post-fetch.29"><span class="tocnumber">2.8.1</span> <span class="toctext">The PPUDATA read buffer (post-fetch)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-20"><a href="#OAM_DMA_.28.244014.29_.3E_write"><span class="tocnumber">2.9</span> <span class="toctext"><span><span>OAM DMA ($4014) &gt; write</span></span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Summary">Summary</span></h2>
+<table class="tabular">
+<tr>
+<th> Common Name
+</th>
+<th> Address
+</th>
+<th> Bits
+</th>
+<th> Notes
+</th></tr>
+<tr>
+<th> <a href="#PPUCTRL">PPUCTRL</a>
+</th>
+<th> $2000
+</th>
+<td> <tt style="white-space: nowrap">VPHB SINN</tt> </td>
+<td> NMI enable (V), PPU master/slave (P), sprite height (H), background tile select (B), sprite tile select (S), increment mode (I), nametable select (NN)
+</td></tr>
+<tr>
+<th> <a href="#PPUMASK">PPUMASK</a>
+</th>
+<th> $2001
+</th>
+<td> <tt style="white-space: nowrap">BGRs bMmG</tt> </td>
+<td> color emphasis (BGR), sprite enable (s), background enable (b), sprite left column enable (M), background left column enable (m), greyscale (G)
+</td></tr>
+<tr>
+<th> <a href="#PPUSTATUS">PPUSTATUS</a>
+</th>
+<th> $2002
+</th>
+<td> <tt style="white-space: nowrap">VSO- ----</tt> </td>
+<td> vblank (V), sprite 0 hit (S), sprite overflow (O), read resets write pair for $2005/2006
+</td></tr>
+<tr>
+<th> <a href="#OAMADDR">OAMADDR</a>
+</th>
+<th> $2003
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> OAM read/write address
+</td></tr>
+<tr>
+<th> <a href="#OAMDATA">OAMDATA</a>
+</th>
+<th> $2004
+</th>
+<td> <tt style="white-space: nowrap">dddd dddd</tt> </td>
+<td> OAM data read/write
+</td></tr>
+<tr>
+<th> <a href="#PPUSCROLL">PPUSCROLL</a>
+</th>
+<th> $2005
+</th>
+<td> <tt style="white-space: nowrap">xxxx xxxx</tt> </td>
+<td> fine scroll position (two writes: X, Y)
+</td></tr>
+<tr>
+<th> <a href="#PPUADDR">PPUADDR</a>
+</th>
+<th> $2006
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> PPU read/write address (two writes: MSB, LSB)
+</td></tr>
+<tr>
+<th> <a href="#PPUDATA">PPUDATA</a>
+</th>
+<th> $2007
+</th>
+<td> <tt style="white-space: nowrap">dddd dddd</tt> </td>
+<td> PPU data read/write
+</td></tr>
+<tr>
+<th> <a href="#OAMDMA">OAMDMA</a>
+</th>
+<th> $4014
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> OAM DMA high address
+</td></tr></table>
+<h2><span class="mw-headline" id="Ports">Ports</span></h2>
+<p>The PPU has an internal data bus that it uses for communication with the CPU.
+This bus, called <code>_io_db</code> in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a> and <code>PPUGenLatch</code> in FCEUX,<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> behaves as an 8-bit dynamic latch due to capacitance of very long traces that run to various parts of the PPU.
+Writing any value to any PPU port, even to the nominally read-only PPUSTATUS, will fill this latch.
+Reading any readable port (PPUSTATUS, OAMDATA, or PPUDATA) also fills the latch with the bits read.
+Reading a nominally &quot;write-only&quot; register returns the latch's current value, as do the unused bits of PPUSTATUS.
+This value begins to decay after a frame or so, faster once the PPU has warmed up, and it is likely that values with alternating bit patterns (such as $55 or $AA) will decay faster.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+<h3><span class="mw-headline" id="Controller_.28.242000.29_.3E_write"><span id="PPUCTRL"><span id="Reg2000">Controller ($2000) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>PPUCTRL</b></li>
+<li> Description: PPU control register</li>
+<li> Access: write</li></ul>
+<p>Various flags controlling PPU operation
+</p>
+<pre>7  bit  0
+---- ----
+VPHB SINN
+|||| ||||
+|||| ||++- Base nametable address
+|||| ||    (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
+|||| |+--- VRAM address increment per CPU read/write of PPUDATA
+|||| |     (0: add 1, going across; 1: add 32, going down)
+|||| +---- Sprite pattern table address for 8x8 sprites
+||||       (0: $0000; 1: $1000; ignored in 8x16 mode)
+|||+------ Background pattern table address (0: $0000; 1: $1000)
+||+------- Sprite size (0: 8x8; 1: 8x16)
+|+-------- PPU master/slave select
+|          (0: read backdrop from EXT pins; 1: output color on EXT pins)
++--------- Generate an <a href="NMI.xhtml" title="NMI">NMI</a> at the start of the
+           <a class="extiw" href="https://en.wikipedia.org/wiki/Vertical_blanking_interval" title="wikipedia:Vertical blanking interval">vertical blanking interval</a> (0: off; 1: on)
+</pre>
+<p>Equivalently, bits 0 and 1 are the most significant bit of the scrolling coordinates (see <a href="PPU_nametables.xhtml" title="PPU nametables">Nametables</a> and <a href="#PPUSCROLL">PPUSCROLL</a>):
+</p>
+<pre>7  bit  0
+---- ----
+.... ..YX
+       ||
+       |+- 1: Add 256 to the X scroll position
+       +-- 1: Add 240 to the Y scroll position
+</pre>
+<p>Another way of seeing the explanation above is that when you reach the end of a nametable, you must switch to the next one, hence, changing the nametable address.
+</p><p><a href="PPU_power_up_state.xhtml" title="PPU power up state">After power/reset</a>, writes to this register are ignored for about 30000 cycles.
+</p><p>When turning on the NMI flag in bit 7, if the PPU is currently in vertical blank and the <a href="#PPUSTATUS">PPUSTATUS</a> ($2002) vblank flag is set, an NMI will be generated immediately.
+This can result in graphical errors (most likely a misplaced scroll) if the NMI routine is executed too late in the blanking period to finish on time.
+To avoid this problem it is prudent to read $2002 immediately before writing $2000 to clear the vblank flag.
+</p>
+<h4><span class="mw-headline" id="Master.2Fslave_mode_and_the_EXT_pins">Master/slave mode and the EXT pins</span></h4>
+<p>When bit 6 of PPUCTRL is clear (the usual case), the PPU gets the <a href="PPU_palettes.xhtml" title="PPU palettes">palette index</a> for the background color from the EXT pins. The stock NES grounds these pins, making palette index 0 the background color as expected. A secondary picture generator connected to the EXT pins would be able to replace the background with a different image using colors from the background palette, which could be used e.g. to implement parallax scrolling.
+</p><p>Setting bit 6 causes the PPU to output the lower four bits of the palette memory index on the EXT pins for each pixel (in addition to normal image drawing) - since only four bits are output, background and sprite pixels can't normally be distinguished this way. As the EXT pins are grounded on an unmodified NES, setting bit 6 is discouraged as it could potentially damage the chip whenever it outputs a non-zero pixel value (due to it effectively shorting Vcc and GND together). Looking at the relevant circuitry in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a>, it appears that the <a href="PPU_palettes.xhtml" title="PPU palettes">background palette hack</a> would not be functional for output from the EXT pins; they would always output index 0 for the background color.
+</p>
+<h4><span class="mw-headline" id="Bit_0_bus_conflict">Bit 0 bus conflict</span></h4>
+<p>Be very careful when writing to this register outside vertical blanking if you are using vertical mirroring (horizontal arrangement) or 4-screen VRAM.
+For specific CPU-PPU alignments, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=112424#p112424" rel="nofollow">a write near the end of a visible scanline</a> may cause only the next scanline to be erroneously drawn from the left nametable.
+This can cause a visible glitch.
+Worse, it can theoretically cause a sprite 0 hit to fail, which may crash a game using a sprite 0 spin loop that's not resilient.
+</p><p>Only writes at the exact moment between active picture and horizontal blanking cause this glitch; well-timed mid-scanline writes do not, nor do writes that land well within horizontal blanking.
+The glitch has no effect in horizontal or one-screen mirroring.
+It also does not appear if bit 0 of the written value is 0; this always correctly sets the left nametable.
+</p><p>This produces an occasionally <a href="Game_bugs.xhtml" title="Game bugs">visible glitch</a> in <i>Super Mario Bros.</i> when the program writes to PPUCTRL at the end of game logic.
+It appears to be turning NMI off during game logic and then turning NMI back on once the game logic has finished in order to prevent the NMI handler from being called again before the game logic finishes.
+To work around this in new productions, have your game logic set a flag that your NMI handler checks.
+</p>
+<h3><span class="mw-headline" id="Mask_.28.242001.29_.3E_write"><span id="PPUMASK"><span id="Reg2001">Mask ($2001) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>PPUMASK</b></li>
+<li> Description: PPU mask register</li>
+<li> Access: write</li></ul>
+<p>This register controls the rendering of sprites and backgrounds, as well as colour effects.
+</p>
+<pre>7  bit  0
+---- ----
+BGRs bMmG
+|||| ||||
+|||| |||+- Greyscale (0: normal color, 1: produce a greyscale display)
+|||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide
+|||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide
+|||| +---- 1: Show background
+|||+------ 1: Show sprites
+||+------- Emphasize red*
+|+-------- Emphasize green*
++--------- Emphasize blue*
+</pre>
+<p>* NTSC colors. PAL and Dendy swaps green and red<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup><sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup>.
+</p>
+<h4><span class="mw-headline" id="Render_Control">Render Control</span></h4>
+<ul><li> Bits 3 and 4 enable the rendering of background and sprites, respectively.</li></ul>
+<ul><li> Bits 1 and 2 enable rendering of the background and sprites in the leftmost 8 pixel columns. Setting these bits to 0 will mask these columns, which is often useful in horizontal scrolling situations where you want partial sprites or tiles to scroll in from the left.</li></ul>
+<ul><li> A value of $1E enables all rendering, with no color effects. A value of $00 disables all rendering. It is usually best practice to write this register only during vblank, to prevent partial-frame visual artifacts.</li></ul>
+<ul><li> If either of bits 3 or 4 is enabled, at any time outside of the vblank interval the PPU will be making continual use to the PPU address and data bus to fetch tiles to render, as well as internally fetching sprite data from the OAM. If you wish to make changes to PPU memory outside of vblank (via <b>$2007</b>), you must set <i>both</i> of these bits to 0 to disable rendering and prevent conflicts.</li></ul>
+<ul><li> Disabling rendering (clear both bits 3 and 4) during a visible part of the frame can be problematic. It can cause a corruption of the sprite state, which will display incorrect sprite data on the next frame. (See: <a href="Errata.xhtml" title="Errata">Errata</a>) It is, however, perfectly fine to mask sprites but leave the background on (set bit 3, clear bit 4) at any time in the frame.</li></ul>
+<ul><li> Sprite 0 hit does not trigger in any area where the background or sprites are hidden.</li></ul>
+<h4><span class="mw-headline" id="Color_Control">Color Control</span></h4>
+<ul><li> Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF, both on the display and through <a href="#PPUDATA">PPUDATA</a>. Writes to the palette through <a href="#PPUDATA">PPUDATA</a> are not affected. Also note that black colours like $0F will be replaced by a non-black grey $00.</li></ul>
+<ul><li> Bits 5,6,7 control a color &quot;emphasis&quot; or &quot;tint&quot; effect. Each bit emphasizes 1 color while darkening the other two. Setting all three emphasis bits will darken all colors.
+<ul><li> Bit 5 emphasizes red on the NTSC PPU, and green on the PAL &amp; Dendy PPUs.</li>
+<li> Bit 6 emphasizes green on the NTSC PPU, and red on the PAL &amp; Dendy PPUs.</li>
+<li> Bit 7 emphasizes blue on the NTSC, PAL, &amp; Dendy PPUs.</li>
+<li> See <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> for a description of how bits 5-7 work on NTSC and PAL PPUs.</li>
+<li> The <a href="Vs__System.xhtml" title="Vs. System">RGB PPU</a> used by PlayChoice and some other systems treat the emphasis bits differently. Instead of darkening other RGB components, it forces one component to maximum brightness. <a href="Colour_emphasis_games.xhtml" title="Colour-emphasis games">A few games</a>, which set all three tint bits to darken all colors, are unplayable on these PPUs.</li></ul></li></ul>
+<ul><li> The emphasis bits are applied independently of greyscale, so they will still tint the color of the grey image.</li></ul>
+<h3><span class="mw-headline" id="Status_.28.242002.29_.3C_read"><span id="PPUSTATUS"><span id="Reg2002">Status ($2002) &lt; read</span></span></span></h3>
+<ul><li> Common name: <b>PPUSTATUS</b></li>
+<li> Description: PPU status register</li>
+<li> Access: read</li></ul>
+<p>This register reflects the state of various functions inside the PPU.
+It is often used for determining timing.
+<span id="Sprite_0">To determine when the PPU has reached a given pixel of the screen, put an opaque pixel of sprite 0 there.</span>
+</p>
+<pre>7  bit  0
+---- ----
+VSO. ....
+|||| ||||
+|||+-++++- Least significant bits previously written into a PPU register
+|||        (due to register not being updated for this address)
+||+------- Sprite overflow. The intent was for this flag to be set
+||         whenever more than eight sprites appear on a scanline, but a
+||         hardware bug causes the actual behavior to be more complicated
+||         and generate false positives as well as false negatives; see
+||         <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a>. This flag is set during sprite
+||         evaluation and cleared at dot 1 (the second dot) of the
+||         pre-render line.
+|+-------- Sprite 0 Hit.  Set when a nonzero pixel of sprite 0 overlaps
+|          a nonzero background pixel; cleared at dot 1 of the pre-render
+|          line.  Used for raster timing.
++--------- Vertical blank has started (0: not in vblank; 1: in vblank).
+           Set at dot 1 of line 241 (the line *after* the post-render
+           line); cleared after reading $2002 and at dot 1 of the
+           pre-render line.
+</pre>
+<h4><span class="mw-headline" id="Notes">Notes</span></h4>
+<ul><li> Reading the status register will clear D7 mentioned above and also the address latch used by <a href="#PPUSCROLL">PPUSCROLL</a> and <a href="#PPUADDR">PPUADDR</a>. It does not clear the sprite 0 hit or overflow bit.</li>
+<li> Once the sprite 0 hit flag is set, it will not be cleared until the end of the next vertical blank.  If attempting to use this flag for raster timing, it is important to ensure that the sprite 0 hit check happens outside of vertical blank, otherwise the CPU will &quot;leak&quot; through and the check will fail.  The easiest way to do this is to place an earlier check for D6 = 0, which will wait for the pre-render scanline to begin.</li>
+<li> If using sprite 0 hit to make a bottom scroll bar below a vertically scrolling or freely scrolling playfield, be careful to ensure that the tile in the playfield behind sprite 0 is opaque.</li>
+<li> Sprite 0 hit is not detected at x=255, nor is it detected at x=0 through 7 if the background or sprites are hidden in this area.</li>
+<li> See: <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a> for more information on the timing of setting and clearing the flags.</li>
+<li> Some <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> PPUs return a constant value in D4-D0 that the game checks.</li>
+<li> <b>Caution:</b> Reading PPUSTATUS at the exact start of vertical blank will return 0 in bit 7 but clear the latch anyway, causing the program to miss frames. See <a href="NMI.xhtml" title="NMI">NMI</a> for details.</li></ul>
+<h3><span class="mw-headline" id="OAM_address_.28.242003.29_.3E_write"><span id="OAMADDR"><span id="Reg2003">OAM address ($2003) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>OAMADDR</b></li>
+<li> Description: OAM address port</li>
+<li> Access: write</li></ul>
+<p>Write the address of <a href="PPU_OAM.xhtml" title="PPU OAM">OAM</a> you want to access here.  Most games just write $00 here and then use <a href="#OAMDMA">OAMDMA</a>. (DMA is implemented in the 2A03/7 chip and works by repeatedly writing to <a href="#OAMDATA">OAMDATA</a>)
+</p>
+<h4><span class="mw-headline" id="Values_during_rendering">Values during rendering</span></h4>
+<p>OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines.
+</p><p>The value of OAMADDR when sprite evaluation starts at tick 65 of the visible scanlines will determine where in OAM sprite evaluation starts, and hence which sprite gets treated as sprite 0. The first OAM entry to be checked during sprite evaluation is the one starting at <tt>OAM[OAMADDR]</tt>. If OAMADDR is unaligned and does not point to the y position (first byte) of an OAM entry, then whatever it points to (tile index, attribute, or x coordinate) will be reinterpreted as a y position, and the following bytes will be similarly reinterpreted. No more sprites will be found once the end of OAM is reached, effectively hiding any sprites before <tt>OAM[OAMADDR]</tt>.
+</p>
+<h4><span class="mw-headline" id="OAMADDR_precautions">OAMADDR precautions</span></h4>
+<p>On the 2C02, writes to OAMADDR reliably corrupt OAM.<sup class="reference" id="cite_ref-OAMglitch_5-0"><a href="#cite_note-OAMglitch-5">[5]</a></sup> This can then be worked around by writing all 256 bytes of OAM.
+</p><p>It is also the case that if OAMADDR is not less than eight when rendering starts, the eight bytes starting at <tt>OAMADDR &amp; 0xF8</tt> are copied to the first eight bytes of OAM; it seems likely that this is related. The former bug is known to have been fixed in the 2C07; the latter is suspected to be. On the Dendy, the latter bug is required for 2C02 compatibility.
+</p>
+<h3><span class="mw-headline" id="OAM_data_.28.242004.29_.3C.3E_read.2Fwrite"><span id="OAMDATA"><span id="Reg2004">OAM data ($2004) &lt;&gt; read/write</span></span></span></h3>
+<ul><li> Common name: <b>OAMDATA</b></li>
+<li> Description: OAM data port</li>
+<li> Access: read, write</li></ul>
+<p>Write OAM data here. Writes will increment <a href="#OAMADDR">OAMADDR</a> after the write; reads during vertical or forced blanking return the value from OAM at that address but do not increment.
+</p><p>Because changes to OAM should normally be made only during vblank, writing through OAMDATA is only effective for partial updates (it is too slow). Most games will use the DMA feature through <a href="#OAMDMA">OAMDMA</a> instead.
+</p>
+<ul><li> Reading OAMDATA while the PPU is rendering will expose internal OAM accesses during sprite evaluation and loading; Micro Machines does this.</li></ul>
+<ul><li> Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, but do perform a glitchy increment of <a href="#OAMADDR">OAMADDR</a>, bumping only the high 6 bits (i.e., it bumps the <i>[n]</i> value in <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a> - it's plausible that it could bump the low bits instead depending on the current status of sprite evaluation). This extends to DMA transfers via <a href="#OAMDMA">OAMDMA</a>, since that uses writes to $2004. For emulation purposes, it is probably best to completely ignore writes during rendering.</li></ul>
+<ul><li> It used to be thought that reading from this register wasn't reliable<sup class="reference" id="cite_ref-6"><a href="#cite_note-6">[6]</a></sup>, however more recent evidence seems to suggest that this is solely due to corruption by <a href="#OAMADDR">OAMADDR</a> writes.</li></ul>
+<ul><li> In the oldest instantiations of the PPU, as found on earlier Famicoms and NESes, this register is not readable<sup class="reference" id="cite_ref-7"><a href="#cite_note-7">[7]</a></sup>. The readability was added on the RP2C02G, found on most NESes and later Famicoms.<sup class="reference" id="cite_ref-8"><a href="#cite_note-8">[8]</a></sup></li></ul>
+<ul><li> In the 2C07, sprite evaluation can <i>never</i> be fully disabled, and will always start 20 scanlines after the start of vblank<sup class="reference" id="cite_ref-9"><a href="#cite_note-9">[9]</a></sup> (same as when the prerender scanline would have been on the 2C02). As such, you must upload anything to OAM that you intend to within the first 20 scanlines after the 2C07 signals vertical blanking.</li></ul>
+<h3><span class="mw-headline" id="Scroll_.28.242005.29_.3E.3E_write_x2"><span id="PPUSCROLL"><span id="Reg2005">Scroll ($2005) &gt;&gt; write x2</span></span></span></h3>
+<ul><li> Common name: <b>PPUSCROLL</b></li>
+<li> Description: PPU scrolling position register</li>
+<li> Access: write twice</li></ul>
+<p>This register is used to change the <a href="PPU_scrolling.xhtml" title="PPU scrolling">scroll position</a>, that is, to tell the PPU which pixel of the nametable selected through <a href="#PPUCTRL">PPUCTRL</a> should be at the top left corner of the rendered screen. Typically, this register is written to during vertical blanking, so that the next frame starts rendering from the desired location, but it can also be modified during rendering in order to split the screen. Changes made to the vertical scroll during rendering will only take effect on the next frame.
+</p><p>After reading <a href="#PPUSTATUS">PPUSTATUS</a> to reset the address latch, write the horizontal and vertical scroll offsets here just before turning on the screen:
+</p>
+<pre> bit PPUSTATUS
+ ; possibly other code goes here
+ lda cam_position_x
+ sta PPUSCROLL
+ lda cam_position_y
+ sta PPUSCROLL
+</pre>
+<p>Horizontal offsets range from 0 to 255. &quot;Normal&quot; vertical offsets range from 0 to 239, while values of 240 to 255 are treated as -16 through -1 in a way, but tile data is incorrectly fetched from the attribute table.
+</p><p>By changing the values here across several frames and writing tiles to newly revealed areas of the nametables, one can achieve the effect of a camera panning over a large background.
+</p>
+<h3><span class="mw-headline" id="Address_.28.242006.29_.3E.3E_write_x2"><span id="PPUADDR"><span id="Reg2006">Address ($2006) &gt;&gt; write x2</span></span></span></h3>
+<ul><li> Common name: <b>PPUADDR</b></li>
+<li> Description: PPU address register</li>
+<li> Access: write twice</li></ul>
+<p>Because the CPU and the PPU are on separate buses, neither has direct access to the other's memory.
+The CPU writes to VRAM through a pair of registers on the PPU.
+First it loads an address into <a href="#PPUADDR">PPUADDR</a>, and then it writes repeatedly to <a href="#PPUDATA">PPUDATA</a> to fill VRAM.
+</p><p>After reading <a href="#PPUSTATUS">PPUSTATUS</a> to reset the address latch, write the 16-bit address of VRAM you want to access here, upper byte first.
+For example, to set the VRAM address to $2108:
+</p>
+<pre>  lda #$21
+  sta PPUADDR
+  lda #$08
+  sta PPUADDR
+</pre>
+<p>Valid addresses are $0000-$3FFF; higher addresses will be <a href="Mirroring.xhtml" title="Mirroring">mirrored</a> down.
+</p>
+<h4><span class="mw-headline" id="note">note</span></h4>
+<p>Access to <a href="#PPUSCROLL">PPUSCROLL</a> and <a href="#PPUADDR">PPUADDR</a> during screen refresh produces interesting raster effects; the starting position of each scanline can be set to any pixel position in nametable memory. For more information, see <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a> and tokumaru's sample code on the BBS.<sup class="reference" id="cite_ref-10"><a href="#cite_note-10">[10]</a></sup>
+</p><p><b> Editor's note:</b> Last comment about external page should be re-directed to the getting started section instead.
+</p>
+<h3><span class="mw-headline" id="Data_.28.242007.29_.3C.3E_read.2Fwrite"><span id="PPUDATA"><span id="Reg2007">Data ($2007) &lt;&gt; read/write</span></span></span></h3>
+<ul><li> Common name: <b>PPUDATA</b></li>
+<li> Description: PPU data port</li>
+<li> Access: read, write</li></ul>
+<p>VRAM read/write data register. After access, the video memory address will increment by an amount determined by $2000:2.
+</p><p>When the screen is turned off by disabling the background/sprite rendering flag with the <a href="#PPUMASK">PPUMASK</a> or during vertical blank, you can read or write data from VRAM through this port. Since accessing this register increments the VRAM address, it should not be accessed outside vertical or forced blanking because it will cause graphical glitches, and if writing, write to an unpredictable address in VRAM. However, two games are known to <a href="Reading_2007_during_rendering.xhtml" title="Reading 2007 during rendering">read from PPUDATA during rendering</a>: see <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">Tricky-to-emulate games</a>.
+</p><p>VRAM reading and writing shares the same internal address register that rendering uses. So after loading data into video memory, the program should reload the scroll position afterwards with <a href="#PPUSCROLL">PPUSCROLL</a> writes in order to avoid wrong scrolling.
+</p>
+<h4><span class="mw-headline" id="The_PPUDATA_read_buffer_.28post-fetch.29">The PPUDATA read buffer (post-fetch)</span></h4>
+<p>When reading while the VRAM address is in the range 0-$3EFF (i.e., before the palettes), the read will return the contents of an internal read buffer. This internal buffer is updated <b>only</b> when reading <a href="#PPUDATA">PPUDATA</a>, and so is preserved across frames. After the CPU reads and gets the contents of the internal buffer, the PPU will immediately update the internal buffer with the byte at the current VRAM address. Thus, after setting the VRAM address, one should first read this register and discard the result.
+</p><p>Reading palette data from $3F00-$3FFF works differently. The palette data is placed immediately on the data bus, and hence no dummy read is required. Reading the palettes still updates the internal buffer though, but the data placed in it is the mirrored nametable data that would appear &quot;underneath&quot; the palette. (Checking the <a href="PPU_memory_map.xhtml" title="PPU memory map">PPU memory map</a> should make this clearer.)
+</p>
+<h3><span class="mw-headline" id="OAM_DMA_.28.244014.29_.3E_write"><span id="Reg4014"><span id="OAMDMA">OAM DMA ($4014) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>OAMDMA</b></li>
+<li> Description: OAM DMA register (high byte)</li>
+<li> Access: write</li></ul>
+<p>This port is located on the CPU. Writing $XX will upload 256 bytes of data from CPU page $XX00-$XXFF to the internal PPU OAM. This page is typically located in internal RAM, commonly $0200-$02FF, but cartridge RAM or ROM can be used as well.
+</p>
+<ul><li> The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick. (1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)</li></ul>
+<ul><li> The OAM DMA is the only effective method for initializing all 256 bytes of OAM. Because of the decay of OAM's dynamic RAM when rendering is disabled, the initialization should take place within vblank. Writes through <a href="#OAMDATA">OAMDATA</a> are generally too slow for this task.</li></ul>
+<ul><li> The DMA transfer will begin at the current OAM write address. It is common practice to initialize it to 0 with a write to <a href="#OAMADDR">OAMADDR</a> before the DMA transfer. Different starting addresses can be used for a simple OAM cycling technique, to alleviate sprite priority conflicts by flickering. If using this technique, after the DMA <a href="#OAMADDR">OAMADDR</a> should be set to 0 before the end of vblank to prevent potential OAM corruption (See: <a href="Errata.xhtml" title="Errata">Errata</a>). However, due to OAMADDR writes also having a &quot;corruption&quot; effect<sup class="reference" id="cite_ref-OAMglitch_5-1"><a href="#cite_note-OAMglitch-5">[5]</a></sup> this technique is not recommended.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://sourceforge.net/p/fceultra/code/HEAD/tree/fceu/trunk/src/ppu.cpp#l183" rel="nofollow">ppu.cpp</a> by Bero and Xodnizel</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=143801#p143801" rel="nofollow">Reply to &quot;Riding the open bus&quot;</a> by lidnariq</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text">PAL PPU swaps green and red emphasis bits: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=131889#p13188" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=131889#p13188</a></span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text">Dendy PPU swaps green and red emphasis bits: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=155513#p155513" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=155513#p155513</a></span>
+</li>
+<li id="cite_note-OAMglitch-5"><span class="mw-cite-backlink">↑ <sup><a href="#cite_ref-OAMglitch_5-0">5.0</a></sup> <sup><a href="#cite_ref-OAMglitch_5-1">5.1</a></sup></span> <span class="reference-text">Manual OAM write glitchyness: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=10189" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=10189</a></span>
+</li>
+<li id="cite_note-6"><span class="mw-cite-backlink"><a href="#cite_ref-6">↑</a></span> <span class="reference-text">$2004 reading reliable? <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6424" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6424</a></span>
+</li>
+<li id="cite_note-7"><span class="mw-cite-backlink"><a href="#cite_ref-7">↑</a></span> <span class="reference-text">$2003 not readable on early revisions: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=62137#p62137" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=62137#p62137</a></span>
+</li>
+<li id="cite_note-8"><span class="mw-cite-backlink"><a href="#cite_ref-8">↑</a></span> <span class="reference-text">hardware revisions and $2003 reads: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=12958&amp;start=45#p150926" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=12958&amp;start=45#p150926</a></span>
+</li>
+<li id="cite_note-9"><span class="mw-cite-backlink"><a href="#cite_ref-9">↑</a></span> <span class="reference-text">2C07 PPU sprite evaluation notes: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=11041" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=9&amp;t=11041</a></span>
+</li>
+<li id="cite_note-10"><span class="mw-cite-backlink"><a href="#cite_ref-10">↑</a></span> <span class="reference-text">PPU synchronization from NMI: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=64111#p64111" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=64111#p64111</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.289 seconds
+Real time usage: 0.296 seconds
+Preprocessor visited node count: 343/1000000
+Preprocessor generated node count: 972/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:11-1!*!0!!en!*!* and timestamp 20160620141835 and revision id 12663
+ -->
+</div></body></html>

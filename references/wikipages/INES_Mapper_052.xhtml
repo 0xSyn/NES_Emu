@@ -1,0 +1,89 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 052</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 052</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 052</strong>, like several other multicart mappers, supplements the <a href="MMC3.xhtml" title="MMC3">MMC3</a>'s RAM with a single register for switching between unmodified MMC3-compatible games.
+</p>
+<pre> Registers:
+ ---------------------------
+ 
+   $6000-7FFF:  [WMCC SBPP]  Multicart reg
+     P = PRG Block (bits 1,0)
+         = PRG A18 and A17
+     B = CHR+PRG Block Select bit (PRG and CHR bit 2)
+         = CHR and PRG A19
+     S = PRG Block size (0=256k   1=128k)
+         = 0=PRG A17 comes from MMC3  1=A17 comes from this register
+     C = CHR Block (bits 1,0)
+         = CHR A18 and A17
+     M = CHR Block size (0=256k   1=128k)
+         = 0=CHR A17 comes from MMC3  1=A17 comes from this register
+     W = 1=Disable multicart register and enable RAM
+         0=allow further writes to multicart register
+ 
+   $8000-FFFF:  Same as MMC3 for selected block
+ 
+ This register can only be written to if PRG-RAM is enabled and writable (see $A001).
+ 
+ PRG Setup:
+ ---------------------------
+ 
+    'S'    PRG-AND    PRG-OR
+    ------------------------
+     0       $1F    %BP0 0000
+     1       $0F    %BPP 0000
+ 
+  'B' and 'P' bits make a 3-bit value used as PRG-OR (left shift 4).  When 'S' is clear, the low bit of that
+ value is forced to 0.
+ 
+ PRG swapping behaves just like a normal MMC3 within this selected block
+ 
+ CHR Setup:
+ ---------------------------
+ 
+    'M'    CHR-AND    CHR-OR
+    ------------------------
+     0       $FF    %BC 0000 0000
+     1       $7F    %BC C000 0000
+ 
+  'B' and 'C' bits make a 3-bit value used as CHR-OR (left shift 7).  When 'M' is clear, the low bit of
+ that value is forced to 0.
+ 
+ CHR swapping behaves just like a normal MMC3 within this selected block
+ 
+ Powerup and Reset:
+ ---------------------------
+ 
+ $6000 set to 0 on reset and powerup.
+</pre>
+<p>The multicart register here can be implemented using two ICs: a 74273 (8 bit latch with asynchronous clear) and a 74153 (used as two independent one-of-two multiplexers). The 74273's /CLEAR input should be connected to something like
+</p>
+<pre> CPU M2 or CPU A0 --|&gt;|--+-+-- /CLEAR
+                         | |
+                         R C
+                         | |
+                       gnd gnd
+</pre>
+<ul><li> Diode: 1N914 or any other small signal diode</li>
+<li> Resistor: approximately 10kΩ</li>
+<li> Capacitor: approximately 1nF</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/Mari7in1.txt" rel="nofollow">&quot;Mario Party&quot; 7 in 1</a> by The Mad Dumper.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=10703" rel="nofollow">Forum thread</a> about mapper 052 by FARID</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:658-1!*!0!*!*!*!* and timestamp 20160208225118 and revision id 10080
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

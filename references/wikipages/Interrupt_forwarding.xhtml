@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Interrupt forwarding</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Interrupt forwarding</h1><div class="article">
+<p>Instead of loading each build of an NES program onto a cartridge, some developers prefer to send code directly to RAM for more rapid development.
+Because the NMI and IRQ vectors are in ROM, the program in ROM needs to forward these to vectors in RAM.
+There are at least three known protocols for NMI and IRQ forwarding.
+</p><p>The Famicom Disk System uses <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml#Pseudo-registers" title="Famicom Disk System">this protocol</a>:
+</p>
+<ul><li>NMI is JMP ($DFF6), JMP ($DFF8), or JMP ($DFFA) based on a control flag stored at $0100</li>
+<li>Reset is JMP ($DFFC) so long as a signature at $0102-$0103 matches</li>
+<li>IRQ and BRK are JMP ($DFFE)</li></ul>
+<p>A simplified version of this protocol is used in the <a class="external text" href="http://slack.net/~ant/old/nes-code/romless/" rel="nofollow">romless NES program format</a>, a subset of <a href="INES.xhtml" title="INES">iNES</a> format designed by Blargg to support a <a class="external text" href="http://slack.net/~ant/old/nes-code/bootloader/" rel="nofollow">bootloader cable</a>.
+</p>
+<ul><li>NMI is JMP ($07FA)</li>
+<li>Reset is JMP ($07FC)</li>
+<li>IRQ and BRK are JMP ($07FE)</li>
+<li>Detection of a cold boot by the bootloader is unspecified</li></ul>
+<p>The Super FX coprocessor for the Super NES implements a similar protocol, but with each vector in RAM being an actual jump instruction instead of just an address.
+As described in <a class="external text" href="http://problemkaputt.de/fullsnes.txt" rel="nofollow">Martin Korth's FullSNES doc</a>, while the GSU is running, it takes the PRG ROM off the S-CPU's bus and switches in a 16-byte pseudo-ROM that contains only vectors to RAM:
+</p>
+<pre>.addr $0100,$0100,$0104,$0100,$0100,$0108,$0100,$010C
+</pre>
+<p>This produces effects equivalent to the following, which let the S-CPU run in RAM and handle interrupts while the GSU accesses ROM.
+</p>
+<ul><li>Reset and BRK (native) are JML $000100</li>
+<li>COP is JML $000104</li>
+<li>NMI is JML $000108</li>
+<li>IRQ and BRK (emulation) are JML $00010C</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1372-1!*!0!*!*!*!* and timestamp 20160208225535 and revision id 10857
+ -->
+</div></body></html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 040</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 040</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 040</strong> describes yet another pirate port of SMB2j from the <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="FDS">FDS</a> to a cartridge. It is very similar to <a href="INES_Mapper_050.xhtml" title="INES Mapper 050">mapper 50</a>.
+</p><p>This description was produced from the source code of FCEUX and Nestopia.
+</p>
+<pre> Registers:
+ ---------------------------
+ Range,Mask:   $8000-FFFF, $E000
+
+   $8000:  Disable and acknowledge IRQ
+   $A000:  Enable IRQ
+   $E000:  8 KiB bank mapped at $C000
+ 
+ PRG Setup:
+ ---------------------------
+ 
+       $6000   $8000   $A000   $C000   $E000  
+     +-------+-------+-------+-------+-------+
+     | { 6 } | { 4 } | { 5 } | $E000 | { 7 } |
+     +-------+-------+-------+-------+-------+
+</pre>
+<p>Like mapper 50, this hardware produces an interrupt 4096 M2 cycles after the IRQ is enabled.
+Both FCEUX and Nestopia's source disable the interrupt when it fires.
+</p><p>It seems most likely the corresponding hardware is a CD4020, functioning as a 13-bit counter, and that if the software didn't acknowledge the interrupt for another 4096 cycles it would self-acknowledge.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/40.txt" rel="nofollow">SMB2j aka &quot;The Lost Levels&quot; Mapper #40 Info</a> by The Mad Dumper.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 5/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1362-1!*!0!*!*!*!* and timestamp 20160208225055 and revision id 10828
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_with_fixed_timing_cycle_IRQs.xhtml">Mappers with fixed-timing cycle IRQs</a></p></div></body></html>

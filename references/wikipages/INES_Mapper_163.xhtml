@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 163</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 163</h1><div class="article">
+<p>Mapper used by <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Shenzhen_Nanjing_Technology_Co.,_Ltd." title="wikia:c:bootleggames:Shenzhen Nanjing Technology Co., Ltd.">Nanjing</a> for their games.  Mostly unlicensed ports of games on newer systems, of varying quality.  Games using this mapper include Final Fantasy VII and Pokemon Yellow.
+</p><p>This is similar to <a href="INES_Mapper_164.xhtml" title="INES Mapper 164">INES_Mapper_164</a>
+</p><p>Details from FCEUX source code:
+</p><p>Memory map:
+</p>
+<ul><li>5000-5FFF = Registers and copy protection</li>
+<li>6000-7FFF = PRG RAM (battery backed)</li>
+<li>8000-FFFF = PRG ROM (switchable in 32k banks)</li></ul>
+<p>Registers: (Address is masked with 0x7300)
+</p>
+<ul><li>5200 = [....xxxx] xxxx = High nibble of 32k PRG page</li>
+<li>5000 = [c...xxxx] xxxx = Low nibble of 32k PRG page.  If the most significant bit of this register is set, it does automatic CHR RAM switching at scanline 128.  The exact way this works is unknown.
+<ul><li>When turned on, both 4K CHR RAM banks 0000-0FFF and 1000-1FFF map to 0000-0FFF for scanline 240 until scanline 128.  Then at scanline 128, both 4K CHR banks point to 1000-1FFF.</li></ul></li>
+<li>5100 = When set to 6, sets the 32K PRG bank to 3.  Further writes to 5200 or 5000 change the bank back to normal.</li></ul>
+<p>Copy protection: (Address is masked with 0x7300, except for 5101)
+</p>
+<ul><li>5300 = Value of security register</li>
+<li>5101 = If the value of this register is changed from nonzero to zero, &quot;trigger&quot; is toggled (XORed with 1).  Initial value of this register is 1, initial value of &quot;trigger&quot; is 0.</li></ul>
+<p>Reading: (Address is masked with 0x7700)
+</p>
+<ul><li>5100 = Returns value of 5300</li>
+<li>5500 = If &quot;trigger&quot; is 1, returns value of 5300, otherwise returns 0</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:753-1!*!0!*!*!*!* and timestamp 20160208225321 and revision id 8579
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

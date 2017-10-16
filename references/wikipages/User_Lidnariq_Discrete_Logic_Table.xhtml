@@ -1,0 +1,246 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/Discrete Logic Table</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/Discrete Logic Table</h1><div class="article">
+<p>It appears that all discrete logic mappers either switch 32kB at a time with no fixed bank (&quot;GxROM-like&quot;), or have a 16kB fixed bank and can switch the other (&quot;UxROM-like&quot;). The tables below illustrate the tradeoffs between CHR, PRG, and banking style.
+</p>
+<table class="datatable" style="text-align:center;">
+
+<tr>
+<th colspan="2" rowspan="2"> GxROM-like </th>
+<th colspan="9" rowspan="1" style="text-align:center;">8kB CHR bank bits
+</th></tr>
+<tr>
+<th>0 </th>
+<th> 1 </th>
+<th> 2 </th>
+<th> 3 </th>
+<th> 4 </th>
+<th> 5 </th>
+<th> 6 </th>
+<th> 7 </th>
+<th> 8
+</th></tr>
+<tr>
+<th colspan="1" rowspan="9">32kB PRG bank bits </th>
+<th> 0
+</th>
+<td> <a href="NROM.xhtml" title="NROM">NROM</a>, <a href="INES_Mapper_143.xhtml" title="INES Mapper 143">143</a>, <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">185</a> </td>
+<td> <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">Vs. System</a>, <a href="INES_Mapper_145.xhtml" title="INES Mapper 145">145</a>, <a href="INES_Mapper_149.xhtml" title="INES Mapper 149">149</a> </td>
+<td> <a href="CNROM.xhtml" title="CNROM">CNROM</a>, <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">87</a>=<a href="INES_Mapper_101.xhtml" title="INES Mapper 101">101</a>, <a href="CPROM.xhtml" title="CPROM">CPROM</a>† </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> oversize <a href="CNROM.xhtml" title="CNROM">CNROM</a>
+</td></tr>
+<tr>
+<th>1
+</th>
+<td> <a href="AxROM.xhtml" title="AxROM">AN1ROM</a>¹ </td>
+<td>  </td>
+<td> <a href="GxROM.xhtml" title="GxROM">MHROM</a>, <a href="INES_Mapper_133.xhtml" title="INES Mapper 133">133</a> </td>
+<td> <a href="NINA_003_006.xhtml" title="NINA-003-006">NINA-03/06</a>=<a href="INES_Mapper_146.xhtml" title="INES Mapper 146">146</a>, <a href="INES_Mapper_148.xhtml" title="INES Mapper 148">148</a> </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> </td>
+<td>
+</td></tr>
+<tr>
+<th>2
+</th>
+<td> <a href="AxROM.xhtml" title="AxROM">ANROM</a>¹, <a href="BNROM.xhtml" title="BNROM">BNROM</a> </td>
+<td>  </td>
+<td> <a href="GxROM.xhtml" title="GxROM">GNROM</a>, <a href="INES_Mapper_038.xhtml" title="INES Mapper 038">38</a> </td>
+<td> <a href="INES_Mapper_058.xhtml" title="INES Mapper 058">58</a>ʰ, <a href="INES_Mapper_086.xhtml" title="INES Mapper 086">86</a>, <a href="INES_Mapper_096.xhtml" title="INES Mapper 096">96</a>†, <a href="INES_Mapper_174.xhtml" title="INES Mapper 174">174</a>ʰ </td>
+<td> <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a>, <a href="INES_Mapper_036.xhtml" title="INES Mapper 036">36</a>, <a href="INES_Mapper_057.xhtml" title="INES Mapper 057">57</a>ʰ, <a href="INES_Mapper_140.xhtml" title="INES Mapper 140">140</a>, <a href="INES_Mapper_147.xhtml" title="INES Mapper 147">147</a> </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> oversize <a href="INES_Mapper_038.xhtml" title="INES Mapper 038">38</a> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<th>3
+</th>
+<td> <a href="AxROM.xhtml" title="AxROM">AOROM</a>¹ </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> <a href="INES_Mapper_113.xhtml" title="INES Mapper 113">113</a>ʰ </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<th>4
+</th>
+<td> oversize <a href="AxROM.xhtml" title="AxROM">AxROM</a>¹, <a href="INES_Mapper_231.xhtml" title="INES Mapper 231">231</a>ʰ </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> oversize <a href="GxROM.xhtml" title="GxROM">GNROM</a> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<th>5
+</th>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> <a href="INES_Mapper_046.xhtml" title="INES Mapper 046">46</a> </td>
+<td>
+</td></tr>
+<tr>
+<th>6
+</th>
+<td> <a href="INES_Mapper_226.xhtml" title="INES Mapper 226">226</a>ʰ </td>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> <a href="INES_Mapper_228.xhtml" title="INES Mapper 228">228</a>ʰ </td>
+<td> <a href="INES_Mapper_062.xhtml" title="INES Mapper 062">62</a>ʰ </td>
+<td>
+</td></tr>
+<tr>
+<th>7
+</th>
+<td>  </td>
+<td style="border-right:1px solid black; border-bottom:1px solid black;"> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<th>8
+</th>
+<td style="border-right:1px solid black; border-bottom:1px solid black;">  oversize <a href="BNROM.xhtml" title="BNROM">BNROM</a> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr></table>
+<p><br/>
+</p>
+<table class="datatable">
+
+<tr>
+<th colspan="2" rowspan="2">UxROM-like </th>
+<th colspan="7" style="text-align:center;">8kB CHR bank bits
+</th></tr>
+<tr>
+<th>0 </th>
+<th> 1 </th>
+<th> 2 </th>
+<th> 3 </th>
+<th> 4 </th>
+<th> 5 </th>
+<th> 6
+</th></tr>
+<tr>
+<th colspan="1" rowspan="7">16kB PRG bank bits </th>
+<th> 2
+</th>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> <a href="INES_Mapper_168.xhtml" title="INES Mapper 168">168</a>† </td>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<th>3
+</th>
+<td> <a href="UxROM.xhtml" title="UxROM">UNROM</a>, <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">94</a>, <a href="INES_Mapper_180.xhtml" title="INES Mapper 180">180</a> </td>
+<td>  </td>
+<td> <a href="INES_Mapper_029.xhtml" title="INES Mapper 029">29</a> </td>
+<td>  </td>
+<td> <a href="INES_Mapper_072.xhtml" title="INES Mapper 072">72</a>, <a href="INES_Mapper_078.xhtml" title="INES Mapper 078">78</a>¹­ʰ, <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">89</a>¹, <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">93</a>*, <a href="INES_Mapper_152.xhtml" title="INES Mapper 152">152</a>¹ </td>
+<td>
+</td></tr>
+<tr>
+<th>4
+</th>
+<td> <a href="UxROM.xhtml" title="UxROM">UOROM</a> </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> <a href="INES_Mapper_070.xhtml" title="INES Mapper 070">70</a>, <a href="INES_Mapper_092.xhtml" title="INES Mapper 092">92</a>
+</td></tr>
+<tr>
+<th>5
+</th>
+<td>  </td>
+<td> </td>
+<td> <a href="UNROM_512.xhtml" title="UNROM 512">Sealie UNROM 512</a>¹ </td>
+<td>
+</td></tr>
+<tr>
+<th>6
+</th>
+<td> oversize <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">94</a> </td>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<th>7
+</th>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<th>8
+</th>
+<td> oversize <a href="UxROM.xhtml" title="UxROM">UxROM</a>, oversize <a href="INES_Mapper_180.xhtml" title="INES Mapper 180">180</a>
+</td></tr></table>
+<p><br/>
+† 4F+4 or 4+4F CHR-RAM banking, not 8 CHR-ROM banking<br/>
+¹ has mapper-controlled single-screen mirroring<br/>
+ʰ has mapper-controlled H/V mirroring<br/>
+* Emulators commonly implement mapper 93 as a plain UNROM variant, not supporting CHR banking. But the hardware does support it.
+</p><p>Non-standard CHR banking:
+</p>
+<ul><li> <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> has 1 bit for 32 PRG and 8 bits for 4+4 CHR banking</li>
+<li> <a href="INES_Mapper_077.xhtml" title="INES Mapper 077">77</a> has 4 bits for 2+6RAM CHR banking (plus 4 bits for 32 PRG banking)</li>
+<li> <a href="INES_Mapper_060.xhtml" title="INES Mapper 060">60</a>, <a href="INES_Mapper_107.xhtml" title="INES Mapper 107">107</a>, and <a href="INES_Mapper_201.xhtml" title="INES Mapper 201">201</a> use the same bits to control both PRG and CHR banks</li>
+<li> <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">184</a> has 5 bits for 4+4 CHR banking</li></ul>
+<p>Exceptions:
+</p>
+<ul><li> <a href="INES_Mapper_040.xhtml" title="INES Mapper 040">40</a> and <a href="INES_Mapper_050.xhtml" title="INES Mapper 050">50</a> have 24F+8+8F banking.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.105 seconds
+Real time usage: 0.108 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:797-1!*!0!*!*!*!* and timestamp 20160208230411 and revision id 9229
+ -->
+</div></body></html>

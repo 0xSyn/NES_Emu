@@ -1,0 +1,61 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 202</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 202</h1><div class="article">
+<p><br/>
+Implemented in BizHawk as of commit f72875b584abd79201ad9d3d0131fa5afcf0c429
+</p><p>Used for the 150-in-1 pirate cart. 
+</p>
+<pre> Registers:
+ $8000-FFFF: A~[.... .... .... O..O]
+               [.... .... .... RRRM]
+ 
+ 
+ O = PRG Mode, if 3, will use 32 PRG mode, else 16
+ R = Page registers, used for both CHR 8k banks, and PRG banks (in both 16k and 32k modes)
+ M = Mirroring, 0 = Vertical, 1 = Horizontal
+ 
+ CHR Setup:
+ 
+                    $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+                   +-------------------------------+-------------------------------+
+ CHR-ROM:          |                             { 0 }                             |
+                   +-------------------------------+-------------------------------+
+ 
+ 
+ 
+ PRG Setup:
+ ------------------------------
+ 32k Mode:
+ 
+ $8000     $A000     $C000     $E000
+ +-------------------------------------+
+ |                 {0}                 |
+ +-------------------------------------+
+ 
+ 
+ 16k Mode:
+ 
+ In 16k mode both regions are mapped to the same PRG bank
+ 
+ $8000     $A000     $C000     $E000     
+ +--------------------------------------+
+ |        {0}        |       {0}        |
+ +--------------------------------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.008 seconds
+Real time usage: 0.008 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1586-1!*!*!*!*!*!* and timestamp 20160208225411 and revision id 11617
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

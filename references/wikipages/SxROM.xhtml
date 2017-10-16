@@ -1,0 +1,239 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>SxROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>SxROM</h1><div class="article">
+<p>The generic designation <b>SxROM</b> refers to cartridge boards made by Nintendo that use the <a href="MMC1.xhtml" title="MMC1">Nintendo MMC1</a> mapper.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Board_types"><span class="tocnumber">1</span> <span class="toctext">Board types</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Solder_pad_config"><span class="tocnumber">2</span> <span class="toctext">Solder pad config</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Battery_data_retention"><span class="tocnumber">2.1</span> <span class="toctext">Battery data retention</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Higher_CHR_lines"><span class="tocnumber">3</span> <span class="toctext">Higher CHR lines</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Various_notes"><span class="tocnumber">4</span> <span class="toctext">Various notes</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Board_types">Board types</span></h2>
+<p>The following SxROM boards are known to exist:
+</p>
+<table class="tabular">
+<tr>
+<th> Board </th>
+<th> PRG ROM </th>
+<th> PRG RAM </th>
+<th> CHR </th>
+<th> Comments
+</th></tr>
+<tr>
+<td>SAROM </td>
+<td> 64 KB </td>
+<td> 8 KB </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td> NES only
+</td></tr>
+<tr>
+<td>SBROM </td>
+<td> 64 KB </td>
+<td>  </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td> NES only
+</td></tr>
+<tr>
+<td>SCROM </td>
+<td> 64 KB </td>
+<td>  </td>
+<td> 128 KB ROM </td>
+<td> NES only
+</td></tr>
+<tr>
+<td>SC1ROM </td>
+<td> 64 KB </td>
+<td> </td>
+<td> 128 KB ROM </td>
+<td> Uses <a href="7432.xhtml" title="7432">7432</a> for 28-pin CHR ROM
+</td></tr>
+<tr>
+<td>SEROM </td>
+<td> 32 KB </td>
+<td>  </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SFROM </td>
+<td> 128 / 256 KB </td>
+<td>  </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SF1ROM </td>
+<td> 256 KB </td>
+<td> </td>
+<td> 64 KB ROM </td>
+<td> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=139126#p139126" rel="nofollow">PRG uses standard 32-pin EPROM pinout</a>
+</td></tr>
+<tr>
+<td>SFEXPROM </td>
+<td> 256 KB </td>
+<td>  </td>
+<td> 64 KB ROM </td>
+<td> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=1371" rel="nofollow">Patches PRG at runtime</a>
+</td></tr>
+<tr>
+<td>SGROM </td>
+<td> 128 / 256 KB </td>
+<td>  </td>
+<td> 8 KB RAM/ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SHROM </td>
+<td> 32 KB </td>
+<td>  </td>
+<td> 128 KB ROM </td>
+<td> NES only
+</td></tr>
+<tr>
+<td>SH1ROM </td>
+<td> 32 KB </td>
+<td> </td>
+<td> 128 KB ROM </td>
+<td> Uses <a href="7432.xhtml" title="7432">7432</a> for 28-pin CHR ROM
+</td></tr>
+<tr>
+<td>SIROM </td>
+<td> 32 KB </td>
+<td> 8 KB </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td> Japan Only
+</td></tr>
+<tr>
+<td>SJROM </td>
+<td> 128 / 256 KB </td>
+<td> 8 KB </td>
+<td> 16 / 32 / 64 KB ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SKROM </td>
+<td> 128 / 256 KB </td>
+<td> 8 KB </td>
+<td> 128 KB ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SLROM </td>
+<td> 128 / 256 KB </td>
+<td>  </td>
+<td> 128 KB ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SL1ROM </td>
+<td> 64 / 128 / 256 KB </td>
+<td>  </td>
+<td> 128 KB ROM </td>
+<td> Uses <a href="7432.xhtml" title="7432">7432</a> for 28-pin CHR ROM
+</td></tr>
+<tr>
+<td>SL2ROM </td>
+<td> 128 / 256 KB </td>
+<td> </td>
+<td> 128 KB ROM </td>
+<td> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=12657" rel="nofollow">CHR uses standard 32-pin EPROM pinout</a>
+</td></tr>
+<tr>
+<td>SL3ROM </td>
+<td> 256 KB </td>
+<td> </td>
+<td> 128 KB ROM </td>
+<td> Uses <a href="7432.xhtml" title="7432">7432</a> for 28-pin CHR ROM
+</td></tr>
+<tr>
+<td>SLRROM </td>
+<td> 128 / 256 KB </td>
+<td> </td>
+<td> 128 KB ROM </td>
+<td> Difference from SLROM unknown
+</td></tr>
+<tr>
+<td>SMROM </td>
+<td> 256 KB </td>
+<td> </td>
+<td> 8 KB RAM </td>
+<td> Japan Only
+</td></tr>
+<tr>
+<td>SNROM </td>
+<td> 128 / 256 KB </td>
+<td> 8 KB </td>
+<td> 8 KB RAM/ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SOROM </td>
+<td> 128 / 256 KB </td>
+<td> 16 KB </td>
+<td> 8 KB RAM/ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SUROM </td>
+<td> 512 KB </td>
+<td> 8 KB </td>
+<td> 8 KB RAM/ROM </td>
+<td>
+</td></tr>
+<tr>
+<td>SXROM </td>
+<td> 128 / 256 / 512 KB </td>
+<td> 32 KB </td>
+<td> 8 KB RAM/ROM </td>
+<td> Japan Only
+</td></tr></table>
+<h2><span class="mw-headline" id="Solder_pad_config">Solder pad config</span></h2>
+<h3><span class="mw-headline" id="Battery_data_retention">Battery data retention</span></h3>
+<p><b>The below pertains to SAROM, SJROM, SKROM, SNROM, SUROM, and SXROM boards only:</b>
+</p>
+<ul><li> PRG RAM retaining data : 'SL' disconnected, Battery, D1, D2, R1 R2 and R3 present.</li>
+<li> PRG RAM not retaining data : 'SL' connected, leave slots for Battery, D1, D2, R1, R2 and R3 free.</li></ul>
+<p>Even if the SOROM boards utilizes a battery, it is connected to only one PRG RAM chip. The first RAM chip will not retain its data, but the second one will. 
+</p>
+<h2><span class="mw-headline" id="Higher_CHR_lines">Higher CHR lines</span></h2>
+<p>The SUROM, SOROM, and SXROM boards are extensions of SNROM, which has CHR RAM and PRG RAM.
+Because CHR RAM doesn't need bankswitching, these boards use the CHR bank select lines to switch different things:
+</p>
+<ul><li>SNROM uses the upper CHR bank select line coming out of the mapper (CHR A16; bit 4 of bank number) as an additional chip enable for the PRG RAM.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?t=7045" rel="nofollow">[1]</a> All other boards with PRG RAM appear to tie /CE to ground.</li>
+<li>SUROM uses CHR A16 to control the upper address line (PRG A18) of its 512KB PRG ROM.</li>
+<li>SOROM uses a similar method, using the second-highest CHR bank select line to choose between two 8KB PRG RAM chips. Of chip 0 and chip 1, only chip 1 is battery backed.</li>
+<li>SXROM is a combination of SOROM and SUROM, addressing both 512KB of PRG ROM and 32KB of PRG RAM.</li></ul>
+<p>In these scenarios, however, both CHR bank registers must be set to the same value (or the CHR bank size must be set to 8KB), or the PRG ROM/RAM will be bankswitched as the PPU renders, causing disastrous results.
+</p>
+<h2><span class="mw-headline" id="Various_notes">Various notes</span></h2>
+<ul><li> The SEROM, SHROM, and SH1ROM boards, all used for games with 32 KiB PRG such as Dr. Mario, do not connect the PRG ROM's A14 to the MMC1; instead A14 is connected directly to the NES. This means the PRG ROM bank register and the PRG ROM bank mode bits have no effect.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=94803#p94803" rel="nofollow">[2]</a> SIROM does not seem to share this property, despite having 32 KiB PRG.</li>
+<li> SLxROM boards are functionally identical to SLROM, but with different chip pinouts. Some of them have an additional <a class="mw-redirect" href="7432.xhtml" title="74HC32">74HC32</a> chip to combine PPU /RD and PPU /A13 into a single enable signal for the CHR ROM chip that has only 28 pins.</li>
+<li> SMROM is functionally identical to SGROM, but features two 128 KB PRG ROM chips instead of one 256 KB. Only a very early MMC1 game in Japan is known to have used this board, and one of very few Nintendo-made boards which combine smaller ROM chips to get a bigger ROM.</li>
+<li> One SNROM game for Famicom uses an 8 KiB CHR ROM instead of CHR RAM: <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3479" rel="nofollow">Morita Shogi</a></i>. The <a class="mw-redirect" href="6264_static_RAM.xhtml" title="6264">6264</a> pinout is nearly identical to the pinout of an 8 KiB <a href="Mask_ROM_pinout.xhtml" title="Mask ROM pinout">mask ROM</a>, except for pins 26 and 27. On the 6264, these are a positive chip enable (CS2) and negative write enable (/WE) respectively; on the mask ROM, they may be additional positive chip enables. Either way, they're high during reads.</li>
+<li> Even boards which different usage of upper CHR lines are all assigned to <b>NES Mapper 1</b>. Emulators can distinguish SOROM and SXROM from SNROM using the new PRG RAM size fields in <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> or using a PRG hash for legacy iNES ROMs. Therefore, it is recommended that ROM images of SOROM and SXROM games be stored in NES 2.0 format to allow an emulator to distinguish them from SNROM or SUROM.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.048 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:135-1!*!0!!en!*!* and timestamp 20160607010234 and revision id 12594
+ -->
+<p class="categories">Categories: <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a></p></div></body></html>

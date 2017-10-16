@@ -1,0 +1,182 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 018</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 018</h1><div class="article">
+<p><b>iNES Mapper 018</b> represents the Jaleco SS88006 mapper used for <i>Magic John</i> (Japanese version of <i>Totally Rad</i>) and a couple other games.
+</p><p>This mapper appears to be connected only to A12-A14, A0-A1, and D0-D3, so the PRG bank and CHR bank numbers are split over two adjacent mapper numbers.  Bits 0-3 are in the lower address of a pair (e.g. $xxx0 or $xxx2), and bits 4-7 are in the next higher address.
+</p>
+<pre>
+$8000-1: PRG $8000
+3210 3210
+|||| ||||
+++++-++++- Select 8192 byte PRG ROM bank in $8000-$9FFF
+
+$8002-3: PRG $A000
+$9000-1: PRG $C000
+(PRG $E000 is fixed to the last bank)
+
+$A000-1: CHR $0000
+3210 3210
+|||| ||||
+++++-++++- Select 1024 byte CHR ROM bank in $0000-$03FF
+
+$A002-3: CHR $0400
+$B000-1: CHR $0800
+$B002-3: CHR $0C00
+$C000-1: CHR $1000
+$C002-3: CHR $1400
+$D000-1: CHR $1800
+$D002-3: CHR $1C00
+</pre>
+<p>The IRQ counter is a 16-bit down counter.
+Port $F001 controls how far the borrow propagates:
+If all counting bits wrap from $0 to $F, it doesn't modify the fixed bits before it but instead triggers an IRQ.
+Writes to $F000 or $F001 acknowledge the IRQ.
+</p>
+<pre>
+7654 3210  $F001: IRQ control
+     ||||
+     |||+- Enable (0: pause; 1: count)
+     +++-- 0: Count down in bits 15-0 and hold no bits constant
+           1: Count down in bits 11-0 and hold bits 15-12 constant
+           2-3: Count down in bits 7-0 and hold bits 15-8 constant
+           4-7: Count down in bits 3-0 and hold bits 15-4 constant
+
+Alternate interpretation:
+
+7654 3210  $F001: IRQ control
+     ||||
+     |||+- Enable (0: pause; 1: count)
+     ||+-- Hold bits 15-12 constant
+     |+--- Hold bits 15-8 constant
+     +---- Hold bits 15-4 constant
+</pre>
+<p>This counter uses a reload value.
+All bits are reloaded, even the ones held constant.
+</p>
+<ul><li>$E000: Set bits 3-0 of counter</li>
+<li>$E001: Set bits 7-4 of counter</li>
+<li>$E002: Set bits 11-8 of counter</li>
+<li>$E003: Set bits 15-12 of counter</li></ul>
+<p>Some games also have a µPD7756C ADPCM sound IC. If so,
+</p>
+<ul><li>$F003: Start playing sound specified by lower 4 bits.</li></ul>
+<p><br/>
+</p>
+<pre> Here are Disch's original notes:
+ ========================
+ =  Mapper 018          =
+ ========================
+ 
+ 
+ Example Games:
+ --------------------------
+ The Lord of King
+ Magic John
+ Pizza Pop
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range,Mask:   $8000-FFFF, $F003
+ 
+   $800x,$900x:  [.... PPPP]  PRG Regs
+   $A00x-$D00x:  [.... CCCC]  CHR Regs
+   $E00x:  [.... IIII]  IRQ Reload value
+   $F000:  [.... ....]  IRQ Reset
+   $F001:  [.... SSSE]  IRQ Control
+      S = Size of IRQ counter
+      E = Enable
+ 
+   $F002:  [.... ..MM]  Mirroring
+      %00 = Horz
+      %01 = Vert
+      %10 = 1ScA
+      %11 = 1ScB
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+ Only low 4 bits of written value significant [.... CCCC]
+ 
+ 2 regs combined to get an 8-bit page number
+ 
+ $x000 or $x002 are the low 4 bits
+ $x001 or $x003 are the high 4 bits
+ 
+ 
+       $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |$A000+1|$A002+3|$B000+1|$B002+3|$C000+1|$C002+3|$D000+1|$D002+3|
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+ Same as CHR, $x000 low, $x001 high
+ 
+       $8000   $A000   $C000   $E000 
+     +-------+-------+-------+-------+
+     |$8000+1|$8002+3|$9000+1| { -1} |
+     +-------+-------+-------+-------+
+ 
+ 
+ IRQ:
+ ---------------------------
+ 
+ 16-bit IRQ Reload value is set via regs $E00x.  $E000 sets the low 4 bits, $E003 sets the high 4 bits.
+ 
+ When enabled, the IRQ counter counts down every CPU cycle.  When it wraps, an IRQ is generated.
+ 
+ The 'S' bits in the control reg determine the size of the IRQ counter.  It can be 4, 8, 12, or 16 bits wide:
+ 
+   %000 = 16 bits wide
+   %001 = 12 bits wide
+   %01x = 8 bits wide
+   %1xx = 4 bits wide
+ 
+ If the counter is less than 16 bits, the high bits are not altered by IRQ counter clocking; they retain their
+ value.
+ 
+ Example:  if the IRQ counter contains $1232, and is in 4-bit mode, it counts like so:
+ 
+   $1232
+   $1231
+   $1230
+   $123F  &lt;--- IRQ here
+   $123E
+    ...
+ 
+ 
+ Any write to the reset reg ($F000) will copy the 16-bit reload value into the IRQ counter (full 16 bits are
+ copied, regardless of current 'S' value).
+ 
+ Any write to $F000 or $F001 will acknowledge the IRQ.
+</pre>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES mapper list</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li>
+<li>Sound IC D7756 <a class="external text" href="http://www.cpu-world.com/Support/7/77.html" rel="nofollow">description</a> and <a class="external text" href="http://bootgod.dyndns.org:7777/downloads/UPD7755_UPD7756_UPD7757_UPD7758.pdf" rel="nofollow">datasheet</a></li>
+<li>Sound IC BBS topics <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=762" rel="nofollow">762</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=32572#p32572" rel="nofollow">4030</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.028 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:522-1!*!*!*!*!*!* and timestamp 20160208225019 and revision id 10734
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

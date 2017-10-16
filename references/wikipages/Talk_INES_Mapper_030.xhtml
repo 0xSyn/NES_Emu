@@ -1,0 +1,29 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 030</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 030</h1><div class="article">
+<h2><span class="mw-headline" id="Board_allocation">Board allocation</span></h2>
+<p>Study Hall definitely needs its own mapper, but why does BK:MoT need to be here? It's handled by the standard m2 emulator oversize logic... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 11:54, 8 April 2014 (MDT)
+</p>
+<dl><dd>While it is true that BK:MoT can function with just the Mapper 2 oversize, the game was made on the board that Mapper 30 is defined for.  Given that it exists on the UNROM 512 board, I do have some plans to make a convenience hack, where the games continue points write something to the flash, so that the game can be saved, resumed later, without needing to write down passwords.  Modding that to real cart will just be a matter of desoldering the 4 flash locked jumnpers, soldering the flash enabled jumper, mounting the 74*139, and flashing the modified rom to the cart. Such a hack would definitely need the mapper 30 definition. <s>Caitsith2</s> (<s>talk</s>) 12:15, 8 April 2014 (MDT)</dd></dl>
+<dl><dd><dl><dd>So... you want to allocate mapper 30 for a BK2 hack you plan to make in the future? I don't think it's good practice to allocate mappers before there is something to be emulated that needs one. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd>Oh wait, I missed the comment about Study Hall. What are Study Hall's special requirements? Bankable CHR-RAM? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 15:09, 8 April 2014 (MDT)</dd>
+<dd>Ah, OK, I see from the <a href="Talk_UNROM_512.xhtml" title="Talk:UNROM 512">UNROM 512 Talk Page</a> this mapper would support several RetroUSB games? I misunderstood the discussion. Are there other such games that don't already fall into existing mappers, or is it just Study Hall? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd> Study Hall explicitly requires self-flashing support. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 15:41, 8 April 2014 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1349-1!*!0!*!*!*!* and timestamp 20160208224102 and revision id 8498
+ -->
+</div></body></html>

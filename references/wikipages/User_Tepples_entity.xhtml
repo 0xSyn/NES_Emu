@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Tepples/entity</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Tepples/entity</h1><div class="article">
+<p>Look at the source to see what's going on. It's perfectly valid 6502 code, but because a constant is being bitwise ANDed at compile time with the constant <code>amp</code> (which here represents the &quot;amplitude&quot; field of APU <a href="APU_Pulse.xhtml" title="APU Pulse">$4000, $4004</a>, and <a href="APU_Noise.xhtml" title="APU Noise">$400C</a>) and followed by a comment, the MediaWiki parser is confusing it with an <a class="extiw" href="http://en.wikipedia.org/wiki/character_entity_reference" title="wikipedia:character entity reference">character entity reference</a>.
+</p><p>Space indented:
+</p>
+<pre>duty    = $C0
+envtype = $30
+amp     = $0F
+lda #$B7&amp;mask off upper nibble
+</pre>
+<p><code>&lt;pre&gt;</code> element:
+</p>
+<pre>
+duty    = $C0
+envtype = $30
+amp     = $0F
+lda #$B7&amp;mask off upper nibble
+</pre>
+<p><code>&lt;source&gt;</code> element:
+&lt;source lang=&quot;6502&quot;&gt;
+duty    = $C0
+envtype = $30
+amp     = $0F
+lda #$B7&amp;mask off upper nibble
+&lt;/source&gt;
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 64/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1202-1!*!0!*!*!*!* and timestamp 20160208230512 and revision id 7436
+ -->
+</div></body></html>

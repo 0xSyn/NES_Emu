@@ -1,0 +1,91 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 168</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 168</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 168</strong> represents the board used for Racermate Challenge 2. It could be thought of as a hybrid of <a class="mw-redirect" href="UxROM.xhtml" title="UNROM">UNROM</a> and <a href="CPROM.xhtml" title="CPROM">CPROM</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Jumpers"><span class="tocnumber">3</span> <span class="toctext">Jumpers</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Bank_Select_.28.248000-.24BFFF.29"><span class="tocnumber">4.1</span> <span class="toctext">Bank Select ($8000-$BFFF)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#RAM_Protection_and_IRQ_acknowledge_.28.24C000-.24FFFF.29"><span class="tocnumber">4.2</span> <span class="toctext">RAM Protection and IRQ acknowledge ($C000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Interrupt"><span class="tocnumber">5</span> <span class="toctext">Interrupt</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Hardware"><span class="tocnumber">6</span> <span class="toctext">Hardware</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 64 KiB</li>
+<li> PRG ROM bank size: 16 KiB</li>
+<li> PRG RAM: No</li>
+<li> CHR capacity: 64 KiB RAM, half (or all) battery-backed.</li>
+<li> CHR bank size: 4 KiB</li>
+<li> Nametable mirroring: Hardwired vertical mirroring</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: no</li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$BFFF: 16 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$0FFF: 4 KiB CHR RAM bank, fixed to the first bank, but see notes in Hardware.</li>
+<li> PPU $1000-$1FFF: 4 KiB switchable CHR RAM bank</li></ul>
+<h2><span class="mw-headline" id="Jumpers">Jumpers</span></h2>
+<ul><li> J1: force deselect SRAM U1 when +5V fails</li>
+<li> J2: allow SRAM U1 to remain selected after +5V fails</li>
+<li> J3: Power SRAM U1 from +5V line</li>
+<li> J4: Power SRAM U1 from battery-backed supply</li></ul>
+<p>SRAM U2 is always protected and battery-backed.
+</p><p>J1+J4 vs J2+J3 should be selected as a pair. This modification allows 64kB of battery-backed memory.
+</p><p>To the best of our knowledge (5 samples), all delivered boards had J2+J3 selected.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_Select_.28.248000-.24BFFF.29">Bank Select ($8000-$BFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+PPxx CCCC
+||   ||||
+||   ++++- Select 4 KB CHR RAM bank for PPU $1000-$1FFF
+++-------- Select 16 KB PRG ROM bank for CPU $8000-$BFFF
+</pre>
+<h3><span class="mw-headline" id="RAM_Protection_and_IRQ_acknowledge_.28.24C000-.24FFFF.29">RAM Protection and IRQ acknowledge ($C000-$FFFF)</span></h3>
+<pre>15   11 address   0  7 data  0
+---- ---- ---- ----  ---- ----
+11.. .... Y... ....  XXXX XZXX
+          |          |||| ||||
+          +----------++++-++++- Write 1 then 0 to deprotect SRAM and reset timer = acknowledge interrupt
+</pre>
+<p>Only one of the 9 above bits is used, but the software has no <i>a priori</i> reason to know which. The firmware thus writes $FF to $F080 and $00 to $F000.
+The PCBs were originally laid out to use the bit above marked &quot;Y&quot; (A7).
+</p><p>It is believed that this is also the interrupt acknowledge/counter reset.
+</p><p>To the best of our knowledge (5 samples), all delivered boards were modified to instead use the bit labeled &quot;Z&quot; (D2)
+</p>
+<h2><span class="mw-headline" id="Interrupt">Interrupt</span></h2>
+<p>The interrupt is implemented with a large binary counter which drives the /IRQ line low after 1024 M2 cycles. Because the counter continues counting, it will automatically acknowledge itself after another 1024 M2 cycles (for a net frequency of no lower than 874 Hz). In practice, nocash says that the software requires at least 27 IRQs per vblank (for a spacing of not more than 1104 M2 cycles), and the software reliably clears the counter within 30 cycles.
+</p><p>A board could have the resistor placed in the adjacent position, which would choose a delay of 2048 M2 cycles instead, but to the best of our knowledge (5 samples), none were.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>This cartridge uses two <a href="7400.xhtml" title="7400">74LS00s</a>, two <a href="7432.xhtml" title="7432">74HCT32s</a>, a 74HCT74, a 74LS174, a 74HCT4040, and a PNP transistor as a low-voltage detection circuit.
+</p><p>Unlike <a href="CPROM.xhtml" title="CPROM">CPROM</a> or <a href="INES_Mapper_180.xhtml" title="INES Mapper 180">iNES Mapper 180</a>, which use AND logic to fix the first bank to 0 and switch the upper bank, the CHR-RAM here instead uses NAND logic, where the CHR banks are the 2's complement of those specified above. Because nothing else can read or write the RAMs except through this interface, the only question is whether the fixed bank is normally battery backed. It is NOT. The difference between NAND and AND logic is invisible to the software, and so emulators could use either convention if exchange of save files between emulators is not anticipated.
+</p><p>It is of casual interest, but also completely irrelevant, that the lower bits of the CHR bank register are out of order: 3012. Once again, because nothing else can read or write the RAMs except through this bank register, this only could matter if one were to desolder the RAMs to read them.
+</p><p>There is a space on the PCB to accept a donor <a class="mw-redirect" href="CIC_lockout_chip.xhtml" title="CIC">CIC</a>, labelled U11. In editions released before the top-loading NES-101, this space was populated with a Tengen CIC.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.043 seconds
+Real time usage: 0.046 seconds
+Preprocessor visited node count: 33/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:814-1!*!0!!en!*!* and timestamp 20160208225327 and revision id 10829
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Mappers_with_fixed_timing_cycle_IRQs.xhtml">Mappers with fixed-timing cycle IRQs</a></p></div></body></html>

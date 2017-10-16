@@ -1,0 +1,89 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Tepples/tutorial</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Tepples/tutorial</h1><div class="article">
+<p>Project began in <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=13113" rel="nofollow">this forum post</a>
+</p>
+<ol><li> Gathering tools
+<ol><li> <a href="User_Tepples_tutorial_Installing_tools_on_Debian.xhtml" title="User:Tepples/tutorial/Installing tools on Debian">On Debian GNU/Linux and derivatives</a>
+<ol><li> Install prerequisites
+<ul><li> <code>sudo apt-get install build-essential python3-imaging gimp fceux wine</code></li></ul></li>
+<li> Compile and install cc65</li>
+<li> Configure the editor</li>
+<li> Install FCEUX (debugging version) for Windows</li></ol></li>
+<li> <a href="User_Tepples_tutorial_Installing_tools_on_Windows.xhtml" title="User:Tepples/tutorial/Installing tools on Windows">On Windows</a>
+<ol><li> Install Python 3</li>
+<li> Install Pillow using pip</li>
+<li> Install cc65 from binary</li>
+<li> Install MSYS</li>
+<li> Install FCEUX</li>
+<li> Install GIMP</li>
+<li> Install and configure Notepad++</li></ol></li>
+<li> On Fedora
+<ol><li> Mostly similar to Debian (using <code>yum</code> instead of <code>apt-get</code>) but will need to either include a section on compiling and installing FCEUX (SDL version) from source or always use FCEUX in Wine because Fedora does not package FCEUX, in turn because Red Hat Inc. fears Nintendo's legal department.</li></ol></li>
+<li> On FreeBSD</li>
+<li> On OS X</li>
+<li> Building a ROM from source code
+<ol><li> The <a class="external text" href="https://pineight.com/nes/#template" rel="nofollow">project for this step</a> is intentionally a more complex program than the first program of lesson 2 because I want to exercise more of the toolchain (ca65, ld65, Python, Pillow, GNU Make, GNU Coreutils) to prevent problems later.</li></ol></li></ol></li>
+<li> Hello World
+<ol><li> Turn the screen green (immediate mode and PPU addressing)</li>
+<li> Display &quot;HI&quot; (immediate mode)</li>
+<li> How to use FCEUX debugger</li>
+<li> Display &quot;Hello World&quot; (indexed addressing and looping)</li>
+<li> Display &quot;Hello World&quot; at different positions (subroutines)</li>
+<li> Display an arrow of &quot;Hello World&quot; (more looping)</li>
+<li> Display multiple strings (pointers and indirect indexed addressing)</li>
+<li> Display two screens of text (reading the controller using the tutorial's library)</li>
+<li> Text file viewer (multiple kinds of delimiters in text)</li></ol></li>
+<li> A bouncing ball
+<ol><li> Display a circle (clearing, filling, and pushing OAM)</li>
+<li> Move the circles (position variables and waiting for vertical blanking)</li>
+<li> Draw some walls (+32 fill mode)</li>
+<li> Limit the circle's movement (position comparison)</li>
+<li> Bounce off the walls (velocity variables)</li>
+<li> Display pressed buttons (nametable updating during vblank)</li>
+<li> Display coordinates (binary to decimal conversion)</li>
+<li> Control the circle (react to button presses and move in 2 dimensions)</li>
+<li> Add some momentum (acceleration and subpixel math)</li></ol></li>
+<li> Air hockey game
+<ol><li> Creating graphics</li>
+<li> Multi-sprite objects</li>
+<li> Collision with paddles</li>
+<li> Attributes</li></ol></li>
+<li> Brick breaking game
+<ol><li> Collision with a level map</li>
+<li> Update buffering</li></ol></li>
+<li> CHR RAM
+<ol><li> iNES header</li>
+<li> Linker script</li>
+<li> Init code</li>
+<li> Loading CHR data</li>
+<li> Tile animation</li></ol></li>
+<li> Platforming
+<ol><li> Metasprite table</li>
+<li> Gravity</li></ol></li>
+<li> Scrolling</li>
+<li> Sound effects
+<ol><li> Making a pitch lookup table generator</li></ol></li>
+<li> Music</li>
+<li> Mappers</li>
+<li> Explanation of the rest of the library
+<ol><li> pads.s</li>
+<li> ppuclear.s</li></ol></li></ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1580-1!*!0!*!*!*!* and timestamp 20160208230517 and revision id 11628
+ -->
+</div></body></html>

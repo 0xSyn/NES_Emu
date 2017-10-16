@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:PPU palettes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:PPU palettes</h1><div class="article">
+<p>It says that the background palette hack can be used to display the unused palette data. Can the EXT pins also do this? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 22:30, 1 July 2013 (MDT)
+</p>
+<dl><dd> Yes, I think so. While rendering background pixels, the palette index that gets looked up is simply 0&lt;exp_in3&gt;&lt;exp_in2&gt;&lt;exp_in1&gt;&lt;exp_in0&gt;. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 03:58, 2 July 2013 (MDT)</dd>
+<dd> Interestingly, it looks like the background palette hack wouldn't work for <i>output</i> to the EXT pins though (bit 6 of $2000 set). The logic that causes the VRAM address to be used for the palette index while the background palette hack is active comes after the logic that outputs the index to the EXT pins. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 04:15, 2 July 2013 (MDT)
+<dl><dd>Thank you for information. I suppose if you are using the master/slave, you can connect the EXT pins in reverse (EXT0 to EXT3, EXT1 to EXT2, EXT2 to EXT1, EXT3 to EXT0) so that this can be used to make extra colors. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 23:05, 2 July 2013 (MDT)</dd></dl></dd></dl>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Source_of_palette"><span class="tocnumber">1</span> <span class="toctext">Source of palette</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parsing_the_palette"><span class="tocnumber">2</span> <span class="toctext">Parsing the palette</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Browser_compatibility_of_Drag.27s_palette_generator"><span class="tocnumber">3</span> <span class="toctext">Browser compatibility of Drag's palette generator</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Palette_color_format.3F"><span class="tocnumber">4</span> <span class="toctext">Palette color format?</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Platte_display"><span class="tocnumber">5</span> <span class="toctext">Platte display</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Move_the_palette_chart_to_the_top"><span class="tocnumber">6</span> <span class="toctext">Move the palette chart to the top</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Source_of_palette">Source of palette</span></h2>
+<p>Where did the palette added by Lidnariq in <s>this edit</s> come from? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 18:56, 25 December 2013 (MST)
+</p>
+<dl><dd> Screenshot from Nestopia running blargg's full_colors and nes_ntsc. Feel free to bikeshed. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 20:00, 25 December 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Parsing_the_palette">Parsing the palette</span></h2>
+<p>The palette values from this table are read from left to right, then up -&gt; down. Is this ok?
+</p><p>00 01 02 03 ... 0F<br/>
+10 11 12 13 ... 1F<br/>
+20 ...<br/>
+<small>(<a class="extiw" href="https://en.wikipedia.org/wiki/wikipedia:Signatures" title="wikipedia:wikipedia:Signatures">unsigned</a> comment by <a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a>)</small>
+</p>
+<dl><dd>Almost. They appear to go from $00 to $0D, then the next line from $10 to $1D, etc. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 06:42, 28 December 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Browser_compatibility_of_Drag.27s_palette_generator">Browser compatibility of Drag's palette generator</span></h2>
+<p>It appears that Firefox 29 implements built-in validation for <code>&lt;input type=&quot;number&quot;&gt;</code> such that said elements are expected by default to contain integers. This affects the default hue and saturation settings, causing the boxes to be given glowing red borders and explanatory tooltips, and preventing the values from being changed to other reasonable non-integers. The default settings still <i>work</i> (in that they produce the same palette as in older versions of Firefox) as long as they are not changed.
+</p><p>Relevant documentation can be found on various Mozilla websites (not bothering to link any of it here due to lack of login). --<s>150.135.211.242</s> 22:30, 18 May 2014 (MDT)
+</p>
+<dl><dd>Maybe send this information to Drag? I don't think it does much good here. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 11:00, 20 May 2014 (MDT)
+<dl><dd>How does Drag prefer to be contacted? I am not active on the forums (and therefore don't qualify for an account on the wiki either). The homepage of the domain on which the generator is hosted mentions that Drag has a Twitter account, but I'm not a registered Twitter user either (and I don't feel like registering just for this one issue).</dd>
+<dd>I don't see how posting here is useless given that some other user could make a fixed version. For example, Tepples has some webspace which could theoretically be used for this. --<s>150.135.211.242</s> 14:46, 20 May 2014 (MDT)
+<dl><dd>You used to need a reputation on the BBS or <a class="mw-redirect" href="NESdev_IRC_channel.xhtml" title="IRC">IRC</a> to qualify for a wiki account. You don't anymore; that ended 20 months ago with the transition away from Parodius. Feel free to register and jump right into the talk pages, and so long as your posts there show clue, you'll get <a href="Nesdev_wiki_Users.xhtml" title="Nesdev wiki:Users">autoconfirmed</a> in no time. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 19:35, 20 May 2014 (MDT)</dd></dl></dd></dl></dd>
+<dd>I'll take this into account if I decide to poke at my palette generator again. :P Thanks for letting me know about it though. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> (<a href="User_talk_Drag.xhtml" title="User talk:Drag">talk</a>) 17:27, 26 May 2014 (MDT)</dd>
+<dd>The number fields should now be fixed, I hope. I just needed to add a &quot;step&quot; property to the input field to specify that I expect decimals to 0.001 precision. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> (<a href="User_talk_Drag.xhtml" title="User talk:Drag">talk</a>) 01:09, 28 May 2014 (MDT)</dd></dl>
+<p>←
+</p><p>One more problem with the validation: Press the &quot;Get current preset&quot; button with everything else left at defaults. The Wx value of 0.3127 gets flagged as invalid because it has one more decimal place than the current validation allows. It's probably a good idea to allow four decimal places in all the custom colorimetry settings, based on the conventions I've seen. (I suppose I'm fine downloading a copy to run locally if you don't want to bother)
+</p><p>(Aside: My main reason not for registering at this point is lack of HTTPS support. Even if I were to ignore that, I'm a little confused why some accounts have needed to be confirmed manually recently.) --<s>150.135.211.242</s> 14:32, 21 April 2015 (MDT)
+</p>
+<h2><span class="mw-headline" id="Palette_color_format.3F">Palette color format?</span></h2>
+<p>What's the color format used in the palette entries? Example: 755,637,700,447... ???
+How do I &quot;decode&quot; the 755 value in RGB? --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> (<s>talk</s>) 13:24, 29 October 2014 (MDT)
+</p>
+<dl><dd>Those are RGB333 values, so 637 means 6/7 red (0xDB), 3/7 green (0x6D), and 7/7 blue (0xFF). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 20:36, 29 October 2014 (MDT)
+<dl><dd>The .PAL format should consist of the same color formatting as the <a class="external text" href="http://www.shikadi.net/moddingwiki/VGA_Palette" rel="nofollow">Classic VGA Palette format</a> so if you know how to program back then, you already know this. --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<a href="User_talk_Hamtaro126.xhtml" title="User talk:Hamtaro126">talk</a>) 05:55, 31 October 2014 (MDT)</dd></dl></dd></dl>
+<p>Why does this page show strange, nonstandard palettes first ?
+</p>
+<h2><span class="mw-headline" id="Platte_display">Platte display</span></h2>
+<p>One version of the canonical, standard NES palette should appear at the top of the page. Other palettes used by RGB, playchoice or whathever are annecdotical and should only appear below. They should most certainly *not* appear first.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 14:29, 6 January 2016 (MST)
+</p>
+<h2><span class="mw-headline" id="Move_the_palette_chart_to_the_top">Move the palette chart to the top</span></h2>
+<p>I don't know about you guys, but most of the time I visit this page is because I want to see a chart which maps NES colors to their corresponding numbers. Strangely, the only chart on the page for this is found at the very bottom! The charts that come before it are for the 2C03, 2C04, 2C05 PPUs, not the 2C02 PPU which is what most people would expect.
+</p><p>Suggested change: Move <a class="external text" href="File_Savtool_swatches_png.xhtml" rel="nofollow">savtool's NES palette</a> to the top of the page, above any mention of the 2C03. 
+</p><p><s>Pubby</s> (<s>talk</s>) 11:20, 11 May 2016 (MDT)
+</p>
+<dl><dd>Good point. Done. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 13:10, 11 May 2016 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.083 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1121-1!*!0!!en!*!* and timestamp 20160512190029 and revision id 12366
+ -->
+</div></body></html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 174</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 174</h1><div class="article">
+<pre> Here are Bisqwit's original notes:  
+ ========================
+ =  Mapper 174          =
+ ========================
+ 
+ Example Game:
+ --------------------------
+ NTDec 5-in-1 (NTSC), Famicom cartridge format
+ 
+ PRG ROM size: 128 kB
+ CHR ROM size: 64 kB 
+ 
+ Registers:
+ ---------------------------
+ 
+  $8000-FFFF:     A~[.... .... OPPP CCCM]
+     M = Mirroring (1=Horizontal, 0=Vertical)
+     P = when O=0 selects 16k both @ $8000 and @ $C000
+         when O=1, the top two bits select 32k @ $8000 and the bottom bit is ignored
+     O = PRG mode: selects 16 kB (when 0) or 32 kB mode (when 1).
+     C = Selects 8 kB page for CHR memory $0000
+ 
+ All of the mapper register access seems to be done in $FF00-$FFFF range, however the entire range works.
+ 
+ The cartridge powers on in a state where all registers are 0.
+ 
+ The cartridge expect the RAM contents to be kept when reset is pressed,
+ whereupon it boots the game. The only way to return to the main menu after
+ selecting a game is to power cycle the console (cold reboot).
+ 
+ This mapper is functionally identical to <a href="INES_Mapper_058.xhtml" title="INES Mapper 058">mapper 58</a> except the bits are moved around.
+ 
+ Notes:
+ ---------------------------
+ This mapper is probably unique to that board, constructed from
+ two GD74LS161As (4-bit binary counter) and one GD74LS153 (dual 4-input multiplexer).
+ 
+ It is a multicart that consists of games of different sizes.
+ - Three games with PRG size = 32 kB (The Legend of Kage, The Goonies, Arkanoid)
+ - One game with PRG size = 16 kB (Urban Champion)
+ - One game with PRG size = 8 kB (Galaxian), which shares a 16 kB page together with the main menu.
+ 
+ The main menu does some writes to $4028 once in a while, and one of
+ the games (Urban Champion) writes to $4025. The purpose of these writes
+ is unknown, as the cartridge does not trap those writes, and there is
+ (probably) no hardware in the NTDec famiclone that responds at those addresses.
+ It can be noted though, that $4025 is the <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="FDS">FDS</a> motor control register,
+ and the value written would safely stop a disk system motor.
+ It is possibly a leftover from porting the game or its library routines
+ from the FDS to the Famicom.
+</pre>
+<p>More information: <a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=96276#p96276" rel="nofollow">[1]</a>
+</p><p>Similar mappers: <a href="INES_Mapper_058.xhtml" title="INES Mapper 058">58</a>, <a href="INES_Mapper_060.xhtml" title="INES Mapper 060">60</a>, <s>212</s>, <a href="INES_Mapper_231.xhtml" title="INES Mapper 231">231</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.037 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:802-1!*!0!*!*!*!* and timestamp 20160208225331 and revision id 9353
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

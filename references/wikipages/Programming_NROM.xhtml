@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming NROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming NROM</h1><div class="article">
+<p><a href="NROM.xhtml" title="NROM">NROM</a> and the other boards that make up <b>mapper 0</b> are the simplest of all NES cartridge boards.
+All address decoding and chip enable handling are handled by the NES hardware; the only integrated circuits on the board are the PRG ROM, CHR ROM, and (in 72-pin carts) CIC.
+</p><p>NROM has two configurations:
+</p>
+<ul><li>NROM-256 with 32 KiB PRG ROM and 8 KiB CHR ROM</li>
+<li>NROM-128 with 16 KiB PRG ROM and 8 KiB CHR ROM</li></ul>
+<p>Your program is mapped into $8000-$FFFF (NROM-256) or <a href="Mirroring.xhtml" title="Mirroring">both</a> $8000-$BFFF and $C000-$FFFF (NROM-128).
+Most NROM-128 games actually run in $C000-$FFFF rather than $8000-$BFFF because it makes the program easier to assemble and link.
+Some kinds of data used by the NES CPU, such as the vectors and <a href="APU_DMC.xhtml" title="APU DMC">sampled sound</a>, have to be in $C000-$FFFF, and it simplifies the linker script if everything is in the same memory region.
+There are probably a few games that rely on the mirroring, but experiments with <a href="Forbidden_Four.xhtml" title="Forbidden Four">a multicart engine</a> show that most can run with garbage in $8000-$BFFF.
+</p>
+<h2><span class="mw-headline" id="NES_2.0_header"><a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header</span></h2>
+<pre>
+.segment &quot;HEADER&quot;
+  .byte &quot;NES&quot;, $1A
+  .byte 2         ; 1 or 2 for NROM-128 or NROM-256 respectively
+  .byte 1         ; 8 KiB CHR ROM
+  .byte $00       ; Mapper 0; $00 or $01 for horizontal or vertical mirroring respectively
+  .byte $08       ; Mapper 0; NES 2.0
+  .byte $00       ; No submapper
+  .byte $00       ; PRG ROM not 4 MiB or larger
+  .byte $00       ; No PRG RAM
+  .byte $00       ; No CHR RAM
+  .byte $00       ; 0 or 1 for NTSC or PAL respectively
+  .byte $00       ; No special PPU
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:410-1!*!0!*!*!*!* and timestamp 20160208225755 and revision id 9039
+ -->
+</div></body></html>

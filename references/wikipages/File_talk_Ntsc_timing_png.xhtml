@@ -1,0 +1,28 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>File talk:Ntsc timing.png</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>File talk:Ntsc timing.png</h1><div class="article">
+<p>the first green ppu cycle 0 on the visible scanline 0 seems to be misleading.
+according to blargg's odd/even frame test, this skipped cycle should be arranged at the last ppu cycle of the pre-render scanline, and the idle cycle presented in the image should be a read (if odd + rendering enabled).
+--<s>110.206.2.212</s> 01:34, 10 December 2013 (MST)
+</p>
+<ul><li>One of the comments (at the lower-right) states that the skipped cycle is actually at y=261,x=340 (and circuit analysis confirms that this is when it happens); I'm not sure why it's shown the way it is on the diagram. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 05:23, 11 December 2013 (MST)
+<ul><li>Might it have to do with the long-standing off-by-one error in cycle counts? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 06:28, 11 December 2013 (MST)</li>
+<li>I think I drew it like that to avoid giving the impression that the final NT fetch on the pre-render line is skipped during odd frames. What really happens is that the final cycle of the fetch moves to (0,0), replacing the idle tick. Can't think of a non-convoluted way to express that in the diagram. --<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>)</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1255-1!*!0!*!*!*!* and timestamp 20160208223848 and revision id 7845
+ -->
+</div></body></html>

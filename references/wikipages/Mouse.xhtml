@@ -1,0 +1,102 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Mouse</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Mouse</h1><div class="article">
+<p>Recent homebrew has adapted the SNES mouse to be used with the NES.
+</p><p>A famiclone made by the Subor company also had a mouse.
+</p>
+<h2><span class="mw-headline" id="SNES_Mouse">SNES Mouse</span></h2>
+<p>The <b>Super NES Mouse</b> (SNS-016) is a peripheral for the Super NES that was originally bundled with <i>Mario Paint</i>.
+It can be used with an NES through an adapter, made from an NES controller extension cord and a Super NES controller extension cord, that <a href="Controller_port_pinout.xhtml" title="Controller port pinout">connects the respective power, ground, clock, latch, and data pins</a>.
+</p><p>As with the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a>, the mouse is read by turning the latch ($4016.d0) on and off, and then reading bit 0 or bit 1 of $4016 or $4017 several times, but its report is 32 bits long as opposed to 8 bits.
+Bit 0 goes to the standard controller ports on an NES or AV Famicom; bit 1 goes to the Famicom 4-player adapter.
+</p><p>Some documents about interfacing with the mouse recommend reading the first 16 bits at one speed, delaying a while, and reading the other 16 bits at another speed, following logic analyzer traces from a Super NES console.
+However, these different speeds are merely an artifact of the main loop of <i>Mario Paint</i>, and the mouse will give a correct report when read at any reasonable speed.
+For example, a program could read 8 bits, wait a couple thousand cycles, and then read the other 24.
+</p><p>The first byte of the report is all zeroes and may be ignored.  The other three bytes are sent most significant bit first:
+</p>
+<pre>
+76543210  Second byte of report
+||||++++- Signature: 0001
+||++----- Current sensitivity (0: low; 1: medium; 2: high)
+|+------- Left button (1: pressed)
++-------- Right button (1: pressed)
+
+76543210  Third byte of report
+|+++++++- Vertical displacement since last read
++-------- Direction (1: up; 0: down)
+
+76543210  Fourth byte of report
+|+++++++- Horizontal displacement since last read
++-------- Direction (1: left; 0: right)
+</pre>
+<p>The displacements are in <a class="extiw" href="https://en.wikipedia.org/wiki/Signed_number_representations#Sign-and-magnitude_method" title="wikipedia:Signed number representations">sign-and-magnitude</a>, not <a class="extiw" href="https://en.wikipedia.org/wiki/Signed_number_representations#Two.27s_complement" title="wikipedia:Signed number representations">two's complement</a>.
+For example, $05 represents five mickeys (movement units) in one direction and $85 represents five mickeys in the other.
+To convert these to two's complement, use <a href="Synthetic_instructions.xhtml#Negate_A" title="Synthetic instructions">negation</a>:
+</p>
+<pre>
+  ; Convert to two's complement
+  lda third_byte
+  bpl :+
+  eor #$7F
+  sec
+  adc #$00
+:
+  sta y_velocity
+
+  lda fourth_byte
+  bpl :+
+  eor #$7F
+  sec
+  adc #$00
+:
+  sta x_velocity
+</pre>
+<p>The mouse can be set to low, medium, or high sensitivity.
+To change the sensitivity, send a clock while the latch ($4016.d0) is turned on:
+</p>
+<pre>
+  ldy #1
+  sty $4016
+  lda $4016,x
+  dey
+  sty $4016
+</pre>
+<p>Some revisions of the mouse's microcontroller <a class="external text" href="http://problemkaputt.de/fullsnes.htm#snescontrollersmousetwobuttonmouse" rel="nofollow">reportedly</a> power up in an unknown state and may return useless values before the sensitivity is changed for the first time.
+A mouse detection routine should cycle through the sensitivities anyway to ensure that the connected device is in fact a mouse.
+Failure to do so is likely to cause things that are not a mouse to be detected as a mouse, such as half of a Four Score if player 3 or 4 is holding Right.
+</p><p>Using more than two mice on an AV Famicom is not recommended for two reasons:
+</p>
+<ul><li> A mouse draws 50 mA, which is much more current than the standard controller draws. Drawing too much current is likely to cause the voltage regulator to overheat.</li>
+<li> Changing player 1's sensitivity also affects player 3's, and changing player 2's sensitivity also affects player 4's.</li></ul>
+<p>A program that reads the mouse while playing <a href="APU_DMC.xhtml" title="APU DMC">DPCM samples</a> must proceed very carefully.
+Sample playback causes occasional double reads on $4016 and $4017, deleting a bit from the stream read back.
+The re-reading solution that can be used for the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> fails here because each latch pulse sent to a mouse will clear its count of accumulated movement, and there is no known way to reliably detect corrupted data.
+Only the <a href="Standard_controller.xhtml#APU_DMC_conflict_glitch" title="Standard controller">OAM DMA sync trick</a> reliably avoids these glitches.
+</p><p>A program could read the mouse while using the DMC as a interval timer, as long as the mouse is read in the IRQ handler so that the mouse reading subroutine can avoid the sample fetch.
+</p><p>Example games:
+</p>
+<ul><li> <i><a href="Thwaite.xhtml" title="Thwaite">Thwaite</a></i></li></ul>
+<h2><span class="mw-headline" id="Subor_Mouse">Subor Mouse</span></h2>
+<p>This came with Subor's SB2000 famiclone system.
+</p><p>Example games:
+</p>
+<ul><li> <i>Educational Computer 2000</i></li></ul>
+<p>Reference: <a class="external text" href="http://problemkaputt.de/everynes.htm#controllerstrackballandmouse" rel="nofollow">Nocash's EveryNES documentation</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 34/1000000
+Preprocessor generated node count: 72/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:625-1!*!0!!*!*!* and timestamp 20160825141712 and revision id 12839
+ -->
+<p class="categories">Categories: <a href="Category_Super_NES.xhtml">Super NES</a>, <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

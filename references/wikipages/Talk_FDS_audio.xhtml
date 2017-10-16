@@ -1,0 +1,30 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:FDS audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:FDS audio</h1><div class="article">
+<h2><span class="mw-headline" id="Envelope_Speed">Envelope Speed</span></h2>
+<p>The &quot;Envelope Speed&quot; section has this quote:
+</p>
+<dl><dd><i>BIOS or game code appears to set this to $FF.</i></dd></dl>
+<p>I've recently checked the FDS bios disassembly, and it seems to actually set the value to $E8, as seen at $ee72 in the BIOS:
+</p>
+<pre>$EE72	LDA #$e8
+$EE74	STA $408A</pre>
+<p>FDS games may set the envelope speed to $FF; However, I haven't checked any of them, so I wouldn't be able to tell you. --<a href="User_Freem.xhtml" title="User:Freem">Freem</a> 20:47, 12 January 2013 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.010 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 5/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:973-1!*!0!*!*!*!* and timestamp 20160208224018 and revision id 5312
+ -->
+</div></body></html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Oversize</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Oversize</h1><div class="article">
+<dl><dd><i>This article is about ROM images with more unique data than the original versions of a cartridge board allowed. For ROM images that contain redundant copies of data, see <s>Overdump</s>.</i></dd></dl>
+<p><b>Oversize</b> refers to a <a href="ROM.xhtml" title="ROM">ROM</a> image that is larger than the largest image used for the licensed boards associated with the same mapper.
+</p><p>As mask ROM capacities increased, Nintendo produced official oversize versions of some cartridge boards: <a href="UxROM.xhtml" title="UxROM">UNROM (mapper 2) became UOROM</a> and <a href="AxROM.xhtml" title="AxROM">ANROM (mapper 7) became AOROM</a>. This was done in cases where Nintendo could get away with simply routing more pins of the <a href="74161.xhtml" title="74161">74HC161</a> already on the board to the ROM's address inputs. Third parties also produced clones of existing boards with more capabilities.
+Panesian used an oversize clone of <a href="CNROM.xhtml" title="CNROM">CNROM (mapper 3)</a> for its erotic games <i>Bubble Bath Babes</i>, <i>Peek-a-Boo Poker</i>, and <i>Hot Slots</i>.
+Likewise, it is believed that the second <i>Battle Kid</i> game uses an oversize clone of UxROM.
+</p><p><br/>
+The iNES mapper corresponding to a particular <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper chip</a> may support larger ROMs than the actual ASIC did.
+Extra address lines might have been left out of the mapper to cut costs.
+Pins are one of the most expensive parts of an ASIC, and manufacturers left off extra pins to save money.
+Each pin for an extra address line costs money, as does the die area occupied by each bit of each register, and upper address lines unlikely to ever see use within the mapper's life would have been a waste of money.
+For example, mapper 4 theoretically supports up to 2048 KiB of PRG ROM with 8 bank bits, while the actual <a href="MMC3.xhtml" title="MMC3">MMC3</a> has only 6-bit bank registers, hence a 512 KiB limit.
+This affects discrete mappers as well, as Nintendo was using 74HC161s as 4-bit registers rather than <a href="74377.xhtml" title="74377">74HC377s for 8-bit registers</a>.
+AOROM was limited to 256 KiB because three bank bits and one nametable selection bit ate up the whole '161.
+</p><p>Sometimes the existing uses for a mapper's bank bits may get in the way of going too far oversize.
+<a href="INES_Mapper_119.xhtml" title="INES Mapper 119">TQROM (mapper 119)</a> can't go past 64 KiB of CHR ROM because CHR bank bit 6 is the ROM/RAM selection bit.
+Mapper 7 can't go past 512 KiB of PRG ROM because PRG bank bit 4 is the nametable selection bit.
+</p><p>Some emulators and copiers refuse to correctly load oversize ROMs.
+For example, early versions of <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> mappers supported only the two least significant bits for CNROM and <a href="BNROM.xhtml" title="BNROM">BxROM (mapper 34)</a> and couldn't play larger unlicensed ROMs such as the Panesian games or the <a href="Action_53.xhtml" title="Action 53">Action 53</a> multicart.
+<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=79826#p79826" rel="nofollow">BNTest</a> tests support for oversize mappers 7 and 34.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:770-1!*!0!*!*!*!* and timestamp 20160208225724 and revision id 11392
+ -->
+</div></body></html>

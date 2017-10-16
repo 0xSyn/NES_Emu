@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 027</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 027</h1><div class="article">
+<p><b>iNES Mapper 027</b> is believed to be an pirate variant of the <a href="VRC4.xhtml" title="VRC4">VRC4</a> mapper.
+</p><p><br/>
+</p><p>GoodNES thinks this is used for <i>World Hero</i>.
+We should discover whether this mapper number is used for any other unlicensed/pirate/multicart VRC2/4 games.
+</p><p>This is supported by BizHawk as of r3975 and FCEUX for some time prior but definitely as of 26-nov-2012.
+</p><p>Formerly FCEUX emulated this with unique code, but as of r2722 CaH4e3 asserts that it is a duplicate of <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">INES Mapper 023</a>.
+This means the only difference between 27 and the other VRC4 mappers (21, 23, and 25) is the way the board wires up the address lines.
+However, FCEUX's VRC2/4 emulation is filled with hacks for pirate and multicart games which are otherwise similar to VRC2/4.
+</p><p>In particular, <i>World Hero</i> depends on the VRC4's 9-bit CHR bank numbers, where the most significant nibble of the CHR banks are actually 5 bits.
+</p><p>The below notes are left until the author agrees they are describing VRC4:
+</p>
+<ul><li> IRQ behavior: does it match <a href="VRC_IRQ.xhtml" title="VRC IRQ">that of VRC family</a> or that of <a href="MMC3.xhtml" title="MMC3">MMC3</a>?</li>
+<li> $9002 behavior: is it 3x8+8F PRG banking or VRC4/MMC3 style PRG banking?</li></ul>
+<p>Additionally, Nestopia adds a register at $9080 that is a duplicate of $9002.
+</p>
+<pre>
+Mask = F00F
+
+Writes:
+9002: ......x. = If bit 2 is set, next write to register 8000 affects PRG C000-BFFF instead of PRG 8000-AFFF
+8000: xxxxxxxx = Switches 8k PRG bank 8000-9FFF (or C000-DFFF)
+9000: ......xx = Select mirroring (0 = Vertical, 1 = Horizontal, 2 = Single screen 0, 3 = Single screen 1)
+A000: xxxxxxxx = Switches 8K PRG bank A000-BFFF
+B000-E003: CHR banks.  They appear to have 9 bits.  If address written to is even (least significant bit is zero), sets the low 4 bits of the value.
+  If address is odd (least significant bit is one), sets the 5 high bits of the value.
+  CHR Bank number affected = Top nibble of address - B, times 2, plus 1 if address &amp; 2.
+  (B000 = 4 low bits of bank 0, B001 = 5 high bits of bank 0, B002 = 4 low bits of bank 1, B003 = 5 high bits of bank 1, C000 = 4 low bits of bank 2, etc...)
+  Selects the 1K CHR bank.
+F000: 4 low bits of IRQ latch
+F001: 4 high bits of IRQ latch
+F002: ......ER = 2 bit IRQ register, bit E = enable, bit R = enable on next acknowledgement (retrigger), then sets value of IRQ counter to IRQ latch - 1.
+F003: Writing here acknowledges the IRQ, and sets bit E (enable) to bit R (retrigger).
+
+IRQ behavior:
+IRQ counter is triggered by A12, just like MMC3, and happens once per scanline.
+If enabled, IRQ counter counts up to FF.  If it would count up when the counter is at FF, it triggers an interrupt, then resets the IRQ counter to IRQ Latch + 1.
+If disabled, IRQ does not count at all.
+
+PRG E000-FFFF is probably fixed to the last bank.
+</pre>
+<hr/>
+<p>In FCEUX r2947, Санчез subsequently reallocated this mapper to a set of games that the source refers to has &quot;Mi Hun Che&quot;, a very simple (if conflated) mapper:
+</p>
+<pre>$8000: [.... ...X] - Select both 4 KiB CHR-ROM bank (mirrored across both PPU $0xxx and $1xxx) and 1scA/1scB mirroring.
+$8001-$FFFF: A~[1... .... .... ...X] - same
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:953-1!*!0!*!*!*!* and timestamp 20160208225031 and revision id 11522
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

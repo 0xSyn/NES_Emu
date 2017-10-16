@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>74157</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>74157</h1><div class="article">
+<p>The <b>74157</b> (variants 74LS157, 74HC157) is a 74-series logic IC with four 2-input multiplexers sharing a single select line.
+</p>
+<h2><span class="mw-headline" id="74157_Pinout">74157 Pinout</span></h2>
+<pre>       .--\/--.
+  S -&gt; |01  16| -- +5V
+1I0 -&gt; |02  15| &lt;- /E
+1I1 -&gt; |03  14| &lt;- 4I0
+ 1Y &lt;- |04  13| &lt;- 4I1
+2I0 -&gt; |05  12| -&gt; 4Y
+2I1 -&gt; |06  11| &lt;- 3I0
+ 2Y &lt;- |07  10| &lt;- 3I1
+Gnd -- |08  09| -&gt; 3Y
+       `------'
+</pre>
+<h2><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h2>
+<p>If /E is high, then all 4 Y output pins output as low,  otherwise, if S is low, for each set of pins starting with the same number, Y is equal to I0,  otherwise, if S is high, then Y is equal to I1.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.009 seconds
+Real time usage: 0.011 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:804-1!*!*!!*!*!* and timestamp 20160208224705 and revision id 5442
+ -->
+<p class="categories">Categories: <a href="Category_7400_series.xhtml">7400 series</a></p></div></body></html>

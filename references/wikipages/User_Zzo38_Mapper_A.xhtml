@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper A</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper A</h1><div class="article">
+<p>This is the &quot;AY-3-8910 only&quot; mapper. Registers are mapped to the PPU address space $3000-$3FFF, and only the address is used; the data isn't used for writing the mapper registers. This can be accessed by writing $2006.
+</p>
+<h2><span class="mw-headline" id="Submappers">Submappers</span></h2>
+<p>Bit0 specifies the mirroring mode. If clear, uses hardwired H or V mirroring. If set, it specifies software-controlled one-screen mirroring; the mirroring bit in the iNES header is then used to specify which bit of which register is used to control it (H=bit7 of port A, V=bit7 of port B).
+</p><p>The other bits are used to select the output levels and filters of each channel output; currently only zero is defined, meaning that all three channels are mixed with the 2A03 and microphone audio at equal volume.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Registers are write-only and are not accessible during rendering. To write to a register: Set the PPU address to $300x or $330x (bit10 and bit11 are ignored; the registers are mirrored), where x is the register number. Set the PPU address to $32xx, where x is the value to write. Something like this may work (untested):
+</p>
+<pre>
+  ; Write A to port Y
+  ldx #$33
+  stx PPUADDR
+  sty PPUADDR
+  dex
+  stx PPUADDR
+  sta PPUADDR
+</pre>
+<p>These are the registers of the AY-3-8910 when the BDIR pin is fixed high.
+</p><p>The bankswitching is done using the two I/O ports of the AY-3-8910. The mapper will not work properly unless both ports are in output mode, so after reset this should be done at first. 
+To keep the high address lines from floating while the I/O ports are still in input mode, PRG bank lines should have pull-up resistors. An emulator should assume these resistors are present, even though some cartridges might not.
+Still, all 32K PRG ROM banks should contain at least some reset code because the player can press Reset at any time.
+</p>
+<ul><li> 32K PRG ROM banks are selected by writing the bank number to the low bits of port A.</li>
+<li> 8K PRG RAM banks are mapped to $6000-$7FFF and are selected by writing the bank number to the high bits of port A.</li>
+<li> 8K CHR ROM or CHR RAM banks are selected by writing the bank number to the low bits of port B.</li>
+<li> If both CHR ROM and CHR RAM is present, and four-screen mirroring is specified in the iNES header, then there is 8K RAM split at $0000-$0FFF and $2000-$2FFF, and 8K ROM split at $1000-$1FFF and $3000-$3EFF. The RAM bank is then selected by the high bits of port B.</li>
+<li> If both CHR ROM and CHR RAM is present, and four-screen mirroring isn't specified in the iNES header, then the high bit of port B selects between ROM and RAM in $0000-$1FFF.</li></ul>
+<p>Note: Normally there is PRG ROM and CHR ROM, but no PRG RAM and CHR RAM. Nevertheless, use of RAM is well-defined and with some extra logic it can be added to the board (if there is no RAM, then all the decoding logic is either part of the AY-3-8910 or it is already decoded in the cartridge connector; therefore a 60-pins cartridge will have three chips and a 72-pins cartridge will have four chips).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1117-1!*!*!!*!*!* and timestamp 20160208230556 and revision id 6950
+ -->
+</div></body></html>

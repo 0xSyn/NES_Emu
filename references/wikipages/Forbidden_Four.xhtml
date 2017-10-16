@@ -1,0 +1,129 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Forbidden Four</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Forbidden Four</h1><div class="article">
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a class="image" href="File_ForbiddenFour_png.xhtml"><img alt="" class="thumbimage" height="224" src="../wiki-images/ForbiddenFour.png" srcset="/w/images/thumb/8/8f/ForbiddenFour.png/450px-ForbiddenFour.png 1.5x, /w/images/8/8f/ForbiddenFour.png 2x" width="300"/></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="File_ForbiddenFour_png.xhtml" title="Enlarge"/></div>Screenshot of menu</div></div></div>
+<p><b>Double Crossing: The Forbidden Four</b> is a multicart engine based on <i>The Legend of Zelda</i>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Instructions"><span class="tocnumber">2</span> <span class="toctext">Instructions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#How_it_works"><span class="tocnumber">3</span> <span class="toctext">How it works</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Further_developments"><span class="tocnumber">4</span> <span class="toctext">Further developments</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<p><i>Animal Crossing</i>, a social simulator for Nintendo GameCube, included NES consoles with built-in games as collectible furniture items. The player could play these games through <i>AC'</i>s built-in emulator. There were several ways to receive games:
+</p>
+<ul><li>Common games
+<ul><li>Buy them from Tom Nook or Redd when he has them in stock</li>
+<li>Enter a &quot;universal code&quot; created with a code generator in Tom Nook's store</li></ul></li>
+<li>Uncommon games
+<ul><li>A neighbor announces on the bulletin board that he has buried one of these in some part of town; use a shovel, find the star mark denoting a buried item, and dig it up</li>
+<li>Enter a &quot;universal code&quot; created with a code generator in Tom Nook's store</li></ul></li>
+<li>Rare games
+<ul><li>Enter a code in the letter and send it to a neighbor</li>
+<li>Connect a Game Boy Advance system and do a particular trading sequence on the island</li>
+<li>Enter a trade code, given to a specific player name in a specific town name, in Tom Nook's store as the right player in the right town (most commonly for <i><a href="MMC2.xhtml" title="MMC2">Punch-Out!!</a></i>)</li>
+<li>Enter a &quot;universal code&quot; created with a code generator in Tom Nook's store</li></ul></li>
+<li>Forbidden games
+<ul><li>Receive one of these games at a Nintendo trade show</li>
+<li>Use Action Replay to change the ID number of a furni in your inventory</li></ul></li></ul>
+<p>The forbidden games are <i>Mario Bros.</i>, <i>Ice Climber</i>, <i>Super Mario Bros.</i>, and <i>The Legend of Zelda</i>.
+The code for Tom Nook's store is specifically designed to reject universal codes that refer to the ID numbers of these games.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p><p>(<i>Animal Crossing: Wild World</i> didn't have NES games because it was too soon after the release of Famicom Mini/Classic NES Series. <i>Animal Crossing: City Folk</i> didn't have NES games because it would compete with Virtual Console games from Wii Shop Channel.)
+</p>
+<h2><span class="mw-headline" id="Instructions">Instructions</span></h2>
+<ol><li> Install 7-Zip. (Windows version on 7-Zip.org; under Ubuntu, <code>sudo apt-get install p7zip</code> to add .7z support to the File Roller archive manager.)</li>
+<li> Download and unpack <a class="external text" href="http://pics.pineight.com/nes/ForbiddenFour.7z" rel="nofollow">Forbidden Four</a>.</li>
+<li> Put two <a href="NROM.xhtml" title="NROM">NROM</a>-128 games in <a href="INES.xhtml" title="INES">iNES</a> format named &quot;bros.nes&quot; and &quot;ice.nes&quot; (not included) in the same folder as &quot;menu.nes&quot;.</li>
+<li> Put one NROM-256 game named &quot;smb1.nes&quot; (not included) in the same folder.</li>
+<li> (Optional) Use a nametable editor to edit the names of the games in dxinglogo.nam and use CC65 to recompile the menu binary.</li>
+<li> Put The Legend of Zelda (or possibly other select games) named &quot;loz.nes&quot; in the same folder.</li>
+<li> (On systems other than Windows) Recompile the ROM builder 'buildf4'.</li>
+<li> Run &quot;Build Multicart.bat&quot;, or on systems other than Windows, run tools/buildf4.</li></ol>
+<h2><span class="mw-headline" id="How_it_works">How it works</span></h2>
+<p>Forbidden Four is a multicart engine that can take any four NES ROMs that fit the following criteria:
+</p>
+<ul><li> Any NROM-128 game, called &quot;Bros&quot;</li>
+<li> A second NROM-128 game, called &quot;Ice&quot;</li>
+<li> Any NROM-256 game, called &quot;SMB1&quot;</li>
+<li> The Legend of Zelda, called &quot;LoZ&quot;, or any other 1 Mbit <a class="mw-redirect" href="SxROM.xhtml" title="SNROM">SNROM</a> game with the same init code</li></ul>
+<p>Two further restrictions: The NROM code must not write to ROM $8000-$9FFF or $E000-$FFFF, as this will trigger an unexpected bankswitch on the <a href="MMC1.xhtml" title="MMC1">MMC1</a> and probably crash the game.  The NROM-128 games also must not depend on values read from the ROM <a href="Mirroring.xhtml" title="Mirroring">mirror</a> at $8000-$BFFF because this ROM mirror does not exist in the multicart.
+</p><p>This SNROM has 256 KiB of PRG ROM, 8 KiB of CHR RAM, and 8 KiB of battery-backed PRG RAM.  The ROM of any MMC1 based game is divided into 16 KiB banks.  There are sixteen such banks in Forbidden Four:
+</p>
+<pre>
+ 0  LoZ PRG 0
+ 1  LoZ PRG 1
+ 2  LoZ PRG 2
+ 3  LoZ PRG 3
+ 4  LoZ PRG 4
+ 5  LoZ PRG 5
+ 6  LoZ PRG 6
+ 7  LoZ PRG 7
+ 8  SMB1 PRG 0
+ 9  SMB1 PRG 1
+10  Bros CHR and SMB1 CHR
+11  Bros PRG
+12  Ice CHR and menu CHR
+13  Ice PRG
+14  Menu PRG
+15  LoZ PRG 7 (duplicate for vectors)
+</pre>
+<p>The last bank of LoZ PRG is duplicated because the game expects to find it in both bank 7 and the MMC1's fixed bank.
+</p><p>The first 256 bytes of Menu contain
+</p>
+<ol><li> a jump table with four entries,</li>
+<li> code to copy a CHR RAM loader and a jump table manager into RAM at $0300, and</li>
+<li> the CHR RAM loader and jump table manager.</li></ol>
+<p>The four entries in the jump table specify which CHR page to load, which PRG page to load, how to set up the memory mapping and the mirroring, and where to put the program counter.
+</p><p>From the mapper init code of LoZ:
+</p>
+<pre>
+setMMC1CTRL = $FF98
+setMMC1PRG = $FFAC
+$FF76:A9 0F     LDA #$0F
+$FF78:20 98 FF  JSR setMMC1CTRL
+; Omitted code: set CHR bank to 0
+$FF90:A9 07     LDA #$07
+$FF92:20 AC FF  JSR setMMC1PRG
+$FF95:4C 40 E4  JMP $E440
+</pre>
+<p>So in order to intercept Zelda's boot sequence, we need to change the start bank and start address to point to our boot sequence at $8020, and make sure it ends up at ctrl=$0F bank=$07 PC=$E440 by the time Zelda starts.
+</p>
+<pre>
+$FF91: 0E
+$FF96: 20
+$FF97: 80
+</pre>
+<p>This passes control to the first 256 bytes of Menu, which sets up CPU RAM and starts the menu using a mechanism similar to the jump table.  This is done because the first 256 bytes of Menu are designed to run from $8000-$80FF, so that LoZ can pass control to it, while the rest of Menu runs from $C100-$FFFF, so that it can take over the vertical blank NMI for display timing.
+</p>
+<h2><span class="mw-headline" id="Further_developments">Further developments</span></h2>
+<p>If you are building this on top of an SNROM base game other than LoZ, you will need to change the addresses a bit in buildf4.c and then use GCC to rebuild buildf4.exe.
+If you have a patch to buildf4.c to support hooking other 1 Mbit SNROM games' init code, <s>talk</s> about it.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text">&quot;<a class="external text" href="http://nookipedia.com/wiki/Forbidden_Four" rel="nofollow">Forbidden Four</a>&quot; on Nookipedia</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.079 seconds
+Real time usage: 0.084 seconds
+Preprocessor visited node count: 70/1000000
+Preprocessor generated node count: 174/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:340-1!*!0!!en!5!* and timestamp 20160208224945 and revision id 9407
+ -->
+</div></body></html>

@@ -1,0 +1,332 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Namco 163 audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Namco 163 audio</h1><div class="article">
+<p>The <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a> offers up to 8 additional sound channels that play wavetable samples while the <a href="INES_Mapper_210.xhtml" title="INES Mapper 210">175 and 340</a> do not. Each waveform can be of a configurable length, and each channel has linear volume control. It has $80 bytes of sound RAM shared by channel registers and wavetable samples; at least $40 bytes are dedicated to samples, with more available if not all channels are used.
+</p><p>Like the Ensoniq DOC in the Apple IIGS, the chip is unable to clock every channel at once, so it cycles though channels, updating one every 15 CPU cycles. Because of this, the chip allows the game to configure the number of enabled channels.  When fewer channels are enabled, the channels are clocked more often, allowing for higher tones with longer, more detailed waveforms. When more channels are enabled, clocking slows down since each channel has to wait its turn, resulting in lower tones and a high-pitched whining noise at the switching frequency. Most games using this IC used only 4 channels.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Sound_Enable_.28.24E000-E7FF.29"><span class="tocnumber">1.1</span> <span class="toctext">Sound Enable ($E000-E7FF)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Address_Port_.28.24F800-.24FFFF.29"><span class="tocnumber">1.2</span> <span class="toctext">Address Port ($F800-$FFFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Data_Port_.28.244800-.244FFF.29"><span class="tocnumber">1.3</span> <span class="toctext">Data Port ($4800-$4FFF)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Sound_RAM_.2478_-_Low_Frequency"><span class="tocnumber">1.3.1</span> <span class="toctext">Sound RAM $78 - Low Frequency</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Sound_RAM_.2479_-_Low_Phase"><span class="tocnumber">1.3.2</span> <span class="toctext">Sound RAM $79 - Low Phase</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Sound_RAM_.247A_-_Mid_Frequency"><span class="tocnumber">1.3.3</span> <span class="toctext">Sound RAM $7A - Mid Frequency</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Sound_RAM_.247B_-_Mid_Phase"><span class="tocnumber">1.3.4</span> <span class="toctext">Sound RAM $7B - Mid Phase</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Sound_RAM_.247C_-_High_Frequency_and_Wave_Length"><span class="tocnumber">1.3.5</span> <span class="toctext">Sound RAM $7C - High Frequency and Wave Length</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Sound_RAM_.247D_-_High_Phase"><span class="tocnumber">1.3.6</span> <span class="toctext">Sound RAM $7D - High Phase</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Sound_RAM_.247E_-_Wave_Address"><span class="tocnumber">1.3.7</span> <span class="toctext">Sound RAM $7E - Wave Address</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Sound_RAM_.247F_-_Volume"><span class="tocnumber">1.3.8</span> <span class="toctext">Sound RAM $7F - Volume</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Other_Channels"><span class="tocnumber">1.3.9</span> <span class="toctext">Other Channels</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Waveform"><span class="tocnumber">2</span> <span class="toctext">Waveform</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Channel_Update"><span class="tocnumber">3</span> <span class="toctext">Channel Update</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Frequency"><span class="tocnumber">4</span> <span class="toctext">Frequency</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Mixing"><span class="tocnumber">5</span> <span class="toctext">Mixing</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Sound_Enable_.28.24E000-E7FF.29">Sound Enable ($E000-E7FF)</span></h3>
+<pre>7  bit  0
+---- ----
+.SPP PPPP
+ ||| ||||
+ |++-++++- Select 8KB page of PRG-ROM at $8000
+ +-------- Disables sound if set.
+</pre>
+<p>Sound is enabled on the 163 by writing a clear bit 6 to this register (0 is sufficient).
+</p>
+<h3><span class="mw-headline" id="Address_Port_.28.24F800-.24FFFF.29">Address Port ($F800-$FFFF)</span></h3>
+<pre>7  bit  0   (write only)
+---- ----
+IAAA AAAA
+|||| ||||
+|+++-++++- Address
++--------- Auto-increment
+</pre>
+<p>Writing to this register sets the internal address.  If the 'I' bit is set, the address will increment on writes and reads to the Data Port ($4800), wrapping $7F-&gt;$00 (address is 7 bits wide)
+</p>
+<h3><span class="mw-headline" id="Data_Port_.28.244800-.244FFF.29">Data Port ($4800-$4FFF)</span></h3>
+<pre>7  bit  0   (read / write)
+---- ----
+DDDD DDDD
+|||| ||||
+++++-++++- Data
+</pre>
+<p>This Port accesses the 163's internal $80 bytes of sound RAM.  Which of the $80 bytes is determined by the Address register ($F800).  When read, the appropriate byte is returned.  When written, the appropriate byte is set.
+</p><p>This RAM is used primarily for wavetables.  The sound channel control registers are also set by writing to certain addresses in sound RAM:
+</p>
+<h4><span class="mw-headline" id="Sound_RAM_.2478_-_Low_Frequency">Sound RAM $78 - Low Frequency</span></h4>
+<pre>7  bit  0
+---------
+FFFF FFFF
+|||| ||||
+++++-++++- Low 8 bits of Frequency
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.2479_-_Low_Phase">Sound RAM $79 - Low Phase</span></h4>
+<pre>7  bit  0
+---------
+FFFF FFFF
+|||| ||||
+++++-++++- Low 8 bits of Phase
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.247A_-_Mid_Frequency">Sound RAM $7A - Mid Frequency</span></h4>
+<pre>7  bit  0
+---------
+FFFF FFFF
+|||| ||||
+++++-++++- Middle 8 bits of Frequency
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.247B_-_Mid_Phase">Sound RAM $7B - Mid Phase</span></h4>
+<pre>7  bit  0
+---------
+FFFF FFFF
+|||| ||||
+++++-++++- Middle 8 bits of Phase
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.247C_-_High_Frequency_and_Wave_Length">Sound RAM $7C - High Frequency and Wave Length</span></h4>
+<pre>7  bit  0
+---------
+LLLL LLFF
+|||| ||||
+|||| ||++- High 2 bits of Frequency
+++++-++--- Length of waveform ((64-L)*4 4-bit samples)
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.247D_-_High_Phase">Sound RAM $7D - High Phase</span></h4>
+<pre>7  bit  0
+---------
+FFFF FFFF
+|||| ||||
+++++-++++- High 8 bits of Phase
+</pre>
+<p>The high byte of the 24-bit phase value directly determines the current sample
+position of the channel. Every time a channel is updated, the 18-bit frequency
+value is added to the 24-bit phase accumulator, which is stored in these three
+registers.
+</p><p>The phase registers may be written to immediately set the phase of
+the wave. It is good practice to set the frequency to 0 before doing so.
+</p>
+<h4><span class="mw-headline" id="Sound_RAM_.247E_-_Wave_Address">Sound RAM $7E - Wave Address</span></h4>
+<pre>7  bit  0
+---------
+AAAA AAAA
+|||| ||||
+++++-++++- Address of waveform (in 4-bit samples)
+</pre>
+<h4><span class="mw-headline" id="Sound_RAM_.247F_-_Volume">Sound RAM $7F - Volume</span></h4>
+<pre>7  bit  0
+---------
+.CCC VVVV
+ ||| ||||
+ ||| ++++- Linear Volume
+ +++------ Enabled Channels (1+C)
+</pre>
+<p>Note 'C' is available on register $7F ONLY.  Those bits have no effect in other registers.
+</p>
+<ul><li> When C=0, only channel 8 enabled</li>
+<li> When C=1, channels 8 and 7 enabled</li>
+<li> When C=2, channels 8, 7, 6 enabled</li>
+<li> etc...</li></ul>
+<h4><span class="mw-headline" id="Other_Channels">Other Channels</span></h4>
+<p>Above Sound RAM register descriptions ($78-$7F) are for the 8th channel.  The other 7 channels are accessed via the same pattern, but each 8 bytes before the last:
+</p>
+<pre>Channel 8:  $78-$7F
+Channel 7:  $70-$77
+Channel 6:  $68-$6F
+Channel 5:  $60-$67
+Channel 4:  $58-$5F
+Channel 3:  $50-$57
+Channel 2:  $48-$4F
+Channel 1:  $40-$47
+</pre>
+<p>Again note that the 'C' bits in the final register is only available at address $7F.
+</p><p>When channels are disabled, their registers are unused, and can be used for waveform data instead.
+</p>
+<h2><span class="mw-headline" id="Waveform">Waveform</span></h2>
+<p>Each enabled channel cycles through its waveform at a rate determined by the 18-bit frequency value 'F'.  Each step in the waveform is 4-bits wide, and the number of steps is determined by the 'L' bits ((64-L)*4). Two samples are stored to a byte, which is little-endian (unlike the Game Boy's wavetable channel).
+</p><p>The 'A' bits dictate where in the internal sound RAM the waveform starts.  'A' is the address in 4-bit samples, therefore a value of $02 would be the low 4 bits of address $01.  A value of $03 would be the high 4 bits of address $01.
+</p><p>For a visual example, assume you have the following sound RAM:
+</p>
+<pre>$00:    00 00 00 A8 DC EE FF FF EF DE AC 58 23 11 00 00
+$10:    10 21 53 00 00 00 00 00 00 00 00 00 00 00 00 00
+</pre>
+<p>And assume a channel has a 'A' value of $06, and a 'L' value of $39.  That channel's waveform would be a sine wave, looking like the following:
+</p>
+<pre>F -       *****
+E -     **     **
+D -    *         *
+C -   *           *
+B -
+A -  *             *
+9 - 
+8 - *               *
+7 - 
+6 -
+5 -                  *             *
+4 -
+3 -                   *           *
+2 -                    *         *
+1 -                     **     **
+0 -                       *****
+</pre>
+<h2><span class="mw-headline" id="Channel_Update">Channel Update</span></h2>
+<p>Namco's 163 does not internally mix its channels. Instead, each channel is output one at a time. It takes exactly 15 CPU cycles to update and output one channel. When multiple channels are used it will cycle between them. With 6 or fewer channels, the time to update all channels is a rate faster than any audible frequency, and the difference between this serial output and mixing cannot be heard, but for 8 channels it creates a very loud and apparent noise at the update rate. For a Famicom through RF output, this noise is attenuated during demodulation (which performs a lowpass filter), but through A/V output to a TV that does not filter high frequencies, it can be very unpleasant. Only two games used all 8 channels: <i>King of Kings</i> and <i>Erika to Satoru no Yume Bouken</i>.
+</p>
+<table class="tabular">
+<tr>
+<th> Channels </th>
+<th> Update Rate
+</th></tr>
+<tr>
+<td> 1 </td>
+<td> 119318 Hz
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 59659 Hz
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 39773 Hz
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 29830 Hz
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> 23864 Hz
+</td></tr>
+<tr>
+<td> 6 </td>
+<td> 19886 Hz
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> 17045 Hz
+</td></tr>
+<tr>
+<td> 8 </td>
+<td> 14915 Hz
+</td></tr></table>
+<p>The following is a speculative version of a single channel update, occurring every 15 CPU cycles:
+</p>
+<pre>* <i>w</i>[$80] = the 163's internal memory
+* <i>sample</i>(x) = (<i>w</i>[x/2] &gt;&gt; ((x&amp;1)*4)) &amp; $0F
+* <i>phase</i> = (<i>w</i>[$7D] &lt;&lt; 16) + (<i>w</i>[$7B] &lt;&lt; 8) + <i>w</i>[$79]
+* <i>freq</i> = ((<i>w</i>[$7C] &amp; $03) &lt;&lt; 16) + (<i>w</i>[$7A] &lt;&lt; 8) + <i>w</i>[$78]
+* <i>length</i> = 256 - (<i>w</i>[$7C] &amp; $FC)
+* <i>offset</i> = <i>w</i>[$7E]
+* <i>volume</i> = <i>w</i>[$7F] &amp; $0F
+</pre>
+<pre><i>phase</i> = (<i>phase</i> + <i>freq</i>) % (<i>length</i> &lt;&lt; 16)
+<i><b>output</b></i> = (<i>sample</i>(((<i>phase</i> &gt;&gt; 16) + <i>offset</i>) &amp; $FF) - 8) * <i>volume</i>
+</pre>
+<p>The <i><b>output</b></i> will be held until the next channel update. The 24-bit <i>phase</i> value will be stored back into <i>w</i>[$7D/$7B/$79].
+</p><p>The sample value is biased by -8, meaning that a waveform value of 8 represents the centre voltage. This means that volume changes have no effect on a sample of 8, will tend negative if &lt;8 and positive if &gt;8.
+</p>
+<h2><span class="mw-headline" id="Frequency">Frequency</span></h2>
+<p>The wave position is driven by the high 8 bits of a 24-bit accumulator. Every 15 CPU clocks, one channel will add its 18-bit frequency to the accumulator. Because only one channel is updated per tick, the output frequency is thus divided by the number of channels enabled.
+</p>
+<pre>f = wave frequency
+l = wave length
+c = number of channels
+p = 18-bit frequency value
+n = CPU clock rate (≈1789773 Hz)
+
+f = (n * p) / (15 * 65536 * l * c)
+</pre>
+<h2><span class="mw-headline" id="Mixing">Mixing</span></h2>
+<p>The relative volume of the IC varies from game to game, unfortunately.
+</p><p>A 163 with a single channel enabled is somewhere between ~3.6x and ~8.5x as loud as the APU square at max volume. The two 8-channel games have a louder mix, probably to compensate for the quieter volume when more channels are enabled. Some 4-channel games have a quieter mix. The polarity of the 163 is reversed from the 2A03.
+</p><p>The volume comparison measured on various cartridges:
+(Values in parentheses are estimated based on listening/balance.)
+</p>
+<table class="tabular">
+<tr>
+<th> 4-Channel Game   </th>
+<th> Volume </th>
+<th> Samples
+</th></tr>
+<tr>
+<td> Final Lap        </td>
+<td> 3.6x   </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Mappy Kids       </td>
+<td> (~6x)  </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Megami Tensei II </td>
+<td> 4.0x   </td>
+<td> 1
+</td></tr>
+<tr>
+<td> Namco Classic 2  </td>
+<td> (~6x)  </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Rolling Thunder  </td>
+<td> 6.5x   </td>
+<td> 2
+</td></tr>
+<tr>
+<td> Sangokushi       </td>
+<td> (~6x)  </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Sangokushi 2     </td>
+<td> (~4x)  </td>
+<td> 0
+</td></tr>
+<tr>
+<th> 8-Channel Game                </th>
+<th> Volume </th>
+<th> Samples
+</th></tr>
+<tr>
+<td> Erika to Satoru no Yumebouken </td>
+<td> 8.5x   </td>
+<td> 1
+</td></tr>
+<tr>
+<td> King of Kings                 </td>
+<td> 7.3x   </td>
+<td> 1
+</td></tr></table>
+<p>Since the mix appears to be arbitrarily chosen per-game, how to handle this is a difficult choice for an emulator author. It should probably be adjustable. You may choose to simply boost the volume when 8-channels are used. You may try to use a value in between (~6.0x sounds well for all games except Final Lap and Sangokushi 2). You may keep a table of 163 games and their volumes (ignoring potential homebrew), though more data needs to be collected . It should be noted that the 8-channel games do not significantly use the 2A03 for music, except the noise channel, so an accurate mix may be less important.
+</p><p>Because the high frequency generated by the channel cycling can be unpleasant, and emulation of high frequency audio can be difficult, it is often preferred to simply sum the channel outputs, and divide the output volume by the number of channels. To compensate for less drop in apparent volume once the switching frequency crosses the threshold of audibility, it may be desired to slightly increase the volume for &gt;5 channels (perhaps always dividing the output by 6 for 6, 7 or 8 channels).
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/namco106.txt" rel="nofollow">Namcot 106 Mapper Information</a> by Goroh, ZW4, nori</li>
+<li><a class="external text" href="http://kevtris.org/nes/nsfspec.txt" rel="nofollow">NES Music Format Spec</a> by Kevin Horton, N106 info by Mamiya</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.065 seconds
+Real time usage: 0.067 seconds
+Preprocessor visited node count: 71/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:103-1!*!0!!en!*!* and timestamp 20160208222558 and revision id 10358
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a></p></div></body></html>

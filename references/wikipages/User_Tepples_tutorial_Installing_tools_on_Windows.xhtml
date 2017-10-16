@@ -1,0 +1,87 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Tepples/tutorial/Installing tools on Windows</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Tepples/tutorial/Installing tools on Windows</h1><div class="article">
+<p>Unlike Debian, Windows lacks a centralized package manager for desktop applications, and the Windows Store introduced in Windows 8 is not oriented toward software developer tools.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Install_Python"><span class="tocnumber">1</span> <span class="toctext">Install Python</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Install_Pillow"><span class="tocnumber">2</span> <span class="toctext">Install Pillow</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Install_cc65_from_binary_package"><span class="tocnumber">3</span> <span class="toctext">Install cc65 from binary package</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Install_MSYS"><span class="tocnumber">4</span> <span class="toctext">Install MSYS</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Install_FCEUX"><span class="tocnumber">5</span> <span class="toctext">Install FCEUX</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Install_GIMP"><span class="tocnumber">6</span> <span class="toctext">Install GIMP</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Install_and_configure_Notepad.2B.2B"><span class="tocnumber">7</span> <span class="toctext">Install and configure Notepad++</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Install_Python">Install Python</span></h2>
+<p>Many data conversion tools used in this tutorial are written in <a class="external text" href="https://www.python.org/" rel="nofollow">Python</a>, an interpreted programming language maintained by the Python Software Foundation.
+To run Python programs, you'll need a Python interpreter.
+As of the first quarter of 2016, the latest version of Python is 3.5.1.
+</p><p><b>Download <a class="external text" href="https://www.python.org/ftp/python/3.5.1/python-3.5.1.exe" rel="nofollow">Python 3.5.1 (Windows x86)</a> and install it.</b>
+It's a Windows executable installer; you may need somebody with administrative privileges on the local PC to enter a password to authorize the installation.
+</p>
+<h2><span class="mw-headline" id="Install_Pillow">Install Pillow</span></h2>
+<p>Pillow (Python Imaging Library) is a component used by Python programs that manipulate image data, such as PNG, JPEG, and BMP files.
+</p><p>To install Pillow, open a Command Prompt and enter the following command:
+</p>
+<pre>C:\Python35\Scripts\pip.exe install Pillow
+</pre>
+<p>Then test the Pillow installation:
+</p>
+<ol><li>From the Start menu, inside All Programs, inside Python, choose IDLE (Python GUI).<br/>or: From the Start menu or Windows 8 Start screen, type IDLE and then choose IDLE (Python GUI).</li>
+<li>(If IDLE's window is titled &quot;Python 3.x.x Shell&quot;, skip this step.)<br/>From the Run menu, choose Python Shell.</li>
+<li>Paste in each of the two following lines, pressing Enter after each one:</li></ol>
+<pre>from PIL import Image
+Image.new('RGB', (100, 100), (0, 191, 0)).show()
+</pre>
+<p>This should cause a small green box to appear on the screen.
+If it does not, or you see a bunch of red text in the IDLE window, there may be a problem with your Python or Pillow installation.
+</p>
+<h2><span class="mw-headline" id="Install_cc65_from_binary_package">Install cc65 from binary package</span></h2>
+<ol><li> From <a class="external free" href="http://cc65.github.io/cc65/" rel="nofollow">http://cc65.github.io/cc65/</a> download the Windows Snapshot.</li>
+<li> Unzip it to a folder in your home directory.</li>
+<li> TODO: Add this folder to your PATH</li></ol>
+<h2><span class="mw-headline" id="Install_MSYS">Install MSYS</span></h2>
+<p><a class="external text" href="http://mingw.org/wiki/MSYS" rel="nofollow">MSYS</a> is a port of parts of the free GNU operating system to Windows.
+It includes <a class="external text" href="https://www.gnu.org/software/make/" rel="nofollow">GNU Make</a>, a program that determines which parts of your project have changed, such as assembly language source code or game graphics, and rebuilds only those parts.
+</p>
+<ol><li> Download and install mingw-get-setup.exe from <a class="external free" href="http://mingw.org/wiki/Getting_Started" rel="nofollow">http://mingw.org/wiki/Getting_Started</a></li>
+<li> TODO: Choose MSYS packages</li></ol>
+<h2><span class="mw-headline" id="Install_FCEUX">Install FCEUX</span></h2>
+<p>FCEUX (Family Computer Emulator Ultra Extended) is an emulator, or an application that interprets NES programs and displays their output.
+</p>
+<ol><li> Download FCEUX (win32 binary) from <a class="external text" href="http://www.fceux.com/web/download.html" rel="nofollow">FCEUX download page</a>.</li>
+<li> Unzip it somewhere convenient in your home directory.</li>
+<li> TODO: configure controls</li></ol>
+<h2><span class="mw-headline" id="Install_GIMP">Install GIMP</span></h2>
+<p>GIMP, the GNU Image Manipulation Program, is a paint program distributed as free software.
+You can use it to create game graphics.
+</p>
+<ol><li> On the <a class="external text" href="http://www.gimp.org/downloads/" rel="nofollow">download page</a>, click &quot;Download GIMP 2.8 directly&quot;.</li>
+<li> Install the MSI.</li>
+<li> TODO: Set default brush to 1 pixel and default grid to 8 pixels, then save tool options</li></ol>
+<h2><span class="mw-headline" id="Install_and_configure_Notepad.2B.2B">Install and configure Notepad++</span></h2>
+<p>To edit source code, you need a text editor.
+Windows Notepad is included with Windows and will work in a pinch, but there is better.
+</p><p>TODO: notepad-plus-plus.org
+</p><p>TODO: Configure for 6502 syntax highlighting
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 27/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1587-1!*!*!!en!*!* and timestamp 20160221150316 and revision id 11957
+ -->
+</div></body></html>

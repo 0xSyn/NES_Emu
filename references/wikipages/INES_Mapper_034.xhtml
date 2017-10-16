@@ -1,0 +1,72 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 034</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 034</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 034</strong> is used to designate both the <a href="BNROM.xhtml" title="BNROM">BNROM</a> and <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> boards. These two boards are unrelated, but have unfortunately been grouped into the same mapper.
+</p><p>Many emulators implement both sets of registers simultaneously, which is safe for the two existing commercial games.
+</p><p>If the emulator wishes to separate the two implementations, they may check the number of CHR banks present: BNROM should be used when there is 0 to 8 KiB of CHR, and NINA-001 should be used otherwise. The <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header with a <a href="NES_2_0_submappers.xhtml#iNES_Mapper_034" title="NES 2.0 submappers">submapper</a> can be used to force use of NINA-001 behavior even with 8 KiB of CHR ROM or CHR RAM.
+</p><p>Developers wishing to use mapper 34 should strictly use only the BNROM or only the NINA-001 registers in a single ROM, and be careful not to accidentally write to the other set of registers.
+</p>
+<h2><span class="mw-headline" id="BNROM">BNROM</span></h2>
+<p>See: <a href="BNROM.xhtml" title="BNROM">BNROM</a>
+</p>
+<ul><li> PRG ROM size: 128 KB (mapper implementations may support up to 512 KB or 8 MB)</li>
+<li> PRG ROM bank size: 32 KB</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 8 KB RAM</li>
+<li> CHR bank size: Not bankswitched</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Solder pads select vertical or horizontal mirroring</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes</li></ul>
+<p>Games:
+</p>
+<ul><li> <i>Deadly Towers</i> (<i>Mashou</i>)</li>
+<li> <i>Darkseed</i></li></ul>
+<p>Registers:
+</p>
+<pre>             7  bit  0
+             ---------
+ $8000-FFFF: .... ..PP - Select 32 KB PRG ROM bank
+</pre>
+<p>Emulators commonly support either a 4-bit or 8-bit register, enabling up to 512 KB or 8 MB PRG ROM.
+This variant may be referred to as <b>BxROM</b>.
+</p>
+<h2><span class="mw-headline" id="NINA-001">NINA-001</span></h2>
+<p>See: <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a>
+</p>
+<ul><li> PRG ROM size: 64 KB</li>
+<li> PRG ROM bank size: 32 KB</li>
+<li> PRG RAM: 8 KB, not battery backed</li>
+<li> CHR ROM capacity: 64 KB ROM</li>
+<li> CHR bank size: 4 KB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: hardwired to horizontal mirroring</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>Games:
+</p>
+<ul><li> <i>Impossible Mission 2</i></li></ul>
+<p>Registers::
+</p>
+<pre>        7  bit  0
+        ---------
+ $7FFD: .... ...P - Select 32 KB PRG ROM bank
+ $7FFE: .... CCCC - Select 4 KB CHR bank at $0000
+ $7FFF: .... CCCC - Select 4 KB CHR bank at $1000
+</pre>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:212-1!*!0!!*!*!* and timestamp 20160208225044 and revision id 10193
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_NES_2_0_mappers_with_submappers.xhtml">NES 2.0 mappers with submappers</a></p></div></body></html>

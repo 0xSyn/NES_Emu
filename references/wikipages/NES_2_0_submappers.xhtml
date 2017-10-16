@@ -1,0 +1,352 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES 2.0 submappers</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES 2.0 submappers</h1><div class="article">
+<p><b>Submapper</b> is a term used in the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header for 4-bit codes designating functionally distinct variants of iNES mappers that cannot be distinguished by the memory size fields alone.
+Most emulators using <a href="INES.xhtml" title="INES">iNES</a> format distinguish these using CRC, SHA-1, or other hashes of the PRG ROM and CHR ROM, but this works only for games published prior to 1997, not for fan translations or ROM hacks, and not for new games on the same mapper.
+</p><p>Submapper 0 represents the default iNES behavour, so that backward compatibility is maintained with existing ROMs.
+</p><p>Submapper allocations that are listed as &quot;deprecated&quot; were assigned by kevtris' original proposal, but have no known use cases. The deprecation reserves these unused allocations to maintain continuity and compatibility.
+</p><p><b>This document is a living specification. Proposals for new submappers should be made at:</b> <a href="NES_2_0_submappers_Proposals.xhtml" title="NES 2.0 submappers/Proposals">Proposals</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#001:_MMC1"><span class="tocnumber">1</span> <span class="toctext">001: MMC1</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#001:_0"><span class="tocnumber">1.1</span> <span class="toctext">001: 0</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#001:_1.2C_2.2C_4_.3D_SUROM.2C_SOROM.2C_SXROM"><span class="tocnumber">1.2</span> <span class="toctext">001: 1, 2, 4 = SUROM, SOROM, SXROM</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#001:_3"><span class="tocnumber">1.3</span> <span class="toctext">001: 3</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#001:_5_Fixed_PRG"><span class="tocnumber">1.4</span> <span class="toctext">001: 5 Fixed PRG</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#002.2C_003.2C_007:_UxROM.2C_CNROM.2C_AxROM"><span class="tocnumber">2</span> <span class="toctext">002, 003, 007: UxROM, CNROM, AxROM</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#002:_0.2C_1.2C_2_UxROM"><span class="tocnumber">2.1</span> <span class="toctext">002: 0, 1, 2 UxROM</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#003:_0.2C_1.2C_2_CNROM"><span class="tocnumber">2.2</span> <span class="toctext">003: 0, 1, 2 CNROM</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#007:_0.2C_1.2C_2_AxROM"><span class="tocnumber">2.3</span> <span class="toctext">007: 0, 1, 2 AxROM</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#004:_MMC3"><span class="tocnumber">3</span> <span class="toctext">004: MMC3</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#004:_0"><span class="tocnumber">3.1</span> <span class="toctext">004: 0</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#004:_1_MMC6"><span class="tocnumber">3.2</span> <span class="toctext">004: 1 MMC6</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#004:_2"><span class="tocnumber">3.3</span> <span class="toctext">004: 2</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#004:_3_MC-ACC"><span class="tocnumber">3.4</span> <span class="toctext">004: 3 MC-ACC</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#032:_Irem_G101"><span class="tocnumber">4</span> <span class="toctext">032: Irem G101</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#032:_0"><span class="tocnumber">4.1</span> <span class="toctext">032: 0</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#032:_1_Major_League"><span class="tocnumber">4.2</span> <span class="toctext">032: 1 Major League</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#034:_BNROM_.2F_NINA-001"><span class="tocnumber">5</span> <span class="toctext">034: BNROM / NINA-001</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#034:_0"><span class="tocnumber">5.1</span> <span class="toctext">034: 0</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#034:_1_NINA-001"><span class="tocnumber">5.2</span> <span class="toctext">034: 1 NINA-001</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#034:_2_BNROM"><span class="tocnumber">5.3</span> <span class="toctext">034: 2 BNROM</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-22"><a href="#068:_Sunsoft_4"><span class="tocnumber">6</span> <span class="toctext">068: Sunsoft 4</span></a>
+<ul>
+<li class="toclevel-2 tocsection-23"><a href="#068:_0"><span class="tocnumber">6.1</span> <span class="toctext">068: 0</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#068:_1_Dual_Cartridge_System"><span class="tocnumber">6.2</span> <span class="toctext">068: 1 Dual Cartridge System</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#071:_Codemasters"><span class="tocnumber">7</span> <span class="toctext">071: Codemasters</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#071:_0"><span class="tocnumber">7.1</span> <span class="toctext">071: 0</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#071:_1_Fire_Hawk"><span class="tocnumber">7.2</span> <span class="toctext">071: 1 Fire Hawk</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#078:_Cosmo_Carrier_.2F_Holy_Diver"><span class="tocnumber">8</span> <span class="toctext">078: Cosmo Carrier / Holy Diver</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#078:_0"><span class="tocnumber">8.1</span> <span class="toctext">078: 0</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#078:_1_Cosmo_Carrier"><span class="tocnumber">8.2</span> <span class="toctext">078: 1 Cosmo Carrier</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#078:_2"><span class="tocnumber">8.3</span> <span class="toctext">078: 2</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#078:_3_Holy_Diver"><span class="tocnumber">8.4</span> <span class="toctext">078: 3 Holy Diver</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-33"><a href="#210:_Namco_175_and_340"><span class="tocnumber">9</span> <span class="toctext">210: Namco 175 and 340</span></a>
+<ul>
+<li class="toclevel-2 tocsection-34"><a href="#210:_0"><span class="tocnumber">9.1</span> <span class="toctext">210: 0</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#210:_1_N175"><span class="tocnumber">9.2</span> <span class="toctext">210: 1 N175</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#210:_2_N340"><span class="tocnumber">9.3</span> <span class="toctext">210: 2 N340</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-37"><a href="#232:_Quattro"><span class="tocnumber">10</span> <span class="toctext">232: Quattro</span></a>
+<ul>
+<li class="toclevel-2 tocsection-38"><a href="#232:_0"><span class="tocnumber">10.1</span> <span class="toctext">232: 0</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#232:_1_Aladdin_Deck_Enhancer"><span class="tocnumber">10.2</span> <span class="toctext">232: 1 Aladdin Deck Enhancer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-40"><a href="#References"><span class="tocnumber">11</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="001:_MMC1"><a href="MMC1.xhtml" title="INES Mapper 001">001</a>: <a href="MMC1.xhtml" title="MMC1">MMC1</a></span></h2>
+<p>Most <a href="SxROM.xhtml" title="SxROM">MMC1 boards</a> are compatible with the standard mapper 1 behavior (submapper <a href="#001:_0">0</a>).
+</p><p>Boards with CHR-RAM usually reuse the CHR banking lines to address other things.
+</p>
+<ul><li> SUROM, SOROM, and SXROM implement extra PRG-ROM and PRG-RAM banking (<i>deprecated</i> submappers <a href="#001:_1.2C_2.2C_4_.3D_SUROM.2C_SOROM.2C_SXROM">1, 2, 4</a>).</li>
+<li> SNROM implements a redundant PRG-RAM enable (no assigned submapper).</li></ul>
+<p>The variant MMC1A chip was assigned to <a href="INES_Mapper_155.xhtml" title="INES Mapper 155">mapper 155</a> (<i>deprecated</i> submapper <a href="#001:_3">3</a>).
+</p><p>Most boards with 32k of PRG-ROM have no PRG banking: SEROM, SHROM, SH1ROM (submapper <a href="#001:_5_Fixed_PRG">5</a>).
+</p>
+<h3><span class="mw-headline" id="001:_0">001: 0</span></h3>
+<p>Normal behavior.
+</p>
+<h3><span class="mw-headline" id="001:_1.2C_2.2C_4_.3D_SUROM.2C_SOROM.2C_SXROM">001: 1, 2, 4 = SUROM, SOROM, SXROM</span></h3>
+<p><b>Deprecated.</b>
+</p><p>These submappers are a redundancy. The difference between these boards and the &quot;normal&quot; MMC1 implementation is exclusively dependent on the sizes of CHR, PRG RAM, and PRG ROM. Because of this, the addition of PRG RAM to the NES 2.0 specification was enough to make these compatible with submapper 0.
+</p><p>These three boards used 8k CHR RAM, and reused the CHR banking bits to bank PRG ROM and RAM instead. The specific boards can be detected by these sizes, or simply emulated together in submapper 0:
+</p>
+<pre>$A000 and $C000:
+4bit0
+-----
+EDCBA
+|||||
+||||+- CHR A12
+|||+-- CHR A13, if extant (CHR &gt;= 16k)
+||+--- CHR A14, if extant; and PRG RAM A14, if extant (PRG RAM = 32k, submapper 4)
+|+---- CHR A15, if extant; and PRG RAM A13, if extant (PRG RAM &gt;= 16k, submappers 2, 4)
++----- CHR A16, if extant; and PRG ROM A18, if extant (PRG ROM = 512k, submappers 1, 4)
+</pre>
+<p>The following games are on SUROM (submapper 1):
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1273" rel="nofollow">Dragon Warrior III</a></i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1276" rel="nofollow">Dragon Warrior IV</a></i> / <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1526" rel="nofollow">Dragon Quest IV</a></i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1531" rel="nofollow">Ninjara Hoi!</a></i></li></ul>
+<p>SOROM (submapper 2):
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=919" rel="nofollow">Genghis Khan</a></i> / <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1528" rel="nofollow">Aoki Ookami to Shiroki Mejika: Genghis Khan</a></i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=497" rel="nofollow">Nobunaga's Ambition</a></i> / <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1529" rel="nofollow">Nobunaga no Yabou: Zenkokuban</a></i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=730" rel="nofollow">Romance of the Three Kingdoms</a></i> / <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3170" rel="nofollow">Sangokushi</a></i></li></ul>
+<p>SXROM (submapper 4):
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3642" rel="nofollow">Final Fantasy I &amp; II</a></i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3757" rel="nofollow">The Best Play Pro Yakyuu Special</a></i></li>
+<li> <i><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=7231" rel="nofollow">PR8</a></i>. If extra RAM is missing, it gives a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=7629" rel="nofollow">&quot;DOES NOT WORK IN THIS EMULATOR&quot; error</a>.</li></ul>
+<p>If any NES 2.0 ROMs are found using these deprecated submappers, the CHR, PRG RAM, and PRG ROM sizes must appropriately match to be a valid header.
+</p>
+<h3><span class="mw-headline" id="001:_3">001: 3</span></h3>
+<p><b>Deprecated.</b>
+</p><p>This originally described a submapper that was already implemented as <a href="INES_Mapper_155.xhtml" title="INES Mapper 155">iNES Mapper 155</a>.
+</p>
+<h3><span class="mw-headline" id="001:_5_Fixed_PRG">001: 5 Fixed PRG</span></h3>
+<p><a class="mw-redirect" href="SxROM.xhtml" title="SEROM">SEROM</a>, <a class="mw-redirect" href="SxROM.xhtml" title="SHROM">SHROM</a>, <s>SH1ROM</s> use a fixed 32k PRG ROM with no banking support. (This is distinct from <s>SIROM</s> which has 32k of bankable PRG ROM.)
+</p><p>PRG ROM A14 is connected directly to CPU A14 (and MMC1 A14 input) instead of MMC1 A14 output.
+</p><p>Existing games are compatible with submapper 0 if $8000-BFFF is initialized to the low bank, and $C000-FFFF is initialized to the high bank. These boards were used in several games: <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=serom&amp;kwtype=pcb" rel="nofollow">SEROM</a> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=shrom&amp;kwtype=pcb" rel="nofollow">SHROM</a> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=sh1rom&amp;kwtype=pcb" rel="nofollow">SH1ROM</a>
+</p><p>Test ROM:
+</p>
+<ul><li> <i><a class="external text" href="http://forums.nesdev.com/download/file.php?id=3753" rel="nofollow">serom.zip</a></i> - validates non-existence of PRG banking control. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=153298#p153298" rel="nofollow">forum post</a>)</li></ul>
+<h2><span class="mw-headline" id="002.2C_003.2C_007:_UxROM.2C_CNROM.2C_AxROM"><a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">002</a>, <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">003</a>, <a class="mw-redirect" href="AxROM.xhtml" title="INES Mapper 007">007</a>: <a href="UxROM.xhtml" title="UxROM">UxROM</a>, <a href="CNROM.xhtml" title="CNROM">CNROM</a>, <a href="AxROM.xhtml" title="AxROM">AxROM</a></span></h2>
+<p>Mappers 2, 3, and 7 describe <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">discrete logic mappers</a> that are usually subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>. Most of these games are programmed in a way that does not rely on the bus conflict behaviour, but software bugs may expose the difference (e.g. <i>Cybernoid</i><sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>). Because these differences are obscure, the default iNES implementation for mappers 2 and 3 has been inconsistent across emulators, some with bus conflicts, some without. Mapper 7 is normally emulated without bus conflicts, because of a small number of games using the <a class="mw-redirect" href="AxROM.xhtml" title="ANROM">ANROM</a> board which rely on this.
+</p><p>Two submappers allow this ambiguity to be resolved, by selecting a specific behaviour:
+</p><p>0: Default iNES behaviour<br/>
+1: Bus conflicts do not occur<br/>
+2: Bus conflicts occur, producing the bitwise AND of the written value and the value in ROM
+</p><p>Although all Nintendo-manufactured games using normal CNROM (mapper 3), normal UxROM (mapper 2), and inverted UxROM (mapper 180) had bus conflicts, apparently several unlicensed games require their absence, as does the updated version of <i>Donkey Kong</i> with the pie factory level<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>.
+</p><p>AxROM (mapper 7) is the only known licensed discrete logic mapper to unreliably come with <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflict</a> prevention circuitry. While no game documented in NesCartDB was released in one region on multiple board variants, several games did change boards when localized.
+</p><p>New ROMs are encouraged to specify submapper 2 to verify correct behaviour with bus conflicts.
+</p><p>CNROM with security diodes (mapper 185) has a different set of submapper definitions.
+</p>
+<h3><span class="mw-headline" id="002:_0.2C_1.2C_2_UxROM">002: 0, 1, 2 <a href="UxROM.xhtml" title="UxROM">UxROM</a></span></h3>
+<p>Test ROMs:
+</p>
+<ul><li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/2_test_0.nes" rel="nofollow">2_test_0.nes</a></i> - Unspecified. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/2_test_1.nes" rel="nofollow">2_test_1.nes</a></i> - No bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/2_test_2.nes" rel="nofollow">2_test_2.nes</a></i> - AND bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li></ul>
+<h3><span class="mw-headline" id="003:_0.2C_1.2C_2_CNROM">003: 0, 1, 2 <a href="CNROM.xhtml" title="CNROM">CNROM</a></span></h3>
+<p>Test ROMs:
+</p>
+<ul><li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/3_test_0.nes" rel="nofollow">3_test_0.nes</a></i> - Unspecified. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=154555#p154555" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/3_test_1.nes" rel="nofollow">3_test_1.nes</a></i> - No bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=154555#p154555" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/3_test_2.nes" rel="nofollow">3_test_2.nes</a></i> - AND bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=154555#p154555" rel="nofollow">forum post</a>)</li></ul>
+<h3><span class="mw-headline" id="007:_0.2C_1.2C_2_AxROM">007: 0, 1, 2 <a href="AxROM.xhtml" title="AxROM">AxROM</a></span></h3>
+<p>Test ROMs:
+</p>
+<ul><li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/7_test_0.nes" rel="nofollow">7_test_0.nes</a></i> - Unspecified. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/7_test_1.nes" rel="nofollow">7_test_1.nes</a></i> - No bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li>
+<li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/7_test_2.nes" rel="nofollow">7_test_2.nes</a></i> - AND bus conflicts. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157804#p157804" rel="nofollow">forum post</a>)</li></ul>
+<h2><span class="mw-headline" id="004:_MMC3"><a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">004</a>: <a href="MMC3.xhtml" title="MMC3">MMC3</a></span></h2>
+<p><a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">iNES Mapper 004</a> represents the most common boards using these four ICs: early <a href="MMC3.xhtml" title="MMC3">MMC3</a>, late MMC3, MC-ACC, and <a href="MMC6.xhtml" title="MMC6">MMC6</a>.
+</p><p>There are three known kinds of IRQ:
+</p>
+<ol><li> MMC3A: IRQ is asserted on A12 rise, and loading the latch with 0 disables IRQ. Some chips labeled MMC3B also have this &quot;old style&quot; behavior. No games are known to rely on this behavior.</li>
+<li> MMC3C: IRQ is asserted on A12 rise, and loading the latch with 0 produces an IRQ on every scanline. Some chips labeled MMC3B also have this &quot;new style&quot; behavior, as does the MMC6. Some later games rely on this behavior.</li>
+<li> MC-ACC: IRQ is asserted on A12 fall, typically four pixels later than MMC3C. Interrupts can be produced every scanline, like the MMC3C.<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup></li></ol>
+<p>There are two known kinds of PRG RAM enable:
+</p>
+<ol><li> MMC3: One set of enable bits controls the entire chip.</li>
+<li> MMC6: The first and second enables control the first and second half of PRG RAM, and an additional enable in bit 5 of $8000 controls the whole PRG RAM.</li></ol>
+<p>The <a href="TxROM.xhtml" title="TxROM">TEROM and TFROM</a> boards have two jumpers that can respectively disable IRQs and force hard-wired mirroring. It is believed that nothing was ever released that used them.
+</p>
+<h3><span class="mw-headline" id="004:_0">004: 0</span></h3>
+<p>Normal. (MMC3C)
+</p>
+<h3><span class="mw-headline" id="004:_1_MMC6">004: 1 MMC6</span></h3>
+<p><a href="MMC6.xhtml" title="MMC6">MMC6</a> has an alternative PRG-RAM enable and write protection scheme designed for its internal 1k PRG RAM.
+</p>
+<ul><li> <i>StarTropics</i></li>
+<li> <i>StarTropics 2</i></li></ul>
+<h3><span class="mw-headline" id="004:_2">004: 2</span></h3>
+<p><b>Deprecated.</b>
+</p><p>This originally described MMC3C with hard wired mirroring. No games are known to require this.
+</p>
+<h3><span class="mw-headline" id="004:_3_MC-ACC">004: 3 MC-ACC</span></h3>
+<p>MC-ACC 
+</p><p>The MC-ACC is found in <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=MC-ACC&amp;kwtype=pcb" rel="nofollow">13 second-source PCBs manufactured by Acclaim</a>:
+</p>
+<ul><li> <i>Alien³</i></li>
+<li> <i>George Foreman's KO Boxing</i></li>
+<li> <i>The Incredible Crash Dummies</i></li>
+<li> <i>Mickey's Safari in Letterland</i></li>
+<li> <i>Roger Clemens' MVP Baseball</i></li>
+<li> <i>Rollerblade Racer</i></li>
+<li> <i>The Simpsons: Bart vs. The World</i></li>
+<li> <i>The Simpsons: Bartman Meets Radioactive Man</i></li>
+<li> <i>Spider-Man: Return of the Sinister Six</i></li>
+<li> <i>T&amp;C Surf Designs 2: Thrilla's Surfari</i></li>
+<li> <i>T2: Terminator 2: Judgment Day</i></li>
+<li> <i>WWF King of the Ring</i></li>
+<li> <i>WWF WrestleMania: Steel Cage Challenge</i></li></ul>
+<h2><span class="mw-headline" id="032:_Irem_G101"><a href="INES_Mapper_032.xhtml" title="INES Mapper 032">032</a>: Irem G101</span></h2>
+<p>A variation of this mapper requires hardwired one-screen mirroring and entirely ignores writes to $9000.
+</p>
+<h3><span class="mw-headline" id="032:_0">032: 0</span></h3>
+<p>Normal (H/V mapper-controlled mirroring)
+</p>
+<h3><span class="mw-headline" id="032:_1_Major_League">032: 1 Major League</span></h3>
+<p>CIRAM A10 is tied high (fixed one-screen mirroring) and PRG banking style is fixed as 8+8+16F
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3800" rel="nofollow">Major League</a></i></li></ul>
+<h2><span class="mw-headline" id="034:_BNROM_.2F_NINA-001"><a href="INES_Mapper_034.xhtml" title="INES Mapper 034">034</a>: <a href="BNROM.xhtml" title="BNROM">BNROM</a> / <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a></span></h2>
+<p>This iNES mapper unfortunately combines the unrelated <a href="BNROM.xhtml" title="BNROM">BNROM</a> and <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> mappers.
+</p>
+<h3><span class="mw-headline" id="034:_0">034: 0</span></h3>
+<p>Normal.
+</p><p>To disambiguate the two mappers, emulators have taken various approaches:
+</p>
+<ul><li> The presense of CHR larger than 8 KiB unambiguously requires NINA-001, as BNROM has no CHR banking.</li>
+<li> The presence of CHR-RAM is taken to imply BNROM, because both extant BNROM games use CHR-RAM.</li>
+<li> CRC tests may be used to select a mapper for previously known ROMs.</li>
+<li> Implement both mappers simultaneously. This is compatible with existing games.</li></ul>
+<p>Selecting a single implementation based on CHR results in greater accuracy, since no game was ever intended for the combined definition.
+</p><p>New programs should not attempt to use a combined BNROM + NINA-001 mapper because this is not reliably available across emulators. Unusual combinations like NINA-001 with CHR-RAM are theoretically possible, but unlikely to be emulated consistently.
+</p>
+<h3><span class="mw-headline" id="034:_1_NINA-001">034: 1 NINA-001</span></h3>
+<p><a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> only.
+</p><p>Test ROM:
+</p>
+<ul><li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/34_test_1.nes" rel="nofollow">34_test_1.nes</a></i> - NINA-001 with CHR ROM. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=153334#p153334" rel="nofollow">forum post</a>)</li></ul>
+<h3><span class="mw-headline" id="034:_2_BNROM">034: 2 BNROM</span></h3>
+<p><a href="BNROM.xhtml" title="BNROM">BNROM</a> only.
+</p><p>Some unlicensed boards by Union Bond were a variation of BNROM that included PRG RAM. These may also use this submapper if PRG RAM is specified in the NES 2.0 header.
+</p><p>Test ROM:
+</p>
+<ul><li> <i><a class="external text" href="http://rainwarrior.ca/projects/nes/34_test_2.nes" rel="nofollow">34_test_2.nes</a></i> - BNROM with CHR RAM. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=153334#p153334" rel="nofollow">forum post</a>)</li></ul>
+<h2><span class="mw-headline" id="068:_Sunsoft_4"><a href="INES_Mapper_068.xhtml" title="INES Mapper 068">068</a>: Sunsoft 4</span></h2>
+<p>In addition to its normal function, the Sunsoft 4 IC was used in <i>Nantettatte!! Baseball</i>, which allowed a second expansion cartridge to be plugged into it.
+</p>
+<h3><span class="mw-headline" id="068:_0">068: 0</span></h3>
+<p>0: Normal (max 256KiB PRG)
+</p>
+<h3><span class="mw-headline" id="068:_1_Dual_Cartridge_System">068: 1 Dual Cartridge System</span></h3>
+<p>1: Sunsoft Dual Cartridge System a.k.a. NTB-ROM (max 128KiB PRG, licensing IC present, external option ROM of up to 128KiB should be selectable by a second menu)
+</p>
+<ul><li> <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=2265" rel="nofollow"><i>Nantettatte!! Baseball</i></a></li></ul>
+<h2><span class="mw-headline" id="071:_Codemasters"><a href="INES_Mapper_071.xhtml" title="INES Mapper 071">071</a>: Codemasters</span></h2>
+<p>Some games use this with 1-screen <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>, where the mapper's mirroring control bit is wired directly to CIRAM A10. Others have hardwired horizontal or vertical mirroring.
+</p><p>Another variation of this mapper was used in the <i>Quattro</i> multicarts, but these have been reassigned to <a href="INES_Mapper_232.xhtml" title="INES Mapper 232">mapper 232</a>.
+</p>
+<h3><span class="mw-headline" id="071:_0">071: 0</span></h3>
+<p>Hardwired horizontal or vertical mirroring.
+</p>
+<h3><span class="mw-headline" id="071:_1_Fire_Hawk">071: 1 Fire Hawk</span></h3>
+<p>Mapper controlled single-screen mirroring.
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=733" rel="nofollow">Fire Hawk</a></i></li></ul>
+<h2><span class="mw-headline" id="078:_Cosmo_Carrier_.2F_Holy_Diver"><a href="INES_Mapper_078.xhtml" title="INES Mapper 078">078</a>: Cosmo Carrier / Holy Diver</span></h2>
+<p>This mapper unfortunately combines two games with incompatible mirroring control.
+</p><p>One game uses this with 1-screen <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>, where the mapper's mirroring control bit is wired directly to CIRAM A10. The other can switch between horizontal and vertical mirroring, using a multiplexer between PPU A10 and PPU A11 whose output is sent to CIRAM A10.
+</p>
+<h3><span class="mw-headline" id="078:_0">078: 0</span></h3>
+<p>Unspecified.
+</p>
+<h3><span class="mw-headline" id="078:_1_Cosmo_Carrier">078: 1 Cosmo Carrier</span></h3>
+<p>Single-screen mirroring (nibble-swapped <a href="INES_Mapper_152.xhtml" title="INES Mapper 152">mapper 152</a>).
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3968" rel="nofollow">Uchuusen: Cosmo Carrier</a></i></li></ul>
+<h3><span class="mw-headline" id="078:_2">078: 2</span></h3>
+<p><b>Deprecated.</b>
+</p><p>This described a variation with fixed vertical mirroring, and WRAM. There is no known use case.
+</p>
+<h3><span class="mw-headline" id="078:_3_Holy_Diver">078: 3 Holy Diver</span></h3>
+<p>Mapper-controlled H/V mirroring.
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=4038" rel="nofollow">Holy Diver</a></i></li></ul>
+<h2><span class="mw-headline" id="210:_Namco_175_and_340"><a href="INES_Mapper_210.xhtml" title="INES Mapper 210">210</a>: Namco 175 and 340</span></h2>
+<p><a href="INES_Mapper_210.xhtml" title="INES Mapper 210">Mapper 210</a> doesn't distinguish between the 175's hardwired mirroring and 340's 1/H/V mirroring.
+</p><p>Also, previous confusion and compatibility code used by Namco when they were developing games means that many 175- and 340- using games are incorrectly tagged as <s>mapper 19</s>.
+</p>
+<h3><span class="mw-headline" id="210:_0">210: 0</span></h3>
+<p>No advisory statement is made (use runtime heuristics suggested at <a href="INES_Mapper_210.xhtml" title="INES Mapper 210">mapper 210</a>)
+</p>
+<h3><span class="mw-headline" id="210:_1_N175">210: 1 N175</span></h3>
+<p>Namco 175. Hardwired mirroring, no IRQ.
+</p>
+<ul><li> <i>Famista '91</i></li>
+<li> <i>Family Circuit '91</i></li>
+<li> <i>Chibi Maruko-chan: Uki Uki Shopping</i></li>
+<li> <i>Heisei Tensai Bakabon / Genius Bakabon</i></li></ul>
+<h3><span class="mw-headline" id="210:_2_N340">210: 2 N340</span></h3>
+<p>Namco 340. 1/H/V mirroring, no IRQ, no internal or external RAM.
+</p>
+<ul><li> <i>Splatterhouse</i></li>
+<li> <i>Wagyan Land 2</i></li>
+<li> <i>Famista '92</i></li>
+<li> <i>Dream Master</i></li>
+<li> <i>Top Striker</i></li>
+<li> <i>Wagyan Land 3</i></li>
+<li> <i>Famista '93</i></li>
+<li> <i>Famista '94</i></li></ul>
+<h2><span class="mw-headline" id="232:_Quattro"><a href="INES_Mapper_232.xhtml" title="INES Mapper 232">232</a>: Quattro</span></h2>
+<p>Similar to #71 above, with a separate register controlling which 64 KiB outer bank of the PRG ROM is used. This is used for the <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=quattro&amp;kwtype=game" rel="nofollow">Quattro multicarts</a>.
+</p><p>The Aladdin Deck Enhancer version of these multicarts used a different banking scheme.
+</p>
+<h3><span class="mw-headline" id="232:_0">232: 0</span></h3>
+<p>0: Normal
+</p>
+<h3><span class="mw-headline" id="232:_1_Aladdin_Deck_Enhancer">232: 1 Aladdin Deck Enhancer</span></h3>
+<p>Aladdin Deck Enhancer variation. Swap the bits of the outer bank number.
+</p>
+<ul><li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=553" rel="nofollow">Quattro Adventure</a> (Aladdin Deck Enhancer)</i></li>
+<li> <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=550" rel="nofollow">Quattro Sports</a> (Aladdin Deck Enhancer)</i></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://blog.kevtris.org/blogfiles/nes/submappers.txt" rel="nofollow">Original submapper list by kevtris</a></li>
+<li> <a class="external text" href="http://blog.kevtris.org/blogfiles/nes/" rel="nofollow">Other definitions by kevtris</a></li></ul>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=7273" rel="nofollow">NESDev post</a> explaining Cybernoid's bugs.</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://www.nintendoage.com/forum/messageview.cfm?catid=22&amp;threadid=44613" rel="nofollow">Nintendoage thread</a> discussing Donkey Kong Pie Factory.</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=128148#p128148" rel="nofollow">MC-ACC IRQ test results</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.205 seconds
+Real time usage: 0.210 seconds
+Preprocessor visited node count: 223/1000000
+Preprocessor generated node count: 398/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:852-1!*!0!!en!*!* and timestamp 20160208225636 and revision id 11864
+ -->
+</div></body></html>

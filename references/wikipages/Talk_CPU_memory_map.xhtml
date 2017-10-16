@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:CPU memory map</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:CPU memory map</h1><div class="article">
+<h2><span class="mw-headline" id="A_mapper_could_switch_just_the_vectors.2C_but_it_would_be_very_unusual._Do_any.3F">A mapper could switch just the vectors, but it would be very unusual. Do any?</span></h2>
+<p>In response to Myask's question in the <s>11011 edit summary</s>, the PowerPak's NSF mapper does this. I don't know any other examples offhand, though. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 15:45, 28 May 2015 (MDT)
+</p>
+<dl><dd>Arguably the PowerPak is not a mapper but a metamapper. On the other hand, I wonder how deeply (if at all) the Powerpak can emulate itself. On that note, metamapper seems like a useful term...or just another word for multicart mapper.<a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 16:09, 28 May 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd>Well, I'm not talking about the whole PowerPak. I'm only talking about one of the mappers used for it. The NSF player mapper. Actually, I think Kevtris' hardware NSF player does the same thing, and there may be others. The TNS line of NSF playing cartridges do not; they simply replace the table in the initially mapped high bank of the ROM, and expects it to remain fixed (or else it crashes). NSF players are the only application I can think of that really require this. Game ROMs always have their own bank-appropriate vector tables. NSFs are unique in that the data doesn't already have vectors (the player is expected to provide them, if needed by the implementation), and the specification permits paging that has to share space with the vectors. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 22:11, 28 May 2015 (MDT)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1549-1!*!0!*!*!*!* and timestamp 20160606132034 and revision id 11017
+ -->
+</div></body></html>

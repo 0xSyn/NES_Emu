@@ -1,0 +1,65 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 246</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 246</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 246</strong> seems to be a singleton for the Taiwanese game <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Feng_Shen_Bang" title="wikia:c:bootleggames:Feng Shen Bang">封神榜 (<i>Feng Shen Bang - Zhu Lu Zhi Zhan</i>)</a>.
+</p><p>It provides 2 KiB of RAM from $6800-$6FFF.
+</p>
+<pre> Mask:   $FFE7
+ 
+ $6000-6003:  PRG Regs
+ $6004-6007:  CHR Regs
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+       $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+     +---------------+---------------+---------------+---------------+
+     |     $6004     |     $6005     |     $6006     |     $6007     |
+     +---------------+---------------+---------------+---------------+
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+       $8000   $A000   $C000   $E000  
+     +-------+-------+-------+-------+
+     | $6000 | $6001 | $6002 | $6003 |
+     +-------+-------+-------+-------+
+ 
+ 
+ Powerup/Reset:
+ ---------------------------
+ $6003 set to $FF on cold boot. (All other registers probably also, but not required)
+</pre>
+<p>The present hardware seems to be:
+</p>
+<ul><li> Four 74LS670 4 x 4bit dual-ported memory</li>
+<li> One GAL16V8</li>
+<li> PRG ROM (up to 2 MiB), CHR ROM (up to 512 KiB), PRG RAM (8 KiB)</li>
+<li> Miscellaneous resistors, diodes, and a battery to power the PRG RAM</li></ul>
+<p>There is additionally some weird behavior on reads from $FFE4-$FFFF:
+</p>
+<ul><li> PRG ROM access when A15..A5 AND A2 are all HIGH should instead occur from a bank where PRG A17 is high, i.e. ( [$6003] | $10 )</li></ul>
+<p>However, the existing dumps in GoodNES have been pre-patched to not require this.
+</p><p>See also:
+</p>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=13969" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=13969</a> Why does Fong Shen Bang only work in Famiclones?</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:719-1!*!*!*!*!*!* and timestamp 20160330135646 and revision id 12115
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 074</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 074</h1><div class="article">
+<p><b>iNES Mapper 074</b> is a <a href="MMC3.xhtml" title="MMC3">MMC3</a> clone used in Eastern games.
+It's identical to <a href="INES_Mapper_192.xhtml" title="INES Mapper 192">iNES Mapper 192</a> and used for the same reason, except that only pages 8 and 9 are RAM.
+If the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header is present, 74 and 192 should be emulated identically, as NES 2.0 specifies CHR RAM size elsewhere.
+</p><p>BizHawk supports this mapper as of r3973; FCEUX and FCEU-MM have supported them for a long time but definitely as of 26-nov-2012, although CRC checks for m192&lt;-&gt;m074 may be lacking.
+</p><p>Some games will be mis-headered as m074 but should really be m192 and will either need to be changed to the correct mapper, or changed to the correct amount of CHR RAM and handled by unified code.
+</p>
+<pre> Here are Disch's original notes:
+ ========================
+ =  Mapper 074          =
+ ========================
+ 
+ 
+ aka:
+ --------------------------
+ Pirate MMC3 variant
+ 
+ 
+ Example Games:
+ --------------------------
+ Di 4 Ci - Ji Qi Ren Dai Zhan
+ Ji Jia Zhan Shi
+ 
+ 
+ Notes:
+ --------------------------
+ This mapper is a modified MMC3 (or is based on MMC3?).
+ 
+ In addition to any CHR-ROM present, there is also an additional 2k of CHR-RAM which is selectable.  CHR pages
+ $08 and $09 select CHR-RAM, other pages select CHR-ROM
+ 
+ Apart from that, this mapper behaves exactly like your typical MMC3.  See mapper 004 for details.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:441-1!*!0!*!*!*!* and timestamp 20160208225142 and revision id 10788
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_MMC3_with_CHR_ROM_and_CHR_RAM.xhtml">MMC3 with CHR ROM and CHR RAM</a></p></div></body></html>

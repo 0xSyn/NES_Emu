@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NROM-368</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NROM-368</h1><div class="article">
+<p><b>NROM-368</b> is a name for an extension to all mappers incapable of banking PRG, such as <a href="NROM.xhtml" title="NROM">NROM</a>, <a href="CNROM.xhtml" title="CNROM">CNROM</a>, <a href="CPROM.xhtml" title="CPROM">CPROM</a>, <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">Sunsoft 1</a>, and <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">CHR-less</a>, allowing 46 KiB of linearly addressed ROM instead of 32 KiB.
+The name comes from the naming scheme for Nintendo's NROM boards, as 368 kilobits of PRG ROM are addressable.
+Its original intent was to provide more space for a game written in C, as cc65 tends not to be good at optimizing for space.
+</p>
+<h2><span class="mw-headline" id="Format">Format</span></h2>
+<p>The PRG ROM is 47104 bytes in size.
+Due to constraints of the <a href="INES.xhtml" title="INES">iNES</a> format, it is padded at the beginning with 2048 bytes of ignored data so that it is an even multiple of 16384 bytes; the rest is loaded in order into $4800-$7FFF, $8000-$BFFF, and $C000-$FFFF.
+</p><p>So an <a href="INES.xhtml" title="INES">iNES</a> or <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> image would look like this:
+</p>
+<ol><li> 16 bytes: Header. PRG ROM size must be 3. Trainer and battery are forbidden; NES 2.0 PRG RAM size must be 0.</li>
+<li> 2048 bytes: Ignored.</li>
+<li> 47104 bytes: PRG ROM mapped to $4800-$FFFF.</li>
+<li> 8192×<i>n</i> bytes: CHR ROM mapped to PPU $0000-$1FFF.</li></ol>
+<p>The <a href="UNIF.xhtml" title="UNIF">UNIF</a> encapsulation should ignore all padding and just have <tt>PRG0</tt> be exactly 47104 bytes.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>Just as the addition of PRG RAM and bus conflict avoidance to these mappers takes <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">one chip to decode</a>, the addition of $4800-$7FFF also takes one chip that uses PRG /CE, M2, and A14-A11 to construct an enable signal for the PRG ROM.
+This is a <a href="7485.xhtml" title="7485">74HC85</a> comparator.
+</p>
+<dl><dd><i>TO DO: Once the circuit is tested on a real PCB, details of how to wire up the '85 will be given here.</i></dd></dl>
+<p>A14 through A0 go to the PRG ROM as is, and PRG /CE goes to A15.
+When burning the EPROM, you have to rearrange the 16 KiB segments of the PRG ROM into the order 1, 2, 0, 0, as PRG /CE is inverted compared to A15.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8921" rel="nofollow">BBS topic</a>, including <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=94322#p94322" rel="nofollow">wiring instructions</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:776-1!*!0!!*!*!* and timestamp 20160221150319 and revision id 11961
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

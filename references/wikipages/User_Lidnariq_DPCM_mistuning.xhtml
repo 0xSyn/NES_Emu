@@ -1,0 +1,574 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/DPCM mistuning</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/DPCM mistuning</h1><div class="article">
+<p>How to read the tables:
+</p><p>Pick the table for your system. Find the rate (written to $4010) on the top or side. Numbers inside are measured in cents of detuning relative to the other rate. Red and blue indicate rates that will sound noticeably flat or sharp, using a <a class="extiw" href="http://en.wikipedia.org/wiki/Just-noticeable_difference" title="wikipedia:Just-noticeable difference">Just-noticeable difference</a> of 6 cents. Numbers in green specify the number of other rates that are in tune with the one selected.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> kHz </th>
+<th> 33.14 </th>
+<th> 24.86 </th>
+<th> 21.31 </th>
+<th> 16.88 </th>
+<th> 13.98 </th>
+<th> 12.60 </th>
+<th> 11.19 </th>
+<th> 9.42 </th>
+<th> 8.36 </th>
+<th> 7.92 </th>
+<th> 7.05 </th>
+<th> 6.26 </th>
+<th> 5.59 </th>
+<th> 5.26 </th>
+<th> 4.71 </th>
+<th> 4.18
+</th></tr>
+<tr>
+<th> period </th>
+<th> 54 </th>
+<th>  72 </th>
+<th>  84 </th>
+<th> 106 </th>
+<th> 128 </th>
+<th> 142 </th>
+<th> 160 </th>
+<th> 190 </th>
+<th> 214 </th>
+<th> 226 </th>
+<th> 254 </th>
+<th> 286 </th>
+<th> 320 </th>
+<th> 340 </th>
+<th> 380 </th>
+<th> 428
+</th></tr>
+<tr>
+<th> NTSC </th>
+<th> $F </th>
+<th> $E </th>
+<th> $D </th>
+<th> $C </th>
+<th> $B </th>
+<th> $A </th>
+<th> $9 </th>
+<th> $8 </th>
+<th> $7 </th>
+<th> $6 </th>
+<th> $5 </th>
+<th> $4 </th>
+<th> $3 </th>
+<th> $2 </th>
+<th> $1 </th>
+<th> $0
+</th></tr>
+<tr>
+<td> <b>$0</b> </td>
+<td style="background:#CCF;">16.1 </td>
+<td style="background:#CCF;">14.1 </td>
+<td style="background:#FCC;">-19.0 </td>
+<td style="background:#FCC;">-16.3 </td>
+<td style="background:#CCF;">10.2 </td>
+<td style="background:#FCC;">-10.1 </td>
+<td> -3.4 </td>
+<td> -5.9 </td>
+<td> 0.0 </td>
+<td> -5.5 </td>
+<td> -3.3 </td>
+<td> 2.1 </td>
+<td> -3.4 </td>
+<td> 1.5 </td>
+<td> -5.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$1</b> </td>
+<td style="background:#CCF;">22.0 </td>
+<td style="background:#CCF;">20.1 </td>
+<td style="background:#FCC;">-13.0 </td>
+<td style="background:#FCC;">-10.3 </td>
+<td style="background:#CCF;">16.2 </td>
+<td> -4.1 </td>
+<td> 2.5 </td>
+<td> 0.0 </td>
+<td> 5.9 </td>
+<td> 0.4 </td>
+<td> 2.6 </td>
+<td style="background:#CCF;">8.0 </td>
+<td> 2.5 </td>
+<td style="background:#CCF;">7.4 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">8
+</td></tr>
+<tr>
+<td> <b>$2</b> </td>
+<td style="background:#CCF;">14.6 </td>
+<td style="background:#CCF;">12.6 </td>
+<td style="background:#FCC;">-20.5 </td>
+<td style="background:#FCC;">-17.8 </td>
+<td style="background:#CCF;">8.7 </td>
+<td style="background:#FCC;">-11.6 </td>
+<td> -5.0 </td>
+<td style="background:#FCC;">-7.4 </td>
+<td> -1.5 </td>
+<td style="background:#FCC;">-7.1 </td>
+<td> -4.8 </td>
+<td> 0.6 </td>
+<td> -5.0 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">6
+</td></tr>
+<tr>
+<td> <b>$3</b> </td>
+<td style="background:#CCF;">19.6 </td>
+<td style="background:#CCF;">17.6 </td>
+<td style="background:#FCC;">-15.5 </td>
+<td style="background:#FCC;">-12.8 </td>
+<td style="background:#CCF;">13.7 </td>
+<td style="background:#FCC;">-6.6 </td>
+<td> 0.0 </td>
+<td> -2.5 </td>
+<td> 3.4 </td>
+<td> -2.1 </td>
+<td> 0.1 </td>
+<td> 5.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$4</b> </td>
+<td style="background:#CCF;">14.0 </td>
+<td style="background:#CCF;">12.1 </td>
+<td style="background:#FCC;">-21.1 </td>
+<td style="background:#FCC;">-18.3 </td>
+<td style="background:#CCF;">8.2 </td>
+<td style="background:#FCC;">-12.1 </td>
+<td> -5.5 </td>
+<td style="background:#FCC;">-8.0 </td>
+<td> -2.1 </td>
+<td style="background:#FCC;">-7.6 </td>
+<td> -5.4 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">6
+</td></tr>
+<tr>
+<td> <b>$5</b> </td>
+<td style="background:#CCF;">19.4 </td>
+<td style="background:#CCF;">17.5 </td>
+<td style="background:#FCC;">-15.6 </td>
+<td style="background:#FCC;">-12.9 </td>
+<td style="background:#CCF;">13.6 </td>
+<td style="background:#FCC;">-6.7 </td>
+<td> -0.1 </td>
+<td> -2.6 </td>
+<td> 3.3 </td>
+<td> -2.2 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$6</b> </td>
+<td style="background:#CCF;">21.7 </td>
+<td style="background:#CCF;">19.7 </td>
+<td style="background:#FCC;">-13.4 </td>
+<td style="background:#FCC;">-10.7 </td>
+<td style="background:#CCF;">15.8 </td>
+<td> -4.5 </td>
+<td> 2.1 </td>
+<td> -0.4 </td>
+<td> 5.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">8
+</td></tr>
+<tr>
+<td> <b>$7</b> </td>
+<td style="background:#CCF;">16.1 </td>
+<td style="background:#CCF;">14.1 </td>
+<td style="background:#FCC;">-19.0 </td>
+<td style="background:#FCC;">-16.3 </td>
+<td style="background:#CCF;">10.2 </td>
+<td style="background:#FCC;">-10.1 </td>
+<td> -3.4 </td>
+<td> -5.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$8</b> </td>
+<td style="background:#CCF;">22.0 </td>
+<td style="background:#CCF;">20.1 </td>
+<td style="background:#FCC;">-13.0 </td>
+<td style="background:#FCC;">-10.3 </td>
+<td style="background:#CCF;">16.2 </td>
+<td> -4.1 </td>
+<td> 2.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">8
+</td></tr>
+<tr>
+<td> <b>$9</b> </td>
+<td style="background:#CCF;">19.6 </td>
+<td style="background:#CCF;">17.6 </td>
+<td style="background:#FCC;">-15.5 </td>
+<td style="background:#FCC;">-12.8 </td>
+<td style="background:#CCF;">13.7 </td>
+<td style="background:#FCC;">-6.6 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$A</b> </td>
+<td style="background:#CCF;">26.2 </td>
+<td style="background:#CCF;">24.2 </td>
+<td style="background:#FCC;">-8.9 </td>
+<td style="background:#FCC;">-6.2 </td>
+<td style="background:#CCF;">20.3 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">3
+</td></tr>
+<tr>
+<td> <b>$B</b> </td>
+<td> 5.9 </td>
+<td> 3.9 </td>
+<td style="background:#FCC;">-29.2 </td>
+<td style="background:#FCC;">-26.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">2
+</td></tr>
+<tr>
+<td> <b>$C</b> </td>
+<td style="background:#CCF;">32.4 </td>
+<td style="background:#CCF;">30.4 </td>
+<td> -2.7 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">1
+</td></tr>
+<tr>
+<td> <b>$D</b> </td>
+<td style="background:#CCF;">35.1 </td>
+<td style="background:#CCF;">33.1 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">1
+</td></tr>
+<tr>
+<td> <b>$E</b> </td>
+<td> 2.0 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">2
+</td></tr>
+<tr>
+<td> <b>$F</b> </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">2
+</td></tr></table>
+<table class="wikitable">
+<tr>
+<th>kHz
+</th>
+<th>33.25 </th>
+<th> 25.19 </th>
+<th> 21.32 </th>
+<th> 16.97 </th>
+<th> 14.09 </th>
+<th> 12.60 </th>
+<th> 11.23 </th>
+<th> 9.45 </th>
+<th> 8.40 </th>
+<th> 7.92 </th>
+<th> 7.04 </th>
+<th> 6.02 </th>
+<th> 5.58 </th>
+<th> 5.26 </th>
+<th> 4.70 </th>
+<th> 4.18
+</th></tr>
+<tr>
+<th> period </th>
+<th> 50 </th>
+<th>  66 </th>
+<th>  78 </th>
+<th>  98 </th>
+<th> 118 </th>
+<th> 132 </th>
+<th> 148 </th>
+<th> 176 </th>
+<th> 198 </th>
+<th> 210 </th>
+<th> 236 </th>
+<th> 276 </th>
+<th> 298 </th>
+<th> 316 </th>
+<th> 354 </th>
+<th> 398
+</th></tr>
+<tr>
+<th> PAL </th>
+<th> $F </th>
+<th> $E </th>
+<th> $D </th>
+<th> $C </th>
+<th> $B </th>
+<th> $A </th>
+<th> $9 </th>
+<th> $8 </th>
+<th> $7 </th>
+<th> $6 </th>
+<th> $5 </th>
+<th> $4 </th>
+<th> $3 </th>
+<th> $2 </th>
+<th> $1 </th>
+<th> $0
+</th></tr>
+<tr>
+<td> <b>$0</b> </td>
+<td style="background:#CCF;">8.7 </td>
+<td style="background:#FCC;">-10.7 </td>
+<td style="background:#FCC;">-21.5 </td>
+<td style="background:#FCC;">-26.3 </td>
+<td> -4.8 </td>
+<td style="background:#FCC;">-10.7 </td>
+<td style="background:#FCC;">-12.6 </td>
+<td style="background:#FCC;">-12.6 </td>
+<td style="background:#FCC;">-8.7 </td>
+<td style="background:#FCC;">-6.9 </td>
+<td> -4.8 </td>
+<td style="background:#FCC;">-33.7 </td>
+<td> -0.9 </td>
+<td> 0.6 </td>
+<td> -2.8 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">5
+</td></tr>
+<tr>
+<td> <b>$1</b> </td>
+<td style="background:#CCF;">11.5 </td>
+<td style="background:#FCC;">-7.9 </td>
+<td style="background:#FCC;">-18.6 </td>
+<td style="background:#FCC;">-23.5 </td>
+<td> -2.0 </td>
+<td style="background:#FCC;">-7.9 </td>
+<td style="background:#FCC;">-9.8 </td>
+<td style="background:#FCC;">-9.8 </td>
+<td> -5.9 </td>
+<td> -4.0 </td>
+<td> -2.0 </td>
+<td style="background:#FCC;">-30.9 </td>
+<td> 1.9 </td>
+<td> 3.4 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">7
+</td></tr>
+<tr>
+<td> <b>$2</b> </td>
+<td style="background:#CCF;">8.1 </td>
+<td style="background:#FCC;">-11.3 </td>
+<td style="background:#FCC;">-22.1 </td>
+<td style="background:#FCC;">-26.9 </td>
+<td> -5.4 </td>
+<td style="background:#FCC;">-11.3 </td>
+<td style="background:#FCC;">-13.2 </td>
+<td style="background:#FCC;">-13.2 </td>
+<td style="background:#FCC;">-9.3 </td>
+<td style="background:#FCC;">-7.4 </td>
+<td> -5.4 </td>
+<td style="background:#FCC;">-34.3 </td>
+<td> -1.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">5
+</td></tr>
+<tr>
+<td> <b>$3</b> </td>
+<td style="background:#CCF;">9.6 </td>
+<td style="background:#FCC;">-9.7 </td>
+<td style="background:#FCC;">-20.5 </td>
+<td style="background:#FCC;">-25.4 </td>
+<td> -3.8 </td>
+<td style="background:#FCC;">-9.7 </td>
+<td style="background:#FCC;">-11.7 </td>
+<td style="background:#FCC;">-11.7 </td>
+<td style="background:#FCC;">-7.8 </td>
+<td> -5.9 </td>
+<td> -3.8 </td>
+<td style="background:#FCC;">-32.8 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">6
+</td></tr>
+<tr>
+<td> <b>$4</b> </td>
+<td style="background:#CCF;">42.4 </td>
+<td style="background:#CCF;">23.0 </td>
+<td style="background:#CCF;">12.3 </td>
+<td style="background:#CCF;">7.4 </td>
+<td style="background:#CCF;">28.9 </td>
+<td style="background:#CCF;">23.0 </td>
+<td style="background:#CCF;">21.1 </td>
+<td style="background:#CCF;">21.1 </td>
+<td style="background:#CCF;">25.0 </td>
+<td style="background:#CCF;">26.9 </td>
+<td style="background:#CCF;">28.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">0
+</td></tr>
+<tr>
+<td> <b>$5</b> </td>
+<td style="background:#CCF;">13.5 </td>
+<td> -5.9 </td>
+<td style="background:#FCC;">-16.7 </td>
+<td style="background:#FCC;">-21.5 </td>
+<td> 0.0 </td>
+<td> -5.9 </td>
+<td style="background:#FCC;">-7.8 </td>
+<td style="background:#FCC;">-7.9 </td>
+<td> -3.9 </td>
+<td> -2.1 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$6</b> </td>
+<td style="background:#CCF;">15.5 </td>
+<td> -3.8 </td>
+<td style="background:#FCC;">-14.6 </td>
+<td style="background:#FCC;">-19.4 </td>
+<td> 2.1 </td>
+<td> -3.8 </td>
+<td> -5.8 </td>
+<td> -5.8 </td>
+<td> -1.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$7</b> </td>
+<td style="background:#CCF;">17.4 </td>
+<td> -2.0 </td>
+<td style="background:#FCC;">-12.7 </td>
+<td style="background:#FCC;">-17.6 </td>
+<td> 3.9 </td>
+<td> -2.0 </td>
+<td> -3.9 </td>
+<td> -3.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">8
+</td></tr>
+<tr>
+<td> <b>$8</b> </td>
+<td style="background:#CCF;">21.3 </td>
+<td> 2.0 </td>
+<td style="background:#FCC;">-8.8 </td>
+<td style="background:#FCC;">-13.7 </td>
+<td style="background:#CCF;">7.9 </td>
+<td> 2.0 </td>
+<td> 0.0 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">5
+</td></tr>
+<tr>
+<td> <b>$9</b> </td>
+<td style="background:#CCF;">21.3 </td>
+<td> 1.9 </td>
+<td style="background:#FCC;">-8.9 </td>
+<td style="background:#FCC;">-13.7 </td>
+<td style="background:#CCF;">7.8 </td>
+<td> 1.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">5
+</td></tr>
+<tr>
+<td> <b>$A</b> </td>
+<td style="background:#CCF;">19.4 </td>
+<td> 0.0 </td>
+<td style="background:#FCC;">-10.8 </td>
+<td style="background:#FCC;">-15.6 </td>
+<td> 5.9 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">7
+</td></tr>
+<tr>
+<td> <b>$B</b> </td>
+<td style="background:#CCF;">13.5 </td>
+<td> -5.9 </td>
+<td style="background:#FCC;">-16.7 </td>
+<td style="background:#FCC;">-21.5 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">9
+</td></tr>
+<tr>
+<td> <b>$C</b> </td>
+<td style="background:#CCF;">35.0 </td>
+<td style="background:#CCF;">15.6 </td>
+<td> 4.8 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">1
+</td></tr>
+<tr>
+<td> <b>$D</b> </td>
+<td style="background:#CCF;">30.1 </td>
+<td style="background:#CCF;">10.8 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">1
+</td></tr>
+<tr>
+<td> <b>$E</b> </td>
+<td style="background:#CCF;">19.4 </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">7
+</td></tr>
+<tr>
+<td> <b>$F</b> </td>
+<td style="background:#CFC; border-top:solid black; border-left:solid black;">0
+</td></tr></table>
+<p><br/>
+</p><p>In a fictional alternate universe, where the DPCM period tables had been chosen to maximize in-tune choices, perhaps the periods would have instead been some subset of the following rates:
+</p>
+<table class="wikitable">
+<tr>
+<td> interval </td>
+<td> P1 </td>
+<td> m2 </td>
+<td> M2 </td>
+<td> m3 </td>
+<td> M3 </td>
+<td> P4 </td>
+<td> d5 </td>
+<td> P5 </td>
+<td> m6 </td>
+<td> M6 </td>
+<td> m7 </td>
+<td> M7
+</td></tr>
+<tr>
+<td rowspan="3"> period </td>
+<td> 48 </td>
+<td>  </td>
+<td> 54 </td>
+<td>  </td>
+<td>  </td>
+<td> 64 </td>
+<td> 68 </td>
+<td> 72 </td>
+<td> 76 </td>
+<td>  </td>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<td> 96 </td>
+<td> 102 </td>
+<td> 108 </td>
+<td> 114 </td>
+<td>  </td>
+<td> 128 </td>
+<td> 136 </td>
+<td> 144 </td>
+<td> 152 </td>
+<td> 162 </td>
+<td>  </td>
+<td>
+</td></tr>
+<tr>
+<td> 192 </td>
+<td> 204 </td>
+<td> 216 </td>
+<td> 228 </td>
+<td> 242 </td>
+<td> 256 </td>
+<td> 272 </td>
+<td> 288 </td>
+<td> 304 </td>
+<td> 322 </td>
+<td> 342 </td>
+<td> 362
+</td></tr></table>
+<p>All of these are within 6 cents of an exact number of semitones relative to period 48.
+</p><p>Better would be to have the user specify the actual divider, for numbers from 2 to 512. Numbers less than 50 may have a reason to be missing from the current table, so maybe some workaround (prohibition or offset) would be warranted. the IRQ and Loop flags would have to be moved for this behavior, though.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.107 seconds
+Real time usage: 0.108 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1225-1!*!*!*!*!*!* and timestamp 20160208230409 and revision id 9167
+ -->
+</div></body></html>

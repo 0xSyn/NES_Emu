@@ -1,0 +1,75 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 119</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 119</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 119</strong> is used to designate the <b>TQROM</b> board, which uses the <a class="mw-redirect" href="MMC3.xhtml" title="Nintendo MMC3">Nintendo MMC3</a> like other <a href="TxROM.xhtml" title="TxROM">TxROM</a> boards but uses the CHR bank number in such a way so as to allow both CHR ROM and CHR RAM to be used simultaneously.
+</p><p>Example games:
+</p>
+<ul><li> <i>High Speed</i></li>
+<li> <i>Pinbot</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Bank_data_.28.248001-.249FFF.2C_odd.29"><span class="tocnumber">1.1</span> <span class="toctext">Bank data ($8001-$9FFF, odd)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Hardware"><span class="tocnumber">2</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Variants"><span class="tocnumber">3</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Other than the CHR bank register described below, see <a href="MMC3.xhtml" title="MMC3">MMC3</a> for a full description.
+</p>
+<h3><span class="mw-headline" id="Bank_data_.28.248001-.249FFF.2C_odd.29">Bank data ($8001-$9FFF, odd)</span></h3>
+<p>Bit 6 of the CHR bank number is used to switch between the CHR ROM chip and the CHR RAM chip.
+</p>
+<pre>7  bit  0
+---- ----
+xCDD DDDD
+ ||| ||||
+ |++-++++- New bank value, based on last value written to Bank select register
+ |         0: Select 2 KB CHR bank at PPU $0000-$07FF (or $1000-$17FF);
+ |         1: Select 2 KB CHR bank at PPU $0800-$0FFF (or $1800-$1FFF);
+ |         2: Select 1 KB CHR bank at PPU $1000-$13FF (or $0000-$03FF);
+ |         3: Select 1 KB CHR bank at PPU $1400-$17FF (or $0400-$07FF);
+ |         4: Select 1 KB CHR bank at PPU $1800-$1BFF (or $0800-$0BFF);
+ |         5: Select 1 KB CHR bank at PPU $1C00-$1FFF (or $0C00-$0FFF);
+ |         6, 7: As standard MMC3
+ +-------- Chip select (for CHR banks)
+           0: Select CHR ROM; 1: Select CHR RAM
+</pre>
+<p>Nintendo <i>could</i> have used bit 7 instead of bit 6, allowing 128 KiB of CHR ROM instead of 64 KiB.
+However, using bit 7 would have precluded a hypothetical &quot;TQSROM&quot; board combining TQROM-style ROM/RAM mixing with <a href="TLSROM.xhtml" title="TLSROM">TLSROM</a>-style single-screen mirroring.
+<a href="Rare.xhtml" title="Rare">Rare</a> developed both games on this board, and also frequently used single-screen mirroring on the <a href="AxROM.xhtml" title="AxROM">AxROM</a> boards.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>A <a href="7432.xhtml" title="7432">74HC32</a> IC controls the CHR ROM's enable line. PPU A13 is ORed with CHR A16 in order to create a /CE signal for the CHR ROM. CHR A16 also directly connects the positive CE pin on the <a class="mw-redirect" href="6264_static_RAM.xhtml" title="6264">6264</a> SRAM used as CHR RAM.
+</p><p>For some totally unknown reason (board space?) official TQROM boards doesn't allow PRG ROMs greater than 128 KB. However, a third party board could expand this mapper up to 512 KB of PRG ROM, like any other MMC3 boards, and split a 128 KiB CHR ROM between banks 0-63 and banks 128-191.
+</p><p>Both TQROM games used an 8 KiB CHR RAM.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>iNES mappers <a href="INES_Mapper_074.xhtml" title="INES Mapper 074">74</a>, <a href="INES_Mapper_191.xhtml" title="INES Mapper 191">191</a>, <a href="INES_Mapper_192.xhtml" title="INES Mapper 192">192</a>, <a href="INES_Mapper_194.xhtml" title="INES Mapper 194">194</a>, and <a href="INES_Mapper_195.xhtml" title="INES Mapper 195">195</a> are similar to mapper 119 except they replace fewer CHR ROM banks with RAM.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://kevtris.org/mappers/mmc3/NES_TQROM.html" rel="nofollow">NES-TQROM</a> by Kevin Horton</li>
+<li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">Disch's Mapper Notes</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 21/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:221-1!*!0!!en!*!* and timestamp 20160208222813 and revision id 11300
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_MMC3_with_CHR_ROM_and_CHR_RAM.xhtml">MMC3 with CHR ROM and CHR RAM</a></p></div></body></html>

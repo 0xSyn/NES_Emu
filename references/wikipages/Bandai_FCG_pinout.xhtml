@@ -1,0 +1,48 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bandai FCG pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bandai FCG pinout</h1><div class="article">
+<p>Bandai FCG-1/LZ93D36 and FCG-2: 42-pin shrink PDIP (<a href="INES_Mapper_016.xhtml" title="INES Mapper 016">iNES Mapper 016</a>)
+</p>
+<pre>            .---\/---.
+       ? ?? |  1  42 | -- +5V
+      M2 -&gt; |  2  41 | ?? ?
+ CPU A13 -&gt; |  3  40 | -&gt; PRG A17
+ CPU A14 -&gt; |  4  39 | -&gt; PRG A15
+  CPU A3 -&gt; |  5  38 | -&gt; PRG A14
+  CPU A2 -&gt; |  6  37 | -&gt; PRG A16
+  CPU A1 -&gt; |  7  36 | &lt;- CPU D7
+  CPU A0 -&gt; |  8  35 | &lt;- CPU D6
+ /ROMSEL -&gt; |  9  34 | &lt;- CPU D5
+  CPU D0 -&gt; | 10  33 | &lt;- CPU D4
+  CPU D1 -&gt; | 11  32 | &lt;- CPU D3
+  CPU D2 -&gt; | 12  31 | -&gt; /IRQ
+     R/W -&gt; | 13  30 | -&gt; CIRAM A10
+ PPU /RD -&gt; | 14  29 | -&gt; CHR A17
+ CHR A15 &lt;- | 15  28 | -&gt; CHR A14
+ CHR A12 &lt;- | 16  27 | -&gt; CHR A13
+ PPU A10 -&gt; | 17  26 | -&gt; CHR A11
+ PPU A11 -&gt; | 18  25 | -&gt; CHR A16
+ PPU A12 -&gt; | 19  24 | -&gt; CHR A10
+ PPU A13 -&gt; | 20  23 | -&gt; CHR /CE
+     GND -- | 21  22 | &lt;- ?
+            '--------'
+</pre>
+<p>Pin 22 is grounded on at least one FCG-1 board and floating on at least one FCG-2.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.010 seconds
+Real time usage: 0.011 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1134-1!*!0!*!*!*!* and timestamp 20160208224759 and revision id 7163
+ -->
+</div></body></html>

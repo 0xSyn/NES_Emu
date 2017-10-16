@@ -1,0 +1,70 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Sweep</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Sweep</h1><div class="article">
+<p>An <a href="APU.xhtml" title="APU">NES APU</a> sweep unit can be made to periodically adjust a <a href="APU_Pulse.xhtml" title="APU Pulse">pulse channel's</a> period up or down.
+</p><p>Each sweep unit contains the following: <a class="mw-redirect" href="APU.xhtml" title="APU Misc">divider</a>, reload flag.
+</p>
+<table class="tabular">
+<tr>
+<td> <b>$4001</b> </td>
+<td> <tt>EPPP.NSSS</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 1</a></b> sweep setup (write)
+</td></tr>
+<tr>
+<td> <b>$4005</b> </td>
+<td> <tt>EPPP.NSSS</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 2</a></b> sweep setup (write)
+</td></tr>
+<tr>
+<td> bit 7 </td>
+<td> <tt>E--- ----</tt> </td>
+<td> Enabled flag
+</td></tr>
+<tr>
+<td> bits 6-4 </td>
+<td> <tt>-PPP ----</tt> </td>
+<td> The divider's period is set to P + 1
+</td></tr>
+<tr>
+<td> bit 3 </td>
+<td> <tt>---- N---</tt> </td>
+<td> Negate flag<br/>0: add to period, sweeping toward lower frequencies<br/>1: subtract from period, sweeping toward higher frequencies
+</td></tr>
+<tr>
+<td> bits 2-0 </td>
+<td> <tt>---- -SSS</tt> </td>
+<td> Shift count (number of bits)
+</td></tr>
+<tr>
+<td colspan="2"> Side effects </td>
+<td> Sets the reload flag
+</td></tr></table>
+<p><i>NOTE: The term &quot;target period&quot; used in the following description is equivalent to [shift-result + current period]. That is, it does not mean the result of the right-shift alone.</i>
+</p><p>When clocked by the <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame counter</a>, one of three things happen:
+</p>
+<ul><li> If the reload flag is set, the divider's counter is set to the period P. If the divider's counter was zero before the reload and the sweep is enabled, the pulse's period is also adjusted (if the target period is in range; see below). The reload flag is then cleared.</li>
+<li> If the reload flag is clear and the divider's counter is non-zero, it is decremented.</li>
+<li> If the reload flag is clear and the divider's counter is zero and the sweep is enabled, the counter is set to P and the pulse's period is adjusted (if the target period is in range; see below).</li></ul>
+<p>The channel's 11-bit <a href="APU_Pulse.xhtml" title="APU Pulse">raw timer period</a> is shifted right by the shift count (using a barrel shifter), then either added to or subtracted from the channel's raw period, yielding the target period. When the channel's <i>current</i> period is less than 8 or the target period is greater than $7FF, the channel is silenced (0 is sent to the <a href="APU_Mixer.xhtml" title="APU Mixer">mixer</a>) but the channel's current period remains unchanged. Otherwise, if the enable flag is set and the shift count is non-zero, when the divider outputs a clock, the channel's period is updated.
+</p><p>If the shift count is zero, the channel's period is never updated, but the channel will <i>still</i> be silenced if the sweep is in add mode and the target period (i.e., the current period added to itself) is greater than $7FF.
+</p><p>The adder computes the next target period immediately after the period is updated by $400x writes or by the frame counter. (Internally, the target period is <i>continuously</i> calculated by the adder.)
+A target period overflow from the sweep unit's adder can silence a channel <i>even when the enabled flag is clear</i> and even when the sweep divider is not outputting a clock signal. To fully disable a sweep unit, write $08 to turn on the negate flag so that the target period is not greater than the channel's period and therefore not greater than $7FF. (This behavior of silencing the channel even when the sweep unit is disabled is only relevant for adder overflow; the pulse channels are <i>always</i> silenced when the period is less than eight, regardless of whether a sweep period update or an explicit setting of the period was involved.)
+</p><p>For reasons unknown, pulse channel 1 hardwires its adder's carry input rather than using the state of the negate flag, resulting in the subtraction operation adding the <b>one's complement</b> instead of the expected two's complement (as pulse channel 2 does). As a result, a negative sweep on pulse channel 1 will subtract the shifted period value <b>minus 1</b>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.053 seconds
+Real time usage: 0.054 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:184-1!*!0!*!*!*!* and timestamp 20160822105740 and revision id 12806
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

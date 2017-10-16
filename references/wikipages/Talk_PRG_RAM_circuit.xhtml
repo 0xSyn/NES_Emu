@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:PRG RAM circuit</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:PRG RAM circuit</h1><div class="article">
+<h2><span class="mw-headline" id="Emulation">Emulation</span></h2>
+<p>Although I have not actually tried it, looking at the FCEUX source codes seems to not emulate PRG RAM in UNROM. There are some games that require it to be absent and some might require it present, this is a mess... you should fix FCEUX; if there are some games that require the absence of PRG RAM in some mappers, then for those mappers you could make it enable PRG RAM only if the battery bit is turned on, even if the game isn't actually using the battery; that seems the clearest way to do it without using NES 2.0. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 16:05, 25 June 2013 (MDT)
+</p>
+<dl><dd> No commercial UNROM game came with PRGRAM, so it is not reasonable to expect emulators to support it by default. Some games even rely on that area being open bus. Use NES2.0. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 17:52, 25 June 2013 (MDT)
+<dl><dd>Is it reasonable to expect emulators that <i>don't</i> support it by default to support NES 2.0? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 18:03, 25 June 2013 (MDT)
+<dl><dd>Well, it would be reasonable for it to either support NES 2.0 or to make it add 8K PRG RAM when the battery bit is set if $6000-$7FFF isn't already used by that mapper and the battery bit also isn't already used by that mapper; in such a case it would create a save file for the PRG RAM even if the game doesn't use it. Supporting NES 2.0 is probably better (therefore you can add 8K PRG RAM, or 4K battery and 8K non-battery, or vice-versa; the specification ought to be made for the &quot;generic&quot; purpose of the ROM and RAM amount headers if the mapper doesn't normally use them) but not all emulators do. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 18:49, 25 June 2013 (MDT)</dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1108-1!*!0!*!*!*!* and timestamp 20160208224401 and revision id 6839
+ -->
+</div></body></html>

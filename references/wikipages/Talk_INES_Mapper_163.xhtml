@@ -1,0 +1,29 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 163</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 163</h1><div class="article">
+<h2><span class="mw-headline" id="VRAM_Scanline_switching">VRAM Scanline switching</span></h2>
+<p>Despite its annoying pirate features, this mapper is on the whole rather simple.  A complex scanline counter seems unlikely.  The games I've seen all use this feature only for a static title screen, which got me to thinking:  What if it isn't scanline based at all?  I implemented the following setup in Bizhawk and it appeared to work for all of the games that I could try with no graphical glitching:
+</p><p><b>Whenever PPU A13 transitions from 0 to 1, latch the current value of PPU A9.  When the 'c' bit is on, use that latched value instead of PPU A12 as the input to CHR RAM A12.</b>
+</p><p>(Note that Bizhawk implements an accurate PPU fetch pattern, including all dummy fetches).  This method is reminiscent of Mapper 096 and can be implemented with discrete hardware or with a very small number of gates in a ASIC or CPLD.   <a href="User_Natt.xhtml" title="User:Natt">Natt</a> (<s>talk</s>) 10:10, 27 January 2014 (MST)
+</p>
+<dl><dd> Looks plausible... If there are any differences, they'll pop up if any games ever set the Y scroll to something non-zero. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 11:34, 27 January 2014 (MST)</dd>
+<dd> That said, a PPUA12-clocked 13-bit counter isn't that complicated either. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 15:06, 27 January 2014 (MST)</dd></dl>
+<dl><dd><dl><dd>If anyone has such cartridge, then see if you are able to put a program to set Y scroll to nonzero to see if there is a difference which you describe. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 13:47, 27 January 2014 (MST)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1312-1!*!0!*!*!*!* and timestamp 20160208224150 and revision id 8179
+ -->
+</div></body></html>

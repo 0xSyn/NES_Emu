@@ -1,0 +1,69 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sprite overflow games</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sprite overflow games</h1><div class="article">
+<p>The following is a list of games which rely on putting more than 8 sprites on a scanline.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Use_of_sprite_overflow_flag"><span class="tocnumber">1</span> <span class="toctext">Use of sprite overflow flag</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Commercial"><span class="tocnumber">1.1</span> <span class="toctext">Commercial</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Homebrew"><span class="tocnumber">1.2</span> <span class="toctext">Homebrew</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Use_of_excess_sprites_for_masking_effects"><span class="tocnumber">2</span> <span class="toctext">Use of excess sprites for masking effects</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Commercial_2"><span class="tocnumber">2.1</span> <span class="toctext">Commercial</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Misc"><span class="tocnumber">3</span> <span class="toctext">Misc</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Commercial_3"><span class="tocnumber">3.1</span> <span class="toctext">Commercial</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Use_of_sprite_overflow_flag">Use of sprite overflow flag</span></h2>
+<p>The sprite overflow flag is rarely used, mainly due to bugs when exactly 8 sprites are present on a scanline. No games rely on the buggy behavior. See <a href="PPU_sprite_evaluation.xhtml#Sprite_overflow_bug" title="PPU sprite evaluation">sprite overflow bug</a> for more details.
+</p><p>Nonetheless, games can intentionally place 9 or more sprites in a scanline to trigger the overflow flag consistently, as long as no previous scanlines have exactly 8 sprites.
+</p>
+<h3><span class="mw-headline" id="Commercial">Commercial</span></h3>
+<ul><li> <i>Bee 52</i>: At the title screen, the game splits the screen with sprite overflow (at scanline 165), then splits the screen with a sprite 0 hit (at scanline 207). If sprite overflow is not emulated, the game will crash at a solid blue-purple screen.</li></ul>
+<h3><span class="mw-headline" id="Homebrew">Homebrew</span></h3>
+<ul><li> blargg's <a class="external text" href="https://github.com/christopherpow/nes-test-roms/tree/master/sprite_overflow_tests" rel="nofollow">sprite overflow test ROMs</a>: tests behavior of sprite overflow, including the buggy behavior.</li></ul>
+<h2><span class="mw-headline" id="Use_of_excess_sprites_for_masking_effects">Use of excess sprites for masking effects</span></h2>
+<p>Some games intentionally place multiple blank sprites early in the <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> at the same Y position so that other sprites on those scanlines are hidden.
+</p>
+<h3><span class="mw-headline" id="Commercial_2">Commercial</span></h3>
+<ul><li> <i>Castlevania II: Simon's Quest</i> (a.k.a. <i>Dracula 2</i>): when Simon enters a swamp, the lower half of his body should be &quot;hidden&quot;.</li>
+<li> <i>Felix the Cat</i>: when entering or exiting a bag.</li>
+<li> <i>Gimmick!</i>: when entering a level.  Also used to keep extra sprites out of the status bar.</li>
+<li> <i>Gremlins 2 - The New Batch</i>: uses multiple blank sprites to mask rows during cutscenes.</li>
+<li> <i>Majou Densetsu II: Daimashikyou Galious</i>: when entering a doorway, Popolon's body should gradually disappear (to imitate walking down stairs); <a class="external text" href="https://www.youtube.com/watch?v=9XHXYhb_gDo" rel="nofollow">Youtube video</a> demonstrating the effect.</li>
+<li> <i>Ninja Gaiden</i>: some cutscenes (more details needed).</li>
+<li> <i>The Legend of Zelda</i> (a.k.a. <i>Zelda 1</i>, <i>Zeruda no Densetsu</i>): when entering doorways on the top or bottom of dungeon screens.</li></ul>
+<h2><span class="mw-headline" id="Misc">Misc</span></h2>
+<h3><span class="mw-headline" id="Commercial_3">Commercial</span></h3>
+<ul><li> <i>Solstice</i>: during the intro cutscene, there are stray sprites on the screen beyond the 8 per scanline, but the NES won't display the excess sprites.  This is not a masking effect, it is merely the hardware covering up a mistake that wasn't caught by the original programmers.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=136304#p136304" rel="nofollow">BBS topic</a> (with screenshots of <i>Castlevania II: Simon's Quest</i>)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.027 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1418-1!*!0!!en!*!* and timestamp 20160208225840 and revision id 11748
+ -->
+</div></body></html>

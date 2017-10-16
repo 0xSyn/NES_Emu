@@ -1,0 +1,58 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:NROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:NROM</h1><div class="article">
+<h2><span class="mw-headline" id="FamicomHDL">FamicomHDL</span></h2>
+<p>I have made some of FamicomHDL already and I think the following code seems to work for implementing NROM-128 with vertical mirroring:
+</p>
+<pre>import Language.FamicomHDL;
+import Language.FamicomHDL.Cartridge;
+import Language.FamicomHDL.Memory;
+nrom :: Mapper ();
+nrom = do {
+  prgrom &lt;- makeROM 0;
+  chrrom &lt;- makeROM 16384;
+  connects $ zip cpuAddress (take 14 $ addressPins prgrom);
+  connects $ zip cpuData (dataPins prgrom);
+  connects $ zip ppuAddress (take 13 $ addressPins chrrom);
+  connects $ zip ppuData (dataPins chrrom);
+  connect romSelect (chipEnablePin prgrom);
+  connect ppuA13inv ciramEnable;
+  connect ciramA10 (ppuAddress !! 10);
+  connect (chipEnablePin chrrom) (ppuAddress !! 13);
+};
+</pre>
+<p>Perhaps commands should be added for some of these things make shortcut. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 22:38, 28 October 2012 (MDT)
+</p>
+<h2><span class="mw-headline" id="CIC_Diodes.3F">CIC Diodes?</span></h2>
+<p>Some NES-NROM boards have slots for diodes too. —<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 01:40, 5 May 2014 (MDT)
+</p>
+<dl><dd> I can't think of a context in which diodes could be useful on an NROM board... do you have a photo somewhere (e.g. NesCartDB) ? —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 03:20, 5 May 2014 (MDT)
+<dl><dd> I also can't think of where they could be useful (not that they are useful on CNROM either...) but <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=21" rel="nofollow">NES-NROM-xxx-02</a> and NES-NROM-xxx-03 boards have slots for 2 diodes next to the CIC. I don't have any game using one of those boards so I can't check where they connect, but you can see the slot clearly on the NesCartDB.—<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 04:03, 5 May 2014 (MDT)
+<dl><dd> Those diodes were intended to go from the CIC /RST and CIC CLK lines to vcc, providing overvoltage protection for the key CIC. But I have no idea under which situation that would have been useful.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:35, 5 May 2014 (MDT)</dd></dl></dd></dl></dd></dl>
+<p>Oh thank you ! I don't know why but I thought about the CNROM diodes when I saw them (since they're close to the CHR ROM as well). My bad, thank you very much for clarifying this.<s>128.178.195.59</s> 13:25, 5 May 2014 (MDT)
+</p>
+<h2><span class="mw-headline" id="Suggested_reforms_for_this_page">Suggested reforms for this page</span></h2>
+<p>There is some thing I would belive would change positively. The page is about simultaneously mapper #0 and NROM, the former being wider than the later. Since I don't know if anyone else agree I won't change anything myself (since I bet 99% that any changes will be reverted immediately and everyone disagreeing), so this is just suggestions:
+</p><p>- Mapper #0 is defined as any board that lacks a mapper and bankswitching capability
+</p><p>- It is written explicitly that NROM is just one board that implements &quot;no mapper&quot;, but other boards (RROM, Family basic, 3rd party boards, etc, etc....) also implement the same functionality
+</p><p>- It is written explicitly in the intro that there is no registers, and the &quot;registers&quot; paragraph is deleted. There is no need for that explanation of &quot;poor man's CNROM&quot;, because it is non-technical, and anyone reading info about the very basic of PPU's way of working and $2000 register already knowns that. Do not assume the reader is a baby.
+</p><p>- PRG RAM capability should be left open for anything 8k or less. There is nothing preventing you to implement NROM with 8k PRG RAM while still following iNES mapper #0 specifications. More than 8k is possible but it would not follow iNES mapper #0 anymore and would be a sparate &quot;mapper&quot; (despite being no mapper, oh the irony). I don't know how to word that correctly. In all cases, I believe that NROM + 8k PRG RAM is a valid configuration, as well as less PRG RAM and not relying on mirroring.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 07:59, 27 May 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:940-1!*!0!!*!*!* and timestamp 20160208224313 and revision id 10981
+ -->
+</div></body></html>

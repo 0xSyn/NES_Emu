@@ -1,0 +1,124 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU addressing modes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU addressing modes</h1><div class="article">
+<p>The NES CPU is a second-source version of MOS Technology 6502, manufactured by Ricoh.
+Addressing modes and instruction timings are the same as those in the standard 6502.
+</p><p>This page summarizes the 6502 addressing modes and explains some cases where certain modes might be useful.
+</p>
+<h2><span class="mw-headline" id="Indexed_addressing">Indexed addressing</span></h2>
+<p>Indexed addressing modes use the X or Y register to help determine the address.
+The 6502 has six main indexed addressing modes:
+</p>
+<table border="1">
+<tr>
+<th> Abbr </th>
+<th> Name </th>
+<th> Formula </th>
+<th> Cycles
+</th></tr>
+<tr>
+<td> d,x </td>
+<td> Zero page indexed </td>
+<td> val = PEEK((arg + X) % 256) </td>
+<td> 4
+</td></tr>
+<tr>
+<td> d,y </td>
+<td> Zero page indexed </td>
+<td> val = PEEK((arg + Y) % 256) </td>
+<td> 4
+</td></tr>
+<tr>
+<td> a,x </td>
+<td> Absolute indexed </td>
+<td> val = PEEK(arg + X) </td>
+<td> 4+
+</td></tr>
+<tr>
+<td> a,y </td>
+<td> Absolute indexed </td>
+<td> val = PEEK(arg + Y) </td>
+<td> 4+
+</td></tr>
+<tr>
+<td> (d,x) </td>
+<td> Indexed indirect </td>
+<td> val = PEEK(PEEK((arg + X) % 256) + PEEK((arg + X + 1) % 256) * 256) </td>
+<td> 6
+</td></tr>
+<tr>
+<td> (d),y </td>
+<td> Indirect indexed </td>
+<td> val = PEEK(PEEK(arg) + PEEK((arg + 1) % 256) * 256 + Y) </td>
+<td> 5+
+</td></tr></table>
+<p>Notes:
+</p>
+<ul><li>Abbreviations for addressing modes are those used in WDC's 65C816 data sheets.</li>
+<li>+ means add a cycle for write instructions or for page wrapping on read instructions, called the &quot;oops&quot; cycle below.</li></ul>
+<p>The 6502 has one 8-bit ALU and one 16-bit upcounter (for PC). To calculate a,x or a,y addressing in an instruction other than sta, stx, or sty, it uses the 8-bit ALU to first calculate the low byte while it fetches the high byte. If there's a carry out, it goes &quot;oops&quot;, applies the carry using the ALU, and repeats the read at the correct address. Store instructions always have this &quot;oops&quot; cycle: the CPU first reads from the partially added address and then writes to the correct address. The same thing happens on (d),y indirect addressing.
+</p><p>The (d),y mode is used far more often than (d,x).
+The latter implies a table of addresses on zero page.
+On computers like the Apple II, where the BASIC interpreter uses up most of zero page, (d,x) is rarely used.
+But the NES has far more spare room in zero page, and music engine might use X = 0, 4, 8, or 12 to match <a href="APU.xhtml" title="APU">APU</a> register offsets.
+</p>
+<h2><span class="mw-headline" id="Other_addressing">Other addressing</span></h2>
+<table border="1">
+<tr>
+<th> Abbr </th>
+<th> Name </th>
+<th> Notes
+</th></tr>
+<tr>
+<td>     </td>
+<td> Implicit </td>
+<td> Instructions like <i>RTS</i> or <i>CLC</i> have no address operand, the destination of results are implied.
+</td></tr>
+<tr>
+<td> A </td>
+<td> Accumulator </td>
+<td> Many instructions can operate on the accumulator, e.g. <i>LSR A</i>. Some assemblers will treat no operand as an implicit <i>A</i> where applicable.
+</td></tr>
+<tr>
+<td> #v </td>
+<td> Immediate </td>
+<td> Uses the 8-bit operand itself as the value for the operation, rather than fetching a value from a memory address.
+</td></tr>
+<tr>
+<td> d </td>
+<td> Zero page </td>
+<td> Fetches the value from an 8-bit address on the zero page.
+</td></tr>
+<tr>
+<td> a </td>
+<td> Absolute </td>
+<td> Fetches the value from a 16-bit address anywhere in memory.
+</td></tr>
+<tr>
+<td> label </td>
+<td> Relative </td>
+<td> Branch instructions (e.g. <i>BEQ</i>, <i>BCS</i>) have a relative addressing mode that specifies an 8-bit signed offset relative to the current PC.
+</td></tr>
+<tr>
+<td> (a)</td>
+<td> Indirect </td>
+<td> The <i>JMP</i> instruction has a special indirect addressing mode that can jump to the address stored in a 16-bit pointer anywhere in memory.
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.023 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:408-1!*!0!!*!*!* and timestamp 20160210202433 and revision id 11943
+ -->
+</div></body></html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 012</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 012</h1><div class="article">
+<p>This mapper is an <a href="MMC3.xhtml" title="MMC3">MMC3</a> variant with a simple twist. Writing to $4020-5FFF will set an additional bit for each half of CHR to allow an extra 256K of ROM to be addressed. For example, the mapped page for the left half would be %Lxxxxxxxx where %xxxxxxxx is the result of the typical MMC3 logic.
+</p><p>Otherwise all operations appear to be typical for MMC3A.
+</p><p>Maybe the only game that uses this mapper is <i>Dragon Ball Z 5</i>. It depends on this mapper operating as MMC3A variant. Choosing otherwise will result in the game hanging at boot-up as it gets stuck in an infinite loop with the IRQ reload set to 0 and continually getting re-triggered.
+</p>
+<pre> Registers:
+ ---------------------------
+ 
+ Range:   $4020-5FFF
+ 
+ $4020:  [...R ...L]
+   L = 256K CHR block for left (low) half of CHR (&lt;$1000)
+   R = 256K CHR block for right (high) half of CHR (&gt;=$1000)
+</pre>
+<p>Note: FCEUX instead uses the range $4100-$5FFF. DBZ5 itself seems to always write to $4132.
+</p><p>If the CHR ROM is 256K or smaller, CHR A18 isn't connected to anything, and thus this behaves as an ordinary MMC3A.
+</p><p>Mapper 12 is also used for FFE disk images. See <a href="INES_Mapper_006.xhtml" title="INES Mapper 006">Mapper 6</a> for some additional details. (FIXME: does the FFE usage comply with the above info, or is there a conflict between different mapper 12 definitions?)
+</p><p>See also: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=160268#p160268" rel="nofollow">Forum thread about adding parts to an MMC3A board to make this mapper</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:751-1!*!0!*!*!*!* and timestamp 20160208225007 and revision id 11885
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

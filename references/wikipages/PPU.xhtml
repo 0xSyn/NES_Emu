@@ -1,0 +1,62 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU</h1><div class="article">
+<p>The NES PPU, or Picture Processing Unit, generates a composite video signal with 240 lines of pixels, designed to be received by a television. When the Famicom chipset was designed in the early 1980s, it was considered quite an advanced 2D picture generator for video games. 
+</p><p>It has its own address space, which typically contains 10 kilobytes of memory: 8 kilobytes of ROM or RAM on the Game Pak (possibly more with one of the common <a href="Mapper.xhtml" title="Mapper">mappers</a>) to store the shapes of background and sprite tiles, plus 2 kilobytes of RAM in the console to store a map or two. Two separate, smaller address spaces hold a palette, which controls which colors are associated to various indices, and OAM (Object Attribute Memory), which stores the position, orientation, shape, and color of the sprites, or independent moving objects. These are internal to the PPU itself, and while the palette is made of static memory, OAM uses dynamic memory (which will slowly decay if the PPU is not rendering data).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Programmer.27s_reference_.28printer_friendly.29"><span class="tocnumber">1</span> <span class="toctext">Programmer's reference (printer friendly)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Hardware_behaviors"><span class="tocnumber">2</span> <span class="toctext">Hardware behaviors</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#See_also"><span class="tocnumber">4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Programmer.27s_reference_.28printer_friendly.29">Programmer's reference (<a href="PPU_programmer_reference.xhtml" title="PPU programmer reference">printer friendly</a>)</span></h3>
+<ul><li> <a href="PPU_registers.xhtml" title="PPU registers">Registers</a></li>
+<li> <a href="PPU_pattern_tables.xhtml" title="PPU pattern tables">Pattern tables</a> (tile graphics for background and sprites)</li>
+<li> Background graphics
+<ul><li> <a href="PPU_nametables.xhtml" title="PPU nametables">Nametables</a></li>
+<li> <a href="PPU_attribute_tables.xhtml" title="PPU attribute tables">Attribute tables</a></li></ul></li>
+<li> <a href="PPU_OAM.xhtml" title="PPU OAM">OAM</a> (sprites)</li>
+<li> <a href="PPU_palettes.xhtml" title="PPU palettes">Palettes</a></li>
+<li> <a href="PPU_memory_map.xhtml" title="PPU memory map">Memory map</a></li></ul>
+<h3><span class="mw-headline" id="Hardware_behaviors">Hardware behaviors</span></h3>
+<ul><li> <a href="PPU_frame_timing.xhtml" title="PPU frame timing">Frame timing</a></li>
+<li> <a href="PPU_power_up_state.xhtml" title="PPU power up state">Power up state</a></li>
+<li> <a href="NMI.xhtml" title="NMI">NMI</a></li>
+<li> <a href="Clock_rate.xhtml" title="Clock rate">Clock rate</a> and other NTSC/PAL differences</li>
+<li> <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a></li>
+<li> <a href="PPU_scrolling.xhtml" title="PPU scrolling">Scrolling</a></li>
+<li> <a href="PPU_rendering.xhtml" title="PPU rendering">Rendering</a></li>
+<li> <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">Sprite evaluation</a></li>
+<li> <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">Sprite priority</a></li>
+<li> <a href="Overscan.xhtml" title="Overscan">Overscan</a></li>
+<li> <a href="PPU_pin_out_and_signal_description.xhtml" title="PPU pin out and signal description">PPU pinout and signals</a></li>
+<li> <a href="File_Ntsc_timing_png.xhtml" title="File:Ntsc timing.png">NTSC PPU frame timing diagram</a></li>
+<li> <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a>: A hardware-level PPU simulator</li></ul>
+<h3><span class="mw-headline" id="Notes">Notes</span></h3>
+<ul><li> The <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> signal is made up of 262 scanlines, and 20 of those are spent in vblank state. After the program has received an NMI, it has about 2270 cycles to update the palette, sprites, and nametables as necessary before rendering begins.</li>
+<li> On NTSC systems, the PPU divides the master clock by 4 while the CPU uses the master clock divided by 12. Since both clocks are fed off the same master clock, this means that there are <b>exactly</b> three PPU ticks per CPU cycle, with no drifting over time (though the clock alignment might vary depending on when you press the Reset button).</li>
+<li> On PAL systems, the PPU divides the master clock by 5 while the CPU uses the master clock divided by 16. As a result, there are exactly 3.2 PPU ticks per CPU cycle.</li></ul>
+<h3><span class="mw-headline" id="See_also">See also</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/2C02%20technical%20reference.TXT" rel="nofollow">2C02 technical reference</a> by Brad Taylor. (Pretty old at this point; information on the wiki might be more up-to-date.)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.046 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:9-1!*!0!!en!*!* and timestamp 20160208222606 and revision id 9874
+ -->
+</div></body></html>

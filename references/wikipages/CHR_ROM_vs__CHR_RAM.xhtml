@@ -1,0 +1,151 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CHR ROM vs. CHR RAM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CHR ROM vs. CHR RAM</h1><div class="article">
+<p>An NES cartridge has at least two memory chips on it: PRG (connected to the <a href="CPU.xhtml" title="CPU">CPU</a>) and CHR (connected to the <a href="PPU.xhtml" title="PPU">PPU</a>).
+There is always at least one PRG ROM, and there may be an additional PRG RAM to hold data.
+Some cartridges have a CHR ROM, which holds a fixed set of graphics tile data available to the PPU from the moment it <a href="PPU_power_up_state.xhtml" title="PPU power up state">turns on</a>.
+Other cartridges have a CHR RAM that holds data that the CPU has copied from PRG ROM through a port on the PPU.
+(<a href="MMC3_with_CHR_ROM_and_CHR_RAM.xhtml" title="MMC3 with CHR ROM and CHR RAM">A few</a> have both CHR ROM and CHR RAM.)
+</p><p>The PPU can see only 8 KiB of tile data at once.
+So once your game has more than that much tile data, you'll need to use a <a href="Mapper.xhtml" title="Mapper">mapper</a> to load more data into the PPU.
+Some mappers bankswitch the CHR ROM so that the PPU can see different &quot;pages&quot;.
+Other mappers are designed for CHR RAM; they let the CPU switch to a PRG ROM bank containing CHR data and copy it to CHR RAM.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#CHR_ROM"><span class="tocnumber">1</span> <span class="toctext">CHR ROM</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Advantages"><span class="tocnumber">1.1</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Applications"><span class="tocnumber">1.2</span> <span class="toctext">Applications</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#CHR_RAM"><span class="tocnumber">2</span> <span class="toctext">CHR RAM</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Advantages_2"><span class="tocnumber">2.1</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Applications_2"><span class="tocnumber">2.2</span> <span class="toctext">Applications</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Effects_possible_with_both_types"><span class="tocnumber">3</span> <span class="toctext">Effects possible with both types</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Switching_to_CHR_RAM"><span class="tocnumber">4</span> <span class="toctext">Switching to CHR RAM</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="CHR_ROM">CHR ROM</span></h2>
+<h3><span class="mw-headline" id="Advantages">Advantages</span></h3>
+<ul><li> Takes less time and code for a beginner to get at least something displayed. The &quot;hello world&quot; program for a CHR ROM mapper is about 16 lines shorter.</li>
+<li> Switching tiles is fast, needs no vblank time, and can be done mid-frame or even mid-scanline.</li>
+<li> Can be used together with <a href="MMC3.xhtml" title="MMC3">MMC3</a> and PRG RAM on a donor cartridge. Only <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=TNROM&amp;kwtype=pcb" rel="nofollow">six games</a> have a board with MMC3 + PRG RAM + CHR RAM, and all are Japan-exclusive. Only <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif=NES-TGROM" rel="nofollow">three NES games use TGROM</a> (MMC3 + CHR RAM) and <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif=NES-TQROM" rel="nofollow">two NES games use TQROM</a> (MMC3 + CHR RAM + CHR ROM) even without PRG RAM. However, this should become less of a consideration as MMC3-compatible cartridges with all new parts hit the market.</li></ul>
+<h3><span class="mw-headline" id="Applications">Applications</span></h3>
+<dl><dt>Big static screens</dt>
+<dd> Smash TV's title screen alone uses more than 8 KB of tile data.</dd></dl>
+<dl><dt>Dedicated bank for status bar</dt>
+<dd> A horizontal status bar might use a separate set of tiles from the playfield. This needs either a mapper with a raster interrupt or a sprite 0 overlap trigger. (e.g. Super Mario Bros. 3)</dd></dl>
+<dl><dt>Artifact blanking</dt>
+<dd> A game that scrolls in all four directions will often have artifacts on one side of the screen because the NES doesn't have enough VRAM to keep the &quot;seam&quot; where new map data is loaded clean. To hide this, a game such as Jurassic Park might display tiles from a blank pattern table for the first or last 8 to 16 scanlines.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=38049#p38049" rel="nofollow">[1]</a></dd></dl>
+<dl><dt>Pseudo texture mapping</dt>
+<dd> In some pseudo-3D games, each row of the floor texture can be stored in a separate bank. Both CHR ROM and CHR RAM let the program switch the background between CHR banks in $0000 and $1000 using <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>,<a class="external autonumber" href="http://jonathan.microclub.ch/NES_raster/index.html" rel="nofollow">[2]</a> but CHR ROM allows far more than two banks to be used, as seen in a forward-scrolling shooter called Cosmic Epsilon.</dd></dl>
+<dl><dt>Workaround for PRG/CHR divide</dt>
+<dd> A drawback of using CHR ROM is that the split between PRG ROM and CHR ROM fragments your data, but it can be worked around. If your PRG ROM is slightly bigger than a power of two, but you have a bit of spare CHR ROM left, you can stash the data in CHR ROM and read it out through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a>/<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a>. For instance, <i>Super Mario Bros.</i> keeps its title screen map data at the end of CHR ROM and copies it into RAM to draw it. However, you can't read this data while rendering is turned on, and due to the <a href="APU_DMC.xhtml#Likely_internal_implementation_of_the_read" title="APU DMC">DMA glitch</a>, reading <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> while playing sampled sound is unreliable.</dd></dl>
+<h2><span class="mw-headline" id="CHR_RAM">CHR RAM</span></h2>
+<h3><span class="mw-headline" id="Advantages_2">Advantages</span></h3>
+<ul><li> Can switch tiles in small increments, and the granularity of switching does not depend on the mapper's complexity.</li>
+<li> Tile data can be <a href="Tile_compression.xhtml" title="Tile compression">compressed in ROM</a>.</li>
+<li> Tile data can be otherwise generated in real time.</li>
+<li> Only one chip to rewire and put on the board when replicating your work on cartridge.</li>
+<li> All data is stored in one address space, as opposed to a small amount being inaccessible when rendering is on and unreliable when DPCM is on.</li></ul>
+<h3><span class="mw-headline" id="Applications_2">Applications</span></h3>
+<dl><dt>Compositing</dt>
+<dd>Sometimes you need to draw piles of things that aren't aligned to an 8x8 pixel grid, and there are more of them than will fit into the limit of 8 sprites per scanline. <i>Hatris</i>, <i>Shanghai II</i>, <i>Blockout</i>, and its clone <i>3D Block</i> have a large playfield containing large stacks of such objects. <i>Cocoron</i> creates the player character's animation frames by piecing together several customizable body parts.</dd>
+<dt>Text flexibility</dt>
+<dd>A font is a set of glyphs, or pictures that represent the characters of a script. Compositing these glyphs with CHR RAM allows drawing text in a proportional font (also called a variable-width font, or VWF). Not a lot of NES games used a VWF, but something like <i>Word Munchers</i> or <i>Fraction Munchers</i> might benefit. The Super NES version of <i>Mario Is Missing</i> uses a VWF, as do a lot of Super NES RPGs, the <a href="Action_53.xhtml" title="Action 53">Action 53</a> menu, and text boxes in <i><a href="RHDE.xhtml" title="RHDE">RHDE</a></i>. It's also the most practical way to display characters in connected scripts such as Arabic or heavily accented scripts such as Vietnamese.</dd>
+<dt>Compression</dt>
+<dd><a href="Tile_compression.xhtml" title="Tile compression">Compression</a> refers to transforming a block of data to reduce its size in bits, so that another transformation on the compressed data can recover the original data. This is fairly common with tile data in games that use CHR RAM. The graphics in Konami games (<i>Blades of Steel</i>, the US version of <i>Contra</i>, and the Japanese version of <i>Simon's Quest</i>) and Codemasters games (such as <i>Bee 52</i>) are compressed using a run-length encoding scheme: Konami's codec <a class="external text" href="http://thefox.aspekt.fi/graveduck.py" rel="nofollow">works on bytes</a>, while Codemasters' <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=48658#p48658" rel="nofollow">works on pixels</a>. If your game has a lot of tile data, especially if it's just a shade over the power of two boundary between one <a href="ROM.xhtml" title="ROM">ROM</a> size and the next larger power of 2, consider compression.</dd>
+<dt>Drawing</dt>
+<dd> A few games allow the user to edit tiles. These include paint programs such as <i>Videomation</i> and <i>Color a Dinosaur</i>, or moddable titles such as the Japan-only shooter maker <i>Dezaemon</i> (whose stock sprites were reused in <i>Recca</i>).</dd>
+<dt>Vector graphics</dt>
+<dd> <i>Qix</i> has horizontal lines, vertical lines, and filled areas that aren't aligned to a tile grid. Graphics in <i>Elite</i> are wireframe 3D.</dd>
+<dt>Juxtaposition</dt>
+<dd>Some CHR ROM games restrict which objects can be seen together because of what bank their CHR data is stored in. CHR RAM has no such problem because any object's tile data can be loaded at any position. This proves useful in a game like <i>Final Fantasy</i>, where any player characters can meet any monsters, or in a game like <i>Dizzy</i> or <i>RHDE</i> or <i>Animal Crossing</i>, where the player can have any of several dozen items in his inventory. The extreme of this is <i>Battletoads</i>, which keeps only one frame of each player's animation loaded. To switch frames of animation, it copies them into CHR RAM. But then it has to turn off rendering at the top of the screen, creating a blank strip in the status bar, in order to fit the copy into blanking time. Whether you are using 8x8 or 8x16 pixel sprites, there is enough space in $1000-$1FFF to hold the current and next cel for all 64 sprites. This effect is used even more intensely in platforms with dual-ported VRAM (TurboGrafx-16, Game Boy Advance) and in platforms which have hardware-assisted memory copying to video ports other than OAM (Genesis, Super NES, Game Boy Color, Game Boy Advance). And it's <i>required</i> if you want to display text in a language whose script has more than 250 or so glyphs, such as the logographic characters in some Chinese games and the Japanese versions of <i>Faxanadu</i> and <i>Bionic Commando</i>.</dd>
+<dt>One chip</dt>
+<dd>CHR RAM means you don't need to program a separate flash chip to act as the CHR ROM.</dd>
+<dt>Battery RAM</dt>
+<dd>NES 2.0 supports CHR battery RAM. If not all of the memory is used for tiles, you can store save game data in there, which means you don't have to install CHR ROM or PRG RAM on the cartridge. (However not many mappers officially support this; as far as I know not many emulators do either.)</dd></dl>
+<h2><span class="mw-headline" id="Effects_possible_with_both_types">Effects possible with both types</span></h2>
+<p>Tile animation. Think of the animated <b>?</b> blocks, coins, and conveyor belts in Super Mario Bros. 3 or the animated grass and quicksand in Super Mario Bros. 2, spinning fans or cogs in some games, or the independent parallax scrolling of distant repeating tile patterns in Batman: Return of the Joker, Crisis Force, and Metal Storm.
+</p><p>With CHR ROM, you'd make a separate bank for each frame of animation that you want to display, or for each offset between the distant pattern's scroll position and the foreground pattern's scroll position. It works best on a mapper with CHR banks smaller than 4 KB, such as MMC3.
+</p><p>With CHR RAM, you'd copy the tiles into VRAM as needed.
+Assuming moderately unrolled VRAM loading code, the NTSC vblank is long enough to copy about 160 bytes per frame plus the <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> display list without turning rendering on late.
+This is enough for 10 tiles alone, or 8 tiles plus a nametable row, nametable column, or entire palette.
+</p><p>In cases where player 1 and player 2 can select a character, and each character has his own frames of animation, the game needs to use either CHR RAM or a CHR ROM mapper with 1 KiB sprite banks so that both player 1's animation and player 2's animation can be loaded at once. According to an article in <i>Nintendo Power</i>, character selection in Pro Wrestling was the driving force behind the invention of UNROM.
+</p><p>Technically, juxtaposition isn't impossible with CHR ROM mappers, but almost no mappers support assigning a separate tile bank for each space in a nametable.
+<a href="MMC5.xhtml" title="MMC5">MMC5</a> has an &quot;ExGrafix&quot; mode that allows this, regardless of page boundaries within the CHR ROM, as long as the game doesn't scroll vertically or uses the effect only in the playfield or only in the status bar. (<a href="MMC4.xhtml" title="MMC4">MMC4</a> also supports automatically switching CHR ROM banks, although in a much more limited way than MMC5.)
+Thus only MMC5 can properly handle Chinese characters without needing each message to be rendered to a separate page.
+</p>
+<h2><span class="mw-headline" id="Switching_to_CHR_RAM">Switching to CHR RAM</span></h2>
+<p>It's straightforward to change an existing project using <a href="NROM.xhtml" title="NROM">NROM</a> to use CHR RAM.
+</p>
+<ol><li> Start with an NROM-256 project, and make sure at least 8300 bytes are free in the PRG ROM.  We want to make sure CHR RAM works before dealing with mapper bankswitch.</li>
+<li> Remove the CHR ROM data from your build process, whether it be <code>.incbin &quot;mytiles.chr&quot;</code> after the IRQ vector or <code>copy /b game.prg+mytiles.chr game.nes</code> after assembly and linking.</li>
+<li> In your program's <a href="INES.xhtml" title="INES">iNES</a> header, set the number of CHR banks to 0 (which signifies CHR RAM). (If you are using a <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header, also set the CHR RAM amount.)</li>
+<li> In your program's <a href="Init_code.xhtml" title="Init code">init code</a>, after the PPU has stabilized but before you turn on rendering, <code>jsr copy_mytiles_chr</code> which is listed below (or you can inline the code).</li>
+<li> Rebuild your project. The size should end up as 32,784 bytes (16 bytes of header and 32,768 bytes of PRG ROM).</li></ol>
+<pre>
+; for ca65
+PPUMASK = $2001
+PPUADDR = $2006
+PPUDATA = $2007
+
+.segment &quot;CODE&quot;
+.proc copy_mytiles_chr
+src = 0
+  lda #&lt;mytiles_chr  ; load the source address into a pointer in zero page
+  sta src
+  lda #&gt;mytiles_chr
+  sta src+1
+
+  ldy #0       ; starting index into the first page
+  sty PPUMASK  ; turn off rendering just in case
+  sty PPUADDR  ; load the destination address into the PPU
+  sty PPUADDR
+  ldx #32      ; number of 256-byte pages to copy
+loop:
+  lda (src),y  ; copy one byte
+  sta PPUDATA
+  iny
+  bne loop  ; repeat until we finish the page
+  inc src+1  ; go to the next page
+  dex
+  bne loop  ; repeat until we've copied enough pages
+  rts
+.endproc
+
+.segment &quot;RODATA&quot;
+mytiles_chr: .incbin &quot;mytiles.chr&quot;
+</pre>
+<p>The original NROM-256 board is designed to take a <a href="Mask_ROM_pinout.xhtml" title="Mask ROM pinout">mask ROM or a JEDEC-pinout EPROM</a> in the CHR ROM position, not a <a class="mw-redirect" href="6264_static_RAM.xhtml" title="6264">6264</a> SRAM.
+Because the board needs to be rewired slightly for CHR RAM, a few emulators do not emulate <a class="mw-redirect" href="NROM.xhtml" title="INES Mapper 000">iNES Mapper 000</a> (NROM) with CHR RAM.
+For these, you'll need to use <a href="INES_Mapper_034.xhtml" title="INES Mapper 034">iNES Mapper 034</a> (BNROM), which has CHR RAM and 32 KiB bank switching.
+</p><p>The next step after this is to switch to a mapper that allows switching PRG banks.
+See <a href="Programming_UNROM.xhtml" title="Programming UNROM">Programming UNROM</a> and <a href="Programming_MMC1.xhtml" title="Programming MMC1">Programming MMC1</a>.
+</p>
+<h2><span class="mw-headline" id="Notes">Notes</span></h2>
+<ul><li> Based on forum posts: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=42576#p42576" rel="nofollow">42576</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=61957#p61957" rel="nofollow">61957</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.091 seconds
+Real time usage: 0.094 seconds
+Preprocessor visited node count: 44/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:189-1!*!0!!en!*!* and timestamp 20160410004841 and revision id 10509
+ -->
+</div></body></html>

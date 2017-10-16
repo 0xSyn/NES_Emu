@@ -1,0 +1,3143 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Fixed cycle delay</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Fixed cycle delay</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Delay_code"><span class="tocnumber">1</span> <span class="toctext">Delay code</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Explanations_on_the_requirements"><span class="tocnumber">1.1</span> <span class="toctext">Explanations on the requirements</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Instructions.2C_addressing_modes.2C_byte_counts.2C_cycle_counts_and_notes"><span class="tocnumber">1.2</span> <span class="toctext">Instructions, addressing modes, byte counts, cycle counts and notes</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#2_cycles"><span class="tocnumber">1.3</span> <span class="toctext">2 cycles</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#3_cycles"><span class="tocnumber">1.4</span> <span class="toctext">3 cycles</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#4_cycles"><span class="tocnumber">1.5</span> <span class="toctext">4 cycles</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#5_cycles"><span class="tocnumber">1.6</span> <span class="toctext">5 cycles</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#6_cycles"><span class="tocnumber">1.7</span> <span class="toctext">6 cycles</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#7_cycles"><span class="tocnumber">1.8</span> <span class="toctext">7 cycles</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#8_cycles"><span class="tocnumber">1.9</span> <span class="toctext">8 cycles</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#9_cycles"><span class="tocnumber">1.10</span> <span class="toctext">9 cycles</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#10_cycles"><span class="tocnumber">1.11</span> <span class="toctext">10 cycles</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#11_cycles"><span class="tocnumber">1.12</span> <span class="toctext">11 cycles</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#12_cycles"><span class="tocnumber">1.13</span> <span class="toctext">12 cycles</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#13_cycles"><span class="tocnumber">1.14</span> <span class="toctext">13 cycles</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#14_cycles"><span class="tocnumber">1.15</span> <span class="toctext">14 cycles</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#15_cycles"><span class="tocnumber">1.16</span> <span class="toctext">15 cycles</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#16_cycles"><span class="tocnumber">1.17</span> <span class="toctext">16 cycles</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#17_cycles"><span class="tocnumber">1.18</span> <span class="toctext">17 cycles</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#18_cycles"><span class="tocnumber">1.19</span> <span class="toctext">18 cycles</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#19_cycles"><span class="tocnumber">1.20</span> <span class="toctext">19 cycles</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#20_cycles"><span class="tocnumber">1.21</span> <span class="toctext">20 cycles</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#21_cycles"><span class="tocnumber">1.22</span> <span class="toctext">21 cycles</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#22_cycles"><span class="tocnumber">1.23</span> <span class="toctext">22 cycles</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#23_cycles"><span class="tocnumber">1.24</span> <span class="toctext">23 cycles</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#24_cycles"><span class="tocnumber">1.25</span> <span class="toctext">24 cycles</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#25_cycles"><span class="tocnumber">1.26</span> <span class="toctext">25 cycles</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#26_cycles"><span class="tocnumber">1.27</span> <span class="toctext">26 cycles</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#27_cycles"><span class="tocnumber">1.28</span> <span class="toctext">27 cycles</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#28_cycles"><span class="tocnumber">1.29</span> <span class="toctext">28 cycles</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#29_cycles"><span class="tocnumber">1.30</span> <span class="toctext">29 cycles</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#30_cycles"><span class="tocnumber">1.31</span> <span class="toctext">30 cycles</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#31_cycles"><span class="tocnumber">1.32</span> <span class="toctext">31 cycles</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#32_cycles"><span class="tocnumber">1.33</span> <span class="toctext">32 cycles</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#33_cycles"><span class="tocnumber">1.34</span> <span class="toctext">33 cycles</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#34_cycles"><span class="tocnumber">1.35</span> <span class="toctext">34 cycles</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#35_cycles"><span class="tocnumber">1.36</span> <span class="toctext">35 cycles</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#36_cycles"><span class="tocnumber">1.37</span> <span class="toctext">36 cycles</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#37_cycles"><span class="tocnumber">1.38</span> <span class="toctext">37 cycles</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#38_cycles"><span class="tocnumber">1.39</span> <span class="toctext">38 cycles</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#39_cycles"><span class="tocnumber">1.40</span> <span class="toctext">39 cycles</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#40_cycles"><span class="tocnumber">1.41</span> <span class="toctext">40 cycles</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#41_cycles"><span class="tocnumber">1.42</span> <span class="toctext">41 cycles</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#42_cycles"><span class="tocnumber">1.43</span> <span class="toctext">42 cycles</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#43_cycles"><span class="tocnumber">1.44</span> <span class="toctext">43 cycles</span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="#44_cycles"><span class="tocnumber">1.45</span> <span class="toctext">44 cycles</span></a></li>
+<li class="toclevel-2 tocsection-47"><a href="#45_cycles"><span class="tocnumber">1.46</span> <span class="toctext">45 cycles</span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#46_cycles"><span class="tocnumber">1.47</span> <span class="toctext">46 cycles</span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#47_cycles"><span class="tocnumber">1.48</span> <span class="toctext">47 cycles</span></a></li>
+<li class="toclevel-2 tocsection-50"><a href="#48_cycles"><span class="tocnumber">1.49</span> <span class="toctext">48 cycles</span></a></li>
+<li class="toclevel-2 tocsection-51"><a href="#49_cycles"><span class="tocnumber">1.50</span> <span class="toctext">49 cycles</span></a></li>
+<li class="toclevel-2 tocsection-52"><a href="#50_cycles"><span class="tocnumber">1.51</span> <span class="toctext">50 cycles</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-53"><a href="#Sanity_checks"><span class="tocnumber">2</span> <span class="toctext">Sanity checks</span></a></li>
+<li class="toclevel-1 tocsection-54"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Delay_code">Delay code</span></h2>
+<p>Shortest possible CPU code that creates N cycles of delay, depending on constraints.
+</p><p>All code samples are written for CA65.
+</p><p>Assumptions:
+</p>
+<ul><li> No page wrap occurs during any branch instruction. If a page wrap occurs, it adds +1 cycle for each loop, completely thwarting the accurate delay.</li>
+<li> No interrupt / NMI occurs during the delay code.</li></ul>
+<p>It is permissible for DMA to steal cycles during the loops.
+If you are expecting that to happen, you have to manually
+adjust the delay cycle count (and it is in fact possible to do so)
+in order to get the correct delay.
+</p>
+<h3><span class="mw-headline" id="Explanations_on_the_requirements">Explanations on the requirements</span></h3>
+<ul><li> @rts12 means you know a memory address that contains byte $60 (<code>RTS</code>).</li></ul>
+<p>cycle instruction that fits your constraints (such as <code>LDA $00</code>), followed by <code>RTS</code>.
+</p>
+<h3><span class="mw-headline" id="Instructions.2C_addressing_modes.2C_byte_counts.2C_cycle_counts_and_notes">Instructions, addressing modes, byte counts, cycle counts and notes</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th scope="col"> Addressing mode
+</th>
+<th scope="col"> Instruction type
+</th>
+<th scope="col"> Bytes
+</th>
+<th scope="col"> Cycle count
+</th>
+<th scope="col"> Example instruction
+</th>
+<th scope="col"> Notes
+</th></tr>
+<tr>
+<th scope="row"> Implied
+</th>
+<th scope="row"> Inter-register
+</th>
+<td> 1 </td>
+<td> 2 </td>
+<td> <code>TAX</code> </td>
+<td> <code>NOP</code> has no side effects. Flag-manipulations like <code>CLC</code>, and <code>SEC</code><code>CLV</code> are used when their effects are desired.
+</td></tr>
+<tr>
+<th scope="row"> Implied
+</th>
+<th scope="row"> Stack push
+</th>
+<td> 1 </td>
+<td> 3 </td>
+<td> <code>PHA</code> </td>
+<td> <code>PHP</code> is only paired with <code>PLP</code>.
+</td></tr>
+<tr>
+<th scope="row"> Implied
+</th>
+<th scope="row"> Stack pop
+</th>
+<td> 1 </td>
+<td> 4 </td>
+<td> <code>PLA</code> </td>
+<td>
+</td></tr>
+<tr>
+<th scope="row"> Implied
+</th>
+<th scope="row"> Return
+</th>
+<td> 1 </td>
+<td> 6 </td>
+<td> <code>RTS</code> </td>
+<td> Used indirectly when paired with <code>JSR</code>. Similarly for <code>RTI</code>.
+</td></tr>
+<tr>
+<th scope="row"> Immediate
+</th>
+<th scope="row">
+</th>
+<td> 2 </td>
+<td> 2 </td>
+<td> <code>CMP #$C5</code> </td>
+<td> Includes instructions like <code>LDA</code>, <code>LDX</code> and <code>LDY</code>. Other ALU instructions are used in more complex situations.
+</td></tr>
+<tr>
+<th scope="row"> Relative
+</th>
+<th scope="row"> Branch
+</th>
+<td> 2 </td>
+<td> 2—4 </td>
+<td> <code>BCC *+2</code> </td>
+<td> Branch takes 3 cycles when taken, 2 otherwise. A page crossing adds +1 cycle when branch is taken, but because of difficulties setting that up, we don't use it.
+</td></tr>
+<tr>
+<th scope="row"> Zeropage
+</th>
+<th scope="row"> Read, write
+</th>
+<td> 2 </td>
+<td> 3 </td>
+<td> <code>LDA $A5</code>
+</td></tr>
+<tr>
+<th scope="row"> Zeropage
+</th>
+<th scope="row"> RMW
+</th>
+<td> 2 </td>
+<td> 5 </td>
+<td> <code>INC @zptemp</code> </td>
+<td> Writing to zeropage is only permitted when @zptemp is available. Technically we could save @zptemp into register and restore at end, but it is bytewise inferior to other techniques.
+</td></tr>
+<tr>
+<th scope="row"> Zeropage indexed
+</th>
+<th scope="row"> Read, write
+</th>
+<td> 2 </td>
+<td> 4 </td>
+<td> <code>LDA $EA,X</code> </td>
+<td> Inferior to 2 × <code>NOP</code>, but useful for hiding additional code to be executed in a loop.
+</td></tr>
+<tr>
+<th scope="row"> Zeropage indexed
+</th>
+<th scope="row"> RMW
+</th>
+<td> 2 </td>
+<td> 6 </td>
+<td> <code>INC @zptemp,X</code> </td>
+<td> Only doable when X is known to be 0, or when entire zeropage can be clobbered.
+</td></tr>
+<tr>
+<th scope="row"> Indexed indirect
+</th>
+<th scope="row"> Read, write
+</th>
+<td> 2 </td>
+<td> 6 </td>
+<td> <code>STA (@ptrtemp,X)</code> </td>
+<td> Only doable when X is known to be 0.
+</td></tr>
+<tr>
+<th scope="row"> Indexed indirect
+</th>
+<th scope="row"> RMW
+</th>
+<td> 2 </td>
+<td> 8 </td>
+<td> <code>SLO (@ptrtemp,X)</code> </td>
+<td> The most cost-effective instruction. Only doable when X is known to be 0, lest we write to a random address. All instructions in this category are unofficial.
+</td></tr>
+<tr>
+<th scope="row"> Indirect indexed
+</th>
+<th scope="row"> Read
+</th>
+<td> 2 </td>
+<td> 5—6 </td>
+<td> <code>LDA (@ptrtemp),Y</code> </td>
+<td> Never used by this code.
+</td></tr>
+<tr>
+<th scope="row"> Indirect indexed
+</th>
+<th scope="row"> Write
+</th>
+<td> 2 </td>
+<td> 6         </td>
+<td> <code>STA (@ptrtemp),Y</code> </td>
+<td> Only doable when Y is known to be 0.
+</td></tr>
+<tr>
+<th scope="row"> Indirect indexed
+</th>
+<th scope="row"> RMW
+</th>
+<td> 2 </td>
+<td> 8         </td>
+<td> <code>SLO (@ptrtemp),Y</code> </td>
+<td> All instructions in this category are unofficial.
+</td></tr>
+<tr>
+<th scope="row"> Absolute
+</th>
+<th scope="row"> Jump
+</th>
+<td> 3 </td>
+<td> 3 </td>
+<td> <code>JMP *+3</code> </td>
+<td>
+</td></tr>
+<tr>
+<th scope="row"> Absolute
+</th>
+<th scope="row"> Read, write
+</th>
+<td> 3 </td>
+<td> 4 </td>
+<td> <code>LDA $2808</code> </td>
+<td> Inferior to 2 × <code>NOP</code>, but can be used carefully to hide additional code to be executed in a loop.
+</td></tr>
+<tr>
+<th scope="row"> Absolute
+</th>
+<th scope="row"> RMW
+</th>
+<td> 3 </td>
+<td> 6 </td>
+<td> <code>INC $4018</code> </td>
+<td> Inferior to 3 × <code>NOP</code>.
+</td></tr>
+<tr>
+<th scope="row"> Absolute indexed
+</th>
+<th scope="row"> Read
+</th>
+<td> 3 </td>
+<td> 4—5 </td>
+<td> <code>LDA $0200,X</code> </td>
+<td> Inferior to shorter alternatives.
+</td></tr>
+<tr>
+<th scope="row"> Absolute indexed
+</th>
+<th scope="row"> Write
+</th>
+<td> 3 </td>
+<td> 5 </td>
+<td> <code>STA $0200,X</code> </td>
+<td> Inferior to shorter alternatives.
+</td></tr>
+<tr>
+<th scope="row"> Absolute indexed
+</th>
+<th scope="row"> RMW
+</th>
+<td> 3 </td>
+<td> 7 </td>
+<td> <code>INC $4018,X</code> </td>
+<td> Only doable when writing into the given address is harmless considering the possible values of X.
+</td></tr>
+<tr>
+<th scope="row"> Absolute indirect
+</th>
+<th scope="row"> Jump
+</th>
+<td> 3 </td>
+<td> 5 </td>
+<td> <code>JMP (@ptrtemp)</code> </td>
+<td> Inferior to shorter alternatives.
+</td></tr></table>
+<p><br/>
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="2_cycles">2 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">1 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> All instructions cost at least 2 cycles. There is no way to do 1 cycle of delay (though <i>−1 cycles</i> may sometimes appear in branch cost calculations).</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="3_cycles">3 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">2 bytes
+</th></tr>
+<tr>
+<td><pre>C5 C5    CMP $C5</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>24 24    BIT $24</pre></td>
+<td>Clobbers Z&amp;N, and V
+</td></tr>
+<tr>
+<td><pre>A5 A5    LDA $A5</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A4 A4    LDY $A4</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">3 bytes
+</th></tr>
+<tr>
+<td><pre>4C xx xx JMP *+3</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> Not relocatable means that the target address is hardcoded into the code. In ROM hacking, it sometimes makes sense to move code blobs around, and a hardcoded address makes it difficult to relocate the code. This restriction does not apply to branches, which use relative addressing. It is also assumed to not apply to <code>JSR</code> instructions, as chances are the JSR target is outside the code being relocated.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="4_cycles">4 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">2 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> zp-indexed modes such as <code>LDA $00,X</code> also do 4 cycles, but having side effects, these two-byte instructions are inferior to a simple 2 × <code>NOP</code>.</li>
+<li> There is also an unofficial opcode <code>NOP $00,X</code> (34 00), but there is no reason to use this instruction when the official equivalent has the same performance.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="5_cycles">5 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">3 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+90 00    BCC *+2</pre></td>
+<td>Clobbers C
+</td></tr>
+<tr>
+<td><pre>B8       CLV
+50 00    BVC *+2</pre></td>
+<td>Clobbers V
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A5 A5    LDA $A5</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A6 A6    LDX $A6</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A4 A4    LDY $A4</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+4C xx xx JMP *+3</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> abs-indexed modes such as <code>LDA $1234,X</code> cause 4 or 5 cycles of delay, depending whether a page wrap occurred. Because you need extra setup code to make sure that a wrap does occur, you do not see this mode in these samples, outside situations where circumstances permit.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="6_cycles">6 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">3 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> zp-indexed RMW instructions such as <code>INC @zptemp,X</code> do 6 cycles. Unless we know the value of X, it might write into any address between $00-$FF. This option is only useful if the entire range of $00-$FF is free for clobbering with random data, or if X has a known value.</li>
+<li> ix instructions like <code>LDA ($00,X)</code> do 6 cycles, but the value of X decides where a pointer is read from, and said pointer can point anywhere. We only do that when the value of X is known.</li>
+<li> iy instructions like <code>LDA ($00),Y</code> also do 5-6 cycles, but in addition to the note above, we cannot predict whether a wrap occurs or not. So we don't use this mode.</li>
+<li> Absolute RMW instructions like <code>INC $4018</code> do 6 cycles, but weighing 3 bytes with side-effects it would be inferior to 3 × <code>NOP</code>.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="7_cycles">7 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">2 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> <code>PHP-PLP</code> is very efficient for 7 cycles of delay, but it does modify stack contents. S register remains unchanged though.</li>
+<li> <code>PLA-PHA</code> does not overwrite any bytes in stack. It just writes back the same byte. But it does clobber A and Z+N. It is not interrupt-unsafe either: If an interrupt happens, the stack byte does get temporarily clobbered, but the value is still in A when the interrupt exits, and gets written back in stack.</li>
+<li> abs-indexed RMW instructions such as <code>INC abs,X</code> do 7 cycles. We only do this when either we know the value of X (for instance, <code>INC $4018,X</code> is safe when X is 0—7&lt;/code&gt;, or when the entire 256-byte page can be safely overwritten with random data.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="8_cycles">8 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 4</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> Unofficial ix and iy RMW instructions such as <code>SLO ($00,X)</code> or <code>SLO ($00),Y</code> would do 8 cycles for 2 bytes of code. We only do that if we know X or Y to be zero, and we have a known pointer to safely rewritable data.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="9_cycles">9 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">3 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> Jumping into the middle of another instruction and thereby reusing code is a very efficient way of reducing code size. Note that all code samples using branches on this page require that no page wrap occurs.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="10_cycles">10 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+C5 C5    CMP $C5
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> The <code>ROL-ROR</code> sequence preserves the original value of the memory address. Carry is also preserved.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="11_cycles">11 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="12_cycles">12 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">3 bytes
+</th></tr>
+<tr>
+<td><pre>20 xx xx JSR @rts12</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>36 36    ROL $36,X
+76 36    ROR $36,X</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+90 00    BCC *+2
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<ul><li> <code>JSR-RTS</code> causes 12 cycles of delay. But it does write a function return address in the stack, which may be unwanted in some applications. S is not modified.</li>
+<li> Again, <code>ROL-ROR</code> does not have side effects (as long as an interrupt does not happen in the middle), except for Z+N.</li></ul>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="13_cycles">13 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+08       PHP
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="14_cycles">14 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP       \ × 2
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="15_cycles">15 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+BA       TSX
+28       PLP
+9A       TXS
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>C5 C5    CMP $C5
+20 xx xx JSR @rts12</pre></td>
+<td>Clobbers Z&amp;N, and C; and requires @rts12
+</td></tr>
+<tr>
+<td><pre>24 24    BIT $24
+20 xx xx JSR @rts12</pre></td>
+<td>Clobbers Z&amp;N, and V; and requires @rts12
+</td></tr>
+<tr>
+<td><pre>A5 A5    LDA $A5
+20 xx xx JSR @rts12</pre></td>
+<td>Clobbers A, and Z&amp;N; and requires @rts12
+</td></tr>
+<tr>
+<td><pre>A4 A4    LDY $A4
+20 xx xx JSR @rts12</pre></td>
+<td>Clobbers Y, and Z&amp;N; and requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+28       PLP
+EA   ... NOP      × 4</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="16_cycles">16 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP       \ × 2
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="17_cycles">17 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A5 A5    LDA $A5
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="18_cycles">18 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP       \ × 2
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="19_cycles">19 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+28       PLP
+20 xx xx JSR @rts12</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+36 36    ROL $36,X
+76 36    ROR $36,X
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="20_cycles">20 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+08       PHP       \ × 2
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="21_cycles">21 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP       \ × 3
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="22_cycles">22 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 02    LDX #2
+EA       NOP
+CA       DEX
+10 FC    BPL *-2</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 03    LDY #3
+EA       NOP
+88       DEY
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+BA       TSX
+08       PHP
+28   ... PLP      × 2
+9A       TXS
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+C5 C5    CMP $C5
+28       PLP
+20 xx xx JSR @rts12</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP       \ × 2
+28       PLP       /
+EA   ... NOP      × 4</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="23_cycles">23 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>18   ... CLC      × 2
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP       \ × 3
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="24_cycles">24 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>20 xx xx JSR @rts12× 2</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A4 A4    LDY $A4
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+C5 C5    CMP $C5
+28       PLP       \ × 2
+08       PHP       /
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="25_cycles">25 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP       \ × 3
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="26_cycles">26 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+20 xx xx JSR @rts12× 2</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+36 36    ROL $36,X
+76 36    ROR $36,X
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="27_cycles">27 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A5 A5    LDA $A5
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>24 2C    BIT &lt;$2C ;hides 'BIT $FDA2'
+A2 FD    LDX #253
+E8       INX
+D0 FA    BNE *-4</pre></td>
+<td>Clobbers X, Z&amp;N, and V
+</td></tr>
+<tr>
+<td><pre>24 2C    BIT &lt;$2C ;hides 'BIT $FDA0'
+A0 FD    LDY #253
+C8       INY
+D0 FA    BNE *-4</pre></td>
+<td>Clobbers Y, Z&amp;N, and V
+</td></tr>
+<tr>
+<td><pre>A4 AC    LDY &lt;$AC ;hides 'LDY $82A2'
+A2 82    LDX #130
+CA       DEX
+30 FA    BMI *-4</pre></td>
+<td>Clobbers X, Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>24 24    BIT $24
+20 xx xx JSR @rts12× 2</pre></td>
+<td>Clobbers Z&amp;N, and V; and requires @rts12
+</td></tr>
+<tr>
+<td><pre>20 xx xx JSR @rts12
+08       PHP
+BA       TSX
+28       PLP
+9A       TXS
+28       PLP</pre></td>
+<td>Clobbers X; and requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+08       PHP       \ × 3
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="28_cycles">28 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>38   ... SEC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP       \ × 4
+28       PLP       /</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="29_cycles">29 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA       NOP
+90 FC    BCC *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 04    LDX #4
+EA       NOP
+CA       DEX
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 04    LDY #4
+EA       NOP
+88       DEY
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 02    LDX #2
+EA       NOP
+CA       DEX
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 03    LDY #3
+EA       NOP
+88       DEY
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+28       PLP
+08       PHP
+C5 C5    CMP $C5
+28       PLP
+20 xx xx JSR @rts12</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+C5 C5    CMP $C5
+28       PLP
+08       PHP
+36 36    ROL $36,X
+76 36    ROR $36,X
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="30_cycles">30 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18   ... CLC      × 2
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18   ... CLC      × 2
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 6A    LDA #$6A ;hides 'ROR A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="31_cycles">31 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+28       PLP
+20 xx xx JSR @rts12× 2</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+A6 A6    LDX $A6
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A4 A4    LDY $A4
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+36 36    ROL $36,X \ × 2
+76 36    ROR $36,X /
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="32_cycles">32 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A2 05    LDX #5 ;hides 'ORA zp'
+CA       DEX ;first loop only
+CA       DEX
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 05    LDY #5 ;hides 'ORA zp'
+88       DEY ;first loop only
+88       DEY
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A9 2A    LDA #$2A ;hides 'ROL A'
+EA   ... NOP      × 3
+10 FA    BPL *-4</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 04    LDX #4
+EA       NOP
+CA       DEX
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A4 A4    LDY $A4
+A0 04    LDY #4
+EA       NOP
+88       DEY
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+98       TYA
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+98       TYA
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A2 04    LDX #4
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18   ... CLC      × 2
+A9 6A    LDA #$6A ;hides 'ROR A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="33_cycles">33 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>18   ... CLC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+28       PLP
+20 xx xx JSR @rts12× 2</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP       \ × 2
+28       PLP       /
+08       PHP
+36 36    ROL $36,X
+76 36    ROR $36,X
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="34_cycles">34 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A0 88    LDY #136 ;hides 'DEY'
+88       DEY
+30 FC    BMI *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>C5 C5    CMP $C5
+48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A5 A5    LDA $A5
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="35_cycles">35 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A9 2A    LDA #$2A ;hides 'ROL A'
+08       PHP
+28       PLP
+10 FB    BPL *-3</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 F8    LDX #248 ;hides 'SED'
+E8   ... INX      × 2
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers X, Z&amp;N, and D
+</td></tr>
+<tr>
+<td><pre>A0 88    LDY #136 ;hides 'DEY'
+88   ... DEY      × 2
+30 FB    BMI *-3</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+38   ... SEC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+38   ... SEC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="36_cycles">36 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>A9 E9    LDA #$E9 ;hides 'SBC #$2A'
+2A       ROL A ;first loop only
+B0 FC    BCS *-2</pre></td>
+<td>Clobbers A, Z&amp;N, C, and V
+</td></tr>
+<tr>
+<td><pre>A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>38       SEC
+A9 0A    LDA #$0A ;hides 'ASL A'
+38       SEC
+10 FC    BPL *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA       NOP
+90 FC    BCC *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA       NOP
+90 FC    BCC *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 04    LDX #4
+EA       NOP
+CA       DEX
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 04    LDY #4
+EA       NOP
+88       DEY
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>20 xx xx JSR @rts12× 3</pre></td>
+<td>Requires @rts12
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+38       SEC
+10 FC    BPL *-2
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="37_cycles">37 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A5 A5    LDA $A5
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 04    LDX #4
+EA   ... NOP      × 2
+CA       DEX
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 04    LDY #4
+EA   ... NOP      × 2
+88       DEY
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+98       TYA
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A2 04    LDX #4
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18   ... CLC      × 2
+A9 2A    LDA #$2A ;hides 'ROL A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="38_cycles">38 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>38       SEC
+A9 69    LDA #$69 ;hides 'ADC #$EA'
+EA       NOP ;first loop only
+B0 FC    BCS *-2</pre></td>
+<td>Clobbers A, Z&amp;N, C, and V
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="39_cycles">39 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A4 A4    LDY $A4
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 88    LDY #136 ;hides 'DEY'
+88   ... DEY      × 2
+30 FB    BMI *-3
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 05    LDX #5 ;hides 'ORA zp'
+CA       DEX ;first loop only
+CA       DEX
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers A, and X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 05    LDY #5 ;hides 'ORA zp'
+88       DEY ;first loop only
+88       DEY
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers A, and Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA   ... NOP      × 3
+10 FA    BPL *-4
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA   ... NOP      × 3
+10 FA    BPL *-4
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+48       PHA
+98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A6 A6    LDX $A6
+A2 04    LDX #4
+EA       NOP
+CA       DEX
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A4 A4    LDY $A4
+A0 04    LDY #4
+EA       NOP
+88       DEY
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">11 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+98       TYA
+A0 04    LDY #4
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="40_cycles">40 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A2 05    LDX #5 ;hides 'ORA zp'
+EA       NOP
+CA       DEX
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 05    LDY #5 ;hides 'ORA zp'
+EA       NOP
+88       DEY
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+18   ... CLC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+18   ... CLC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="41_cycles">41 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>38       SEC
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 08    LDX #8
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 08    LDY #8
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 88    LDY #136 ;hides 'DEY'
+88       DEY
+30 FC    BMI *-2
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+A6 A6    LDX $A6
+A2 05    LDX #5
+CA       DEX
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A5 A5    LDA $A5
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="42_cycles">42 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A5 A5    LDA $A5
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+A2 05    LDX #5 ;hides 'ORA zp'
+EA       NOP
+CA       DEX
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 05    LDY #5 ;hides 'ORA zp'
+EA       NOP
+88       DEY
+D0 FB    BNE *-3</pre></td>
+<td>Clobbers A, Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+08       PHP
+28       PLP
+10 FB    BPL *-3
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 2A    LDA #$2A ;hides 'ROL A'
+08       PHP
+28       PLP
+10 FB    BPL *-3
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 F8    LDX #248 ;hides 'SED'
+E8   ... INX      × 2
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 88    LDY #136 ;hides 'DEY'
+88   ... DEY      × 2
+30 FB    BMI *-3
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+98       TYA
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+38   ... SEC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+10 FD    BPL *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="43_cycles">43 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>38   ... SEC      × 2
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A2 05    LDX #5
+EA       NOP
+CA       DEX
+10 FC    BPL *-2</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 06    LDY #6
+EA       NOP
+88       DEY
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 E9    LDA #$E9 ;hides 'SBC #$2A'
+2A       ROL A ;first loop only
+B0 FC    BCS *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, C, and V
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 E9    LDA #$E9 ;hides 'SBC #$2A'
+2A       ROL A ;first loop only
+B0 FC    BCS *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+38       SEC
+A9 0A    LDA #$0A ;hides 'ASL A'
+38       SEC
+10 FC    BPL *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA       NOP
+90 FC    BCC *-2
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="44_cycles">44 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A9 0A    LDA #$0A ;hides 'ASL A'
+EA   ... NOP      × 2
+10 FB    BPL *-3</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A0 88    LDY #136 ;hides 'DEY'
+EA       NOP
+88       DEY
+30 FB    BMI *-3</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 08    LDX #8
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>C5 C5    CMP $C5
+48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A5 A5    LDA $A5
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 04    LDX #4
+EA   ... NOP      × 2
+CA       DEX
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 04    LDY #4
+EA   ... NOP      × 2
+88       DEY
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+48       PHA
+98       TYA
+A0 06    LDY #6
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">11 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+98       TYA
+A0 05    LDY #5
+88       DEY
+D0 FD    BNE *-1
+A8       TAY
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="45_cycles">45 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 08    LDY #8
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A2 08    LDX #8
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+A0 08    LDY #8
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+38       SEC
+A9 69    LDA #$69 ;hides 'ADC #$EA'
+EA       NOP ;first loop only
+B0 FC    BCS *-2
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, C, and V
+</td></tr>
+<tr>
+<td><pre>08       PHP
+38       SEC
+A9 69    LDA #$69 ;hides 'ADC #$EA'
+EA       NOP ;first loop only
+B0 FC    BCS *-2
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+08       PHP
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18       CLC
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="46_cycles">46 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">5 bytes
+</th></tr>
+<tr>
+<td><pre>A2 08    LDX #8
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 09    LDY #9
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+A6 A6    LDX $A6
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A4 A4    LDY $A4
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+98       TYA
+A0 88    LDY #136 ;hides 'DEY'
+88   ... DEY      × 2
+30 FB    BMI *-3
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">11 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+EA   ... NOP      × 3
+10 FA    BPL *-4
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="47_cycles">47 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 06    LDY #6
+EA       NOP
+88       DEY
+D0 FC    BNE *-2
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+A2 08    LDX #8
+CA       DEX
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 05    LDX #5 ;hides 'ORA zp'
+EA       NOP
+CA       DEX
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers A, and X
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 3
+A0 08    LDY #8
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 05    LDY #5 ;hides 'ORA zp'
+EA       NOP
+88       DEY
+D0 FB    BNE *-3
+28       PLP</pre></td>
+<td>Clobbers A, and Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+98       TYA
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+A8       TAY
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N
+</td></tr>
+<tr>
+<td><pre>08       PHP
+98       TYA
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+A8       TAY
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A2 07    LDX #7
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>EA   ... NOP      × 2
+08       PHP
+A0 06    LDY #6
+88       DEY
+10 FD    BPL *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+18   ... CLC      × 2
+A9 0A    LDA #$0A ;hides 'ASL A'
+90 FD    BCC *-1
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="48_cycles">48 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>EA       NOP
+A2 08    LDX #8
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>EA       NOP
+A0 09    LDY #9
+88       DEY
+D0 FD    BNE *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+38       SEC
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+38       SEC
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 08    LDX #8
+CA       DEX
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 08    LDY #8
+88       DEY
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 0A    LDA #$0A ;hides 'ASL A'
+18       CLC
+10 FC    BPL *-2
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="49_cycles">49 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">4 bytes
+</th></tr>
+<tr>
+<td><pre>A0 88    LDY #136 ;hides 'DEY'
+30 FD    BMI *-1</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>18       CLC
+A9 2A    LDA #$2A ;hides 'ROL A'
+08       PHP
+28       PLP
+90 FB    BCC *-3</pre></td>
+<td>Clobbers A, Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>A6 A6    LDX $A6
+A2 08    LDX #8
+CA       DEX
+10 FD    BPL *-1</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>C5 C5    CMP $C5
+48       PHA
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A5 A5    LDA $A5
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<th colspan="2">10 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 2A    LDA #$2A ;hides 'ROL A'
+08       PHP
+28       PLP
+10 FB    BPL *-3
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="50_cycles">50 cycles</span></h3>
+<table class="wikitable testtable">
+<tr>
+<th colspan="2">6 bytes
+</th></tr>
+<tr>
+<td><pre>A9 E9    LDA #$E9 ;hides 'SBC #$2A'
+2A       ROL A ;first loop only
+EA       NOP
+B0 FB    BCS *-3</pre></td>
+<td>Clobbers A, Z&amp;N, C, and V
+</td></tr>
+<tr>
+<td><pre>A2 07    LDX #7
+EA       NOP
+CA       DEX
+D0 FC    BNE *-2</pre></td>
+<td>Clobbers X, and Z&amp;N
+</td></tr>
+<tr>
+<td><pre>A0 06    LDY #6
+EA       NOP
+88       DEY
+10 FC    BPL *-2</pre></td>
+<td>Clobbers Y, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">7 bytes
+</th></tr>
+<tr>
+<td><pre>98       TYA
+A0 09    LDY #9
+88       DEY
+D0 FD    BNE *-1
+A8       TAY</pre></td>
+<td>Clobbers A, and Z&amp;N
+</td></tr>
+<tr>
+<th colspan="2">8 bytes
+</th></tr>
+<tr>
+<td><pre>48       PHA
+38   ... SEC      × 2
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+68       PLA</pre></td>
+<td>Clobbers Z&amp;N, and C
+</td></tr>
+<tr>
+<td><pre>08       PHP
+38   ... SEC      × 2
+A9 4A    LDA #$4A ;hides 'LSR A'
+D0 FD    BNE *-1
+28       PLP</pre></td>
+<td>Clobbers A
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A2 05    LDX #5
+EA       NOP
+CA       DEX
+10 FC    BPL *-2
+28       PLP</pre></td>
+<td>Clobbers X
+</td></tr>
+<tr>
+<td><pre>08       PHP
+A0 06    LDY #6
+EA       NOP
+88       DEY
+D0 FC    BNE *-2
+28       PLP</pre></td>
+<td>Clobbers Y
+</td></tr>
+<tr>
+<th colspan="2">9 bytes
+</th></tr>
+<tr>
+<td><pre>08       PHP
+48       PHA
+A9 E9    LDA #$E9 ;hides 'SBC #$2A'
+2A       ROL A ;first loop only
+B0 FC    BCS *-2
+68       PLA
+28       PLP</pre></td>
+<td>No requirements
+</td></tr>
+</table>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Sanity_checks">Sanity checks</span></h2>
+<p>It is possible to verify on compile time that no page wrap occurs,
+by replacing all branches with these macros:
+</p>
+<pre>.macro branch_check opc, dest
+    opc dest
+    .assert &gt;* = &gt;(dest), warning, &quot;branch_check: failed, crosses page&quot;
+.endmacro
+.macro bccnw dest
+        branch_check bcc, dest
+.endmacro
+.macro bcsnw dest
+        branch_check bcs, dest
+.endmacro
+.macro beqnw dest
+        branch_check beq, dest
+.endmacro
+.macro bnenw dest
+        branch_check bne, dest
+.endmacro
+.macro bminw dest
+        branch_check bmi, dest
+.endmacro
+.macro bplnw dest
+        branch_check bpl, dest
+.endmacro
+.macro bvcnw dest
+        branch_check bvc, dest
+.endmacro
+.macro bvsnw dest
+        branch_check bvs, dest
+.endmacro</pre>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="Delay_code.xhtml" title="Delay code">Delay code</a> for functions that produce runtime-determined amount of delay</li>
+<li> Bisqwit’s “vending machine” for producing a ca65-compatible delay_n macro for arbitrary number of cycles, with more fine-grained configurable constraints: <a class="external free" href="http://bisqwit.iki.fi/utils/nesdelay.php" rel="nofollow">http://bisqwit.iki.fi/utils/nesdelay.php</a> The samples on this page are excerpts from files generated by this online tool.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 1.195 seconds
+Real time usage: 1.269 seconds
+Preprocessor visited node count: 2737/1000000
+Preprocessor generated node count: 5828/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1621-1!*!0!!en!*!* and timestamp 20160422134820 and revision id 12186
+ -->
+</div></body></html>

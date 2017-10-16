@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Enhancement</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Enhancement</h1><div class="article">
+<h2><span class="mw-headline" id="Enhanced_graphics_via_rendering_in_layers">Enhanced graphics via rendering in layers</span></h2>
+<p>Hey there, I noticed people are starting up a topic in Enhancement.
+</p><p>First of all, One thing everyone missed that can be possible, there is a way to make a cart with a extra PPU with different regs to make up new graphics, This method is called <i>Graphical Layering</i>.
+</p><p>It can be simpler than MMC5. But minding the limits, It can be done.
+</p><p>--<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> 16:38, 13 November 2011 (UTC)
+</p>
+<dl><dd>Yeah, Wide Boy and Super Game Boy use that. But someone on the forum told me a long time ago that the NES PPU is more complex than an MMC5, and adding one to a cart would be hideously expensive. Look at <a class="external text" href="http://www.retrousb.com/product_info.php?cPath=30&amp;products_id=87" rel="nofollow">how much bunnyboy charges for a Retrovision</a>, for example. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 17:19, 13 November 2011 (UTC)</dd></dl>
+<dl><dd><dl><dd>Also, neither the PPU EXT pins nor the video passthrough are exposed to the cartridge, which means it cannot be implemented on NES and Famicom cartridges. You could make the emulator to emulate a system that does have these features, but I don't know what's the point. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 15:07, 21 July 2013 (MDT)
+<dl><dd>Technically you don't need the EXT pins or the video passthrough if you're just sending bits 1-0 of each color. You can just stream attributes and CHR data in 8x1 pixel slivers, with one attribute for each sliver. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:00, 21 July 2013 (MDT)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd>You are talking about a MSX1-style 1bpp graphics mode, Right? That'd be pretty awesome! --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<a href="User_talk_Hamtaro126.xhtml" title="User talk:Hamtaro126">talk</a>) 22:29, 21 July 2013 (MDT)
+<dl><dd>Sort of. Instead of specifying two colors for each 8x1 sliver, the mapper would specify 2 bits of &quot;attribute&quot; for whether a sliver uses colors 0-3, 0 and 5-7, 0 and 9-11, or 0 and 13-15. Then the actual pixels in the sliver would have 2bpp. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 22:38, 21 July 2013 (MDT)</dd></dl></dd>
+<dd>If you are just sending bits 1-0 of each color like you describe (two bits per pixel), then yes it will work, of course; it is clear how the mapper can do that. Also, such a thing would probably be less complicated than the PPU. This is sort of like QBASIC SCREEN 1 but with a different resolution. And yes with more complication you can combine it with 8x1 attribute areas. These are not bad ideas. (This does not give you the features that can be done with EXT pins; if you have the system with two synchronized PPUs and the EXT pins connected in reverse order, then you can get sixteen colors on the screen at once (not including sprites, which adds twelve more), with seven colors per tile!) To implement the 8x1 areas in a mapper, the most obvioiusly way that seems to me, however, would make it very slow to reprogram the graphics during the game. It will have some latches set by the PPU address, and those output to the address of a RAM in the cartridge. To write to it, the program would need to change the PPU address several times in order to set the latches correctly. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 03:29, 22 July 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Metadata_INI_block_for_emulation_enhancement">Metadata INI block for emulation enhancement</span></h2>
+<p>I have added a INI block for enhancement to <a href="User_Zzo38_Metadata_INI.xhtml" title="User:Zzo38/Metadata INI">User:Zzo38/Metadata INI</a>. It is a draft so there may be a few mistakes in it; if you know the correct way you might fix it. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 02:13, 6 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id=".22Map_Logging.22">&quot;Map Logging&quot;</span></h2>
+<p>Along these lines are <a class="external text" href="http://tasvideos.org/Movies-Atlas-Obs.html" rel="nofollow">&quot;atlas encodes&quot;.</a> I thought more were on TASVideos, but apparently there is a <a class="external text" href="https://www.youtube.com/user/nesatlas" rel="nofollow">channel</a> of them. Here's a topic where they <a class="external text" href="http://tasvideos.org/forum/viewtopic.php?t=10120" rel="nofollow">discuss(ed)</a> them. <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 16:21, 18 February 2016 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.037 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:645-1!*!0!!*!*!* and timestamp 20160606132048 and revision id 11956
+ -->
+</div></body></html>

@@ -1,0 +1,405 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Nesdev</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Nesdev</h1><div class="article">
+<center><a class="image" href="File_Nesdev1_Tokumaru_png.xhtml"><img alt="Nesdev1 Tokumaru.png" height="92" src="../wiki-images/Nesdev1_Tokumaru.png" srcset="/w/images/thumb/5/56/Nesdev1_Tokumaru.png/750px-Nesdev1_Tokumaru.png 1.5x, /w/images/5/56/Nesdev1_Tokumaru.png 2x" width="500"/></a></center>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Notices"><span class="tocnumber">1</span> <span class="toctext">Notices</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Text_files"><span class="tocnumber">2</span> <span class="toctext">Text files</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#NES"><span class="tocnumber">2.1</span> <span class="toctext">NES</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#6502"><span class="tocnumber">2.2</span> <span class="toctext">6502</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Famicom_Disk_System"><span class="tocnumber">2.3</span> <span class="toctext">Famicom Disk System</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Etc."><span class="tocnumber">2.4</span> <span class="toctext">Etc.</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Emulation"><span class="tocnumber">2.5</span> <span class="toctext">Emulation</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Dr._PC_Jr."><span class="tocnumber">2.6</span> <span class="toctext">Dr. PC Jr.</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#SNES"><span class="tocnumber">2.7</span> <span class="toctext">SNES</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#NES_Programs"><span class="tocnumber">3</span> <span class="toctext">NES Programs</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#NES_Development_Tools"><span class="tocnumber">4</span> <span class="toctext">NES Development Tools</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#PC_Programs"><span class="tocnumber">4.1</span> <span class="toctext">PC Programs</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#6502_Tools"><span class="tocnumber">4.1.1</span> <span class="toctext">6502 Tools</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Graphic_Tools"><span class="tocnumber">4.1.2</span> <span class="toctext">Graphic Tools</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Misc."><span class="tocnumber">4.1.3</span> <span class="toctext">Misc.</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Sound_Tools"><span class="tocnumber">4.1.4</span> <span class="toctext">Sound Tools</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-17"><a href="#Amiga_Programs"><span class="tocnumber">4.2</span> <span class="toctext">Amiga Programs</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#6502_Tools_2"><span class="tocnumber">4.2.1</span> <span class="toctext">6502 Tools</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Graphic_Tools_2"><span class="tocnumber">4.2.2</span> <span class="toctext">Graphic Tools</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Misc_tools"><span class="tocnumber">4.2.3</span> <span class="toctext">Misc tools</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#NES_Hardware_Information"><span class="tocnumber">5</span> <span class="toctext">NES Hardware Information</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#console_hardware"><span class="tocnumber">5.1</span> <span class="toctext">console hardware</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#cartridge_hardware"><span class="tocnumber">5.2</span> <span class="toctext">cartridge hardware</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-24"><a href="#NES_Hardware_Projects"><span class="tocnumber">6</span> <span class="toctext">NES Hardware Projects</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#Music"><span class="tocnumber">7.1</span> <span class="toctext">Music</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#NES-related"><span class="tocnumber">7.2</span> <span class="toctext">NES-related</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#misc._tech"><span class="tocnumber">7.3</span> <span class="toctext">misc. tech</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#home_pages"><span class="tocnumber">7.4</span> <span class="toctext">home pages</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#6502_2"><span class="tocnumber">7.5</span> <span class="toctext">6502</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#misc_6502"><span class="tocnumber">7.6</span> <span class="toctext">misc 6502</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Notices">Notices</span></h2>
+<ul><li><b>Do not download full copies of the site through the webserver.  Use the <a class="external text" href="ftp://ftp.parodius.com/pub/nesdev/nesdev_weekly.zip" rel="nofollow">FTP mirror</a></b> or the  ED2K mirror</li>
+<li> <a class="external text" href="http://forums.nesdev.com/" rel="nofollow">The messageboards</a> are open.  The <a class="external text" href="http://nesdev.com/cgi-bin/wwwthreads/wwwthreads.pl" rel="nofollow">old boards</a> are still readable.</li>
+<li> Consider making a donation of any amount to help pay for hosting costs (which includes every site hosted on Parodius). The paypal link will be found on  <a class="external text" href="http://www.parodius.co" rel="nofollow">Parodius' main page</a>.</li>
+<li> An NES dev cartridge is in production by Membler Industries.  More details to come.</li></ul>
+<center><a class="image" href="File_Mbar_gif.xhtml"><img alt="Mbar.gif" height="60" src="../wiki-images/Mbar.gif" width="400"/></a></center>
+<h2><span class="mw-headline" id="Text_files">Text files</span></h2>
+<h3><span class="mw-headline" id="NES">NES</span></h3>
+<p>General information about the Nintendo Entertainment System, or Famicom.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/NESDoc.pdf" rel="nofollow">Nintendo Entertainment System Documentation</a> v1.0 by Patrick Diskin.</li>
+<li> <a class="external text" href="http://nesdev.com/NinTech.txt" rel="nofollow">NinTech</a> by Blue Hawk.</li>
+<li> <a class="external text" href="http://nesdev.com/2A03%20technical%20reference.txt" rel="nofollow">2A03 technical reference</a> First release (4-23-2004), by Brad Taylor. Covers everything related to the NES's CPU, including sound. The linear counter section needs to be written, if anyone experienced with this is interested in documenting it, please post on the forum.</li>
+<li> <a class="external text" href="http://nesdev.com/2C02%20technical%20reference.TXT" rel="nofollow">NTSC 2C02 technical reference</a>  First release (4-23-2004), by Brad Taylor.  Lots of information about the NTSC version of the NES PPU.</li>
+<li> <a class="external text" href="http://nesdev.com/apu_ref.txt" rel="nofollow">NES APU Sound Hardware Reference</a> 2004.1.30 by Blargg</li>
+<li> <a class="external text" href="http://nesdev.com/NES101.zip" rel="nofollow">NES 101</a> by Michael Martin.  An NES programming tutorial for those who know 6502 assembly.</li>
+<li> <a class="external text" href="http://nesdev.com/NESprgmn.txt" rel="nofollow">Programming that 8-bit beast of power, the NES</a>  v.80.666  by joker21@earthlink.net.</li>
+<li> <a class="external text" href="http://nesdev.com/NESTechFAQ.htm" rel="nofollow">NES Technical FAQ</a>  v1.4  by Chris Covell.</li>
+<li> <a class="external text" href="http://nesdev.com/nesdoc2.txt" rel="nofollow">NES Tech doc (French)</a> by Crispysix.</li>
+<li> <a class="external text" href="http://nesdev.com/ndox200.zip" rel="nofollow">Nintendo Entertainment System documentation</a> v2.0  by Jeremy Chadwick.</li>
+<li> <a class="external text" href="http://nesdev.com/nestech_cn.txt" rel="nofollow">Nintendo Entertainment System documentation (Chinese)</a> v2.0  by Jeremy Chadwick, translation by Blue Potato.</li>
+<li> <a class="external text" href="http://nesdev.com/nestechd.txt" rel="nofollow">Nintendo Entertainment System documentation (Dutch)</a> v2.0  by Jeremy Chadwick, translation by A.A.J. Bouwmans.</li>
+<li> <a class="external text" href="http://nesdev.com/NESTECJ.TXT" rel="nofollow">Nintendo Entertainment System documentation (Japanese)</a>  v.53  by Jeremy Chadwick, translation by (?).</li>
+<li> <a class="external text" href="http://fms.komkon.org/EMUL8/NES.html" rel="nofollow">NES System Architecture</a>  v2.4  by Marat Fayzullin.</li>
+<li> <a class="external text" href="http://dendy.city.tomsk.net/arhit.htm" rel="nofollow">NES System Architecture (Russian)</a> v1.4  by Marat Fayzullin, partial translation by (?)</li>
+<li> <a class="external text" href="http://nesdev.com/nes_c.txt" rel="nofollow">NES System Architecture (Chinese)</a> v2.2  by Marat Fayzullin, translation by Wu Jian.</li>
+<li> <a class="external text" href="http://nesdev.com/NES_J.TXT" rel="nofollow">NES System Architecture (Japanese)</a> v1.4  by Marat Fayzullin, translation by Bero.</li>
+<li> <a class="external text" href="http://nesdev.com/nesguide.zip" rel="nofollow">NES Programming Guide</a>  v.4 by Bokudono and Waseiyakusha.</li>
+<li> <a class="external text" href="http://nesdev.com/loopyppu.zip" rel="nofollow">The Skinny on NES Scrolling</a>  by loopy.</li>
+<li> <a class="external text" href="http://nesdev.com/nesscroll-sp.pdf" rel="nofollow">The Skinny on NES Scrolling (Spanish)</a>  by loopy, translated by Hyde.</li>
+<li> <a class="external text" href="http://nesdev.com/nesscroll-pt.pdf" rel="nofollow">The Skinny on NES Scrolling (Portuguese)</a> by loopy, translated by Hyde.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-emu/dmc/" rel="nofollow">Detailed DMC Operation</a>  by blargg.  Information about how the DMA uses the sample buffer.  Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/nesgfx.txt" rel="nofollow">How NES Graphics Work</a>  A document describing the basics.</li>
+<li> <a class="external text" href="http://nesdev.com/nesgfx-d.txt" rel="nofollow">How NES Graphics Work (Dutch)</a>  A document describing the basics.  Translation by A.A.J.Bouwmans.</li></ul>
+<h3><span class="mw-headline" id="6502">6502</span></h3>
+<p>Information about the 6502.  The NES's 2A03 CPU is a modified 6502.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/nesdoc1.txt" rel="nofollow">Assembleur sur NES (French)</a>  v0.9 by Crispysix.</li>
+<li> <a class="external text" href="http://nesdev.com/r650x.zip" rel="nofollow">Rockwell 650x and 651x specs</a>  Official specifications for the 6502 family.</li>
+<li> <a class="external text" href="http://nesdev.com/6502.txt" rel="nofollow">6502 Microprocessor info</a>  Excerpt from the Commodore 64 Programmers Reference Manual.</li>
+<li> <a class="external text" href="http://nesdev.com/6502_cn.txt" rel="nofollow">6502 Microprocessor info (Chinese)</a>  From the Commodore 64 Progammers Reference Manual, translation by Blue Potato.</li>
+<li> <a class="external text" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">NMOS 65xx Instruction Set</a>  From a C64 emulator and devkit.</li>
+<li> <a class="external text" href="http://nesdev.com/6502guid.txt" rel="nofollow">Assembly in one step</a>  A brief guide to programming the 6502 in assembly language.</li>
+<li> <a class="external text" href="http://nesdev.com/6502jsm.zip" rel="nofollow">6502 Instruction Summary</a>  A list of opcodes and addressing modes.  Originally by RTK, modified by CricketNE</li>
+<li> <a class="external text" href="http://nesdev.com/opcodes.txt" rel="nofollow">6502 Opcodes</a>  In japanese.  By famtasiaに添付されてたと思った (?)</li>
+<li> <a class="external text" href="http://nesdev.com/6502bugs.txt" rel="nofollow">6502 bugs</a>  A list of known bugs in the 6502.</li>
+<li> <a class="external text" href="http://nesdev.com/mathv1r_lib.txt" rel="nofollow">mathpac</a>  by Matt Malone.  Some math routines in 6502.</li>
+<li> <a class="external text" href="http://nesdev.com/dr6502-docs.zip" rel="nofollow">DR6502 Docs</a>  by M.J.Malone.  This documentation for a 6502 simuator contains extensive 6502 information.</li>
+<li> <a class="external text" href="http://nesdev.com/undocumented_opcodes.txt" rel="nofollow">Undocumented Opcodes</a> v3.0  by Freddy Offenga.  Based on the Atari 8-bit 6502.</li>
+<li> <a class="external text" href="http://nesdev.com/extra_instructions.txt" rel="nofollow">Extra Instructions of the 65XX Series CPU</a>  11-27-96  by Adam Vardy.</li>
+<li> <a class="external text" href="http://wiki.breaknes.com/6502" rel="nofollow">Circuit-level 6502 description (russian)</a> (<a class="external text" href="http://translate.google.ru/translate?sl=ru&amp;tl=en&amp;u=http%3A%2F%2Fwiki.breaknes.com%2F6502&amp;act=url" rel="nofollow">google translate</a>)</li></ul>
+<h3><span class="mw-headline" id="Famicom_Disk_System">Famicom Disk System</span></h3>
+<p>Information about the Famicom's floppy disk add-on.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/FDS%20technical%20reference.txt" rel="nofollow">Famicom Disk System technical reference</a> 3rd release (4-23-2004), by Brad Taylor. Comprehensive FDS technical docs.</li>
+<li> <a class="external text" href="http://nesdev.com/fdsloadr.zip" rel="nofollow">Famicom Disk System Loader</a> by Brad Taylor. This is the software and documentation for a hardware project to emulate the FDS's disk drive using a PC disk drive via parallel port. Can also copy FDS disk contents to your PC.</li>
+<li> <a class="external text" href="http://nesdev.com/fdscopy.zip" rel="nofollow">FDS Copy Tool</a> info from a book in Japanese. Contributed by Tomy.</li>
+<li> <a class="external text" href="http://nesdev.com/fds-copytool2.zip" rel="nofollow">FDS copy tool 2</a> Japanese docs, scanned by Tomy.</li>
+<li> <a class="external text" href="http://nesdev.com/FDSSOUND_v1.1.txt" rel="nofollow">Nintendo Disksystem Sound</a> v1.1 by Norix. In Japanese.</li>
+<li> <a class="external text" href="http://nesdev.com/FDS.txt" rel="nofollow">FDS Sound</a> 07/14/2004 by Disch.</li>
+<li> <a class="external text" href="http://nesdev.com/fds-nori.txt" rel="nofollow">Famicom Disk System info</a> by Nori. (in Japanese)</li>
+<li> <a class="external text" href="http://nesdev.com/fds-e.txt" rel="nofollow">Famicom Disk System</a> by Nori, translated by Ki.</li>
+<li> <a class="external text" href="http://nesdev.com/disksystem.txt" rel="nofollow">Famicom Disk System info</a> by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/diskspec.txt" rel="nofollow">Famicom Disk System info</a> by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/diskinfo.txt" rel="nofollow">Disk Info</a></li></ul>
+<h3><span class="mw-headline" id="Etc.">Etc.</span></h3>
+<p>Information about the NES/Famicom's add-ons, or anything that doesn't pertain to another category.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/SH657XTool_release.zip" rel="nofollow">SH657X Toolkit</a> A huge amount of info, tools, and demos, for an NES clone system using the 657x IC.</li>
+<li> <a class="external text" href="http://nesdev.com/NES_ADAPTER.txt" rel="nofollow">NES to Famicom Adapter</a> 72 to 60-pin wiring info.</li>
+<li> <a class="external text" href="http://nesdev.com/zapper_to_famicom.txt" rel="nofollow">Connecting NES Zapper to Famicom</a> Wiring info.</li>
+<li> <a class="external text" href="http://nesdev.com/vsdoc.txt" rel="nofollow">VS UniSystem Information</a> v1.0 by Fx3.</li>
+<li> <a class="external text" href="http://nesdev.com/pc10doc.txt" rel="nofollow">Nintendo Playchoice 10 Hardware Description</a> v0.2 by Oliver Achten.</li>
+<li> <a class="external text" href="http://nesdev.com/pc10bios.zip" rel="nofollow">New Playchoice 10 BIOS</a> v0.1 by Oliver Achten. Allows the Playchoice 10 arcade machine to run NES carts.</li>
+<li> <a class="external text" href="http://nesdev.com/megm1rom.txt" rel="nofollow">Megaman 1 ROM Tech</a> v0.13 by AlphaBeta. Info on Megaman 1's ROM data structure.</li>
+<li> <a class="external text" href="http://nesdev.com/ffpa.txt" rel="nofollow">Famicom Four-Player Adapter</a> v1.0 by Richard Hoelscher. This adapter works differently than the ones for NES.</li>
+<li> <a class="external text" href="http://nesdev.com/Excite_Boxing-english.txt" rel="nofollow">Excite Boxing</a> by goroh, english translation by Ki.</li>
+<li> <a class="external text" href="http://nesdev.com/Light_Gun-english.txt" rel="nofollow">Family Computer Gun</a> by goroh, english translation by Ki.</li>
+<li> <a class="external text" href="http://nesdev.com/keyboard.txt" rel="nofollow">Famicom keyboard info</a> by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/Keyboard-english.txt" rel="nofollow">Reverse Engineering the Keyboard of Family Computer</a> by goroh, english translation by Ki.</li>
+<li> <a class="external text" href="http://nesdev.com/NESHDRJ.TXT" rel="nofollow">Mapper Information for Emulation</a> by ???. In Japanese.</li>
+<li> <a class="external text" href="http://nesdev.com/powerpad.txt" rel="nofollow">Power Pad information</a> v1.2 by Tennessee Carmel-Veilleux.</li>
+<li> <a class="external text" href="http://nesdev.com/famitra.txt" rel="nofollow">Family Trainer</a> by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/nesdevma.zip" rel="nofollow">NESdev Mailing list</a> An archive of postings from Jan 22 1998, to March 25 1999. Go to <a class="external text" href="http://gamesource.groups.yahoo.com/group/nesdev/" rel="nofollow">Yahoo Groups</a> to subscribe. (No activity since February 2006.)</li>
+<li> <a class="external text" href="http://nesdev.com/nesgg.txt" rel="nofollow">NES Game Genie Format</a> v.071 by Benzene.</li>
+<li> <a class="external text" href="http://nesdev.com/nes4play.txt" rel="nofollow">NES 4 Player Adapter Documentation</a> v.9 by Fredrik Olsson.</li>
+<li> <a class="external text" href="http://nesdev.com/random.txt" rel="nofollow">Marat's doc randomized</a> not of any use, but slightly amusing.</li></ul>
+<h3><span class="mw-headline" id="Emulation">Emulation</span></h3>
+<p>Information related to the emulation of the NES/Famicom.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/NES%20emulator%20development%20guide.txt" rel="nofollow">NES emulator development guide</a> 4th release (4-23-2004), by Brad Taylor. Lots of information and techniques about emulating the NES.</li>
+<li> UNIF File format specification An upcoming new format for NES roms.</li>
+<li> <a class="external text" href="http://nesdev.com/iNES.txt" rel="nofollow">iNES Header Format</a> march 2000 by rvu.</li>
+<li> <a class="external text" href="http://nesdev.com/neshdr20.txt" rel="nofollow">iNES Header Format</a> v2.0 by VmprHntrD.</li>
+<li> <a class="external text" href="http://nesdev.com/nespalette.zip" rel="nofollow">NES Palette</a> v1.1 by merp. NTSC and PAL versions converted from BMF's and Matrixz's NES palettes in photoshop, paint shop pro, and microsoft format.</li>
+<li> <a class="external text" href="http://nesdev.com/kevin_palette.txt" rel="nofollow">NES palette generator</a> 4-08-00 by Kevin Horton. Written in BASIC.</li>
+<li> <a class="external text" href="http://nesdev.com/nespal.txt" rel="nofollow">NES Palette</a> by Matt Conte.</li>
+<li> <a class="external text" href="http://nesdev.com/pal.txt" rel="nofollow">NES Palette</a> by Loopy.</li>
+<li> <a class="external text" href="http://nesdev.com/staform.txt" rel="nofollow">.STA format</a> NESticle .43 save state format info. By goroh.</li></ul>
+<h3><span class="mw-headline" id="Dr._PC_Jr.">Dr. PC Jr.</span></h3>
+<p>The Doctor PC Jr. is a Chinese computer based off the NES/Famicom. Visit <a class="external text" href="http://mypage.direct.ca/c/ccovell/nesdev.html" rel="nofollow">Dr. PC Jr. Development Page</a> for extended information.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/DrPCJrBIOS.zip" rel="nofollow">BIOS ROM</a> A dump of the BIOS ROM from the Dr. PC Jr.</li>
+<li> <a class="external text" href="http://nesdev.com/DrPCJrDOS.zip" rel="nofollow">DOS disk</a> The files from the OS disk of the Dr. PC Jr.</li>
+<li> <a class="external text" href="http://nesdev.com/CATalogue.zip" rel="nofollow">CATalogue</a> v1.0 by Chris Covell. Uses the 'Cue-Cat'.</li></ul>
+<h3><span class="mw-headline" id="SNES">SNES</span></h3>
+<p>The well-known sequel to the NES, both castrated and enhanced. Only stuff unavailable elsewhere will be featured here.
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/SNES-starterkit.zip" rel="nofollow">SNESdev starter kit</a> by neviksti. Includes an assembler, example programs, docs, and tools.</li>
+<li> <a class="external text" href="http://nesdev.com/sreader.zip" rel="nofollow">SNES Cartridge Reader</a> by Lucas Siudym.</li>
+<li> <a class="external text" href="http://nesdev.com/eprcart4.zip" rel="nofollow">SNES Cart Hacking Info</a> v0.4 by Lucas Siudym. Includes pin-outs and diagrams showing how to modify SNES cartridges to use EPROMs.</li>
+<li> <a class="external text" href="http://en.wikibooks.org/wiki/Super_NES_Programming/Initialization_Tutorial" rel="nofollow">SNES Central Development Page</a> Off-site link.</li>
+<li> <a class="external text" href="http://www.zophar.net/documents/snes.html" rel="nofollow">Zophar's Domain - SNES Tech Docs</a> Offsite link. More SNES stuff.</li>
+<li> <a class="external text" href="http://www.zophar.net/tech/65816.html" rel="nofollow">Zophar's Domain - 65816 Docs</a> Offsite link. Docs about the SNES's CPU. An enhanced, yet backwards compatible, 16-bit version of the 6502.</li></ul>
+<h2><span class="mw-headline" id="NES_Programs">NES Programs</span></h2>
+<p>See <a href="Projects.xhtml" title="Projects">Projects</a>.
+</p>
+<h2><span class="mw-headline" id="NES_Development_Tools">NES Development Tools</span></h2>
+<h3><span class="mw-headline" id="PC_Programs">PC Programs</span></h3>
+<h4><span class="mw-headline" id="6502_Tools">6502 Tools</span></h4>
+<ul><li> <a class="external text" href="http://www.nesicide.com/" rel="nofollow">NESICIDE</a> v.0.2 by Christopher S. Pow. The NES &quot;Incredibly Cool&quot; Integrated Development Environment, which aims to encompass the full lifecycle of NES ROM development. Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/6502mnemonix.zip" rel="nofollow">6502 hex-to-mnemonix</a> by juicy_killa@hotmail.com. A convenient reference program for viewing hex codes for 6502 opcodes. Email the author if you have any corrections or suggestions.</li>
+<li> <a class="external text" href="http://nesdev.com/fasm10.zip" rel="nofollow">FASM</a> v1.0 by Toshi Morita. Quote from the docs: FASM was written as a quick replacement for the 2500 AD assembler for Nintendo 8-bit development. GPL license.</li>
+<li> <a class="external text" href="http://nesdev.com/idafw.zip" rel="nofollow">Interactive Disassembler</a> freeware version, by DataRescue. The commercial version is better, but it's expensive.</li>
+<li> NESrev v.013 by Kent Hansen. This disassembler detects the differences between code and data, and aims to produce output that can be reassembled. Works with 16KB programs. <a class="external text" href="http://nesdev.com/NESrev.java" rel="nofollow">[Java source</a>]</li>
+<li> <a class="external text" href="http://bobrost.com/nes/resources.php#devtools" rel="nofollow">nbasic</a> A high-level programming language for 8-bit NES development, by Bob Rost. Off-site link.</li>
+<li> <a class="external text" href="http://hkn.berkeley.edu/~mcmartin/P65/" rel="nofollow">P65 Assembler</a> A portable 6502 assembler written in Perl. Off-site link.</li>
+<li> <a class="external text" href="http://www.villehelin.com/wla.html" rel="nofollow">WLA DX</a> A portable GB-Z80/Z80/6502/6510/65816 macro assembler. Linux and MS-DOS versions available. Off-site link.</li>
+<li> <a class="external text" href="http://www.cc65.org/" rel="nofollow">CC65</a> A portable 6502/65c02/65c816 assembler, linker, and C compiler. Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/x816112f.zip" rel="nofollow">X816</a> An assembler for 6502/65c816. By minus.</li>
+<li> <a class="external text" href="http://nesdev.com/s6502b10.zip" rel="nofollow">6502 SDK</a> Quoted from the docs: <i>The kit is an Integrated Development Environment (IDE) similar to Borland ones, which allows you to edit, compile and (hopefully) debug your Assembly code for 65xx processors. It includes a (still rudimental) emulator and a project manager for multiple file applications.</i> Requires Win3.11 or higher. Here's the <a class="external text" href="http://nesdev.com/s6502src.zip" rel="nofollow">source code</a>.</li>
+<li> <a class="external text" href="http://nesdev.com/nesasm.zip" rel="nofollow">Nintendo Assembler</a> v.1 by Charles Doty, David Michel, and J.H. Van Ornum.</li>
+<li> <a class="external text" href="http://nesdev.com/md6502.zip" rel="nofollow">Minachun Disassembler for 6502 Famicom(NES)</a> v.04a. Features Japanese language and mapper support. Source included, with an English language option.</li>
+<li> <a class="external text" href="http://nesdev.com/tracer.zip" rel="nofollow">TRaCER</a> A disassembler for 6502/65c816. By Y0shi.</li>
+<li> <a class="external text" href="http://nesdev.com/6502sim.zip" rel="nofollow">6502 Simulator</a> by Dan Boris.</li>
+<li> <a class="external text" href="http://nesdev.com/dasm32.zip" rel="nofollow">DASM</a> v2.12 by Mathew Dillon</li>
+<li> <a class="external text" href="http://sf.net/projects/neslisp" rel="nofollow">neslisp</a> v0.0.17 by erana (Commodore 64 native version at <a class="external free" href="http://sf.net/projects/neslispc64" rel="nofollow">http://sf.net/projects/neslispc64</a> v0.0.17 and up)</li>
+<li> <a class="external text" href="http://sf.net/projects/ados-os-nes" rel="nofollow">ados-nes</a> v0.1.13 by erana</li>
+<li> <a class="external text" href="http://sourceforge.net/projects/arm-lisp" rel="nofollow">arm-lisp</a> v0.2.73 by erana (ARMv7 and 6502 target included.)</li></ul>
+<h4><span class="mw-headline" id="Graphic_Tools">Graphic Tools</span></h4>
+<ul><li> <a class="external text" href="http://nesdev.com/tilemolester-0.16.zip" rel="nofollow">Tile Molester</a> v0.16 by Kent Hansen. This tile editor requires <a class="external text" href="http://java.sun.com/j2se/1.4.2/download.html" rel="nofollow">Java</a>, and supports NES as well as other console formats.</li>
+<li> <a class="external text" href="http://www.zophar.net/utilities/graphutil/yy-chr.html" rel="nofollow">YY-Chr</a> by YY. A multi-format tile editor. Available in Japanese and English.</li>
+<li> <a class="external text" href="http://nesdev.com/bmpnes.zip" rel="nofollow">BMPNES</a> v1.8 by ninjasuperk. Spanish BMP to NES format converter. Includes some utils by Chis Covell.</li>
+<li> <a class="external text" href="http://nesdev.com/tlp10.zip" rel="nofollow">Tile Layer Pro</a> v1.0 by SnowBro. Tile editor.</li>
+<li> <a class="external text" href="http://nesdev.com/CHR_Creator.zip" rel="nofollow">CHR-ROM Creator</a> v1.1 by Stefan Fausser. An NES tile editor. <a class="external text" href="http://nesdev.com/vb40032.zip" rel="nofollow">VB40032.DLL</a> is required.</li>
+<li> <a class="external text" href="http://opentume.co.cc/" rel="nofollow">Open tUME</a> A 2D level editor designed for game development, check it out!</li>
+<li> <a class="external text" href="http://nesdev.com/nsa01b.zip" rel="nofollow">NES Screen Arranger</a> Uses NES graphics from a .CHR file and let's you set up the name and attribute tables, with optional RLE compression. By SnowBro.</li>
+<li> <a class="external text" href="http://nesdev.com/tlay050b.zip" rel="nofollow">Tile Layer</a> v0.50b. Let's you edit graphics from roms for various consoles. By SnowBro.</li>
+<li> <a class="external text" href="http://nesdev.com/bmp2nes.zip" rel="nofollow">BMP2NES</a> by <a class="external text" href="mailto:q7h1460@hotmail.com" rel="nofollow">7h1460</a>. Converts BMP graphics to the NES's format.</li>
+<li> <a class="external text" href="http://nesdev.com/raw2chrDOS.zip" rel="nofollow">RAW2CHR</a> by Chris Covell. Converts graphics from RAW to the NES's format.</li>
+<li> <a class="external text" href="http://nesdev.com/charlieDOS.zip" rel="nofollow">CHARlie</a> by Chris Covell. Optimizes graphics by removing redundant tiles.</li>
+<li> <a class="external text" href="http://nesdev.com/chr2namDOS.zip" rel="nofollow">CHR2NAM</a> by Chris Covell. Creates a nametable from an image file.</li></ul>
+<h4><span class="mw-headline" id="Misc.">Misc.</span></h4>
+<ul><li> <a class="external text" href="http://ucon64.sourceforge.net/" rel="nofollow">uCON64</a> (offsite link) ROM management utility. Can convert between file formats, split iNES images into PRG and CHR ROMs (use Pasofami format to do this), and much more.</li>
+<li> <a class="external text" href="http://nesdev.com/ggconv.zip" rel="nofollow">Game Genie Code Coverter</a>  v4.0 by Zazer.  Create new, or decode existing Game Genie codes for NES and all other GG-platforms.</li>
+<li> <a class="external text" href="http://nesdev.com/rollcost.zip" rel="nofollow">Roller Coaster</a>  by Pan/ATX.  This program can generate various sine and non-repeating random data tables to use in your games/demos.</li>
+<li> <a class="external text" href="http://nesdev.com/fdsloadr.zip" rel="nofollow">Famicom Disk System Loader</a> by Brad Taylor. This is the software and documentation for a hardware project to emulate the FDS's disk drive using a PC disk drive via parallel port. Can also copy FDS disk contents to your PC.</li>
+<li> <a class="external text" href="http://nesdev.com/legwizar.rar" rel="nofollow">Legacy of the Wizard map viewer</a>  by Brad Taylor.  Programs to view the maps from this game.  Includes a bitmap graphic of the entire map.</li>
+<li> <a class="external text" href="http://nesdev.com/FDSListWIN.zip" rel="nofollow">FDSList</a>  v1.2 by Chris Covell.  Lists and extracts files from Famicom disk images.  Supports FDS format.</li>
+<li> <a class="external text" href="http://nesdev.com/decrom20.zip" rel="nofollow">Decrom</a>  v2.0 by Fx3.  Converts VROM graphics into ascii.</li>
+<li> <a class="external text" href="http://nesdev.com/vrc7test.zip" rel="nofollow">VRC-VII Emulator</a>  By Kevin Horton.  VRC7 is a Konami mapper/sound-chip, with FM synthesis.</li>
+<li> <a class="external text" href="http://nesdev.com/vrcvibas.zip" rel="nofollow">VRC-VI Emulator</a>  Written in qbasic, by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/hexpo215.zip" rel="nofollow">Hexposure</a> v0.215.  A Hex editor by SnowBro.</li></ul>
+<h4><span class="mw-headline" id="Sound_Tools">Sound Tools</span></h4>
+<ul><li> <a class="external text" href="http://nesdev.com/nt2/" rel="nofollow">Nerdtracker 2</a> beta version by Bananmos. A DOS/Win9X NES music tracker. The NT2 site also has replay source code for NES, an assortment of songs made by NT2 users, and more.</li>
+<li> <a class="external text" href="http://dutycyclegenerator.com/nijuu/nijuu.html" rel="nofollow">Nijuu</a> v0.1b by Neil Baldwin. A NES music engine that converts tracks defined in text files into NES or NSF files. Off-site link.</li>
+<li> <a class="external text" href="http://www.geocities.co.jp/Playtown-Denei/9628/" rel="nofollow">MCK</a>  by Izumi.  A sound driver using MML format.  Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/ned2nsf10.zip" rel="nofollow">NED2NSF</a> v1.0 by Matrixz. Windows program that can make a single-song NSF from a NED file (Nerdtracker 2 format). Does not support NEDs with DMC samples, currently.</li>
+<li> <a class="external text" href="http://nesdev.com/midimml1.0.zip" rel="nofollow">MIDIMML converter</a>  v1.0 by Tom Murphy 7.  <a class="external text" href="http://www-2.cs.cmu.edu/%7Etom7/midimml/" rel="nofollow">[link</a>] This program converts MIDI files (with some special annotations) into MML. The output wouldn't be as optimal as hand-crafted MML (in most cases), but it's very interesting and even useful for MIDI users, nonetheless.</li>
+<li> <a class="external text" href="http://nesdev.com/mckc-e.txt" rel="nofollow">MCKC: MCK &gt; MML Converter</a>  by Manbow-J, translated by virt.  This document shows you how to use MML to create NES music.</li>
+<li> <a class="external text" href="http://nesdev.com/mck_guide_v1.0.txt" rel="nofollow">MCK/MML Beginners Guide</a>  v1.0 by Nullsleep/8bitpeoples.</li>
+<li> <a class="external text" href="http://nesdev.com/mck-mml%20Beginners%20Guide%20v1.0_cn.txt" rel="nofollow">MCK/MML Beginners Guide (Chinese)</a>  v1.0 by Nullsleep, translated by Tong Yun Weng.</li>
+<li> <a class="external text" href="http://nesdev.com/DPCM_HowTo.txt" rel="nofollow">DPCM HowTo</a>  by nullsleep.  How to use DPCM samples with MCK.</li>
+<li> <a class="external text" href="http://wiw.org/%7Etek/muzak/#info" rel="nofollow">Making NSFs under UNIX</a>  by Julian Squires.  Info concerning MCK.  Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/nsf2midi0130.lzh" rel="nofollow">nsf2midi (Japanese)</a>  v.130 by GIGO.  <a class="external text" href="http://nesdev.com/nsf2midi005aE.zip" rel="nofollow">NSF2MIDI (english)</a>  v.05a Translated by Tatt and Yura.</li>
+<li> <a class="external text" href="http://nesdev.com/wav2nes.zip" rel="nofollow">WAV2NES</a>  by David de Regt.  Converts a .wav file to an .NES rom, but uses an obscure mapper.</li>
+<li> <a class="external text" href="http://nesdev.com/dmcconv005.zip" rel="nofollow">dmc converter (Japanese)</a>  v.05 by Norix.  <a class="external text" href="http://nesdev.com/DPCM_HowTo.txt" rel="nofollow">english doc</a> by Nullsleep.</li>
+<li> <a class="external text" href="http://nesdev.com/81.zip" rel="nofollow">sample converters</a>  by Bananmos.  Includes 8bit-to-1bit and 1bit-to-8bit programs.</li>
+<li> <a class="external text" href="http://nesdev.com/81v2.zip" rel="nofollow">sample converter</a>  by Damian Yerrick.  Converts 8-bit samples to NES's 1-bit format, also scales the volume and oversamples the sound.</li>
+<li> <a class="external text" href="http://shaw.la.coocan.jp/nsdl/" rel="nofollow">NES Sound Driver &amp; Library (NSD.Lib)</a> by S.W.   A sound driver. This include the library for cc65/ca65 and MML compiler(This can make NSF and assembler source).</li></ul>
+<h3><span class="mw-headline" id="Amiga_Programs">Amiga Programs</span></h3>
+<h4><span class="mw-headline" id="6502_Tools_2">6502 Tools</span></h4>
+<ul><li> <a class="external text" href="http://www.villehelin.com/wla.html" rel="nofollow">WLA DX</a>  A GB-Z80/Z80/6502/6510/65816 macro assembler.</li>
+<li> <a class="external text" href="http://nesdev.com/dasm.zip" rel="nofollow">DASM  v2.0 by Mathew Dillon.  Source code is included.  [http://nesdev.com/dasm32.zip v.212</a> is also available, but does not include an Amiga executable.</li></ul>
+<h4><span class="mw-headline" id="Graphic_Tools_2">Graphic Tools</span></h4>
+<ul><li> <a class="external text" href="http://nesdev.com/raw2chr.zip" rel="nofollow">Raw2CHR</a>  by Chris Covell.  Converts graphics from RAW to the NES's format.  C source code is included.</li>
+<li> <a class="external text" href="http://nesdev.com/charlie.zip" rel="nofollow">CHARlie</a>  by Chris Covell.  Optimizes graphics in CHR roms by removing duplicate tiles.  C source code is included.</li>
+<li> <a class="external text" href="http://nesdev.com/chr2nam.zip" rel="nofollow">CHR2NAM</a>  by Chris Covell.  Makes a nametable from your CHR rom.  C source code is included.  </li></ul>
+<h4><span class="mw-headline" id="Misc_tools">Misc tools</span></h4>
+<ul><li> <a class="external text" href="http://nesdev.com/FDSList.zip" rel="nofollow">FDSList</a> v1.2  by Chris Covell.  Lists and extracts files from Famicom disk images.  Supports FDS format.</li>
+<li> <a class="external text" href="http://nesdev.com/AmiGenie.lha" rel="nofollow">AmiGenie</a>  by Chris Covell.  Converts between Game Genie codes and hex addresses.</li></ul>
+<h2><span class="mw-headline" id="NES_Hardware_Information">NES Hardware Information</span></h2>
+<ul><li> Index of US <a href="Patents.xhtml" title="Patents">patents</a> related to the NES/Famicom.</li></ul>
+<h3><span class="mw-headline" id="console_hardware">console hardware</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/NES%20hardware%20development%20guide.txt" rel="nofollow">NES hardware development guide</a>  First release (4-23-2004), by Brad Taylor.  Detailed NES hardware info, and several project ideas.</li>
+<li> <a class="external text" href="http://nesdev.com/Ntd_8bit.jpg" rel="nofollow">Family Computer schematic</a>  by Nintendo?  File provided by Ubaldo Prones.</li>
+<li> <a class="external text" href="http://nesdev.com/famicom_kairo.txt" rel="nofollow">Nintendo Family Computer 回路の解析</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/famicom-circuitry.txt" rel="nofollow">Nintendo Family Computer circuitry RE</a>  by goroh, english translation by Ki.</li>
+<li> <a class="external text" href="http://nesdev.com/2A03_pinout.txt" rel="nofollow">2A03 Pinout</a>  by Eli Dayan.</li>
+<li> <a class="external text" href="http://nesdev.com/nes_ppu.txt" rel="nofollow">RP2C02G (aka: the NES's PPU)</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/NESAudio.gif" rel="nofollow">NES Audio Path</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/4783812-sound_synth.pdf" rel="nofollow">Electronic Sound Synthesizer</a>  A patent for the Famicom Disk System's sound hardware.</li>
+<li> <a class="external text" href="http://nesdev.com/5317714-digital_sound.pdf" rel="nofollow">Digital Sound Apperatus and External Memory Cartridge Used Therefor&quot;</a>  A patent for the NES's sample playing hardware.</li>
+<li> <a class="external text" href="http://nesdev.com/74HCT373.pdf" rel="nofollow">74LS373N</a>  Octal D-Type transparent latch; 3-state</li>
+<li> <a class="external text" href="http://nesdev.com/74HC_HCT04_CNV_2.pdf" rel="nofollow">74HCU04P</a>  Hex inverter</li>
+<li> <a class="external text" href="http://nesdev.com/74HC_HCT368_CNV_2.pdf" rel="nofollow">74HC368</a>  Hex buffer/line driver; 3-state; inverting</li>
+<li> <a class="external text" href="http://nesdev.com/74HC_HCT139_CNV_2.pdf" rel="nofollow">74LS139</a>  Dual 2-to-4 line decoder/demultiplexer</li>
+<li> <a class="external text" href="http://nesdev.com/nlockout.txt" rel="nofollow">Disabling the NES's lockout chip</a>  rev 0.4  by Mark Knibbs.</li>
+<li> <a class="external text" href="http://nesdev.com/Playchoice.pdf" rel="nofollow">Playchoice 10 Schematics</a>  1986 Nintendo of America Inc.</li>
+<li> <a class="external text" href="http://nesdev.com/VS_UniSystem.pdf" rel="nofollow">VS UniSystem Kit Manual</a>  by Nintendo of America Inc.  Instructions on changing the game in an NES arcade cabinet, part list, etc.</li>
+<li> <a class="external text" href="http://nesdev.com/VS_Wiring.pdf" rel="nofollow">VS UniSystem Wiring Diagram</a>  1984/1985 by Nintendo of America Inc.</li>
+<li> <a class="external text" href="http://nesdev.com/VSSCHEM.pdf" rel="nofollow">VS UniSystem Schematic</a>  by Nintendo Co. Ltd.</li>
+<li> <a class="external text" href="http://nesdev.com/nes-on-a-chip.txt" rel="nofollow">&quot;NES on a chip&quot; pinout</a> v1.0  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/6578_pinout.pdf" rel="nofollow">NT6578 NES &quot;on a chip&quot; pinout</a>  by Ubaldo Prones.</li></ul>
+<h3><span class="mw-headline" id="cartridge_hardware">cartridge hardware</span></h3>
+<p><i>Note: Goroh's docs are in japanese</i>
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/NES%20ROM%20Pinouts.txt" rel="nofollow">NES ROM Pinouts</a>  by Drk.  Covers all PRG, CHR, and RAM chips used in NES cartridges.</li>
+<li> <a class="external text" href="http://nesdev.com/NES%20EPROM%20Conversions.txt" rel="nofollow">NES EPROM Conversions</a>  by Drk.  Instructions on how to modify certain boards to use EPROMs.</li>
+<li> <a class="external text" href="http://nesdev.com/EPROM%20Pinouts.txt" rel="nofollow">EPROM Pinouts</a>  by Drk.</li>
+<li> <a class="external text" href="http://nesdev.com/fam_pinout.txt" rel="nofollow">Famicom Cartridge Connector Pinout</a>  by Siudym.  <a class="external text" href="http://nesdev.com/fam_pinout.doc" rel="nofollow">DOC version</a> available.</li>
+<li> <a class="external text" href="http://nesdev.com/smb2_pinout.txt" rel="nofollow">Super Mario Bros. 2 Pinout</a>  by Siudym.  Board is NES-TSROM-07.</li>
+<li> <a class="external text" href="http://nesdev.com/smb3_pinout.txt" rel="nofollow">Super Mario Bros. 3 Pinout</a>  by Siudym.  Board is NES-TSROM-08.</li>
+<li> <a class="external text" href="http://nesdev.com/solo_pinout.txt" rel="nofollow">Solstice Pinout</a>  by Siudym.  Board is NES-ANROM-XX.</li>
+<li> <a class="external text" href="http://nesdev.com/ww2_pinout.txt" rel="nofollow">Wizards and Warriors 2: Ironsword Pinout</a>  by Siudym.  Board is NES-AOROM-03.</li>
+<li> <a class="external text" href="http://nesdev.com/dkc_pinout.txt" rel="nofollow">Donkey Kong Classics Pinout</a>  by Siudym.  Board is NES-CNROM-07.  Comments in Polish.</li>
+<li> <a class="external text" href="http://nesdev.com/goroh1.zip" rel="nofollow">goroh's docs 1</a>  by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/goroh2.zip" rel="nofollow">goroh's docs 2</a>  by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/rom.txt" rel="nofollow">NES Cart Types</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/namco106.txt" rel="nofollow">Namcot 106</a>  by goroh, fix by ZW4 and nori, english translation by nori.</li>
+<li> <a class="external text" href="http://nesdev.com/maxi15.txt" rel="nofollow">Preliminary Maxi-15 Mapper Hardware Description</a>  by Mark.</li>
+<li> <a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a>  v0.80 by \Firebug\.  Includes viewer program by Troy McLeod.</li>
+<li> <a class="external text" href="http://nesdev.com/map90v20.txt" rel="nofollow">Mapper 90 Information</a>  v2.0  by Fx3.</li>
+<li> <a class="external text" href="http://nesdev.com/caltron.txt" rel="nofollow">Caltron / Myriad Games 6-in-1</a>  v1.0  by The Mad Dumper.</li>
+<li> <a class="external text" href="http://nesdev.com/vrcvii.txt" rel="nofollow">Konami VRC-VII Chip Info</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/vrcvi.txt" rel="nofollow">Konami VRC-VI Chip Info</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/vrc6-j.txt" rel="nofollow">Konami VRC-VI</a>  by goroh.  Sound info is inaccurate.</li>
+<li> <a class="external text" href="http://nesdev.com/mmc1.txt" rel="nofollow">Nintendo MMC1</a>  by Matthew J. Richey.</li>
+<li> <a class="external text" href="http://nesdev.com/mmc2.txt" rel="nofollow">Nintendo MMC2</a>  01/29/98  by Jim Geffre.</li>
+<li> <a class="external text" href="http://nesdev.com/mmc3.txt" rel="nofollow">Nintendo MMC3</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/mmc4.txt" rel="nofollow">Nintendo MMC4</a>  by ???</li>
+<li> <a class="external text" href="http://nesdev.com/mmc5_bank_switch.txt" rel="nofollow">Nintendo MMC5 Bankswitching</a>  by Kevin Horton.</li>
+<li> <a class="external text" href="http://nesdev.com/mmc5-e.txt" rel="nofollow">Nintendo MMC5</a>  by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/mapper6.txt" rel="nofollow">Mapper 6</a>  Info on the FFE mapper.  By FanWen Yang.</li>
+<li> <a class="external text" href="http://nesdev.com/16.txt" rel="nofollow">Bandai Mapper</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/bandai-e.txt" rel="nofollow">Bandai Mapper</a>  About Bandai's NES mapper.  By goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/jaleco.txt" rel="nofollow">Jaleco Mapper</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/konami-e.txt" rel="nofollow">Konami Mapper</a>  by goroh, translated by Sgt. Bowhack.  <a class="external text" href="http://nesdev.com/konami-j.txt" rel="nofollow">Here</a> is the japanese version.</li>
+<li> <a class="external text" href="http://nesdev.com/taito-j.txt" rel="nofollow">Taito Mapper</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/namco.txt" rel="nofollow">Namco Mapper</a>  by goroh.</li>
+<li> <a class="external text" href="http://nesdev.com/sunsoft.txt" rel="nofollow">Sunsoft Mapper</a>  by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://nesdev.com/40.txt" rel="nofollow">SMB2j aka &quot;The Lost Levels&quot; Mapper #40 Info</a>  2.08.2000  by The Mad Dumper.</li>
+<li> <a class="external text" href="http://nesdev.com/42.txt" rel="nofollow">Pirate game &quot;Mario Baby&quot; Mapper #42 Info</a>  5.29.2000  by The Mad Dumper.</li>
+<li> <a class="external text" href="http://nesdev.com/225.txt" rel="nofollow">iNES mapper 225</a>  by ???</li>
+<li> <a class="external text" href="http://nesdev.com/226.txt" rel="nofollow">iNES mapper 226</a>  by Mark.</li>
+<li> <a class="external text" href="http://nesdev.com/Mari7in1.txt" rel="nofollow">&quot;Mario Party&quot; 7 in 1</a>  by The Mad Dumper.</li></ul>
+<h2><span class="mw-headline" id="NES_Hardware_Projects">NES Hardware Projects</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/lptnes.zip" rel="nofollow">PC NES transfer cable</a> by sepi. Connects a PC's parallel port to the NES control port. It allows you control a game with a PC keyboard to log and play back button presses.</li>
+<li> <a class="external text" href="http://nesdev.com/fdsloadr.zip" rel="nofollow">Famicom Disk System Loader</a> by Brad Taylor. This is the software and documentation for a hardware project to emulate the FDS's disk drive using a PC disk drive via parallel port. Can also copy FDS disk contents to your PC.</li>
+<li> <a class="external text" href="http://www.tripoint.org/kevtris/Projects/copynes/" rel="nofollow">CopyNES</a>  by Kevin Horton.  NES modification that allows reading and writing of cartridges.</li>
+<li> <a class="external text" href="http://enio.chykn.com/" rel="nofollow">ENIO</a>  by Pete Brown.  Goal is to give the NES ethernet access to a game server over the Internet.</li>
+<li> <a class="external text" href="http://breaknes.com" rel="nofollow">Breaking NES</a> by org. NES chips exploration down to silicon level.</li></ul>
+<h2><span class="mw-headline" id="Links">Links</span></h2>
+<h3><span class="mw-headline" id="Music">Music</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/music/" rel="nofollow">NES Music</a>  NES music in module format.</li>
+<li> <a class="external text" href="http://nesdev.com/2A03/" rel="nofollow">Sounds of the 2A03</a>  New, original NES music!</li>
+<li> <a class="external text" href="http://nesdev.com/NESAudioRipping.zip" rel="nofollow">NES Music Ripping Guide</a> v1.4 by Chris Covell.</li>
+<li> <a class="external text" href="http://nesdev.com/nt2re.zip" rel="nofollow">The NED File Format</a> by Damian Yerrick. A reverse-engineering of NerdTracker 2 file-format.</li>
+<li> <a class="external text" href="http://nesdev.com/sound.txt" rel="nofollow">Sound test codes</a> by me. If you know one that isn't in there, tell <a class="external text" href="mailto:5010.0951@tcon.net" rel="nofollow">me</a>. Thanks to Bananmos for getting this back to me after my harddisk died.</li>
+<li> <a class="external text" href="http://nesdev.com/authors.htm" rel="nofollow">NES Music Author List</a> v3.11 Information from various sources, compiled by Memblers. A never-ending research project that needs your <a class="external text" href="mailto:5010.0951@tcon.net" rel="nofollow">contributions</a>.</li>
+<li> <a class="external text" href="http://fripper.fc2web.com/nes_composer.html" rel="nofollow">NES Music Author List</a> Japanese translation by HAS. Off-site link.</li>
+<li> <a class="external text" href="http://nesdev.com/sk8ordie.mp3" rel="nofollow">Skate or Die 2 (title theme)</a> Recorded by Memblers, through the audio output of an NES. This Rob Hubbard tune uses raw PCM output ($4011) that few (if any) emulators play correctly.</li>
+<li> <a class="external text" href="http://nesdev.com/comic_bakery.mp3" rel="nofollow">Comic Bakery</a> Recorded by Chris Covell. This is an MP3 of how this cover of a Martin Galway song plays on a real NES (The one in the Stars SE demo). It doesn't sound too good, due to some scarcely documented um.. features of the NES's sound hardware. Since it does a great job of highlighting these features, it may be be useful for emulator authors who want to improve their sound emulation accuracy. This MP3 is in stereo, the square waves are in the left channel, the triangle is in the right one. The noise channel isn't used. If you're wondering, these features were compensated for in Bananmos's newest sound code (as used in Solar Wars), and it is now 100% cool on real NES. =)</li>
+<li> <a class="external text" href="http://2a03.org/" rel="nofollow">2A03.org</a>  An archive of new NES music in NSF format.</li>
+<li> <a class="external text" href="http://www.tripoint.org/kevtris/nes/nsf.html" rel="nofollow">NSF Collection</a>  Here you can get a sorted collection of NSFs, the only bad thing being that the sound effects are removed.</li>
+<li> <a class="external text" href="http://wayfar.net/" rel="nofollow">wayfar.net</a>  Makers of MIDINES, a MIDI interface cartridge for NES.</li>
+<li> <a class="external text" href="http://www.vgmix.com/" rel="nofollow">VGMIX</a>  A videogame music remix site, with an excellent interface for musicans to add their own works.</li>
+<li> <a class="external text" href="http://www.vorc.org/" rel="nofollow">VORC</a>  A Japanese/English chip and game music news site.</li>
+<li> <a class="external text" href="http://www.zophar.net/nsf/" rel="nofollow">Zophar's Domain NSF page</a>  The most complete NSF archive around.</li>
+<li> <a class="external text" href="http://www.nanjamonja.com/" rel="nofollow">Chibi-Tech's page</a>  Tracked chip music, including NES-style stuff.</li>
+<li> <a class="external text" href="http://www.parodius.com/%7Ememblers/dropoff7.htm" rel="nofollow">Dropoff 7</a>  Original music, plus NES music remixes and a few real NES tunes recorded with analogue effects.</li>
+<li> <a class="external text" href="http://www.minibosses.com/" rel="nofollow">The Minibosses</a>  A band that covered some NES songs, their MP3s available for download here.</li>
+<li> <a class="external text" href="http://www.ocremix.org/" rel="nofollow">OverClocked ReMix</a>  A site with remixes (mostly MP3 format) of music from games of many systems.</li>
+<li> <a class="external text" href="http://nesmusic.zophar.net/" rel="nofollow">The Best Game Music!</a>  Check it out whether you read Japanese or not, it has music and original content.  Also the home of the MCK sound driver.</li>
+<li> <a class="external text" href="http://www.kontek.net/vgjam/" rel="nofollow">Video Game Jam</a>  Guitar and bass tablature for game music.</li>
+<li> <a class="external text" href="http://www.chiptune.com/" rel="nofollow">Chiptune.com</a>  Chip music in various formats.</li></ul>
+<h3><span class="mw-headline" id="NES-related">NES-related</span></h3>
+<ul><li> <a class="external text" href="http://www.egroups.com/group/nesdev" rel="nofollow">NESdev mailing list</a>  A mailing list for NES programmers.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/" rel="nofollow">NESdev messageboard</a>  The messageboard for this site.</li>
+<li> <a class="external text" href="http://www.neshq.com/" rel="nofollow">NES HQ</a>  A site with a bit of hardware info, a few cart/box scans, and other stuff.</li>
+<li> <a class="external text" href="http://graphics.stanford.edu/%7Eianbuck/proj/Nintendo/" rel="nofollow">Hardware Console Design</a>  NES Hardware simulator done in VHDL.</li>
+<li> <a class="external text" href="http://www.classicgaming.com/nestable/index.shtml" rel="nofollow">NESp</a>  Website for a portable NES project.</li>
+<li> <a class="external text" href="http://mypage.direct.ca/c/ccovell/nesdev.html" rel="nofollow">Dr. PC Jr. Development Page</a>  A site with technical information and support files for the Dr. PC Jr.  (A Chinese computer based on the NES/Famicom)</li>
+<li> <a class="external text" href="http://www.valesh.com/%7Ejon/computers/nintendo.html" rel="nofollow">Nintendo, America!</a>  A page by Jon Valesh, who worked at Color Dreams.</li>
+<li> <a class="external text" href="http://nesworld.com/" rel="nofollow">NES World</a>  An excellent NES site.</li>
+<li> <a class="external text" href="http://atarihq.com/tsr/" rel="nofollow">tsr's NES archive</a>  Another good NES site.</li></ul>
+<h3><span class="mw-headline" id="misc._tech">misc. tech</span></h3>
+<ul><li> <a class="external text" href="http://www.retrousb.com/" rel="nofollow">RetroZone</a> Manufacturer of the <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> device for NES and SNES, controller adapters, and custom cartridges.</li>
+<li> <a class="external text" href="http://www.tototek.com/" rel="nofollow">Tototek</a>  A supplier of FlashROM-based cartridges for various systems, among other things.</li>
+<li> <a class="external text" href="http://www.romlab.prv.pl/" rel="nofollow">RomLabratory</a>  Tons of tech info about cartridges for NES/FC, SNES/SFC, and Sega Genesis/MegaDrive.</li>
+<li> <a class="external text" href="http://smsflash.8m.com/" rel="nofollow">SMS Flash devcart and Motherboard Flash Method</a>  How to program a Flash-ROM with a PC motherboard, and SMS devcart instructions.</li>
+<li> <a class="external text" href="http://www.schells.com/cuttlecart.shtml" rel="nofollow">Cuttle Cart</a>  A RAM cartridge for 2600 with bankswitching support.  Loads a ROM through audio input.</li>
+<li> <a class="external text" href="http://www.smspower.org/" rel="nofollow">SMS Power</a>  A page with some tech info, demos and sources and stuff for the Sega Master System.</li>
+<li> <a class="external text" href="http://www.gamesx.com/" rel="nofollow">GamesX</a>  A page with technical info on various consoles.</li>
+<li> <a class="external text" href="http://www.io.com/%7Enickb/atariprg.htm" rel="nofollow">Atari 2600 Programming Page</a>  You'd have to be a maniac to program this console.</li>
+<li> <a class="external text" href="http://quadrun.tripod.com/" rel="nofollow">Atari 7800 Developer's Page</a>  Info on building a devkit/copier for 2600/7800.</li></ul>
+<h3><span class="mw-headline" id="home_pages">home pages</span></h3>
+<ul><li> <a class="external text" href="http://bobrost.com/nes/" rel="nofollow">Game Development for the 8-bit NES</a>  Bob Rost's site.  Lots of interesting NES projects.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-emu/" rel="nofollow">NES Sound Emulation</a>  Blargg's site.</li>
+<li> <a class="external text" href="http://www.siudyms.prv.pl/" rel="nofollow">Siudym's Homepage</a>  Tech info, and other stuff.  In Polish and English.</li>
+<li> <a class="external text" href="http://chewbonesoftware.cjb.net/" rel="nofollow">Chewbone Software</a></li>
+<li> <a class="external text" href="http://www.parodius.com/%7Ememblers/games/" rel="nofollow">Strangulation Games</a>  Unlicensed NES game developer.</li>
+<li> <a class="external text" href="http://pineight.com/" rel="nofollow">Damian Yerrick's page</a>  NES and PC games and demos.</li>
+<li> <a class="external text" href="http://www.disgruntleddesigner.com/chrisc/" rel="nofollow">Chris Covell's page</a>  Some interesting stuff, and even an explanation of how to convert your NES to have stereo sound!</li>
+<li> <a class="external text" href="http://www.tripoint.org/kevtris" rel="nofollow">BlueTech</a>  Kevin Horton's page.  Tech info, pictures and descriptions of some amazing home-made devices.</li>
+<li> <a class="external text" href="http://wwwkenya.freeuk.com/markk/" rel="nofollow">Mark Knibb's page</a>  Some console tech info, plus some Amiga and C64 stuff.</li>
+<li> <a class="external text" href="http://memblers.com/" rel="nofollow">Memblers' page</a>  Info about Dropoff 7 (the band I'm in), and downloadable music in MP3, NSF, and iNES format.</li></ul>
+<h3><span class="mw-headline" id="6502_2">6502</span></h3>
+<ul><li> <a class="external text" href="http://www.npsnet.com/danf/cbm/cross-development.html" rel="nofollow">6502 Cross-Development Languages and Tools</a></li>
+<li> <a class="external text" href="http://www.ffd2.com/fridge/" rel="nofollow">The Fridge</a>  6502 source code archive.</li>
+<li> <a class="external text" href="http://atarihq.com/danb/6502.shtml" rel="nofollow">Dan Boris's 6502 Page</a></li>
+<li> <a class="external text" href="http://6502.org/" rel="nofollow">6502.org</a></li></ul>
+<h3><span class="mw-headline" id="misc_6502">misc 6502</span></h3>
+<ul><li> <a class="external text" href="http://micro.magnet.fsu.edu/chipshots/mos/index.html" rel="nofollow">Magnified pictures of a 6502</a></li></ul>
+<center><a class="image" href="File_Mbar_gif.xhtml"><img alt="Mbar.gif" height="60" src="../wiki-images/Mbar.gif" width="400"/></a></center>
+<center><font size="1">graphics were ripped from other pages.</font></center>
+<p>Horde soldier: &quot;Surrender, citizen!&quot;<br/>
+Bo: (laughs) &quot;I'm not a citizen, I'm a rebel.&quot;<br/>
+-from the He-Man cartoon, The Secret of the Sword.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.257 seconds
+Real time usage: 0.261 seconds
+Preprocessor visited node count: 126/1000000
+Preprocessor generated node count: 134/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:351-1!*!0!!en!5!* and timestamp 20160208225710 and revision id 11387
+ -->
+</div></body></html>

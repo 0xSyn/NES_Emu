@@ -1,0 +1,96 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>8-bit Multiply</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>8-bit Multiply</h1><div class="article">
+<p>The following code multiplies two 8-bit integers (range 0...255) and outputs a 16-bit result using only real calculation, no lockup table so the size of the code is very small.
+</p>
+<pre>
+;8-bit multiply
+;by Bregalad
+;Enter with A,Y, numbers to multiply
+;Output with YA = 16-bit result (X is unchanged)
+Multiply
+	sty Factor	;Store input factor
+	ldy #$00
+	sty Res
+	sty Res2	;Clear result
+	ldy #$08	;Number of shifts needed
+
+-	lsr A		;Shift right input number
+	bcc +		;Check if bit is set
+	pha
+	lda Res2
+	clc
+	adc Mult
+	sta Res2	;If so add number to result
+	pla
++	lsr Res2	;Shift result right
+	ror Res
+	dey
+	bne -
+	lda Res
+	ldy Res2
+	rts
+</pre>
+<h2><span class="mw-headline" id="Russian_Peasant_Algorithm">Russian Peasant Algorithm</span></h2>
+<p>This is the Russian peasant algorithm which was suggested by Bob Rost in his NES Development class PDFs.  With 8 bit values the maximum number of iterations would be 7.  Try to have value2ptr point to the lesser of the two values to reduce iterations.
+</p>
+<pre>
+; Multiply two bytes in memory using Russian peasant algorithm
+; by frantik
+
+
+; Accepts: value1ptr and value2ptr, pointers to bytes in memory
+;   value2ptr should point to the lesser of the two values 
+;   for increased efficiency
+; Uses: $00, $01, $02 for temporary variables
+; Returns: 16 bit value in $00 and $01
+
+.macro multiply value1ptr, value2ptr
+
+ret  = $00			; return value
+temp = $02			; temp storage
+
+	lda #$00		; clear temporary variables
+	sta ret
+	sta ret+1
+	sta temp
+	jmp start:
+
+-loop:
+	asl value1ptr		; double first value
+	rol temp		; using 16bit precision
+	lsr value2ptr		; halve second vale
+start:
+	lda value2ptr		;
+	and #01			; is new 2nd value an odd number?
+	beq -loop:		; 
+	clc			; if so, add new 1st value to running total
+	lda ret			;
+	adc value1ptr		;
+	sta ret			;
+	lda ret+1		;
+	adc temp		;
+	sta ret+1		;
+	lda value2ptr		;
+	cmp #01			; is 2nd value 1?  if so, we're done
+	bne -loop:		; otherwise, loop
+.endm
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:227-1!*!*!*!*!*!* and timestamp 20160208224715 and revision id 9022
+ -->
+<p class="categories">Categories: <a href="Category_Arithmetic.xhtml">Arithmetic</a></p></div></body></html>

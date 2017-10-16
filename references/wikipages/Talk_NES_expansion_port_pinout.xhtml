@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:NES expansion port pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:NES expansion port pinout</h1><div class="article">
+<h2><span class="mw-headline" id="In.2Fout.2C_and_musing_all_over_the_place">In/out, and musing all over the place</span></h2>
+<p>Audio in/out, $4016 outs, and video out seem clear enough, and, if I understand correctly, EXP* are whatever direction the hardware guys choose between cart and expansion. But how is the expansion port situated related to the controllers, as it seems to only have one connection to each controller pin? 
+</p><p>Is it possible to make an expansion-port [NES] extra-controller adapter that's compatible with, say, FourScore software, with only two ports? Or would one have to have four ports on the expansion device in order to be able to serialize one controller with the other (and signature)? (Famicom-expansion style, putting in upper bits seems much easier, though obviously less useful thanks to it not being a Famicom.) Hmm, adding a SNES controller port would be nice too… <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 10:35, 15 July 2016 (MDT)
+</p>
+<dl><dd> The data lines are just directly shared with the input from the jacks on the front, so there's technically going to be a bus conflict between a plugged-in controller and whatever tries to drive it via the expansion port. Which doesn't explain why $4017.d0 is available on the <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">Famicom expansion port</a>... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 11:40, 15 July 2016 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.025 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1681-1!*!0!*!*!*!* and timestamp 20160715211353 and revision id 12723
+ -->
+</div></body></html>

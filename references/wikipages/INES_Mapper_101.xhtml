@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 101</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 101</h1><div class="article">
+<p>This mapper was allocated for a naïve misdumping of the <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1547" rel="nofollow">JF-10</a> board that contains <i>Urusei Yatsura - Lum no Wedding Bell</i>. JF-10 is identical to <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3004" rel="nofollow">JF-09</a>, which is the only <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">mapper 87</a> game with 32KiB CHR. Both JF-10 and JF-09 only differ from all their predecessors (<a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3006" rel="nofollow">JF-05</a>, <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=2282" rel="nofollow">-06</a>, <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=2283" rel="nofollow">-07</a>, and <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1732" rel="nofollow">-08</a>) by the addition of a single trace. In short, either mapper 87 should be capped to 16KiB CHR, or mapper 101 never had a hardware instantiation.
+</p><p>Supported in r3420 BizHawk, r2696 FCEUX (probably has been supported for eons), and reportedly MESS.
+</p>
+<pre>Registers:
+---------------------------
+ $6000-7FFF: [CCCC CCCC]
+    C = Selects 8k CHR @ $0000
+</pre>
+<p>This is the same as <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">mapper 87</a> but with the bits in order, and so has a better defined <a href="Oversize.xhtml" title="Oversize">oversize</a> extension; or the same as <a href="CNROM.xhtml" title="CNROM">CNROM</a> without bus conflicts.
+</p><p>Jaleco subsequently extended the JF-09 and JF-10 boards to add the ability to bank PRG in a <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM</a>-like manner. That was allocated to <a href="INES_Mapper_140.xhtml" title="INES Mapper 140">iNES Mapper 140</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:904-1!*!0!*!*!*!* and timestamp 20160208225227 and revision id 8764
+ -->
+<p class="categories">Categories: <a href="Category_CNROM_like_mappers.xhtml">CNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Bad_iNES_Mappers.xhtml">Bad iNES Mappers</a></p></div></body></html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU power up state</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU power up state</h1><div class="article">
+<p>The following results are from a US (NTSC) NES, original front-loading design, RP2A03G CPU chip, NES-CPU-07 main board revision, manufactured in 1988. The memory values are probably slightly different for each individual NES console. Please note that you should NOT rely on the state of any registers after Power-UP and especially not the stack register and RAM ($0000-$07FF).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#At_power-up"><span class="tocnumber">1</span> <span class="toctext">At power-up</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#After_reset"><span class="tocnumber">2</span> <span class="toctext">After reset</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="At_power-up">At power-up</span></h2>
+<dl><dd>P = $34<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> (IRQ disabled)<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup></dd>
+<dd>A, X, Y = 0</dd>
+<dd>S = $FD</dd>
+<dd>$4017 = $00 (frame irq enabled)</dd>
+<dd>$4015 = $00 (all channels disabled)</dd>
+<dd>$4000-$400F = $00 (not sure about $4010-$4013)</dd></dl>
+<dl><dd>Internal memory ($0000-$07FF) has unreliable startup state. Some machines may have consistent RAM contents at power-on, but others do not.
+<ul><li> Emulators often implement a consistent RAM startup state (e.g. all $00 or $FF, or a particular pattern), and flash carts like the <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> may partially or fully initialize RAM before starting a program, so an NES programmer must be careful not to rely on the startup contents of RAM.</li></ul></dd></dl>
+<h2><span class="mw-headline" id="After_reset">After reset</span></h2>
+<dl><dd>A, X, Y were not affected</dd>
+<dd>S was decremented by 3 (but nothing was written to the stack)</dd>
+<dd>The I (IRQ disable) flag was set to true (status ORed with $04)</dd>
+<dd>The internal memory was unchanged</dd>
+<dd>APU mode in $4017 was unchanged</dd>
+<dd>APU was silenced ($4015 = 0)</dd></dl>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="PPU_power_up_state.xhtml" title="PPU power up state">Power-up state of PPU</a></li></ul>
+<h2><span class="mw-headline" id="Notes">Notes</span></h2><ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text">The <a href="Emulator_tests.xhtml" title="Emulator tests">golden log of nestest</a> differs from this in the <a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">irrelevant bits 5 and 4 of P</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text">IRQ was first asserted about 1/60 second after power-up, by APU.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.074 seconds
+Real time usage: 0.151 seconds
+Preprocessor visited node count: 57/1000000
+Preprocessor generated node count: 170/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:38-1!*!0!!en!*!* and timestamp 20160208224836 and revision id 11712
+ -->
+</div></body></html>

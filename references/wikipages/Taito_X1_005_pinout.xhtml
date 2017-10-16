@@ -1,0 +1,54 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Taito X1-005 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Taito X1-005 pinout</h1><div class="article">
+<p>Taito X1-005: 48-pin 0.6&quot; PDIP (Canonically <a href="INES_Mapper_080.xhtml" title="INES Mapper 080">mapper 80</a>).
+</p>
+<pre>               .---\/---.
+         NC -- |01    48| -- VCC
+(F)      M2 -&gt; |02    47| -&gt; PRG A17 (r)
+(s) CPU A12 -&gt; |03    46| -&gt; PRG A15 (r)
+(F) CPU A13 -&gt; |04    45| -&gt; PRG A14 (r)
+(F) CPU A14 -&gt; |05    44| -&gt; PRG A13 (r)
+(s)  CPU A6 -&gt; |06    43| &lt;- CPU A8  (s)
+(s)  CPU A5 -&gt; |07    42| &lt;- CPU A9  (s)
+(s)  CPU A4 -&gt; |08    41| &lt;- CPU A11 (s)
+(s)  CPU A3 -&gt; |09    40| -&gt; PRG A16 (r)
+(s)  CPU A2 -&gt; |10    39| &lt;- CPU A10 (s)
+(s)  CPU A1 -&gt; |11    38| &lt;- /ROMSEL (s)
+(s)  CPU A0 -&gt; |12    37| &lt;&gt; PRG D7  (s)
+(s)  CPU D0 &lt;&gt; |13    36| &lt;&gt; PRG D6  (s)
+(s)  CPU D1 &lt;&gt; |14    35| &lt;&gt; PRG D5  (s)
+(s)  CPU D2 &lt;&gt; |15    34| &lt;&gt; PRG D4  (s)
+(F) CPU R/W -&gt; |16    33| &lt;&gt; PRG D3  (s)
+(r) CHR A17 &lt;- |17    32| -- NC
+        GND -- |18    31| -&gt; CIRAM A10 (F)
+(r) CHR A15 &lt;- |19    30| -&gt; CHR A14 (r)
+(r) CHR A12 &lt;- |20    29| -&gt; CHR A13 (r)
+(F) PPU A10 -&gt; |21    28| -&gt; CHR A11 (r)
+(F) PPU A11 -&gt; |22    27| -&gt; CHR A16 (r)
+(F) PPU A12 -&gt; |23    26| -&gt; CHR A10 (r)
+        GND -- |24    25| -- NC
+               `--------'
+</pre>
+<p>Variant pinout for <a href="INES_Mapper_207.xhtml" title="INES Mapper 207">mapper 207</a>:
+</p>
+<pre><b>(F) CIRAM A10</b> &lt;- |17    32| -- NC
+          GND -- |18    31| -&gt; <b>NC</b>
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:817-1!*!0!*!*!*!* and timestamp 20160208225914 and revision id 7241
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

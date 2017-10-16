@@ -1,0 +1,239 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Family BASIC Keyboard</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Family BASIC Keyboard</h1><div class="article">
+<p>The Family Basic Keyboard (HVC-007) was a peripheral released with the Family Basic package in 1984. With the <a href="Family_BASIC_Data_Recorder.xhtml" title="Family BASIC Data Recorder">data recorder</a> that could be attached to it, it allowed the Famicom to have the abilities of the average home computer of around that time. It is a generic 72 button keyboard using common matrix logic, and can be connected to the Famicom at the expansion port.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Keyboard_map"><span class="tocnumber">1</span> <span class="toctext">Keyboard map</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Hardware_interface"><span class="tocnumber">2</span> <span class="toctext">Hardware interface</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Input_.28.244016_write.29"><span class="tocnumber">2.1</span> <span class="toctext">Input ($4016 write)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Output_.28.244017_read.29"><span class="tocnumber">2.2</span> <span class="toctext">Output ($4017 read)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Matrix"><span class="tocnumber">3</span> <span class="toctext">Matrix</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Hardware"><span class="tocnumber">4</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Miscellaneous"><span class="tocnumber">5</span> <span class="toctext">Miscellaneous</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Keyboard_map">Keyboard map</span></h2>
+<pre>F1  F2  F3  F4  F5  F6  F7  F8
+ 1 2 3 4 5 6 7 8 9 0 - ^ ¥ STOP       CH* INS DEL
+ESC Q W E R T Y U I O P @ [ RETURN        UP
+CTR A S D F G H J K L ; : ] KANA      LEFT RIGHT
+SHIFT Z X C V B N M , . / _ SHIFT        DOWN
+       GRPH   SPACE
+
+* CH = CLR HOME
+</pre>
+<p>If you have proper font support, with full-width spaces (i.e. &quot;=&quot; is above &quot;-&quot;):
+</p>
+<pre>
+
+　　　Ｆ１　　　　　　Ｆ２　　　　　　Ｆ３　　　　　　Ｆ４　　　　　　Ｆ５　　　　　　Ｆ６　　　　　　Ｆ７　　　　　　Ｆ８
+
+　　　　！　　　＂　　　＃　　　＄　　　％　　　＆　　　＇　　　（　　　）　　　　　　　＝
+　　　１　ァ　２　ィ　３　ゥ　４　ェ　５　ォ　６　　　７　　　８　　　９　　　０　　　－　　　＾　　　￥　　　 STOP
+　　　　ア　　　イ　　　ウ　　　エ　　　オ　　　ナ　　　ニ　　　ヌ　　　ネ　　　ノ　　　ラ　　　リ　　　ル　　　　　　　　ＣＬＲ
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　ＩＮＳ　ＤＥＬ
+　ＥＳＣ　Ｑ　　　Ｗ　　　Ｅ　　　Ｒ　　　Ｔ　　　Ｙ　パ　Ｕ　ピ　Ｉ　プ　Ｏ　ペ　Ｐ　ポ　＠　　　［　「　ＲＥＴＵＲＮ　　 HOME
+　　　　　　カ　　　キ　　　ク　　　ケ　　　コ　　　ハ　　　ヒ　　　フ　　　ヘ　　　ホ　　　レ　　　ロ
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　＋　　　＊　　　　　　　　　　　　　　　　　▲
+　　ＣＴＲ　Ａ　　　Ｓ　　　Ｄ　　　Ｆ　　　Ｇ　　　Ｈ　　　Ｊ　　　Ｋ　　　Ｌ　　　；　　　：　　　］　」　 カナ
+　　　　　　　サ　　　シ　　　ス　　　セ　　　ソ　　　マ　　　ミ　　　ム　　　メ　　　モ　　　ー　　　。
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　〈　　　〉　　　？　　　␣　　　　　　　　　　　　　◀　　　　　　　▶
+ＳＨＩＦＴ　　Ｚ　　　Ｘ　　　Ｃ　　　Ｖ　　　Ｂ　　　Ｎ　　　Ｍ　　　，　　　．　　　／　　　　　　　　ＳＨＩＦＴ
+　　　　　　　　タ　　　チ　　　ツ　　　テ　　　ト　　　ヤ　　　ユ　　　ヨ　　　ワ　　　ヲ　　　ン
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　▼
+
+　　　　　　　　　　　 GRPH ［．．．．．．．．．．．．ＳＰＡＣＥ．．．．．．．．．．．．］
+
+</pre>
+<p>Mind that the DEL key function is actually that of <i>Backspace</i> we all know and love.
+</p>
+<h2><span class="mw-headline" id="Hardware_interface">Hardware interface</span></h2>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xKCR
+      |||
+      ||+-- Reset the keyboard to the first row.
+      |+--- Select column, row is incremented if this bit goes from high to low.
+      +---- Enable keyboard matrix (if 0, all voltages inside the keyboard will be 5V, reading back as logical 0 always)
+</pre>
+<p>Incrementing the row from the (keyless) 10th row will cause it to wrap back to the first row.
+</p>
+<h3><span class="mw-headline" id="Output_.28.244017_read.29">Output ($4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxK KKKx
+   | |||
+   +-+++--- Receive key status of currently selected row/column.
+</pre>
+<p>Any key that is held down, will read back as 0.
+</p><p>($4016 reads from the data recorder.)
+</p>
+<h2><span class="mw-headline" id="Matrix">Matrix</span></h2>
+<table border="1">
+<tr>
+<th> </th>
+<th colspan="4"> Column 0
+</th>
+<th colspan="4"> Column 1
+</th></tr>
+<tr>
+<th> $4017 bit
+</th>
+<th> 4 </th>
+<th> 3 </th>
+<th> 2 </th>
+<th> 1 </th>
+<th> 4 </th>
+<th> 3 </th>
+<th> 2 </th>
+<th> 1
+</th></tr>
+<tr>
+<th> Row 0
+</th>
+<td> ] </td>
+<td> [ </td>
+<td> RETURN </td>
+<td> F8 </td>
+<td> STOP </td>
+<td> ¥ </td>
+<td> RSHIFT </td>
+<td> KANA
+</td></tr>
+<tr>
+<th> Row 1
+</th>
+<td> ; </td>
+<td> : </td>
+<td> @ </td>
+<td> F7 </td>
+<td> ^ </td>
+<td> - </td>
+<td> / </td>
+<td> _
+</td></tr>
+<tr>
+<th> Row 2
+</th>
+<td> K </td>
+<td> L </td>
+<td> O </td>
+<td> F6 </td>
+<td> 0 </td>
+<td> P </td>
+<td> , </td>
+<td> .
+</td></tr>
+<tr>
+<th> Row 3
+</th>
+<td> J </td>
+<td> U </td>
+<td> I </td>
+<td> F5 </td>
+<td> 8 </td>
+<td> 9 </td>
+<td> N </td>
+<td> M
+</td></tr>
+<tr>
+<th> Row 4
+</th>
+<td> H </td>
+<td> G </td>
+<td> Y </td>
+<td> F4 </td>
+<td> 6 </td>
+<td> 7 </td>
+<td> V </td>
+<td> B
+</td></tr>
+<tr>
+<th> Row 5
+</th>
+<td> D </td>
+<td> R </td>
+<td> T </td>
+<td> F3 </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> C </td>
+<td> F
+</td></tr>
+<tr>
+<th> Row 6
+</th>
+<td> A </td>
+<td> S </td>
+<td> W </td>
+<td> F2 </td>
+<td> 3 </td>
+<td> E </td>
+<td> Z </td>
+<td> X
+</td></tr>
+<tr>
+<th> Row 7
+</th>
+<td> CTR </td>
+<td> Q </td>
+<td> ESC </td>
+<td> F1 </td>
+<td> 2 </td>
+<td> 1 </td>
+<td> GRPH </td>
+<td> LSHIFT
+</td></tr>
+<tr>
+<th> Row 8
+</th>
+<td> LEFT </td>
+<td> RIGHT </td>
+<td> UP </td>
+<td> CLR HOME </td>
+<td> INS </td>
+<td> DEL </td>
+<td> SPACE </td>
+<td> DOWN
+</td></tr></table>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The Family BASIC Keyboard is implemented using a CD4017 decade counter (to scan the rows of the keyboard matrix), a CD4019 quad AND-OR gate, and one sixth of a CD4069 hex inverter. The latter two are combined to make a quad 1-of-2 selector, equivalent to a CD4519 or a 74'157. (Another three inverters are used to interface to the Family BASIC Data Recorder)
+</p>
+<h2><span class="mw-headline" id="Miscellaneous">Miscellaneous</span></h2>
+<ul><li> Unlike the PC keyboard, but similar to the Commodore 64 keyboard, the sixteen keys corresponding to ASCII $2C-$3B all specify the ASCII code point should be XORed with $10 when the SHIFT key is pressed. This can be used to simplify the keyboard decoding logic in your program.</li>
+<li> There is no backslash key, however, historical reasons have given to using the yen key and symbol for the same meaning.</li>
+<li> The kana are arranged in (grid) alphabetical order, not in the way that modern Japanese computers are.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> Reverse-engineered schematics by <a class="external text" href="http://www43.tok2.com/home/cmpslv/" rel="nofollow">Enri</a>:
+<ul><li> <a class="external free" href="http://www43.tok2.com/home/cmpslv/Famic/Fambas.htm" rel="nofollow">http://www43.tok2.com/home/cmpslv/Famic/Fambas.htm</a></li>
+<li> Also available <a class="external text" href="http://atariusa.com/Famicom_Schematics/FC%20Family%20Basic%20Keyboard%20and%20Sound%20Circuit%20Schematic.png" rel="nofollow">here</a> and <a class="external text" href="http://atariusa.com/Famicom_Schematics/FC%20Keyboard%20Key%20Schematic.png" rel="nofollow">here</a></li></ul></li>
+<li> Photographs of the keyboard by <a class="external text" href="https://commons.wikimedia.org/wiki/File:Nintendo-Famicom-Family-Basic-Keyboard-wCart.jpg" rel="nofollow">Evan-Amos</a></li>
+<li> <a class="external text" href="http://www.pfu.fujitsu.com/hhkeyboard/kb_collection/images/hvc-007.gif" rel="nofollow">Stylized keycaps diagram</a> from <a class="external text" href="http://www.pfu.fujitsu.com/hhkeyboard/kb_collection/" rel="nofollow">PFU's Happy Hacking Keyboard keyboard history library</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 40/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:67-1!*!0!!en!*!* and timestamp 20160411004842 and revision id 12166
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 088</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 088</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 088</strong> is the same as <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">mapper 206</a> with the following exception:
+</p>
+<ul><li> CHR support is increased to 128KB by connecting PPU's A12 line to the CHR ROM's A16 line.</li></ul>
+<p>Consequently, CHR is split into two halves. $0xxx can only have CHR from the first 64K, $1xxx can only have CHR from the second 64K.
+</p><p>A possible way to implement this would be to mask the CHR ROM 1K bank output from the mapper by ANDing with $3F, and then OR it with $40 if the PPU address was &gt;= $1000.
+</p><p>If the CHR ROM is 64K or smaller, it is identical to mapper 206.
+</p>
+<pre> Example Games:
+ --------------------------
+ Quinty (J)
+ Namcot Mahjong 3
+ Dragon Spirit - Aratanaru Densetsu
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:675-1!*!0!*!*!*!* and timestamp 20160208225203 and revision id 8858
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

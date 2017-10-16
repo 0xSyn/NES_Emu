@@ -1,0 +1,25 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 015</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 015</h1><div class="article">
+<p>On the page it says that in power-up state, the bank mode is 2, which is 8K. While I don't have any experience with testing out hardware mappers, I do have some ROMs that have this mapper and both don't have valid interrupt vectors in the first 8K. It seems to me more likely that the power-up state is bank mode 0 (32K), which both my emulators seem to use for this mapper. If I configure my emulator to use another bank mode at boot, the game won't run.--<s>Tai Ferret</s> (<s>talk</s>) 10:52, 5 April 2016 (MDT)
+</p>
+<h2><span class="mw-headline" id="Bank_mode_in_Powerup_State">Bank mode in Powerup State</span></h2>
+<p>I can also confirm that the Mapper implementation works (at least for the Contra 16 100-in-1 ROM) only when the starting bank mode is 0, not 2.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1636-1!*!0!*!*!*!* and timestamp 20160611171529 and revision id 12606
+ -->
+</div></body></html>

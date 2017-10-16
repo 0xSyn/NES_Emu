@@ -1,0 +1,80 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bandai LZ93D50 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bandai LZ93D50 pinout</h1><div class="article">
+<p>Bandai LZ93D50: 52-pin shrink PDIP (Canonically <a href="INES_Mapper_159.xhtml" title="INES Mapper 159">iNES Mapper 159</a>)
+</p>
+<pre>           .---\/---.
+        ?? |  1  52 | -- +5V
+        ?? |  2  51 | -&gt; PRG RAM /CS
+PRG /CE &lt;- |  3  50 | ?? ?
+    +5V ?? |  4  49 | ?? +5V
+     M2 -&gt; |  5  48 | ?? ?
+CPU A13 -&gt; |  6  47 | -&gt; PRG A17
+CPU A14 -&gt; |  7  46 | -&gt; PRG A15
+ CPU A3 -&gt; |  8  45 | -&gt; PRG A14
+ CPU A2 -&gt; |  9  44 | -&gt; PRG A16
+ CPU A1 -&gt; | 10  43 | &lt;- CPU D7
+ CPU A0 -&gt; | 11  42 | &lt;- CPU D6
+/ROMSEL -&gt; | 12  41 | &lt;- CPU D5
+ CPU D0 -&gt; | 13  40 | &lt;&gt; CPU D4
+ CPU D1 -&gt; | 14  39 | &lt;- CPU D3
+ CPU D2 -&gt; | 15  38 | -&gt; /IRQ
+    R/W -&gt; | 16  37 | -&gt; CIRAM A10
+PPU /RD -&gt; | 17  36 | -&gt; CHR A17
+CHR A15 &lt;- | 18  35 | -&gt; CHR A14
+CHR A12 &lt;- | 19  34 | -&gt; CHR A13
+PPU A10 -&gt; | 20  33 | -&gt; CHR A11
+PPU A11 -&gt; | 21  32 | -&gt; CHR A16
+PPU A12 -&gt; | 22  31 | -&gt; CHR A10
+PPU A13 -&gt; | 23  30 | -&gt; CHR /CE
+    GND -- | 24  29 | &lt;- **
+      ? ?? | 25  28 | -&gt; I²C SCL
+    GND -- | 26  27 | &lt;&gt; I²C SDA
+           '--------'
+
+** Grounded on BA-JUMP2. Floating on other games.
+   Seems likely to be an enable for reading I²C from $6000-$7fff (internal pullup, normally floating)
+</pre>
+<p>Bandai's variants of the LZ93D50 are almost as bad as <a href="MMC1_pinout.xhtml" title="MMC1 pinout">MMC1</a>.
+</p><p><a href="INES_Mapper_153.xhtml" title="INES Mapper 153">BA-JUMP2</a>: supports PRG RAM instead of I²C, replaces banked CHR-ROM with unbanked CHR-RAM, and increases PRG max to 512KiB:
+</p>
+<pre>PPU /RD -&gt; | 17  36 | -&gt; <b>n/c</b>
+    <b>n/c</b> &lt;- | 18  35 | -&gt; <b>n/c</b>
+    <b>n/c</b> &lt;- | 19  34 | -&gt; <b>n/c</b>
+PPU A10 -&gt; | 20  33 | -&gt; <b>n/c</b>
+PPU A11 -&gt; | 21  32 | -&gt; <b>n/c</b>
+    <b>GND</b> -&gt; | 22  31 | -&gt; <b>PRG A18</b>
+    <b>GND</b> -&gt; | 23  30 | -&gt; <b>n/c</b>
+    GND -- | 24  29 | &lt;- <b>GND</b>
+      ? ?? | 25  28 | -&gt; <b>PRG RAM +CS</b>
+    GND -- | 26  27 | &lt;&gt; <b>n/c</b>
+           '--------'
+</pre>
+<p><a href="INES_Mapper_157.xhtml" title="INES Mapper 157">Datach Joint ROM System</a>: Two separate I²C clocks, replaces banked CHR-ROM with unbanked CHR-RAM, and external barcode reader.
+</p><p>This IC is actually a 52-pin QFP, with a slightly different pin order from the PDIP instantiation. The pertinent changes:
+</p>
+<ul><li> I²C SCL is only for the internal EEPROM</li>
+<li> CHR A13 is External I²C SCL</li>
+<li> WRAM /CS drives a tristateable buffer that connects barcode data to CPU D3.</li></ul>
+<p>See also:
+</p>
+<ul><li> <a class="external free" href="http://seesaawiki.jp/famicomcartridge/d/Bandai%20Datach" rel="nofollow">http://seesaawiki.jp/famicomcartridge/d/Bandai%20Datach</a></li>
+<li> <a class="external free" href="http://seesaawiki.jp/famicomcartridge/d/Bandai%20LZ93D50%20standard" rel="nofollow">http://seesaawiki.jp/famicomcartridge/d/Bandai%20LZ93D50%20standard</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1135-1!*!0!*!*!*!* and timestamp 20160208224801 and revision id 8311
+ -->
+</div></body></html>

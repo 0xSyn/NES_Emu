@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNIF/900218</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNIF/900218</h1><div class="article">
+<p>MAPR <b>900218</b> describes the PCB used for the pirate port <i>Lord of King</i> or <i>Axe of Fight</i> (the pirates evidently hadn't decided), a mapper hack of <i>Astynax</i>.
+</p><p>No <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> mapper has yet been assigned.
+</p><p>It has been modified to use a <a href="VRC2.xhtml" title="VRC2">VRC2</a>, with registers placed compatible with the <a href="VRC4.xhtml" title="VRC4">VRC4e</a> variant (i.e. registers from $8000-$9004 and $A000-$E00C are thus identical to <a href="VRC4.xhtml" title="VRC4">VRC4e</a>. ) The register mask is $F00C.
+</p><p>Additionally, a simple fixed-period IRQ (of 1024 M2 cycles) is mapped to $F008 and $F00C:
+</p>
+<ul><li> Writes to $F00C (and mirrors) acknowledge an IRQ, reset the timer to 0, and prevent counting</li>
+<li> Writes to $F008 (and mirrors) allow the counter to start</li></ul>
+<p>The counter's 1024s bit is inverted into the Famicom's /IRQ line; i.e. if the IRQ is ignored for 1024 cycles it will self-acknowledge.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=12546" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=12546</a> lidnariq's forum post (in English)</li>
+<li> <a class="external free" href="http://www.nesbbs.com/bbs/thread-30904-1-1.html" rel="nofollow">http://www.nesbbs.com/bbs/thread-30904-1-1.html</a> zxbdragon's forum post (in Chinese)</li>
+<li> <a class="external free" href="https://github.com/dragon2snow/fceux-dump-project/commit/42233e291693babfb988076dc4934b8708e26eda" rel="nofollow">https://github.com/dragon2snow/fceux-dump-project/commit/42233e291693babfb988076dc4934b8708e26eda</a> sloppy patch to FCEUX for support</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1552-1!*!0!*!*!*!* and timestamp 20160208225936 and revision id 11166
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_fixed_timing_cycle_IRQs.xhtml">Mappers with fixed-timing cycle IRQs</a></p></div></body></html>

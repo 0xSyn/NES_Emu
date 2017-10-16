@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES Game Genie IC pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES Game Genie IC pinout</h1><div class="article">
+<p>See also: <a href="Game_Genie.xhtml" title="Game Genie">Game Genie</a>
+</p>
+<pre>                  .---\/---.  
+    CC PRG /CE &lt;- | 01  48 | &lt;- PPU /A13 on NES
+ Genie ROM /CE &lt;- | 02  47 | -&gt; CHR /A13 on CC
+       /ROMSEL -&gt; | 03  46 | &lt;- PPU /RD
+       CPU R/W -&gt; | 04  45 | &lt;- PPU  A2
+       CPU  A0 -&gt; | 05  44 | &lt;- PPU  A4
+       CPU  A1 -&gt; | 06  43 | &lt;- PPU  A5
+       CPU  A2 -&gt; | 07  42 | &lt;- PPU  A6
+       CPU  A3 -&gt; | 08  41 | &lt;- PPU  A7
+       CPU  A4 -&gt; | 09  40 | &lt;&gt; CPU  D0
+       CPU  A5 -&gt; | 10  39 | &lt;&gt; CPU  D1
+       CPU  A6 -&gt; | 11  38 | &lt;&gt; CPU  D2
+           GND -- | 12  37 | &lt;&gt; CPU  D3
+       CPU  A7 -&gt; | 13  36 | -- +5V
+       CPU  A8 -&gt; | 14  35 | &lt;&gt; CPU  D4
+       CPU  A9 -&gt; | 15  34 | &lt;&gt; CPU  D5
+       CPU A10 -&gt; | 16  33 | &lt;&gt; CPU  D6
+       CPU A11 -&gt; | 17  32 | &lt;&gt; CPU  D7
+       CPU A12 -&gt; | 18  31 | -&gt; PPU  D7
+       CPU A13 -&gt; | 19  30 | ?? NC
+       CPU A14 -&gt; | 20  29 | -&gt; PPU  D6
+        /RESET -- | 21  28 | -&gt; PPU  D5
+            NC ?? | 22  27 | -&gt; PPU  D4
+       PPU  D0 &lt;- | 23  26 | -&gt; PPU  D3
+       PPU  D1 &lt;- | 24  25 | -&gt; PPU  D2    
+                  '--------'	 
+</pre>
+<p>Pins 31-35 and 37-40 are connected to the CPU Dx lines via 200 ohm
+resistors.  Their function is to prevent a bus conflict.
+</p><p>CC M2 is pulled low by resistor-diode logic when Genie ROM /CE is low.
+</p><p>/RESET only detects power-on reset, not reset-button reset.
+</p><p>Pin 30 goes to an unpopulated location for a capacitor.
+</p><p>See also: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=12777" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=12777</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1532-1!*!0!*!*!*!* and timestamp 20160208225640 and revision id 11694
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

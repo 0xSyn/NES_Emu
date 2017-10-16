@@ -1,0 +1,157 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper I</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper I</h1><div class="article">
+<p><br/>
+This is design for trying to simplify (and speed up) Z-code interpreter programs (and possibly other kind of interpreters, too). It can be made with four 74xx series ICs (it is completely untested).
+</p>
+<ul><li> PRG ROM size: Main ROM = 16K or 32K; ExROM = 16K, 32K, 64K, or 128K.</li>
+<li> PRG ROM bank size: Main ROM = not bankswitched; ExROM = 2 bytes if 128K, 1 byte if less than 128K</li>
+<li> PRG RAM size: 8K, 16K, 32K, 64K, or 128K (ExRAM; optionally battery-backed)</li>
+<li> PRG RAM bank size: 1 byte</li>
+<li> CHR capacity: 8K ROM</li>
+<li> CHR bank size: 8K</li>
+<li> Nametable mirroring: Hardwired</li>
+<li> Bus conflicts: Yes (but usually not significant)</li></ul>
+<p>Note that in the iNES file, ExROM comes first and is then followed by the main ROM. Please note that 32K ExROM and 16K main ROM is not a valid combination.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Memory_map"><span class="tocnumber">1</span> <span class="toctext">Memory map</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Mapper_registers"><span class="tocnumber">2</span> <span class="toctext">Mapper registers</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Wiring"><span class="tocnumber">3</span> <span class="toctext">Wiring</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Examples"><span class="tocnumber">4</span> <span class="toctext">Examples</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Oversize.2Fundersize"><span class="tocnumber">5</span> <span class="toctext">Oversize/undersize</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Implementations"><span class="tocnumber">6</span> <span class="toctext">Implementations</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Memory_map">Memory map</span></h2>
+<p>CPU:
+</p>
+<ul><li> $1000-$1FFF: Mapper registers overlapping console's internal RAM</li>
+<li> $3000-$3FFF: Mapper registers overlapping PPU registers</li>
+<li> $5000-$5FFF: Mapper registers</li>
+<li> $7000-$7FFF: Mapper registers (mirror of $5000-$5FFF)</li>
+<li> $8000-$FFFF: 16K or 32K PRG ROM, fixed to the last bank</li></ul>
+<p>PPU:
+</p>
+<ul><li> $0000-$1FFF: One 8K bank of CHR ROM; not bankswitched</li>
+<li> $2000-$3FFF: CIRAM</li></ul>
+<h2><span class="mw-headline" id="Mapper_registers">Mapper registers</span></h2>
+<p>There are two 8-bit registers, the low address register and the high address register.
+</p><p>Low address register is mapped at:
+</p>
+<pre>[0..1 .... ...1 ....]
+</pre>
+<p>High address register is mapped at:
+</p>
+<pre>[0..1 .... ..1. ....]
+</pre>
+<p>Writing to any such address writes those registers; reading from the addresses will instead write to the mapper register whatever data happens to be read from that address (possibly a mirror of the Famicom's internal 2K RAM).
+</p><p>Note that if bit4 and bit5 are both set, then both registers will be written.
+</p><p>ExROM is mapped at:
+</p>
+<pre>[0..1 1... .... .1.x]
+</pre>
+<p>A15-A8 are loaded from the high address register, A7-A0 from the low address register, and A16 is from the &quot;x&quot; above.
+</p><p>ExRAM is mapped at:
+</p>
+<pre>[0..1 1... .... .0.x]
+</pre>
+<p>A15-A8 are loaded from the high address register, A7-A0 from the low address register, and A16 is from the &quot;x&quot; above.
+</p><p>Also note that accessing ExROM/ExRAM may also write to mapper registers if bit4/bit5 of the address the CPU is using to access it happen to be set (although race conditions may result if you are not careful).
+</p><p>The R/W signal is not used for mapper registers, except when accessing ExRAM.
+</p>
+<h2><span class="mw-headline" id="Wiring">Wiring</span></h2>
+<p>The following cartridge signals are used: /ROMSEL A12 M2 A0 A2 A4 A5 A11 D0-D7 R/W
+</p>
+<ul><li> D0-D7 are wired to inputs of both latches, as well as to RAM and both ROMs.</li>
+<li> R/W is wired to the RAM only.</li></ul>
+<p>Other wires:
+</p>
+<pre>wire0 = /ROMSEL&amp;A12
+wire1 = wire0&amp;M2
+wire2 = wire1~&amp;A11
+wire3 = wire2~&amp;wire2
+Latch1.E = wire1&amp;A4
+Latch1.D7:D0 = D7:D0
+Latch2.E = wire1&amp;A5
+Latch2.D7:D0 = D7:D0
+ExROM.D7:D0 = D7:D0
+ExROM.A16 = A0
+ExROM.A15:A8 = Latch2.Q7:Q0
+ExROM.A7:A0 = Latch1.Q7:Q0
+ExROM./CS = wire3~&amp;A2
+ExRAM.D7:D0 = D7:D0
+ExRAM.A15:A8 = Latch2.Q7:Q0
+ExRAM.A7:A0 = Latch1.Q7:Q0
+ExRAM./CS = ExROM./CS~&amp;wire3
+ExRAM.R/W = R/W
+</pre>
+<p>This is untested; I hope it works and that I haven't made a mistake in typing it into the computer.
+</p>
+<h2><span class="mw-headline" id="Examples">Examples</span></h2>
+<p>Assuming variables are assigned as follows:
+</p>
+<ul><li> $10 = bit7-bit0 of instruction pointer</li>
+<li> $20 = bit15-bit8 of instruction pointer</li>
+<li> $0E = bit16 of instruction pointer</li></ul>
+<p>Further assume that the high 64K of a 128K story file is in the low 64K of ExROM, and the low 64K of the story file in the high 64K of ExROM.
+</p><p>To advance instruction pointer and read the byte, you can do something like:
+</p>
+<pre>    INC $1010
+    BNE L1
+    INC $1020
+    BNE L1
+    INC &lt;$0E
+L1  LDX &lt;$0E
+    LDA $5803,X
+</pre>
+<p>And then if interpreting an instruction such as GET or PUT or whatever that accesses other parts of the RAM, the high address register can be reset simply by the <tt>BIT $1020</tt> (or <tt>IGN $1020</tt>) instruction. And then when reading the next instruction byte, the <tt>INC $1010</tt> will reset the low address register too.
+</p><p>An implementation of a PUT instruction might be something like this:
+</p>
+<pre>    LDA &lt;$12
+    ASL A
+    ROL &lt;$22
+    CLC
+    ADC &lt;$11
+    STA $1011
+    LDA &lt;$22
+    ADC &lt;$21
+    STA $1021
+    LDA &lt;$23
+    STA $5801
+    INC $1011
+    BNE L1
+    INC $1021
+L1  LDA &lt;$13
+    STA $5801
+    IGN $1020
+    JMP NXTINST
+</pre>
+<p>This adds up to 64 cycles. (By contrast my current MMC5 implementation takes up 90 cycles. This comparison isn't particularly good either, because on MMC5 there is also a lot more overhead per instruction.)
+</p>
+<h2><span class="mw-headline" id="Oversize.2Fundersize">Oversize/undersize</span></h2>
+<p>Oversize extensions are obvious to allow A0 and A1 to be used, allowing up to 256K ROM and 256K RAM.
+</p><p>Undersize extensions are also possible to mean not all bits of the bankswitching registers will be in use (or some might be ROM only or RAM only).
+</p>
+<h2><span class="mw-headline" id="Implementations">Implementations</span></h2>
+<ul><li> In C, targeting Nintendulator: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=12441" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=22&amp;t=12441</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.051 seconds
+Real time usage: 0.098 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1403-1!*!*!!en!*!* and timestamp 20160208230616 and revision id 9609
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_Mappers_with_large_PRG_RAM.xhtml">Mappers with large PRG RAM</a></p></div></body></html>

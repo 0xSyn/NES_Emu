@@ -1,0 +1,69 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 099</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 099</h1><div class="article">
+<p><b>Mapper 99</b> is a simple mapper used by <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> games such as <i>Vs. Super Mario Bros.</i>
+It is comparable to <a href="CNROM.xhtml" title="CNROM">CNROM</a>, but without bus conflicts.
+</p><p>The Vs. System has other ports related to coin insertion and DIP switches that must be emulated to get games to advance past <a class="extiw" href="http://en.wikipedia.org/wiki/Attract_mode" title="wikipedia:Attract mode">attract mode</a>, and most games' palettes differ from the standard RGB NES palette used by <i>Duck Hunt</i> and PlayChoice games.
+See <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> for more information.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Bank_select_.28.244016.29"><span class="tocnumber">3.1</span> <span class="toctext">Bank select ($4016)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Hardware"><span class="tocnumber">4</span> <span class="toctext">Hardware</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 8 to 40 KiB, in 8 KiB steps (as one to four 8 KiB ROMs, or one 16 KiB ROM and three 8 KiB ROMs)</li>
+<li> PRG ROM bank size: 8 KiB</li>
+<li> PRG RAM: 2 KiB, at least in Vs DualSystem, switchable between CPUs</li>
+<li> CHR capacity: 8 or 16 KiB (as one or two 8 KiB ROMs)</li>
+<li> CHR bank size: 8 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Fixed as four screen</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: 2 KiB RAM, swappable between CPUs (open bus when not available)</li>
+<li> CPU $8000-$9FFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $A000-$FFFF: 24 KiB fixed PRG ROM bank</li>
+<li> PPU $0000-$1FFF: 8 KiB switchable CHR ROM bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.244016.29">Bank select ($4016)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xBRC
+      |
+      +--- Select both PRG ROM and CHR ROM bank
+</pre>
+<p>Note that the two LSBs are used for other things (see <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a>), so you'll probably need to keep a copy of the value stored.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The banking configuration described by mapper 99 connects the 2A03's OUT2 pin to a simple 1-to-2 demultiplexer to select between two CHR ROMs.
+</p><p>Only <i>Vs. Gumshoe</i> uses the 40KiB PRG variant; in the <a href="INES.xhtml" title="INES">iNES</a> encapsulation, the 8KiB banks are arranged as 0, 1, 2, 3, 0alternate, empty. (The hardware adds a wire to EPROM socket 2D or 6D, connecting OUT2 to A13)
+</p><p>Note: unlike all other mappers, an undersize mapper 99 image implies open bus instead of mirroring. The original hardware has six sockets, and if any of them are not populated, the corresponding area isn't driven. Most pertinently, this means that for games with only 8 KiB of CHR, when the bank select bit is high the PPU will have no tile data to render!
+</p><p>Although this hardware has never been used officially outside the Vs. System, its behavior is well-defined in the absence of the <a href="INES.xhtml#Flags_7" title="INES">for Vs. System</a> or <a href="INES.xhtml#Flags_6" title="INES">four-screen VRAM</a> bits.
+</p><p>An <a class="external text" href="http://www.retrousb.com/product_info.php?cPath=29&amp;products_id=94" rel="nofollow">NES-compatible bootleg of <i>Vs. Super Mario Bros.</i></a> was produced, with DIP switches.
+They must be implemented differently than the Vs. switches, because there's no way to prevent a bus conflict on reads from the lower five bits of the controller ports.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 20/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:790-1!*!0!!en!*!* and timestamp 20160208225223 and revision id 9108
+ -->
+<p class="categories">Categories: <a href="Category_CNROM_like_mappers.xhtml">CNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_with_overlapping_PRG_and_CHR_registers.xhtml">Mappers with overlapping PRG and CHR registers</a></p></div></body></html>

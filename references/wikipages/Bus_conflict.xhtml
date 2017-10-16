@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bus conflict</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bus conflict</h1><div class="article">
+<p>A <b>bus conflict</b> occurs when two logic devices output different values on the same <a class="extiw" href="http://en.wikipedia.org/wiki/Bus_(computing)" title="wikipedia:Bus (computing)">bus</a> line. When two signals are asserted at the same voltage, the one with less impedance generally wins. In the NES, this generally happens when a program writes to a <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> whose registers overlap ROM but the ROM does not shut off its output, causing a potential conflict on the PRG data bus. Most ASIC based mappers include logic to disable the ROM's output enable during writes, putting the ROM's outputs into a high-impedance state and preventing the bus conflict. But many mappers, especially <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">discrete logic mappers</a>, do not.
+</p>
+<h2><span class="mw-headline" id="Programming_around_bus_conflicts">Programming around bus conflicts</span></h2>
+<p>If you are using a mapper with bus conflicts, make sure that all devices on the bus are asserting the same value by writing to a ROM location that already contains the value that you are writing. For instance, to switch to bank 5 in <a href="UxROM.xhtml" title="UxROM">UNROM or UOROM</a>, write a 5 to a ROM location that already contains a 5.
+</p><p>One common way to do this is to perform an immediate load and then store over the opcode:
+</p>
+<pre>
+@loadInstruction:
+  ldy #5
+  sty @loadInstruction+1
+</pre>
+<p>To switch to a bank based on the value of a variable, put it in an indexed register and then perform an absolute indexed store:
+</p>
+<pre>
+  lda curMapBank
+  tax
+  sta bankBytes,x
+; ...
+bankBytes:
+  .byt $00, $01, $02, $03, $04, $05, $06, $07
+</pre>
+<h2><span class="mw-headline" id="Emulating_bus_conflicts">Emulating bus conflicts</span></h2>
+<p>Most emulators have assumed that the CPU &quot;wins&quot; all bus conflicts, that is, that the mapper circuitry sees the signals from the CPU more strongly than the signals from the PRG ROM and acts solely on the CPU. Quite a few early programs in <a href="INES.xhtml" title="INES">iNES</a> format were developed withoug taking bus conflicts in account, and do not work correctly when run on an NES Game Pak that has been modified to take rewritable memory. In general, the authors of these programs did not know at the time that bus conflicts existed. These programs can, however, be made to run by adding ROM-disabling circuitry like that of <a class="mw-redirect" href="AxROM.xhtml" title="ANROM">ANROM</a> or the positive chip enable of the PRG ROM chips used with <a class="mw-redirect" href="AxROM.xhtml" title="AOROM">AOROM</a>.
+The following classes of iNES files will often contain bugs causing bus conflicts:
+</p>
+<ul><li> Old homebrew ROMs. Old documents did not mention the possibility of bus conflicts.</li>
+<li> Mapper hacks. Because the <a href="MMC1.xhtml" title="MMC1">MMC1</a> was poorly understood, and the code to operate an MMC1 is generally larger than that for a discrete logic mapper without bus conflicts, the early English translations of the Famicom game <i>Final Fantasy II</i> changed it from <a href="MMC1.xhtml" title="MMC1">MMC1</a> to a variant of <a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">mapper 2</a>.</li>
+<li> Buggy homebrew or hack. Code or tables to avoid bus conflicts may have been written incorrectly, or a <code>JMP</code> instruction may have sent the program counter into nowhere.</li></ul>
+<p>It has been confirmed through <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=109708#p109708" rel="nofollow">testing</a> that both the CPU and the mask ROMs used in the NES era drive a 0 more strongly than a 1, as one would expect based on the logic's implementation.
+This implies that an emulator should use the bitwise AND of the value from the CPU and the value from the ROM.
+However, programmers must not rely on this undefined behavior.
+Emulators should log a warning whenever a bus conflict occurs. This will help find bugs 1. in the emulator's handling of PRG ROM bank switching and 2. in future homebrew ROMs tested on the emulator.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="Category_Mappers_with_bus_conflicts.xhtml" title="Category:Mappers with bus conflicts">Mappers with bus conflicts</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 29/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:94-1!*!0!!*!*!* and timestamp 20160208224819 and revision id 8767
+ -->
+</div></body></html>

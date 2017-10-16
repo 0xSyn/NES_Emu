@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 099</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 099</h1><div class="article">
+<h2><span class="mw-headline" id="Minimal_discrete_logic_clone">Minimal discrete logic clone</span></h2>
+<p>A <a href="74138.xhtml" title="74138">74138</a>, selecting on M2, A14, A4, and A1 high; R/W and A0 low, and a 7474 (or any larger latch). Maps the write-only register at every address [4-7C-F].[13579BDF][26AE]. Incorrectly decodes writes to $4012 and DualSystem RAM. Using a <a href="74161.xhtml" title="74161">74161</a> or any other latch with an additional active-low enable would remove the collision with the DualSystem RAM; however, there's no obvious place to get an extra active-high enable to prevent the collision with $4012. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:15, 31 October 2013 (MDT)
+</p>
+<ul><li> Half of the 7474 can be configured to <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=125760#p125760" rel="nofollow">act as an inverter</a>. In this case, instead of requiring A0 low, we could instead require A2 high, mapping the register at [4-7C-F].[13579BDF][67EF]. Now it incorrectly decodes writes to $4017, but few games will write to that register more than once. (It still collides with writes to the RAM at $6xxx.)</li>
+<li> For games that require the extra RAM, using a 74138 or 74139 has the advantage that it already produces a /($4000-$5fff) signal. This could then be combined with another '138 or '139 to require A4, A2, and A1 high; and R/W (and A0) low.</li></ul>
+<p>Regardless, open bus behavior will cause the game to perceive one of the coin acceptors as always true. The last configuration above can produce /RD4016or4017, which can be combined with a tristateable buffer (and a button? or infrared receiver? or oscillator?) to pull D6 and D5 high or low as appropriate to fake the coin acceptors. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:37, 4 May 2014 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1232-1!*!0!*!*!*!* and timestamp 20160208224131 and revision id 8641
+ -->
+</div></body></html>

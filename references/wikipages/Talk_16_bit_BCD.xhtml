@@ -1,0 +1,25 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:16-bit BCD</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:16-bit BCD</h1><div class="article">
+<p>These kind of description of arithmetic stuff is useful. There might be useful to have a category for this. I also asking about a signed version, but I suppose such thing wouldn't be too difficult (print a minus sign and then XOR by 65535 and then add one, and then do it with unsigned). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 17:07, 24 August 2013 (MDT)
+</p>
+<dl><dd>Good idea. I made <a href="Category_Arithmetic.xhtml" title="Category:Arithmetic">Category:Arithmetic</a>. You can probably populate it by going through the last week of <s>Special:Contributions/Koitsu</s>. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:30, 24 August 2013 (MDT)</dd></dl>
+<p>I seem to remember optimizing this routine way back, at the very least to eliminate that unnecessary sec in the loop. Make it a clc, adjust the low table, and take the clc out of the loop since the bcc ensures it's clear each time through.<s>Blargg</s> (<a href="User_talk_Blargg.xhtml" title="User talk:Blargg">talk</a>) 11:06, 25 November 2013 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1198-1!*!0!*!*!*!* and timestamp 20160208223853 and revision id 7787
+ -->
+</div></body></html>

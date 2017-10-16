@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Accuracy</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Accuracy</h1><div class="article">
+<p><b>Compatibility</b> is how well an emulator produces the same output as the original system when running a particular known program.
+<b>Accuracy</b> refers to how well an emulator produces the same output as the original system when running an arbitrary unknown program.
+An emulator can be highly compatible without being very accurate; NESticle was this way back in the 1990s, running a wide selection of popular North American commercial games.
+</p><p>Accuracy cannot be measured directly. Compatibility with <a href="Emulator_tests.xhtml" title="Emulator tests">ROMs designed to test obscure behaviors</a> and <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">games relying on obscure behaviors</a> is a good (though not perfect) predictor of accuracy.
+</p><p>In many cases, an emulator is more forgiving than the hardware, especially in when a program is allowed to write to a register.
+NESticle, for instance, allowed writes to <a href="PPU_registers.xhtml" title="PPU registers">$2007</a> at any time, when the NES allows it only on or after line 241 of each frame (vertical blanking) or when $2001 &amp; $1E == 0 (forced blanking).
+Most emulators allow the program to twiddle PPU registers immediately, while the NES PPU <a href="PPU_power_up_state.xhtml" title="PPU power up state">ignores most writes for the first frame after a reset</a>.
+Inaccuracies like these led to inadvertent development of <a href="Program_compatibility.xhtml" title="Program compatibility">programs that the NES itself cannot run</a> during the early years of NES homebrew.
+</p><p>Whenever you discover a difference in behavior between the NES and best-of-breed emulators (like Nintendulator and Nestopia), you can help emulators become more accurate.
+First reduce your program to a <a class="external text" href="http://sscce.org/" rel="nofollow">minimal test case</a>: keep removing things while the program continues to exhibit this difference.
+Then characterize the behavior difference as best you can and add it to the <a href="Emulator_tests.xhtml" title="Emulator tests">test suite</a>.
+</p><p>Some emulators attempt to <a href="Enhancement.xhtml" title="Enhancement">enhance</a> the games to make them appear more appealing than they did on the original NES.
+</p>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a href="Emulator_tests.xhtml" title="Emulator tests">Emulator tests</a></li>
+<li> <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">Tricky-to-emulate games</a></li>
+<li> <a href="Game_bugs.xhtml" title="Game bugs">Game bugs</a> - Accurate emulation should correctly reproduce known software bugs.</li>
+<li> <a href="Program_compatibility.xhtml" title="Program compatibility">Program compatibility</a> - Homebrew games that may suffer from compatibility problems.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=5797" rel="nofollow">Topic on BBS</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=30784#p30784" rel="nofollow">Different grades of accuracy on BBS</a></li>
+<li><a class="external text" href="https://wiki.mozilla.org/QA/Minimal_Test_Cases" rel="nofollow">How to make a minimal test case</a> (focuses on HTML, but applies to any virtual machine)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:369-1!*!0!!*!*!* and timestamp 20160208224740 and revision id 11361
+ -->
+</div></body></html>

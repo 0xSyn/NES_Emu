@@ -1,0 +1,138 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 068</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 068</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 068</strong> denotes PCBs using the <a href="Sunsoft_4_pinout.xhtml" title="Sunsoft 4 pinout">Sunsoft-4 mapper IC</a>. In the US it was only used in the game <i>After Burner</i>.
+It has the unusual ability to map CHR ROM into the part of the PPU's address space used for nametables.
+</p><p>Example games:
+</p>
+<ul><li> <i>After Burner</i></li>
+<li> <i>Maharaja (J)</i></li>
+<li> <i>Nantettatte!! Baseball (J)</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#.246000-.247FFF:_Licensing_IC"><span class="tocnumber">3.1</span> <span class="toctext">$6000-$7FFF: Licensing IC</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.248000-.248FFF:_CHR_bank_at_.240000"><span class="tocnumber">3.2</span> <span class="toctext">$8000-$8FFF: CHR bank at $0000</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.249000-.249FFF:_CHR_bank_at_.240800"><span class="tocnumber">3.3</span> <span class="toctext">$9000-$9FFF: CHR bank at $0800</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.24A000-.24AFFF:_CHR_bank_at_.241000"><span class="tocnumber">3.4</span> <span class="toctext">$A000-$AFFF: CHR bank at $1000</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.24B000-.24BFFF:_CHR_bank_at_.241800"><span class="tocnumber">3.5</span> <span class="toctext">$B000-$BFFF: CHR bank at $1800</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.24C000-.24CFFF:_Nametable_register_0"><span class="tocnumber">3.6</span> <span class="toctext">$C000-$CFFF: Nametable register 0</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.24D000-.24DFFF:_Nametable_register_1"><span class="tocnumber">3.7</span> <span class="toctext">$D000-$DFFF: Nametable register 1</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.24E000-.24EFFF:_Nametable_control"><span class="tocnumber">3.8</span> <span class="toctext">$E000-$EFFF: Nametable control</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.24F000-.24FFFF:_PRG_bank_at_.248000"><span class="tocnumber">3.9</span> <span class="toctext">$F000-$FFFF: PRG bank at $8000</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Hardware"><span class="tocnumber">4</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 256 KiB</li>
+<li> PRG ROM bank size: 16 KiB</li>
+<li> PRG RAM: Up to 8 KiB</li>
+<li> CHR capacity: Up to 256 KiB ROM</li>
+<li> CHR bank size: 2 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No </li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: 8 KiB PRG RAM bank</li>
+<li> CPU $8000-$BFFF: 16 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last internal bank </li>
+<li> PPU $0000-$07FF: 2 KiB switchable CHR bank</li>
+<li> PPU $0800-$0FFF: 2 KiB switchable CHR bank</li>
+<li> PPU $1000-$17FF: 2 KiB switchable CHR bank</li>
+<li> PPU $1800-$1FFF: 2 KiB switchable CHR bank</li>
+<li> PPU $2000-$23FF (and $2400 or $2800): 1 KiB switchable CHR bank</li>
+<li> PPU $2C00-$2FFF (and $2800 or $2400): 1 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id=".246000-.247FFF:_Licensing_IC">$6000-$7FFF: Licensing IC</span></h3>
+<p>Only for the game <u>Nantettatte!! Baseball</u>, when WRAM is disabled ($F000.4 is 0), writes to this register reset a timer in the external option ROM cartridge. The external ROM is only readable while banked into $8000-$BFFF and the timer has not expired; once it has, reads from the external ROM should return open bus.
+</p><p>The game verifies that the timer expires after 107516 to 107575 M2 cycles (most likely exactly 107520=1024·105) by reading a signature from the end of the external ROM.
+</p><p>While WRAM is disabled, reads from $6000-$7FFF return open bus for <i>all</i> games. (The licensing IC isn't readable because it is connected to only M2, WRAM +CE, WRAM /CE, and R/W. None of the data pins connect.)
+</p>
+<h3><span class="mw-headline" id=".248000-.248FFF:_CHR_bank_at_.240000">$8000-$8FFF: CHR bank at $0000</span></h3>
+<p>Map a 2 KiB CHR ROM bank into PPU $0000.
+</p>
+<h3><span class="mw-headline" id=".249000-.249FFF:_CHR_bank_at_.240800">$9000-$9FFF: CHR bank at $0800</span></h3>
+<p>Map a 2 KiB CHR ROM bank into PPU $0800.
+</p>
+<h3><span class="mw-headline" id=".24A000-.24AFFF:_CHR_bank_at_.241000">$A000-$AFFF: CHR bank at $1000</span></h3>
+<p>Map a 2 KiB CHR ROM bank into PPU $1000.
+</p>
+<h3><span class="mw-headline" id=".24B000-.24BFFF:_CHR_bank_at_.241800">$B000-$BFFF: CHR bank at $1800</span></h3>
+<p>Map a 2 KiB CHR ROM bank into PPU $1800.
+</p>
+<h3><span class="mw-headline" id=".24C000-.24CFFF:_Nametable_register_0">$C000-$CFFF: Nametable register 0</span></h3>
+<p>Map a 1 KiB CHR ROM bank in place of the lower nametable (CIRAM $000-$3FF).
+Only D6-D0 are used; D7 is ignored and treated as 1, so nametables must be in the last 128 KiB of CHR ROM.
+</p>
+<h3><span class="mw-headline" id=".24D000-.24DFFF:_Nametable_register_1">$D000-$DFFF: Nametable register 1</span></h3>
+<p>Map a 1 KiB CHR ROM bank in place of the upper nametable (CIRAM $400-$7FF).
+Only D6-D0 are used; D7 is ignored and treated as 1.
+</p>
+<h3><span class="mw-headline" id=".24E000-.24EFFF:_Nametable_control">$E000-$EFFF: Nametable control</span></h3>
+<pre>
+7654 3210
+   |   ||
+   |   ++- Mirroring
+   |       0: vertical (0101); 1: horizontal (0011);
+   |       2: 1-screen (0000); 3: 1-screen (1111)
+   +------ Chip select for PPU $2000-$2FFF (nametables):
+           0 for CIRAM or 1 for CHR ROM
+</pre>
+<p>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> works the same way in both CIRAM and CHR ROM modes.
+</p>
+<h3><span class="mw-headline" id=".24F000-.24FFFF:_PRG_bank_at_.248000">$F000-$FFFF: PRG bank at $8000</span></h3>
+<pre>7  bit  0
+---- ----
+...E BBBB
+   | ||||
+   | ++++- Select 16 KiB PRG banked into $8000-$BFFF
+   +------ 1:Enable PRG RAM = WRAM +CS2
+</pre>
+<p><u>Nantettatte!! Baseball</u> repurposes some of the bits:
+</p>
+<pre>7  bit  0
+---- ----
+...E RBBB
+   | ||||
+   | |+++- Select 16 KiB PRG banked into $8000-$BFFF
+   | +---- 1: select internal ROM
+   |       0: select external ROM
+   +------ 1:Enable PRG RAM = WRAM +CS2
+           0:Enable licensing verification
+</pre>
+<p>Note that although the external ROM could be up to 128KiB, both known subcartridges contain 16KiB of data, doubled to fill a 32KiB EPROM, mirrored across the bottom 128KiB.
+</p><p>The fixed bank is always from the internal ROM.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The US release of <i>After Burner</i> has CHR ROM split into <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=326" rel="nofollow">two 28-pin chips</a>.
+The Japanese releases exist both as <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3806" rel="nofollow">two 32-pin 128KiB CHR ROMs with extra enables</a> and as <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=106818#p106818" rel="nofollow">one 32-pin 256KiB ROM</a>.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/sunsoft.txt" rel="nofollow">Goroh's Sunsoft mapper doc</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=9744" rel="nofollow">Naruko's notes in the forum</a></li>
+<li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.045 seconds
+Real time usage: 0.047 seconds
+Preprocessor visited node count: 66/1000000
+Preprocessor generated node count: 88/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:554-1!*!0!!en!*!* and timestamp 20160208225136 and revision id 10313
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Mappers_with_ROM_nametables.xhtml">Mappers with ROM nametables</a>, <a href="Category_NES_2_0_mappers_with_submappers.xhtml">NES 2.0 mappers with submappers</a></p></div></body></html>

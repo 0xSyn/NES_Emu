@@ -1,0 +1,318 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNIF</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNIF</h1><div class="article">
+<p><b>UNIF</b> (Universal NES Image Format) is an alternative format for holding NES and Famicom ROM images.
+</p><p>Its motivation was to offer more description of the mapper board than the popular <a href="INES.xhtml" title="INES">iNES 1.0</a> format, but it suffered from other limiting constraints and a lack of popularity. The format is considered deprecated, replaced by the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> revision of the iNES format, which better addresses the issues it had hoped to solve.
+</p><p>There are a small number of game rips that currently only exist as UNIF. (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=12883&amp;p=148952#p148948" rel="nofollow">board list</a>)
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#History"><span class="tocnumber">1</span> <span class="toctext">History</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Format"><span class="tocnumber">2</span> <span class="toctext">Format</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Types"><span class="tocnumber">2.1</span> <span class="toctext">Types</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Shortcomings"><span class="tocnumber">3</span> <span class="toctext">Shortcomings</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="History">History</span></h2>
+<p>The originator of the UNIF format, Tennessee Carmel-Veilleux, publically abandoned the format in December of 2008, and had its <a class="external text" href="http://web.archive.org/web/20080827175203/http://www.parodius.com/~veilleux/" rel="nofollow">website deleted</a>.
+</p><p>Since 2011 the UNIF standard has been maintained as part of the libunif project. See: <a class="external free" href="http://github.com/eteran/libunif" rel="nofollow">http://github.com/eteran/libunif</a>
+</p><p>UNIF is currently considered a deprecated standard. Further updates to UNIF are unlikely, and it is recommended that new games or rips requiring special mapper specifications use the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> format instead of attempting to extend UNIF.
+</p>
+<h2><span class="mw-headline" id="Format">Format</span></h2>
+<p>UNIF images start with a 32-byte header:
+</p>
+<table class="tabular">
+<tr>
+<th> Offset </th>
+<th> Length (bytes) </th>
+<th> Value
+</th></tr>
+<tr>
+<td> 0 </td>
+<td>  4 </td>
+<td> &quot;UNIF&quot;
+</td></tr>
+<tr>
+<td> 4 </td>
+<td>  4 </td>
+<td> le32, minimum version number required to parse all chunks in file
+</td></tr>
+<tr>
+<td> 8 </td>
+<td> 24 </td>
+<td> all nulls
+</td></tr></table>
+<p>Followed by any number of Type+Length+Value blocks:
+</p>
+<table class="tabular">
+<tr>
+<th> Offset </th>
+<th> Length (bytes) </th>
+<th> Value
+</th></tr>
+<tr>
+<td> 0 </td>
+<td>  4 </td>
+<td> Type, varies, defined below
+</td></tr>
+<tr>
+<td> 4 </td>
+<td>  4 </td>
+<td> le32, length
+</td></tr>
+<tr>
+<td> 8 </td>
+<td>length</td>
+<td> content encoding varies by type
+</td></tr></table>
+<h3><span class="mw-headline" id="Types">Types</span></h3>
+<p>The following Types are known:
+</p>
+<table class="wikitable sortable">
+
+<tr>
+<th> Type </th>
+<th> Length </th>
+<th> Minimum version required </th>
+<th> Encoding </th>
+<th> Content meaning
+</th></tr>
+<tr>
+<td> MAPR </td>
+<td> variable </td>
+<td> 1 </td>
+<td> null-terminated UTF-8 </td>
+<td> A unique human-readable identifier specifying the exact hardware used; <b>not</b> an iNES mapper number, and <b>not</b> a full text description of the mapper; required
+</td></tr>
+<tr>
+<td> PRG<i>n</i> </td>
+<td> variable, usually power of two </td>
+<td> 4 </td>
+<td> raw </td>
+<td> the contents of the <i>n</i>th PRG ROM; at least PRG0 is required; <i>n</i> is in hexadecimal
+</td></tr>
+<tr>
+<td> CHR<i>n</i> </td>
+<td> variable, usually power of two </td>
+<td> 4 </td>
+<td> raw </td>
+<td> the contents of the <i>n</i>th CHR ROM
+</td></tr>
+<tr>
+<td> PCK<i>n</i> </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> le32 </td>
+<td> the CRC-32 of the <i>n</i>th PRG ROM
+</td></tr>
+<tr>
+<td> CCK<i>n</i> </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> le32 </td>
+<td> the CRC-32 of the <i>n</i>th CHR ROM
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> variable </td>
+<td> 1 </td>
+<td> null-terminated UTF-8 </td>
+<td> the name of the game
+</td></tr>
+<tr>
+<td> WRTR </td>
+<td> variable </td>
+<td> unknown </td>
+<td> null-terminated UTF-8 </td>
+<td> unofficial, invalid. The name of the dumping software. Should be in a DINF chunk instead
+</td></tr>
+<tr>
+<td> READ </td>
+<td> variable </td>
+<td> 1 </td>
+<td> null-terminated UTF-8 </td>
+<td> comments about the game, especially licensing information for homebrew
+</td></tr>
+<tr>
+<td> DINF </td>
+<td> 204 </td>
+<td> 2 </td>
+<td> special </td>
+<td> Dumping information
+<table class="tabular">
+<tr>
+<th> Offset </th>
+<th> Length (bytes) </th>
+<th> Value
+</th></tr>
+<tr>
+<td align="right">   0 </td>
+<td align="right"> 100 </td>
+<td> null-terminated UTF-8 dumper name
+</td></tr>
+<tr>
+<td align="right"> 100 </td>
+<td align="right">   1 </td>
+<td> day-of-month of dump
+</td></tr>
+<tr>
+<td align="right"> 101 </td>
+<td align="right">   1 </td>
+<td> month-of-year of dump
+</td></tr>
+<tr>
+<td align="right"> 102 </td>
+<td align="right">   2 </td>
+<td> le16, year of dump
+</td></tr>
+<tr>
+<td align="right"> 104 </td>
+<td align="right"> 100 </td>
+<td> null-terminated UTF-8 the name of the dumping software or mechanism
+</td></tr></table>
+</td></tr>
+<tr>
+<td> TVCI </td>
+<td> 1 </td>
+<td> 6 </td>
+<td> byte </td>
+<td> TV standard compatibility information-
+<table>
+<tr>
+<td align="right"> 0.</td>
+<td>NTSC only
+</td></tr>
+<tr>
+<td align="right"> 1.</td>
+<td>PAL only
+</td></tr>
+<tr>
+<td align="right"> 2.</td>
+<td>compatible with both
+</td></tr></table>
+</td></tr>
+<tr>
+<td> CTRL </td>
+<td> 1 </td>
+<td> 7 </td>
+<td> byte </td>
+<td> Controllers usable by this game (bitmask)
+<table>
+<tr>
+<td align="right">  1.</td>
+<td><a href="Standard_controller.xhtml" title="Standard controller">Standard controller</a>
+</td></tr>
+<tr>
+<td align="right">  2.</td>
+<td><a href="Zapper.xhtml" title="Zapper">Zapper</a>
+</td></tr>
+<tr>
+<td align="right">  4.</td>
+<td>R.O.B.
+</td></tr>
+<tr>
+<td align="right">  8.</td>
+<td><a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a>
+</td></tr>
+<tr>
+<td align="right"> 16.</td>
+<td><a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a>
+</td></tr>
+<tr>
+<td align="right"> 32.</td>
+<td><a href="Four_Score.xhtml" title="Four Score">Four Score</a>
+</td></tr>
+<tr>
+<td align="right"> 64.</td>
+<td> expansion (leave cleared)
+</td></tr>
+<tr>
+<td align="right">128.</td>
+<td> expansion (leave cleared)
+</td></tr></table>
+</td></tr>
+<tr>
+<td> BATR </td>
+<td> 1 </td>
+<td> 5 </td>
+<td> byte </td>
+<td> Boolean specifying whether the RAM is battery-backed.
+</td></tr>
+<tr>
+<td> VROR </td>
+<td> 1 </td>
+<td> 5 </td>
+<td> byte </td>
+<td> &quot;If this chunk is present, then the CHR-ROM area will be considered as RAM even if ROM is present.&quot;
+</td></tr>
+<tr>
+<td> MIRR </td>
+<td> 1 </td>
+<td> 5 </td>
+<td> byte </td>
+<td> <a href="Mirroring.xhtml" title="Mirroring">What CIRAM A10 is connected to</a>:
+<table>
+<tr>
+<td align="right"> 0.</td>
+<td>PPU A11 (horizontal mirroring)
+</td></tr>
+<tr>
+<td align="right"> 1.</td>
+<td>PPU A10 (vertical mirroring)
+</td></tr>
+<tr>
+<td align="right"> 2.</td>
+<td>Ground (one-screen A)
+</td></tr>
+<tr>
+<td align="right"> 3.</td>
+<td>Vcc (one-screen B)
+</td></tr>
+<tr>
+<td align="right"> 4.</td>
+<td>Extra memory has been added (four-screen)
+</td></tr>
+<tr>
+<td align="right"> 5.</td>
+<td>Mapper controlled
+</td></tr></table>
+</td></tr></table>
+<h2><span class="mw-headline" id="Shortcomings">Shortcomings</span></h2>
+<p>Prior to 2013, no encoding was specified for any of the fields; 7-bit-clean ASCII was assumed, making NAME inadequate for the vast majority of non-US games.
+In the first quarter of 2013, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=9883" rel="nofollow">UTF-8 became the encoding</a>.
+</p><p>Chunks can come in any order, so conventional patching tools cannot work without going through an &quot;unpacked&quot; intermediary stage.
+</p><p>MAPR chunks are nominally supposed to use the text on the PCB, such as &quot;NES-SNROM&quot;. However, some games have no identifying text on the PCB at all. Other games have only symbols in <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1762" rel="nofollow">Japanese</a> or Chinese. Sometimes the <a href="UxROM.xhtml" title="UxROM">same PCB</a> can have <a href="INES_Mapper_180.xhtml" title="INES Mapper 180">different incompatible behavior</a>, depending on how things are populated or what things are jumpered. The workaround has been to add extra text the MAPR chunk (in the <i>Crazy Climber</i> case, <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3869" rel="nofollow">&quot;HVC-UNROM+74HC08&quot;</a>).
+</p><p>There is no ability to specify PRG RAM outside of the MAPR chunk. Two games using VRC4 (<a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1565" rel="nofollow">Gradius II</a> and <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3988" rel="nofollow">Bio Miracle Bokutte Upa</a>) use the exact same PCB, but the former adds 2KiB PRG RAM and the latter adds none.
+</p><p>For greater emulator compatibility, people sometimes use already-known-supported MAPR chunks to get something that's &quot;close enough&quot;, rather than specifying a new MAPR for not-necessarily-identical behavior.
+</p><p>BATR chunks do not disambiguate which RAM is battery-backed, if more than one is present.
+</p><p>It's not clear exactly what VROR is supposed to mean—&quot;Do not throw an error if this MAPR normally has CHR ROM but there are no CHR<i>n</i> chunks, just give me 8KiB of CHR RAM&quot;? &quot;All the data I gave you for CHR-ROM, that was actually RAM, make it writeable&quot;? As such, Nestopia, Nintendulator, and FCEUX just ignore it.
+</p><p>CTRL chunks do not specify which controller should be plugged into which port, nor Famicom-only controllers, nor Super NES controllers plugged into a Famiclone or through an adapter (such as the <a href="Standard_controller.xhtml" title="Standard controller">12-key controller</a> or the <a href="Mouse.xhtml" title="Mouse">mouse</a>).
+Then again, <a href="INES.xhtml" title="INES">iNES</a> and <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> don't even try to include controller metadata in the ROM file; instead, there is a <a href="User_Zzo38_Metadata_INI.xhtml" title="User:Zzo38/Metadata INI">proposal in the works for a separate metadata file</a>.
+</p><p>No way to fully describe PlayChoice 10 or <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> games.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> libunif project on github: <a class="external free" href="http://github.com/eteran/libunif" rel="nofollow">http://github.com/eteran/libunif</a></li>
+<li> Last published version of the standard: <a class="external free" href="http://raw.githubusercontent.com/eteran/libunif/master/UNIF_current.txt" rel="nofollow">http://raw.githubusercontent.com/eteran/libunif/master/UNIF_current.txt</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.135 seconds
+Real time usage: 0.139 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:986-1!*!0!!en!*!* and timestamp 20160208225933 and revision id 11594
+ -->
+</div></body></html>

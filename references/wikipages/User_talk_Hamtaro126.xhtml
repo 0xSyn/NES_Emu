@@ -1,0 +1,112 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User talk:Hamtaro126</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User talk:Hamtaro126</h1><div class="article">
+<h2><span class="mw-headline" id="H126-ROM1_and_H126-RAM1_mapper_format_.28for_next_letter_of_ZZO38.27s_Mapperset.29">H126-ROM1 and H126-RAM1 mapper format (for next letter of ZZO38's Mapperset)</span></h2>
+<p>This mapper will be a DIY thing, I will not make carts, But it is possible to make them!
+</p><p>Based off a combo of UxROM and MMC3
+</p><p>PPU (H126-ROM1):
+</p>
+<ul><li> $0000-$03FF: 4k CHR bank 1 (uses $40C0)</li>
+<li> $0400-$07FF: 4k CHR bank 2 (uses $40C1)</li>
+<li> $0800-$0BFF: 4k CHR bank 3 (uses $40C2)</li>
+<li> $0C00-$0FFF: 4k CHR bank 4 (uses $40C3)</li>
+<li> $1000-$13FF: 4k CHR bank 5 (uses $40C4)</li>
+<li> $1400-$17FF: 4k CHR bank 6 (uses $40C5)</li>
+<li> $1800-$1BFF: 4k CHR bank 7 (uses $40C6)</li>
+<li> $1C00-$1FFF: 4k CHR bank 8 (uses $40C7)</li></ul>
+<p>PPU (H126-RAM1):
+</p>
+<ul><li> $0000-$1FFF - 8k CHR RAM ($40C0-$40C7 are unused!)</li></ul>
+<p>RAM:
+</p>
+<ul><li> $5000-$5FFF: 2k WRAM (optional)</li>
+<li> $6000-$7FFF: 8k SaveRAM or WRAM</li></ul>
+<p>ROM:
+</p>
+<ul><li> $8000-$9FFF: 8k ROM bank 1 (uses $40C8)</li>
+<li> $A000-$BFFF: 8k ROM bank 2 (uses $40C9)</li>
+<li> $C000-$DFFF: 8k ROM bank 3 (uses $40CA)</li>
+<li> $E000-$FFFF: 8k ROM bank 4 (Fixed)</li></ul>
+<p>PPU Mirror:
+</p>
+<ul><li> $40CB: Mirroring (0 = 1-Screen $2000, 1 = 1-Screen $2400, 2 = Horizontal, 3 = Vertical)</li></ul>
+<p>IRQ (optional):
+</p>
+<ul><li> $40CC: Control Disable</li>
+<li> $40CD: Control Enable </li>
+<li> $40CE: Cycle IRQ Counter Value (MMC5 style)</li></ul>
+<p>This is a WIP, May Change!!! --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<strong class="selflink">talk</strong>) 08:10, 29 June 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Discussion">Discussion</span></h2>
+<p>I suggest to use $40C8, $40C9, $40CA for the PRG ROM bank select, and having $40CB unused. I think this would be more logical and probably simpler to build. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:10, 29 June 2013 (MDT)
+</p>
+<dl><dd> EDIT1: Adjustments are Made, Tell me more, --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<strong class="selflink">talk</strong>) 23:59, 29 June 2013 (MDT)</dd></dl>
+<p>This is very similar to Taito's <a href="INES_Mapper_082.xhtml" title="INES Mapper 082">X1-017</a> or <a href="INES_Mapper_048.xhtml" title="INES Mapper 048">TC0350</a>. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:12, 29 June 2013 (MDT)
+</p>
+<dl><dd> NOTE1: I actually based the format off of complex mappers like Sunsoft and Taito's, But wanted the user to choose what options needed for their game, But this mapper is not too complex, It is designed for a variable sized package for cheapness, And the reason that MMC5-style instead of MMC3 IRQs are used because of ease of use! --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<strong class="selflink">talk</strong>) 08:32, 30 June 2013 (MDT)</dd></dl>
+<dl><dd><dl><dd> I'd call this the logical evolution of the TC0350. You've increased it to 8x1 CHR banking instead of 2x2+4x1, moved the control registers, changed it to a scanline instead of cycle-counting IRQ, and increased the amount of memory. Note that 2KiB RAMs aren't really available anymore; if you're going to specify a form with more than 8KiB of flat RAM, you may as well specify <i>all</i> of it to be and put 16320 bytes of RAM from $4040-$7FFF instead. (Or, keep an eye to implementation, and allocate 512*31 bytes from $4200-$7FFF from an iCE40 FPGA). Also, even thought people thought banking CHR RAM to be odd for Lagrange Point, on the balance it's useful. I wouldn't prohibit it a priori. (Also, is &quot;4k&quot; a typo?) —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:34, 30 June 2013 (MDT)</dd></dl></dd></dl>
+<p>You said you have no intention to build this cartridge, which might be OK, but you should at least have some idea of how to build such a cartridge (using discrete logic, Verilog, whatever). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 15:13, 4 July 2013 (MDT)
+</p><p>I actually planned to learn all that, But the problem is I never actually wanted to until I learn to create better stuff, I have lots that are unfinished, Some that are study cases (mostly SMBDIS hacks), Some are actual works studying the PPU and ROM hacking, So I cannot do anything until I am done with my actual experience, actually LEARNING, and try to release actual stuff before doing this, I am sorry...
+</p><p>Should I leave this info here, or should I erase it until then? --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> (<strong class="selflink">talk</strong>) 15:39, 4 July 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Hamtaro126.27s_Code.2FMacro_Examples_.28WIP.29">Hamtaro126's Code/Macro Examples (WIP)</span></h2>
+<p>See the page on implenting a <a href="Multibyte_constant.xhtml" title="Multibyte constant">Macro for Multibyte Constant</a> (specifically my ASM6 example) for my first macro submitted on this wiki, using the HEX command for ASM6
+</p><p>Macros:
+</p>
+<pre>
+;Easy Super Mario Bros. 3 TileMap Macro (16x16 Metatiles, 8x8 Split Tiles)
+;ASM6 version
+;By Hamtaro126, With thanks to Southbird for disassembling Super Mario Bros. 3
+;Can also be used for Homebrew!!!
+; 
+;Example: SMB3Tile, $8000, $01, $23, $45, $67
+;this splits these tiles into 256-byte SECTIONS at $8000, $8100, $8200, and $8300... have fun
+
+.macro SMB3Tile address, t1, t2, t3, t4
+  .org address
+  .db t1
+  .org address+$0100
+  .db t2
+  .org address+$0200
+  .db t3
+  .org address+$0300
+  .db t4
+.endm
+</pre>
+<p>Routines:
+</p>
+<pre>
+;Straight from Super Mario World (SNES), but usable for NES now!
+;BRA is changed to JMP for usability in any 6502 processor
+
+;This code is useable since it is just generic code!
+
+HexToDec:
+	LDX #$00
+SetTens:
+	CMP #$0A
+	BCC ExitHToDRt
+	SBC #$0A
+	INX
+	JMP SetTens
+ExitHToDRt:
+	RTS
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.037 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:824-1!*!0!!*!*!* and timestamp 20160208230039 and revision id 11315
+ -->
+</div></body></html>

@@ -1,0 +1,121 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNIF/COOLBOY</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNIF/COOLBOY</h1><div class="article">
+<p>UNIF MAPR <b>COOLBOY</b> describes a mapper designed for <a href="MMC3.xhtml" title="MMC3">MMC3</a> multicarts. Unlike almost all other mappers, it is currently being manufactured. (Search for &quot;COOLBOY&quot; on eBay or AliExpress).
+</p><p>It adds four extra registers in lieu of (in addition to?) the normal PRG-RAM. FCEUX claims that all four of these registers are cleared on power up and reset.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.246000"><span class="tocnumber">1.1</span> <span class="toctext">$6000</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.246001"><span class="tocnumber">1.2</span> <span class="toctext">$6001</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.246002"><span class="tocnumber">1.3</span> <span class="toctext">$6002</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.246003"><span class="tocnumber">1.4</span> <span class="toctext">$6003</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Register_interpretation"><span class="tocnumber">2</span> <span class="toctext">Register interpretation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Banking_mode_.3D_.2400"><span class="tocnumber">2.1</span> <span class="toctext">Banking mode = $00</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Banking_mode_.3D_.2410"><span class="tocnumber">2.2</span> <span class="toctext">Banking mode = $10</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Banking_mode_.3D_.2440"><span class="tocnumber">2.3</span> <span class="toctext">Banking mode = $40</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Banking_mode_.3D_.2450"><span class="tocnumber">2.4</span> <span class="toctext">Banking mode = $50</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>These registers overlay, but are independent from, any PRG-RAM present.
+</p><p>Mask: $E003
+</p>
+<h3><span class="mw-headline" id=".246000">$6000</span></h3>
+<pre> 7  bit  0
+ ---- ----
+ ABCC DEEE
+ |||| ||||
+ |||| |+++-- PRG offset (PRG A19, A18, A17)
+ |||| +----- Alternate CHR A17
+ ||++------- PRG offset (PRG A24, A23)
+ |+--------- PRG mask (PRG A17 from 0: MMC3; 1: offset)
+ +---------- CHR mask (CHR A17 from 0: MMC3; 1: alternate)
+</pre>
+<h3><span class="mw-headline" id=".246001">$6001</span></h3>
+<pre> 7  bit  0
+ ---- ----
+ GHIJ KKLx
+ |||| |||
+ |||| ||+--- GNROM mode bank PRG size (1: 32 KiB bank, PRG A14=CPU A14; 0: 16 KiB bank, PRG A14=offset A14)
+ |||+-++---- PRG offset (in order: PRG A20, A22, A21)
+ ||+-------- PRG mask (PRG A20 from 0: offset; 1: MMC3)
+ |+--------- PRG mask (PRG A19 from 0: offset; 1: MMC3)
+ +---------- PRG mask (PRG A18 from 0: MMC3; 1: offset)
+</pre>
+<h3><span class="mw-headline" id=".246002">$6002</span></h3>
+<pre> 7  bit  0
+ ---- ----
+ xxxx MMMM
+      ||||
+      ++++-- CHR offset for GNROM mode (CHR A16, A15, A14, A13)
+</pre>
+<h3><span class="mw-headline" id=".246003">$6003</span></h3>
+<pre> 7  bit  0
+ ---- ----
+ NPxP QQRx
+ || | |||
+ || | +++--- PRG offset for GNROM mode (PRG A16, A15, A14)
+ || +------- 1: GNROM mode; 0: MMC3 mode
+ || |         (1: PRG A16...13 from QQ, L, R, CPU A14, A13 + CHR A16...10 from MMMM, PPU A12...10;
+ || |          0: PRG A16...13 from MMC3 + CHR A16...A10 from MMC3 )
+ |+-+------- Banking mode
+ |+--------- &quot;Weird MMC3 mode&quot;
+ +---------- Lockout (prevent further writes to these four registers, only works in MMC3 mode)
+</pre>
+<h2><span class="mw-headline" id="Register_interpretation">Register interpretation</span></h2>
+<p>The following things are always true, regardless of mode:
+</p>
+<ul><li> The CCKK bits are always connected to PRG A24..A21.</li>
+<li> The PRG and CHR mask controls (I, H, G, B, &amp; A) always control whether PRG A20..A17 and CHR A17 are connected to the internal MMC3 registers, or the literal values in other controls (J, EEE, &amp; D).</li></ul>
+<h3><span class="mw-headline" id="Banking_mode_.3D_.2400">Banking mode = $00</span></h3>
+<p>“Normal” oversize MMC3 mode.
+</p><p>Supports MMC3 anywhere between 128 KiB and 2 MiB, otherwise identical to ordinary <a href="MMC3.xhtml" title="MMC3">MMC3</a>. Goofy mask values will produce goofy memory layouts.
+</p><p>The combined register of CCKKJEEE could be thought of as a way to select one of 256 different 128 KiB PRG MMC3 games, or CCKK selecting one of 16 different 2 MiB MMC3 games.
+</p><p>Lockout works in this mode.
+</p>
+<h3><span class="mw-headline" id="Banking_mode_.3D_.2410">Banking mode = $10</span></h3>
+<p>“Normal” GNROM mode.
+</p><p>PRG A16 and A15 come from the QQ controls.
+</p><p>When in 16 KiB PRG mode (L control), PRG A14 comes from the R control. Otherwise, it comes from CPU A14.
+</p><p>CHR A16, A15, A14, and A13 come from MMMM controls. CHR A12, A11, and A10 come from PPU A12, A11, and A10.
+</p><p>The combined register of CCKKJEEEQQR could be thought of as a way to select one of 2048 different 16 KiB NROM games.
+</p><p>Note: The CHR and PRG mask registers STILL AFFECT THIS MODE, allowing weird splicing of MMC3 banking (with 128 KiB granularity) overlaying GNROM-style banking.
+</p><p>Lockout DOES NOT work in this mode.
+</p>
+<h3><span class="mw-headline" id="Banking_mode_.3D_.2440">Banking mode = $40</span></h3>
+<p>“Weird” MMC3 mode.
+</p><p>If <a href="MMC3.xhtml#Bank_select_.28.248000-.249FFE.2C_even.29" title="MMC3">MMC3 PRG ROM bank mode</a> is &quot;normal&quot; (8+8+16F), then the PRG banks at 0xC000 and 0xE000 are fixed to 8 KiB bank 0, instead of 0xFE and 0xFF. Supposedly this effect is completely ignored when MMC3 PRG ROM bank mode is inverted (8F+8+8+8F).
+</p><p>The second half of each of the 2 KiB CHR banks is replaced with bank 0, and the LSB of MMC3 registers 0 and 1 work (instead of being replaced by PPU A10).
+</p><p>Otherwise, behaves as “normal” MMC3 mode above.
+</p>
+<h3><span class="mw-headline" id="Banking_mode_.3D_.2450">Banking mode = $50</span></h3>
+<p>“Weird” GNROM-ish mode.
+</p><p>Combine the rules mentioned above for “Normal” GNROM mode with “Weird” MMC3 mode. (These descriptions should not be contradictory.)
+</p><p>Lockout DOES NOT work in this mode.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.043 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1609-1!*!0!!en!*!* and timestamp 20160208225939 and revision id 11900
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

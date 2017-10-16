@@ -1,0 +1,30 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES</h1><div class="article">
+<p>How does a PlayChoice hint screen work? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 19:08, 21 September 2012 (MDT)
+</p>
+<h2><span class="mw-headline" id="Last_4">Last 4</span></h2>
+<p>Should this be &quot;if the last <i>5</i> bytes are not all zero&quot;? &quot;A general rule of thumb: if the last 4 bytes are not all zero, and the header is not marked for NES 2.0 format, an emulator should either mask off the upper 4 bits of the mapper number or simply refuse to load the ROM.&quot; -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 03:45, 14 July 2013 (MDT)
+</p>
+<dl><dd>When I wrote 4 as the rule of thumb, I didn't know how many not-widely-adopted extensions to original iNES were floating around, and I guessed that one or more might have used byte 11 for something, but all of the ROMs I saw with DiskDude and similar tags had at least something in the last four bytes of the header. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 07:48, 14 July 2013 (MDT)
+<dl><dd> Makes sense. Just wanted to check whether it was a typo. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 09:06, 14 July 2013 (MDT)</dd></dl></dd>
+<dd>Nestopia checks the last 6, and clears/ignores the last 9. (It also actually does pay attention to bytes 8 and 9)—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 11:21, 14 July 2013 (MDT)</dd>
+<dd>If the header contains &quot;DiskDude!&quot; or one of those other things (I forget now, but I knew at one time and figured this out), then bit2 of flags 7 will be set; otherwise bit2 and bit3 should both be cleared. This may be another way. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 19:51, 20 August 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.054 seconds
+Real time usage: 0.057 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:851-1!*!0!*!*!*!* and timestamp 20160603204812 and revision id 12565
+ -->
+</div></body></html>

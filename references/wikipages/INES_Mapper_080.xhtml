@@ -1,0 +1,88 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 080</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 080</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 080</strong> represents most boards using <a href="Taito_X1_005_pinout.xhtml" title="Taito X1-005 pinout">Taito's X1-005 mapper IC</a>, which provides something somewhere between the <a href="MMC6.xhtml" title="MMC6">MMC6</a> and the <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">Namcot 108</a> in sophistication.
+</p><p>In comparison to to the Namcot 108, it:
+</p>
+<ul><li> has the ability to bankswitch ROM from $C000-$DFFF</li>
+<li> has mirroring control</li>
+<li> has 128 extra bytes of RAM, optionally battery-backed</li></ul>
+<p>In comparison to the MMC6, it
+</p>
+<ul><li> has the ability to bankswitch three different 8 KiB slices of PRG ROM simultaneously</li>
+<li> does not have an IRQ</li>
+<li> cannot swap which pattern table is 2×2KiB and which is 4×1KiB</li>
+<li> has only 128 extra bytes of RAM</li></ul>
+<p>If the pinout is correct, CPU A7 is ignored and the control registers should also be present at $7E7x.
+</p><p>See also: <a href="INES_Mapper_082.xhtml" title="INES Mapper 082">Taito X1-017</a>, <a href="INES_Mapper_207.xhtml" title="INES Mapper 207">Taito X1-005 with alternate mirroring control</a>, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=30165" rel="nofollow">BootGod's forum post</a>
+</p>
+<pre> ========================
+ =  Mapper 080          =
+ ========================
+ 
+ 
+ Example Games:
+ --------------------------
+ Kyonshiizu 2
+ Minelvaton Saga
+ Taito Grand Prix - Eikou heno License
+ 
+ 
+ Notes:
+ ---------------------------
+ Regs appear at $7EFx, I'm unsure whether or not PRG-RAM can exist at $6000-7EFF
+ 
+ Fudou Myouou Den is often marked to use this mapper -- however it uses <a href="INES_Mapper_207.xhtml" title="INES Mapper 207">mapper 207</a>.
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+   $7EF0-7EF5:  CHR Regs
+ 
+   $7EF6,7EF7:  [.... ...M]  Mirroring
+     0 = Horz
+     1 = Vert
+
+   $7EF8,7EF9:  Internal RAM permission ($A3 enables reads/writes; any other value disables)
+  
+   $7EFA,7EFB:  PRG Reg 0 (8k @ $8000)
+   $7EFC,7EFD:  PRG Reg 1 (8k @ $A000)
+   $7EFE,7EFF:  PRG Reg 2 (8k @ $C000)
+
+   $7F00-7FFF:  128 Bytes of RAM, mirrored once.
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+        $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+      +---------------+---------------+-------+-------+-------+-------+
+      |    &lt;$7EF0&gt;    |    &lt;$7EF1&gt;    | $7EF2 | $7EF3 | $7EF4 | $7EF5 |
+      +---------------+---------------+-------+-------+-------+-------+
+ 
+ PRG Setup:
+ ---------------------------
+ 
+       $8000   $A000   $C000   $E000  
+     +-------+-------+-------+-------+
+     | $7EFA | $7EFC | $7EFE | { -1} |
+     +-------+-------+-------+-------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.027 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:672-1!*!0!*!*!*!* and timestamp 20160208225150 and revision id 7243
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

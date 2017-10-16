@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 093</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 093</h1><div class="article">
+<h2><span class="mw-headline" id="Banking_CHRRAM">Banking CHRRAM</span></h2>
+<p>If, for some reason, you were to remove the 8KiB CHR RAM IC on the Sunsoft-3R PCB and replace it specifically with a 62256 (the largest compatible 28-pin RAM), the functionality of that PCB would then become:
+</p>
+<pre> $8000-FFFF:  [.PPP .C.C]
+    P = PRG Reg  (16k @ $8000)
+    C = 8KiB CHR RAM bank
+</pre>
+<p>No-one has ever done this.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:12, 12 May 2013 (MDT)
+</p>
+<dl><dd> Are you capable of running a test ROM for bankable CHR RAM? It could be used as part of the test suite for this mapper's NES 2.0 representation. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 15:24, 12 May 2013 (MDT)
+<dl><dd> No, I don't have the parts on hand. I think I'd rather define all discrete logic mappers as &quot;can be used to bank CHR-RAM in place of CHR-ROM if the NES2.0 header specifies no CHR ROM and more than 8KiB CHR RAM&quot; rather than formalizing the above idiosyncrasy of noncontiguous bits; e.g. m70 with CHR-RAM is strictly superior for homebrew because it supports 4 bits for each of CHR and PRG instead of 2 and 3, respectively. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:33, 12 May 2013 (MDT)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1049-1!*!0!*!*!*!* and timestamp 20160208224129 and revision id 6280
+ -->
+</div></body></html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 036</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 036</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 036</strong> is assigned to TXC's PCB <b>01-22000-400</b>, featuring a <a href="74138.xhtml" title="74138">74138</a>, a 74175, and usually a 24-pin ASIC labeled <i>05-00002-010</i>. <a class="external text" href="http://glukvideo.info/listado-juegos-gluk" rel="nofollow">Two games</a> are currently known to require this definition.
+</p>
+<ul><li> Strike Wolf</li>
+<li> Policeman</li></ul>
+<p>Even though these games can evidently be emulated as a weird kind of GNROM, the hardware does something quite different:
+</p><p>The CHR banking is definitely implemented using the two 7400-series ICs:
+</p>
+<pre>Mask: $E200
+write $4200: [.... CCCC] - Select 8 KiB CHR bank
+</pre>
+<p>The PRG banking is part of the ASIC:
+</p>
+<pre>Mask: $E103
+ read $4100-4103: [xxRR xxxx]
+                   |||| ||||
+                   ||++------ reads show the internal state.
+                   ++---++++- open bus
+ write $4100: when M=0, copy PP to RR. When M=1, RR=RR+1
+ write $4101: no visible effect
+ write $4102: [..PP ....] - Request 32 KiB PRG bank
+ write $4103: [...M ....] - PRG banking mode (0: copy, 1: increment)
+ write $8000-$FFFF: copy RR to PRG banking pins
+</pre>
+<p>This PRG behavior is confusing but seems to be complete.
+</p><p>The <i>05-00002-010</i> ASIC is connected as:
+</p>
+<pre>                .--\/--.
+         ¹NC &lt;- |01  24| -&gt; NC
+ (r) PRG A16 &lt;- |02  23| -&gt; NC
+ (r) PRG A15 &lt;- |03  22| -&gt; NC
+         GND ?? |04  21| &lt;- CPU A13 (rn)
+          5V ?? |05  20| &lt;- CPU A14 (rn)
+          NC &lt;&gt; |06  19| ?? GND
+          5V ?? |07  18| &lt;- CPU R/W (n)
+          NC &lt;&gt; |08  17| &lt;- /ROMSEL (rn)
+          NC &lt;&gt; |09  16| &lt;- M2 (n)
+         ¹NC &lt;&gt; |10  15| &lt;- CPU A8 (rn)
+ (rn) CPU D5 &lt;&gt; |11  14| &lt;- CPU A1 (rn)
+ (rn) CPU D4 &lt;&gt; |12  13| &lt;- CPU A0 (rn)
+                '------'
+
+ ¹: pins 1 and 10 could respectively function as PRG A17 and CPU D6 if they were connected
+    However, none of pins 6, 8, or 9 behave like CPU D7. Perhaps they were intended for CHR banking?
+</pre>
+<p>Three additional games published by Gluk use the same PCB, with no ASIC. They were also released in other regions on different hardware, and <i>only</i> Gluk's editions are compatible with the above-mentioned CHR banking.
+</p>
+<ul><li> F-15 City War</li>
+<li> Volley ball</li>
+<li> Puzzle</li></ul>
+<p>Compatibility code left in means that all editions of these three games are emulatable as <a href="NINA_003_006.xhtml" title="NINA-003-006">NINA-06</a>.
+</p><p>See also:
+</p>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=167180#p167180" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=167180#p167180</a> Thread about dumping Policeman starts here</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:922-1!*!0!*!*!*!* and timestamp 20160427212819 and revision id 12225
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

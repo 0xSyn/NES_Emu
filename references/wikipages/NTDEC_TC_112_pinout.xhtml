@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NTDEC TC-112 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NTDEC TC-112 pinout</h1><div class="article">
+<p>NTDEC TC-112: 40-pin 0.6&quot; PDIP. (Canonically <a href="INES_Mapper_193.xhtml" title="INES Mapper 193">iNES Mapper 193</a>)
+</p>
+<pre>                .---\/---.
+ (n)      M2 -&gt; |1     40| -- VCC
+ (s)  CPU D7 -&gt; |2     39| -&gt; PRG A16  (r)
+ (s)  CPU D6 -&gt; |3     38| -&gt; PRG A15  (r)
+ (s)  CPU D5 -&gt; |4     37| -&gt; PRG A14  (r)
+ (s)  CPU D4 -&gt; |5     36| -&gt; PRG A13  (r)
+ (s)  CPU D3 -&gt; |6     35| -&gt; PRG1 /CE (r)
+ (s)  CPU D2 -&gt; |7     34| -&gt; PRG2 /CE (r)
+ (s)  CPU D1 -&gt; |8     33| -&gt; CHR A16  (r)
+ (s)  CPU A1 -&gt; |9     32| -&gt; CHR A15  (r)
+ (s)  CPU A0 -&gt; |10    31| -&gt; CHR A14  (r)
+ (n) CPU R/W -&gt; |11    30| -&gt; CHR A13  (r)
+ (n) CPU /CE -&gt; |12    29| -&gt; CHR A12  (r)
+ (n) CPU A14 -&gt; |13    28| -&gt; CHR A11  (r)
+ (n) CPU A13 -&gt; |14    27| -&gt; CHR1 /CE (r)
+ (n) PPU A13 -&gt; |15    26| -&gt; CHR2 /CE (r)
+ (n) PPU A12 -&gt; |16    25| &lt;- CPU D0   (s)
+ (n) PPU A11 -&gt; |17    24| -- NC
+ (s) PPU A10 -&gt; |18    23| -- NC
+  †  PPU /RD -&gt; |19    22| &lt;- CPU A2   (s) ???
+         GND -- |20    21| -- NC
+                `--------'
+</pre>
+<p>† On one board, connected to a seemingly-needlessly-complicated <a href="7400.xhtml" title="7400">7400</a> circuit. See the <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=7106" rel="nofollow">thread on the forum</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:838-1!*!0!*!*!*!* and timestamp 20160208225654 and revision id 5656
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

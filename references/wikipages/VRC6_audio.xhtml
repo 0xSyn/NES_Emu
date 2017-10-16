@@ -1,0 +1,323 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC6 audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC6 audio</h1><div class="article">
+<p>Konami's <a href="VRC6.xhtml" title="VRC6">VRC6</a> mapper provided 3 extra channels for sound: two pulse waves, and one sawtooth.  All channels operate similarly to the native channels in the <a href="APU.xhtml" title="APU">NES APU</a>.
+</p><p>On some boards, the A0 and A1 lines were switched, so for those boards, registers will need adjustment when emulating ($x001 will become $x002 and vice versa).  Registers listed here are how they are for 悪魔城伝説 (<i>Akumajou Densetsu</i>, iNES mapper 024).  For <i>Madara</i> and <i>Esper Dream 2</i> (iNES mapper 026), you will need to adjust the registers.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Frequency_Control_.28.249003.29"><span class="tocnumber">1.1</span> <span class="toctext">Frequency Control ($9003)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Pulse_Control_.28.249000.2C.24A000.29"><span class="tocnumber">1.2</span> <span class="toctext">Pulse Control ($9000,$A000)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Saw_Accum_Rate_.28.24B000.29"><span class="tocnumber">1.3</span> <span class="toctext">Saw Accum Rate ($B000)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Freq_Low_.28.249001.2C.24A001.2C.24B001.29"><span class="tocnumber">1.4</span> <span class="toctext">Freq Low ($9001,$A001,$B001)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Freq_High_.28.249002.2C.24A002.2C.24B002.29"><span class="tocnumber">1.5</span> <span class="toctext">Freq High ($9002,$A002,$B002)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Pulse_Channels"><span class="tocnumber">2</span> <span class="toctext">Pulse Channels</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Sawtooth_Channel"><span class="tocnumber">3</span> <span class="toctext">Sawtooth Channel</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Output"><span class="tocnumber">4</span> <span class="toctext">Output</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<table class="tabular">
+<caption> Overall map of VRC6 audio registers
+</caption>
+<tr>
+<th> Base </th>
+<th> +0 </th>
+<th> +1 </th>
+<th> +2 </th>
+<th> +3
+</th></tr>
+<tr>
+<td> $9000 </td>
+<td> Pulse 1 duty and volume </td>
+<td> Pulse 1 period low </td>
+<td> Pulse 1 period high </td>
+<td> Frequency scaling
+</td></tr>
+<tr>
+<td> $A000 </td>
+<td> Pulse 2 duty and volume </td>
+<td> Pulse 2 period low </td>
+<td> Pulse 2 period high </td>
+<td>
+</td></tr>
+<tr>
+<td> $B000 </td>
+<td> Saw volume </td>
+<td> Saw period low </td>
+<td> Saw period high </td>
+<td> (<a href="VRC6.xhtml#Mirroring_Control_.28.24B003.29" title="VRC6">mirroring control</a>)
+</td></tr></table>
+<h3><span class="mw-headline" id="Frequency_Control_.28.249003.29">Frequency Control ($9003)</span></h3>
+<p>Normally you should write $00 to this register on startup to initialize it, and not make any further writes to it. This is what all three original VRC6 games do.
+</p>
+<dl><dd>$9003 controls the overall frequency of the VRC6 audio.</dd></dl>
+<pre>7  bit  0
+---- ----
+.... .ABH
+      |||
+      ||+- Halt
+      |+-- 16x frequency (4 octaves up)
+      +--- 256x frequency (8 octaves up)
+</pre>
+<pre>H - halts all oscillators, stopping them in their current state
+B - 16x frequency, all oscillators (4 octave increase)
+A - 256x frequency, all oscillators (8 octave increase)
+</pre>
+<ul><li> The halt flag overrides the other flags.</li></ul>
+<ul><li> The 256x flag overrides the 16x flag.</li></ul>
+<ul><li> The 16x/256x flags effectively control a 4-bit and 8-bit right shift of the 12-bit period registers.</li></ul>
+<h3><span class="mw-headline" id="Pulse_Control_.28.249000.2C.24A000.29">Pulse Control ($9000,$A000)</span></h3>
+<dl><dd>$9000 controls Pulse 1</dd>
+<dd>$A000 controls Pulse 2</dd></dl>
+<pre>7  bit  0
+---- ----
+MDDD VVVV
+|||| ||||
+|||| ++++- Volume
+|+++------ Duty Cycle
++--------- Mode (1: ignore duty)
+</pre>
+<h3><span class="mw-headline" id="Saw_Accum_Rate_.28.24B000.29">Saw Accum Rate ($B000)</span></h3>
+<pre>7  bit  0
+---- ----
+..AA AAAA
+  ++-++++- Accumulator Rate (controls volume)
+</pre>
+<h3><span class="mw-headline" id="Freq_Low_.28.249001.2C.24A001.2C.24B001.29">Freq Low ($9001,$A001,$B001)</span></h3>
+<dl><dd>$9001 controls Pulse 1</dd>
+<dd>$A001 controls Pulse 2</dd>
+<dd>$B001 controls Saw</dd></dl>
+<pre>7  bit  0
+---- ----
+FFFF FFFF
+|||| ||||
+++++-++++- Low 8 bits of frequency
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Freq_High_.28.249002.2C.24A002.2C.24B002.29">Freq High ($9002,$A002,$B002)</span></h3>
+<dl><dd>$9002 controls Pulse 1</dd>
+<dd>$A002 controls Pulse 2</dd>
+<dd>$B002 controls Saw</dd></dl>
+<pre>7  bit  0
+---- ----
+E... FFFF
+|    ||||
+|    ++++- High 4 bits of frequency
++--------- Enable (0 = channel disabled)
+</pre>
+<h2><span class="mw-headline" id="Pulse_Channels">Pulse Channels</span></h2>
+<p>The VRC6 pulse channels operate similarly to the NES's own pulse channels.  The CPU clock rate (1.79 MHz) drives the 12-bit divider <b>F</b>.  Every cycle the divider counts down until it reaches zero, at which point the divider resets and the duty cycle generator is clocked.
+</p><p>The duty cycle generator takes 16 steps, counting down from 15 to 0. When the current step is less than or equal to the given duty cycle <b>D</b>, the channel volume <b>V</b> is output, otherwise 0 is output.
+</p><p>When the mode bit <b>M</b> is true, the channel ignores the duty cycle generator and outputs the current volume regardless of the current duty.
+</p><p>Therefore, <b>D</b> and <b>M</b> values provide the following duty cycles:
+</p>
+<table>
+<tr>
+<th> D value </th>
+<th> Duty (percent)
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 1/16 </td>
+<td> 6.25%
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 2/16 </td>
+<td> 12.5%
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 3/16 </td>
+<td> 18.75%
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 4/16 </td>
+<td> 25%
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 5/16 </td>
+<td> 31.25%
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> 6/16 </td>
+<td> 37.5%
+</td></tr>
+<tr>
+<td> 6 </td>
+<td> 7/16 </td>
+<td> 43.75%
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> 8/16 </td>
+<td> 50%
+</td></tr>
+<tr>
+<td> M </td>
+<td> 16/16 </td>
+<td> 100%
+</td></tr></table>
+<p>When the channel is disabled by clearing the <b>E</b> bit, output is forced to 0, and the duty cycle is immediately reset and halted; it will resume from the beginning when <b>E</b> is once again set. Thus it is possible to reset phase by clearing and immediately setting <b>E</b>.
+</p><p>When using equivalent duty cycle settings for the VRC6 pulse channels, they will appear inverted compared to their 2A03 counterparts.
+</p><p>The frequency of the pulse channels is very similar to the APU pulse channels. It is a division of the <a href="Clock_rate.xhtml" title="Clock rate">CPU Clock</a> (1.789773MHz NTSC). The output frequency (f) of the generator can be determined by the 12-bit period value (t) written to $9001-9002/$A001-A002.
+</p>
+<pre>f = CPU / (16 * (t + 1))
+t = (CPU / (16 * f)) - 1
+</pre>
+<h2><span class="mw-headline" id="Sawtooth_Channel">Sawtooth Channel</span></h2>
+<p>For the sawtooth, the CPU clock rate drives a 12-bit divider <b>F</b>.  Every cycle, the divider counts down until it reaches zero, at which point it reloads and clocks the accumulator.  However, it seems that the accumulator only reacts on every 2 clocks.
+</p><p>When clocked, the rate value <b>A</b> is added to an internal 8-bit accumulator.  The high 5 bits of the accumulator are then output (provided the channel is enabled by having the <b>E</b> bit set).  After <b>A</b> has been added 6 times, on the 7th clock, instead of <b>A</b> being added, the internal accumulator is reset to zero.
+</p><p>For an example, assume an <b>A</b> value of $08
+</p>
+<table class="tabular">
+<tr>
+<th> Step </th>
+<th> Accumulator </th>
+<th> Output </th>
+<th> Comment
+</th></tr>
+<tr>
+<td>  0 </td>
+<td> $00 </td>
+<td> $00 </td>
+<td>
+</td></tr>
+<tr>
+<td>  1 </td>
+<td> $00 </td>
+<td> $00 </td>
+<td> (odd step, do nothing)
+</td></tr>
+<tr>
+<td>  2 </td>
+<td> $08 </td>
+<td> $01 </td>
+<td> (even step, add <b>A</b> to accumulator)
+</td></tr>
+<tr>
+<td>  3 </td>
+<td> $08 </td>
+<td> $01 </td>
+<td>
+</td></tr>
+<tr>
+<td>  4 </td>
+<td> $10 </td>
+<td> $02 </td>
+<td>
+</td></tr>
+<tr>
+<td>  5 </td>
+<td> $10 </td>
+<td> $02 </td>
+<td>
+</td></tr>
+<tr>
+<td>  6 </td>
+<td> $18 </td>
+<td> $03 </td>
+<td>
+</td></tr>
+<tr>
+<td>  7 </td>
+<td> $18 </td>
+<td> $03 </td>
+<td>
+</td></tr>
+<tr>
+<td>  8 </td>
+<td> $20 </td>
+<td> $04 </td>
+<td>
+</td></tr>
+<tr>
+<td>  9 </td>
+<td> $20 </td>
+<td> $04 </td>
+<td>
+</td></tr>
+<tr>
+<td> 10 </td>
+<td> $28 </td>
+<td> $05 </td>
+<td>
+</td></tr>
+<tr>
+<td> 11 </td>
+<td> $28 </td>
+<td> $05 </td>
+<td>
+</td></tr>
+<tr>
+<td> 12 </td>
+<td> $30 </td>
+<td> $06 </td>
+<td>
+</td></tr>
+<tr>
+<td> 13 </td>
+<td> $30 </td>
+<td> $06 </td>
+<td>
+</td></tr>
+<tr>
+<td>  0 </td>
+<td> $00 </td>
+<td> $00 </td>
+<td> (14th step, reset accumulator)
+</td></tr>
+<tr>
+<td>  1 </td>
+<td> $00 </td>
+<td> $00 </td>
+<td>
+</td></tr>
+<tr>
+<td>  2 </td>
+<td> $08 </td>
+<td> $01 </td>
+<td>
+</td></tr></table>
+<p>If <b>A</b> is more than 42 (floor(255 / 6)), the accumulator will wrap, resulting in distorted sound.
+</p><p>If <b>E</b> is clear, the accumulator is forced to zero until <b>E</b> is again set. The phase of the saw generator can be mostly reset by clearing and immediately setting <b>E</b>. Clearing <b>E</b> does not reset the frequency divider, however, so the first step of the reset saw may appear shortened.
+</p><p>The frequency of the saw is a division of the <a href="Clock_rate.xhtml" title="Clock rate">CPU Clock</a> (1.789773MHz NTSC). The output frequency (f) of the generator can be determined by the 12-bit period value (t) written to $B001-B002. Note that it divides the clock by 14 instead of 16, unlike the pulse channels.
+</p>
+<pre>f = CPU / (14 * (t + 1))
+t = (CPU / (14 * f)) - 1
+</pre>
+<h2><span class="mw-headline" id="Output">Output</span></h2>
+<p>At maximum volume, the pulse channels of the VRC6 are roughly equivalent to the pulse channels of the 2A03 (except inverted). The DAC of the VRC6, unlike the 2A03, appears to be linear.
+</p><p>The final mix is a 6-bit DAC summing the two 4-bit pulse outputs and the high 5 bits of the saw accumulator.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/vrcvi.txt" rel="nofollow">VRCVI Chip Info</a> by Kevin Horton</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.056 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:99-1!*!0!!en!*!* and timestamp 20160208225944 and revision id 8191
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a></p></div></body></html>

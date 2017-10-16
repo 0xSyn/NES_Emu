@@ -1,0 +1,36 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Music</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Music</h1><div class="article">
+<p>Music is available for the NES. It is most often stored in NSF files, which package the data for one or more songs along with 6502 machine code to play it back. NSF files can be played on a NES or on a PC with an appropriate player which emulates the NES sound hardware and CPU.
+</p><p>The music from a large number of NES games has been &quot;ripped&quot; into NSF format, and people are actively creating <a class="external text" href="http://www.2a03.org/" rel="nofollow">new NES music</a> with sequencing tools. The three main music sequencers are
+</p>
+<ul><li> <a class="external text" href="http://www.nesdev.com/mck_guide_v1.0.txt" rel="nofollow">MCK/MML</a></li>
+<li> <a class="external text" href="http://nesdev.com/nt2/" rel="nofollow">Nerd Tracker II</a></li>
+<li> <a class="external text" href="http://famitracker.com/" rel="nofollow">Famitracker</a></li></ul>
+<p>But some of these general-purpose music engines are designed for making NSFs where the only thing executing is the music player.
+This means they can be fairly large, and in an <a href="NROM.xhtml" title="NROM">NROM</a> game, their features might not justify their size.
+If you want to write your own music engine that targets the NES <a href="APU.xhtml" title="APU">APU</a>, you'll first need a lookup table for the note periods.
+This means you'll need the frequencies that correspond to various pitches. See <a class="extiw" href="http://en.wikipedia.org/wiki/Pitch_(music)" title="wikipedia:Pitch (music)">Wikipedia:Pitch (music)</a>, <a class="extiw" href="http://en.wikipedia.org/wiki/Semitone" title="wikipedia:Semitone">Wikipedia:Semitone</a>, and <a class="extiw" href="http://en.wikipedia.org/wiki/Equal_temperament" title="wikipedia:Equal temperament">Wikipedia:Equal temperament</a>.
+</p>
+<h2><span class="mw-headline" id="NES_Audio">NES Audio</span></h2>
+<ul><li> <a class="mw-redirect" href="APU.xhtml" title="NES APU">NES APU</a></li></ul>
+<h2><span class="mw-headline" id="SNES_Audio">SNES Audio</span></h2>
+<ul><li> <a href="Blargg_SPC_Upload.xhtml" title="Blargg SPC Upload">Blargg SPC Upload</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:239-1!*!0!!*!*!* and timestamp 20160208225622 and revision id 4743
+ -->
+<p class="categories">Categories: <a href="Category_Audio.xhtml">Audio</a></p></div></body></html>

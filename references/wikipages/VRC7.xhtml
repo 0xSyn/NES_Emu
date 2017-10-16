@@ -1,0 +1,237 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC7</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC7</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>VRC7</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Konami
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=85&amp;group=groupid" rel="nofollow">2 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> 352402, 353429
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 512K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 1K
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H, V, or 1, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7a only</a>
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="VRC7.xhtml" title="INES Mapper 085">085</a>
+</td></tr></table>
+</div>
+<p>The <b>Konami VRC7</b> is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>.
+It is assigned to <b>iNES Mapper 085</b>.
+</p><p>Example games:
+</p>
+<ul><li> <i>Lagrange Point</i></li>
+<li> <i>Tiny Toon Adventures 2</i></li></ul>
+<p>See <a href="VRC7_pinout.xhtml" title="VRC7 pinout">VRC7 pinout</a> for chip pinout.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#PRG_Select_0_.28.248000.29"><span class="tocnumber">2.1</span> <span class="toctext">PRG Select 0 ($8000)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#PRG_Select_1_.28.248010.2C_.248008.29"><span class="tocnumber">2.2</span> <span class="toctext">PRG Select 1 ($8010, $8008)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#PRG_Select_2_.28.249000.29"><span class="tocnumber">2.3</span> <span class="toctext">PRG Select 2 ($9000)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_Select_0.E2.80.A67_.28.24A000.E2.80.A6.24DFFF.29"><span class="tocnumber">2.4</span> <span class="toctext">CHR Select 0…7 ($A000…$DFFF)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Mirroring_Control_.28.24E000.29"><span class="tocnumber">2.5</span> <span class="toctext">Mirroring Control ($E000)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#IRQ_Control_.28.24E008_-_.24F010.29"><span class="tocnumber">2.6</span> <span class="toctext">IRQ Control ($E008 - $F010)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Sound_.28.249010.2C_.249030.29"><span class="tocnumber">3</span> <span class="toctext">Sound ($9010, $9030)</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#See_also"><span class="tocnumber">4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$9FFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $E000-$FFFF: 8 KB PRG ROM bank, fixed to the last bank</li></ul>
+<ul><li> CHR $0000-$03FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0400-$07FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0800-$0BFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0C00-$0FFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1000-$13FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1400-$17FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1800-$1BFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1C00-$1FFF: 1 KB switchable CHR ROM bank</li></ul>
+<p>If CHR-RAM is used instead of CHR-ROM, the banking feature is still functional.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>There are two board variations:
+</p>
+<ul><li> VRC7a uses A4 to select registers ($x010), used in <i>Lagrange Point</i>.</li>
+<li> VRC7b uses A3 to select registers ($x008), used in <i>Tiny Toon Adventures</i>.</li></ul>
+<p>Although A5 is wired for sound registers on both ($x030, $x028), in the latter board the ceramic resonator necessary for the sound hardware to work is missing.
+</p>
+<h3><span class="mw-headline" id="PRG_Select_0_.28.248000.29">PRG Select 0 ($8000)</span></h3>
+<pre>7  bit  0
+---------
+..PP PPPP
+  || ||||
+  ++-++++- Select 8 KB PRG ROM at $8000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="PRG_Select_1_.28.248010.2C_.248008.29">PRG Select 1 ($8010, $8008)</span></h3>
+<pre>7  bit  0
+---------
+..PP PPPP
+  || ||||
+  ++-++++- Select 8 KB PRG ROM at $A000
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_2_.28.249000.29">PRG Select 2 ($9000)</span></h3>
+<pre>7  bit  0
+---------
+..PP PPPP
+  || ||||
+  ++-++++- Select 8 KB PRG ROM at $C000
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_0.E2.80.A67_.28.24A000.E2.80.A6.24DFFF.29">CHR Select 0…7 ($A000…$DFFF)</span></h3>
+<table class="wikitable">
+<tr>
+<th> Write to CPU address </th>
+<th> 1KB CHR bank affected
+</th></tr>
+<tr>
+<td> $A000 </td>
+<td> $0000-$03FF
+</td></tr>
+<tr>
+<td> $A008 or $A010 </td>
+<td> $0400-$07FF
+</td></tr>
+<tr>
+<td> $B000 </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> $B008 or $B010 </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> $C000 </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> $C008 or $C010 </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> $D000 </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> $D008 or $D010 </td>
+<td> $1C00-$1FFF
+</td></tr></table>
+<h3><span class="mw-headline" id="Mirroring_Control_.28.24E000.29">Mirroring Control ($E000)</span></h3>
+<pre>7  bit  0
+---------
+RS.. ..MM
+||     ||
+||     ++- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> (0: vertical; 1: horizontal;
+||                        2: one-screen, lower bank; 3: one-screen, upper bank)
+|+-------- Silence expansion sound if set
++--------- WRAM enable (1: enable WRAM, 0: protect)
+</pre>
+<h3><span class="mw-headline" id="IRQ_Control_.28.24E008_-_.24F010.29">IRQ Control ($E008 - $F010)</span></h3>
+<pre>
+$E008, $E010:  IRQ Latch
+       $F000:  IRQ Control
+$F008, $F010:  IRQ Acknowledge
+</pre>
+<p>Many VRC mappers use the same IRQ system.  For details on IRQ operation, see <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC IRQs</a>.
+</p>
+<h2><span class="mw-headline" id="Sound_.28.249010.2C_.249030.29">Sound ($9010, $9030)</span></h2>
+<p>For details on sound information, see <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a>.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/vrcvii.txt" rel="nofollow">Konami VRC-VII Chip Info</a> by Kevin Horton.</li>
+<li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.152 seconds
+Real time usage: 0.158 seconds
+Preprocessor visited node count: 153/1000000
+Preprocessor generated node count: 695/1000000
+Post‐expand include size: 1055/2097152 bytes
+Template argument size: 128/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:101-1!*!0!!en!*!* and timestamp 20160612173030 and revision id 12619
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User talk:Zzo38/Mapper C</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User talk:Zzo38/Mapper C</h1><div class="article">
+<h2><span class="mw-headline" id="Hardware_required">Hardware required</span></h2>
+<ul><li> Two NAND gates making an SR latch using PPU A11 and A10, producing CHR A12 or A13</li>
+<li> One NAND gate decoding PPU A12 &amp; A13 to make PRG A15</li>
+<li> One NAND gate decoding two of the three of (/ROMSEL, A12, M2) going to 6264 RAM -CE
+<ul><li> The last of those three signals goes to 6264 +CE</li></ul></li></ul>
+<p>A few complicating factors:
+</p>
+<ul><li> the PPU always fetches 34 tiles per scanline, so even with a scroll of (256,240) it will fetch from the nametable at $2800 before it fetches the sprites.</li>
+<li> At this precise moment, Visual2C02 is simulating the unused sprite fetches as coming from tile 0, not tile $FF as documented elsewhere.</li></ul>
+<p>—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:21, 4 January 2014 (MST)
+</p>
+<dl><dd>This is precisely the hardware I intended to be required. I was aware of the first &quot;complicating factor&quot; but not the second; this probably just means the section about CHR bankswitching should be written more clearly; it should still work as long as the correct assumptions are being made. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 20:11, 4 January 2014 (MST)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1267-1!*!0!*!*!*!* and timestamp 20160208230126 and revision id 7955
+ -->
+</div></body></html>

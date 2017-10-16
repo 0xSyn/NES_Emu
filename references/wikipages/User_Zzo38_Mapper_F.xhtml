@@ -1,0 +1,273 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper F</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper F</h1><div class="article">
+<p><br/>
+This is a experimental kind of ASIC mapper, with a few complicated features.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Memory_map"><span class="tocnumber">2</span> <span class="toctext">Memory map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#PRG_setup"><span class="tocnumber">2.1</span> <span class="toctext">PRG setup</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#CHR_setup"><span class="tocnumber">2.2</span> <span class="toctext">CHR setup</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#.245800_.28W.29_.2F_CIRAM_controls_.2F_mute"><span class="tocnumber">3.1</span> <span class="toctext">$5800 (W) / CIRAM controls / mute</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.245800_.28R.29_.2F_Audio_input"><span class="tocnumber">3.2</span> <span class="toctext">$5800 (R) / Audio input</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.245801_.28W.29_.2F_Low_PRG_ROM_bank_.2F_video_mode"><span class="tocnumber">3.3</span> <span class="toctext">$5801 (W) / Low PRG ROM bank / video mode</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.245801_.28R.29_.2F_PPU_address"><span class="tocnumber">3.4</span> <span class="toctext">$5801 (R) / PPU address</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.245802_.28W.29_.2F_IRQ_setting_.2F_high_PRG_ROM_bank"><span class="tocnumber">3.5</span> <span class="toctext">$5802 (W) / IRQ setting / high PRG ROM bank</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.245803_.28W.29_.2F_ExRAM_mode_.2F_PRG_RAM_bank"><span class="tocnumber">3.6</span> <span class="toctext">$5803 (W) / ExRAM mode / PRG RAM bank</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.245804_.2F_Channel_1_controls"><span class="tocnumber">3.7</span> <span class="toctext">$5804 / Channel 1 controls</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.245805_.2F_Channel_1_low_period"><span class="tocnumber">3.8</span> <span class="toctext">$5805 / Channel 1 low period</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.245806_.2F_Channel_1_high_period"><span class="tocnumber">3.9</span> <span class="toctext">$5806 / Channel 1 high period</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.245807_.28W.29_.2F_Pattern_table_CHR_banks"><span class="tocnumber">3.10</span> <span class="toctext">$5807 (W) / Pattern table CHR banks</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.245808_.2F_Channel_2_controls"><span class="tocnumber">3.11</span> <span class="toctext">$5808 / Channel 2 controls</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.245809_.2F_Channel_2_low_period"><span class="tocnumber">3.12</span> <span class="toctext">$5809 / Channel 2 low period</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.24580A_.2F_Channel_2_high_period"><span class="tocnumber">3.13</span> <span class="toctext">$580A / Channel 2 high period</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.24580B_.28W.29_.2F_ExRAM_mode"><span class="tocnumber">3.14</span> <span class="toctext">$580B (W) / ExRAM mode</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.24580C_.28W.29_.2F_Channel_3_controls"><span class="tocnumber">3.15</span> <span class="toctext">$580C (W) / Channel 3 controls</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.24580C_.28R.29_.2F_Phase_output"><span class="tocnumber">3.16</span> <span class="toctext">$580C (R) / Phase output</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.24580D_.28W.29_.2F_Channel_3_low_period"><span class="tocnumber">3.17</span> <span class="toctext">$580D (W) / Channel 3 low period</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.24580E_.28W.29_.2F_Channel_3_high_period"><span class="tocnumber">3.18</span> <span class="toctext">$580E (W) / Channel 3 high period</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.24580F_.28W.29_.2F_Nametable_CHR_banks"><span class="tocnumber">3.19</span> <span class="toctext">$580F (W) / Nametable CHR banks</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#ExRAM"><span class="tocnumber">4</span> <span class="toctext">ExRAM</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Power_on_state"><span class="tocnumber">5</span> <span class="toctext">Power on state</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 512 KB</li>
+<li> PRG ROM bank size: 16 KB</li>
+<li> PRG RAM: Up to 64 KB</li>
+<li> CHR capacity: Up to 64 KB ROM, or 64 KB RAM, or 32 KB ROM + 32 KB RAM</li>
+<li> CHR bank size: 4 KB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes, but irrelevant</li></ul>
+<p>A number of advanced features are supported, including:
+</p>
+<ul><li> Three extra sound channels, one of which can be used for interrupts and/or PPU access counting</li>
+<li> Ability to mute the 2A03 + microphone audio</li>
+<li> Register to read the audio output from 2A03 + microphone</li>
+<li> Capability for 8x8 attribute areas</li>
+<li> ROM nametable support</li>
+<li> 256 additional bytes of RAM, usable for a number of strange things</li>
+<li> Ability to write to the NES/Famicom's internal PRG RAM and to the mapper registers/ExRAM simultaneously</li></ul>
+<h2><span class="mw-headline" id="Memory_map">Memory map</span></h2>
+<h3><span class="mw-headline" id="PRG_setup">PRG setup</span></h3>
+<ul><li> $0800-$0FFF: Reading or writing here also writes to (but never reads from) mapper registers</li>
+<li> $1000-$17FF: ExRAM (write-only)</li>
+<li> $1800-$1FFF: Registers (write-only)</li>
+<li> $3000-$3FFF: Mirror of $7000-$7FFF (write-only)</li>
+<li> $4800-$4FFF: Mirror of $0800-$0FFF, but there is no data to read from, so it can't know what to write</li>
+<li> $5000-$57FF: ExRAM</li>
+<li> $5800-$5FFF: Registers</li>
+<li> $6000-$7FFF: 8K RAM bank</li>
+<li> $8000-$BFFF: 16K switchable ROM bank</li>
+<li> $C000-$DFFF: Bottom half of 16K switchable ROM bank</li>
+<li> $E000-$FFFF: Fixed to the last ROM bank</li></ul>
+<p>Some areas are specified &quot;write-only&quot;, meaning that if you try to read it, it will have bus-conflicts.
+</p>
+<h3><span class="mw-headline" id="CHR_setup">CHR setup</span></h3>
+<ul><li> $0000-$0FFF: 4K switchable ROM or RAM bank, or CIRAM</li>
+<li> $1000-$1FFF: 4K switchable ROM or RAM bank, or CIRAM</li>
+<li> $2000-$2FFF: 4K switchable ROM or RAM bank, or CIRAM</li>
+<li> $3000-$3EFF: 4K switchable ROM or RAM bank, or CIRAM</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Registers are mapped at $5800-$5FFF, using the low four bits as a register number. There may be different registers for reading as for writing. The same registers are also mapped at $1800-$1FFF, however reading from those address may result in bus conflicts. Writing there is OK, though.
+</p><p>Therefore, the address mask is:
+</p>
+<pre>[0.01 1... .... xxxx]
+</pre>
+<h3><span class="mw-headline" id=".245800_.28W.29_.2F_CIRAM_controls_.2F_mute">$5800 (W) / CIRAM controls / mute</span></h3>
+<pre>[ESMM CCCC]
+ |||| ||||
+ |||| ++++--- CIRAM enable
+ ||++-------- Nametable mirroring
+ |+---------- CIRAM swap
+ +----------- Enable console audio
+</pre>
+<p>If the &quot;E&quot; bit is cleared, then only the expansion audio is played, and the audio from 2A03 + microphone is disabled.
+</p><p>Nametable mirroring decides the connection of CIRAM A10, depending on &quot;MM&quot;, and then that address line is XORed by &quot;S&quot;, as follows:
+</p>
+<ul><li> 00 = PA10</li>
+<li> 01 = PA11</li>
+<li> 10 = PA12</li>
+<li> 11 = PA13</li></ul>
+<p>The &quot;CCCC&quot; decides which sections of PPU address space are accessing CIRAM (if the bit is clear, CIRAM is used; if set, the CHR ROM/RAM in the cartridge is used):
+</p>
+<ul><li> bit0 = $0000-$0FFF</li>
+<li> bit1 = $1000-$1FFF</li>
+<li> bit2 = $2000-$2FFF</li>
+<li> bit3 = $3000-$3EFF</li></ul>
+<h3><span class="mw-headline" id=".245800_.28R.29_.2F_Audio_input">$5800 (R) / Audio input</span></h3>
+<pre>[.... XXXX]
+      ||||
+      ++++--- 4-bit ADC
+</pre>
+<p>This register is a 4-bit ADC for the 2A03+microphone audio. Mute and expansion audio are not applied; it is the same audio signal as cartridge is receiving at first.
+</p>
+<h3><span class="mw-headline" id=".245801_.28W.29_.2F_Low_PRG_ROM_bank_.2F_video_mode">$5801 (W) / Low PRG ROM bank / video mode</span></h3>
+<pre>[VV.P PPPP]
+ || | ||||
+ || +-++++--- 16K PRG ROM bank at $8000-$BFFF
+ ++---------- Video mode
+</pre>
+<p>The video modes can be:
+</p>
+<ul><li> 00 = No special modes.</li>
+<li> 01 = When reading the nametables (not counting the attribute tables): Copy PPU address bit0 to bit0 of register $580F. Copy PPU address bit5 to bit1 of register $580F and to bit6 of register $5800. Copy PPU address bit10 XOR PPU address bit11 to bit0 of register $5807.</li>
+<li> 10 = When reading addresses $1FDx or $1FEx of pattern tables: Copy PPU address bit4 to bit4 of register $5800 and to bit0 of register $5807.</li>
+<li> 11 = When reading the nametables (not counting the attribute tables): Copy PPU address bit0 to bit0 of register $5807. Copy PPU address bit5 to bit1 of register $5807. Copy PPU address bit10 XOR PPU address bit11 to bit1 of register $5800.</li></ul>
+<h3><span class="mw-headline" id=".245801_.28R.29_.2F_PPU_address">$5801 (R) / PPU address</span></h3>
+<pre>[AAAA AAAA]
+ |||| ||||
+ ++++-++++--- PPU address
+</pre>
+<p>This data will read bit11-bit4 of the PPU address according to what it was during the most recent nametables (not attribute tables) read.
+</p>
+<h3><span class="mw-headline" id=".245802_.28W.29_.2F_IRQ_setting_.2F_high_PRG_ROM_bank">$5802 (W) / IRQ setting / high PRG ROM bank</span></h3>
+<pre>[IILP PPPP]
+ |||| ||||
+ |||+-++++--- 8K PRG ROM bank at $C000-$DFFF
+ ||+--------- IRQ latch
+ ++---------- IRQ mode
+</pre>
+<p>This is actually the low 8K of a 16K bank, so the high 8K of a 16K bank cannot be mapped into $C000-$DFFF.
+</p><p>The IRQ latch is just output to the IRQ pin, and can be manually changed (lowering it will trigger IRQ if enabled). Depending on IRQ mode, it may also automatically change it too. (Note: This can also be used as output to the Famicom expansion port.)
+</p><p>IRQ mode:
+</p>
+<ul><li> 00 = Manual only.</li>
+<li> 01 = When reading nametables (not counting attributes), copy inverted bit11 of PPU address to IRQ latch.</li>
+<li> 10 = Clear IRQ latch when reading PPU addresses $1FD0 or $1FE0.</li>
+<li> 11 = Clear IRQ latch when writing to PPU addresses $1FD0 or $1FE0.</li></ul>
+<h3><span class="mw-headline" id=".245803_.28W.29_.2F_ExRAM_mode_.2F_PRG_RAM_bank">$5803 (W) / ExRAM mode / PRG RAM bank</span></h3>
+<pre>[HHHH .BBB]
+ ||||  |||
+ ||||  +++--- 8K PRG RAM bank at $6000-$7FFF
+ ++++-------- High 4-bits of ExRAM mode
+</pre>
+<h3><span class="mw-headline" id=".245804_.2F_Channel_1_controls">$5804 / Channel 1 controls</span></h3>
+<p>Same as register $580C, but for channel 1. However, there are two additional bits which you can write, which are only existing in channel 1:
+</p>
+<pre>[PCIW AAAA]
+ |||| ||||
+ |||| ++++--- AND mask
+ |||+-------- Waveform (0: saw, 1: square)
+ ||+--------- If set, clear IRQ latch after one full period
+ |+---------- Clock source (0: CPU, 1: PPU)
+ +----------- Phase reset if bit is cleared
+</pre>
+<p>If the clock source is set to PPU, then this channel is clocked when the PPU reads data.
+</p>
+<h3><span class="mw-headline" id=".245805_.2F_Channel_1_low_period">$5805 / Channel 1 low period</span></h3>
+<p>Same as register $580D, but for channel 1.
+</p>
+<h3><span class="mw-headline" id=".245806_.2F_Channel_1_high_period">$5806 / Channel 1 high period</span></h3>
+<p>Same as register $580E, but for channel 1.
+</p>
+<h3><span class="mw-headline" id=".245807_.28W.29_.2F_Pattern_table_CHR_banks">$5807 (W) / Pattern table CHR banks</span></h3>
+<pre>[HHHH LLLL]
+ |||| ||||
+ |||| ++++--- 4K CHR bank at $0000-$0FFF
+ ++++-------- 4K CHR bank at $1000-$1FFF
+</pre>
+<p>If there is both CHR ROM and CHR RAM, then the high bit (bit3) of the bank number selects between ROM and RAM (ROM if cleared, RAM if set).
+</p><p>If CHR RAM is enabled but that address range is also set to CIRAM, then reading will read CIRAM, but writing will write both the CIRAM and the cartridge CHR RAM.
+</p>
+<h3><span class="mw-headline" id=".245808_.2F_Channel_2_controls">$5808 / Channel 2 controls</span></h3>
+<p>Same as register $580C, but for channel 2.
+</p>
+<h3><span class="mw-headline" id=".245809_.2F_Channel_2_low_period">$5809 / Channel 2 low period</span></h3>
+<p>Same as register $580D, but for channel 2.
+</p>
+<h3><span class="mw-headline" id=".24580A_.2F_Channel_2_high_period">$580A / Channel 2 high period</span></h3>
+<p>Same as register $580E, but for channel 2.
+</p>
+<h3><span class="mw-headline" id=".24580B_.28W.29_.2F_ExRAM_mode">$580B (W) / ExRAM mode</span></h3>
+<pre>[LLLL LLLL]
+ |||| ||||
+ ++++-++++--- Low 8-bits of ExRAM mode
+</pre>
+<h3><span class="mw-headline" id=".24580C_.28W.29_.2F_Channel_3_controls">$580C (W) / Channel 3 controls</span></h3>
+<pre>[P..W AAAA]
+ |  | ||||
+ |  | ++++--- AND mask
+ |  +-------- Waveform (0: saw, 1: square)
+ +----------- Phase reset if bit is cleared
+</pre>
+<p>The waveform is used to determine the output values:
+</p>
+<ul><li> Saw: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31</li>
+<li> Square: 0 0 30 30 0 0 30 30 0 0 30 30 0 0 30 30 0 0 30 30 0 0 30 30 0 0 30 30 0 0 30 30</li></ul>
+<p>These values from the waveform are then taken, the AND mask is left shift by one and add one, and it is bitwise AND by the result, to determine the output level.
+</p>
+<h3><span class="mw-headline" id=".24580C_.28R.29_.2F_Phase_output">$580C (R) / Phase output</span></h3>
+<pre>[...P PPPP]
+    | ||||
+    +-++++--- Phase output
+</pre>
+<p>This register outputs the phase value from 0 to 31 which is the index into the waveform.
+</p>
+<h3><span class="mw-headline" id=".24580D_.28W.29_.2F_Channel_3_low_period">$580D (W) / Channel 3 low period</span></h3>
+<pre>[LLLL LLLL]
+ |||| ||||
+ ++++-++++--- Low bits of period of channel 3
+</pre>
+<h3><span class="mw-headline" id=".24580E_.28W.29_.2F_Channel_3_high_period">$580E (W) / Channel 3 high period</span></h3>
+<pre>[HHHH HHHH]
+ |||| ||||
+ ++++-++++--- High bits of period of channel 3
+</pre>
+<h3><span class="mw-headline" id=".24580F_.28W.29_.2F_Nametable_CHR_banks">$580F (W) / Nametable CHR banks</span></h3>
+<pre>[HHHH LLLL]
+ |||| ||||
+ |||| ++++--- 4K CHR bank at $2000-$2FFF
+ ++++-------- 4K CHR bank at $3000-$3EFF
+</pre>
+<p>If there is both CHR ROM and CHR RAM, then the high bit (bit3) of the bank number selects between ROM and RAM (ROM if cleared, RAM if set).
+</p><p>If CHR RAM is enabled but that address range is also set to CIRAM, then reading will read CIRAM, but writing will write both the CIRAM and the cartridge CHR RAM.
+</p>
+<h2><span class="mw-headline" id="ExRAM">ExRAM</span></h2>
+<p>ExRAM is at $5000-$57FF, but there are only 256 bytes, mirrored across this range. It is also writable at $1000-$17FF, but there is bus conflicts if you try to read it from this address.
+</p><p>Reading/writing it can have various effects on the data and address, depending on the ExRAM mode setting:
+</p>
+<ul><li> bit0: When reading (not when writing), toggle bit7 of the address.</li>
+<li> bit1: When writing (not when reading), address is shifted left by two, and those two high bits are instead put in the low bits of the address.</li>
+<li> bit2: When writing, always write $0 as the low nybble.</li>
+<li> bit3: When writing, always write $F as the low nybble.</li>
+<li> bit4: When writing, always write $0 as the high nybble.</li>
+<li> bit5: When writing, always write $F as the high nybble.</li>
+<li> bit6: After reading, write $00 to that cell in ExRAM.</li>
+<li> bit7: After reading, write $FF to that cell in ExRAM.</li>
+<li> bit8: After reading, write the address of the cell into the ExRAM.</li>
+<li> bit9: After reading, write the value of the internal last-read register to the cell just read, before updating the last-read register. (This last-read register is always updated after reading from ExRAM, regardless if this bit is set or not.)</li>
+<li> bit10: Clear the IRQ latch when the CPU writes $00 to anywhere in ExRAM.</li>
+<li> bit11: Suppress updating the internal last-read register.</li></ul>
+<p>In some cases multiple bits set are conflicting, and should not be used.
+</p>
+<h2><span class="mw-headline" id="Power_on_state">Power on state</span></h2>
+<p>The power on state is undefined. All relevant registers (including audio) must be initialized. For normal usage, the registers that have to be initialized includes: $0 $1 $2 $4 $7 $8 $C
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.114 seconds
+Real time usage: 0.117 seconds
+Preprocessor visited node count: 103/1000000
+Preprocessor generated node count: 108/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1265-1!*!0!!en!*!* and timestamp 20160208230606 and revision id 8107
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_Mappers_with_ROM_nametables.xhtml">Mappers with ROM nametables</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a></p></div></body></html>

@@ -1,0 +1,103 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sachen SA8259A pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sachen SA8259A pinout</h1><div class="article">
+<p><a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen SA8259A</a>: 28-pin 0.6&quot; DIP
+</p><p>Most of Sachen's mapper ICs have names that collide with other well-known ICs, presumably as an initial round of indirection to confuse would-be mass copiers. The 8259A is canonically the original IBM PC's <a class="extiw" href="http://en.wikipedia.org/wiki/Programmable_Interrupt_Controller" title="wikipedia:Programmable Interrupt Controller">Programmable Interrupt Controller</a>.
+</p>
+<pre>              .---\/---.              
+   PRG A15 &lt;- | 01  28 | -- Vcc
+ CIRAM A10 &lt;- | 02  27 | -&gt; r42
+   PPU A11 -&gt; | 03  26 | &lt;- CPU A8 (+CE)
+   PPU A13 -&gt; | 04  25 | -&gt; rX0
+   PPU /RD -&gt; | 05  24 | &lt;- R/W
+         ? ?? | 06  23 | &lt;- M2
+   PRG A16 &lt;- | 07  22 | &lt;- PPU A12
+   CPU A14 -&gt; | 08  21 | &lt;- PPU A10
+   CPU  A0 -&gt; | 09  20 | &lt;- /ROMSEL
+       rX1 &lt;- | 10  19 | -&gt; r41
+   CPU  D0 -&gt; | 11  18 | &lt;- CPU D2
+   CPU  D1 -&gt; | 12  17 | -&gt; r60
+   PRG A17 &lt;- | 13  16 | -&gt; rX2
+       GND -- | 14  15 | -&gt; r40
+              '--------'
+</pre>
+<p>The exact connectivity of the pins labelled r?? depends on the
+corresponding mapper number or name allocated.
+</p>
+<table class="datatable">
+<tr>
+<th> pin \ mapper </th>
+<th> <a href="INES_Mapper_137.xhtml" title="INES Mapper 137">137</a> </th>
+<th> 138 </th>
+<th> 139 </th>
+<th> 141
+</th></tr>
+<tr>
+<td> rX0 </td>
+<td> CHR A10 </td>
+<td> CHR A11 </td>
+<td> CHR A13 </td>
+<td> CHR A12
+</td></tr>
+<tr>
+<td> rX1 </td>
+<td> CHR A11 </td>
+<td> CHR A12 </td>
+<td> CHR A14 </td>
+<td> CHR A13
+</td></tr>
+<tr>
+<td> rX2 </td>
+<td> CHR A12 </td>
+<td> CHR A13 </td>
+<td> CHR A15 </td>
+<td> CHR A14
+</td></tr>
+<tr>
+<td> r40 </td>
+<td> CHR A14¹ </td>
+<td> CHR A14 </td>
+<td> CHR A16 </td>
+<td> CHR A15
+</td></tr>
+<tr>
+<td> r41 </td>
+<td> CHR A14¹ </td>
+<td> CHR A15 </td>
+<td> CHR A17 </td>
+<td> CHR A16
+</td></tr>
+<tr>
+<td> r42 </td>
+<td> CHR A14¹ </td>
+<td> CHR A16 </td>
+<td> CHR A18 </td>
+<td> CHR A17
+</td></tr>
+<tr>
+<td> r60 </td>
+<td> CHR A13¹ </td>
+<td> n/c </td>
+<td> n/c </td>
+<td> n/c
+</td></tr></table>
+<p>¹: r40, r41, r42, and r60 go through a 74LS253 dual 4 to 1 multiplexer and a 74LS257 quad 2 to 1 multiplexer to produce 4x1+4F CHR banking
+</p><p>Reference: Cah4e3 ( <a class="external free" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt</a> )
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1319-1!*!0!*!*!*!* and timestamp 20160208225821 and revision id 8634
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

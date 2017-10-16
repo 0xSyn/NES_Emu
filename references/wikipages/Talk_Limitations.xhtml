@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Limitations</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Limitations</h1><div class="article">
+<h2><span class="mw-headline" id="Higher_Limitations_on_Famicom">Higher Limitations on Famicom</span></h2>
+<p>Here I will discuss some ways to overcome some of the limitations than how it is written in the article, using Famicom (rather than NES; sometimes even AV Famicom or a modified AV Famicom might be necessary; some of these things apply to NES too, though). Here is a list:
+</p>
+<ul><li> For input devices, you can even use the Famicom keyboard and/or SNES mouse if that helps. (If the keyboard is used, you can also use the tape for save data.)</li>
+<li> For RAM, in addition to the 8K PRG RAM in the cartridge, there is the internal RAM at $0000-$07FF, and you might be able to use unused parts of CIRAM, CHR RAM, and palette RAM as additional general purpose RAM. In addition, MMC5 can have up to 64K RAM (it is also possible to make simpler mappers having such features). If you are storing the copy of OAM in CPU addressable RAM, some of the OAM bytes of unused sprites can be used as additional general purpose RAM, too. (In some games that don't need to move sprites, you might even store OAM in ROM.)</li>
+<li> For 16x16 attribute areas, again MMC5 can avoid it (as mentioned in the article), although it can be possible to make simpler mappers having such features too. It says it puzzles that each playfield is limited 6x12, although single player would be wider, you can use only four colors (like the CGA low-res graphics mode in a PC), or you can even make up a game based around the 16x16 attribute limitation and 8 sprites per scanline limitation (my WIP game &quot;<i>Attribute Zone</i>&quot; (currently in QBASIC, though) is like this).</li>
+<li> Fighting: To avoid the 8 sprites per scanline limitation, you could make up some kind of fighting game involving vertical arrangement instead of horizontal. You could also have a kind of team game with two characters below and two above.</li>
+<li> For music, you can add additional channels using expansion audio of the mappers that have them; even a AY-3-8910 alone is sufficient to make a mapper having both expansion audio and bankswitching (and even software-controlled 1-screen mirroring if this is wanted). A cartridge could possibly even be made which can filter the 2A03 audio without adding its own channels.</li>
+<li> For games with many bullets, you could also use the sprite limitations as part of the strategy of the gameplay.</li>
+<li> For games with many players, one thing you can do is take turns; another possibility is potential use of parallel and serial multi-player adapters being used together for up to eight players. For many colors of sprites, another thing that can be done is if you use only single color on each sprite, duplicate the graphics many times in the pattern tables using different colors and then you can have up to twelve colors of sprites. If it would help, you could even use the automatic CHR bankswitching of MMC4 so that the alternate color sprites can be in the other bank (although this may limit the number of sprites in each scanline less than eight).</li>
+<li> To improve speed, you could even store some programs in RAM and use self-modifying code.</li>
+<li> There are other things too that I did not mention here. I am sure other people have figured out many other things that I don't know, too.</li></ul>
+<p>--<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 14:32, 2 September 2013 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1205-1!*!0!*!*!*!* and timestamp 20160208224215 and revision id 7476
+ -->
+</div></body></html>

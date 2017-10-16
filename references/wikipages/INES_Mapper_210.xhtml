@@ -1,0 +1,336 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 210</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 210</h1><div class="article">
+<p><br/>
+This mapper represents most of the PCBs using the Namcot 175 and Namcot 340 ICs, such as <i>Famista '92</i> and <i>Wagyan Land 3</i>.
+It is very similar to <a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">iNES Mapper 019</a>, having a <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a>-class mapper IC with no <a href="Namco_163_audio.xhtml" title="Namco 163 audio">N163 expansion sound</a>.
+</p><p>The 175 always has hard-wired mirroring. The 340 has an entirely different and incompatible mirroring control from the 163.
+</p><p>Run-time heuristics can determine how the emulator should act:
+</p>
+<ul><li> if $E000.7 is ever set, this should be a Namcot 340.</li>
+<li> if $E000.6 is set and this isn't a Namcot 163, this is probably a Namcot 340.</li>
+<li> if the game ever writes to $4800, $5000, $5800, $C800, $D000, $D800, or $F800 this should be a Namcot 163</li>
+<li> if the game ever reads or writes PRG RAM, this is NOT a Namcot 340</li>
+<li> if the game ever writes to $C000 and this isn't a Namcot 163, this is probably a Namcot 175 with external RAM.</li></ul>
+<p>Badly behaved software or software that writes to both sets of mirroring control registers will fail these heuristics.
+</p><p>Naruko provided a table of which games used which ICs and what is necessary for accurate emulation, translated here:
+</p>
+<table class="wikitable sortable">
+<tr>
+<th colspan="7">Commercially available games using a Namcot 129/163/175/340
+</th></tr>
+<tr>
+<th> hard </th>
+<th> soft </th>
+<th> battRAM </th>
+<th> yyyy.mm.dd </th>
+<th> name </th>
+<th> transliterated &amp;// translated </th>
+<th> found mixing resistor
+</th></tr>
+<tr>
+<td>129 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1987.12.04 </td>
+<td> スターウォーズ </td>
+<td> Star Wars
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1988.04.05 </td>
+<td> 独眼竜政宗 </td>
+<td> Dokuganryuu Masamune </td>
+<td> 0
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1988.05.27 </td>
+<td> ナムコクラシック </td>
+<td> Namco Classic
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1988.06.24 </td>
+<td> 妖怪道中記 </td>
+<td> Youkai Douchuuki / Shadow Land
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> external </td>
+<td> 1988.07.29 </td>
+<td> 三国志 中原の覇者 </td>
+<td> Sangokushi: Chuugen no Hasha / Romance of the Three Kingdoms: Champion of the Central Plains </td>
+<td> 4.7k
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1988.08.12 </td>
+<td> ファイナルラップ </td>
+<td> Final Lap </td>
+<td> either 4.7k or 15k
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1988.09.27 </td>
+<td> えりかとさとるの夢冒険 </td>
+<td> Erika to Satoru no Yume Bouken / Erika and Satoru's Dream of Adventure </td>
+<td> 10k
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1988.11.18 </td>
+<td> 貝獣物語 </td>
+<td> Kaijuu Monogatari / Shell Monsters Story
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> external </td>
+<td> 1988.12.09 </td>
+<td> キングオブキングス </td>
+<td> King of Kings </td>
+<td> 4.7k
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1989.02.17 </td>
+<td> ハイドライド3 </td>
+<td> Hydlide 3 </td>
+<td> 0
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1989.03.17 </td>
+<td> ローリングサンダー </td>
+<td> Rolling Thunder </td>
+<td> 22k
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1989.04.18 </td>
+<td> マインドシーカー </td>
+<td> Mind Seeker
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1989.07.14 </td>
+<td> ドラゴンニンジャ </td>
+<td> Dragon Ninja / Bad Dudes
+</td></tr>
+<tr>
+<td>340* </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1989.07.31 </td>
+<td> スプラッターハウス </td>
+<td> Splatterhouse </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1989.12.19 </td>
+<td> ファミスタ'90 </td>
+<td> Famista '90 (previous games were &quot;Family Stadium Baseball&quot;)
+</td></tr>
+<tr>
+<td>163 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1989.12.22 </td>
+<td> マッピーキッズ </td>
+<td> Mappy Kids </td>
+<td> 10
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> external </td>
+<td> 1990.04.06 </td>
+<td> 女神転生II </td>
+<td> Megami Tensei II / Rebirth of the Goddess II </td>
+<td> 4.7k
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> internal </td>
+<td> 1990.06.23 </td>
+<td> バトルフリート </td>
+<td> Battle Fleet
+</td></tr>
+<tr>
+<td>340* </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1990.12.14 </td>
+<td> ワギャンランド2 </td>
+<td> Wagyan Land 2 </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>175 </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1990.12.21 </td>
+<td> ファミスタ'91 </td>
+<td> Famista '91 </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> external </td>
+<td> 1991.01.04 </td>
+<td> じゅうべえくえすと </td>
+<td> Juvei Quest
+</td></tr>
+<tr>
+<td>175 </td>
+<td> 340 </td>
+<td> external </td>
+<td> 1991.07.19 </td>
+<td> ファミリーサーキット'91 </td>
+<td> Family Circuit '91 </td>
+<td> 0 (n/a)
+</td></tr>
+<tr>
+<td>175 </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1991.10.04 </td>
+<td> ちびまる子ちゃん </td>
+<td> Chibi Maruko-chan: Uki Uki Shopping </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>175* </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1991.12.06 </td>
+<td> 平成天才バカボン </td>
+<td> Heisei Tensai Bakabon / Genius Bakabon </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>340 </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1991.12.20 </td>
+<td> ファミスタ'92 </td>
+<td> Famista '92 </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> none </td>
+<td> 1992.03.13 </td>
+<td> ナムコクラシックII </td>
+<td> Namco Classic II
+</td></tr>
+<tr>
+<td>163* </td>
+<td> 163 </td>
+<td> external </td>
+<td> 1992.06.10 </td>
+<td> 三国志II 覇王の大陸 </td>
+<td> Sangokushi II: Haou no Tairiku / Romance of the Three Kingdoms II: Overlord of the Continent
+</td></tr>
+<tr>
+<td>340* </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1992.09.22 </td>
+<td> ドリームマスター </td>
+<td> Dream Master </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>340 </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1992.10.22 </td>
+<td> トップストライカー </td>
+<td> Top Striker </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>340* </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1992.12.08 </td>
+<td> ワギャンランド3 </td>
+<td> Wagyan Land 3 </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>340 </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1992.12.22 </td>
+<td> ファミスタ'93 </td>
+<td> Famista '93 </td>
+<td> n/a
+</td></tr>
+<tr>
+<td>340 </td>
+<td> 340 </td>
+<td> none </td>
+<td> 1993.12.01 </td>
+<td> ファミスタ'94 </td>
+<td> Famista '94 </td>
+<td> n/a
+</td></tr></table>
+<ul><li> hard: those marked with * were only found as epoxy: they were determined by connectivity and VRAM /CS behavior</li>
+<li> soft: The Namcot 175 and 340 are similar enough that they can be emulated together</li>
+<li> soft: Categorized as 340 if they don't write to $5800 or $c800</li>
+<li> battRAM:
+<ul><li> none: Neither external Work RAM nor battery.</li>
+<li> internal: Battery backup of 163's internal memory.</li>
+<li> external: External SRAM with battery backup.</li></ul></li>
+<li> yyyy.mm.dd is the release date.</li>
+<li> Splatterhouse and Famista '91 are the only games that do not use a 163 that can be correctly emulated as using a 163. (Translator suspects the games perform compatibility writes)</li>
+<li> The 129 sounds different from the 163: sometimes it's distorted. (translator: This is the most coherent I could get it) RAM and IRQ are the same as the 163. VRAM behavior has not been tested.</li></ul>
+<p>The found mixing resistors were reported in <a class="external text" href="http://homepage1.nifty.com/rophon/mck2ch/thread/thread_12th.htm" rel="nofollow">this archived thread</a> from 2ch.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:706-1!*!0!*!*!*!* and timestamp 20160208225423 and revision id 10208
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_NES_2_0_mappers_with_submappers.xhtml">NES 2.0 mappers with submappers</a></p></div></body></html>

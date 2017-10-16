@@ -1,0 +1,129 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NES Classic Controller for Wii</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NES Classic Controller for Wii</h1><div class="article">
+<p>This tutorial will instruct you in how to build yourself a Mayflash NES/SNES-to-Wiimote controller adapter with a full fledged standard 7-pin NES connector instead of the provided DE-9 pin connector.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Materials"><span class="tocnumber">2</span> <span class="toctext">Materials</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Procedure"><span class="tocnumber">3</span> <span class="toctext">Procedure</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Video"><span class="tocnumber">4</span> <span class="toctext">Video</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<p>In late 2009, a Chinese peripheral manufacturer called Mayflash released an interesting controller adapter for the Wii. With this adapter, one could use NES or Super NES controllers on the Wii by connecting them to the adapter and then the adapter to a Wii Remote, essentially fooling the Wii into thinking these older controllers are in fact the Wii Classic Controller.
+</p><p>Using NES or Super NES controllers on a Wii is really a matter of preference and nostalgia. Holding the Wii Remote on its side emulates the style of control that the NES provided. Holding a real NES controller is a lot more satisfying. If you didn't grow up with an NES, getting used to the brick design can be difficult. For you guys, I recommend the NES2 Dogbone. These are more difficult to find, but definitely more comfortable. The Wii Classic Controller is basically a dumbed down copy of the SNES pad with two thumbsticks attached. Most games that support the Classic Controller do not need either thumbstick and they just sort of get in the way. Most retro gamers agree that the original SNES controller is one of the best ever designed, so why wouldn't you want to use it on the Wii?
+</p><p>The idea is to allow you to plug in your oldschool controllers both on the Wii and their original hardware. But unfortunately,
+A: Unfortunately, Mayflash designed their adapter to use a <a class="extiw" href="http://en.wikipedia.org/wiki/D-subminiature" title="wikipedia:D-subminiature">DE-9</a> pin connector for NES controller functionality. In Asia, most clones of the NES hardware (commonly called Famiclones) use this type of controller connector. In America, Europe and even Japan, the Nintendo hardware used a NES 7-pin connector instead.
+</p><p>In the 1980s, many videogame systems including the Atari 2600, Commodore 64 and even Sega Genesis used a standard nine pin controller port called a DE-9, which had a simple parallel interface for the buttons. This meant that many controllers were interchangeable with each other, allowing gamers to use Genesis controllers to play Atari games.
+</p><p>However, the Nintendo Entertainment System (NES) used a proprietary 7-pin controller plug with an SPI-like serial interface. The two plugs are shaped very differently. This mod project involves replacing the DE-9 pin connector with a standard NES 7-pin.
+</p><p>The Retroports that Retrozone sell are marketed as NES &amp; SNES to Wii adapters, but they are in reality only NES &amp; SNES to Gamecube adapters. This means that they work on all Gamecube games that support digital control, but on the Wii they only work with games that alllow the use of Gamecube controllers. Increasingly, more games are being released on the Wii that support the Wii Remote on its side and Classic Controller only, such as Tetris, Dr. Mario, Mega Man 9, and Mega Man 10. Also, since the Mayflash adapter plugs into the Wii Remote and not the Wii itself, it sort of makes the NES/SNES wired controllers wireless, preventing trip hazards.
+</p><p>The Mayflash SNES controller has the correct size and pinout and does not need replacing.
+</p>
+<h2><span class="mw-headline" id="Materials">Materials</span></h2>
+<p>You'll need a Wii console, a Wii Remote, and 
+Mayflash NES/SNES to Wii adapter - various online stores, ebay
+NES and SNES controller - check your local used game stores. eBay has them, but be careful of knock-offs. Always look for Nintendo's logo. The design patents for the controllers have expired, but knock-offs will never have Nintendo written on them.
+</p><p>salvaged female NES 7pin controller plug - Out of an old front-loading NES or a Four Score accessory. The ideal place to find one is if you have or know someone who has a dead/unwanted NES. Alternatively, check ebay for the part itself that someone has already removed or buy an NES for parts. Getting it out of the system is real easy - Simply remove the screws holding the case together, remove the RF shield and simply unplug one of the controller ports. Finally unscrew both screws on the black plastic piece that keeps the 7pin connectors in place.
+</p><p><br/>
+small star screwdriver - your garage/junk drawer/hardware store.
+soldering iron - hardware store.
+desoldering pump/braid - hardware store.
+scissors - your kitchen/department store
+glue - may not be needed, depending on your skill.
+a sharp work knife - your kitchen/craft store.
+small pair of pliers - garage/hardware store.
+</p>
+<h2><span class="mw-headline" id="Procedure">Procedure</span></h2>
+<ul><li>Disclaimer: Following this tutorial should allow you to achieve desirable results, but that being said I take no responsibility for following my advice here. By continuing to read this you take full responsibility of damaging your hardware, burning or cutting yourself. Don't be a jackass and you should be fine.</li></ul>
+<p>1. Take your Mayflash NES/SNES to Wii adapter apart by removing the four screws on the back. Set aside the top part of the shell along with the four small screws and the turbo fire button in a safe place, preferably in a bowl so you don't lose anything.
+</p><p>2. Unhook the cord and remove the PCB from the bottom tray. Place bottom tray in bowl with the other side and the screws.
+</p><p>3. Carefully examine the PCB. You'll notice that the Famiclone DE-9 plug is connected to the PCB using all nine pins, even though Famicom/NES controllers only use five pins. On the real hardware, the two extra pins to make of the 7pin connector were only used by specialty controllers such as the Zapper or PowerGlove. You will notice a pattern that looks like this:
+</p>
+<pre>
+    _________
+1 \ o o o o o / 5
+   \ o o o o /
+   6 `&quot;&quot;&quot;&quot;&quot;' 9
+</pre>
+<p>Note that this diagram shows the correct pins that face away from the PCB. In other words, the pins that are normally visible and plug into DE-9 controllers.
+</p><p>4. Use a soldering iron and soldering pump/braid to heat and remove the solder that holds the DE-9 pin plug. This is a slow process, be patient: Don't try to forcefully remove the pins as that will most likely result in damaging the entire PCB.
+</p><p>5. Once you have the old DE-9 pin adapter removed, either discard or keep for a future project. Either way, you're done with the stock DE-9 pin connector for now.
+</p><p>6. Prepare your salvaged NES 7pin adapter. If you're using one taken from an old NES, you can easily finish this project just by soldering the correctly colored wires. Wires may be different for third party NES female plugs, I'm not sure.
+</p><p>I number the <a href="Controller_port_pinout.xhtml" title="Controller port pinout">controller pins</a> this way, with, the wire color and the job each does:
+</p>
+<pre>
+      .-
+GND - |1\
+CLK - |32\ - +5V
+OUT - |54| - D3
+ D0 - |76| - D4
+      '--'
+</pre>
+<ol><li> Brown Ground</li>
+<li> White 5 Volts</li>
+<li> Red Clock</li>
+<li> Purple Not Used on standard controllers.</li>
+<li> Orange Latch/Strobe</li>
+<li> Blue Not Used on standard controllers.</li>
+<li> Yellow Data</li></ol>
+<p>You will need only the brown, white, red, orange and yellow wires. Clip the blue and purple (used for expansion controllers like the <a href="Zapper.xhtml" title="Zapper">Zapper</a> and <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a>) right out of the way so you don't get confused by them.
+</p><p>7. Back where the DE-9 pin adapter was, remove any excess solder and ensure you can place wires in each small hole. Here is the DE-9 standard layout for most Famiclone DE-9 connectors, including the Mayflash:
+</p>
+<ol><li> N/A</li>
+<li> DATA</li>
+<li> LATCH/STROBE</li>
+<li> CLOCK</li>
+<li> N/A</li>
+<li> +5V</li>
+<li> N/A</li>
+<li> GND</li>
+<li> N/A</li></ol>
+<p>Reading the pins of a DE-9 is simple. The top row is 1-5 and the bottom is 6-9.
+</p><p>DE-9 pins you need to solder to are in represented by &quot;o&quot;. &quot;x&quot; shows pins that you can leave disconnected.
+</p>
+<pre>
+    __________
+1 \ x o o o x / 5
+   \ o x o x /
+    6 `&quot;&quot;&quot;' 9
+</pre>
+<p>Just to double check specifically, solder the NES wires to these places:
+</p>
+<ul><li>2 Yellow</li>
+<li>3 Orange</li>
+<li>4 Red</li>
+<li>6 White</li>
+<li>8 Brown</li></ul>
+<p>8. Simply solder away. Take your time. Remember to solder on the underside only.
+</p><p>9. Before reassembly, try it out. Your oldschool NES controllers should now work perfectly.
+</p><p>10. Depending on where you want to place the NES 7pin connector, use your knife to cut away plastic in the way and possibly glue it in place. On my adapter I simply cut away enough plastic for the new NES connector to fit snugly in place and tightened up the screws to hold it in place. No plug, no mess.
+</p><p>11. Boot up your favorite NES, TurboGrafx, Select Genesis WiiWare or Wii games including both Megaman 9 and 10 and enjoy them using an authentic NES controller - that will still also work with the real NES!
+</p>
+<h2><span class="mw-headline" id="Video">Video</span></h2>
+<p><a class="external free" href="http://www.youtube.com/watch?v=WYWVrFq3Cu4" rel="nofollow">http://www.youtube.com/watch?v=WYWVrFq3Cu4</a>
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=60109#p60109" rel="nofollow">SatoshiMatrix's post on BBS</a></li>
+<li><a class="external text" href="http://satoshimatrix.wordpress.com/2010/04/25/160/" rel="nofollow">Newer version of tutorial; please import pictures</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.044 seconds
+Real time usage: 0.048 seconds
+Preprocessor visited node count: 46/1000000
+Preprocessor generated node count: 84/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:436-1!*!0!!en!*!* and timestamp 20160208225638 and revision id 5196
+ -->
+</div></body></html>

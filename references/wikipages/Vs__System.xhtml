@@ -1,0 +1,130 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Vs. System</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Vs. System</h1><div class="article">
+<p>The <b>Vs. UniSystem</b> and <b>Vs. DualSystem</b> are arcade system boards based on the NES.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Palette"><span class="tocnumber">1</span> <span class="toctext">Palette</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Controller_and_CHR_ROM_bank_.28.244016_write.29"><span class="tocnumber">2.1</span> <span class="toctext">Controller and CHR ROM bank ($4016 write)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Controller_2_data.2C_coins.2C_and_DIP_switches_.28.244016_read.29"><span class="tocnumber">2.2</span> <span class="toctext">Controller 2 data, coins, and DIP switches ($4016 read)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Controller_1_data.2C_DIP_switches.2C_and_watchdog_timer_.28.244017_read.29"><span class="tocnumber">2.3</span> <span class="toctext">Controller 1 data, DIP switches, and watchdog timer ($4017 read)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Coin_counter_.28.244020-.24403F.2C_.26c.29"><span class="tocnumber">2.4</span> <span class="toctext">Coin counter ($4020-$403F, &amp;c)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Copy_Protection"><span class="tocnumber">2.5</span> <span class="toctext">Copy Protection</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Palette">Palette</span></h2>
+<p>There are several different RGB PPUs used in Vs. games.
+To determine which PPU is used, read the PPU type byte of the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header if available; otherwise, use the hash of the PRG and CHR ROM data.
+</p>
+<dl><dt> 2C03</dt>
+<dd> This PPU is used in <i>Duck Hunt</i> and <i>Tennis</i>, as well as the PlayChoice, Famicom Titler, and Famicom TVs. Its colors closely resemble those of the 2C02 in the standard NTSC NES.</dd>
+<dt> 2C04</dt>
+<dd> There are four versions of this PPU with different permutations of the same (but different from the 2C03) <a href="PPU_palettes.xhtml#2C04" title="PPU palettes">60-color master palette</a>. This was used as a form of copy protection, so that games would have wrong colors if someone were to burn a new PRG ROM and CHR ROM and put them on the game PCB. Fading requires lookup tables with these PPUs.</dd>
+<dt> 2C05</dt>
+<dd> This PPU has the same colors as the 2C03, but it swaps the meanings of $2000 and $2001 and returns a constant identifying value in bits 4-0 of $2002. This is also for copy protection. However, there exist circuits to adapt 2C05 for boards that expect 2C03.</dd></dl>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Registers $4016 and $4017 have additional bits related to coin insertion and difficulty switches, and $4020 is a new register.
+The controllers are swapped: $4017 on the left and $4016 on the right.
+The 2C05 swaps <a href="PPU_registers.xhtml" title="PPU registers">PPUCTRL and PPUMASK</a>.
+Otherwise, all registers have the same meanings as on the NES or PlayChoice.
+</p>
+<h3><span class="mw-headline" id="Controller_and_CHR_ROM_bank_.28.244016_write.29">Controller and CHR ROM bank ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xCRS
+      |||
+      ||+- 1 then 0: Request a report from the <a href="Standard_controller.xhtml" title="Standard controller">joysticks</a> or <a href="Zapper.xhtml" title="Zapper">Zapper</a>
+      |+-- In the DualSystem, connects to 1- /IRQ of the other CPU and 2- when high on the primary
+      |      specifies that 2KiB of RAM is mapped from $6000-$7FFF, else mapped for the secondary CPU
+      +--- Select 8 KiB CHR ROM bank for PPU $0000-$1FFF (<a href="INES_Mapper_099.xhtml" title="INES Mapper 099">mapper 99</a> games only)
+           Note: In case of games with 40KiB PRG-ROM (as found in VS Gumshoe),
+                 the above bit additionally changes 8KiB PRG-ROM at $8000-$9FFF.
+</pre>
+<p>Note that VS Super Mario Bros. relies on having the shared memory granted to it. The bundled RP2A04 is nothing but a jumper that ties the primary socket's OUT1 pin to ground.
+</p>
+<h3><span class="mw-headline" id="Controller_2_data.2C_coins.2C_and_DIP_switches_.28.244016_read.29">Controller 2 data, coins, and DIP switches ($4016 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xCCD DSxB
+ ||| || |
+ ||| || +- Buttons for player 2 (A, B, 1, 3, Up, Down, Left, Right)
+ ||| |+--- Service button (commonly inserts a credit)
+ ||+-+---- DIP switches &quot;2&quot; and &quot;1&quot;, respectively
+ ++------- Coin inserted (read below)
+</pre>
+<p>The &quot;coin inserted&quot; signals are the contact switches in the coin acceptors. The default arcade machine wiring connects both coin acceptors in parallel, and only to the $20s bit, so that bit is the only one of the two that goes high when a coin is inserted in either acceptor. However, games MUST check both bits because the coin acceptors could have been connected independently. Some games refuse to grant a credit if the &quot;coin inserted&quot; signal is true for too long, to protect against malicious arcade-goers.
+</p><p>The coin collectors will read as true for approximately 1/20th to 1/15th of a second. A game should check the registers at least every other NMI to be assured of not eating the player's coins.
+</p><p>The service button is debounced with an RC network: after the button is released, it should take somewhere between 3 to 6 milliseconds until it reads as false. After the capacitor has been fully charged, it should take between 1 and 1.4 milliseconds until it reads as true. The game need not poll the service button with any frequency, since the button can be held by the arcade operator for an arbitrary amount of time.
+</p><p>Games may, and even probably should, parse the two &quot;coin inserted&quot; bits independently: emulators should NOT set both bits high when a single virtual coin has been inserted. For example, VS Super Mario Bros. gives 2 credits if both coin bits are set.
+</p><p>Unlike previous advice, it is not <i>necessary</i> to acknowledge a coin insert by driving the coin counter, but the arcade operator would be cross if the game didn't!
+</p>
+<h3><span class="mw-headline" id="Controller_1_data.2C_DIP_switches.2C_and_watchdog_timer_.28.244017_read.29">Controller 1 data, DIP switches, and <a class="extiw" href="https://en.wikipedia.org/wiki/watchdog_timer" title="wikipedia:watchdog timer">watchdog timer</a> ($4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+DDDD DDxB
+|||| || |
+|||| || +- Buttons for player 1 (A, B, 2, 4, Up, Down, Left, Right)
+++++-++--- More DIP switches (&quot;8&quot; down to &quot;3&quot;)
+</pre>
+<p>A CPU must be installed in socket 8J (&quot;slave&quot;) and it must be instructed to read from $4017 at least every 1.2 seconds, or both CPUs, both PPUs, and both CPUs' bit at $4020 are reset.
+</p>
+<h3><span class="mw-headline" id="Coin_counter_.28.244020-.24403F.2C_.26c.29">Coin counter ($4020-$403F, &amp;c)</span></h3>
+<p>The game is expected to keep track of the total number of coins inserted by toggling this line every time a coin is seen while reading $4016.
+</p>
+<pre>15   address 4    0  7  bit  0
+---- ---- ---- ----  ---- ----
+010x xxxA xx1x xxxx  xxxx xxxC
+        |                    |
+        |                    +- (write) 1, delay, 0: Increment coin counter
+        +---------------------- (read) Same as write, but see below
+</pre>
+<p>The port is mirrored across the entire range of $4020-$5FFF and may interfere with mappers that put <a href="Category_Mappers_using__4020__5FFF.xhtml" title="Category:Mappers using $4020-$5FFF">ports, ROM, or RAM in this range</a>.
+When the latched value is 1, it drives an electromagnet in the coin counter. Writing 1 then 0 will increment the counter.
+The electromagnetic counter can vary from machine to machine, but the least common denominator is a 10Hz DC coin counter: driving the signal high for 50ms (3 vblanks) and then low for 50ms is guaranteed to work.
+Some counters may be able to be driven faster: one requires as little <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=127442#p127442" rel="nofollow">as 16ms high and 22ms low</a>.
+This register is explicitly cleared on powerup and reset.
+</p><p>Reading from the register effectively writes the value of open bus (usually the MSB of the address, but other values could appear from e.g. DMC DMA)
+No games use any of this bit's mirrors, or try to read from it.
+</p>
+<h3><span class="mw-headline" id="Copy_Protection">Copy Protection</span></h3>
+<p>The games released for the Vs. System mostly relied on the variety of PPUs to prevent copyright infringement. A few third-party games added an extra IC as well; the three known games with this additional protection were used with Namco's <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">108</a>.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/VSSCHEM.pdf" rel="nofollow">VS System mainboard schematic</a></li>
+<li> <a class="external text" href="http://nesdev.com/VS_Wiring.pdf" rel="nofollow">VS UniSystem cabinet harness hookup diagram</a></li>
+<li> <a class="external text" href="http://nesdev.com/VS_UniSystem.pdf" rel="nofollow">VS UniSystem conversion kit installation guide</a> for converting an older single-game Nintendo arcade machine to a VS UniSystem</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=127592#p127592" rel="nofollow">Lidnariq's Vs. System's characterization test ROM</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=127442#p127442" rel="nofollow">Memblers's test results</a> for it.</li>
+<li> <a class="external text" href="http://problemkaputt.de/everynes.htm#vssystemprotections" rel="nofollow">Nocash's comments</a> on Vs. System copy protection mechanisms</li></ul>
+<p>The hardware used by games released during the Vs. System's commercial life is equivalent to the following mappers:
+</p>
+<ul><li> <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">iNES Mapper 099</a> (games provided without a daughterboard)</li>
+<li> iNES Mapper 001 (<a href="MMC1.xhtml" title="MMC1">MMC1</a>)</li>
+<li> iNES Mapper 002 (<a href="UxROM.xhtml" title="UxROM">UxROM</a>)</li>
+<li> <a href="INES_Mapper_067.xhtml" title="INES Mapper 067">iNES Mapper 067</a> (SUNSOFT-3)</li>
+<li> iNES Mapper 075 (<a href="VRC1.xhtml" title="VRC1">VRC1</a>, erroneously <a href="INES_Mapper_151.xhtml" title="INES Mapper 151">iNES Mapper 151</a>)</li>
+<li> <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">iNES Mapper 206</a> (Namco 108, erroneously <a href="MMC3.xhtml" title="MMC3">MMC3</a>/<a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">iNES Mapper 004</a>)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.108 seconds
+Real time usage: 0.112 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:791-1!*!0!!en!*!* and timestamp 20160617013648 and revision id 12648
+ -->
+</div></body></html>

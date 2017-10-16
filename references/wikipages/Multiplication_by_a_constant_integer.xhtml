@@ -1,0 +1,65 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Multiplication by a constant integer</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Multiplication by a constant integer</h1><div class="article">
+<h2><span class="mw-headline" id="Multiply_by_a_power_of_two">Multiply by a power of two</span></h2>
+<p>In binary arithmetic, multiply by 2^n is equivalent to shifting left n times (technically this is true even if n is negative). For this reason, it is recommended that you design your NES project in a way that takes advantage of this fact.
+</p><p>For signed numbers tough, its required you save the sign first, and restore it at the end, and this will be true for all multiplications discussed in this article, which focuses on unsigned numbers.
+</p>
+<h2><span class="mw-headline" id="Muliply_by_a_constant">Muliply by a constant</span></h2>
+<p>When you want to multiply 2 numbers, if one of them is constant, it is possible take advantage of this to optimize code (as opposed to use the general purpose <a href="8_bit_Multiply.xhtml" title="8-bit Multiply">multiplication by 2 variables</a>).
+</p><p>First thing is to decompose the constant number into sum-of-power-of-two (i.e. write it in binary form).
+Take the variable number, shift it and add the content of the original variable after a shift whenever the corresponding constant bit is set.
+For an example here I'll multiply by 13 = 0b1101
+</p>
+<pre>
+;Multiplication by 13
+     lda Var      ;'1'
+     asl A
+     adc Var      ;'1'
+     asl A        ;'0'
+     asl A
+     adc Var      ;'1'
+</pre>
+<p>Of couse the result will only be correct if smaller than 8-bit in the above example (as it relies on the ASL A instruction to clear carry between ads), if you exept a larger number of bits you should use other variables such as in this example of a multiplication by 81 = 0b110001
+</p>
+<pre>
+;Multiplication by 81
+     lda #$00
+     sta ResH     ;Init high bits of result
+     lda Var      ;'1'
+     asl A
+     rol ResH
+     adc Var      ;'1'
+     asl A
+     rol ResH     ;'0'
+     asl A
+     rol ResH     ;'0'
+     asl A
+     rol ResH     ;'0'
+     asl A
+     rol ResH
+     adc Var      ;'1'
+     ldy ResH
+</pre>
+<p>Note that multiplications of 2^n numbers can easily be seen as a particular case of the above.
+</p>
+<h2><span class="mw-headline" id="Chain_multiply_by_a_variable">Chain multiply by a variable</span></h2>
+<p>If you want to do an algorithm that does a really great number of multiplication by a variable, but that the value of the variable is constant for the whole algorithm, it can be faster to write a code that generate the above code in RAM and execute it that way instead of doing the slower variable x variable code.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:364-1!*!0!!*!*!* and timestamp 20160208225619 and revision id 5046
+ -->
+</div></body></html>

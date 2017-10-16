@@ -1,0 +1,165 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming with unofficial opcodes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming with unofficial opcodes</h1><div class="article">
+<p>The NES CPU has <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">unofficial opcodes</a> that were officially discouraged, but nevertheless had specific function that can be made useful. This article covers practical ways to make use of them.
+</p>
+<ul><li><b>See: <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">CPU unofficial opcodes</a></b></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Disadvantages"><span class="tocnumber">1</span> <span class="toctext">Disadvantages</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Combined_operations"><span class="tocnumber">2</span> <span class="toctext">Combined operations</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#RMW_instructions"><span class="tocnumber">3</span> <span class="toctext">RMW instructions</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Watermarking_instructions"><span class="tocnumber">4</span> <span class="toctext">Watermarking instructions</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Clockslide"><span class="tocnumber">5</span> <span class="toctext">Clockslide</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#External_links"><span class="tocnumber">6</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Disadvantages">Disadvantages</span></h2>
+<p>Code written with unofficial opcodes is not portable to other variations of the CPU such as the 65C816.
+</p><p>Because of their rarity of use, some emulators fail to implement unofficial instructions properly and will fail on games that require them.
+</p><p>There are no official mnemonics for unofficial instructions, so the names of various opcodes will vary between documents and implementations. Hex values are used in this document to disambiguate.
+</p><p>Assemblers may have poor support for unofficial mnemonics. CC65 has a <a class="external text" href="http://cc65.github.io/doc/ca65.html#ss4.3" rel="nofollow">6502X mode</a> that enables some of them.
+</p><p>Some unofficial opcodes have unpredictable behaviour, such as <a class="external text" href="http://visual6502.org/wiki/index.php?title=6502_Opcode_8B_%28XAA,_ANE%29" rel="nofollow">opcode $8B (XAA)</a> which depends on analog effects.
+</p>
+<h2><span class="mw-headline" id="Combined_operations">Combined operations</span></h2>
+<p>Because of how the 6502's microcode is compressed, some opcodes that share bits with two other opcodes will end up performing operations from both opcodes.
+A lot of these involve a bitwise AND operation, which is a side effect of the <a class="extiw" href="https://en.wikipedia.org/wiki/Open_collector" title="wikipedia:Open collector">open-drain</a> behavior of NMOS logic.
+When two instructions put a value into a temporary register inside the 6502 core called &quot;special bus&quot;, this creates a <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflict</a>, and the lower voltage wins because transistors can pull down stronger than resistors can pull up.
+</p>
+<dl><dt>ALR #i ($4B ii; 2 cycles)</dt>
+<dd>Equivalent to AND #i then LSR A. Some sources call this &quot;ASR&quot;; we do not follow this out of confusion with the mnemonic for <a href="Synthetic_instructions.xhtml#Arithmetic_shift_right" title="Synthetic instructions">a pseudoinstruction</a> that combines CMP #$80 (or ANC #$FF) then ROR.</dd></dl>
+<dl><dt>ANC #i ($0B ii, $2B ii; 2 cycles)</dt>
+<dd>Does AND #i, setting N and Z flags based on the result. Then it copies N (bit 7) to C. ANC #$FF could be useful for sign-extending, much like CMP #$80. ANC #$00 acts like LDA #$00 followed by CLC.</dd></dl>
+<dl><dt>ARR #i ($6B ii; 2 cycles)</dt>
+<dd>Similar to AND #i then ROR A, except sets the flags differently. N and Z are normal, but C is bit 6 and V is bit 6 xor bit 5.</dd></dl>
+<dl><dt>AXS #i ($CB ii, 2 cycles)</dt>
+<dd>Sets X to {(A AND X) - #value without borrow}, and updates NZC. One might use TXA AXS #-element_size to iterate through an array of structures or other elements larger than a byte, where the 6502 architecture usually prefers a structure of arrays. For example, TXA AXS #$FC could step to the next <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> entry or to the next <a href="APU.xhtml" title="APU">APU</a> channel, saving one byte and four cycles over four INXs. Also called <b>SBX</b>.</dd></dl>
+<dl><dt>LAX (d,X) ($A3 dd; 6 cycles)</dt>
+<dt>LAX d ($A7 dd; 3 cycles)</dt>
+<dt>LAX a ($AF aa aa; 4 cycles)</dt>
+<dt>LAX (d),Y ($B3 dd; 5 cycles)</dt>
+<dt>LAX d,Y ($B7 dd; 4 cycles)</dt>
+<dt>LAX a,Y ($BF aa aa; 4 cycles)</dt>
+<dd>Shortcut for LDA value then TAX. Saves a byte and two cycles and allows use of the X register with the (d),Y addressing mode. Notice that the immediate is missing; the opcode that <i>would</i> have been LAX is affected by line noise on the data bus. MOS 6502: even the bugs have bugs.</dd></dl>
+<dl><dt>SAX (d,X) ($83 dd; 6 cycles)</dt>
+<dt>SAX d ($87 dd; 3 cycles)</dt>
+<dt>SAX a ($8F aa aa; 4 cycles)</dt>
+<dt>SAX d,Y ($97 aa aa; 4 cycles)</dt>
+<dd>Stores the bitwise AND of A and X. As with STA and STX, no flags are affected.</dd></dl>
+<h2><span class="mw-headline" id="RMW_instructions">RMW instructions</span></h2>
+<p>The read-modify-write instructions (INC, DEC, ASL, LSR, ROL, ROR) have few valid addressing modes, but these instructions have three more: (d,X), (d),Y, and a,Y.
+In some cases, it could be worth it to use these and ignore the side effect on the accumulator.
+</p>
+<dl><dt>DCP (d,X) ($C3 dd; 8 cycles)</dt>
+<dt>DCP d ($C7 dd; 5 cycles)</dt>
+<dt>DCP a ($CF aa aa; 6 cycles)</dt>
+<dt>DCP (d),Y ($D3 dd; 8 cycles)</dt>
+<dt>DCP d,X ($D7 dd; 6 cycles)</dt>
+<dt>DCP a,Y ($DB aa aa; 7 cycles)</dt>
+<dt>DCP a,X ($DF aa aa; 7 cycles)</dt>
+<dd>Equivalent to DEC value then CMP value, except supporting more addressing modes.</dd></dl>
+<dl><dt>ISC (d,X) ($E3 dd; 8 cycles)</dt>
+<dt>ISC d ($E7 dd; 5 cycles)</dt>
+<dt>ISC a ($EF aa aa; 6 cycles)</dt>
+<dt>ISC (d),Y ($F3 dd; 8 cycles)</dt>
+<dt>ISC d,X ($F7 dd; 6 cycles)</dt>
+<dt>ISC a,Y ($FB aa aa; 7 cycles)</dt>
+<dt>ISC a,X ($FF aa aa; 7 cycles)</dt>
+<dd>Equivalent to INC value then SBC value, except supporting more addressing modes.</dd></dl>
+<dl><dt>RLA (d,X) ($23 dd; 8 cycles)</dt>
+<dt>RLA d ($27 dd; 5 cycles)</dt>
+<dt>RLA a ($2F aa aa; 6 cycles)</dt>
+<dt>RLA (d),Y ($33 dd; 8 cycles)</dt>
+<dt>RLA d,X ($37 dd; 6 cycles)</dt>
+<dt>RLA a,Y ($3B aa aa; 7 cycles)</dt>
+<dt>RLA a,X ($3F aa aa; 7 cycles)</dt>
+<dd>Equivalent to ROL value then AND value, except supporting more addressing modes.</dd></dl>
+<dl><dt>RRA (d,X) ($63 dd; 8 cycles)</dt>
+<dt>RRA d ($67 dd; 5 cycles)</dt>
+<dt>RRA a ($6F aa aa; 6 cycles)</dt>
+<dt>RRA (d),Y ($73 dd; 8 cycles)</dt>
+<dt>RRA d,X ($77 dd; 6 cycles)</dt>
+<dt>RRA a,Y ($7B aa aa; 7 cycles)</dt>
+<dt>RRA a,X ($7F aa aa; 7 cycles)</dt>
+<dd>Equivalent to ROR value then ADC value, except supporting more addressing modes. Essentially this computes A + value / 2, where value is 9-bit and the division is rounded up.</dd></dl>
+<dl><dt>SLO (d,X) ($03 dd; 8 cycles)</dt>
+<dt>SLO d ($07 dd; 5 cycles)</dt>
+<dt>SLO a ($0F aa aa; 6 cycles)</dt>
+<dt>SLO (d),Y ($13 dd; 8 cycles)</dt>
+<dt>SLO d,X ($17 dd; 6 cycles)</dt>
+<dt>SLO a,Y ($1B aa aa; 7 cycles)</dt>
+<dt>SLO a,X ($1F aa aa; 7 cycles)</dt>
+<dd>Equivalent to ASL value then ORA value, except supporting more addressing modes.</dd></dl>
+<dl><dt>SRE (d,X) ($43 dd; 8 cycles)</dt>
+<dt>SRE d ($47 dd; 5 cycles)</dt>
+<dt>SRE a ($4F aa aa; 6 cycles)</dt>
+<dt>SRE (d),Y ($53 dd; 8 cycles)</dt>
+<dt>SRE d,X ($57 dd; 6 cycles)</dt>
+<dt>SRE a,Y ($5B aa aa; 7 cycles)</dt>
+<dt>SRE a,X ($5F aa aa; 7 cycles)</dt>
+<dd>Equivalent to LSR value then EOR value, except supporting more addressing modes.</dd></dl>
+<h2><span class="mw-headline" id="Watermarking_instructions">Watermarking instructions</span></h2>
+<p>Some instructions are equivalent to other instructions; other instructions do nothing at all or next to nothing.
+One possible use of these is for <a href="Watermarking.xhtml" title="Watermarking">watermarking</a> your binary if you want to make leaked executables traceable, such as copies of the ROM sent to testers or even individual cartridges sent to end users.
+Another possible use is if you need to waste an exact number of bytes and cycles of code.
+</p>
+<dl><dt>ADC #i ($69 ii, $E9 ii^$FF, $EB ii^$FF; 2 cycles)</dt>
+<dt>SBC #i ($69 ii^$FF, $E9 ii, $EB ii; 2 cycles)</dt>
+<dd>$69 and $E9 are official; $EB is not. These three opcodes are nearly equivalent, except that $E9 and $EB add 255-i instead of i. Have your preprocessor randomly choose one of these opcodes.</dd></dl>
+<dl><dt>NOP ($1A, $3A, $5A, $7A, $DA, $EA, $FA; 2 cycles)</dt>
+<dd>The official NOP ($EA) and six unofficial NOPs do nothing, but they are useful for watermarking your binary (or, with some debugger+assembler combinations, defining breakpoints). You can have a preprocessor insert a randomly chosen NOP at random points in a non-time-sensitive subroutine.</dd></dl>
+<dl><dt>SKB #i ($80 ii, $82 ii, $89 ii, $C2 ii, $E2 ii; 2 cycles)</dt>
+<dd>These unofficial opcodes just read an immediate byte and skip it, like a different address mode of NOP. Because the second byte can be absolutely anything, your preprocessor can insert even more watermark data here. One of these even works almost the same way on 65C02, HuC6280, and 65C816: BIT #i ($89 ii), whose only difference from the 6502 is that it affects the NVZ flags like the other BIT instructions. Use this SKB if you want your code to be portable to Lynx, TG16, or Super NES. <a class="external text" href="http://tasvideos.org/forum/viewtopic.php?p=306520#306520" rel="nofollow"><i>Puzznic</i> uses $89</a>, and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=79142#p79142" rel="nofollow"><i>Beauty and the Beast</i> uses $80</a>. Also called <b>DOP</b>, <b>NOP</b> (distinguished from the 1-byte encoding by the addressing mode).</dd></dl>
+<dl><dt>IGN a ($0C aa aa; 4 cycles)</dt>
+<dt>IGN a,X ($1C aa aa, $3C aa aa, $5C aa aa, $7C aa aa, $DC aa aa, $FC aa aa; 4 or 5 cycles)</dt>
+<dt>IGN d ($04 dd, $44 dd, $64 dd; 3 cycles)</dt>
+<dt>IGN d,X ($14 dd, $34 dd, $54 dd, $74 dd, $D4 dd, $F4 dd; 4 cycles)</dt>
+<dd> Reads from memory at the specified address and ignores the value. Affects no register nor flags. Only useful for side effects (e.g. PPUADDR increment, PPUSTATUS latch reset) so on the NES the zero-page versions are only useful for timing or watermarking as an alternative to BIT.</dd>
+<dd> IGN d,X reads from both <tt>d</tt> and <tt>(d+X)&amp;255</tt>. IGN a,X additionally reads from <tt>a+X-256</tt> it crosses a page boundary (i.e. if <tt>((a &amp; 255) + X) &gt; 255</tt>)</dd>
+<dd> Sometimes called TOP (triple-byte no-op), SKW (skip word), DOP (double-byte no-op), or SKB (skip byte).</dd></dl>
+<dl><dt>CLD ($D8; 2 cycles)</dt>
+<dt>CLV ($B8; 2 cycles)</dt>
+<dt>SED ($F8; 2 cycles)</dt>
+<dd>These are official. CLD and SED control decimal mode, but on second-source 6502 CPUs without decimal mode such as the 2A03, they do almost nothing; their effect is visible only after a PHP or BRK. You can use them like NOP. And the V flag that CLV clears is rarely used; only ADC, BIT, SBC, the stack ops PLP and RTI, and the unofficial instructions ARR, ISC, and RRA affect it; the BVC and BVS instructions will check it.</dd></dl>
+<dl><dt>AND #i ($29 ii; 2 cycles)</dt>
+<dt>DEX ($CA; 2 cycles)</dt>
+<dt>DEY ($88; 2 cycles)</dt>
+<dt>EOR #i ($49 ii; 2 cycles)</dt>
+<dt>INX ($E8; 2 cycles)</dt>
+<dt>INY ($C8; 2 cycles)</dt>
+<dt>LDA #i ($A9 ii; 2 cycles)</dt>
+<dt>LDX #i ($A2 ii; 2 cycles)</dt>
+<dt>LDY #i ($A0 ii; 2 cycles)</dt>
+<dt>ORA #i ($09 ii; 2 cycles)</dt>
+<dd>These are official and can be used much like NOP or SKB immediately before LDA, LDX, LDY, PLA, TAX, TAY, TSX, TXA, or TYA as appropriate. CMP, CPX, and CPY work as well if you don't care about the flags. You can also use things like &quot;EOR #0&quot; to affect flags only or to create a patch point.</dd></dl>
+<h2><span class="mw-headline" id="Clockslide">Clockslide</span></h2>
+<p>A <a class="external text" href="http://www.pagetable.com/?p=669" rel="nofollow">clockslide</a> is a sequence of instructions that wastes a small constant amount of cycles plus one cycle per executed byte, no matter whether it's entered on an odd or even address.
+With official instructions, one can construct a clockslide from CMP instructions: <code>... C9 C9 C9 C9 C5 EA</code>
+Disassemble from the start and you get <code>CMP #$C9 CMP #$C9 CMP $00EA</code> (6 bytes, 7 cycles).
+Disassemble one byte in and you get <code>CMP #$C9 CMP #$C5 NOP</code> (5 bytes, 6 cycles).
+This can be combined with the <a href="RTS_Trick.xhtml" title="RTS Trick">RTS Trick</a> to precisely control raster effect or sample playback timing.
+</p><p>CMP has a side effect of destroying most of the flags, but unofficial instructions that skip one byte can be used to preserve them.
+For example, replace $C9 (CMP) with $89 or $80, which skips one immediate byte, and replace $C5 with $04, $44, or $64, which reads a byte from zero page and ignores it.
+These are described more fully in &quot;Watermarking instructions&quot;.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/318/" rel="nofollow">65xx Processor Data</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.092 seconds
+Real time usage: 0.095 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:518-1!*!0!!en!*!* and timestamp 20160529133603 and revision id 12415
+ -->
+</div></body></html>

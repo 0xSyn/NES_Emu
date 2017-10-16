@@ -1,0 +1,67 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU DMC</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU DMC</h1><div class="article">
+<p>Similarly to the <a href="APU_Noise.xhtml" title="APU Noise">noise channel</a>, the DPCM channel's frequency counter <a class="external text" href="http://uxul.org/~noname/chips/cpu-2/no-metal/stitched/final/" rel="nofollow">on the die</a> is a <b>9-bit linear feedback shift register</b> (with taps at the 5th and 9th bits); when I take the counter values from the on-die ROM and run the LFSR until the result is '100000000', the cycle counts (for NTSC) match once multiplied by 2. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 05:00, 23 January 2011 (UTC)
+</p><p>I suspect there's no &quot;address increment&quot;, but <i>another</i> shift register. Just pay attention to the address wrap - if we had a counter, it would wrap to zero, but instead, it wraps to $8000, like ($10000 &gt;&gt; 1).
+--<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 01:49, 6 June 2011 (UTC)
+</p>
+<dl><dd>The generated addresses are linear, and I don't think a shift register can do that. So I'm conjecturing an up-counter here. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 02:30, 6 June 2011 (UTC)
+<dl><dd>The DPCM address register is only 15 bits wide (with A15 being connected to the VCC rail @ 2850,5450), and the upper bit (A14) gets initialized to 1 (@ 2565,5365) instead of the last value written to $4012 (and the bottom 6 bits get initialized to 0, but we already know this). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 03:03, 6 June 2011 (UTC)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="DMC_find">DMC find</span></h2>
+<p>Looks like the DMC silent flag makes difference for $4011 raw output. If this flag is non-zero, the $4011 value written is ignored by the raw output <i>only</i>. I could test a few NSFs and it works flawlessly. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 14:53, 14 November 2011 (UTC)
+</p>
+<dl><dd>By &quot;the DMC silent flag&quot; do you mean bit 4 of $4015? And what exactly do you mean by &quot;ignored by the raw output only&quot;? Do you mean that values are queued up and take effect after the sample period ends? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 15:10, 14 November 2011 (UTC)</dd></dl>
+<p>Well, the silent flag is described in the APU DMC section, &quot;<i>The output unit continuously outputs a 7-bit value to the mixer. It contains an 8-bit right shift register, a bits-remaining counter, a 7-bit delta-counter, and <b>a silence flag</b></i>&quot;. Just read the rest of the APU DMC output unit. About the <i>raw output</i>, I mean the timed writes to $4011 register, as listen in Battletoads (drums) for example. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 15:31, 14 November 2011 (UTC)
+</p>
+<dl><dd>So as I understand it, you're saying that in effect, $4011 writes don't take effect if a sample is not playing. Interesting; is there a test ROM for me to run on my PowerPak? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 17:20, 14 November 2011 (UTC)
+<dl><dd>Could you point out the location (within the <a class="external text" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/expert.html" rel="nofollow">Visual 2A03</a>) of the hardware responsible for this hypothetical behavior? Because if it's there, I can't see it - the internal signal for &quot;write $4011&quot; comes solely from the address+R/W+CLK lines, and when it's active, it <i>immediately</i> updates the position register (of which only the upper 6 bits are a &quot;delta-counter&quot; - the bottom-most bit is just a simple latch) to match the state of D0-D6. An example, for D6: during a write to $4011, t13375 activates and connects node 13255 to node 10616 (D6), then that updates t13885 and causes node 10957 to be set to the inverse of node 13255, then that updates t13872 and causes node 10881 (PCM_OUT6) to be set to the inverse of node 10957, which works out to be the value of D6. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 22:55, 14 November 2011 (UTC)</dd></dl></dd></dl>
+<p>Thanks for verifying it. I suspected it's empirical. It works only when <b>emulating</b> $4011, as such behavior do not exist in the hardware. In short words, it's a trick that can be used for emulation only, avoiding sound pops. Sorry for the inconvenience, if any. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 00:02, 15 November 2011 (UTC)
+</p>
+<dl><dd>I mentioned something similar in the <a href="Enhancement.xhtml" title="Enhancement">enhancement</a> article. But there's still one problem: What happens when the DMC tries to write back to the position register on the same cycle as a $4011 write? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 00:23, 15 November 2011 (UTC)
+<dl><dd>Most of the APU &quot;runs&quot; when M2 is low, while writes to registers happen when M2 is high. The logic that updates the DMC position register appears to be an exception, though - I'm not sure what will happen if a $4011 write happens at the same time as an increment/decrement, but I'm guessing the resulting state would be (position +/- 1) AND (data bits). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 00:45, 15 November 2011 (UTC)</dd></dl></dd></dl>
+<p>Well, it's the <i>$4011 position register</i> value (7 bit delta-counter) being treated as wave data (raw) too. Since the <i>silence flag</i> is not zero, the value is ignored as wave data, working as it should be.  --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 02:24, 15 November 2011 (UTC)
+</p>
+<h2><span class="mw-headline" id="PAL_frequency_table">PAL frequency table</span></h2>
+<p>Is this table correct? There are two entries I find really strange, for reasons which I outlined here: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=94079#p94079" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=94079#p94079</a>
+</p><p>The two values in question:
+</p>
+<pre>$4 : $114 = 276
+$C : $062 = 98
+</pre>
+<p>I think these should have been:
+</p>
+<pre>$4 : $10A = 266
+$C : $064 = 100
+</pre>
+<p>I don't have a PAL NES to test, but can someone confirm if the table in this article is correct or not? The NTSC table represents a scheme that consistently uses the best match to a tone in an A440 tuning. The PAL table does the same thing except these two pitches which are significantly detuned. Either our table is wrong, or the chip was designed &quot;wrong&quot;, and I'm open to either possibility, but as I said I cannot verify for myself. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 22:50, 18 May 2012 (PDT)
+</p>
+<dl><dd>With some help from jrlepage, who has a PAL NES, I have verified that the two frequencies are indeed 276 and 98. I guess they implemented the chip incorrectly. Weird. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 17:30, 25 July 2012 (PDT)</dd></dl>
+<dl><dd>Just for reference, the table I verified is: 398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118, 98, 78, 66, 50</dd>
+<dd>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 17:42, 25 July 2012 (PDT)</dd></dl>
+<h2><span class="mw-headline" id="Pitch_table">Pitch table</span></h2>
+<p>I removed the pitch names from the table.
+</p><p>The &quot;pitch table&quot; was really a sample rate table. In the table, the frequencies in Hz are sample points per second, or deltas per second. (When talking about pitch, frequencies in Hz are wave periods per second.) In other words, having pitch names in the table isn't useful. It's as useless as saying CD audio that plays at 44100 samples per second is pitch F11 - 23 cents.
+</p><p>If I've made a mistake, feel free to revert. --<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 20:53, 28 December 2013 (MST)
+</p>
+<dl><dd> The important part of the table is <i>relative</i> pitch. Maybe my table at <a href="User_Lidnariq_DPCM_mistuning.xhtml" title="User:Lidnariq/DPCM mistuning">User:Lidnariq/DPCM_mistuning</a> would be a better presentation of it, I dunno. While it's definitely not useful to say that &quot;4181.71 Hz is C-8  -1.78c&quot;, it is useful to point out that &quot;4709.93 Hz is to 4181.71Hz as C-8 -1.78c is to D-8  +4.16c&quot;. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 21:56, 28 December 2013 (MST)</dd></dl>
+<dl><dd>(edit conflict:) I reverted the change. After thinking about it, the table is trying to show the rates were chosen to get particular intervals or a particular scale (not specific pitches). I'm still not comfortable with the absolute pitches in the table (C8 to C11 is at the upper end to above human hearing), but I think I'll leave it there and play around with alternatives before changing it again. --<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 22:00, 28 December 2013 (MST)</dd></dl>
+<dl><dd><dl><dd> It's not as irrelevant as it may seem. The organization of the DPCM samplerates clearly demonstrates that they were designed to be tuned to a scale. (See <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=6&amp;t=5473" rel="nofollow">this thread</a>.) They happen to be nearly useless for this purpose, especially because of the +1 modifier on the sample length that looks like an accident of the implementation, but the design intent is clear. I agree that it's unfortunately misleading to label them with pitches, but I can't think of a simpler way to express their tuning relationships to each other. You can have a matrix with cents and relative intervals, maybe, but I think using letter pitch names gets the idea across quicker and more easily. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 02:05, 29 December 2013 (MST)</dd></dl></dd></dl>
+<dl><dd><dl><dd> As an aside, I've found a use for these pitches in the past when wanting to play a DPCM ramp to adjust triangle volume. By knowing the pitch of the samplerate, I can tune the ramp to a pitch that will be hidden by the existing harmony of the music. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 02:06, 29 December 2013 (MST)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.110 seconds
+Real time usage: 0.114 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:538-1!*!0!!*!*!* and timestamp 20160208223902 and revision id 7930
+ -->
+</div></body></html>

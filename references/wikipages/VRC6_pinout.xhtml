@@ -1,0 +1,55 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC6 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC6 pinout</h1><div class="article">
+<p>Konami <a href="VRC6.xhtml" title="VRC6">VRC6</a>: 48-pin 0.6&quot; PDIP marked &quot;053328 VRC VI&quot; or &quot;053329 VRC VI&quot; (iNES Mappers <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 024">24</a> and <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 026">26</a>)
+</p>
+<pre>                 .---\/---.  
+         ?GND -&gt; | 01  48 | -- +5V
+       AUD D1 &lt;- | 02  47 | -&gt; AUD D0   
+       AUD D3 &lt;- | 03  46 | -&gt; AUD D2
+       AUD D5 &lt;- | 04  45 | -&gt; AUD D4
+ (fr) CPU A12 -&gt; | 05  44 | -&gt; PRG A16 (r)
+  (f) CPU A14 -&gt; | 06  43 | &lt;- CPU A13 (f)
+       (f) M2 -&gt; | 07  42 | -&gt; PRG A17 (r)
+  (r) PRG A14 &lt;- | 08  41 | -&gt; PRG A15 (r)
+ (fr) CPU  A1 -&gt; | 09  40 | -&gt; PRG A13 (r)
+ (fr) CPU  A0 -&gt; | 10  39 | &lt;- CPU D7 (fr)
+ (fr) CPU  D0 -&gt; | 11  38 | &lt;- CPU D6 (fr)
+ (fr) CPU  D1 -&gt; | 12  37 | &lt;- CPU D5 (fr)
+ (fr) CPU  D2 -&gt; | 13  36 | &lt;- CPU D4 (fr)
+  (r) PRG /CE &lt;- | 14  35 | &lt;- CPU D3 (fr)
+      (f) R/W -&gt; | 15  34 | &lt;- /ROMSEL (f)
+     WRAM /CE &lt;- | 16  33 | -&gt; /IRQ (f)
+  (r) CHR /CE &lt;- | 17  32 | -&gt; CIRAM /CE (f)
+  (f) PPU /RD -&gt; | 18  31 | &lt;- PPU A10 (f)
+ (f) PPU /A13 -&gt; | 19  30 | &lt;- PPU A11 (f)
+  (r) CHR A16 &lt;- | 20  29 | &lt;- PPU A12 (f)
+  (r) CHR A15 &lt;- | 21  28 | -&gt; CHR A17 (r)
+  (r) CHR A12 &lt;- | 22  27 | -&gt; CHR A14 (r)
+  (r) CHR A11 &lt;- | 23  26 | -&gt; CHR A13 (r)
+          GND -- | 24  25 | -&gt; CHR/CIRAM A10 (r)
+                 `--------'
+ 
+ 1: conceivably an input instead of a power supply?
+ 2-4, 45-47: goes to a 6 bit DAC, and then mixed with system audio
+ 9,10: VRC6a (Mapper 24: Akumajou Densetsu) is shown.  For VRC6b (Mapper 26: Madara, Esper Dream 2), these pins are swapped.
+ 16: passes through a small pulse-shaping network consisting of a resistor, diode, and capacitor.
+ 32: The VRC6 supports ROM nametables.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:172-1!*!0!*!*!*!* and timestamp 20160323202238 and revision id 12094
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

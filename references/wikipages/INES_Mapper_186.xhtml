@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 186</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 186</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 186</strong> is used for Fukutake Shoten's Japanese edutainment game <i>Study Box</i>. This information is currently identical to FCEUX's source and should NOT be treated as any more authoritative.
+</p>
+<pre>Write mask: $FE03
+ $4200 write: [RR.. ....] - select one of four 8 KiB PRG-RAM banks at $6000
+ $4201 write: [.... PPPP] - select one of sixteen 16 KiB PRG-ROM banks at $8000
+ $4202 write: unknown
+ $4203 write: unknown
+</pre>
+<p>TCRF claims that there's a printer interface.
+</p>
+<pre>Read mask: $FFFF
+ $4200, $4201, $4203 read: returns $00
+ $4202 read: returns $40
+ $4204-$43FF read: returns $FF
+</pre>
+<p>The readable ports may have something to do with what Санчез describes as an &quot;Audio Tape reader&quot; and &quot;power supply condition&quot;. TCRF additionally mentions a touchpad interface.
+</p><p>Memory locations:
+</p>
+<pre>$4400-$4FFF: 3 KiB PRG-RAM
+$6000-$7FFF: 8 KiB PRG-RAM bank (one of four)
+$8000-$BFFF: 16 KiB switchable PRG-ROM bank 
+$C000-$FFFF: 16 KiB fixed PRG-ROM bank (always bank 0)
+</pre>
+<p>Having 35 KiB of PRG-RAM seems unlikely, and probable that the 3 KiB slice overlaps with some of the bankable 32 KiB of RAM. Санчез doesn't say anything more specific, unfortunately.
+</p><p>See also:
+</p>
+<ul><li> <a class="external free" href="http://cah4e3.shedevr.org.ru/dumping_2005.php" rel="nofollow">http://cah4e3.shedevr.org.ru/dumping_2005.php</a></li>
+<li> <a class="external free" href="http://sourceforge.net/p/fceultra/code/HEAD/tree/fceu/trunk/src/boards/186.cpp" rel="nofollow">http://sourceforge.net/p/fceultra/code/HEAD/tree/fceu/trunk/src/boards/186.cpp</a></li>
+<li> <a class="external free" href="https://tcrf.net/StudyBox" rel="nofollow">https://tcrf.net/StudyBox</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.011 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1607-1!*!*!*!*!*!* and timestamp 20160208225349 and revision id 11832
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_Mappers_with_large_PRG_RAM.xhtml">Mappers with large PRG RAM</a></p></div></body></html>

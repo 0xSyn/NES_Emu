@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 116</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 116</h1><div class="article">
+<p>These boards appear to have been researched by CaH4e3. They're used for some chinese games and bootlegs. He has described them in fceu-mm sources as:
+</p>
+<pre>* SL12 Protected 3-in-1 mapper hardware (VRC2, MMC3, MMC1)
+* the same as 603-5052 board (TODO: add reading registers, merge)
+* SL1632 2-in-1 protected board, similar to SL12 (TODO: find difference)
+</pre>
+<p>The following PCBs are listed as examples:
+</p>
+<pre>* Garou Densetsu Special (G0904.PCB, Huang-1, GAL dip: W conf.)
+* Kart Fighter (008, Huang-1, GAL dip: W conf.)
+* Somari (008, C5052-13, GAL dip: P conf., GK2-P/GK2-V maskroms)
+* Somari (008, Huang-1, GAL dip: W conf., GK1-P/GK1-V maskroms)
+* AV Mei Shao Nv Zhan Shi ()
+* Samurai Spirits (Full version) (Huang-1, GAL dip: unk conf. GS-2A/GS-4A maskroms)
+* Contra Fighter (603-5052 board, C5052-3, GAL dip: unk conf. SC603-A/SCB603-B maskroms)
+</pre>
+<p>These documents were verified by implementation into bizhawk based solely on the fceu-mm sources. FCEUX also possesses fceu-mm's sources for this mapper.
+</p><p>This equipment is much simpler to operate than you might expect, considering that it is a combination of VRC2 + MMC3 + MMC1. The supervisor register controls which mapper's address and IRQ outputs and write enable inputs are enabled:
+</p>
+<pre> Range,Mask:   $4000-7FFF, $4100
+   $4100:  [.... .CMM]
+     MM = Mapper mode
+          %00 = <a href="VRC2.xhtml" title="VRC2">VRC2b</a>
+          %01 = <a href="MMC3.xhtml" title="MMC3">MMC3</a>
+          %02, %03 = <a href="MMC1.xhtml" title="MMC1">MMC1</a>
+      C = 256K CHR ROM base (AV Girl Fighting uses this)
+</pre>
+<p>This control register supposedly occupies the WRAM address range, so there can be no WRAM. However, it only answers to $41xx.
+</p><p>The Mapper mode bits control which of the mapper circuits are connected to the NES. All of the PRG-based registers and IRQ signals are connected or disconnected accordingly. This means that in order to configure one of the mapper circuits, it must be connected.  
+</p><p>The VRC2 is wired as a <a href="VRC2.xhtml" title="VRC2">VRC2b</a>.
+Though Konami games using VRC mappers write to only the canonical address of each port, games using this mapper such as <i>Garou Densetsu Special</i> tend to rely on being able to write to <a href="Mirroring.xhtml#Memory_Mirroring" title="Mirroring">mirrors</a> of $8xxx, $9xxx, and $Axxx.
+And <i>SOMARI-W</i> depends on the CHR bank registers being $FF at power on.
+</p><p>The MMC3 acts exactly as a stock TxROM. It has not been determined which MMC3 variant this MMC3 is acting as. Fceu-mm makes it seem as if the mmc3 CHR regs must be initialized at power-on in a certain pattern; it is unknown why this would be important.
+</p><p>The MMC1 acts exactly as a stock SxROM. Fceu-mm contained &quot;hacky hacky&quot; logic to do a reset of sorts on the MMC1 whenever the low bit of $41xx's address was set, claiming it was necessary for SOMARI-W.
+</p><p>The C bit of the m116's control reg controls CHR ROM A18, which provides a CHR ROM base offset for the VRC2 and MMC3 modes. Whether and how this applies to the MMC1 mode has not been tested.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:793-1!*!0!*!*!*!* and timestamp 20160208225239 and revision id 9184
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

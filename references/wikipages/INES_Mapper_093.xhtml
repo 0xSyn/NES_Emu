@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 093</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 093</h1><div class="article">
+<p>This is part of a family of Sunsoft mappers used by Japanese games: (<a href="INES_Mapper_089.xhtml" title="INES Mapper 089">iNES Mapper 089</a>, <strong class="selflink">iNES Mapper 093</strong>, <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">iNES Mapper 184</a>)
+</p><p>This mapper represents the <a href="Sunsoft_2_pinout.xhtml" title="Sunsoft 2 pinout">Sunsoft-2 IC</a> on the Sunsoft-3R board. It is used by <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3142" rel="nofollow">Shanghai</a>, as well as <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3858" rel="nofollow">Fantasy Zone</a> whose program is compatible with both this board and a different one that used the <a href="Sunsoft_1_pinout.xhtml" title="Sunsoft 1 pinout">Sunsoft-1 IC</a>.
+</p><p><a href="INES_Mapper_089.xhtml" title="INES Mapper 089">Mapper 89</a> uses the same Sunsoft-2 IC but on the Sunsoft-3 board and so differs in that it has mapper-controlled one-screen mirroring and CHR ROM banking. Note that the CHR bank lines are still hooked up to the RAM, explaining the RAM enable bit. For homebrew and hacks, games with CHR ROM should use 89's banking behavior with fixed mirroring.
+</p><p>Despite the mapper existing as a single IC, its functionality <a href="Sunsoft_2_pinout.xhtml" title="Sunsoft 2 pinout">is describable</a> using just a <a href="74377.xhtml" title="74377">74377</a> and a <a href="7432.xhtml" title="7432">7432</a> and should probably be considered discrete logic.
+</p><p>This mapper is deprecated for new development. Homebrew projects other than mapper tests should use <a href="UxROM.xhtml" title="UxROM">UxROM</a> (<a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">iNES Mapper 002</a>) instead.
+</p><p>Here is the documentation in <a href="INES_Mapper_DischDocs.xhtml" title="INES Mapper DischDocs">disch's original style</a>:  
+</p>
+<pre> Registers **BUS CONFLICTS**:
+ --------------------------
+   
+   $8000-FFFF:  [.PPP ...E]
+     P = PRG Reg  (16k @ $8000)
+     E = CHR RAM enable:
+         0 = RAM is disabled; writes are ignored and reads are open bus
+             (like <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a> except no games use this)
+         1 = normal operation.
+ 
+ 
+ PRG Setup:
+ --------------------------
+ 
+       $8000   $A000   $C000   $E000  
+     +---------------+---------------+
+     |     $8000     |     { -1}     |
+     +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:680-1!*!0!*!*!*!* and timestamp 20160208225213 and revision id 9901
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

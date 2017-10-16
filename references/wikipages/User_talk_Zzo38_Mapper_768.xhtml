@@ -1,0 +1,25 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User talk:Zzo38/Mapper 768</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User talk:Zzo38/Mapper 768</h1><div class="article">
+<h2><span class="mw-headline" id="Extra_Data">Extra Data</span></h2>
+<p>The <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> format doesn't have any provisions for additional data beyond what the original <a href="INES.xhtml" title="INES">iNES</a> format mentions (where the PC10 PROM is often missing and the 128-byte/127-byte &quot;title&quot; is completely optional), so how would emulators know to load the &quot;extra data for mapper 768&quot; without having to hardcode mapper-specific behavior into their file loading logic? Perhaps it might be worth updating the NES 2.0 standard (maybe NES 2.1?) to include a means of specifying additional mapper-specific data (since many emulators close the .NES file before ever initializing the mapper)... --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 19:58, 19 March 2013 (MDT)
+</p>
+<dl><dd>It is probably not a bad idea; you can do this if you want to. Nevertheless, the extra data is always at the end, after everything else. It will probably be ignored otherwise anyways, such as if you are converting a private mapper (3840 and higher) to mapper 768 or vice versa, or into a standard mapper number (such conversions like this might be useful for testing; for actual conversion into standard mapper numbers you will probably truncate the file, too). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 21:15, 19 March 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1012-1!*!0!*!*!*!* and timestamp 20160208230121 and revision id 5769
+ -->
+</div></body></html>

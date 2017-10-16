@@ -1,0 +1,80 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Template:Nesdbbox</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Template:Nesdbbox</h1><div class="article">
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?{{{1}}}={{{2}}}" rel="nofollow">{{{3}}}</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<p>A box containing the <a href="Category_In_NesCartDB.xhtml" title="Category:In NesCartDB">In NesCartDB</a> category tag and 1 or more links to NesDB searches.
+</p><p>Single use:
+</p>
+<pre>{{nesdbbox|ines|1|iNES 001}}</pre>
+<p>Multi use:
+</p>
+<pre>{{nesdbbox
+|ines|1|iNES 001
+|unif|NES-CNROM|NES-CNROM
+|unif_wild|AOROM|AOROM
+|unif_wild|-A%ROM|AxROM
+}}</pre>
+<p>The parameters are simply a batched set of <a href="Template_Nesdblink.xhtml" title="Template:Nesdblink">nesdblink</a> templates, documentation included below.
+</p>
+<h2><span class="mw-headline" id="Template:Nesdblink_Documentation"><a href="Template_Nesdblink.xhtml" title="Template:Nesdblink">Template:Nesdblink</a> Documentation</span></h2>
+<p>A simple template for creating links to Bootgod's NES Cart Database.
+</p><p>Usage:
+</p>
+<pre>{{nesdblink
+ | search type (ines/unif/unif_wild)
+ | search parameter (number/board)
+ | link text
+}}</pre>
+<p>Examples:
+</p>
+<pre>1. {{nesdblink|ines|1|iNES 001}}
+2. {{nesdblink|unif|NES-CNROM|NES-CNROM}}
+3. {{nesdblink|unif_wild|CNROM|CNROM}}
+4. {{nesdblink|unif_wild|-A%ROM|AxROM}}
+</pre>
+<ol><li> Search by iNES mapper.</li>
+<li> Search by specific PCB name.</li>
+<li> Search for PCB name containing term.</li>
+<li> Use % as a wildcard to include multiple variations. (Here the - prefix is to match NES<b>-A</b>O<b>ROM</b> and HVC<b>-A</b>O<b>ROM</b> but exclude T<b>A</b>ITO-CN<b>ROM</b>.)</li></ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.090 seconds
+Real time usage: 0.095 seconds
+Preprocessor visited node count: 111/1000000
+Preprocessor generated node count: 2287/1000000
+Post‐expand include size: 689/2097152 bytes
+Template argument size: 70/2097152 bytes
+Highest expansion depth: 7/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1520-1!*!0!*!*!*!* and timestamp 20160208222803 and revision id 11054
+ -->
+<p class="categories">Categories: <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

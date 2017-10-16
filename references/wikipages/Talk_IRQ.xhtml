@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:IRQ</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:IRQ</h1><div class="article">
+<p>Is it really impossible to acknownledge a DMC IRQ by reading $4015 ?
+It's weird this register has a DMC IRQ flag, but that reading it would not ack the interrupt.
+Also it sounds fishy you'd have to stop the sample and restart another one to acknownledge.Bregalad 14:00, 24 April 2012 (PDT)
+</p>
+<dl><dd>Whatever <a href="Projects.xhtml#stuff_by_Damian_Yerrick" title="Projects">my DPCM Split and DPCM Letterbox demos</a> are doing works on an NES. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 16:15, 24 April 2012 (PDT)</dd></dl>
+<h2><span class="mw-headline" id="Table">Table</span></h2>
+<p>Just how comprehensive do we want this list to be? Obviously including every single mapper with IRQs is overkill (q.v. <a href="User_Lidnariq_MMC3_Variants.xhtml#ASIC_mappers_with_simple_banking" title="User:Lidnariq/MMC3 Variants">my list, sort it by IRQ presence</a>), but does it make sense to include non-US mappers here? If so, why these ones? (e.g. there were more games released on the Namco 163 (20) than the VRC4+6+7 combined (16)) —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 18:28, 17 May 2015 (MDT)
+</p>
+<dl><dd>Yeah, actually the whole table is probably useless. Knowing some value to enable/disable/ack an IRQ is too little information to do anything useful with it (except the disable, I guess). Really that information is best left at the article page. What we really need is <a href="Category_Mappers_with_IRQs.xhtml" title="Category:Mappers with IRQs">Category:Mappers with IRQs</a>, and your list is a great TODO list for building that category. I guess this article needs a rewrite with a better focus, probably. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 18:50, 17 May 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Before I go and start adding that Category to everything ... do we want to distinguish at the category level between &quot;quantized to scanlines&quot; and &quot;cycle-based&quot; ? I'd vaguely be inclined to, although there's some fuzziness for the ones that can be switched between cycle-based and scanline-quantized. (Obviously both of those categories would be subcategories of &quot;Mappers with IRQ&quot;)... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:56, 17 May 2015 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> Sure, I don't see why not. You could just put something in both categories if it can do both. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 20:13, 17 May 2015 (MDT)</dd>
+<dd> Sure. Whether it uses the PPU or CPU as a time base is especially important for whether a program would need to be adapted for the longer vblank and slower clock divider of the PAL NES. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 21:01, 17 May 2015 (MDT)
+<dl><dd> Hm. Where should we file <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC IRQs</a> then? I was originally going to say with the scanline IRQs, but if the argument here is 2C02-and-Dendy-vs-2C07, it might then instead belong in cycle-based...—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 21:37, 17 May 2015 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd> VRC is cycle based. It's just cycle based with an interface that's convenient for working with scanlines. Any cycle based counter can do what VRC does, but no cycle based counter can do what a true scanline counter does. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 22:23, 17 May 2015 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:760-1!*!0!*!*!*!* and timestamp 20160208224207 and revision id 10755
+ -->
+</div></body></html>

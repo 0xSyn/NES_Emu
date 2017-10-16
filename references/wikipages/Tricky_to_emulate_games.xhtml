@@ -1,0 +1,57 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Tricky-to-emulate games</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Tricky-to-emulate games</h1><div class="article">
+<p>At the very least the following games depend on hard-to-emulate or just obscure behavior:
+</p>
+<ul><li> <i>Adventures of Lolo 2</i>, <i>Ms. Pac-Man</i> (Tengen), and <i>Spelunker</i> rely on 1 cycle NMI delay when <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> ($2002) bit 7 gets set inside vblank (if $2002 has not been read yet), in which <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> bit 7 can be read as true.</li>
+<li> <i>Balloon Fight</i> relies on reading the nametables through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> ($2007) to twinkle the stars in the background. (The code is at $D603.) The scroll split in &quot;Balloon Trip&quot; also depends to an extent on the correct number of CPU cycles from the start of NMI to the start of display, but it's not particularly picky.</li>
+<li> <i>Bases Loaded II</i> glitches after a pitch is thrown (<a href="File_Bases_Loaded_2_without_re_NMI_jpg.xhtml" title="File:Bases Loaded 2 without re-NMI.jpg">screenshot</a>) if writing $00 then $80 to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> during vertical blank does not cause an additional <a href="NMI.xhtml" title="NMI">NMI</a>.</li>
+<li> <i>Battletoads</i> requires fairly precise CPU and PPU timing (Including the cycle penalty for crossing pages) and a fairly robust sprite zero implementation. It leaves rendering disabled for a number of scanlines into the visible frame to gain extra VRAM manipulation time and then enables it. If the timing is off so that the background image appears too high or too low at this point, a sprite zero hit will fail to trigger, hanging the game. This usually occurs immediately upon entering the first stage if the timing is off by enough, and might cause random hangs at other points otherwise.</li>
+<li> <i>Battletoads &amp; Double Dragon</i> crashes at the first boss if emulated with WRAM (memory in the $6000-$7FFF range) present and initialized to $FF. ($00 does not seem to cause problems, for some reason.) The real cart does not contain WRAM and produces open bus reads. This is caused by a usually inert bug in the game's code.</li>
+<li> <i>Bee 52</i> needs accurate DMC timing and relies on <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> bit 5 (sprite overflow) as well</li>
+<li> <i>Bill &amp; Ted's Excellent Adventure</i> and a few other <a href="MMC1.xhtml" title="MMC1">MMC1</a> games depend on the mapper ignoring successive writes; see <a class="mw-redirect" href="MMC1.xhtml" title="INES Mapper 001">iNES Mapper 001</a> (the talk page for that page might be informative too). <i>Bill &amp; Ted…</i> also turns off and re-enables rendering midframe to switch CHR banks (e.g. in the black border above dialog boxes).</li>
+<li> <i>Burai Fighter (U)</i> accesses <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> during rendering to draw the scorebar. Incorrect emulation clips the scorebar to half size. See the notes on accessing <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> during rendering on the <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a> page.</li>
+<li> <i>B-Wings</i> writes to CHR ROM and expects the writes to have no effect.</li>
+<li> <i>Cobra Triangle</i> and <i>Ironsword: Wizards and Warriors II</i> rely on the dummy read for the sta $4000,X instruction to acknowledge pending APU IRQs.</li>
+<li> <i>Crystalis</i>, <i>Fantastic Adventures of Dizzy</i>, <i>Fire Hawk</i>, and <i>Super Off Road</i> do mid-frame palette changes.</li>
+<li> <i>Fire Hawk</i>, <i>Mig 29 Soviet Fighter</i>, and <i>Time Lord</i> need accurate DMC timing because they <a href="APU_DMC.xhtml#Usage_of_DMC_for_syncing_to_video" title="APU DMC">abuse APU DMC IRQ</a> to split the screen.</li>
+<li> <i>Galaxian</i> requires proper handling of bit 4 of the <a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">P register</a> for /IRQ.</li>
+<li> <i>G.I. Joe</i> and <i>Mickey in Letterland</i> turn <a class="external text" href="PPU_registers.xhtml#Mask_.28.242001.29_.3E_write" rel="nofollow">show sprites</a> off and MMC3 mapper relies on sprites fetches to clock the scanline counter.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=14103" rel="nofollow">[1]</a></li>
+<li> <i>Huge Insect</i> depends on obscure <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003) behavior; see <a href="PPU_registers.xhtml" title="PPU registers">PPU registers</a>.</li>
+<li> <i>The Magic of Scheherazade</i> maps two non-contiguous PRG-ROM pages next to each other, then executes code across the page boundary.  Emulators which use pointers to fetch sequential instruction bytes from ROM will fail when taking damage in the RPG-style battles.  (Use password 5W to test this easily)</li>
+<li> <i>Marble Madness</i> switches CHR banks mid-scanline to draw text boxes (e.g. at the beginning of each level). Getting these to render correctly requires fairly precise timing.</li>
+<li> <i>Micro Machines</i> requires correct values when reading <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004) during rendering, and also relies on proper background color selection when rendering is disabled and the VRAM address points to the palette (see the &quot;background palette hack&quot; on <a href="PPU_palettes.xhtml" title="PPU palettes">the PPU palettes page</a>).</li>
+<li> <i>Paperboy</i> relies on the open bus behavior of controller reads and expects them to return exactly 0x40 or 0x41; see <a href="Standard_controller.xhtml" title="Standard controller">Standard controller</a>.</li>
+<li> <i>Punch-Out!!</i> requires fetching the 34th tile; otherwise, the ring will be glitched.</li>
+<li> <i>Puzznic</i> and <i>Reflect World</i> (FDS) use <a href="Programming_with_unofficial_opcodes.xhtml#Watermarking_instructions" title="Programming with unofficial opcodes">unofficial</a> opcode $89, which is a two-byte NOP on 6502 and BIT #imm on 65C02. (<a class="external text" href="http://tasvideos.org/forum/viewtopic.php?p=306520#306520" rel="nofollow">Puzznic tasvideos discussion</a>) The instruction in <i>Puzznic</i> is 89 00; emulating $89 as a single-byte NOP will trigger a BRK that <a class="external text" href="http://tasvideos.org/forum/viewtopic.php?p=306559#306559" rel="nofollow">causes the screen to shake</a>.
+<ul><li> <a href="CPU_unofficial_opcodes.xhtml#Games_using_unofficial_opcodes" title="CPU unofficial opcodes">Several other games</a> use other unofficial opcodes.</li></ul></li>
+<li> <i>Slalom</i> does a JSR while the stack pointer is 0, so that half of the return address ends up at $0100 and the other half at $01FF.</li>
+<li> <i>Super Mario Bros.</i> is [<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=22022#22022" rel="nofollow">probably the hardest game to emulate</a> among the most popular <a href="NROM.xhtml" title="NROM">NROM</a> games, which are generally the first targets against which an emulator author tests his or her work. It relies on JMP indirect, correct palette mirroring (otherwise the sky will be black; see <a href="PPU_palettes.xhtml" title="PPU palettes">PPU palettes</a>), sprite 0 detection (otherwise the game will freeze on the title screen), the 1-byte delay when reading from CHR ROM through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> (see <a href="PPU_registers.xhtml#The_PPUDATA_read_buffer_.28post-fetch.29" title="PPU registers">The PPUDATA read buffer</a>), and proper behavior of the nametable selection bits of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a>. In addition, there are several bad dumps floating around, some of which were ripped from pirate multicarts whose cheat menus leave several key parameters in RAM. If you're looking for a good first game for your new emulator, try anything made in 1984 or earlier, such as <i>Donkey Kong</i>.</li>
+<li> <i>Super Mario Bros. 3</i> relies on an interaction between the <a class="mw-redirect" href="PPU_sprite_priority.xhtml" title="Sprite priority">sprite priority</a> bit and the OAM index to put power-ups behind blocks.</li>
+<li> <i>Time Lord</i> is sensitive to the power-on state of the NES.  The Vblank flag in PPU Status must be set for the first time within 240 scanlines, otherwise there will be a frame IRQ which is never acknowledged, which will mess up the DMC IRQs used elsewhere and cause the game to crash.</li>
+<li> <i>Wizards and Warriors 3</i> writes new tile graphics for the sprites at the screen split after the sprites have been drawn, but before the frame has ended.  Emulators which draw the sprites all at once using graphics data from the end of the frame will have glitches in the main character's sprite.</li>
+<li> <i>The Young Indiana Jones Chronicles</i> accesses <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> during rendering to perform a glitchy y scroll (to make the screen shake when cannon balls hit the ground). See the notes on accessing <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> during rendering on <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a> page.</li></ul>
+<p><br/>
+<a href="Game_bugs.xhtml" title="Game bugs">Game bugs</a> lists games that have glitches on NES hardware, so you won't go &quot;fixing&quot; them while breaking your emulator.
+</p>
+<h2><span class="mw-headline" id="Troubleshooting_games">Troubleshooting games</span></h2>
+<p>If a scroll split doesn't work, and a garbage sprite shows up around the intended split point, then the game is probably trying to use a sprite 0 hit, but either the wrong tile data is loaded or the background is scrolled to a position that doesn't overlap correctly.
+This could be a problem with nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>, with CHR bankswitching in <a href="Mapper.xhtml" title="Mapper">mappers</a> that support it, or with the CPU and PPU timing of whatever happened above the split. Battletoads, for one, uses 1-screen mirroring and requires exact timing to get the background scroll position dead-on.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.107 seconds
+Real time usage: 0.110 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1024-1!*!0!*!*!*!* and timestamp 20160715141531 and revision id 12721
+ -->
+</div></body></html>

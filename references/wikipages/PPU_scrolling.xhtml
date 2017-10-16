@@ -1,0 +1,573 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU scrolling</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU scrolling</h1><div class="article">
+<p><b>Scrolling</b> is the movement of the displayed portion of the map.
+Games scroll to show an area much larger than the 256x240 pixel screen.
+For example, areas in <i>Super Mario Bros.</i> may be up to 24 screens wide.
+The NES's first major improvement over its immediate predecessors (ColecoVision and Sega Mark 1) was pixel-level scrolling of playfields.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_common_case"><span class="tocnumber">1</span> <span class="toctext">The common case</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Frequent_pitfalls"><span class="tocnumber">1.1</span> <span class="toctext">Frequent pitfalls</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#PPU_registers"><span class="tocnumber">2</span> <span class="toctext">PPU registers</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Register_controls"><span class="tocnumber">3</span> <span class="toctext">Register controls</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#.242000_write"><span class="tocnumber">3.1</span> <span class="toctext">$2000 write</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.242002_read"><span class="tocnumber">3.2</span> <span class="toctext">$2002 read</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.242005_first_write_.28w_is_0.29"><span class="tocnumber">3.3</span> <span class="toctext">$2005 first write (<i>w</i> is 0)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.242005_second_write_.28w_is_1.29"><span class="tocnumber">3.4</span> <span class="toctext">$2005 second write (<i>w</i> is 1)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.242006_first_write_.28w_is_0.29"><span class="tocnumber">3.5</span> <span class="toctext">$2006 first write (<i>w</i> is 0)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.242006_second_write_.28w_is_1.29"><span class="tocnumber">3.6</span> <span class="toctext">$2006 second write (<i>w</i> is 1)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#At_dot_256_of_each_scanline"><span class="tocnumber">3.7</span> <span class="toctext">At dot 256 of each scanline</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#At_dot_257_of_each_scanline"><span class="tocnumber">3.8</span> <span class="toctext">At dot 257 of each scanline</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#During_dots_280_to_304_of_the_pre-render_scanline_.28end_of_vblank.29"><span class="tocnumber">3.9</span> <span class="toctext">During dots 280 to 304 of the pre-render scanline (end of vblank)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Between_dot_328_of_a_scanline.2C_and_256_of_the_next_scanline"><span class="tocnumber">3.10</span> <span class="toctext">Between dot 328 of a scanline, and 256 of the next scanline</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.242007_reads_and_writes"><span class="tocnumber">3.11</span> <span class="toctext">$2007 reads and writes</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Explanation"><span class="tocnumber">3.12</span> <span class="toctext">Explanation</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Summary"><span class="tocnumber">3.13</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Wrapping_around"><span class="tocnumber">4</span> <span class="toctext">Wrapping around</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Coarse_X_increment"><span class="tocnumber">4.1</span> <span class="toctext">Coarse X increment</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Y_increment"><span class="tocnumber">4.2</span> <span class="toctext">Y increment</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Tile_and_attribute_fetching"><span class="tocnumber">4.3</span> <span class="toctext">Tile and attribute fetching</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-22"><a href="#Examples"><span class="tocnumber">5</span> <span class="toctext">Examples</span></a>
+<ul>
+<li class="toclevel-2 tocsection-23"><a href="#Single_scroll"><span class="tocnumber">5.1</span> <span class="toctext">Single scroll</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Split_X_scroll"><span class="tocnumber">5.2</span> <span class="toctext">Split X scroll</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Split_X.2FY_scroll"><span class="tocnumber">5.3</span> <span class="toctext">Split X/Y scroll</span></a>
+<ul>
+<li class="toclevel-3 tocsection-26"><a href="#Details"><span class="tocnumber">5.3.1</span> <span class="toctext">Details</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-27"><a href="#Quick_coarse_X.2FY_split"><span class="tocnumber">5.4</span> <span class="toctext">Quick coarse X/Y split</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="The_common_case">The common case</span></h2>
+<p>Ordinarily, a program writes to two <a href="PPU_registers.xhtml" title="PPU registers">PPU registers</a> to set the scroll position in its NMI handler:
+</p>
+<ol><li>Find the X and Y coordinates of the upper left corner of the visible area (the part seen by the &quot;camera&quot;)</li>
+<li>Write the X coordinate to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> ($2005)</li>
+<li>Write the Y coordinate to PPUSCROLL</li>
+<li>Write the starting page (high order bit of X and Y) to bits 0 and 1 of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000)</li></ol>
+<p>The scroll position written to PPUSCROLL is applied at the end of vertical blanking, just before rendering begins, therefore these writes need to occur before the end of vblank. Also, because writes to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> ($2006) can overwrite the scroll position, the two writes to PPUSCROLL must be done after any updates to VRAM using PPUADDR.
+</p><p>By itself, this allows moving the camera within a usually two-screen area (see <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a>), with horizontal and vertical wraparound if the camera goes out of bounds.
+To scroll over a larger area than the two screens that are already in VRAM, you choose appropriate offscreen columns or rows of the nametable, and you write that to VRAM before you set the scroll, as seen in the animation below.
+The area that needs rewritten at any given time is sometimes called the &quot;seam&quot; of the scroll.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="File_SMB1_scrolling_seam_gif.xhtml"><img alt="SMB1 scrolling seam.gif" height="384" src="../wiki-images/SMB1_scrolling_seam.gif" width="512"/></a></div></div>
+<h3><span class="mw-headline" id="Frequent_pitfalls">Frequent pitfalls</span></h3>
+<ul><li> If your NMI handler routine takes too long and PPUSCROLL ($2005) is not set before the end of vblank, the scroll will not be correctly applied this frame. Most games do not write more than 64 bytes to the nametable per NMI, more than this may require advanced techniques to fit this narrow window of time.</li>
+<li> PPUSCROLL must always be set after using PPUADDR ($2006). They have a shared internal register and using PPUADDR will overwrite the scroll position.</li></ul>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="PPU_registers">PPU registers</span></h2>
+<p>If you aren't trying to split the screen, scrolling the background is as easy as writing the X and Y coordinates to $2005 and writing the high bit of both coordinates to $2000.
+Programming or emulating a game that uses complex raster effects, on the other hand, requires a complete understanding of how the various address registers inside the PPU work.
+Here are the related registers:
+</p>
+<dl><dt>v</dt>
+<dd> Current VRAM address (15 bits)</dd>
+<dt>t</dt>
+<dd> Temporary VRAM address (15 bits); can also be thought of as the address of the top left onscreen tile.</dd>
+<dt>x</dt>
+<dd> Fine X scroll (3 bits)</dd>
+<dt>w</dt>
+<dd> First or second write toggle (1 bit)</dd></dl>
+<p>The PPU uses the current VRAM address for both reading and writing PPU memory thru $2007, and for fetching nametable data to draw the background.
+As it's drawing the background, it updates the address to point to the nametable data currently being drawn.
+Bits 10-11 hold the base address of the nametable minus $2000.
+Bits 12-14 are the Y offset of a scanline within a tile.
+</p><p>The 15 bit registers <i>t</i> and <i>v</i> are composed this way during rendering:
+</p>
+<pre>yyy NN YYYYY XXXXX
+||| || ||||| +++++-- coarse X scroll
+||| || +++++-------- coarse Y scroll
+||| ++-------------- nametable select
++++----------------- fine Y scroll
+</pre>
+<h2><span class="mw-headline" id="Register_controls">Register controls</span></h2>
+<p>In the following, <i>d</i> refers to the data written to the port, and <i>A</i> through <i>H</i> to individual bits of a value.
+</p><p>$2005 and $2006 share a common write toggle, so that the first write has one behaviour, and the second write has another.
+After the second write, the toggle is reset to the first write behaviour. This toggle may be manually reset by reading
+$2002.
+</p>
+<h3><span class="mw-headline" id=".242000_write">$2000 write</span></h3>
+<pre>t: ...BA.. ........ = d: ......BA
+</pre>
+<h3><span class="mw-headline" id=".242002_read">$2002 read</span></h3>
+<pre>w:                  = 0
+</pre>
+<h3><span class="mw-headline" id=".242005_first_write_.28w_is_0.29">$2005 first write (<i>w</i> is 0)</span></h3>
+<pre>t: ....... ...HGFED = d: HGFED...
+x:              CBA = d: .....CBA
+w:                  = 1
+</pre>
+<h3><span class="mw-headline" id=".242005_second_write_.28w_is_1.29">$2005 second write (<i>w</i> is 1)</span></h3>
+<pre>t: CBA..HG FED..... = d: HGFEDCBA
+w:                  = 0
+</pre>
+<h3><span class="mw-headline" id=".242006_first_write_.28w_is_0.29">$2006 first write (<i>w</i> is 0)</span></h3>
+<pre>t: .FEDCBA ........ = d: ..FEDCBA
+t: X...... ........ = 0
+w:                  = 1
+</pre>
+<h3><span class="mw-headline" id=".242006_second_write_.28w_is_1.29">$2006 second write (<i>w</i> is 1)</span></h3>
+<pre>t: ....... HGFEDCBA = d: HGFEDCBA
+v                   = t
+w:                  = 0
+</pre>
+<h3><span class="mw-headline" id="At_dot_256_of_each_scanline">At dot 256 of each scanline</span></h3>
+<dl><dd><dl><dd>If rendering is enabled, the PPU increments the vertical position in <i>v</i>. The effective Y scroll coordinate is incremented, which is a complex operation that will correctly skip the attribute table memory regions, and wrap to the next nametable appropriately. See <a href="#Wrapping_around">Wrapping around</a> below.</dd></dl></dd></dl>
+<h3><span class="mw-headline" id="At_dot_257_of_each_scanline">At dot 257 of each scanline</span></h3>
+<dl><dd><dl><dd>If rendering is enabled, the PPU copies all bits related to horizontal position from <i>t</i> to <i>v</i>:</dd></dl></dd></dl>
+<pre>v: ....F.. ...EDCBA = t: ....F.. ...EDCBA
+</pre>
+<h3><span class="mw-headline" id="During_dots_280_to_304_of_the_pre-render_scanline_.28end_of_vblank.29">During dots 280 to 304 of the pre-render scanline (end of vblank)</span></h3>
+<dl><dd><dl><dd>If rendering is enabled, at the end of vblank, shortly after the horizontal bits are copied from <i>t</i> to <i>v</i> at dot 257, the PPU will repeatedly copy the vertical bits from <i>t</i> to <i>v</i> from dots 280 to 304, completing the full initialization of <i>v</i> from <i>t</i>:</dd></dl></dd></dl>
+<pre>v: IHGF.ED CBA..... = t: IHGF.ED CBA.....
+</pre>
+<h3><span class="mw-headline" id="Between_dot_328_of_a_scanline.2C_and_256_of_the_next_scanline">Between dot 328 of a scanline, and 256 of the next scanline</span></h3>
+<dl><dd><dl><dd>If rendering is enabled, the PPU increments the horizontal position in <i>v</i> many times across the scanline, it begins at dots 328 and 336, and will continue through the next scanline at 8, 16, 24... 240, 248, 256 (every 8 dots across the scanline until 256). The effective X scroll coordinate is incremented, which will wrap to the next nametable appropriately. See <a href="#Wrapping_around">Wrapping around</a> below.</dd></dl></dd></dl>
+<h3><span class="mw-headline" id=".242007_reads_and_writes">$2007 reads and writes</span></h3>
+<dl><dd><dl><dd>Outside of rendering, reads from or writes to $2007 will add either 1 or 32 to <i>v</i> depending on the VRAM increment bit set via $2000. During rendering (on the pre-render line and the visible lines 0-239, provided either background or sprite rendering is enabled), it will update <i>v</i> in an odd way, triggering a <a href="#Coarse_X_increment">coarse X increment</a> and a <a href="#Y_increment">Y increment</a> simultaneously (with normal wrapping behavior). Internally, this is caused by the carry inputs to various sections of <i>v</i> being set up for rendering, and the $2007 access triggering a &quot;load next value&quot; signal for <b>all</b> of <i>v</i> (when not rendering, the carry inputs are set up to linearly increment <i>v</i> by either 1 or 32). This behavior is not affected by the status of the increment bit. The Young Indiana Jones Chronicles uses this for some effects to adjust the Y scroll during rendering, and also Burai Fighter (U) to draw the scorebar. If the $2007 access happens to coincide with a standard VRAM address increment (either horizontal or vertical), it will presumably <i>not</i> double-increment the relevant counter.</dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Explanation">Explanation</span></h3>
+<ul><li> The implementation of scrolling has two components. There are two fine offsets, specifying what part of an 8x8 tile each pixel falls on, and two coarse offsets, specifying which tile. Because each tile corresponds to a single byte addressable by the PPU, during rendering the coarse offsets reuse the same VRAM address register (<i>v</i>) that is normally used to send and receive data from the PPU. Because of this reuse, the two registers $2005 and $2006 both offer control over <i>v</i>, but $2005 is mapped in a more obscure way, designed specifically to be convenient for scrolling.</li>
+<li> $2006 is simply to set the VRAM address register. This is why the second write will immediately set <i>v</i>; it is expected you will immediately use this address to send data to the PPU via $2007. The PPU memory space is only 14 bits wide, but <i>v</i> has an extra bit that is used for scrolling only. The first write to $2006 will clear this extra bit (for reasons not known).</li>
+<li> $2005 is designed to set the scroll position before the start of the frame. This is why it does not immediately set <i>v</i>, so that it can be set at precisely the right time to start rendering the screen.</li>
+<li> The high 5 bits of the X and Y scroll settings sent to $2005, when combined with the 2 nametable select bits sent to $2000, make a 12 bit address for the next tile to be fetched within the nametable address space $2000-2FFF. If set before the end of vblank, this 12 bit address gets loaded directly into <i>v</i> precisely when it is needed to fetch the tile for the top left pixel to render.</li>
+<li> The low 3 bits of X sent to $2005 (first write) control the fine pixel offset within the 8x8 tile. The low 3 bits goes into the separate <i>x</i> register, which just selects one of 8 pixels coming out of a set of shift registers. This fine X value does not change during rendering; the only thing that changes it is a $2005 first write.</li>
+<li> The low 3 bits of Y sent to $2005 (second write) control the vertical pixel offset within the 8x8 tile. The low 3 bits goes into the high 3 bits of the <i>v</i> register, where during rendering they are not used as part of the PPU memory address (which is being overridden to use the nametable space $2000-2FFF). Instead they count the lines until the coarse Y memory address needs to be incremented (and wrapped appropriately when nametable boundaries are crossed).</li></ul>
+<p>See also: <a href="PPU_rendering.xhtml#Frame_timing_diagram" title="PPU rendering">PPU Frame timing</a>
+</p>
+<h3><span class="mw-headline" id="Summary">Summary</span></h3>
+<p>The following diagram illustrates how several different actions may update the various internal registers related to scrolling. See <a href="#Examples">Examples</a> below for usage examples.
+</p>
+<table class="wikitable">
+<tr>
+<th rowspan="2"> Action
+</th>
+<th colspan="4" style="background-color:palegreen"> Before
+</th>
+<th rowspan="2"> Instructions
+</th>
+<th colspan="4" style="background-color:lightcoral"> After
+</th>
+<th rowspan="2"> Notes
+</th></tr>
+<tr>
+<th style="background-color:palegreen"> t
+</th>
+<th style="background-color:palegreen"> v
+</th>
+<th style="background-color:palegreen"> x
+</th>
+<th style="background-color:palegreen"> w
+</th>
+<th style="background-color:lightcoral"> t
+</th>
+<th style="background-color:lightcoral"> v
+</th>
+<th style="background-color:lightcoral"> x
+</th>
+<th style="background-color:lightcoral"> w
+</th></tr>
+<tr>
+<th> $2000 write
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> .
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$00 (%000000<span style="background-color:lime">00</span>)<br/>STA $2000
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...<span style="background-color:lime">00</span>.. ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> .
+</td>
+<td>
+</td></tr>
+<tr>
+<th> $2002 read
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> ...00.. ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> .
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$2002
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...00.. ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">0</span>
+</td>
+<td> Resets paired write latch <i>w</i> to 0.
+</td></tr>
+<tr>
+<th> $2005 write 1
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> ...00.. ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 0
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$7D (%<span style="background-color:lime">01111</span><span style="background-color:yellow">101</span>)<br/>STA $2005
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...00.. ...<span style="background-color:lime">01111</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:yellow">101</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">1</span>
+</td>
+<td>
+</td></tr>
+<tr>
+<th> $2005 write 2
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> ...00.. ...01111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$5E (%<span style="background-color:lime">01</span><span style="background-color:yellow">011</span><span style="background-color:cyan">110</span>)<br/>STA $2005
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:cyan">110</span>00<span style="background-color:lime">01</span> <span style="background-color:yellow">011</span>01111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">0</span>
+</td>
+<td>
+</td></tr>
+<tr>
+<th> $2006 write 1
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> 1100001 01101111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 0
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$3D (%00<span style="background-color:lime">111101</span>)<br/>STA $2006
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:lightcoral">0</span><span style="background-color:lime">111101</span> 01101111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">1</span>
+</td>
+<td>Bit 14 of <i>t</i> gets set to zero
+</td></tr>
+<tr>
+<th> $2006 write 2
+</th>
+<td style="font-family:monospace; white-space:nowrap;"> 0111101 01101111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$F0 (%<span style="background-color:lime">11110000</span>)<br/>STA $2006
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 0111101 <span style="background-color:lime">11110000</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:yellow">0111101</span> <span style="background-color:yellow">11110000</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">0</span>
+</td>
+<td>After <i>t</i> is updated, contents of <i>t</i> copied into <i>v</i>
+</td></tr></table>
+<h2><span class="mw-headline" id="Wrapping_around">Wrapping around</span></h2>
+<p>The following pseudocode examples explain how wrapping is performed when incrementing components of <i>v</i>. This code is written for clarity, and is not optimized for speed.
+</p>
+<h3><span class="mw-headline" id="Coarse_X_increment">Coarse X increment</span></h3>
+<p>The coarse X component of <i>v</i> needs to be incremented when the next tile is reached.
+Bits 0-4 are incremented, with overflow toggling bit 10. This means that
+bits 0-4 count from 0 to 31 across a single nametable, and bit 10 selects the current nametable horizontally.
+</p>
+<pre>if ((<i>v</i> &amp; 0x001F) == 31) // if coarse X == 31
+  <i>v</i> &amp;= ~0x001F          // coarse X = 0
+  <i>v</i> ^= 0x0400           // switch horizontal nametable
+else
+  <i>v</i> += 1                // increment coarse X
+</pre>
+<h3><span class="mw-headline" id="Y_increment">Y increment</span></h3>
+<p>If rendering is enabled, fine Y is incremented at dot 256 of each scanline,
+overflowing to coarse Y,
+and finally adjusted to wrap among the nametables vertically.
+</p><p>Bits 12-14 are fine Y. Bits 5-9 are coarse Y. Bit 11 selects the vertical nametable.
+</p>
+<pre>if ((<i>v</i> &amp; 0x7000) != 0x7000)        // if fine Y &lt; 7
+  <i>v</i> += 0x1000                      // increment fine Y
+else
+  <i>v</i> &amp;= ~0x7000                     // fine Y = 0
+  int <i>y</i> = (<i>v</i> &amp; 0x03E0) &gt;&gt; 5        // let <i>y</i> = coarse Y
+  if (<i>y</i> == 29)
+    <i>y</i> = 0                          // coarse Y = 0
+    <i>v</i> ^= 0x0800                    // switch vertical nametable
+  else if (<i>y</i> == 31)
+    <i>y</i> = 0                          // coarse Y = 0, nametable not switched
+  else
+    <i>y</i> += 1                         // increment coarse Y
+  <i>v</i> = (v &amp; ~0x03E0) | (<i>y</i> &lt;&lt; 5)     // put coarse Y back into <i>v</i>
+</pre>
+<p>Row 29 is the last row of tiles in a nametable. To wrap to the next nametable when incrementing coarse Y from 29, the vertical nametable is switched by toggling bit 11, and coarse Y wraps to row 0.
+</p><p>Coarse Y can be set out of bounds (&gt; 29), which will cause the PPU to read the attribute data stored there as tile data. If coarse Y is incremented from 31, it will wrap to 0, but the nametable will not switch. For this reason, a write &gt;= 240 to $2005 may appear as a &quot;negative&quot; scroll value, where 1 or 2 rows of attribute data will appear before the nametable's tile data is reached.
+</p>
+<h3><span class="mw-headline" id="Tile_and_attribute_fetching">Tile and attribute fetching</span></h3>
+<p>The high bits of <i>v</i> are used for fine Y during rendering, and addressing nametable data only requires 12 bits, with the high 2 CHR addres lines fixed to the 0x2000 region. The address to be fetched during rendering can be deduced from <i>v</i> in the following way:
+</p>
+<pre> tile address      = 0x2000 | (<i>v</i> &amp; 0x0FFF)
+ attribute address = 0x23C0 | (<i>v</i> &amp; 0x0C00) | ((<i>v</i> &gt;&gt; 4) &amp; 0x38) | ((<i>v</i> &gt;&gt; 2) &amp; 0x07)
+</pre>
+<p>The low 12 bits of the attribute address are composed in the following way:
+</p>
+<pre> NN 1111 YYY XXX
+ || |||| ||| +++-- high 3 bits of coarse X (x/4)
+ || |||| +++------ high 3 bits of coarse Y (y/4)
+ || ++++---------- attribute offset (960 bytes)
+ ++--------------- nametable select
+</pre>
+<h2><span class="mw-headline" id="Examples">Examples</span></h2>
+<h3><span class="mw-headline" id="Single_scroll">Single scroll</span></h3>
+<p>If only one scroll setting is needed for the entire screen, this can be done by writing $2000 once, and $2005 twice before the end of vblank.
+</p>
+<ol><li> The low two bits of $2000 select which of the four nametables to use.</li>
+<li> The first write to $2005 specifies the X scroll, in pixels.</li>
+<li> The second write to $2005 specifies the Y scroll, in pixels.</li></ol>
+<p>After this, do not make any writes to $2006 before the end of vblank, as they will overwrite the <i>t</i> register. The <i>v</i> register will be completely copied from <i>t</i> at the end of vblank, setting the scroll.
+</p><p>Note that the series of two writes to $2005 presumes the toggle that specifies which write is taking place. If the state of the toggle is unknown, reset it by reading from $2002 before the first write to $2005.
+</p><p>Instead of writing $2000, the first write to $2006 can be used to select the nametable, if this happens to be more convenient (usually it is not because it will toggle <i>w</i>).
+</p>
+<h3><span class="mw-headline" id="Split_X_scroll">Split X scroll</span></h3>
+<p>The X scroll can be changed at the end of any scanline when the horizontal components of <i>v</i> get reloaded from <i>t</i>: Simply make writes to $2000/$2005 before the end of the line.
+</p>
+<ol><li> The first write to $2005 alters the horizontal scroll position. The fine <i>x</i> register (sub-tile offset) gets updated immediately, but the coarse horizontal component of <i>t</i> (tile offset) does not get updated until the end of the line.</li>
+<li> An optional second write to $2005 is inconsequential; the changes it makes to <i>t</i> will be ignored at the end of the line. However, it will reset the write toggle <i>w</i> for any subsequent splits.</li>
+<li> Write to $2000 if needed to set the high bit of X scroll, which is controlled by bit 0 of the value written. Writing $2000 changes <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">other rendering properties</a> as well, so make sure the other bits are set appropriately.</li></ol>
+<p>Like the single scroll example, reset the toggle by reading $2002 if it is in an unknown state. Since a write to $2005 and a read from $2002 are equally expensive in both bytes and time, whether you use one or the other to prepare for subsequent screen splits is up to you.
+</p><p>The first write to $2005 should usually be made as close to the end of the line as possible, but before the start of hblank when the coarse x scroll is copied from <i>t</i> to <i>v</i>. Because about 4 pixels of timing jitter are normally unavoidable, $2005 should be written a little bit early (once hblank begins, it is too late). The resulting glitch at the end of the line can be concealed by a line of one colour pixels, or a sprite. To eliminate the glitch altogether, the following more advanced X/Y scroll technique could be used to update <i>v</i> during hblank instead.
+</p>
+<h3><span class="mw-headline" id="Split_X.2FY_scroll">Split X/Y scroll</span></h3>
+<p>Cleanly setting the complete scroll position (X and Y) mid-screen takes four writes:
+</p>
+<ol><li> Nametable number &lt;&lt; 2 (that is: $00, $04, $08, or $0C) to $2006</li>
+<li> Y to $2005</li>
+<li> X to $2005</li>
+<li> Low byte of nametable address to $2006, which is ((Y &amp; $F8) &lt;&lt; 2) | (X &gt;&gt; 3)</li></ol>
+<p>The last two writes should occur during horizontal blanking to avoid visual errors.
+</p>
+<h4><span class="mw-headline" id="Details">Details</span></h4>
+<p>To split both the X and Y scroll on a scanline, we must perform four writes to $2006 and $2005 alternately in order to completely reload <i>v</i>. Without the second write to $2006, only the horizontal portion of <i>v</i> will loaded from <i>t</i> at the end of the scanline. By writing twice to $2006, the second write causes an immediate full reload of <i>v</i> from <i>t</i>, allowing you to update the vertical scroll in the middle of the screen.
+</p><p>The writes to PPU registers are done in the order of $2006, $2005, $2005, $2006. This order of writes is important, understanding that the write toggle for $2005 is shared with $2006. As always, if the state of the toggle is unknown before beginning, read $2002 to reset it.
+</p><p>In this example we will perform two writes to each of $2005 and $2006. We will set the X scroll (X), Y scroll (Y), and nametable select (N) by writes to $2005 and $2006. This diagram shows where each value fits into the four register writes.
+</p>
+<pre>N: %01
+X: %01111101 = $7D
+Y: %00111110 = $3E
+</pre>
+<pre>$2005.1 = X                                                          = %01111101 = $7D
+$2005.2 = Y                                                          = %00111110 = $3E
+$2006.1 = ((Y &amp; %11000000) &gt;&gt; 6) | ((Y &amp; %00000011) &lt;&lt; 4) | (N &lt;&lt; 2) = %00010100 = $14
+$2006.2 = ((X &amp; %11111000) &gt;&gt; 3) | ((Y &amp; %00111000) &lt;&lt; 2)            = %11101111 = $EF
+</pre>
+<p>However, since there is a great deal of overlap between the data sent to $2005 and $2006, only the last write to any particular bit of <i>t</i> matters. This makes the first write to $2006 mostly redundant, and we can simplify its setup significantly:
+</p>
+<pre>$2006.1 = N &lt;&lt; 2                                                     = %00000100 = $04
+</pre>
+<p>There are other redundancies in the writes to $2005, but since it is likely the original X and Y values are already available, these can be left as an exercise for the reader.
+</p>
+<table class="wikitable">
+<tr>
+<th colspan="4" style="background-color:palegreen"> Before
+</th>
+<th rowspan="2"> Instructions
+</th>
+<th colspan="4" style="background-color:lightcoral"> After
+</th>
+<th rowspan="2"> Notes
+</th></tr>
+<tr>
+<th style="background-color:palegreen"> t
+</th>
+<th style="background-color:palegreen"> v
+</th>
+<th style="background-color:palegreen"> x
+</th>
+<th style="background-color:palegreen"> w
+</th>
+<th style="background-color:lightcoral"> t
+</th>
+<th style="background-color:lightcoral"> v
+</th>
+<th style="background-color:lightcoral"> x
+</th>
+<th style="background-color:lightcoral"> w
+</th></tr>
+<tr>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 0
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$04 (%00<span style="background-color:lime">000100</span>)<br/>STA $2006
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:lightcoral">0</span><span style="background-color:lime">000100</span> ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">1</span>
+</td>
+<td> Bit 14 of <i>t</i> set to zero
+</td></tr>
+<tr>
+<td style="font-family:monospace; white-space:nowrap;"> 0000100 ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$3E (%<span style="background-color:lime">00</span><span style="background-color:yellow">111</span><span style="background-color:cyan">110</span>)<br/>STA $2005
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:cyan">110</span>01<span style="background-color:lime">00</span> <span style="background-color:yellow">111</span>.....
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">0</span>
+</td>
+<td> Behaviour of 2nd $2005 write
+</td></tr>
+<tr>
+<td style="font-family:monospace; white-space:nowrap;"> 1100100 111.....
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ...
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 0
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$7D (%<span style="background-color:lime">01111</span><span style="background-color:yellow">101</span>)<br/>STA $2005
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1100100 111<span style="background-color:lime">01111</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:yellow">101</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">1</span>
+</td>
+<td> Behaviour of 1st $2005 write
+</td></tr>
+<tr>
+<td style="font-family:monospace; white-space:nowrap;"> 1100100 11101111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> ....... ........
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> LDA #$EF (%<span style="background-color:lime">11101111</span>)<br/>STA $2006
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1100100 <span style="background-color:lime">11101111</span>
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 1100100 11101111
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> 101
+</td>
+<td style="font-family:monospace; white-space:nowrap;"> <span style="background-color:bisque">0</span>
+</td>
+<td>After <i>t</i> is updated, contents of <i>t</i> copied into <i>v</i>
+</td></tr></table>
+<p>Timing for this series of writes is important. Because the Y scroll in <i>v</i> will be incremented at dot 256, you must either set it to the intended Y-1 before dot 256, or set it to Y after dot 256. Many games that use split scrolling have a visible glitch at the end of the line by timing it early like this.
+</p><p>Alternatively you can set the intended Y after dot 256. The last two writes ($2005.1 / $2006.2) can be timed to fall within hblank to avoid any visible glitch. Hblank begins after dot 256, and ends at dot 320 when the first tile of the next line is fetched.
+</p><p>Because this method sets <i>v</i> immediately, it can be used to set the scroll in the middle of the line. This is not normally recommended, as the difficulty of exact timing and interaction of tile fetches makes it difficult to do cleanly.
+</p>
+<h3><span class="mw-headline" id="Quick_coarse_X.2FY_split">Quick coarse X/Y split</span></h3>
+<p>Since it is the write to $2006 when <i>w</i>=1 that transfers the contents of <i>t</i> to <i>v</i>, it is not strictly necessary to perform all 4 writes as above, so long as one is willing to accept some trade-offs.
+</p><p>For example, if you only write to $2006 twice, you can update coarse X, coarse Y, N, and the bottom 2 bits of fine y. The top bit of fine y is cleared, and fine x is unchanged.
+</p><p>$2006's contents are in the same order as <i>t</i>, so you can affect the bits as:
+</p>
+<pre>   First      Second
+/¯¯¯¯¯¯¯¯¯\ /¯¯¯¯¯¯¯\
+0 0yy NN YY YYY XXXXX
+  ||| || || ||| +++++-- coarse X scroll
+  ||| || ++-+++-------- coarse Y scroll
+  ||| ++--------------- nametable select
+  +++------------------ fine Y scroll
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/loopyppu.zip" rel="nofollow">The skinny on NES scrolling</a> original document by loopy, 1999-04-13</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=78593#p78593" rel="nofollow">Drag's X/Y scrolling example</a> from the forums</li>
+<li> <a href="File_Vramaddr_jpg.xhtml" title="File:Vramaddr.jpg">VRAM address register</a> chip photograph analysis by Quietust</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.272 seconds
+Real time usage: 0.276 seconds
+Preprocessor visited node count: 164/1000000
+Preprocessor generated node count: 224/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:192-1!*!0!!en!5!* and timestamp 20160722024339 and revision id 12754
+ -->
+</div></body></html>

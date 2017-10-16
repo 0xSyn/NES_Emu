@@ -1,0 +1,60 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/Unofficial opcode matrix</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/Unofficial opcode matrix</h1><div class="article">
+<p>I could have sworn I posted this to the forum at some point in the past, but can't find it now.
+Anyway, this is a slightly different format from <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">CPU unofficial opcodes</a>.
+</p>
+<pre>       00       04       08       0C       10        14        18        1C
+00 BRK immed|nop zpg|PHP impl |nop abs|BPL rel  |nop zpg,X|CLC impl |nop abs,X  \
+20 JSR abs  |BIT zpg|PLP impl |BIT abs|BMI rel  |nop zpg,X|SEC impl |nop abs,X   \ program flow
+40 RTI impl |nop zpg|PHA impl |JMP abs|BVC rel  |nop zpg,X|CLI impl |nop abs,X   /
+60 RTS impl |nop zpg|PLA impl |JMP ind|BVS rel  |nop zpx,X|SEI impl |nop abs,X  /
+80 nop immed|STY zpg|DEY impl |STY abs|BCC rel  |STY zpg,X|TYA impl |<b>sya abs,X</b>  store Y
+A0 LDY immed|LDY zpg|TAY impl |LDY abs|BCS rel  |LDY zpg,X|CLV impl |LDY abs,X  load Y
+C0 CPY immed|CPY zpg|INY impl |CPY abs|BNE rel  |nop zpg,X|CLD impl |nop abs,X  compare Y
+E0 CPX immed|CPX zpg|INX impl |CPX abs|BEQ rel  |nop zpg,X|SED impl |nop abs,X  compare X
+02 kil      |ASL zpg|ASL A    |ASL abs|kil      |ASL zpg,X|nop impl |ASL abs,X  arithmetic shift left
+22 kil      |ROL zpg|ROL A    |ROL abs|kil      |ROL zpg,X|nop impl |ROL abs,X  rotate left through carry
+42 kil      |LSR zpg|LSR A    |LSR abs|kil      |LSR zpg,X|nop impl |LSR abs,X  logical shirt right
+62 kil      |ROR zpg|ROR A    |ROR abs|kil      |ROR zpg,X|nop impl |ROR abs,X  rotate right through carry
+82 nop imm  |STX zpg|TXA impl |STX abs|kil      |STX zpg,Y|TXS impl |<b>sxa abs,Y</b>  store X
+A2 LDX imm  |LDX zpg|TAX impl |LDX abs|kil      |LDX zpg,Y|TSX impl |LDX abs,Y  load X
+C2 nop imm  |DEC zpg|DEX impl |DEC abs|kil      |DEC zpg,X|nop impl |DEC abs,X  decrement
+E2 nop imm  |INC zpg|NOP impl |INC abs|kil      |INC zpg,X|nop impl |INC abs,X  increment
+01 ORA X,ind|ORA zpg|ORA immed|ORA abs|ORA ind,Y|ORA zpg,X|ORA abs,Y|ORA abs,X  bitwise inclusive OR
+21 AND X,ind|AND zpg|AND immed|AND abs|AND ind,Y|AND zpg,X|AND abs,Y|AND abs,X  bitwise and
+41 EOR X,ind|EOR zpg|EOR immed|EOR abs|EOR ind,Y|EOR zpg,X|EOR abs,Y|EOR abs,X  bitwise exclusive or
+61 ADC X,ind|ADC zpg|ADC immed|ADC abs|ADC ind,Y|ADC zpg,X|ADC abs,Y|ADC abs,X  add with carry
+81 STA X,ind|STA zpg|nop immed|STA abs|STA ind,Y|STA zpg,X|STA abs,Y|STA abs,X  store A
+A1 LDA X,ind|LDA zpg|LDA immed|LDA abs|LDA ind,Y|LDA zpg,X|LDA abs,Y|LDA abs,X  load A
+C1 CMP X,ind|CMP zpg|CMP immed|CMP abs|CMP ind,Y|CMP zpg,X|CMP abs,Y|CMP abs,X  compare
+E1 SBC X,ind|SBC zpg|SBC immed|SBC abs|SBC ind,Y|SBC zpg,X|SBC abs,Y|SBC abs,X  subtract with borrow
+03 slo X,ind|slo zpg|<b>anc immed</b>|slo abs|slo ind,Y|slo zpg,X|slo abs,Y|slo abs,X  01+02 = ORA+ASL = 'slo'
+23 rla X,ind|rla zpg|<b>anc immed</b>|rla abs|rla ind,Y|rla zpg,X|rla abs,Y|rla abs,X  21+22 = AND+ROL = 'rla'
+43 sre X,ind|sre zpg|<b>alr immed</b>|sre abs|sre ind,Y|sre zpg,X|sre abs,Y|sre abs,X  41+42 = EOR+LSR = 'sre'
+63 rra X,ind|rra zpg|<b>arr immed</b>|rra abs|rra ind,Y|rra zpg,X|rra abs,Y|rra abs,X  61+62 = ADC+ROR = 'rra'
+83 sax X,ind|sax zpg|<b>xaa immed</b>|sax abs|<b>axa ind,Y</b>|sax zpg,Y|<b>tas abs,Y</b>|<b>axa abs,Y</b>  81+82 = STA+STX = 'sax'
+A3 lax X,ind|lax zpg|<b>atx immed</b>|lax abs|lax ind,Y|lax zpg,Y|<b>lar abs,Y</b>|lax abs,Y  A1+A2 = LDA+LDX = 'lax'
+C3 dcp X,ind|dcp zpg|<b>axs immed</b>|dcp abs|dcp ind,Y|dcp zpg,X|dcp abs,Y|dcp abs,X  C1+C2 = CMP+DEC = 'dcp'
+E3 isc X,ind|isc zpg|<b>sbc immed</b>|isc abs|isc ind,Y|isc zpg,X|isc abs,Y|isc abs,X  E1+E2 = SBC+INC = 'isc'
+</pre>
+<p>Unofficial instructions in <b>bold</b> break the pattern of their row.
+Some are described at <a href="Programming_with_unofficial_opcodes.xhtml" title="Programming with unofficial opcodes">Programming with unofficial opcodes</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1268-1!*!0!*!*!*!* and timestamp 20160208230424 and revision id 8977
+ -->
+</div></body></html>

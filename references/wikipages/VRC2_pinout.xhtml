@@ -1,0 +1,102 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC2 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC2 pinout</h1><div class="article">
+<p>Konami <a href="VRC2.xhtml" title="VRC2">VRC2</a> and <a href="VRC4.xhtml" title="VRC4">VRC4</a>: 0.6&quot; 40-pin PDIP (iNES Mappers <a href="INES_Mapper_021.xhtml" title="INES Mapper 021">21</a>, <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">22</a>, <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>, and <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a>)
+</p>
+<pre> r: connects to ROM
+ f: connects to Famicom
+ 
+                     .--\/--. 
+      (f) CPU A13 -&gt; |01  40| -- +5V
+      (f) CPU A14 -&gt; |02  39| -&gt; PRG A17 (r)
+      (fr) CPU Ax -&gt; |03  38| -&gt; PRG A15 (r)
+      (fr) CPU Ay -&gt; |04  37| &lt;- CPU A12 (f)
+      (f) PPU A12 -&gt; |05  36| -&gt; PRG A14 (r)
+      (f) PPU A11 -&gt; |06  35| -&gt; PRG A13 (r)
+      (f) PPU A10 -&gt; |07  34| -&gt; PRG A16 (r)
+      (r) PRG /CE &lt;- |08  33| &lt;- CPU D0 (fr)
+      (f) CPU R/W -&gt; |09  32| &lt;- CPU D1 (fr)
+      (r) CHR /CE &lt;- |10  31| &lt;- CPU D2 (fr)
+     (f) PPU /A13 -&gt; |11  30| &lt;- CPU D4 (fr)
+      (f) PPU /OE -&gt; |12  29| &lt;- CPU D3 (fr)
+    (f) CIRAM A10 &lt;- |13  28| -&gt; CHR A17 (r)
+      (f) /ROMSEL -&gt; |14  27| -&gt; CHR A15 (r)
+           (f) M2 -&gt; |15  26| -&gt; CHR A12 (r)
+ VRC4 (f) CHR A18 &lt;- |16  25| -&gt; CHR A14 (r)
+    VRC4 (f) /IRQ &lt;- |17  24| -&gt; CHR A13 (r)
+                ? -- |18  23| -&gt; CHR A11 (r)
+    VRC4 WRAM /CE &lt;- |19  22| -&gt; CHR A16 (r)
+              GND -- |20  21| -&gt; CHR A10 (r)
+                     `------'
+ 3, 4: see below
+</pre>
+<p>The VRC2's pins 16-19 seem to have been <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8569" rel="nofollow">intended for a never-seen-used EEPROM</a>
+</p><p>Konami was greatly fond of making minor variations from one game to the next, presumably to make life harder on pirates.
+</p><p>VRC4a, PCB 352398, mapper 21 submapper 9
+</p>
+<pre>   <b>(fr) CPU A2</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A1</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC2c, PCB 351948, mapper 25 submapper 15 &amp;<br/>
+VRC4b, PCB 351406, mapper 25 submapper 1
+</p>
+<pre>   <b>(fr) CPU A0</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A1</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC4c, PCB 352889, mapper 21 submapper 14
+</p>
+<pre>   <b>(fr) CPU A7</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A6</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC4d, PCB 352400, mapper 25 submapper 3
+</p>
+<pre>   <b>(fr) CPU A2</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A3</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC4e, PCB 352396, mapper 23 submapper 10
+</p>
+<pre>   <b>(fr) CPU A3</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A2</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC2b, PCBs 350603, 350636, 350926, and 351179, mapper 23 submapper 15
+</p>
+<pre>   <b>(fr) CPU A1</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A0</b> -&gt; |04  37| &lt;- CPU A12 (f)
+</pre>
+<p>VRC2a, PCB 351618, mapper 22 (no submapper necessary)
+</p>
+<pre>   <b>(fr) CPU A0</b> -&gt; |03  38| -&gt; PRG A15 (r)
+   <b>(fr) CPU A1</b> -&gt; |04  37| &lt;- CPU A12 (f)
+                  ⋮     ⋮
+ (f) CIRAM A10 &lt;- |13  28| -&gt; <b>CHR A16 (r)</b>
+   (f) /ROMSEL -&gt; |14  27| -&gt; <b>CHR A14 (r)</b>
+        (f) M2 -&gt; |15  26| -&gt; <b>CHR A11 (r)</b>
+ VRC2 µWire DO -&gt; |16  25| -&gt; <b>CHR A13 (r)</b>
+ VRC2 µWire DI &lt;- |17  24| -&gt; <b>CHR A12 (r)</b>
+ VRC2 µWire SK &lt;- |18  23| -&gt; <b>CHR A10 (r)</b>
+ VRC2 µWire CS &lt;- |19  22| -&gt; <b>CHR A15 (r)</b>
+           GND -- |20  21| -&gt; <b>n/c</b>
+</pre>
+<p>The VRC2 µWire interface is believed to be nonfunctional.
+</p><p>Sources:
+</p>
+<ul><li> <a class="external free" href="https://web.archive.org/web/20140920211213/http://nintendoallstars.w.interia.pl/romlab/vrcp.htm" rel="nofollow">https://web.archive.org/web/20140920211213/http://nintendoallstars.w.interia.pl/romlab/vrcp.htm</a></li>
+<li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=8569" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=8569</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.025 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:512-1!*!0!*!*!*!* and timestamp 20160208222746 and revision id 11680
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

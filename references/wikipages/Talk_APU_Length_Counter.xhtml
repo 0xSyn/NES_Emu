@@ -1,0 +1,67 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU Length Counter</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU Length Counter</h1><div class="article">
+<p>Food for thought: the values in the length counter table <a class="external text" href="http://uxul.org/~noname/chips/cpu-2/no-metal/stitched/final/" rel="nofollow">on the die</a> (bottom of the chip, just left of center), <b>once incremented by 1</b>, match the ones on this page. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 03:30, 23 January 2011 (UTC)
+</p><p>- As small note, on $4015 reads in my emulator, I have to put a flag there because the LC *should* be +1. Probably unrelated...
+--<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 01:28, 28 January 2011 (UTC)
+</p>
+<hr/>
+<p>There's some structure to how these values are laid out, which is reinforced when you look at the order in which they appear in the PLA on the chip. Here's an index (in binary) to length map:
+</p>
+<pre>
+11111 -&gt; 30
+11101 -&gt; 28
+11011 -&gt; 26
+11001 -&gt; 24
+10111 -&gt; 22
+10101 -&gt; 20
+10011 -&gt; 18
+10001 -&gt; 16
+01111 -&gt; 14
+01101 -&gt; 12
+01011 -&gt; 10
+01001 -&gt; 8
+00111 -&gt; 6
+00101 -&gt; 4
+00011 -&gt; 2
+00001 -&gt; 254
+
+11110 -&gt; 32  (24 times 1 1/3)
+11100 -&gt; 16  (12 times 1 1/3)
+11010 -&gt; 72  (12 times 6)
+11000 -&gt; 192
+10110 -&gt; 96
+10100 -&gt; 48
+10010 -&gt; 24
+10000 -&gt; 12
+
+01110 -&gt; 26  (20 times 1 1/3)
+01100 -&gt; 14  (10 times 1.4)
+01010 -&gt; 60  (10 times 6)
+01000 -&gt; 160
+00110 -&gt; 80
+00100 -&gt; 40
+00010 -&gt; 20
+00000 -&gt; 10
+</pre>
+<p>The least significant bit seems to be a &quot;use linear length&quot; flag, which makes the length the value of the remaining bits (with 0 being special). When not set, you get doubling note lengths based on 10 and 12, with some other values in there too (maybe handy for slight length alterations and triplets and the like - I'm not a professional musician :P). -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 18:34, 29 May 2013 (MDT)
+</p>
+<dl><dd> The interpretation I put on the page is probably even more likely... -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 20:51, 29 May 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.053 seconds
+Real time usage: 0.104 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:536-1!*!0!*!*!*!* and timestamp 20160603204824 and revision id 12569
+ -->
+</div></body></html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 143</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 143</h1><div class="article">
+<p>GoodNES, Nestopia, and Санчез say that <strong class="selflink">iNES Mapper 143</strong> is “just NROM games [with] a pathetic form of copy protection in them.” Games include <i>Dancing Blocks</i> and <i>Magical Mathematics</i>. 
+</p><p>The functional description is consistent with a <a href="74138.xhtml" title="74138">74138</a> and a 74368.
+</p><p>Reads from these addresses produce this output:
+</p>
+<pre>A:[010. ...1 ..DD DDDD] -&gt; [xxii iiii]
+               || ||||      |||| ||||
+               ++-++++------||++-++++-- reads provide the logical inversion of DDDDDD in the bits iiiiii
+                            ++--------- open bus
+</pre>
+<p>Nestopia additionally implies that at least <i>Dancing Blocks</i> relies extensively on the values of uninitialized memory, and so manually sets the emulated famiclone's 2K of internal RAM to a different pattern than Nestopia's default.
+</p>
+<ul><li> <a class="external free" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1373-1!*!0!*!*!*!* and timestamp 20160208225245 and revision id 8743
+ -->
+</div></body></html>

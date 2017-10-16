@@ -1,0 +1,329 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Help:Formatting</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Help:Formatting</h1><div class="article">
+<p>You can format your text using wiki markup. This consists of normal characters like asterisks, single quotes or equation marks which have a special function in the wiki, sometimes depending on their position. For example, to format a word in <i>italic</i>, you include it in two single quotes like <code>''this''</code>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Text_formatting_markup"><span class="tocnumber">1</span> <span class="toctext">Text formatting markup</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Paragraphs"><span class="tocnumber">2</span> <span class="toctext">Paragraphs</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#HTML"><span class="tocnumber">3</span> <span class="toctext">HTML</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Other_formatting"><span class="tocnumber">4</span> <span class="toctext">Other formatting</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Text_formatting_markup">Text formatting markup</span></h2>
+<table border="1">
+<tr>
+<th> Description </th>
+<th> You type </th>
+<th> You get
+</th></tr>
+<tr>
+<th colspan="3" style="background:#ABE"> character (inline) formatting – <i>applies anywhere</i>
+</th></tr>
+<tr>
+<td>Italic text
+</td>
+<td> <code>''italic''</code>
+</td>
+<td><i>italic</i>
+</td></tr>
+<tr>
+<td> Bold text
+</td>
+<td> <code>'''bold'''</code>
+</td>
+<td><b>bold</b>
+</td></tr>
+<tr>
+<td> Bold and italic
+</td>
+<td> <code>'''''bold &amp; italic'''''</code>
+</td>
+<td><i><b>bold &amp; italic</b></i>
+</td></tr>
+<tr>
+<td>Escape wiki markup
+</td>
+<td> <code>&lt;nowiki&gt;no ''markup''&lt;/nowiki&gt;</code>
+</td>
+<td>no ''markup''
+</td></tr>
+<tr>
+<th colspan="3" style="background:#ABE"> section formatting – <i>only at the beginning of the line</i>
+</th></tr>
+<tr>
+<td>Headings of different levels
+</td>
+<td> <pre>=level 1=
+==level 2==
+===level 3===
+====level 4====
+=====level 5=====
+======level 6======</pre>
+<p>An article with 4 or more headings automatically creates a <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Section#Table_of_contents_.28TOC.29" title="wikipedia:Wikipedia:Section">table of contents</a>.
+</p>
+</td>
+<td>
+<div style="font-size: 188%; margin: 0; padding-top: .5em; padding-bottom: .17em; border-bottom: 1px solid #aaa">Level 1</div>
+<div style="font-size: 150%; margin: 0; padding-top: .5em; padding-bottom: .17em; border-bottom: 1px solid #aaa">Level 2</div>
+<div style="font-size: 132%; font-weight: bold">Level 3</div><b>Level 4</b><div style="font-size: 86%; font-weight: bold">Level 5</div><b style="font-size: 80%">Level 6</b>
+</td></tr>
+<tr>
+<td>Horizontal rule
+</td>
+<td> <code>----</code>
+</td>
+<td>
+<hr/>
+</td></tr>
+<tr>
+<td>Bullet list
+</td>
+<td>
+<pre>
+* one
+* two
+* three
+** three point one
+** three point two
+</pre>
+<p>Inserting a blank line will end the first list and start another.
+</p>
+</td>
+<td>
+<ul><li> one</li>
+<li> two</li>
+<li> three
+<ul><li> three point one</li>
+<li> three point two</li></ul></li></ul>
+</td></tr>
+<tr>
+<td>Numbered list
+</td>
+<td>
+<pre>
+# one
+# two&lt;br /&gt;spanning more lines&lt;br /&gt;doesn't break numbering
+# three
+## three point one
+## three point two
+</pre>
+</td>
+<td>
+<ol><li> one</li>
+<li> two<br/>spanning more lines<br/>doesn't break numbering</li>
+<li> three
+<ol><li> three point one</li>
+<li> three point two</li></ol></li></ol>
+</td></tr>
+<tr>
+<td>Definition list
+</td>
+<td><pre>
+;item 1
+: definition 1
+;item 2
+: definition 2-1
+: definition 2-2
+</pre>
+</td>
+<td>
+<dl><dt>item 1</dt>
+<dd> definition 1</dd>
+<dt>item 2</dt>
+<dd> definition 2-1</dd>
+<dd> definition 2-2</dd></dl>
+</td></tr>
+<tr>
+<td> Adopting definition list to indent text
+</td>
+<td>
+<pre>: Single indent
+:: Double indent
+::::: Multiple indent</pre>
+<p>This workaround may be controversial from the viewpoint of accessibility.
+</p>
+</td>
+<td>
+<dl><dd> Single indent
+<dl><dd> Double indent
+<dl><dd><dl><dd><dl><dd> Multiple indent</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+</td></tr>
+<tr>
+<td> Mixture of different types of list
+</td>
+<td>
+<pre>
+# one
+# two
+#* two point one
+#* two point two
+# three
+#; three item one
+#: three def one
+# four
+#: four def one
+#: this rather looks like the continuation of # four
+#: and thus often used instead of &lt;br /&gt;
+# five
+## five sub 1
+### five sub 1 sub 1
+## five sub 2
+
+;item 1
+:* definition 1-1
+:* definition 1-2
+:
+;item 2
+:# definition 2-1
+:# definition 2-2
+</pre>
+<p>The usage of <code>#:</code> and <code>*:</code> for breaking a line within an item may also be controversial.
+</p>
+</td>
+<td>
+<ol><li> one</li>
+<li> two
+<ul><li> two point one</li>
+<li> two point two</li></ul></li>
+<li> three
+<dl><dt> three item one</dt>
+<dd> three def one</dd></dl></li>
+<li> four
+<dl><dd> four def one</dd>
+<dd> this rather looks like the continuation of <code># four</code></dd>
+<dd> often used instead of <code>&lt;br /&gt;</code></dd></dl></li>
+<li> five
+<ol><li> five sub 1
+<ol><li> five sub 1 sub 1</li></ol></li>
+<li> five sub 2</li></ol></li></ol>
+<dl><dt>item 1
+<ul><li> definition 1-1</li>
+<li> definition 1-2</li></ul></dt>
+<dd/>
+<dt>item 2
+<ol><li> definition 2-1</li>
+<li> definition 2-2</li></ol></dt></dl>
+</td></tr>
+
+<tr>
+<td>Preformatted text
+</td>
+<td>
+<pre>
+ preformatted text is done with
+ a '''space''' at the 
+ ''beginning'' of the line
+</pre>
+<p>This way of preformatting only applies to section formatting, and character formatting markups are still effective.
+</p>
+</td>
+<td>
+<pre>preformatted text is done with
+a <b>space</b> at the 
+<i>beginning</i> of the line
+</pre>
+</td></tr></table>
+<h2><span class="mw-headline" id="Paragraphs">Paragraphs</span></h2>
+<p>MediaWiki ignores normal line breaks. To start a new paragraph, leave an empty line. You can force a line break within a paragraph with the HTML tags <code>&lt;br /&gt;</code>.
+</p>
+<h2><span class="mw-headline" id="HTML">HTML</span></h2>
+<p>Some <a class="extiw" href="http://en.wikipedia.org/wiki/HTML" title="wikipedia:HTML">HTML</a> tags are allowed in MediaWiki, for example <code>&lt;code&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code> and <code>&lt;font&gt;</code>. These apply anywhere you insert them.
+</p>
+<table border="1">
+<tr>
+<th>Description
+</th>
+<th>You type
+</th>
+<th>You get
+</th></tr>
+<tr>
+<td> Strikethrough
+</td>
+<td> <code>&lt;del&gt;Strikethrough&lt;/del&gt;</code> or <code>&lt;s&gt;Strikethrough&lt;/s&gt;</code>
+</td>
+<td><del>Strikethrough</del>
+</td></tr>
+<tr style="white-space:nowrap">
+<td>Fixed width text
+</td>
+<td> <code>&lt;tt&gt;Fixed width text&lt;/tt&gt;</code> or <code>&lt;code&gt;source code&lt;/code&gt;</code>
+</td>
+<td> <tt>Fixed width text</tt>
+</td></tr>
+<tr>
+<td>Blockquotes
+</td>
+<td> <pre>
+text text text text text text text text text text text text
+text text text text text text text text text text text text
+&lt;blockquote&gt;  quote quote quote quote quote quote &lt;/blockquote&gt;
+text text text text text text text text text text text text
+</pre>
+</td>
+<td> text text text text text text text text text text text text text text text text text text text text text text text text
+<blockquote>  quote quote quote quote quote quote </blockquote>
+<p>text text text text text text text text text text text text
+</p>
+</td></tr>
+<tr>
+<td>Comment
+</td>
+<td> <code>&lt;!-- This is a comment --&gt;</code>
+<p>Text can only be viewed in the edit window.
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td>Completely preformatted text
+</td>
+<td>
+<p><code>&lt;pre&gt;this way, all markups are '''ignored'''&lt;/pre&gt;</code>
+</p>
+</td>
+<td>
+<pre> this way, all markups are '''ignored'''.</pre>
+</td>
+<td>
+</td></tr>
+<tr>
+<td><b>Customised</b> preformatted text
+</td>
+<td>
+<p><code>&lt;pre style=&quot;CSS text&quot;&gt;this way, all markups are '''ignored''' and formated with a CSS text&lt;/pre&gt;</code>
+</p>
+</td>
+<td>
+<pre style="white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;overflow:auto;">
+ this way for instance, all '''ignored''' markups take into account the navigator size, by automatically adding some carriage returns dynamically to it.</pre>
+</td></tr></table>
+<p><s>Template:Admin tip</s>
+</p>
+<h2><span class="mw-headline" id="Other_formatting">Other formatting</span></h2>
+<p>Beyond the text formatting markup shown above, here are some other formatting references:
+</p>
+<ul><li><a href="Help_Links.xhtml" title="Help:Links">Links</a></li>
+<li> <a href="Help_Images.xhtml" title="Help:Images">Images</a></li>
+<li> <s>Tables</s></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.089 seconds
+Real time usage: 0.091 seconds
+Preprocessor visited node count: 215/1000000
+Preprocessor generated node count: 530/1000000
+Post‐expand include size: 23/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:295-1!*!0!!en!*!* and timestamp 20160208230144 and revision id 4390
+ -->
+</div></body></html>

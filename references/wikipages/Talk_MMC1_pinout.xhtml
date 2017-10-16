@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:MMC1 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:MMC1 pinout</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Tying_PA12_low"><span class="tocnumber">1</span> <span class="toctext">Tying PA12 low</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#SNROM.2C_etc..._loses_CHR_banking_.3F"><span class="tocnumber">2</span> <span class="toctext">SNROM, etc... loses CHR banking ?</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#SXROM_wram"><span class="tocnumber">3</span> <span class="toctext">SXROM wram</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#PPU_A12_.2F_CHR_A12"><span class="tocnumber">4</span> <span class="toctext">PPU A12 / CHR A12</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Tying_PA12_low">Tying PA12 low</span></h2>
+<p>Based on the description of <a href="NES_EVENT.xhtml" title="NES-EVENT">NES-EVENT</a> (#105), it appears to tie the MMC1's PA12 input low and connect the cart's PA12 to A12 of the CHR RAM. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 08:31, 12 October 2012 (MDT)
+</p>
+<dl><dd>Given the pictures I can find (<a class="external text" href="http://kevtris.org/mappers/nes_custom/NES_EVENT.html" rel="nofollow">kevtris</a>, <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=4627" rel="nofollow">kevtris-via-bootgod</a>; both are component side only), it looks like the PA12 input is likely still connected to the cartridge edge. I can't tell anything about whether MMC1 CHR A12 OUT goes to CHR RAM A12. And when I load NWC in FCEUX and trap all mapper writes, it looks like the game just uses 8KB mode anyway. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 11:41, 12 October 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="SNROM.2C_etc..._loses_CHR_banking_.3F">SNROM, etc... loses CHR banking ?</span></h2>
+<p>I'm pretty sure they don't, they just bank only 8k as they were always supposed to, and it's possible to have two banks of 4k and bankswitch them independently. I might be wrong, I'll have to double check.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 04:26, 15 May 2014 (MDT)
+</p>
+<h2><span class="mw-headline" id="SXROM_wram">SXROM wram</span></h2>
+<p>32K ram does not have an A15 line if the address lines start at the conventional 0, right? pins 9 and 10 should probably be WRAM A13 and A14 respectively? —<s>68.107.78.15</s> (<s>talk</s>) 19:37, 24 February 2015 (MST)
+</p>
+<dl><dd> Nice catch! Fixed. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 21:49, 24 February 2015 (MST)</dd></dl>
+<h2><span class="mw-headline" id="PPU_A12_.2F_CHR_A12">PPU A12 / CHR A12</span></h2>
+<p>Holodnak's last edit implies a board where PPU A12 does not go via the MMC1 to the CHR memory. But to the best of our current knowledge, all boards connect PPU A12 to MMC1 PPU A12 IN and MMC1 CHR A12 OUT to CHR A12. What board did Holodnak find? Are (some of) the special boards (e.g. SNROM, SXROM) that always used 8 KiB of CHR RAM wired in a way that's arbitrarily different without the benefits of freeing up an output? —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 21:15, 14 March 2016 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 14/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:910-1!*!0!!en!*!* and timestamp 20160315131434 and revision id 12032
+ -->
+</div></body></html>

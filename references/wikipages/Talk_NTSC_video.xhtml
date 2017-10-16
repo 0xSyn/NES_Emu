@@ -1,0 +1,40 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:NTSC video</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:NTSC video</h1><div class="article">
+<p>The part of the PPU that generates the video signal (immediately to the right of the NMI and CLK pins) appears to consist of a very long resistor between VCC and GND with taps at various points, and one of them (closest to VCC) is a switchable pulldown to GND (no doubt for color emphasis). The logic itself can select 12 different voltage levels (00/10/20/30, 0D/1D/2D/3D, synch, colorburst L/H, and GND), and they appear to correspond to 10 distinct voltage levels - one of the duplicates is at the highest voltage (likely 20/30), and the other one is the 3rd-lowest [non-GND] voltage (not sure which one). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 17:59, 28 September 2011 (UTC)
+</p>
+<ul><li>With the help of ChipSim, I've traced down exactly what the 12 voltage levels correspond to - Synch (GND), Colorburst L, Color 0D, Color xE/xF and Color 1D, Colorburst H, Color 2D, Color 00, Color 10, color 3D, Color 20 and Color 30 (&quot;and&quot; == two signals which select the same actual voltage). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 11:17, 29 October 2012 (MDT)</li></ul>
+<h2><span class="mw-headline" id="Absolute_Video_Signal_Timing">Absolute Video Signal Timing</span></h2>
+<p>Some tests with Visual2C02 managed to confirm all of the contents of the Scanline Timing table, plus one more interesting bit of information: the <i>offset</i>. Specifically, the &quot;active&quot; region begins at cycle <b>4</b>, which is when the PPU is just finishing the attribute byte fetch for the 3rd tile in the scanline (the first 2 are fetched at the end of the previous scanline). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 08:50, 1 November 2012 (MDT)
+</p>
+<dl><dd>But during which cycles is sync output? We need that too to align the NES picture center relative to the NTSC standard picture center (see <a href="Overscan.xhtml" title="Overscan">Overscan</a>). --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 09:41, 1 November 2012 (MDT)
+<dl><dd>It's probably been mentioned elsewhere, but for completeness: cycles 280 through 304, inclusive, which happens to correspond to when the VRAM address gets reloaded during the prerender scanline. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 07:24, 14 February 2013 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="C.2B.2B_code.3F">C++ code?</span></h2>
+<p>Is this really C++ code? Can we call it what it is, if it's not?
+</p>
+<pre>auto InColorPhase = [=](int color) { return (color + phase) % 12 &lt; 6; }; // Inline function
+</pre>
+<p>-- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 07:26, 13 August 2014 (MDT)
+</p>
+<dl><dd>It appears to be C++11 code. Not all C++ compilers understand C++11 yet. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 19:42, 13 August 2014 (MDT)</dd></dl>
+<dl><dd><dl><dd>Am I just out of touch? Is C++11 the accepted standard now? I didn't know it was safe to call it &quot;C++&quot; now, but maybe it is? :S - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 21:08, 13 August 2014 (MDT)
+<dl><dd> Yes, it's the standard. The draft was commonly referred to as &quot;C++0x&quot; because they aimed to get it accepted by the end of 2009. It became <a class="extiw" href="https://en.wikipedia.org/wiki/C%2B%2B11" title="wikipedia:C++11">C++11</a> when the changes were officially added to ISO C++ in 2011. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 06:56, 14 August 2014 (MDT)
+<dl><dd> It was an official standard in 2011, but that's different than it being the primary flavour of C++, which is really what I meant. After looking around, I've noted that as usual Microsoft has done a pick-and-choose with which features to implement, but the C++11 features they did implement have been enabled by default since VS2010. GCC on the other hand much more fully supports it, but requires a compiler switch to enable. Clang is in the same situation as GCC. Intel's compiler looks like partial support, off by default. I imagine other compilers are in similar states. As such, I'd say we're in a period of transition, but C++11 will surely become the default before long. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 11:56, 14 August 2014 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.071 seconds
+Real time usage: 0.144 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:624-1!*!0!!*!*!* and timestamp 20160603204818 and revision id 12567
+ -->
+</div></body></html>

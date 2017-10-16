@@ -1,0 +1,62 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC1 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC1 pinout</h1><div class="article">
+<p>There isn't a consistent pinout for the <a href="VRC1.xhtml" title="VRC1">VRC1</a> and its clones; here are two.
+The pins are <i>mostly</i> in the same order, but power and ground definitely move.
+</p><p>Anything with a ? next to it is uncertain; these pinouts were deduced solely based on images of the PCB.
+</p><p>VRC-1: 28-pin 0.6&quot; DIP (canonically <b>mapper 75</b>)
+</p><p>Labeled &quot;Konami 8626K7 007422 VRC 075&quot; on PCB labeled &quot;Konami 302114A&quot;:
+</p>
+<pre>               .--\/--.
+(r) PRG A15 &lt;- |01  28| -- +5V
+(r) PRG A14 &lt;- |02  27| &lt;- CPU A14 (F)
+(s) CPU A12 -&gt; |03  26| &lt;- CPU A13 (F)
+(r) PRG A13 &lt;- |04  25| &lt;- PPU A12?
+(r) PRG A16 &lt;- |05  24| &lt;- CPU nROMSEL?
+ (s) CPU D0 -&gt; |06  23| &lt;- PPU A11?
+ (s) CPU D1 -&gt; |07  22| -&gt; PRG nSEL (r)
+ (s) CPU D2 -&gt; |08  21| &lt;- PPU A10?
+ (s) CPU D3 -&gt; |09  20| -&gt; CHR nSEL (r)
+(r) CHR A12 &lt;- |10  19| &lt;- PPU A13?
+(r) CHR A14 &lt;- |11  18| &lt;- PPU nRD?
+(r) CHR A13 &lt;- |12  17| -&gt; CIRAM A10?
+(r) CHR A15 &lt;- |13  16| &lt;- (CPU nROMSEL OR CPU RnW)?
+        Gnd -- |14  15| -&gt; CHR A16 (r)
+               `------'
+</pre>
+<p>Labeled &quot;VRC 007421 8805 Z04&quot; on PCB labeled &quot;JALECO-20&quot;:
+</p>
+<pre>               .--\/--.
+(r) PRG A15 &lt;- |01  28| &lt;- CPU A14 (F)
+   ?PRG A14 &lt;- |02  27| &lt;- CPU A13 (F)
+   ?CPU A12 -&gt; |03  26| &lt;- CPU nROMSEL? 
+   ?PRG A13 &lt;- |04  25| &lt;- PPU A12?		 
+(r) PRG A16 &lt;- |05  24| &lt;- PPU A11?		 
+ (s) CPU D0 -&gt; |06  23| &lt;- CPU RnW (F)
+        Gnd -- |07  22| -&gt; PRG nSEL (r)
+ (s) CPU D1 -&gt; |08  21| -- +5V
+ (s) CPU D2 -&gt; |09  20| -&gt; CHR nSEL?
+ (s) CPU D3 -&gt; |10  19| &lt;- PPU A10?
+   ?CHR A12 &lt;- |11  18| &lt;- PPU nRD (F)
+(r) CHR A14 &lt;- |12  17| -&gt; CIRAM A10 (F)
+   ?CHR A13 &lt;- |13  16| &lt;- (CPU nROMSEL OR CPU RnW)?
+(r) CHR A15 &lt;- |14  15| -&gt; CHR A16 (r)
+               `------'
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:822-1!*!0!*!*!*!* and timestamp 20160208225940 and revision id 8645
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

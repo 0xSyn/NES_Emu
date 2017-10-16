@@ -1,0 +1,90 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Arkanoid controller</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Arkanoid controller</h1><div class="article">
+<p>The Arkanoid Vaus controller was included with the <i>Arkanoid</i> game, and is only used for this game and <i>Chase HQ</i>.
+It has an control knob connected to a potentiometer and a single fire button.
+Under a small black plastic cover is another potentiometer to adjust the control knob's range.
+</p>
+<pre>
+            ,--------------------------------------.   |
+            |                  %%                  |   |
+            |   ,---.          %%                % |   |
+            |  /     \         %%         ,-.   %% |   |
+ Control  -&gt;| |       |        %%        (   )  %% |&lt;- Fire button
+   knob     |  \     /         %%         `-'   %% |   |    
+            |   `---'          %%                % |==/
+Adjustment-&gt;|     ()           %%                  |
+   screw    `--------------------------------------'
+
+</pre>
+<p>The Famicom version of this controller uses D1 (Famicom) on both ports.
+The NES version uses D3 and D4, usually in port 2 ($4017).
+The controller will not work in a <a href="Four_Score.xhtml" title="Four Score">Four Score</a>.
+</p>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxS
+        |
+        +- Control knob shift register strobe
+</pre>
+<p>Writing 1 to this bit will record the state of the control knob.
+Writing 0 afterwards will allow the position to be read back.
+</p><p>The analog to digital conversion takes about 7 ms, so strobing too fast will return bad data, especially at the right side of the range.  A function that reads the controller multiple times in a row to avoid DPCM glitches may not work. Instead, check for spurious accelerations, where the <a class="extiw" href="http://en.wikipedia.org/wiki/finite_difference" title="wikipedia:finite difference">second difference</a> <i>x</i><sub><i>t</i></sub> - 2<i>x</i><sub><i>t</i> - 1</sub> + <i>x</i><sub><i>t</i> - 2</sub> exceeds about eight units.
+</p>
+<h3><span class="mw-headline" id="Output_.28.244016.2F.244017_read.29">Output ($4016/$4017 read)</span></h3>
+<p>Famicom:
+</p>
+<pre>
+$4016:
+7  bit  0
+---- ----
+xxxx xxBx
+       |
+       +-- Fire button (1: pressed)
+
+$4017:
+7  bit  0
+---- ----
+xxxx xxDx
+       |
+       +-- Serial control knob data
+</pre>
+<p>NES:
+</p>
+<pre>
+7  bit  0
+---- ----
+xxxD Bxxx
+   | |
+   | +---- Fire button (1: pressed)
+   +------ Serial control knob data
+</pre>
+<p>Button status is returned in D3, and does not need to be latched. However, making sure it reads the same way eight times is a good way to distinguish it from a <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a>, and reading it several times during a frame should distinguish it from the light sensor of a <a href="Zapper.xhtml" title="Zapper">Zapper</a>.
+</p><p>Control knob data is returned in D4, MSB first.  The data is also inverted.  The whole range is about 180 degrees, and returned in $A0 steps.
+</p><p>Variations in the analog to digital and pot physical range can vary the result slightly.
+With the trim pot at minimum the range returned is $0D-$AD.
+With the trim pot at maximum the range returned is $5C-$FC.
+</p><p>The <i>Arkanoid</i> game expects the range to be $54-$F4; the manual explains how to adjust the trimpot.
+New games can work at any trim pot setting by storing the maximum and minimum values seen during a play session and assuming values within ±80 units of the center of this range.
+</p>
+<h2><span class="mw-headline" id="Test_ROMs">Test ROMs</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=10662" rel="nofollow">Vaus Test</a> shows adaptation to trimpot setting, repeated read rate, and first and second differences</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.043 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 38/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:66-1!*!0!!*!*!* and timestamp 20160208224750 and revision id 7851
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 037</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 037</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 037</strong> represents the Nintendo of Europe multicart &quot;Super Mario Bros. + Tetris + Nintendo World Cup&quot;. It glues together 3 <a href="MMC3.xhtml" title="MMC3">MMC3</a>-compatible games in a single pak.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Outer_Bank_Select_.28.246000-.247FFF.29"><span class="tocnumber">2.1</span> <span class="toctext">Outer Bank Select ($6000-$7FFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#All_other_registers_.28.248000-.24FFFF.29"><span class="tocnumber">2.2</span> <span class="toctext">All other registers ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 256 KiB</li>
+<li> PRG ROM bank size: 8 KiB inner / 64 or 128 KiB outer</li>
+<li> PRG RAM: Impossible</li>
+<li> CHR capacity: 256 KiB ROM</li>
+<li> CHR bank size: 1 and 2 KiB inner / 128 KiB outer</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper.</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>This game, like <a href="INES_Mapper_047.xhtml" title="INES Mapper 047">Super Spike V'Ball + Nintendo World Cup</a>, replaces PRG RAM with a single register to enforce multiple &quot;jail cells&quot; containing each game.
+</p><p>The Outer Bank Select register is cleared by the <a href="CIC_lockout_chip.xhtml" title="CIC lockout chip">CIC</a> reset line, so if this multicart is used in a console without a functioning lockout chip, only a full power cycle will get back to the menu.
+</p>
+<h3><span class="mw-headline" id="Outer_Bank_Select_.28.246000-.247FFF.29">Outer Bank Select ($6000-$7FFF)</span></h3>
+<pre>7  bit  0
+xxxx xQBB
+      │││
+      │└┴── If 3, forces PRG A16 high regardless of Q bit; otherwise
+      └──── the MMC3's PRG A16 is ANDed with this bit before going to PRG ROM.
+             Additionally connected to A17 on both PRG and CHR ROM.
+</pre>
+<p>In case that wasn't clear:
+</p>
+<table class="wikitable">
+<tr>
+<th> Value written </th>
+<th> PRG window </th>
+<th> 128kB CHR window
+</th></tr>
+<tr>
+<td> 0,1,2 </td>
+<td> $00000-$0FFFF (64kB) </td>
+<td> $00000-$1FFFF
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> $10000-$1FFFF (64kB) </td>
+<td> $00000-$1FFFF
+</td></tr>
+<tr>
+<td> 4,5,6 </td>
+<td> $20000-$3FFFF (128kB) </td>
+<td> $20000-$3FFFF
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> $30000-$3FFFF (64kB) </td>
+<td> $20000-$3FFFF
+</td></tr></table>
+<p>As far as the MMC3 is concerned, this <i>is</i> the PRG-RAM, so you will need to <a href="MMC3.xhtml#PRG_RAM_protect_.28.24A001-.24BFFF.2C_odd.29" title="MMC3">enable writes to PRG-RAM</a> to update it. Despite that the MMC3 thinks this register is RAM, the register itself does not, so it is not readable and attempting to read it will return open bus.
+</p>
+<h3><span class="mw-headline" id="All_other_registers_.28.248000-.24FFFF.29">All other registers ($8000-$FFFF)</span></h3>
+<p>See <a href="MMC3.xhtml" title="MMC3">MMC3</a>.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>Since this pak was only ever released with epoxy covering wirebonded silicon dice, the following is guesswork:
+</p><p>It is very likely that the support hardware is a <a href="74161.xhtml" title="74161">74HC161</a> latch and a <a href="7400.xhtml" title="7400">74HC00</a> quad NAND gate, based on the specific order that the traces enter the epoxy blob. The latch, just like in the discrete logic mappers that use it, latches the bottom 3 bits of the data bus when it is written to. (Below, we call the latched form of D0→Q0, D1→Q1, and D2→Q2). The NAND gates are arranged to calculate
+</p>
+<pre>(MMC3 PRG A16 out) = M16 (for brevity)
+(PRG ROM A16 in) = Q0·Q1 + Q2·M16 = Q̿0̿·̿Q̿1̿ ̅·̅ ̅Q̿2̿·̿M̿1̿6̿
+(PRG ROM A17 in) = (CHR ROM A17 in) = Q2
+</pre>
+<p>Further testing has indicated that the internal products (Q0 NAND Q1, Q2 NAND M16) are brought out to test pads for factory verification.
+</p><p>The fourth NAND gate is used to invert CIC +RESET to generate 74'161 /CLEAR.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 21/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:809-1!*!0!!en!*!* and timestamp 20160208225049 and revision id 11693
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

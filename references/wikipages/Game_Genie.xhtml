@@ -1,0 +1,101 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Game Genie</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Game Genie</h1><div class="article">
+<p>The <b>Game Genie</b> is a enhancement cart for the NES designed by Camerica and distributed by Galoob and Camerica.  It functions as a pass-thru, with a 72 pin <a href="Cartridge_connector.xhtml" title="Cartridge connector">cartridge connector</a> connecting it to the NES, and a 72 pin cartridge slot for a game to be inserted into.  When plugged in between a game and the NES and turned on, it provides a simple interface to enter up to three cheat codes, which then modify the behavior of the game.
+</p><p>Game Genie is not currently assigned a <a href="Mapper.xhtml" title="Mapper">mapper</a> number (which would be &quot;tools&quot; when it is assigned).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Technical"><span class="tocnumber">1</span> <span class="toctext">Technical</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Master_Control_.28.248000.29"><span class="tocnumber">2.1</span> <span class="toctext">Master Control ($8000)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Address_High_.28.248001.2C_.248005.2C_.248009.29"><span class="tocnumber">2.2</span> <span class="toctext">Address High ($8001, $8005, $8009)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Address_Low_.28.248002.2C_.248006.2C_.24800a.29"><span class="tocnumber">2.3</span> <span class="toctext">Address Low ($8002, $8006, $800a)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Compare_.28.248003.2C_.248007.2C_.24800b.29"><span class="tocnumber">2.4</span> <span class="toctext">Compare ($8003, $8007, $800b)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Replace_.28.248004.2C_.248008.2C_.24800c.29"><span class="tocnumber">2.5</span> <span class="toctext">Replace ($8004, $8008, $800c)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Unknown_.28.24FFF0.2C_.24FFF1.29"><span class="tocnumber">2.6</span> <span class="toctext">Unknown ($FFF0, $FFF1)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Pattern_Tables"><span class="tocnumber">3</span> <span class="toctext">Pattern Tables</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Technical">Technical</span></h2>
+<p>The Game Genie works by intercepting CPU reads and replacing the game cart's response with its own response.  It can intercept any three addresses in CPU $8000:$FFFF and respond with a single replacement for each.  To make the tool more compatible with bank-switching, each of the three codes has an option compare value which can be used to only replace the byte if the original byte matches the compare, hopefully limiting the cheat to functioning on the desired bank.
+</p><p>When first booted, the Game Genie presents its own 4KiB PRG ROM and a series of simple gates masquerading as a CHR ROM.  The included PRG ROM runs code to show a simple code entry user interface.  When the user presses Start, the cheat values are written to memory mapped registers, and then another register is written which switches the Game Genie into game mode, where the attached game cart's CHR and PRG is passed through, save whatever code replacements were defined.  The Game Genie remains in game mode until power cycled, and will respond to no further writes.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Master_Control_.28.248000.29">Master Control ($8000)</span></h3>
+<pre>7  bit  0
+---- ----
+.DDD CCCE
+ ||| ||||
+ ||| |||+- Master enable: write 1 then 0 to switch into game mode.
+ ||| +++-- Compare enable for each of the three codes
+ +++------ Disable each of the three codes
+</pre>
+<p>Bit 1 and 4 correspond to the code at $8001:$8004.
+</p>
+<h3><span class="mw-headline" id="Address_High_.28.248001.2C_.248005.2C_.248009.29">Address High ($8001, $8005, $8009)</span></h3>
+<pre>7  bit  0
+---- ----
+.AAA AAAA
+ ||| ||||
+ +++-++++- Bits 8:14 of address for this cheat (Bit 15 fixed to 1)
+</pre>
+<h3><span class="mw-headline" id="Address_Low_.28.248002.2C_.248006.2C_.24800a.29">Address Low ($8002, $8006, $800a)</span></h3>
+<pre>7  bit  0
+---- ----
+AAAA AAAA
+|||| ||||
+++++-++++- Bits 0:7 of address for this cheat
+</pre>
+<h3><span class="mw-headline" id="Compare_.28.248003.2C_.248007.2C_.24800b.29">Compare ($8003, $8007, $800b)</span></h3>
+<pre>7  bit  0
+---- ----
+CCCC CCCC
+|||| ||||
+++++-++++- Compare value for this cheat (write 0 if unused?)
+</pre>
+<h3><span class="mw-headline" id="Replace_.28.248004.2C_.248008.2C_.24800c.29">Replace ($8004, $8008, $800c)</span></h3>
+<pre>7  bit  0
+---- ----
+RRRR RRRR
+|||| ||||
+++++-++++- Replacement value for this cheat
+</pre>
+<h3><span class="mw-headline" id="Unknown_.28.24FFF0.2C_.24FFF1.29">Unknown ($FFF0, $FFF1)</span></h3>
+<p>The Game Genie rom writes 0 to $FFF0, $FFF1, $FFF0 in that sequence.
+</p>
+<h2><span class="mw-headline" id="Pattern_Tables">Pattern Tables</span></h2>
+<p>When game mode is inactive, the Game Genie generates <a href="PPU_pattern_tables.xhtml" title="PPU pattern tables">PPU pattern tables</a> through PPU $0000:$1fff by the following method:
+</p>
+<pre>When PPU A2 = 1:
+  PPU A4 =&gt; PPU D4:D7
+  PPU A5 =&gt; PPU D0:D3
+When PPU A2 = 0:
+  PPU A6 =&gt; PPU D4:D7
+  PPU A7 =&gt; PPU D0:D3
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/nesgg.txt" rel="nofollow">NESGG.TXT</a> - Game Genie Code Format, by Benzene 1997-7-10.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.050 seconds
+Real time usage: 0.054 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1330-1!*!0!!en!*!* and timestamp 20160208224949 and revision id 10473
+ -->
+</div></body></html>

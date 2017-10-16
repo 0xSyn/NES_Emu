@@ -1,0 +1,245 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NSF2</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NSF2</h1><div class="article">
+<p><br/>
+<b>NSF 2</b> is a proposed extension to the <a href="NSF.xhtml" title="NSF">NSF</a> file format. It is intended to be backward compatible with the original NSF, provide IRQ timer functionality, and allow track times and other metadata to be contained.
+</p><p>It is currently an unfinished proposal. Currently Nintendulator partially supports it. See link below for reference.
+</p><p>The goals are:
+</p>
+<ul><li> IRQ support</li>
+<li> &quot;no return&quot; init addresses</li>
+<li> information block</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#New_header_fields"><span class="tocnumber">1</span> <span class="toctext">New header fields</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#IRQ_support"><span class="tocnumber">2</span> <span class="toctext">IRQ support</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Non-returning_INIT"><span class="tocnumber">3</span> <span class="toctext">Non-returning INIT</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Metadata"><span class="tocnumber">4</span> <span class="toctext">Metadata</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Reference"><span class="tocnumber">5</span> <span class="toctext">Reference</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="New_header_fields">New header fields</span></h2>
+<table class="datatable">
+<tr>
+<th> offset </th>
+<th> length </th>
+<th> type </th>
+<th> description
+</th></tr>
+<tr>
+<td> $005 </td>
+<td> 1 </td>
+<td> BYTE </td>
+<td> Version number: $02 (was $01)
+</td></tr>
+<tr>
+<td> $07C </td>
+<td> 1 </td>
+<td> BYTE </td>
+<td> NSF 2.0 feature enables (was $00)
+<ul><li> bit 0: if set, enable IRQ features</li>
+<li> bit 1: if set, allow a non-returning init address</li>
+<li> bit 2: if set, allow play calling to be disabled</li>
+<li> bit 3-6: still 0</li>
+<li> bit 7: if set, a metadata block follows the NSF data</li></ul>
+</td></tr>
+<tr>
+<td> $07D </td>
+<td> 3 </td>
+<td> WORD </td>
+<td> Length of NSF data block in bytes, LSB first, up to $100000 (was $000000)
+</td></tr></table>
+<h2><span class="mw-headline" id="IRQ_support">IRQ support</span></h2>
+<p>NSF 2 files are allowed to use three IRQ sources:
+</p>
+<ul><li> <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a> IRQ</li>
+<li> <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">APU Frame Counter</a> IRQ</li>
+<li> A new cycle-counting interval timer at $401B-$401D, handled much as a mapper IRQ</li></ul>
+<p>A program using IRQ MUST write to $4017 to enable the interval timer IRQ and to reset the frame IRQ.
+</p><p>The interval timer has three readable and writable ports:
+</p>
+<ul><li> $401B: Lower 8 bits of the 16-bit timer reload value</li>
+<li> $401C: Upper 8 bits of the 16-bit timer reload value</li>
+<li> $401D: Control register. Clearing bit 0 stops the timer and holds it in reset; setting it to 1 starts it.</li></ul>
+<p>In NSF 2 files using IRQ, $FFFE and $FFFF (the IRQ vector) are treated as readable and writable.
+A program using IRQ MUST write to these locations before enabling IRQ.
+Writes to $FFFE and $FFFF do not affect the NSF data; they are separate bytes of RAM.
+</p><p>For IRQ support, I figured allowing the use of frame IRQs and DPCM IRQs just like on the NES, and then a 16 bit IRQ timer which would be connected to the CPU in the usual way (via its IRQ input).
+</p><p>This would allow a real NES to play 2.0 NSFs using say a PowerPak or similar.
+</p><p>The timer would decrement at the CPU clock rate, whether it be NTSC or PAL rate (so 1.79MHz or 1.66MHz or so).
+</p><p>The counter is a modulus N counter and has the following behaviour:
+</p><p>When the counter is off (whenever 401d bit 0 is clear) it is constantly being reloaded with the values in 401b/401c, and the counter IRQ flag is cleared.
+</p><p>When the counter is on (401d bit 0 is set), it will decrement once per CPU cycle. When it hits 0, it is reloaded from 401b/401c, the IRQ flag is set and an IRQ is asserted.
+</p><p>This means an IRQ will be generated every N+1 clock cycles, where N is the value loaded into the counter. (it is N+1 because 0 is counted too).
+</p><p>To clear the IRQ flag, you read 401d. I should probably put the IRQ flag at bit 7 (read only) to allow easy testing of IRQ source.
+</p><p>Code might look like this:
+</p>
+<pre>
+
+timervalue:  .equ 01fffh       ;desired # of cpu cycles minus 1
+
+starttimer: LDA #000h
+               STA 0401dh         ;reset and shut off timer in case it was on
+
+               LDA #&lt;irqvector
+               STA 0fffeh           ;store interrupt vector low of our handler
+               LDA #&gt;irqvector
+               STA 0ffffh            ;store interrupt vector high
+
+               LDA #&lt;timervalue
+               STA 0401bh         ;low byte of timer value
+               LDA #&gt;timervalue
+               STA 0401ch         ;high byte of timer value
+
+               LDA #0c0h
+               STA 04017h         ;turn off frame IRQs
+               LDA 04015h         ;ack any pending DPCM IRQ if, it exists
+               CLI                     ;enable IRQs
+
+               LDA #01h
+               STA 0401dh         ;turn the timer on
+               RTS
+
+stoptimer: SEI                    ;turn off IRQs
+                LDA #000h
+                STA 0401dh        ;turn timer off
+                RTS
+
+irqvector:  &lt;perform our interrupt code here&gt;
+                ....
+                ....
+               
+                LDA 0401dh        ;reading 401d resets IRQ flag
+                RTI                    ;return from interrupt
+
+
+alternatively, if you wish to determine WHAT caused the IRQ (if you're using more than one source) you'd do something like this...
+
+irqvector:   BIT 0401dh        ;bit 7 indicates we have a timer IRQ waiting
+                 BPL +
+                 JSR timer           ;if bit 7 was set, call timer subroutine
+               + BIT 04015h
+                 BPL +
+                 PHP                   ;save flags if we have DPCM int.
+                 JSR dpcm           ;if bit 7 was set, call DPCM sub
+                 PLP
+               + BVC +
+                 JSR frame          ;bit 6 of 4015 = frame IRQ
+               + RTI                    ;exit interrupt
+
+timer:        &lt;do stuff here&gt;
+                 RTS
+
+dpcm:        &lt;do stuff here&gt;
+                 RTS
+
+frame:        &lt;do stuff here&gt;
+                  RTS
+
+</pre>
+<p>There's a lot of ways to skin this cat, but this is one particular method.  The idea is to read the status regs to figure out which source caused the interrupt, then run code to service it, then go back and check the other sources just in case one of them also needs servicing.
+</p><p>Like the APU period timers and the MMC3 scanline timer, the NSF2 cycle timer includes both the 0 and the reload value in its sequence of states.
+When it hits 0, the NEXT clock performs a reload.
+</p><p>For example, when the reload value is $0010, the counter would have a period of 17 CPU cycles:
+</p><p>10, 10, 10, [Enable now] 0F, 0E, 0D, 0C, ..., 02, 01, 00, 10*, 0F, 0E, 0D, 0C, ...
+</p><p>where * denotes the IRQ flag becoming true.
+</p>
+<h2><span class="mw-headline" id="Non-returning_INIT">Non-returning INIT</span></h2>
+<p>An NSF with a non-returning INIT takes more or less complete control of the CPU.
+In effect, the INIT address becomes the reset vector, and the PLAY address becomes the NMI vector.
+If the IRQ feature is also in use, IRQ has its vector at $FFFE-$FFFF as above.
+</p>
+<h2><span class="mw-headline" id="Metadata">Metadata</span></h2>
+<p>The optional metadata block allows an NSF to carry the following additional metadata:
+</p>
+<ul><li> Longer title, author, and copyright fields</li>
+<li> UTF-8 encoding for wider language support</li>
+<li> Separate field for ripper</li>
+<li> Lengths of tracks</li>
+<li> Possibility of separate track, author, and copyright fields</li></ul>
+<p>The metadata is placed at the end so that pre-NSF 2 players will correctly ignore it by placing it at the end of the NSF data.
+Files MUST also contain data in the original title, author, and copyright fields for compatibility with pre-NSF 2 tools.
+</p><p>Kev's proposal uses a somewhat TIFF-like chunked format for metadata
+</p>
+<table class="datatable">
+<tr>
+<th> offset </th>
+<th> length </th>
+<th> type </th>
+<th> description
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 1 </td>
+<td> BYTE </td>
+<td> record type
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 2 </td>
+<td> WORD </td>
+<td> record length
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 1 </td>
+<td> BYTE </td>
+<td> track number to which this record applies, or $FF for all tracks
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> N </td>
+<td> variant </td>
+<td> record data
+</td></tr>
+<tr>
+<td> N + 4 </td>
+<td> 1 </td>
+<td> BYTE </td>
+<td> next record type...
+</td></tr></table>
+<p>Records would be one after another, and a record of 4 $00 bytes would signify the end of the data.
+</p>
+<ul><li> $00: last record (length 0)</li>
+<li> $01: title (1 line)</li>
+<li> $02: composer (1 line)</li>
+<li> $03: copyright (1 line)</li>
+<li> $04: ripper (1 line)</li>
+<li> $05: Length (in units to be determined)</li>
+<li> $06: Type (background music, jingle, or sound effect; values to be determined)</li>
+<li> $07: Additional description (UTF-8, for example: &quot;Entry 7, cover of 'Breaking the Law' by Judas Priest&quot;)</li></ul>
+<p>All strings are UTF-8; players should indicate an error for characters that they cannot display.
+For example, a hardware player supporting only ASCII might replace any run of bytes with the high bit set with �.
+</p><p>To reduce duplication of data, track $FF is a wildcard indicator, which populates fields that don't have a more specific value for a particular track:
+</p>
+<ul><li> composer, track $FF, jimbob</li>
+<li> title, track 0, my first song</li>
+<li> title, track 1, my second song</li>
+<li> title, track 2, a song by someone else</li>
+<li> composer, track 2, billy</li>
+<li> title, track 3, another song</li></ul>
+<p>This would set the composer of tracks 0, 1, and 3 to jimbob.
+</p><p>This format should be easy for a hardware player to parse.
+If you prefer to enter metadata as JSON, XML, or the like, create a tool that parses your metadata and stuffs it at the end of the NSF.
+</p>
+<h2><span class="mw-headline" id="Reference">Reference</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=6&amp;t=7304" rel="nofollow">NSF 2.0 forum discussion</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.046 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:952-1!*!0!!en!*!* and timestamp 20160208225650 and revision id 11932
+ -->
+<p class="categories">Categories: <a href="Category_File_formats.xhtml">File formats</a>, <a href="Category_Audio.xhtml">Audio</a></p></div></body></html>

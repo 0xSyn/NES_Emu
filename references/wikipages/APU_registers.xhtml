@@ -1,0 +1,169 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU registers</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU registers</h1><div class="article">
+<p>The following memory-mapped registers are used by the <a href="APU.xhtml" title="APU">NES APU</a>. They are write-only except $4015 which is read/write. Unused registers aren't listed.
+</p>
+<table class="tabular">
+<tr>
+<th> Address </th>
+<th> <tt>7654.3210</tt> </th>
+<th> Function
+</th></tr>
+<tr>
+<td colspan="2"> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse 1 channel</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4000</b> </td>
+<td> <tt>DDLC NNNN</tt> </td>
+<td> <a href="APU_Pulse.xhtml" title="APU Pulse">Duty</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">loop envelope</a>/<a href="APU_Length_Counter.xhtml" title="APU Length Counter">disable length counter</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">constant volume</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">envelope period/volume</a>
+</td></tr>
+<tr>
+<td> <b>$4001</b> </td>
+<td> <tt>EPPP NSSS</tt> </td>
+<td> <a href="APU_Sweep.xhtml" title="APU Sweep">Sweep unit</a>: enabled, period, negative, shift count
+</td></tr>
+<tr>
+<td> <b>$4002</b> </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> <a href="APU_Pulse.xhtml" title="APU Pulse">Timer low</a>
+</td></tr>
+<tr>
+<td> <b>$4003</b> </td>
+<td> <tt>LLLL LHHH</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter load</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">timer high</a> (also resets <a href="APU_Pulse.xhtml" title="APU Pulse">duty</a> and starts <a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td colspan="2"> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse 2 channel</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4004</b> </td>
+<td> <tt>DDLC NNNN</tt> </td>
+<td> <a href="APU_Pulse.xhtml" title="APU Pulse">Duty</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">loop envelope</a>/<a href="APU_Length_Counter.xhtml" title="APU Length Counter">disable length counter</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">constant volume</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">envelope period/volume</a>
+</td></tr>
+<tr>
+<td> <b>$4005</b> </td>
+<td> <tt>EPPP NSSS</tt> </td>
+<td> <a href="APU_Sweep.xhtml" title="APU Sweep">Sweep unit</a>: enabled, period, negative, shift count
+</td></tr>
+<tr>
+<td> <b>$4006</b> </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> <a href="APU_Pulse.xhtml" title="APU Pulse">Timer low</a>
+</td></tr>
+<tr>
+<td> <b>$4007</b> </td>
+<td> <tt>LLLL LHHH</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter load</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">timer high</a> (also resets <a href="APU_Pulse.xhtml" title="APU Pulse">duty</a> and starts <a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td colspan="2"> </td>
+<td> <b><a href="APU_Triangle.xhtml" title="APU Triangle">Triangle channel</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4008</b> </td>
+<td> <tt>CRRR RRRR</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter disable</a>/<a href="APU_Triangle.xhtml" title="APU Triangle">linear counter control</a>, <a href="APU_Triangle.xhtml" title="APU Triangle">linear counter reload value</a>
+</td></tr>
+<tr>
+<td> <b>$400A</b> </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> <a href="APU_Triangle.xhtml" title="APU Triangle">Timer low</a>
+</td></tr>
+<tr>
+<td> <b>$400B</b> </td>
+<td> <tt>LLLL LHHH</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter load</a>, <a href="APU_Triangle.xhtml" title="APU Triangle">timer high</a> (also reloads <a href="APU_Triangle.xhtml" title="APU Triangle">linear counter</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td colspan="2"> </td>
+<td> <b><a href="APU_Noise.xhtml" title="APU Noise">Noise channel</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$400C</b> </td>
+<td> <tt>--LC NNNN</tt> </td>
+<td> <a href="APU_Envelope.xhtml" title="APU Envelope">Loop envelope</a>/<a href="APU_Length_Counter.xhtml" title="APU Length Counter">disable length counter</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">constant volume</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">envelope period/volume</a>
+</td></tr>
+<tr>
+<td> <b>$400E</b> </td>
+<td> <tt>L--- PPPP</tt> </td>
+<td> <a href="APU_Noise.xhtml" title="APU Noise">Loop noise</a>, <a href="APU_Noise.xhtml" title="APU Noise">noise period</a>
+</td></tr>
+<tr>
+<td> <b>$400F</b> </td>
+<td> <tt>LLLL L---</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter load</a> (also starts <a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td colspan="2"> </td>
+<td> <b><a href="APU_DMC.xhtml" title="APU DMC">DMC channel</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4010</b> </td>
+<td> <tt>IL-- FFFF</tt> </td>
+<td> IRQ enable, loop sample, frequency index
+</td></tr>
+<tr>
+<td> <b>$4011</b> </td>
+<td> <tt>-DDD DDDD</tt> </td>
+<td> Direct load
+</td></tr>
+<tr>
+<td> <b>$4012</b> </td>
+<td> <tt>AAAA AAAA</tt> </td>
+<td> Sample address <tt>%11AAAAAA.AA000000</tt>
+</td></tr>
+<tr>
+<td> <b>$4013</b> </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Sample length <tt>%0000LLLL.LLLL0001</tt>
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4015</b> </td>
+<td> <tt>---D NT21</tt> </td>
+<td> <b><a class="mw-redirect" href="APU.xhtml" title="APU Status">Control</a></b>: <a href="APU_DMC.xhtml" title="APU DMC">DMC enable</a>, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter enables</a>: <a href="APU_Noise.xhtml" title="APU Noise">noise</a>, <a href="APU_Triangle.xhtml" title="APU Triangle">triangle</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">pulse 2</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">pulse 1</a> (write)
+</td></tr>
+<tr>
+<td> <b>$4015</b> </td>
+<td> <tt>IF-D NT21</tt> </td>
+<td> <b><a class="mw-redirect" href="APU.xhtml" title="APU Status">Status</a></b>: <a href="APU_DMC.xhtml" title="APU DMC">DMC interrupt</a>, <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame interrupt</a>, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter status</a>: <a href="APU_Noise.xhtml" title="APU Noise">noise</a>, <a href="APU_Triangle.xhtml" title="APU Triangle">triangle</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">pulse 2</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">pulse 1</a> (read)
+</td></tr>
+<tr>
+<td> <b>$4017</b> </td>
+<td> <tt>SD-- ----</tt> </td>
+<td> <b><a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">Frame counter</a></b>: 5-frame sequence, disable frame interrupt (write)
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.073 seconds
+Real time usage: 0.074 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:175-1!*!0!*!*!*!* and timestamp 20160208224738 and revision id 3657
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

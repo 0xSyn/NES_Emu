@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Vs. System</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Vs. System</h1><div class="article">
+<p>Is there a way to detect if the game is running on Vs. System or not (which also works in emulators)? In case I wanted to make up the game which can work coin-operated arcade game but also works without it if you put it in a ordinary cartridge? --Zzo38
+</p>
+<dl><dd>You can always make a separate version for Vs. boards. It's not like you can plug a Famicom cartridge into a Vs. board or anything. But unless you're using Duck Hunt or Tennis, one problem with Vs. is that the colors are all scrambled, making it much harder to do decent fades. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 16:17, 7 October 2012 (MDT)</dd></dl>
+<dl><dd>The page mentions that certain revisions of the PPU (RC2C05*) return a magic number in the lower bits of $2002 read. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 16:47, 7 October 2012 (MDT)
+<dl><dd>But then those are the ones that swap $2000 and $2001, so you pretty much have to make special builds for the 2C05. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 18:11, 7 October 2012 (MDT)
+<dl><dd>If they swap $2000 and $2001 then you might be able to detect that using sprite 0 hit, somehow. Switches might also be used to configure the palettes in case 2C04 is used. Does 2C04 have any differences from 2C03 other than the colors? I know you cannot put a Famicom cartridge in the Vs. boards, but you could replace the chips manually, or make a clone hardware with the same purpose of $4016,$4017,$4020 registers (I don't know if it might be possible to build such a clone hardware into a cartridge, controller ports, and expansions ports, to wire to the coin slots and so on?). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 18:47, 7 October 2012 (MDT)
+<dl><dd>If you're replacing chips manually, and you know what kind of board you're replacing them into, why not just use a build specifically made for one Vs. board? I don't see the advantage of having one ROM image that runs on several fundamentally incompatible system boards. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 18:59, 7 October 2012 (MDT)
+<dl><dd>Well I suppose yes it could be made separate ROM images, one for not Vs. System, and other for the Vs. System boards. (Using conditional compiling, perhaps?). I still was interested to know if there is ways to detect it, though. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 19:39, 7 October 2012 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd>Between the part where you'll need 5 additional builds (4 palette scrambles, 1 $2000/$2001 swap) to accommodate all the different Vs hardware, and only have the ability to detect the last, it's not clear to me how to feasible autodetection (as opposed to different builds, DIP switch settings, asking the user, &amp;c)—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 10:36, 8 October 2012 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd>I suppose best would be to simply have one normal ROM image and one arcade ROM image (using macros and conditional compilation), and to use either the switches (three would be needed, unless there is a way to distinguish 2C03 from 2C04 in general, in which case two is sufficient) or a service menu to select the palette? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 15:34, 28 April 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Coin_acknowledgement">Coin acknowledgement</span></h2>
+<p>I finally noticed what seems to be the official Vs System schematic­—<a class="external free" href="http://nesdev.com/VSSCHEM.pdf" rel="nofollow">http://nesdev.com/VSSCHEM.pdf</a> —and noticed that the coin acknowledgement seems to actually only be NAND3($4000-$5FFF,A5,M2) (gate 4D, coordinates E5 or J5). Which means that the register 1- should react to reads as well as writes, and 2- is duplicated all over the place. I don't suppose we can get any kind of verification; should I just update the document?
+</p><p>Also, there's something funny involving $6000-$7FFF, OUT1, and IRQs in this schematic. It looks like the two CPUs have 2KiB of RAM that can be shared depending on the primary CPU's OUT1 pin. I guess Nocash already figured that out, though: <a class="external free" href="http://problemkaputt.de/everynes.htm#vssystemcontrollers" rel="nofollow">http://problemkaputt.de/everynes.htm#vssystemcontrollers</a> —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:20, 18 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Service_button">Service button</span></h2>
+<p>If anyone makes a new game using Vs. System, then instead of simply adding a credit, it can be used when held down, displaying a diagnostics menu (containing such things as number of games played since power on, idle time, palette test, $2002 readout, high score, last score, last game duration), and if other buttons are pushed while it is active, to do other things:
+</p>
+<ul><li> A and B = Change the colors. This can be used if the game is running on a different 2C04 variant than normal (altenatively, three switches can be used, especially if there is no save game file, then using the switches would be better). Sound test could also be done using these buttons.</li>
+<li> START = Add a credit.</li>
+<li> SELECT = Discard all credits.</li>
+<li> Up/Down/Left/Right = Edit the high score.</li></ul>
+<p>This is just a suggestion and you can make the game do whatever you want with this; it doesn't have to be the above. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 15:34, 28 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Moniker">Moniker</span></h2>
+<p>The kit manual (see link the Wiki page) refers to the device as the VS. UniSystem, not the Vs. Unisystem.  Should we fix the character casing on the Wiki page?
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:900-1!*!0!!*!*!* and timestamp 20160615215627 and revision id 12645
+ -->
+</div></body></html>

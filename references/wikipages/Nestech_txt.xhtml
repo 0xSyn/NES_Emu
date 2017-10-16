@@ -1,0 +1,126 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Nestech.txt</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Nestech.txt</h1><div class="article">
+<p><b>Nintendo Entertainment System Documentation</b>, sometimes referred to as <b>nestech.txt</b> after its filename, is a document written between 1996 and 2000 by <a href="User_Koitsu.xhtml" title="User:Koitsu">Koitsu</a> that synthesized the public knowledge about the NES hardware at the time it was written. Much of it is still believed accurate; some isn't. This document explains how the public's understanding of NES hardware changed between the publication of version 2.00 of nestech.txt and the wiki.nesdev.com era. It is of largely historical interest but may help with onboarding of users who arrived at NESdev.com through nestech.txt.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Acronymns"><span class="tocnumber">2</span> <span class="toctext">Acronymns</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#CPU"><span class="tocnumber">3</span> <span class="toctext">CPU</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#PPU"><span class="tocnumber">4</span> <span class="toctext">PPU</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#pAPU"><span class="tocnumber">5</span> <span class="toctext">pAPU</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Joypads.2C_paddles.2C_expansion_ports"><span class="tocnumber">6</span> <span class="toctext">Joypads, paddles, expansion ports</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Memory_Mapping_Hardware"><span class="tocnumber">7</span> <span class="toctext">Memory Mapping Hardware</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Registers"><span class="tocnumber">8</span> <span class="toctext">Registers</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#File_Formats"><span class="tocnumber">9</span> <span class="toctext">File Formats</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Programming_the_NES"><span class="tocnumber">10</span> <span class="toctext">Programming the NES</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Emulation"><span class="tocnumber">11</span> <span class="toctext">Emulation</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Reference_Material"><span class="tocnumber">12</span> <span class="toctext">Reference Material</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<dl><dt>A. Disclaimer</dt>
+<dd>Implies that Nintendo was still offering NES development tools in the Nintendo 64 era.</dd>
+<dt>E. &quot;Thank You&quot;s</dt>
+<dd>People listed here who are active in the NES scene as of 2015 include at least Kevtris, Loopy and Memblers.</dd></dl>
+<h2><span class="mw-headline" id="Acronymns">Acronymns</span></h2>
+<p>[sic]
+</p>
+<dl><dt>pAPU</dt>
+<dd>&quot;There is no physical IC for audio processing nor generation&quot; may mislead. True, the APU is not a discrete component, but it's certainly physical, taking up roughly half the CPU die.</dd>
+<dt>SPR-RAM</dt>
+<dd>&quot;OAM&quot; (object attribute memory) is more common nowadays.</dd>
+<dt>SRAM</dt>
+<dd>Used to mean &quot;save RAM&quot;, but means &quot;static RAM&quot; on NESdev Wiki. Going forward, the term &quot;battery RAM&quot; should be unambiguous.</dd>
+<dt>Dandy</dt>
+<dd>Misspelling of Dendy, a PAL famiclone distributed by Steepler that uses a <a href="Clock_rate.xhtml" title="Clock rate">long post-render period</a> to improve Famicom game compatibility.</dd></dl>
+<h2><span class="mw-headline" id="CPU">CPU</span></h2>
+<dl><dt>A. General Information</dt>
+<dd>The PAL CPU clock frequency is that of the Dendy, which uses a /15 divider. The PAL NES CPU is 6.25% slower because of its /16 divider.</dd></dl>
+<h2><span class="mw-headline" id="PPU">PPU</span></h2>
+<dl><dt>B. Memory Map</dt>
+<dd>The size of Name Tables in the RAM Memory Map is given as $800, which is enough for two. Some carts have one, three, or four; see <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a>. The following Programmer Memory Map is correct.</dd>
+<dt>F. Palettes</dt>
+<dd>The &quot;lookup table&quot; interpretation is valid for RGB PPUs (2C03-2C05), but the underlying relationship with composite and YUV used by the 2C02 and 2C07 wasn't confirmed until later.</dd>
+<dt>G. Name Table Mirroring</dt>
+<dd>The explanation of horizontal mirroring doesn't distinguish addresses in nametable memory ($000-$7FF) from where they are mapped in ($2000-$23FF and $2800-$2BFF). It could be misinterpreted as implying $2400 as the second nametable, which is correct for vertical arrangement on the Super NES and Game Boy Advance but not on the NES.</dd>
+<dt>H. Palette Mirroring</dt>
+<dd>$3F00 defines background color only when rendering is on or the current VRAM address is outside $3F00-$3FFF. If rendering is off, and the VRAM address points into the palette, the color at the current VRAM address is used as the background color. Ignoring this can cause rainbow glitches during updates.</dd>
+<dt>I. Background Scrolling</dt>
+<dd>The example uses &quot;A&quot; and &quot;B&quot; in a screen-aligned, and the implicit &quot;arrangement&quot; naming convention isn't clearly distinguished from the &quot;mirroring&quot; convention used later on. The position of nametables #2 and #3 ($2800 and $2C00) above nametables #0 and #1 ($2000 and $2400) is equally valid but not common outside this document. The reason for &quot;negative&quot; values (later) isn't explained.</dd>
+<dt>J. Screen and Sprite Layering</dt>
+<dd>The diagram implies the naive understanding of <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">PPU sprite priority</a>, not the more nuanced understanding needed to get occlusion working in <i>Super Mario Bros. 3</i> and <i>RHDE</i>.</dd>
+<dt>K. Sprites and SPR-RAM</dt>
+<dd>The fact that OAM &quot;will gradually degrade&quot; was discovered early on, but we didn't know how rapid this was. It was discovered to be so fast that the PAL NES PPU enters a refresh pattern after the first 20 lines of vblank just to keep it from decaying.</dd>
+<dt>L. Sprite #0 Hit Flag</dt>
+<dd>The failure to detect at X=255 isn't mentioned.</dd>
+<dt>M. Horizontal and Vertical Blanking</dt>
+<dd>The diagram implies that the NTSC PPU generates a 263-line signal with 3 lines of post-render, 20 lines of vblank, and zero pre-render. (The correct values are 1, 20, and 1.) It also fails to mention that the vblank flag ($2002 bit 7) is cleared after it is read, which reinforces the incorrect NESticle interpretation of the vblank flag. (It also contradicts section 10, which describes this clearing correctly.) Nor is the 341-dot length of most scanlines mentioned.</dd>
+<dt>N. $2005/2006 Magic</dt>
+<dd>This section cites Loopy's &quot;<a class="mw-redirect" href="PPU_scrolling.xhtml" title="The skinny on NES scrolling">The skinny on NES scrolling</a>&quot;, which dates nestech.txt after &quot;Skinny&quot;.</dd>
+<dt>O. PPU Quirks</dt>
+<dd>It mentions the 1-byte lag and the lack thereof in palette memory, but it doesn't mention how bits 3-0 read back when grayscale mode ($2001 bit 0) is on.</dd></dl>
+<h2><span class="mw-headline" id="pAPU">pAPU</span></h2>
+<dl><dt>To be written.</dt>
+<dd>This dates nestech.txt before Brad Taylor's APU document. Frustration with lack of APU documentation was one of the things that drove <a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> toward the GBA scene for several years, another being the lack of any way to run homebrew on an NES without <a href="Mask_ROM_pinout.xhtml#Converting_a_donor_board" title="Mask ROM pinout">modding donors</a>.</dd></dl>
+<h2><span class="mw-headline" id="Joypads.2C_paddles.2C_expansion_ports">Joypads, paddles, expansion ports</span></h2>
+<dl><dt>A. General Information</dt>
+<dd>&quot;Signature&quot; applies only to the Four Score and Satellite accessories. Its mention outside that context is misleading. In addition, authentic controllers do not return 0 after the report; they return 1.</dd>
+<dt>D. Paddles</dt>
+<dd>The description of D1 of $4016 and D1 of $4017 is for the Famicom version of the <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a>. The NES version uses D3 and D4 of $4017 instead.</dd>
+<dt>H. Expansion ports</dt>
+<dd>Holding the strobe output ($4016 bit 0) high doesn't allow &quot;communicating with the expansion port.&quot; Some specialized controllers, such as the Power Glove, use the strobe for outgoing serial communication, but not nearly in the manner described here.</dd></dl>
+<h2><span class="mw-headline" id="Memory_Mapping_Hardware">Memory Mapping Hardware</span></h2>
+<p>This section cites FireBug's mappers.nfo, which dates nestech.txt after mappers.nfo.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<dl><dt>$2000 D6: PPU Master/Slave Selection</dt>
+<dd>Not &quot;unused&quot;. The &quot;slave mode&quot; ($2000 bit 6 = 1) enables output of bits 3-0 of the current color on four PPU pins, which later NES RGB mods use. The &quot;master mode&quot; ($2000 bit 6 = 0) uses these pins as an input.</dd>
+<dt>$2001 D7-D5: Full Background Colour (when D0 == 1)</dt>
+<dd>This only applies &quot;Colour Intensity&quot; to the grayscaled output. And plenty of games &quot;use more than one type&quot;.</dd>
+<dt>$2001 D0</dt>
+<dd> Display Type</dd>
+<dd>It doesn't specify how the monochrome display is achieved, which is by ANDing all values read from the palette with $30.</dd>
+<dt>$2002 D5: Scanline Sprite Count</dt>
+<dd>Implies that the bit turns off once <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a> no longer finds 8 sprites on the &quot;current scanline&quot;. It actually turns off at the end of vblank. Nor does it mention the pathological diagonal fetch pattern, which was discovered later.</dd>
+<dt>$2002 D4: VRAM Write Flag</dt>
+<dd>Does not exist on the NES. May have been a misinterpretation of open bus behavior.</dd>
+<dt>$2003 | SPR-RAM Address Register (W)</dt>
+<dd>Does not mention glitches in the OAM DRAM controller that corrupt OAM when this is written.</dd>
+<dt>$4015, $4017</dt>
+<dd><a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">APU Frame Counter</a> was not understood, and it was confused with the Vertical Clock Signal coming from the PPU.</dd></dl>
+<h2><span class="mw-headline" id="File_Formats">File Formats</span></h2>
+<dl><dt>A. iNES Format</dt>
+<dd>Describes the iNES 0.7 variant of the <a href="INES.xhtml" title="INES">.NES format</a>, without the Vs. bit, PRG RAM size, or TV system bytes.</dd></dl>
+<h2><span class="mw-headline" id="Programming_the_NES">Programming the NES</span></h2>
+<dl><dt>C. PPU Notes</dt>
+<dd>The vblank wait that it recommends (spinning on $2002) is affected by a race condition. It's useful <a href="PPU_power_up_state.xhtml" title="PPU power up state">during power-up</a>, but afterward an <a href="NMI.xhtml" title="NMI">NMI</a> handler should be used. (It doesn't mention power-up restrictions at all.) And you don't have to &quot;clear the internal VRAM address via $2006&quot;, which appears to be a misguided attempt to set the scroll. True, licensed games do this, but just because licensed games do something doesn't mean you have to <a class="extiw" href="https://en.wikipedia.org/wiki/Cargo_cult_programming" title="wikipedia:Cargo cult programming">join the same cargo cult</a> with your own original programs. Licensed programmers didn't have perfect docs either. Make sure to finish your VRAM update code and <a href="PPU_scrolling.xhtml#The_common_case" title="PPU scrolling">set the scroll position</a> before the end of vertical blanking, and it'll be fine.</dd></dl>
+<h2><span class="mw-headline" id="Emulation">Emulation</span></h2>
+<dl><dt>A. General Information</dt>
+<dd>Open bus section contradicts itself. Reads from a nonexistent SRAM are said to &quot;return data previously left on the bus&quot;, but emulators are advised to &quot;return 0&quot; instead. Returning 0 breaks <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">tricky games</a> that (intentionally or unintentionally) rely on values read from open bus, such as  <i>Low G Man</i> and <i>Earthworm Jim 2</i>. And the initial state of internal RAM at cold boot isn't all zeroes.</dd>
+<dt>B. CPU Notes</dt>
+<dd>The 6502 core is correctly identified as the NMOS version. But the <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">CPU unofficial opcodes</a> are called &quot;bad&quot;, and it recommends that emulators &quot;ignore&quot; them. Treating all of them as synonymous with $EA (1 byte NOP) breaks a few later licensed games.</dd></dl>
+<h2><span class="mw-headline" id="Reference_Material">Reference Material</span></h2>
+<p>Full of broken links, which we can forgive.
+</p>
+<ul><li><a class="external text" href="http://nesdev.com/ndox200.zip" rel="nofollow">Nintendo Entertainment System documentation</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.074 seconds
+Real time usage: 0.077 seconds
+Preprocessor visited node count: 84/1000000
+Preprocessor generated node count: 136/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1485-1!*!0!!en!*!* and timestamp 20160712140215 and revision id 12704
+ -->
+<p class="categories">Categories: <a href="Category_History.xhtml">History</a></p></div></body></html>

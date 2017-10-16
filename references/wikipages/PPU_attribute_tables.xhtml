@@ -1,0 +1,94 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU attribute tables</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU attribute tables</h1><div class="article">
+<p>The <b>attribute table</b> is a 64-byte array at the end of each <a href="PPU_nametables.xhtml" title="PPU nametables">nametable</a> that controls which palette is assigned to each part of the background.
+</p><p>Each attribute table, starting at $23C0, $27C0, $2BC0, or $2FC0, is arranged as an 8x8 byte array:
+</p>
+<pre>
+       2xx0    2xx1    2xx2    2xx3    2xx4    2xx5    2xx6    2xx7
+     ,-------+-------+-------+-------+-------+-------+-------+-------.
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xC0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xC8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xD0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xD8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xE0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xE8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xF0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+2xF8:|   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     `-------+-------+-------+-------+-------+-------+-------+-------'
+</pre>
+<div style="float:right">
+<pre>,---+---+---+---.
+|   |   |   |   |
++ D1-D0 + D3-D2 +
+|   |   |   |   |
++---+---+---+---+
+|   |   |   |   |
++ D5-D4 + D7-D6 +
+|   |   |   |   |
+`---+---+---+---'
+</pre>
+</div>
+<p>Each byte controls the palette of a 32x32 pixel part of the nametable and is divided into four 2-bit areas.
+Each area covers four tiles or 16x16 pixels, the size of a [?] block in <i>Super Mario Bros.</i>
+Given palette numbers topleft, topright, bottomleft, bottomright, each in the range 0 to 3, the value of the byte is
+</p>
+<pre>value = (topleft &lt;&lt; 0) | (topright &lt;&lt; 2) | (bottomleft &lt;&lt; 4) | (bottomright &lt;&lt; 6)
+</pre>
+<p>Most games for the NES use 16x16 pixel <s>metatiles</s> (size of <i>Super Mario Bros.</i> ? block) or 32x32 pixel metatiles (width of <b>SMB</b> pipe) in order to align the map with the attribute areas.
+</p>
+<h2><span class="mw-headline" id="Worked_example">Worked example</span></h2>
+<div style="clear: both">
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_bg_with_attr_grid_png.xhtml"><img alt="" class="thumbimage" height="512" src="../wiki-images/Thwaite_bg_with_attr_grid.png" width="640"/></a>  <div class="thumbcaption">The background in the game <i><a href="Thwaite.xhtml" title="Thwaite">Thwaite</a></i>, with an overlaid attribute grid.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_attrs_png.xhtml"><img alt="" class="thumbimage" height="512" src="../wiki-images/Thwaite_attrs.png" width="640"/></a>  <div class="thumbcaption">Each 16x16 pixel color area has one of four color sets assigned to it, and one byte controls four color areas.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_palette_color_sets_png.xhtml"><img alt="" class="thumbimage" height="96" src="../wiki-images/Thwaite_palette_color_sets.png" width="640"/></a>  <div class="thumbcaption">The background palette is divided into four color sets.</div></div></div></div>
+<p>The byte at $23F2 has color set 3 at top left, 1 at top right, 2 at bottom left, and 2 at bottom right.
+Thus its attribute is calculated as follows:
+</p>
+<pre>value = (topleft &lt;&lt; 0) | (topright &lt;&lt; 2) | (bottomleft &lt;&lt; 4) | (bottomright &lt;&lt; 6)
+      = (3       &lt;&lt; 0) | (1        &lt;&lt; 2) | (2          &lt;&lt; 4) | (2           &lt;&lt; 6)
+      = $03            | $04             | $20               | $80
+      = $A7
+</pre>
+</div>
+<h2><span class="mw-headline" id="Glitches">Glitches</span></h2>
+<p>Nametable tiles are 8x8 pixels, and the left-side clipping window in <a href="PPU_registers.xhtml" title="PPU registers">PPUMASK ($2001)</a> is 8 pixels wide, but attribute table tiles are 16x16 pixels. This is why games that use the horizontal or vertical <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> mode for diagonal <a href="PPU_scrolling.xhtml" title="PPU scrolling">scrolling</a> often have color artifacts on one side of the screen (on the right side in <i>Super Mario Bros. 3</i>; on the trailing side of the scroll in <i>Kirby's Adventure</i>; at the top and bottom in <i>Super C</i>).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.107 seconds
+Real time usage: 0.114 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:23-1!*!0!!*!5!* and timestamp 20160208220044 and revision id 9818
+ -->
+</div></body></html>

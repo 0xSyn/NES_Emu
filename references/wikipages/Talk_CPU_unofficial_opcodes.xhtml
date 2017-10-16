@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:CPU unofficial opcodes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:CPU unofficial opcodes</h1><div class="article">
+<h2><span class="mw-headline" id="Puzznic_on_a_Z80.3F">Puzznic on a Z80?</span></h2>
+<p>Regarding <s>this edit</s>: what does the arcade version running on a Z80 have to do with the NES version? I understand the idea that sharing code that may have been written for 65C02 could cause this particular problem (which is why I didn't just remove that bit of conjecture; though I am starting to regret not removing it), but I don't understand why the arcade version being a Z80 would be pertinent to 6502 code having a weird NOP in it. There were 15 or so different ports of this game, and the relevant ones to inspect might include the C64 and PCE versions, as well as Apple II prototype. If you're looking to make some connection, you could research the opcodes used in these versions, but at this point that's a lot of work to chase down a speculative footnote about why there's a hidden bug (?) in the game.
+</p><p>Is it even a bug? Does the code seem to expect a BIT #imm functionality? Answering these two questions seems like a prerequisite for even making the 65C02 speculation in the first place. Every bad opcode's gonna mean &quot;something&quot; on another variant... Never mind, I think I'm just going to go the rest of the way and trim it entirely. We haven't justified the connection, at face value. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 21:14, 29 May 2016 (MDT)
+</p>
+<dl><dd>Took a quick look at it and I don't think there's any reason to speculate about BIT #imm. It's actually BIT #0 ($89 $00), and A will always be $01 when it is hit. Follow the subsequent code any flags this would set are overwritten before they are used. Wondered if it might be an accidentally misspelled LDA #0 ($A9 $00) because it's in a block of code that's a bunch of &quot;LDA #imm + STA zp&quot; stuff, but trying this destroys the game, so it's clearly not supposed to be that. In this particular case BIT #imm is just as much of a NOP as the 6502 version. I don't think it makes worthwhile speculation. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 00:26, 30 May 2016 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.028 seconds
+Real time usage: 0.094 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1646-1!*!0!*!*!*!* and timestamp 20160530141713 and revision id 12435
+ -->
+</div></body></html>

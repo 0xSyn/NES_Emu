@@ -1,0 +1,82 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:MMC3</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:MMC3</h1><div class="article">
+<p>The hardware section of this page needs to be tidied up a bit, because right now, it's just a giant infodump with little organization. :P --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 13:09, 4 June 2012 (PDT)
+</p><p>There's some documentation about the differences between MMC3 revisions here: <a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?t=6467" rel="nofollow">[1]</a>
+I'll add them in at some point, if nobody else does. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 18:00, 19 April 2011 (UTC)
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#PRG_RAM_bank_behavior"><span class="tocnumber">1</span> <span class="toctext">PRG RAM bank behavior</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#MMC3_scanline_counter"><span class="tocnumber">2</span> <span class="toctext">MMC3 scanline counter</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Oversize_.22non-compliance.22.3F"><span class="tocnumber">3</span> <span class="toctext">Oversize &quot;non-compliance&quot;?</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#PRG_RAM_protection"><span class="tocnumber">4</span> <span class="toctext">PRG RAM protection</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="PRG_RAM_bank_behavior">PRG RAM bank behavior</span></h2>
+<p>When PRG RAM is accessed via $6000-$7FFF, what does the MMC3 put on the upper PRG ROM address lines? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 23:24, 20 April 2011 (UTC)
+</p>
+<dl><dd> Ideally, the MMC3 wouldn't put anything on the ROM address lines. :P Either way, if the CPU is accessing $6000-7FFF, I'd imagine whatever chip is selected would see %011xxxxx xxxxxxxx on its address lines. RAM would just see the x part, and whatever mapper-supplemented upper address lines if the RAM is bankswitched. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 04:05, 21 April 2011 (UTC)
+<dl><dd> When I hear &quot;wouldn't put anything&quot;, I think &quot;high impedance&quot;. It appears you claim that if $6000-$7FFF is accessed, the PRG A13 through PRG A18 outputs from the mapper are high-Z, not the value in either PRG bank register. Do I misunderstand? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 22:42, 21 April 2011 (UTC)
+<dl><dd> The simplest thing electrically is to never disable the address drivers. Given how MMC3 works I'd guess it drives the upper address lines high. <a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 18:08, 22 April 2011 (UTC)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd> Actually, I'm not entirely sure I understand what you're saying. When you say PRG ROM address lines, I thought you meant the address lines on the actual ROM. Yes, even if the CPU is accessing $6000-7FFF, the ROM would still see the address bus, but it won't do anything with it, because the mapper won't select the chip. That's what I meant by &quot;wouldn't put anything on the ROM address lines&quot;. Even though it's physically putting something there, the ROM is disabled so it never does anything with it.</dd></dl></dd></dl>
+<dl><dd><dl><dd> If you're talking about what happens with WRAM, I imagine the chip wouldn't have the upper three address lines, unless the RAM is bankswitched. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 07:33, 25 April 2011 (UTC)
+<dl><dd>I was asking whether or not it's feasible to build PRG RAM bankswitching by running the same upper address lines out of the mapper to both PRG ROM and PRG RAM. When PRG RAM is being accessed, what is the voltage on each of the upper address lines PRG A18-A13 (pins 23, 25, 21, 18, 22, 19) coming out of the MMC3? Does it depend on either of the PRG ROM bank values, or is it a constant value? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 13:25, 25 April 2011 (UTC)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd> Ahh, ok, that makes more sense. The MMC3 outputs different things to the most significant rom bits depending on what address is being accessed, so it's entirely possible that the circuitry involved selects between a couple different latches, depending on bits 14 and 13 of the PRG address. If it uses an ordinary decoder, then it's possible that bit 15 goes to the /OE of whatever multiplexer it uses.</dd>
+<dd> TL;DR: The &quot;banks&quot; for $0000-$7FFF may mirror the bank configuration of $8000-$FFFF, or it may not. Either way, accessing $6000-7FFF is like accessing $E000-FFFF (which is fixed to the last bank), so whether it looks at A15 or not, you'll probably end up with all 1's across A13+. This is just my speculation though. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 19:56, 25 April 2011 (UTC)</dd></dl></dd></dl></dd></dl></dd></dl>
+<p><br/>
+</p>
+<dl><dd> I can't say for sure, because very complex equipment would be needed to verify this, but it's <i>extremely</i> likely that the MMC3's PRG-banking ciruitery completely ignores the state of A15. That is, acessing any adress with A15 low will have the higher adress lines pointed to the same latch as if the corresponding adress with A15 high was used. In particular, when acessing $6000-$7fff, the MMC3 will act like when acessing $e000-$ffff (which means all adress lines will go high, pointing to the &quot;last-hardwired&quot; bank).</dd></dl>
+<dl><dd>This hypothesis is especially robust when you consider there is no A15 on the cart edge, so you have to invert PRG /CE to get the state of A15. Also, when the PPU fetches nametable area ($2000-$2fff), the MMC3 does bank the CHR-ROM exactly like when acessing the corresponding area with A13 low, that is $0000-$1fff, and the TLSROM and TKSROM boards makes a good use of this.</dd></dl>
+<dl><dd>This is valid not only for the MMC3 but for 99% of mappers in fact : Anyone would be crazy to add extra circuitry in their chips so that it acts differently when the CPU is adressing space where the ROM will never respond anyways. (Probably only mappers such as the MMC5 or FME7, which can map ROM and RAM anywhere regardless of the state of A15, will not follow this rule). So, no, sorry but no PRG-RAM switching would be possible on MMC3. But any mapper that was not designed to switch PRG-RAM, but that was designed to switch PRG-ROM at $e000-$ffff could be abused to also switch RAM. Bregalad 11:39, 1 May 2011 (UTC)</dd></dl>
+<h2><span class="mw-headline" id="MMC3_scanline_counter">MMC3 scanline counter</span></h2>
+<p>What happens when both background and sprites are fetched from $1xxx? --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 02:28, 8 November 2011 (UTC)
+</p>
+<dl><dd> I think that should disable IRQs, because A12 will never be 0 for longer than 4 pixels —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:12, 25 January 2015 (MST)</dd></dl>
+<dl><dd><dl><dd> Even during the dummy fetches at the end of a line (337-340)? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 16:03, 25 January 2015 (MST)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> Depends on what the idle cycle's address is. If A12 is 0 during it, then A12 could be low for 9 pixels. And then that gets into the question below… —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 17:40, 25 January 2015 (MST)</dd></dl></dd></dl></dd></dl>
+<p><i>The MMC3 scanline counter is based entirely on PPU A12, triggered on rising edges (after the line remains low for a sufficiently long period of time)</i>
+Which period of time exactly? —anonymous contributer from <s>94.254.14.226</s>
+</p>
+<dl><dd> Without clocking it manually, it's hard to say, but certainly not more than 64 pixels (because it still works if the pattern tables are swapped). See also <a class="external free" href="https://github.com/christopherpow/nes-test-roms/tree/master/mmc3_irq_tests" rel="nofollow">https://github.com/christopherpow/nes-test-roms/tree/master/mmc3_irq_tests</a> ; test 3.4 there also requires that it be no longer than ≈22cy, but that's about the same as 64 pixels.  —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:01, 25 January 2015 (MST)
+<dl><dd>I performed some tests using my own dumper and real cartridge. Seems like IRQ counter working when there are 2 rising edges of M2 between falling and rising of A12. It's the only one necessary condition. —<s>83.149.9.144</s> 07:25, 31 January 2015 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Oversize_.22non-compliance.22.3F">Oversize &quot;non-compliance&quot;?</span></h2>
+<p>I could use a clarification about <s>this edit</s> by Lidnariq. If the ROM size is &lt;= 512K the top two data bits <i>have</i> to be ignored when writing the bank register. What possible incompatibility could result from implementing an 8-bit register? Why would an emulator choose to present an error to the user instead of simply supporting the oversize ROM? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 13:59, 30 May 2015 (MDT)
+</p>
+<dl><dd> For the same reason that NES emulators shouldn't implement a plugin that takes in arbitrary video and quantizes it to the NES output: the hardware that does that doesn't exist. Same problem with ROM hacks that only work in Nesticle. Emulators must implement the restrictions of the hardware, because otherwise you end up with crap like the aforementioned ROM hack where because they don't understand <i>why</i> they're not allowed to do that, they include patches to hack FCEUXDSP and Nintendulator to support their BS oversize ROM, and no-one can ever make a reproduction that uses an MMC3. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:55, 30 May 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Ahh, the extension seems extremely logical and straightforward to me, but after checking FCEUX, Nestopia, and Nintendulator, I can see that all of them prevent oversized MMC3. I don't really understand the motivation for this (does it create other software incompatibility?), but the lack of emulator support is good reason to remove oversize support from the infobox. Hadn't read the description of that romhack either (was just part of a merge), but it's kind of interesting that not much supports it. I'll revise. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 15:15, 30 May 2015 (MDT)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="PRG_RAM_protection">PRG RAM protection</span></h2>
+<p>I just noticed that <i>Zoda's Revenge</i> uses some strange writes to $A001 (RAM protection).
+</p>
+<pre>   LDA #$30
+   STA $A001
+</pre>
+<p>or 
+</p>
+<pre>   LDA #$B0
+   STA $A001
+</pre>
+<p>So RAM should be protected. But it writes to RAM after this.
+</p><p>FCE ultra actually ignores state of $A001 for mapper #4 and game is working fine but it crashes on my cartridge (no sound after start, crashes later). Is it game using some other revision of MMC3? Or MMC3 actually using other bits in $A001 too? Or maybe this game using some weird wiring of MMC3? <s>94.253.14.226</s> 01:20, 22 September 2015 (MDT)
+</p>
+<dl><dd> Startropics and Startropics 2 use the <a href="MMC6.xhtml" title="MMC6">MMC6</a>, not the <a href="MMC3.xhtml" title="MMC3">MMC3</a>, which is the same except for this write protect behaviour. Unfortunately both are assigned to iNES mapper 4, so emulators that chose to implement the write protection have a compatibility conflict. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 01:39, 22 September 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Thank you very much! <s>94.253.14.226</s> 01:47, 22 September 2015 (MDT)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.067 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:581-1!*!0!!en!*!* and timestamp 20160208224229 and revision id 11686
+ -->
+</div></body></html>

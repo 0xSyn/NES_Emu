@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bandai M60001-0115P pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bandai M60001-0115P pinout</h1><div class="article">
+<p>(Bandai) Mitsubishi M60001-0115P: 28-pin 0.6&quot; PDIP (<a href="INES_Mapper_188.xhtml" title="INES Mapper 188">iNES Mapper 188</a>)
+</p>
+<pre>            .--\/--.
+    blue -&gt; |01  28| -- +5V
+  yellow -&gt; |02  27| -&gt; internal PRG /CE
+  orange -&gt; |03  26| -&gt; external PRG /CE
+ PPU A11 -&gt; |04  25| -&gt; VRAM A10
+ PPU A10 -&gt; |05  24| -&gt; LatchedD6
+ ROM R/W -&gt; |06  23| -&gt; PRG A14
+ /ROMSEL -&gt; |07  22| -&gt; PRG A15
+ CPU A14 -&gt; |08  21| -&gt; PRG A16
+ CPU A13 -&gt; |09  20| -&gt; PRG A17
+ CPU A12 -&gt; |10  19| ??
+ CPU D0  &lt;&gt; |11  18| &lt;- CPU D6
+ CPU D1  &lt;&gt; |12  17| &lt;- CPU D5
+ CPU D2  &lt;&gt; |13  16| &lt;- CPU D4
+     GND -- |14  15| &lt;- CPU D3
+            '------'
+</pre>
+<p>The color names were silkscreened on the PCB. They are the wires from the microphone.
+</p><p>This mapper has the dubious distinction of failing to prevent bus conflicts but also being too complex to comfortably say &quot;it's
+just a couple silicon dice in a single package&quot;, unlike the <a href="Sunsoft_1_pinout.xhtml" title="Sunsoft 1 pinout">Sunsoft-1</a> and
+<a href="Sunsoft_2_pinout.xhtml" title="Sunsoft 2 pinout">-2</a>. The described functionality is equivalent to <i>five</i> 74xx ICs. (74377, ½ 74139, ½ 7420, ½ 74244, 7432)
+</p><p>The M60001 prefix was used by Mitsubishi for custom orders: the M60001-0103P was
+used in the Joyball for the Famicom: <a class="external autonumber" href="http://www.raphnet.net/electronique/famicom_to_nes/index_en.php" rel="nofollow">[1]</a>
+</p><p>See also: <a class="external text" href="http://seesaawiki.jp/famicomcartridge/d/%a5%ab%a5%e9%a5%aa%a5%b1%a5%b9%a5%bf%a5%b8%a5%aa" rel="nofollow">naruko's writeup</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1334-1!*!0!*!*!*!* and timestamp 20160208224802 and revision id 8364
+ -->
+</div></body></html>

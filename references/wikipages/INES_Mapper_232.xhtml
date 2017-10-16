@@ -1,0 +1,59 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 232</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 232</h1><div class="article">
+<p><br/>
+</p>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 232          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ Quattro Adventure
+ Quattro Sports
+ Quattro Arcade
+ 
+ 
+ Notes:
+ --------------------------
+ This is another Camerica/Codemasters mapper like <a href="INES_Mapper_071.xhtml" title="INES Mapper 071">071</a>.  Like 071, this mapper also involves a custom lockout
+ defeat circuit which is mostly unimportant for emulation purposes.  Details will not be mentioned here, but
+ are outlined in Kevtris' Camerica Mappers documentation.
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+  $8000-BFFF:   [...B B...]   PRG Block Select
+ 
+  $C000-FFFF:   [.... ..PP]   PRG Page Select
+     
+ 
+ PRG Setup:
+ ---------------------------
+ 
+ Pages are taken from the 64k block currently selected by $8000.
+ 
+       $8000   $A000   $C000   $E000  
+     +---------------+---------------+
+     |     $C000     |     { 3 }     |
+     +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:712-1!*!0!*!*!*!* and timestamp 20160208225454 and revision id 10209
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a>, <a href="Category_NES_2_0_mappers_with_submappers.xhtml">NES 2.0 mappers with submappers</a></p></div></body></html>

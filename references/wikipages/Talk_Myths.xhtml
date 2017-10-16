@@ -1,0 +1,84 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Myths</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Myths</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Picture"><span class="tocnumber">1</span> <span class="toctext">Picture</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#All_three_color_emphasis_bits_with_color_0D"><span class="tocnumber">2</span> <span class="toctext">All three color emphasis bits with color 0D</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Source_the_myths"><span class="tocnumber">3</span> <span class="toctext">Source the myths</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Some_Facts_that_not_many_people_knew_.28or_mention_at_least.29"><span class="tocnumber">4</span> <span class="toctext">Some Facts that not many people knew (or mention at least)</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Picture">Picture</span></h2>
+<p>- An offhand comment. Wouldn't be better to change &quot;NTSC NES picture&quot; term into &quot;NTSC NES PPU output&quot;? Perhaps the second one sounds more technical than the original though. A NES picture could be anything like the straight thing: a picture of a NES unit, for example. When you say &quot;PPU output&quot;, we have something more concrete. Yup, it's a picture, or &quot;frame&quot;, but not &quot;a picture of the NES&quot;, anyways... :) --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> 23:11, 2 February 2011 (UTC)
+</p>
+<dl><dd>I was under the impression that &quot;picture&quot; is the word used in video standards for any time that isn't a blanking period. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 19:31, 8 September 2015 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="All_three_color_emphasis_bits_with_color_0D">All three color emphasis bits with color 0D</span></h2>
+<p>According to my interpretation of various posts in this forum thread: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=8623" rel="nofollow">sony trinitron + color emphasis bits = scrambled image?</a>, if you use all three color emphasis bits and use color 0D, that color's signal may dip too low and confuse some TVs:
+</p>
+<dl><dd>In the first post, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=90009#p90009" rel="nofollow">GradualGames says</a> he used all three color emphasis bits to dim the screen and got &quot;an extremely ugly bunch of scanline artifacts&quot; on his Sony Trinitron. In a later post, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=90039#p90039" rel="nofollow">Sdwave says</a> he also saw &quot;some bending&quot; using one of the palette demos on a Trinitron and suggested using 3F <del>[= 1D*]</del> for black instead of 0D. Later, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=90556#p90556" rel="nofollow">GradualGames confirms</a> using 0E <del>[= 1D*]</del> instead of 0D got rid of the artifacts.</dd></dl>
+<p><del>*According <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a>, the xE and xF colors send the same signal level as 1D.</del>
+</p><p><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=90015#p90015" rel="nofollow">Lidnariq points out</a> that mathematically, even color 1D with all three color emphasis bits dips lower than the normal black:
+</p>
+<dl><dd><i>If all preemphasis bits are set, then color 1D (&quot;black&quot;) becomes blacker-than-black and 01-0C no longer decode to a valid RGB color from the received YIQ values (Their brightness is approximately equal to unattenuated color 1D). So if it looks like scanlines restarting all over the place, maybe that's why?</i></dd></dl>
+<p><del>But based on Sdwave's and GradualGames's comments, 1D with all three color emphasis bits was fine on their Trinitrons.</del>
+</p><p>--<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 21:10, 23 June 2013 (MDT)
+</p>
+<dl><dd>Color emphasis does not get applied for phases $xE or $xF, and it similarly does not get applied during horizontal (x=270-327) or vertical (y=241-261) blanking. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 17:23, 24 June 2013 (MDT)
+<dl><dd>Then someone's going to have to make a test ROM to run on an RGB system that displays emphasized $1D on a field of $0F to see how readable it is. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:41, 24 June 2013 (MDT)
+<dl><dd>I think I remember someone mentioning having a complete set of Kevtris's 2C03/4/5 dumps except for the &quot;grey&quot;scale dump for one of them; I'm pretty certain on those PPUs it indicated colors xE and xF being collapsed to x0 when the bit was set. (&quot;snarky quotes&quot; because scrambled palettes cause it to not necessarily be grey) I don't know if the greyscale bit is masked with the same flag as the emphasis bits, though. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:51, 24 June 2013 (MDT)
+<dl><dd>It doesn't tell you what it does with emphasis bits though. I too agree someone should test the function of emphasis bits of $xE and $xF on RGB systems (such as a Famicom Titler or Famicom TV). It would be useful to know, if making a emulator, hardware clone, or a game that uses the emphasis bits. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 01:47, 25 June 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<p><br/>
+Quietust, thanks for pointing out that using the emphasis bits doesn't attenuate the xE and xF colors, I didn't notice or remember that part of the <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> page. Everyone else, I was talking about an NTSC PPU sending a signal to an NTSC TV, not an RGB PPU sending a signal to an RGB monitor. My original point was that the Myths page says
+</p>
+<blockquote><b>Myth:</b> Enabling more than one color emphasis bit at once will damage the PPU, or at least cause the TV to lose sync.</blockquote>
+<p>I agree it's unlikely that enabling multiple emphasis bits will damage the PPU, but according to the forum posts I mentioned, it does seem possible to confuse a TV's line sync if you use all three color emphasis bits and color 0D. And as Lidnariq posted, mathematically <b>(edit:) the attenuated</b> 1D level is lower that the black level, so perhaps using it with all three emphasis bits might confuse some TVs too?
+</p><p><small>(Above, I misbelieved the xE and xF colors would also be attenuated and so they'd have the same level as an attenuated 1D, so I misinterpreted Sdwave's and GradualGames's comments as equivalent to saying 1D was a safe color to use with all three color emphasis bits. Now I understand the xE and xF colors aren't affected by the color emphasis attenuation, so it's clear they have the same signal level as an unattenuated 1D and they're safe to use with all three emphasis bits. It's not clear how the attenuated 1D level behaves with actual TVs (I didn't see 1D mentioned when the posters described problems), but mathematically I can see it might be wise to avoid it.)</small>
+</p><p>If others agree the forum posts are describing line sync problems (or can recreate the results), maybe the Myths page can be revised to clarify it's possible to confuse (some?) TV's line sync when using all three emphasis bits with color 0D (and maybe color 1D too?).
+</p><p>--<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 20:38, 25 June 2013 (MDT)
+</p><p><small>added links to specific posts, struck out misunderstandings in my original post above --<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 22:13, 25 June 2013 (MDT)</small>
+</p>
+<h2><span class="mw-headline" id="Source_the_myths">Source the myths</span></h2>
+<p>I would be a great idea to know where the myths comes from, adding sources and link to wrong information whenever possible. This would also avoid people &quot;making up their own myths&quot;, just for the fun of it.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 05:21, 26 May 2015 (MDT)
+</p>
+<dl><dd>This any better? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:58, 26 May 2015 (MDT)</dd></dl>
+<p>Why does the text appear so tiny on screen?
+</p>
+<dl><dd>Bavi H mistyped a closing tag on small text above. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 09:49, 26 May 2015 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Some_Facts_that_not_many_people_knew_.28or_mention_at_least.29">Some Facts that not many people knew (or mention at least)</span></h2>
+<p>Using an interrupt (the one used by the sample player, you could generate an interrupt on any screen line (200). In each H-blank you could write 3 colours (and since the 4th is transparent... so for something like a Horizontal shooter, levels with different coloured background images top &amp; bottom. I even wrote a converter that took a picture drawn in OCP Art Studio+ (I just copied how OPC worked on the ST and adapted for images up to 256 colours) fixed to the 53 colours (0-C,10-1C,20-2c,30-3C &amp; OD) available. On each line, I allowed the artist to change 3 colours and after it was drawn, the OCP scanned and came up with an image highlighting errors. These were solved by placing sprites over the error. Sprites could actually be multiplexed so on any lines with no change, I could reuse a sprite OR swap a palette. What can I say... it was as good as you can expect and taught me a useful lesson which made it into Tomb Raider Gameboy colour where I got 2304 colours on screen and pretty damned good images of the whole team. Access is A+B+R+U... or +D (I forget the last one BUT if you hit all 4 in the same frame, about 20 hidden pictures were added - we had to use the biggest cart but were left with 200 odd K.... so as well as the title screen, there were more &amp; better images—(<a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Signatures" title="wikipedia:Wikipedia:Signatures">unsigned</a> post by <s>213.106.56.145</s> at 11:52, 7 September 2015)
+</p>
+<dl><dd> There is <b>not</b> enough time to change even <b>one</b> palette entry during hblank, let alone three. Rendering must be disabled after pixel 256 (in order to be invisible) and enabled before pixel 320 (in order to be invisible). This is only 64 pixels, or 21⅓ CPU cycles. It takes 27 cycles to update a single palette entry:
+<ul><li> first half of PPUADDR (free, can happen before rendering is disabled)</li>
+<li> disable rendering (1 cycle: the first 3 cycles are free)</li>
+<li> second half of PPUADDR (4 cycles)</li>
+<li> palette update (4 cycles)</li>
+<li> load three new values for next three writes (6 cycles, can be skipped if some of the values are duplicates)</li>
+<li> first half of PPUADDR to reset screen to correct location on screen after render stop (4 cycles)</li>
+<li> second half of PPUADDR to &amp;c (4 cycles)</li>
+<li> enable rendering (4 cycles)</li></ul></dd>
+<dd> In the specific (and unlikely) case where you can fit all the values that you'll write into just the 6502's three registers, you still have the completely unavoidable 2 pixels of jitter, one more than you can spare.</dd></dl>
+<dl><dd> Possible workarounds:
+<ul><li> Blank scanlines</li>
+<li> Disable rendering early, as is done by the <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=139925#p139925" rel="nofollow">Indiana Jones and the Last Crusade title screen</a> losing any detail (it's now all the backdrop color) from 18 pixels in exchange for 6 CPU cycles. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 01:50, 8 September 2015 (MDT)</li></ul></dd></dl>
+<dl><dd><dl><dd>The practical rate of color replacement with zero artifacts is about one 3-color subpalette per blank line, or the entire background palette in 4 blank lines, or background and sprite palettes in 8 blank lines. So you can have separate palettes for a playfield and status bar, or for both players' playfields in a split-screen 2-player game. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 19:29, 8 September 2015 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> Ok, here's a goofy idea: generate <i>address</i> bus conflicts and the use the bonus cycle from page crossing; write the first value to PPUADDR, and then have four LDA $22F7,x. Externally drive R/W and some of A0..A2 low; also drive the data bus. This allows eight writes in 20 CPU cycles, which, if the timing is permissible to the PPU, should be enough to update 3 palette entries, or update 1 palette entry and do a full 2006-2005-2005-2006 scroll reset. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 02:01, 9 September 2015 (MDT)</dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.079 seconds
+Real time usage: 0.082 seconds
+Preprocessor visited node count: 41/1000000
+Preprocessor generated node count: 80/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:544-1!*!0!!en!*!* and timestamp 20160208224255 and revision id 11656
+ -->
+</div></body></html>

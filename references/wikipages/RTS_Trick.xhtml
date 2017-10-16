@@ -1,0 +1,321 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>RTS Trick</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>RTS Trick</h1><div class="article">
+<p>The <strong class="selflink">RTS Trick</strong> is one implementation of <a href="Jump_table.xhtml" title="Jump table">jump tables</a>, which are a neat way to avoid long, complicated branching code to subroutine calls.  It is easier to implement than a pile of branches, reads well, and saves bytes. In fact, the syscall dispatcher for the Apple IIGS toolbox (JSL $E10000) uses this same approach.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#When_to_use_the_RTS_Trick"><span class="tocnumber">1</span> <span class="toctext">When to use the RTS Trick</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#About_JSR_and_RTS"><span class="tocnumber">2</span> <span class="toctext">About JSR and RTS</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Using_RTS_as_a_jump_table"><span class="tocnumber">3</span> <span class="toctext">Using RTS as a jump table</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Step_1:_Return_Address_Table"><span class="tocnumber">3.1</span> <span class="toctext">Step 1: Return Address Table</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Step_2:_Table-friendly_Data_Format"><span class="tocnumber">3.2</span> <span class="toctext">Step 2: Table-friendly Data Format</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Step_3:_RTS_Trick_Launcher_subroutine."><span class="tocnumber">3.3</span> <span class="toctext">Step 3: RTS Trick Launcher subroutine.</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Potential_Pitfall"><span class="tocnumber">3.4</span> <span class="toctext">Potential Pitfall</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Unofficial-MagicKit_Macro"><span class="tocnumber">4</span> <span class="toctext">Unofficial-MagicKit Macro</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Games_that_use_the_RTS_Trick"><span class="tocnumber">5</span> <span class="toctext">Games that use the RTS Trick</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#See_also"><span class="tocnumber">6</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="When_to_use_the_RTS_Trick">When to use the RTS Trick</span></h2>
+<p>The RTS Trick is especially useful for anything that can be clearly expressed as a <a class="extiw" href="https://en.wikipedia.org/wiki/finite-state_machine" title="wikipedia:finite-state machine">finite-state machine</a>.
+</p><p>Sometimes a module or data format will have a large set of subroutines that will be invoked based on the value of a variable or a data read.  One example would be a textbox module for an RPG game.  In addition to the mundane displaying of letters you will likely need subroutines to perform various textbox-related tasks.  Some examples might be:
+</p>
+<ul><li>clear the textbox</li>
+<li>freeze the textbox (to wait for a button press, for example)</li>
+<li>insert a pause</li>
+<li>pluralize words (that is, add or omit an &quot;s&quot; based on a number in a case like: 1 *piece of gold/43 pieces of gold)</li>
+<li>play a sound</li>
+<li>close the textbox (end the dialogue)</li>
+<li>update a variable (set flags, add items to inventory, etc)</li>
+<li>pop up a yes-no box and prompt the player for a response</li>
+<li>etc..</li></ul>
+<p>Another example would be a music engine.  Your song data will have values that represent note values and note lengths, but your data format will also have opcodes that invoke subroutines to perform different tasks.  For example:
+</p>
+<ul><li>set a <i>segno</i>, or loop point (possibly more than one, so you can nest loops)</li>
+<li><i>dal segno</i>, or loop</li>
+<li>alter the pitch of a playing note</li>
+<li>change tempo</li>
+<li>silence a channel or otherwise set volume</li>
+<li>set volume envelope</li>
+<li>set sweep envelope</li>
+<li>set square duty</li>
+<li>apply vibrato</li>
+<li>etc.</li></ul>
+<p>The more opcode-invoked subroutines you have at your disposal, the more unwieldy branching code will become:
+</p>
+<pre>
+    lda (data_pointer), y   ;read a byte from the text data stream
+    bmi textbox_opcodes  ;let's say a value &gt;= #$80 indicates an opcode
+                         ;in our imaginary text data format
+    ;...do ordinary text stuff
+    
+textbox_opcodes:
+    cmp #$FF
+    bne not_end
+    jsr tb_end_dialogue
+    jmp end_of_opcodes
+not_end:
+    cmp #$FE
+    bne not_clear
+    jsr tb_clear_dialogue
+    jmp end_of_opcodes
+not_clear:
+    cmp #$FD
+    bne not_pluralize
+    jsr tb_pluralize_word
+    jmp end_of_opcodes
+not_pluralize:
+    cmp #$FC
+    bne not_add_inventory
+    jsr tb_add_inventory
+    jmp end_of_opcodes
+not_add_inventory:
+     
+    ...
+     
+    etc...
+</pre>
+<p>In the above code example, we read a byte from our data stream and then determine whether that byte represents a character of text or a <a class="extiw" href="https://en.wikipedia.org/wiki/control_character" title="wikipedia:control character">control character</a>.  If it's an opcode, we have to check which opcode.  If it FF?  no.  well is it FE?  no.  well is it FD?  crap.  how about FC?  The more opcodes you have, the more checks you have to do, and the more painful it will be to rearrange if you decide later to swap the values around. This is where jump tables can help, and the RTS Trick is one efficient way to make a jump table on 6502.
+</p>
+<h2><span class="mw-headline" id="About_JSR_and_RTS">About JSR and RTS</span></h2>
+<p>Before talking about the RTS Trick, we need to make clear how JSR and RTS work.  When you call a subroutine using JSR, two things happen:
+</p>
+<ul><li>the address of the last byte of the JSR (that is, the next instruction minus 1) is pushed onto the stack</li>
+<li>the program counter jumps to the subroutine indicated.</li></ul>
+<p>When the program encounters an RTS instruction, this happens:
+</p>
+<ul><li>an address is popped off the stack.</li>
+<li>the program counter jumps to this address + 1</li></ul>
+<pre>
+$C0E0: 20 00 80     JSR $8000
+$C0E3: A2 00        LDX #$00
+$C0E5: A0 00        LDY #$00
+
+$8000: A9 0F        LDA #$0F
+$8002: 8D 15 40     STA $4015
+$8005: 60           RTS
+</pre>
+<p>Let's run through this code.
+</p>
+<ul><li>The Program Counter is at $C0E0.</li>
+<li>We encounter a JSR instruction.  The address of the next instruction - 1 is pushed onto the stack.  The next instruction is $C0E3.  $C0E3 - 1 is $C0E2.  $C0, then $E2 are pushed onto the stack (note the order).  Then we jump to $8000.</li>
+<li>We load #$0F into the accumulator.</li>
+<li>We store the accumulator in $4015.</li>
+<li>We encounter an RTS instruction.  Two bytes are popped off the stack.  In this case, those two values will be E2 and C0.  The program counter jumps to this address + 1.  $C0E2 + 1 is $C0E3.  The Program Counter jumps to $C0E3, which is the instruction after our original JSR.</li>
+<li>We continue on with our program as normal from $C0E3.</li></ul>
+<p>The part we need to take note of for the RTS Trick is the fact that RTS expects the stack to have a destination address MINUS 1.  For the rest of this article, let's call this a return address.  The two byte return address should be positioned on the stack so that the low byte is popped first, then the high byte.  That's all we need to know:  Destination address minus 1.  Low byte popped first.
+</p>
+<h2><span class="mw-headline" id="Using_RTS_as_a_jump_table">Using RTS as a jump table</span></h2>
+<p>We said above that we want to avoid having a long chain of comparisons and branches, and that the <strong class="selflink">RTS Trick</strong> will help us do that.  So what is the RTS Trick?
+</p><p>The RTS Trick consists of a lookup table of return addresses.  You read a return address from this table, push it onto the stack, and then RTS.  It's really, really simple to understand with an example.  Let's use our textbox example above.  What do we need?
+</p>
+<ul><li>We need a table of return addresses</li>
+<li>We need a data format that will allow us to index into this table easily.</li>
+<li>We need a RTS Trick launcher subroutine (I'll tell you why below.  Don't worry, it's super-simple)</li></ul>
+<h3><span class="mw-headline" id="Step_1:_Return_Address_Table">Step 1: Return Address Table</span></h3>
+<p>This is really easy to make.  Assuming we already have a bunch of subroutines:
+</p>
+<pre>
+tb_end_dialogue:
+    ;do stuff
+    rts
+   
+tb_clear_textbox:
+    ;do stuff
+    rts
+   
+tb_pluralize_word:
+    ;check a number and add an &quot;s&quot; if it's &gt; 1
+    rts
+   
+tb_add_inventory:
+    ;do stuff
+    rts
+   
+tb_set_flag:
+    ;do stuff
+    rts
+  
+tb_insert_dramatic_pause:
+    ;do stuff
+    rts
+   
+tb_play_dramatic_sound:
+    ;do stuff
+    rts
+   
+tb_set_text_color:
+    ;do stuff
+    rts
+
+    ... etc
+</pre>
+<p>This is how our return address table will look:
+</p>
+<pre>
+tb_opcode_rts_table:
+     .word tb_end_dialogue-1
+     .word tb_clear_textbox-1
+     .word tb_pluralize_word-1
+     .word tb_add_inventory-1
+     .word tb_set_flag-1
+     .word tb_insert_dramatic_pause-1
+     .word tb_play_dramatic_sound-1
+     .word tb_set_text_color-1
+     .word ...etc
+</pre>
+<p>Finished.  That's it.  Recall that RTS will expect the address on the stack to be its destination - 1.  So we tack a minus one to all of our addresses in the table.
+</p>
+<h3><span class="mw-headline" id="Step_2:_Table-friendly_Data_Format">Step 2: Table-friendly Data Format</span></h3>
+<p>Our text engine reads a byte from our data stream.  It checks to see whether that value represents a letter or an opcode.  If it is an opcode, we want to turn that value into an index into our return address table.  Indexes start at 0 and go up.  The data format we have now, counting down from $FF probably won't be quite as convenient as one that counts up.  It doesn't really matter from where.  It could start at $80, or $C0, or $E0, or it could start from $00 and reach $1F (such as $0A for a new line).  For this example, let's keep it simple and choose $80.  Here is our new data format:
+</p>
+<pre>
+ $00-$7F: letters (a, b, c, d..etc)
+ $80-$FF(potentially): opcodes
+
+ Opcode list:
+ 
+ $80 = end dialogue
+ $81 = clear the textbox
+ $82 = pluralize a word
+ $83 = add an item to the character's inventory
+ $84 = set a flag
+ $85 = insert a pause
+ $86 = play a sound
+ $87 = set text color
+ $88 = add to gold total
+ $89 = subtract from gold total
+ $8A ... etc
+</pre>
+<p>This Data Format for the opcodes is very table-friendly.  It starts at $80 and goes up.  When we read a byte from our data stream and determine it to be an opcode, all we have to do is chop off bit7 to turn our value into a table index:
+</p>
+<pre>
+ $80 = %10000000
+ $81 = %10000001
+ $82 = %10000010
+ $83 = %10000011
+        |
+        +----------- if we chop off this bit7, we will get $00, $01, $02, $03, etc.
+                     That's easy.  Just AND with $7F (%01111111) 
+</pre>
+<p>Finished.  Step 2 Complete.
+</p>
+<h3><span class="mw-headline" id="Step_3:_RTS_Trick_Launcher_subroutine.">Step 3: RTS Trick Launcher subroutine.</span></h3>
+<p>This is easy.  We need a subroutine that will turn our data value into an index, read a return address from the table, push the values and RTS.
+</p>
+<pre>
+tb_opcode_launcher:
+    asl             ;we have a table of addresses, which are two bytes each. double that index.
+                    ;incidentally, this chops off bit 7 and stashes it in the carry.
+    tax
+    lda tb_opcode_rts_table+1, x    ;RTS will expect the low byte to be popped first,
+                                    ;so we need to push the high byte first
+    pha
+    lda tb_opcode_rts_table, x      ;push the low byte
+    pha
+    rts             ;this rts will launch our opcode subroutine.
+</pre>
+<p>That's it!
+</p>
+<h3><span class="mw-headline" id="Potential_Pitfall">Potential Pitfall</span></h3>
+<p>One point I would like to stress: your launcher must be a subroutine.  The opcode subroutines that you are RTS-launching all end in an RTS of their own.  Do you know where they will return?  Consider the following two examples:
+</p><p>The Right Way
+</p>
+<pre>
+tb_read_data:
+    lda (data_pointer), y
+    bmi opcode_stuff    ;if negative (bit7 set), we have an opcode
+    ;do normal text stuff here
+
+opcode_stuff:
+    jsr tb_opcode_launcher    ;key point!  This JSR will put a return address on the stack!
+                              ;When our opcode finishes execution, it will return to the right place!
+    iny
+    ;continue
+</pre>
+<p>The Wrong Way
+</p>
+<pre>
+tb_read_data:
+    lda (data_pointer), y
+    bmi opcode_stuff
+    ;do normal text stuff
+
+opcode_stuff:
+    and #$7F
+    asl
+    tax
+    lda tb_opcode_rts_table+1, x
+    pha
+    lda tb_opcode_rts_table, x
+    pha
+    rts ;the opcode return address is on the stack, but our starting point isn't.
+        ;When the opcode returns, our game will leave this subroutine entirely
+    iny ;and will never get here.
+</pre>
+<p>Let's assume that in both cases, the last INY instruction happens to be located at address space $D333.
+</p><p>In the first example, we JSR to our launcher.  The JSR will put $D332 on the stack and jump to our launcher.  Our launcher will read an opcode return address from our table and push it onto the stack.  Then our launcher will RTS, which will pull the opcode return address off the stack, add one, and jump there.  Our opcode will execute and return.  Our opcode's RTS will pull our D332 address off the stack, add one and jump there.  Good!  We made it back to our INY instruction.
+</p><p>In the second example, there is no JSR to our launcher.  No values are pushed on the stack to mark our place.  We read from the table and push an opcode return address onto the stack and RTS to it.  Our opcode executes and returns.  Our opcode's RTS will pull two bytes off the stack, but we have no idea what those two bytes are.  Usually, this will be the return address of whatever called our launcher, but if you have pushed something else onto the stack, it could return anywhere.  We are in big trouble.
+</p><p>So make sure your launcher is wrapped up in a subroutine and called via JSR, or that it is <a class="extiw" href="https://en.wikipedia.org/wiki/Tail_call" title="wikipedia:Tail call">otherwise the last thing in a subroutine</a>, and you will be safe.
+</p>
+<h2><span class="mw-headline" id="Unofficial-MagicKit_Macro">Unofficial-MagicKit Macro</span></h2>
+<p>In the <s>Unofficial-MagicKit</s> assembler, you may use a macro like the following:
+</p>
+<pre>
+	macro def_inst
+	macset 2,4,*
+	macset 3,4,?B
+	bank bank(instadl)
+	org instadl+(\1)
+	db low(\2-1)
+	org instadh+(\1)
+	db high(\2-1)
+	bank \3
+	org \2
+	endm
+</pre>
+<p>Note: This creates tables in a different format than mentioned above. It uses a separate table for the low-byte and high-byte, rather than putting them together. This avoids needing a shift operation (although you may also avoid a shift just by not defining any odd-numbered opcodes).
+</p><p>Now you may have a table like (they must be in the same 8K bank, and they should be aligned to a 256-byte page):
+</p>
+<pre>
+instadl	ds 256
+instadh	ds 256
+</pre>
+<p>And then before the subroutines that would be called in this way you can do, for example:
+</p>
+<pre>
+	def_inst 42
+</pre>
+<h2><span class="mw-headline" id="Games_that_use_the_RTS_Trick">Games that use the RTS Trick</span></h2>
+<ul><li>The Guardian Legend uses the RTS trick in its sound engine for opcodes.</li>
+<li><a href="Concentration_Room.xhtml" title="Concentration Room">Concentration Room</a> uses the RTS trick for three jump tables: one for the menu, one for the state of the board, and one for the state of the AI.</li>
+<li>Famicom Z-machine has two: one for Z-character decoding (which uses a state machine) and one for instruction decoding.</li>
+<li><a href="Attribute_Zone.xhtml" title="Attribute Zone">Attribute Zone</a> uses it for keyboard decoding in the level editor.</li>
+<li><a href="Haunted__Halloween__85.xhtml" title="Haunted: Halloween '85">Haunted: Halloween '85</a> uses it to call enemies' move handlers.</li>
+<li><s>240p test suite</s> has a jump table for main menu activities.</li>
+<li>Games using <s>Pently</s> audio engine version 5 or later use the RTS trick to process pattern opcodes that enable effects.</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<p>The <a href="Fixed_Bit_Length_Encoding.xhtml" title="Fixed Bit Length Encoding">Fixed Bit Length Encoding</a> article has an example of the <strong class="selflink">RTS Trick</strong> in action.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.145 seconds
+Real time usage: 0.150 seconds
+Preprocessor visited node count: 147/1000000
+Preprocessor generated node count: 284/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:269-1!*!0!!en!*!* and timestamp 20160626030116 and revision id 12669
+ -->
+</div></body></html>

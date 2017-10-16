@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 058</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 058</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 058          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ 68-in-1 (Game Star)
+ Study and Game 32-in-1
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+   $8000-FFFF:  A~[.... .... MOCC CPPP]
+     P = PRG page select
+     C = CHR page select (8k @ $0000)
+     O = PRG Mode
+     M = Mirroring (0=Vert, 1=Horz)
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+                $8000   $A000   $C000   $E000  
+              +-------------------------------+
+ PRG Mode 0:  |            &lt;$8000&gt;            |
+              +-------------------------------+
+ PRG Mode 1:  |     $8000     |     $8000     |
+              +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.007 seconds
+Real time usage: 0.007 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:660-1!*!*!*!*!*!* and timestamp 20160208225124 and revision id 7494
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

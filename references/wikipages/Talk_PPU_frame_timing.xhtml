@@ -1,0 +1,36 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:PPU frame timing</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:PPU frame timing</h1><div class="article">
+<pre>
+	   PPU      29780.7   29780.7  29780.7  29780.7
+	-C--P-------C--P-------C-P-------CP-------*
+	CPU       29781      29781     29781    29781
+	
+* The above synchronization will result in an exact PPU/CPU alignment.
+	
+	 -|--.--V--|-     -|--V--.--|-     -V--.--.--|- 
+	Read             Read             Read
+	                                 Loop will stop here
+</pre>
+<p>Is the first C--P missing a '-' there?
+</p>
+<h2><span class="mw-headline" id="Merge_with_PPU_rendering.3F">Merge with <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a>?</span></h2>
+<p>There is a wonderful diagram at <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a>, as well as lots of information about timing there. I think this article should be merged into that one. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 18:02, 24 March 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1029-1!*!0!*!*!*!* and timestamp 20160208224345 and revision id 9863
+ -->
+</div></body></html>

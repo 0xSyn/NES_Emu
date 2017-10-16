@@ -1,0 +1,173 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PRG RAM circuit</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PRG RAM circuit</h1><div class="article">
+<p>The <a href="INES.xhtml" title="INES">iNES</a> format implies 8 KiB of PRG RAM at $6000-$7FFF, which may or may not be battery backed, even for <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">discrete boards</a> such as <a href="NROM.xhtml" title="NROM">NROM</a> and <a href="UxROM.xhtml" title="UxROM">UxROM</a> that never actually had RAM there.
+This inspired some people on the nesdev.com BBS to come up with <b>circuits to add PRG RAM</b> to the original boards, so that games relying on it can run on an NES.
+The primary problem is in producing the enable signals for a 62256 or <a href="6264_static_RAM.xhtml" title="6264 static RAM">6264 static RAM</a> or compatible PSRAM.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#kyuusaku.27s_circuit"><span class="tocnumber">1</span> <span class="toctext">kyuusaku's circuit</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Using_7410"><span class="tocnumber">2</span> <span class="toctext">Using 7410</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Using_7420"><span class="tocnumber">3</span> <span class="toctext">Using 7420</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Using_74139"><span class="tocnumber">4</span> <span class="toctext">Using 74139</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#PRG_.2FCE_delay"><span class="tocnumber">5</span> <span class="toctext">PRG /CE delay</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Battery_backup"><span class="tocnumber">6</span> <span class="toctext">Battery backup</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="kyuusaku.27s_circuit">kyuusaku's circuit</span></h2>
+<p>On the forum, kyuusaku and Bregalad discussed PRG RAM decoder circuits built from <a class="extiw" href="https://en.wikipedia.org/wiki/List_of_7400_series_integrated_circuits" title="wikipedia:List of 7400 series integrated circuits">7400 series parts</a> to approximate this behavior in an NES cartridge board.
+The first tries took two chips<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=32389#p32389" rel="nofollow">[1]</a> or had possible timing problems.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=32520#p32520" rel="nofollow">[2]</a><a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=32531#p32531" rel="nofollow">[3]</a> They settled on the following circuits:
+</p>
+<h2><span class="mw-headline" id="Using_7410">Using 7410</span></h2>
+<p>kyuusaku suggested a circuit based on a 74HC10 (triple three-input NAND) stick a pulldown on CE2 to take advantage of Phi2 going high-impedance during reset in order to &quot;offer some write protection&quot;.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=35231#p35231" rel="nofollow">[4]</a>
+</p>
+<pre>
+           ,-------------- ROM /CE
+          |   ____
+/ROMSEL --+--|    `-.
+             |       \
+A14 ---------|        )o-- RAM /CE
+             |       /
+A13 ---------|____,-'
+
+              ____
++5V ------+--|    `-.
+          |  |       \
+          `--|        )o-- ROM /OE
+             |       /
+R/W ------+--|____,-'
+          |
+          `--------------- RAM /WE
+
+Phi2 ---------+----------- RAM CE2
+              |
+              &lt;
+              &lt; &quot;big R&quot;
+              &lt;
+              |
+GND ----------+----------- RAM /OE
+</pre>
+<h2><span class="mw-headline" id="Using_7420">Using 7420</span></h2>
+<p>He also suggested a circuit based on a 74HC20 (double 4-input NAND), which appears to be the same one in <i>Family BASIC</i>:
+</p>
+<dl><dd>Or you could just use a NAND4 to decode any active low memory, also using the /WE priority method. If this is done with a two gate 7420, the second gate could be used to invert r/w to prevent bus conflicts as in the circuit above. This is probably the *final* best way unless you happen to need the extra AND3 from the 7410 and have a positive CE.</dd></dl>
+<p>The <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=72181#p72181" rel="nofollow">pinout</a>:
+</p>
+<ul><li>A = Phi2</li>
+<li>B = /ROMSEL</li>
+<li>C = A14</li>
+<li>D = A13</li>
+<li>Y = PRG RAM /CE</li>
+<li>PRG RAM /OE = GND</li>
+<li>PRG RAM /WE = Vcc or R//W, depending on the Family BASIC cart's write-protect switch</li></ul>
+<p>Kevin Horton suggested <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=76149#p76149" rel="nofollow">the same circuit</a>.
+</p><p>You could also use the other gate to invert R//W for /OE on the ROM to prevent bus conflicts.
+</p>
+<h2><span class="mw-headline" id="Using_74139">Using 74139</span></h2>
+<p>If you don't need bus conflict prevention, you can use a <a href="74139.xhtml" title="74139">74HC139</a> (double 2-to-4 decoder), which may be cheaper or have better timing than a 74HC20.
+This circuit resembles the decoder in Jaleco's discrete mappers (<a href="INES_Mapper_087.xhtml" title="INES Mapper 087">87</a> and <a href="INES_Mapper_140.xhtml" title="INES Mapper 140">140</a>), which uses a 74139 to decode a single mapper register to $6000-$7FFF.
+</p>
+<ul><li>1/E = GND</li>
+<li>1A0 = M2</li>
+<li>1A1 = A14</li>
+<li>2/E = 1/Y3</li>
+<li>2A0 = A13</li>
+<li>2A1 = PRG /CE</li>
+<li>PRG RAM /CE = 2/Y3</li></ul>
+<p>Proof:
+</p>
+<table class="tabular">
+<tr>
+<th> 1A0 </th>
+<th> 1A1 </th>
+<th> 1/Y3 </th>
+<th> 2A0 </th>
+<th> 2A1 </th>
+<th> 2/Y3
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> x </td>
+<td> 1 </td>
+<td> x </td>
+<td> x </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> x </td>
+<td> x </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> x </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0
+</td></tr></table>
+<p>See <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=75739#p75739" rel="nofollow">further suggestions from kyuusaku</a>.
+</p><p>The PlayChoice version of <i>Mike Tyson's Punch-Out!!</i> uses an extra IC to add battery-backed RAM.
+The digits in existing photos are hard to read, but it is believed to be <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=101088#p101088" rel="nofollow">a 74HC139</a>.
+Its wiring has not been traced.
+</p>
+<h2><span class="mw-headline" id="PRG_.2FCE_delay">PRG /CE delay</span></h2>
+<p>One thing that can complicate adding PRG RAM to a board is the fact that PRG /CE and M2, used together to decode $6000-$7FFF, do not change at the same time. PRG /CE is the logical NAND of M2 and PRG A15. This is accomplished by sending M2 and PRG A15 into a <a href="74139.xhtml" title="74139">74LS139</a> two-to-four line decoder on the NES main board. This introduces a small delay of up to 33 ns between the time M2 rises and the time PRG /CE falls.
+</p><p>If this delay is too long it can cause unintentional writes to PRG RAM when writing to mapper registers $E000-$FFFF.
+</p><p>This is not a problem for the original cartridge hardware because the RAM chips used require a /WE (Write Enable) pulse of at least 50ns to 70ns depending on the chip. This means that the spurious /WE signal generated by this delay (MAX 33ns) will not be sufficient to trigger a write on the RAM chip. The circuits above give even more head-room as they tie PRG RAM /OE to ground and decode to /CE. The /CE to end of write timing is typically longer than the minimum /WE pulse width.
+</p><p>If your RAMs are faster than these timing specifications, your decoding logic must delay M2 by about 33 ns to match the PRG /CE delay, as in the 74139-based circuit shown above.
+In <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=176078#p176078" rel="nofollow">this post</a>, lidnariq suggested adding a resistor and capacitor:
+</p>
+<pre>
+card edge M2 --- 1k --- + --- 7420
+                        |
+                       33pF
+                        |
+                       GND
+</pre>
+<h2><span class="mw-headline" id="Battery_backup">Battery backup</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=87107#87107" rel="nofollow">Battery circuit schematic</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> Loopy pointed out the PRG /CE delay <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=70539#p70539" rel="nofollow">here</a>.</li>
+<li> Further investigation performed in <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=7618" rel="nofollow">this thread</a>.</li>
+<li> <a class="external text" href="https://www.jameco.com/Jameco/Products/ProdDS/42930.pdf" rel="nofollow">6264P-12 8Kx8 SRAM Data Sheet</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 45/1000000
+Preprocessor generated node count: 72/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:81-1!*!0!!en!*!* and timestamp 20160726022754 and revision id 12756
+ -->
+</div></body></html>

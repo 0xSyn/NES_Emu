@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Clock rate</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Clock rate</h1><div class="article">
+<h2><span class="mw-headline" id="Divider">Divider</span></h2>
+<p>Ok, ok. I went to the visual2A03, saw that Quietust had implemented a &quot;microstep&quot; function which drives the 2A03's clock input (instead of the inside 6502's φ0 input), and so tested this. <a class="external text" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/?nosim=t&amp;find=11292&amp;panx=553.7&amp;pany=344.0&amp;zoom=8.6" rel="nofollow">In the <i>2A03</i></a>, the input clock is implemented using a <a class="extiw" href="http://en.wikipedia.org/wiki/Ring_counter" title="wikipedia:Ring counter">Johnson counter</a>, which intrinsically divides by an even number. They couldn't use the same design to divide by 15, so they instead divided by 16.
+</p><p>Interestingly, there is even two more unused bits on this divider (off the bottom), so maybe by the time they made the 2A03G's die they had unified the 2A07 and 2A03 designs sufficiently to just be a &quot;move this tap from here to here&quot;.
+</p><p>Dividing by 15 would have required an entire different design, and I suspect that the smallest ÷15 circuit (4 bit binary counter plus 4-input AND gate) would have taken more silicon die space than the 8-stage Johnson counter they used.
+—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 00:05, 4 September 2012 (MDT)
+</p>
+<dl><dd>The CIC uses a polynomial counter for the program counter to save die space. How hard would it have been to use a 4-bit <a class="extiw" href="http://en.wikipedia.org/wiki/Linear_feedback_shift_register" title="wikipedia:Linear feedback shift register">linear feedback shift register</a> to divide by 15? I guess there would have to be some post-decoding of the LFSR's state to produce a binary clock signal, and that might have taken a lot of space too. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 08:13, 4 September 2012 (MDT)</dd></dl>
+<dl><dd><dl><dd> Right, that would have required at least a 2-input XOR gate. I'm not clear on whether 4 bits of shift register plus the smallest 2-input XOR gate (implementated as an and-or-invert and an inverter, no P-type MOSFETs so no transmission gates yet) is bigger, but regardless none of the internal bits of state are even close to a 50% duty cycle at ≈1.8MHz, and converting that back would definitely have been more silicon space. Meanwhile, a design with a synchronous 4-bit counter that skipped state 0b1111 would have required 4 JK registers, and one each of a 2-, 3-, and 4- input AND gate.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 13:25, 4 September 2012 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd>I don't know if it's a requirement of the output, but a johnson counter very conveniently has each bit output equal time high and low, doesn't it? If you an effective 15x divide with equal time high/low, would you actually need a 30x divider that is clocked twice as fast? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 12:20, 4 September 2012 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> While other microcontroller datasheets specify fairly strict requirements on duty cycle, the 6502 datasheet only specifies that φ0 high and low times both need to be at least 240ns (2MHz binned parts). A nonuniform division should have been ok as long as it complied with that part; for the PAL CPU they probably could have divided it into 6.5 (240ns×26.6MHz=6.4) and 8.5 safely but no further. To answer the other half: yes, so you'd need a design that reacted to both rising and falling edges from the master clock. Possible, but bigger, and probably easier to use a binary counter. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 13:25, 4 September 2012 (MDT)
+<dl><dd> I slightly misspoke: In the 2A0x, <b>two</b> Johnson counters are used, each clocked on opposite edges, and a NOR gate (output is node 11200) combines the two phases.  —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 16:47, 17 January 2013 (MST)</dd></dl></dd></dl></dd></dl></dd>
+<dd>Kev tells me the &quot;In the <i>2A03</i>&quot; link is broken. Did you mean <a class="external text" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/?nosim=t&amp;find=11292&amp;panx=553.7&amp;pany=344.0&amp;zoom=8.6" rel="nofollow">this</a>? Perhaps die shots from a Dendy CPU might help. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 15:50, 17 January 2013 (MST)
+<dl><dd>Looks like Q replaced the traditional view with the expert one. Fixed my link.  Dollars to doughnuts that the Dendy implements its ÷15 with an arithmetic up-counter and a 4-input AND gate. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 16:47, 17 January 2013 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="NTSC_frequency">NTSC frequency</span></h2>
+<p>Where did 1.789772<b>67</b> MHz come from? Why is it not 1.789772<b>73</b>? It's only 30ppb error, insignificant by NTSC's 3ppm requirement, but it's odd. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:56, 14 November 2014 (MST)
+</p>
+<dl><dd>Probably the master clock (21.477272 MHz), rounded to the nearest Hz, then divided by 12. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:16, 14 November 2014 (MST)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.032 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:839-1!*!0!!*!*!* and timestamp 20160208223958 and revision id 9896
+ -->
+</div></body></html>

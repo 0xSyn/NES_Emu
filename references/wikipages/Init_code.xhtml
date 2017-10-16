@@ -1,0 +1,97 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Init code</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Init code</h1><div class="article">
+<p>When the NES is powered on or reset, the program should do the following within a fixed bank:
+</p>
+<ul><li>Set IRQ ignore bit (not strictly necessary as the 6502 sets this flag on all interrupts, including RESET, but it allows program code to simulate a reset by <code>JMP ($FFFC)</code>)</li>
+<li>Disable <a href="PPU.xhtml" title="PPU">PPU</a> NMIs and rendering</li>
+<li>Initialize stack pointer</li>
+<li>Initialize the mapper (if any)</li></ul>
+<p>The init code after this point may be placed either in the fixed bank or in a separate bank using a bankswitch followed by a <code>JMP</code>:
+</p>
+<ul><li>Disable decimal mode (not strictly necessary as the 2A03 has no decimal mode, but it maintains compatibility with generic 6502 debuggers)</li>
+<li>If using a mapper that generates IRQs, disable <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">APU timer IRQs</a></li>
+<li>Disable <a href="APU_DMC.xhtml" title="APU DMC">DMC</a> IRQs <a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=22538#p22538" rel="nofollow">[1]</a></li>
+<li>Set all RAM that your program uses to a known state. This often involves clearing internal RAM (@ $0000-$07FF) (and PRG RAM if needed (@ $6000-$7FFF)), except that which is intended to survive a reset (such as high scores). However, you don't need to set up an area of RAM that only one part of a program uses; you can set that in the same part where it's used, and in many cases, you'll need to set it up multiple times as part of the program is run multiple times.</li>
+<li>Wait at least 30,000 cycles (see <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a>) before reading or writing registers $2003 through $2007. This is commonly done by waiting for the PPU to signal the start of vertical blank twice through $2002.</li></ul>
+<p>Some mappers have no fixed bank because they switch all 32 KB of PRG at a time. These include <a href="AxROM.xhtml" title="AxROM">AxROM</a>, <a class="mw-redirect" href="BNROM.xhtml" title="BxROM">BxROM</a>, <a href="GxROM.xhtml" title="GxROM">GxROM</a>, and some configurations of <a href="MMC1.xhtml" title="MMC1">MMC1</a>. You'll have to put the interrupt vectors and the code up to the end of the <code>JMP</code> in a separate section that is duplicated in each bank. Often, the 256-byte page $FF00-$FFFF contains the vectors, the start of the init code, and a &quot;trampoline&quot; for jumps from code in one bank to code in another.
+</p><p>Sample implementation:
+</p>
+<pre>
+reset:
+    sei        ; ignore IRQs
+    cld        ; disable decimal mode
+    ldx #$40
+    stx $4017  ; disable APU frame IRQ
+    ldx #$ff
+    txs        ; Set up stack
+    inx        ; now X = 0
+    stx $2000  ; disable NMI
+    stx $2001  ; disable rendering
+    stx $4010  ; disable DMC IRQs
+
+    ; Optional (omitted):
+    ; Set up mapper and jmp to further init code here.
+
+    ; If the user presses Reset during vblank, the PPU may reset
+    ; with the vblank flag still true.  This has about a 1 in 13
+    ; chance of happening on NTSC or 2 in 9 on PAL.  Clear the
+    ; flag now so the @vblankwait1 loop sees an actual vblank.
+    bit $2002
+
+    ; First of two waits for vertical blank to make sure that the
+    ; PPU has stabilized
+@vblankwait1:  
+    bit $2002
+    bpl @vblankwait1
+
+    ; We now have about 30,000 cycles to burn before the PPU stabilizes.
+    ; One thing we can do with this time is put RAM in a known state.
+    ; Here we fill it with $00, which matches what (say) a C compiler
+    ; expects for BSS.  Conveniently, X is still 0.
+    txa
+@clrmem:
+    sta $000,x
+    sta $100,x
+    sta $300,x
+    sta $400,x
+    sta $500,x
+    sta $600,x
+    sta $700,x  ; Remove this if you're storing reset-persistent data
+
+    ; We skipped $200,x on purpose.  Usually, RAM page 2 is used for the
+    ; display list to be copied to OAM.  OAM needs to be initialized to
+    ; $EF-$FF, not 0, or you'll get a bunch of garbage sprites at (0, 0).
+
+    inx
+    bne @clrmem
+
+    ; Other things you can do between vblank waits are set up audio
+    ; or set up other mapper registers.
+   
+@vblankwait2:
+    bit $2002
+    bpl @vblankwait2
+</pre>
+<p>At this point, the program can fill the <a href="PPU_nametables.xhtml" title="PPU nametables">nametables</a>, fill the <a href="PPU_pattern_tables.xhtml" title="PPU pattern tables">pattern tables</a> (if the board uses CHR RAM), fill the <a href="PPU_palettes.xhtml" title="PPU palettes">palette</a>, and start displaying things.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="APU_basics.xhtml" title="APU basics">APU basics</a> covers how to initialize the APU</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 12/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:237-1!*!0!*!*!*!* and timestamp 20160208225525 and revision id 11911
+ -->
+</div></body></html>

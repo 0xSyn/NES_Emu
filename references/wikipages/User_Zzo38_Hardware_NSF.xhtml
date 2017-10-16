@@ -1,0 +1,195 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Hardware NSF</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Hardware NSF</h1><div class="article">
+<p><b>!!! WARNING !!! THIS HAS VARIOUS MISTAKES IN IT !!!</b>
+</p><p>These are some of my ideas for hardware <a href="NSF.xhtml" title="NSF">NSF</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Hardware"><span class="tocnumber">1</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#PRG_ROM_Layout"><span class="tocnumber">2</span> <span class="toctext">PRG ROM Layout</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#CHR_ROM_Layout"><span class="tocnumber">3</span> <span class="toctext">CHR ROM Layout</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Main_Routine"><span class="tocnumber">4</span> <span class="toctext">Main Routine</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Interrupt_Routine"><span class="tocnumber">5</span> <span class="toctext">Interrupt Routine</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#File_Loading"><span class="tocnumber">6</span> <span class="toctext">File Loading</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Miscellaneous_Information"><span class="tocnumber">7</span> <span class="toctext">Miscellaneous Information</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>Memory from $4018-$403F would be filled by a 40-byte ROM used for an interrupt routine. (Famicom Disk System uses some of these addresses but NSF only uses the audio registers, not these ones.)
+</p><p>When the main routine is enabled, $8000-$BFFF is a single byte of RAM (used to store the current song number; mirrored) and $C000-$FFFF is ROM (also mirrored; not much ROM is needed).
+</p><p>Writing to even bytes of $4018-$403F: If bit2 is set, the memory from $8000-$DFFF becomes read/write (except main routine ROM which is always read-only), otherwise it is read-only. If bit0 is set, VRC6 audio will play, otherwise it will be muted. If bit1 is set, VRC7 audio will play and otherwise is muted. If bit5 is set, Sunsoft 5B audio is played and is otherwise muted. Other bits (bit3, bit4, bit6, and bit7) are ignored.
+</p><p>Writing to odd bytes of $4018-$403F enables main routine ROM if the low bit of the data is set, and disables if the low bit is clear. Other bits are ignored.
+</p><p>The hardware generate IRQ at the rate specified in the NSF header. When IRQ is called, the IRQ vector should be read as $4018 whenever it is checked.
+</p><p>Another thing the hardware will do is convert the audio to digital and whenever the name tables are being accessed, make the pattern tables read as a waveform view of the music being played.
+</p>
+<h2><span class="mw-headline" id="PRG_ROM_Layout">PRG ROM Layout</span></h2>
+<p>(note: somewhat obsolete with new specification)
+</p>
+<pre>+-----+-----------------------+
+| 1FF | Interrupt vectors     |
+| 1FA |                       |
++-----+-----------------------+
+| 1F9 | Main routine          |
+| 100 |                       |
++-----+-----------------------+
+| 0FF | .NSF header           |
+| 080 |                       |
++-----+-----------------------+
+| 07F | Main routine helper   |
+| 040 |                       |
++-----+-----------------------+
+| 03F | Interrupt routine     |
+| 018 |                       |
++-----+-----------------------+
+| 017 | Stop routine          |
+| 000 |                       |
++-----+-----------------------+
+</pre>
+<h2><span class="mw-headline" id="CHR_ROM_Layout">CHR ROM Layout</span></h2>
+<p>CHR ROM is ASCII, but tile $00 is blank, and tiles $10-$1F contain the hex digits &quot;0&quot; to &quot;F&quot;.
+</p><p>Printable ASCII characters use color 3 for the foreground, and hex digits use color 1 for the foreground. All tiles use color 0 for the background. This way, the palette can be changed to make it change color of the song number digits to indicate play/stop.
+</p><p>While rendering rows below the fourth row, the CHR ROM will not be accessible and instead they will be connected to a analog-to-digital converter which puts the same data regardless of address (but which is depending on the position on screen).
+</p>
+<h2><span class="mw-headline" id="Main_Routine">Main Routine</span></h2>
+<p>(note: somewhat obsolete with new specification)
+</p>
+<ul><li> Disable IRQ.</li>
+<li> Wait for PPU.</li>
+<li> Write the starting song number (offset $07 of header) to $8000, and then decrement it.</li>
+<li> Copy expansion chip byte (offset $7B of header) to $4018.</li>
+<li> Set up palette.</li>
+<li> Fill up the nametable with the title and so on from the NSF header, and with the current and maximum song number, and indicate the music is stopped.</li>
+<li> Enable background.</li>
+<li> Loop:
+<ul><li> Update the display of the current song number.</li>
+<li> If LEFT is pushed:
+<ul><li> Decrement current song number. If it is zero it wraps around.</li>
+<li> Wait for button is not pushed.</li></ul></li>
+<li> If RIGHT is pushed:
+<ul><li> Increment current song number. If it is too high it wraps to zero.</li>
+<li> Wait for button is not pushed.</li></ul></li>
+<li> If START is pushed:
+<ul><li> Initialize the sound registers by writing $00 to $4000-$4013, $0F to $4015.</li>
+<li> Initialize the frame counter to 4-step mode ($40 to $4017).</li>
+<li> Write initial bank values to $5FF6-$5FFF. (If the initial bank values are all zero, instead compute them from the load address.)</li>
+<li> Update display to indicate song is playing.</li>
+<li> Load value at memory $8000 into the accumulator.</li>
+<li> Load zero into the X register.</li>
+<li> Jump to the start routine.</li></ul></li></ul></li>
+<li> Stop routine:
+<ul><li> Disable interrupts.</li>
+<li> Turn off all audio.</li>
+<li> Reset the stack pointer.</li>
+<li> Update display to indicate song is stopped.</li>
+<li> Go to main loop checking which button is pushed.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Interrupt_Routine">Interrupt Routine</span></h2>
+<ul><li> Check if the A button is pushed.</li>
+<li> If the A button is pushed (it should branch if button pushed rather than skip over if unpushed because this way uses less clock cycles):
+<ul><li> Enable main routine ROM.</li>
+<li> Jump to the stop routine.</li></ul></li>
+<li> Reset the stack pointer.</li>
+<li> Call the play subroutine.</li>
+<li> Enable interrupts.</li>
+<li> Run an idle loop doing nothing.</li>
+<li> Start routine:
+<ul><li> Disable main routine ROM.</li>
+<li> Call the init subroutine.</li>
+<li> Enable interrupts.</li>
+<li> Run an idle loop doing nothing.</li></ul></li></ul>
+<p>Code (40 bytes, 30 clock):
+</p>
+<pre>        .ORG $4018
+intr    LDX #1       ; 2/2 (X=1)
+        STX $4016    ; 3/4 (strobe)
+        DEX          ; 1/2 (X=0)
+        STX $4016    ; 3/4 (allow buttons to be read)
+        LDA $4016    ; 3/4 (read &quot;A&quot; button)
+        BNE stopa    ; 2/2 (branch if button pushed)
+        DEX          ; 1/2 (X=255)
+        TXS          ; 1/2 (reset stack)
+        JSR play     ; 3/6
+        CLI          ; 1/2
+wait    JMP wait     ; 3/- (wait)
+stopa   STA $4019    ; 3/- (write 1 to $4019)
+        JMP stop     ; 3/-
+start   STX $4019    ; 3/- (write 0 to $4019)
+        JSR init     ; 3/-
+        CLI          ; 1/-
+        JMP wait     ; 3/-
+</pre>
+<h2><span class="mw-headline" id="File_Loading">File Loading</span></h2>
+<p>Depending on how the data is loaded onto the cartridge, some things may need to differ a bit, for example it may need to include codes to read the file. This may mean having 128 bytes of RAM in $8000-$BFFF instead of only 1 byte, and use this for the .NSF header (header $07 could be reused for the current song number), and then have another code to load the banks by first setting bit2 of $4018, and then after it is loaded, copy header $7B to $4018 which may or may not clear bit2.
+</p><p>The header bytes at $78 and $79 could be used for telling the cartridge what IRQ period to use. It could do something like this when loading:
+</p>
+<ul><li> Disable interrupts.</li>
+<li> Read the first 128 bytes of the file into the RAM reserved for the header ($8000-$807F).</li>
+<li> Check the first six bytes of the header. If they are wrong:
+<ul><li> Change background to red.</li>
+<li> Play error tone.</li>
+<li> Halt.</li></ul></li>
+<li> Detect TV system.
+<ul><li> If NTSC: Copy header $6E to $78 and $6F to $79.</li>
+<li> If bit1 of header $7A is not set, and bit0 of the header $7A is not equal to detected TV system:
+<ul><li> Change background to yellow.</li>
+<li> Play error tone.</li>
+<li> Halt.</li></ul></li>
+<li> Write the detected TV system to header $7A.</li></ul></li>
+<li> Read header $70 to $77. If all of them are zero:
+<ul><li> Load header $09 into a register.</li>
+<li> Right shift four spaces.</li>
+<li> Copy it to the X register.</li>
+<li> Load zero into the A register.</li>
+<li> While X is not equal to ten:
+<ul><li> STA $8068,X</li>
+<li> Increment X register.</li>
+<li> Add one to A register.</li></ul></li></ul></li>
+<li> Bitwise AND header $09 with literal $0F.</li>
+<li> Bitwise OR header $09 with literal $60.</li>
+<li> Write $40 to $4018.</li>
+<li> Write zero to Y register and $5FF6.</li>
+<li> Until end of file:
+<ul><li> Read one byte from file.</li>
+<li> Use header $08 and $09 as address to write the byte which has been read from the file.</li>
+<li> Add one to header $08 and carry over to header $09.</li>
+<li> If bit4 of header $09 is set:
+<ul><li> Increment Y register.</li>
+<li> Write contents of Y register to $5FF6.</li>
+<li> Clear bit4 at header $09.</li></ul></li></ul></li>
+<li> Start loading the nametable and so on, and wait for buttons pushed.</li></ul>
+<p>Here is a description of a possible file-loading interface (you could use it in other hardware designs too; not only this one):
+</p>
+<ul><li> A port with 12 pins on the cartridge: Data0 to Data7, Clock, EOF, Power, and Ground.</li>
+<li> A device which connects to that port will use the simple file-loading protocol: When Clock is received, it reads a byte from the file and updates the Data0 to Data7 pins. If a byte cannot be read because it is the end of the file, EOF pin is set instead.</li>
+<li> Cartridge has some way of connecting this port to the memory accessible by CPU.</li></ul>
+<p>This hardware NSF could have it implemented as follows:
+</p>
+<ul><li> When powered on, the range $4040-$40FF accesses the file-loading port. A clock will be set and the data pins will be readable in this memory.</li>
+<li> When EOF is set, IRQ will be triggered and then memory range $4040-$40FF will be used as FDS audio from then on.</li></ul>
+<h2><span class="mw-headline" id="Miscellaneous_Information">Miscellaneous Information</span></h2>
+<ul><li> All audio expansion are always implemented, although the Sunsoft 5B, VRC6, and VRC7 can be muted (individually).</li>
+<li> Memory range $6000-$7FFF is always RAM.</li>
+<li> Memory $8000-$FFFF is either the NSF RAM or the &quot;main routine&quot; memory, which is 128 bytes of RAM and 512 bytes of ROM (only 1 byte of RAM if not using the &quot;file loading&quot; above).</li>
+<li> RAM banks of 4K each can be written to when writing $6000-$DFFF is enabled, and can be switched using the NSF bankswitching registers.</li>
+<li> Memory $E000-$FFFF is read-only, although it is a RAM bank, you can never write the RAM using these addresses; you must map it to different addresses to write it.</li>
+<li> Memory $6000-$DFFF is banked RAM, and is writable when enabled, and otherwise read-only.</li>
+<li> Some mirrored registers can be implemented, although done such that the addresses specified in the NSF specification always work without conflicts.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.065 seconds
+Real time usage: 0.131 seconds
+Preprocessor visited node count: 27/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:834-1!*!0!!en!*!* and timestamp 20160208230552 and revision id 5463
+ -->
+</div></body></html>

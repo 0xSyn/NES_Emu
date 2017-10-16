@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper H</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper H</h1><div class="article">
+<p>This mapper design is intended to support multiple vertical scrolling regions (for example, like those in multiplayer Panel de Pon). It is untested.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>There are three mapper registers:
+</p>
+<ul><li> MODE (8-bits)</li>
+<li> COLOR (2-bits; same data is repeated four times so 8-bits in total)</li>
+<li> SCROLL (3-bits)</li></ul>
+<p>All registers are only updated by PPU reads, as follows:
+</p>
+<ul><li> When reading from PPU address where bit11 and bit10 are both low, bits 13, 12, 9, 8, 7, 6, 5, and 4 of the PPU address are copied into the MODE register.</li>
+<li> When reading from PPU address where bit9, bit8, bit7, and bit6 are not all high, the two low bits of the PPU data are copied into the COLOR register.</li>
+<li> When reading from PPU address where bit13 is low, the low three bits of the PPU address are copied into the SCROLL register.</li></ul>
+<h2><span class="mw-headline" id="PPU_address_space">PPU address space</span></h2>
+<p>PPU memory is mapped as follows:
+</p>
+<ul><li> $0000-$1FFF = CHR ROM; the low three address bits are determined by the low three bits of the sum of the SCROLL register and MODE register, while the high four bits of the MODE register select an 8K bank</li>
+<li> $2000-$3FFF (unless bit9, bit8, bit7, bit6 all high) = CIRAM; bit3 of the result of the sum of the SCROLL register and the MODE register selects between name tables</li>
+<li> $2000-$3FFF (when bit9, bit8, bit7, bit6 all high) = the COLOR register, extended to fill the entire byte</li></ul>
+<h2><span class="mw-headline" id="CPU_address_space">CPU address space</span></h2>
+<p>PRG ROM is mapped to $8000-$FFFF. PRG bankswitching is an optional feature; if present, banks are 32K and the other bank is selected by setting bit13 and bit12 of the PPU address (reading is not necessary).
+</p><p>PRG RAM is optional. If present, it is 4K or 8K, and is mapped at $5000-$5FFF and $7000-$7FFF, with mirrors at $1000-$1FFF and $3000-$3FFF (reading from the mirrors will cause bus conflicts; writing through the mirrors is OK). PRG RAM is not battery backed.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.011 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1397-1!*!*!!*!*!* and timestamp 20160208230614 and revision id 9074
+ -->
+</div></body></html>

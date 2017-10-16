@@ -1,0 +1,116 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 228</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 228</h1><div class="article">
+<p><br/>
+<b>iNES Mapper 228</b> represents the board used by Active Enterprises for <i>Action 52</i> and <i>Cheetahmen II</i>.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<pre>Address           Data
+FEDCBA98 76543210 76543210
+1.MHHPPP PPS.CCCC ......CC
+  |||||| ||| ||||       ||
+  |||||| ||| ++++-------++- Select 8 KiB CHR ROM bank at PPU $0000
+  |||||| ||+--------------- PRG bank size
+  |||||| ||                 0: Put bank with bit 0 false in $8000 and
+  |||||| ||                    bank with bit 0 true in $C000
+  |||||| ||                 1: Put same 16 KiB bank in $8000 and $C000
+  |||+++-++---------------- Select 16 KiB PRG ROM bank at CPU $8000
+  |++---------------------- Select which 512 KiB PRG ROM chip to enable
+  |                         (A52 uses 0, 1, and 3; bank 2 is open bus)
+  +------------------------ 0: Vertical mirroring; 1: Horizontal mirroring
+</pre>
+<p>It is claimed that there are four 4-bit RAM locations at $4020-$4023, mirrored throughout $4020-$5FFF. This 16-bit RAM is definitely not present on either cartridge, Nestopia does not implement it at all, and neither cartridge ever writes to these addresses.
+</p><p>Incidentally, this is very similar to <a href="INES_Mapper_225.xhtml" title="INES Mapper 225">iNES Mapper 225</a> with a few differences:
+</p>
+<ul><li> Two of the CHR bank bits have been shifted to the data bus.</li>
+<li> PRG bank size bit moved to other side of PRG bank number.</li>
+<li> High bit moved to other side of mirroring and applies only to PRG ROM, not CHR ROM.</li>
+<li> The rumored 4x4-bit RAM is at a different address.</li></ul>
+<pre> Here are Disch's original notes:
+ ========================
+ =  Mapper 228          =
+ ========================
+ 
+ 
+ Example Games:
+ --------------------------
+ Action 52
+ Cheetah Men II
+ 
+ 
+ Notes:
+ ---------------------------
+ Cheetah Men II is infamous for how freaking terrible it is.  Action 52 is none better.  These games are SO
+ bad, it's hilarious.
+ 
+ Action 52's PRG size is weird (not a power of 2 value).  This is because there are 3 seperate 512k PRG chips.
+ PRG Setup section will cover details.
+ 
+ 
+ Powerup and Reset:
+ ---------------------------
+ Apparently the games expect $00 to be written to $8000 on powerup/reset.
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+   $4020-4023:  [.... RRRR]  RAM  (readable/writable)
+                 (16 bits of RAM -- 4 bits in each of the 4 regs)
+   $4024-5FFF:    mirrors $4020-4023
+ 
+   $8000-FFFF:    [.... ..CC]   Low 2 bits of CHR
+                A~[..MH HPPP PPO. CCCC]
+ 
+     M = Mirroring (0=Vert, 1=Horz)
+     H = PRG Chip Select
+     P = PRG Page Select
+     O = PRG Mode
+     C = High 4 bits of CHR
+ 
+ CHR Setup:
+ ---------------------------
+ 
+       $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+     +---------------------------------------------------------------+
+     |                             $8000                             |
+     +---------------------------------------------------------------+
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+ 'H' bits select the PRG chip.  Each chip is 512k in size.  Chip 2 does not exist, and when selected, will
+ result in open bus.  The Action 52 .nes ROM file contains chips 0, 1, and 3:
+ 
+ chip 0:  offset 0x000010
+ chip 1:  offset 0x080010
+ chip 2:  -- non existant --
+ chip 3:  offset 0x100010
+ 
+ 'P' selects the PRG page on the currently selected chip.
+ 
+                $8000   $A000   $C000   $E000  
+              +-------------------------------+
+ PRG Mode 0:  |            &lt;$8000&gt;            |
+              +-------------------------------+
+ PRG Mode 1:  |     $8000     |     $8000     |
+              +---------------+---------------+
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:623-1!*!0!*!*!*!* and timestamp 20160208225448 and revision id 7947
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

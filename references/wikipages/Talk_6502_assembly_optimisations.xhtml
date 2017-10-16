@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:6502 assembly optimisations</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:6502 assembly optimisations</h1><div class="article">
+<h3><span class="mw-headline" id="Examples">Examples</span></h3>
+<dl><dd><b>Split word tables in high and low components</b></dd>
+<dd>This optimisation is not human friendly, makes the source code much bigger, but still makes the compiled size smaller and faster:</dd></dl>
+<p>One doesn't compile assembly language programs.  They are assembled.  Please use correct terminology so those of us who know the difference between assembling and compiling programs don't dismiss this article as the work of a dilettante.
+</p><p><i><tt>PointerTable .dw Pointer1, Pointer2, ....</tt></i>
+</p><p>The <tt>.dw</tt> pseudo-op is non-standard syntax that should not be used in code examples.  Best if examples stick to official MOS Technology syntax and pseudo-ops, such as:
+</p><p><tt>pointertable .byte pointer1, pointer2, ...</tt>
+<small>(<a class="extiw" href="https://en.wikipedia.org/wiki/Wikipedia:Signatures" title="wikipedia:Wikipedia:Signatures">unsigned</a> post by <s>38.69.12.5</s>)</small>
+</p>
+<dl><dd>With respect to &quot;compile&quot; vs. &quot;assemble&quot; pedantry: The distinction between assembling and compiling becomes blurred when macros (in assembly language) or blocks of inline assembly language (in a language that is not primarily assembly language) come into play. Besides, we use &quot;compile&quot; because among words meaning &quot;translate source code into object code&quot;, I assume it will be understood by the largest number of readers. What better word encompasses both &quot;compile&quot; and &quot;assemble&quot; and means &quot;perform a translation of source code, in either assembly language or a language that is not assembly language, into object code&quot;?</dd>
+<dd>With respect to syntax: What assembler distributed under a <a class="extiw" href="https://en.wikipedia.org/wiki/free_software_license" title="wikipedia:free software license">free software license</a> should we cite as an example of an assembler that accepts official MOS Technology syntax and pseudo-ops? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 21:18, 7 June 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.052 seconds
+Real time usage: 0.141 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1095-1!*!0!*!*!*!* and timestamp 20160603204750 and revision id 12558
+ -->
+</div></body></html>

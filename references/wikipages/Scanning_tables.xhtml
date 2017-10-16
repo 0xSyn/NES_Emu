@@ -1,0 +1,125 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Scanning tables</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Scanning tables</h1><div class="article">
+<p>There are several ways to scan a table that is 256 bytes or smaller, thanks to the many indexed addressing modes available (for larger tables, see <a class="mw-redirect" href="Scanning_large_tables.xhtml" title="Scanning Large Tables">Scanning Large Tables</a>). Scanning could be reading values looking for a particular one, writing multiple values, copying, etc. Some are more efficient than others, or simpler to code.
+</p>
+<h2><span class="mw-headline" id="Common_approaches">Common approaches</span></h2>
+<p>For example, this code fills a table of <i>size</i> bytes with 0, from beginning to end:
+</p>
+<pre>
+        lda #0
+        ldy #0
+loop:   sta table,y       ; Y = 0 through size-1
+        iny
+        cpy #size
+        bne loop
+</pre>
+<p>It's often more efficient to scan backwards, since DEY and similar instructions implicitly compare the decremented value with zero. Since it doesn't matter which direction we fill a table, backwards is preferable:
+</p>
+<pre>
+        lda #0
+        ldy #size
+loop:   dey               ; decrement BEFORE sta
+        sta table,y       ; Y = size-1 through 0
+        bne loop
+</pre>
+<p>Note how the DEY is before the STA. If it were after, once Y reached 0, the loop would end, even though the STA would never have been executed with Y=0.
+</p><p>If we're doing something besides simply filling, we might not be able to put the DEY before the table operation. For example, if we're finding the sum of all values in the table using ADC, the ADC will alter flags. We could add a CPY #0 just before the branch, but then we're back with code similar to the original code. If the table is 128 bytes or smaller, we can instead use the BPL instruction:
+</p>
+<pre>
+        lda #0
+        ldy #size - 1     ; size must be 128 or less
+loop:   clc
+        adc table,y       ; Y = size-1 through 0
+        dey
+        bpl loop
+</pre>
+<p>Once DEY decrements Y to 0, BPL still branches, since 0 is considered positive. The loop then executes a final time, with Y=0. Then DEY decrements it to $FF (-1), and BPL falls through.
+</p><p>If the table is more than 128 bytes, we can still use BNE, and adjust the table address to compensate:
+</p>
+<pre>
+        lda #0
+        ldy #size
+loop:   clc
+        adc table-1,y     ; Y = size through 1
+        dey
+        bne loop
+</pre>
+<h2><span class="mw-headline" id="Efficient_forwards_scanning">Efficient forwards scanning</span></h2>
+<p>Sometimes a table <i>must</i> be scanned forwards, not backwards. For example, we might want to find the first occurrence of a particular byte equal to A:
+</p>
+<pre>
+        ldy #0
+loop:   cmp table,y       ; Y = 0 through size-1
+        beq found
+        iny
+        cpy #size
+        bne loop
+        
+found:  ...
+</pre>
+<p>The original approach works, but there is one as efficient as the backwards approach. First, consider scanning a 256-byte table forwards. We don't need a compare since Y will wrap around to 0 on the 256th iteration. So this is as fast as the backwards version:
+</p>
+<pre>
+        ldy #0
+loop:   cmp table,y       ; Y = 0 through $FF
+        beq found
+        iny
+        bne loop
+</pre>
+<p>Now, let's say we only want to scan the last 3 bytes of table. We would simply start the loop with Y set to $FD rather than 0. It would scan entries $FD, $FE, and $FF, then end (or find what it was looking for):
+</p>
+<pre>
+        ldy #$FD
+loop:   cmp table,y       ; Y = $FD through $FF
+        beq found
+        iny
+        bne loop
+</pre>
+<p>Since we can use the above loop to scan the last 3 bytes of table, we can use it to scan <i>any</i> three bytes of memory; it doesn't matter whether they are the last 3 bytes of a 256-byte table, or a table that's only 3 bytes long. But it does add $FD to whatever table address we use, so we'll need to subtract that. The following scans a 3-byte table forwards for a value:
+</p>
+<pre>
+        ldy #$FD
+loop:   cmp table - $FD,y          ; Y = $FD through $FF
+        beq found
+        iny
+        bne loop
+</pre>
+<p>The general pattern is to load Y with the $100-size, and subtract that same value from table:
+</p>
+<pre>
+        ldy #$100-size
+loop:   cmp table - ($100-size),y       ; Y = $100-size through $FF
+        beq found
+        iny
+        bne loop
+</pre>
+<p>There is a slight overhead introduced by this approach: since most indexed instructions take an extra cycle if the low byte of the address added to the index exceeds $FF, this is likely to introduce an extra cycle. Using the 3-byte table example, if table's address were $10ED, the compare would assemble to CMP $0FF0,Y. Then, with Y=$FD, there would be a page crossing, adding an extra cycle. Since this approach uses the upper portion of Y's range, rather than the lower portion, it's more likely to cause page crossings. However, one cycle due to a page crossing is less than two cycles due to an immediate compare.
+</p><p>If size is less than 128, Y going negative could stop the loop, allowing the typical offset to the table halved, reducing the chance of a page crossing:
+</p>
+<pre>
+        ldy #$80-size
+loop:   cmp table - ($80-size),y       ; Y = $80-size through $7F
+        beq found
+        iny
+        bpl loop
+</pre>
+<p>This approach has the efficiency of the decrement approach while avoiding accessing the table in reverse. One downside is that finding the actual index of the current byte requires some calculation. Also, since it's somewhat tricky to code, backwards is still preferred where the access order doesn't matter. Don't overlook the possibility of storing the table itself in reverse order so that the reverse approach can be used.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.049 seconds
+Real time usage: 0.051 seconds
+Preprocessor visited node count: 61/1000000
+Preprocessor generated node count: 212/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:446-1!*!0!!*!*!* and timestamp 20160208222724 and revision id 9014
+ -->
+</div></body></html>

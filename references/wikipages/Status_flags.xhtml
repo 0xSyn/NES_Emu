@@ -1,0 +1,73 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Status flags</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Status flags</h1><div class="article">
+<p>The 6502 has 6 status flags: carry, decimal mode, interrupt disable, negative, overflow, and zero. Each of these can either be set or clear. The processor stores the current state of each at all times. There are 2^6 = 64 total states these flags can be in.
+</p><p>During certain events, a copy of the flags is written to a byte in memory. There are 8 bits in a byte, and when writing to memory, all 8 bits must be written. Since there are only 6 status flags, the unused 2 bits must be given values.
+</p><p>There are four events that cause the flags to be written to memory: NMI and IRQ vectoring, and the BRK and PHP instructions. Rather than set the unused bits in the copy in memory to the same values in all cases, the 6502 sets one of them based on whether the event was interrupt vectoring or an executed instruction.
+</p><p>The flags are copied to memory in this arrangement:
+</p><p>Bit 7: Negative<br/>
+Bit 6: Overflow<br/>
+Bit 5: Always set<br/>
+Bit 4: Clear if interrupt vectoring, set if BRK or PHP<br/>
+Bit 3: Decimal mode (exists for compatibility, does not function on the Famicom/NES's 2A03/2A07)<br/>
+Bit 2: Interrupt disable<br/>
+Bit 1: Zero<br/>
+Bit 0: Carry<br/>
+</p><p>Note bits 4 and 5. This means that the following will put $30 into A, not 0:
+</p>
+<pre>LDA #$00
+PHA      ; pushes $00 on stack
+PLP      ; clears all 6 status flags
+PHP      ; pushes $30 on stack
+PLA      ; pops the $30 off the stack
+</pre>
+<p>Since bit 4 is set if the cause was a BRK instruction, and clear if it was an IRQ, this allows code to determine the cause of its IRQ handler being invoked, since BRK and IRQ both use the vector at $FFFE:
+</p>
+<pre>irq:
+        STA temp
+        PLA        ; get saved flags off stack
+        PHA        ; save again
+        AND #$10   ; check bit 4
+        BNE caused_by_brk
+caused_by_irq:
+        ...
+caused_by_brk:
+        ....
+</pre>
+<p>The above is the only way to determine the cause of the irq handler invocation. One might think that the following would work, if one thought that there was a status flag that told when it was a BRK instruction that invoked the IRQ handler:
+</p>
+<pre>; wrong way to determine cause of IRQ handler invocation
+irq:
+        STA temp
+        PHP        ; save current flags
+        PLA        ; get saved flags off stack
+        AND #$10   ; check bit 4
+        BNE caused_by_brk
+caused_by_irq:
+        ...
+caused_by_brk:
+        ....
+</pre>
+<p>This fails because there are only 6 status flags, none of which tell the reason the IRQ handler was invoked. This misunderstanding exists because many descriptions of the 6502 incorrectly state that the processor has 7 status flags, the 7th one being the break flag.
+</p><p>There is no break flag; there are only 6 status flags. As covered above, there are 8 bits in a byte, so when saving a <i>copy</i> of the status flags in memory, these unused two bits must be set to something. On the 6502, bit 5 of the copy is always set, and bit 4 is set BRK or PHP, clear if an interrupt. When restoring the flags from memory, bits 4 and 5 are ignored, since again, there are only 6 status flags, and thus the extra 2 bits of the byte must be ignored.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">CPU status flag behavior</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:506-1!*!0!*!*!*!* and timestamp 20160208225848 and revision id 2402
+ -->
+</div></body></html>

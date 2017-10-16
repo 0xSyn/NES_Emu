@@ -1,0 +1,95 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Installing CC65</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Installing CC65</h1><div class="article">
+<p>An <b>assembler</b> is a program that translates assembly language source code into machine code.
+A commonly used assembler that produces machine code for 6502 CPUs is <b>CA65</b>, which is distributed as part of the <b>CC65</b> package.
+These instructions tell how to install and run CA65 on Windows 2000 or Windows XP.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Configuring_Windows"><span class="tocnumber">1</span> <span class="toctext">Configuring Windows</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Configuring_7-Zip"><span class="tocnumber">2</span> <span class="toctext">Configuring 7-Zip</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Downloading_CC65"><span class="tocnumber">3</span> <span class="toctext">Downloading CC65</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Building_CC65_on_Ubuntu_.28Linux.29"><span class="tocnumber">4</span> <span class="toctext">Building CC65 on Ubuntu (Linux)</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Configuring_Windows">Configuring Windows</span></h2>
+<p>Windows is shipped with file name extensions hidden in Windows Explorer.
+This misfeature was originally intended to make Windows 95 look more like Mac OS 7.5, which did not use file name extensions.
+But hiding makes it easier to accidentally create a file name with two extensions.
+Worse yet, destructive software such as the ILOVEYOU worm (<a class="extiw" href="http://en.wikipedia.org/wiki/ILOVEYOU" title="wikipedia:ILOVEYOU">Wikipedia article</a>) has shipped with two extensions: one to indicate to the operating system that the file is executable and one to fool the user into thinking that the file is not executable (and thus safe).
+The first thing we will do is turn on the display of file name extensions in Windows Explorer:
+</p>
+<ol><li>Open Control Panel. (This may be in Start &gt; Control Panel or Start &gt; Settings &gt; Control Panel.)</li>
+<li>In Windows XP, if &quot;Pick a category&quot; shows up at top center of the window, click &quot;Switch to Classic View&quot;.</li>
+<li>Open Folder Options and activate the View pane.</li>
+<li>In the scrolling list of Advanced Options, turn make sure that &quot;Hide extensions for known file types&quot; is <i>not</i> checked.</li>
+<li>Press OK to put the change into effect.</li></ol>
+<h2><span class="mw-headline" id="Configuring_7-Zip">Configuring 7-Zip</span></h2>
+<p>Windows 2000 does not come with software to extract files from PKZIP archives.
+Windows XP comes with a bare-bones archiver called Compressed Folders that can only handle PKZIP archives (<code>.zip</code>), not rar or 7z or tar or gz or bz2 files.
+The <a class="external text" href="http://www.7-zip.org/" rel="nofollow">7-Zip package</a> can extract files from all of them, as well as add files to PKZIP and 7-Zip archives.
+</p>
+<h2><span class="mw-headline" id="Downloading_CC65">Downloading CC65</span></h2>
+<ol><li>Read the <a class="external text" href="http://www.cc65.org/" rel="nofollow">front page of CC65's web site</a>.</li>
+<li>Scroll down to &quot;Download&quot;. At the bottom of this section is a list of mirrors.</li>
+<li>Enter one of the mirrors, and download the <code>cc65-win32-<i>#####</i>.zip</code> and <code>cc65-doc-<i>#####</i>.zip</code> packages to your computer. (The <i>#####</i> represents a version number, such as 2.11.0-1, which may change before you read this.) The <code>cc65-win32</code> contains the CC65 package compiled for Windows, and <code>cc65-doc</code> contains the manual.</li>
+<li>Extract <code>cc65-win32-<i>#####</i>.zip</code> to a new folder.</li>
+<li>Open this folder and run the <code>install.vbs</code> file as an administrator to copy it to Program Files.</li>
+<li>Delete this folder.</li></ol>
+<p>Log out and log in to complete installation.
+</p>
+<h2><span class="mw-headline" id="Building_CC65_on_Ubuntu_.28Linux.29">Building CC65 on Ubuntu (Linux)</span></h2>
+<p>Absolute easiest method:
+</p><p><a class="external text" href="http://www.trikaliotis.net/debian" rel="nofollow">Debian Hosting</a>
+</p><p>Set up you repository there as it says on the homepage.
+Using software sources and import the gpg key.
+or
+add:
+deb     <a class="external free" href="http://debian.trikaliotis.net/" rel="nofollow">http://debian.trikaliotis.net/</a> stable contrib
+to your software sources list.
+</p><p>Download: <a class="external text" href="http://www.trikaliotis.net/spiro.pgp" rel="nofollow">KeyFile</a>
+add to authentication sources.
+</p><p>Then:
+sudo apt-get install cc65
+</p><p>Done.! Enjoy.
+</p><p>//------------------
+</p><p>Note: I'll add a link to the compile.txt in the docs at the cc65 site later.
+Note2: I must be really tired, I never even thought of just modifying the makefile. 
+Note2: Ignore &quot;Method 2&quot;. And I'll clean this up in the morning. 
+Note3: If enough people want it and tell me so on the userpage, I'd be more than willing to upload a package somewhere.
+</p><p><br/>
+Unzip the source, move that top-level folder somewhere; I just dragged it from the archive onto the Desktop.
+Open a terminal and get to your Desktop folder (or where ever you put it):
+</p><p>$ cd cc65-VERSION/make
+$ make -f make/gcc.mak
+</p><p>Now once that finishes, rename gcc.mak to makefile, then open it, and remove the text &quot;make/&quot; from 
+line 37. If you don't want a particular executable installed (and also packaged), on line 134, remove
+the name of the program. If you're programming for the NES, chances are you don't need the C compiler,
+so you'd remove &quot;cc65&quot;. Next, you'll need to rename the top-level make folder to the name of its parent folder, as checkinstall will otherwise use &quot;make&quot; as the name of the package. I did this by accident, and it took me
+a whole 15 minutes to force the reinstallation of the make utility and make sure the spurious/incorrectly named cc65 package was removed. After you remove the top-level make to the same as the parent, enter that newly renamed folder and run &quot;sudo checkinstall&quot;. Give it a nice descriptive name, modify any other items you feel like, and
+hit enter. It should do its thing, install the program, and output a .deb package into the folder.
+</p><p>I did not use this method, so attempt it carefully. I used the below method which doesn't modify any files
+but it does copy the ENTIRE directory tree into itself, along with some more complex directory/file renaming.
+</p><p>METHOD 2
+</p><p>Replace VERSION with the rest of the folder name after &quot;cc65-&quot;. It doesn't take long to make the entire suite of programs. After you've built it, you could probably install by just saying &quot;make -f make/gcc.mak install&quot;, and perhaps you'll want to (I didn't try this). Others, such as myself, want to make sure it can be removed. For this, we use the checkinstall program. The problem is, the installation runs a script file with a hardcoded path from the main directory to place each executable. While you could play with the makefile, I had success with a somewhat more hackish solution:
+</p><p>Rename the make directory to the same thing as the top level cc65 directory. Then, enter the directory you just renamed and create a folder called make. Put a copy of install-sh into this new make folder. Now copy all the folders except the recently renamed one INTO the recently renamed one. Then, rename gcc.mak to makefile and run &quot;sudo checkinstall&quot; from the directory that has makefile in it (Desktop/cc65-2.10.1/cc65-2.10.1 for example).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:238-1!*!*!!en!*!* and timestamp 20160208225533 and revision id 1658
+ -->
+</div></body></html>

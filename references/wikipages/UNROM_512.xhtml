@@ -1,0 +1,362 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNROM 512</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNROM 512</h1><div class="article">
+<p><b>UNROM 512</b> is a discrete-logic board made by RetroUSB as an extension of <a class="mw-redirect" href="UxROM.xhtml" title="UNROM">UNROM</a> with up to 512kB of PRG ROM, bankable CHR RAM, an option for mapper-controlled single-screen mirroring, as well as a self-flashable configuration for rewriting PRG.  Games that use this board include Study Hall and <a href="Battle_Kid_2__Mountain_of_Torment.xhtml" title="Battle Kid 2: Mountain of Torment">Battle Kid 2: Mountain of Torment</a>.  Since its initial creation InfiniteNesLives has replicated its design and also added an optional four-screen mirroring variation.
+</p><p>The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>iNES Mapper 030</b> to UNROM 512.
+</p><p>The <a href="UNIF.xhtml" title="UNIF">UNIF</a> names for this board are <b>UNROM-512-8</b>, <b>UNROM-512-16</b> and <b>UNROM-512-32</b>, depending on how much CHR RAM is present.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Board"><span class="tocnumber">2</span> <span class="toctext">Board</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Mapper"><span class="tocnumber">3</span> <span class="toctext">Mapper</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 512kB (Up to 256kB on 8Bit XMAS)</li>
+<li> PRG ROM bank size: 16kB</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: Up to 32kB RAM</li>
+<li> CHR bank size: 8kB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Solder pads select vertical, horizontal, mapper-controlled one-screen. (InfiniteNesLives variation permits four-screen mirroring)</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes, in the non-flashable configuration</li></ul>
+<h2><span class="mw-headline" id="Board">Board</span></h2>
+<p>The example board in question is marked as follows: &quot;Sealie Computing&quot;, &quot;12/29/2011 revA&quot;, &quot;UNROM 512&quot;.  The backside of the board was mislabeled with &quot;ReproPak MMC3&quot;.
+</p><p>The board includes 4x banks worth of full 8kB CHR-RAM (Configurable by jumpers) and 32x 16kB PRG banks.
+</p><p>The board can be wired in a non-flashable or self-flashable configurations.  
+</p><p>Mirroring can be selected between Horizontal, Vertical, and Mapper-controlled One Screen.  The InfiniteNesLives variation optionally adds 4-screen mirroring capabilities.
+</p><p>Bus conflicts are only present on the non-flashable configuration of the board.
+</p><p>Some images of the board: 
+</p>
+<ul><li><a class="internal" href="/w/images/9/90/Unrom512_front_study_hall.jpg" title="Unrom512 front study hall.jpg">Study Hall PCB Front</a></li>
+<li><a class="internal" href="/w/images/f/f1/Unrom512_front_bk2.jpg" title="Unrom512 front bk2.jpg">Battle Kid 2 PCB Front</a></li>
+<li><a class="internal" href="/w/images/a/a8/Unrom512_back.jpg" title="Unrom512 back.jpg">PCB Back</a></li>
+<li><a class="internal" href="/w/images/d/dc/8BIT_XMAS_revD.jpg" title="8BIT XMAS revD.jpg">8BIT XMAS revD PCB Front</a></li>
+<li><a class="internal" href="/w/images/7/75/8BIT_XMAS_revD_back.jpg" title="8BIT XMAS revD back.jpg">8BIT XMAX revD PCB Back</a></li></ul>
+<p>When board is not flashable:
+</p>
+<pre>
+  Registers:
+  ---------------------------
+  
+  Range,Mask:   $8000-FFFF, $8000
+  
+    $8000:  [MCCP PPPP]
+      M = One screen Mirroring select
+      C = CHR RAM bank
+      P = PRG ROM bank
+  
+  PRG Setup:
+  ---------------------------
+       $8000   $A000   $C000   $E000  
+      +-------------------------------+
+      |     $8000     |     { -1}     |
+      +---------------+---------------+
+  
+  CHR Setup:
+  ---------------------------
+        $0000   $1000   
+      +-------+-------+
+      |     $0000     |
+      +-------+-------+
+</pre>
+<p>When board is self flashable:
+</p>
+<pre>
+  Registers:
+  ---------------------------
+  
+  Range,Mask:   $8000-BFFF, $8000
+                $C000-FFFF, $C000
+  
+    $8000:  [.... ....]
+      Write a sequence of bytes here for writing to the flash. The sequence is as follows 
+
+(This code must exist in wram):
+        Erase 4KB Flash Sector:
+        $C000:$01, $9555:$AA
+        $C000:$00, $AAAA:$55
+        $C000:$01, $9555:$80
+        $C000:$01, $9555:$AA
+        $C000:$00, $AAAA:$55
+        $C000:BANK, ADDR:$30 (Where BANK is $00-1F, ADDR is $8000,$9000,$A000,$B000)
+        Read the written location twice until you get $FF twice.
+
+        Write a byte:
+        $C000:$01, $9555:$AA
+        $C000:$00, $AAAA:$55
+        $C000:$01, $9555:$A0
+        $C000:BANK, ADDR:DATA (Where BANK is $00-1F, ADDR is $8000-$BFFF, DATA is $00-$FF)
+        Read the written location twice until you get DATA twice.
+
+Additionally, on 8Bit XMAS boards, any writes here controls the LEDs as follows.
+
+    $8000:  [BYGR bygr]
+        B = Blue 3, Blue 4
+        Y = Yellow 3, Yellow 4
+        G = Green 3, Green 4
+        R = Red 3, Red 4
+        b = Blue 1, Blue 2
+        y = Yellow 1, Yellow 2
+        g = Green 1, Green 2
+        r = Red 1, Red 2
+
+  
+    $C000:  [MCCP PPPP]
+      M = One screen Mirroring select
+      C = CHR RAM bank
+      P = PRG ROM bank
+  
+  PRG Setup:
+  ---------------------------
+       $8000   $A000   $C000   $E000  
+      +-------------------------------+
+      |     $8000     |     { -1}     |
+      +---------------+---------------+
+  
+  CHR Setup:
+  ---------------------------
+        $0000   $1000   
+      +-------+-------+
+      |     $8000     |
+      +-------+-------+
+</pre>
+<p>Here's a schematic of the board:
+</p>
+<pre>
+             ____
+A14 ---------\    \
+              )    &gt;--- ROM A14
+377 Q0 ------/____/
+
+             ____
+A14 ---------\    \
+              )    &gt;--- ROM A15
+377 Q1 ------/____/
+
+             ____
+A14 ---------\    \
+              )    &gt;--- ROM A16
+377 Q2 ------/____/
+
+             ____
+A14 ---------\    \
+              )    &gt;--- ROM A17
+377 Q3 ------/____/
+
+             ____
+A14 ---------\    \
+              )    &gt;--- ROM A18
+377 Q4 ------/____/
+
+16/32KB CHRRAM
+377 Q5 --[]--+-- CHRRAM A13
+             |
+VCC -----[]--+
+8KB CHRRAM
+
+8/16KB CHRRAM
+VCC -----[]--+
+             |
+377 Q6 --[]--+-- CHRRAM A14
+32KB CHRRAM
+
+ONE
+377 Q7 --[]--+
+             |
+VERT         |
+PPU A10 -[]--+-- CIRAM_A10
+             |
+HORIZ        |
+PPU A11 -[]--+
+
+FLASHLOCKED3
+R/W ------[]-+
+             |
+FLASHABLE    |
+GND ------[]-+-- 377_/CE
+
+FLASHLOCKED1
+VCC ------[]-------+
+          ½74LS139 |
+          .------. |
+CPUA14----|A   Y0|-+- PRGROM_/WE
+R/W ------|B   Y1|-+- 377_CLK
+          |    Y2| |
+/ROMSEL-+-|G   Y3| |
+        | '------' |
+        |          |
+        +---[]-----+
+       FLASHLOCKED2
+
+FLASHLOCKED4
+GND ------[]-----+
+        ½74LS139 |
+        .------. |
+R/W ----|A   Y0| |
+GND ----|B   Y1|-+- PRGROM_/OE
+        |    Y2|
+/ROMSEL-|G   Y3|
+        '------'
+
+With 8Bit Xmas Board, there is a second 377 chip for the LEDs, and 2 jumpers to control whether the 377 is sourcing
+current to the LEDs or sinking current from them.  Additionally, the board has no flash control jumpers, and is hard-wired
+flashable,  and has no CHR ram control jumpers, is hard-wired as 32KB, and it does not have the second 74LS32 chip,
+required for a 512KB board, so its max size is 256KB.
+
+Q0-----R1-----RED1-----RED2-------+
+Q1--+--R6-----GRN1----------------+
+    +--R5-----GRN2----------------+
+Q2-----R3-----YEL1-----YEL2-------+
+Q3--+--R9-----BLU1----------------+
+    +--R10----BLU2----------------+
+Q4-----R2-----RED3-----RED4-------+
+Q5--+--R7-----GRN3----------------+
+    +--R8-----GRN4----------------+
+Q6-----R4-----YEL3-----YEL4-------+
+Q7--+--R11----BLU3----------------+
+    +--R12----BLU4----------------+
+                                  |
+VCC---------[]--------------------+
+GND---------[]--------------------+
+
+</pre>
+<p>The board is wired in one of the following configurations:
+</p><p>Not Flashable:
+</p>
+<ul><li>All 4 Flash Locked jumpers are soldered.</li>
+<li>Flashable jumper is not soldered.</li>
+<li>74*139 is not mounted.</li>
+<li>This configuration <b>is</b> subject to bus conflicts</li></ul>
+<p>Flashable:
+</p>
+<ul><li>All 4 Flash Locked jumpers are not soldered.</li>
+<li>Flashable jumper is soldered.</li>
+<li>74*139 is mounted.</li>
+<li>This configuration is <b>not</b> subject to bus conflicts</li></ul>
+<p>The Self-flashable configuration should be implemented according to the <a class="external text" href="http://www.microchip.com/wwwproducts/Devices.aspx?product=SST39SF040" rel="nofollow">SST39SF040</a>'s datasheet. 
+</p><p>Example flash writing code - <a class="internal" href="/w/images/f/fa/Flash.asm.txt" title="Flash.asm.txt">Flash.asm</a>
+</p><p><br/>
+</p>
+<hr/>
+<p><b>InfiniteNesLives four-screen mirroring variation:</b>
+</p>
+<ul><li> Two of the unused OR gates are used in combination with jumpers to disable NES mainboard VRAM/CIRAM and utilize cartridge VRAM for all pattern, name, &amp; attribute tables.</li>
+<li> This variation only allows CHR-RAM size of 32KB, however the last CHR-RAM bank is designated for non-pattern table use.</li></ul>
+<dl><dd>- This restricts the user to only having free use of the first 3 CHR-RAM banks (24KB) for pattern table tile data.</dd></dl>
+<ul><li> The last 8KB CHR-RAM bank is mapped to PPU $2000-3FFF (effectively $2000-3EFF due to palette data.)
+<ul><li> The first 4KB of this last CHR-RAM bank is mapped to PPU $2000-2FFF to provide four-screen mirroring.</li>
+<li> PPU $3000-3EFF are no longer mirrors to nametables, and actually have RAM mapped to each byte which aren't used by the PPU for rendering.</li></ul></li></ul>
+<dl><dd><dl><dd>- This 3.75KB of RAM can be used by the developer as a 'scratch RAM' space only accessible via CPU $2006/2007.</dd>
+<dd>- The last 256bytes of the last CHR-RAM bank are not normally accessible due to pallette data being mapped to PPU $3F00-3FFF.</dd></dl></dd></dl>
+<ul><li> Setting of both CHR RAM bank bits ($8000: 0bx11xxxxx) is permissible, but extreme care must be used when the PPU is rendering as it has the effect of mapping the last CHR-RAM bank to both PPU $0000-1FFF (Pattern tables), and PPU $2000-3F00 (Name/Attribute tables) at the same time.</li></ul>
+<dl><dd>- Improperly operating in this mode will render NT/AT data as tiles in PT0, and writes to PT0 will corrupt NT/AT data.</dd>
+<dd>- This mode is the only means of gaining access to the last 256bytes of the last CHR-RAM bank which are normally hidden behind PPU pallette address space.</dd></dl>
+<p>PPU memory map:
+</p>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $0000-$0FFF </td>
+<td> $1000 </td>
+<td> Pattern Table 0
+</td></tr>
+<tr>
+<td> $1000-$1FFF </td>
+<td> $1000 </td>
+<td> Pattern Table 1
+</td></tr>
+<tr>
+<td> $2000-$23FF  </td>
+<td> $0400 </td>
+<td> Nametable 0
+</td></tr>
+<tr>
+<td> $2400-$27FF  </td>
+<td> $0400 </td>
+<td> Nametable 1
+</td></tr>
+<tr>
+<td> $2800-$2BFF  </td>
+<td> $0400 </td>
+<td> Nametable 2
+</td></tr>
+<tr>
+<td> $2C00-$2FFF  </td>
+<td> $0400 </td>
+<td> Nametable 3
+</td></tr>
+<tr>
+<td> $3000-$3EFF  </td>
+<td> $0F00 </td>
+<td> Scratch RAM
+</td></tr>
+<tr>
+<td> $3F00-$3F1F  </td>
+<td> $0020 </td>
+<td> Palette RAM indexes
+</td></tr>
+<tr>
+<td> $3F20-$3FFF  </td>
+<td> $00E0 </td>
+<td> Mirrors of $3F00-$3F1F
+</td></tr></table>
+<p>Electrical Schematic:
+</p>
+<pre>
+             ____
+PPU A13 -----\    \
+              )    &gt;--- CHRRAM A13
+377 Q5 ------/____/
+
+             ____
+PPU A13 -----\    \
+              )    &gt;--- CHRRAM A14
+377 Q6 ------/____/
+
+NON-4SCREEN
+PPU A13 ----[]--+
+                |
+GND --------[]--+---- CHRRAM /CE (Cartridge VRAM)
+4SCREEN MIRROR
+
+NON-4SCREEN
+PPU /A13 ---[]--+
+                |
+VCC --------[]--+---- CIRAM /CE (NES mainboard VRAM)
+4SCREEN MIRROR
+
+</pre>
+<h2><span class="mw-headline" id="Mapper">Mapper</span></h2>
+<p><a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> may specify the CHR-RAM size from 8 to 32 kB, but the default for iNES should to use 32 kB.
+</p><p>If the Battery flag is set, which indicates the mapper is flashable, then no bus conflicts should be emulated. On the other hand, bus conflicts should be emulated if the battery flag is cleared.
+</p><p>Mapper controlled one-screen mirroring is only emulated if the Four-Screen mirroring flag is set, otherwise, it is hard-locked on either horizontal or vertical mirroring.  This needs to be officially disambiguated in order to define how to differentiate between one-screen and four-screen.  Utilization of the Four-Screen mirroring flag to denote one-screen mirroring does not follow logically from the nes 2.0 header definition.
+</p><p>Mapper 30 is currently only using sub mapper 0.  The other sub mappers are reserved for future use.
+</p><p>Supported in FCEUX as of r3071,  Supported in BizHawk as of r6322
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a href="INES_Mapper_DischDocs.xhtml" title="INES Mapper DischDocs">INES Mapper DischDocs</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.131 seconds
+Real time usage: 0.136 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 100/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1343-1!*!0!!en!*!* and timestamp 20160823013225 and revision id 12821
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a></p></div></body></html>

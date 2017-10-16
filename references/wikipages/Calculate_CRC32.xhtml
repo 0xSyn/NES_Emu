@@ -1,0 +1,86 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Calculate CRC32</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Calculate CRC32</h1><div class="article">
+<p>The following code from Kevin Horton can be used to calculate a <a class="external text" href="http://en.wikipedia.org/wiki/Cyclic_redundancy_check" rel="nofollow">CRC32 checksum</a>.
+</p>
+<h2><span class="mw-headline" id="Details">Details</span></h2>
+<ul><li> Variable <b>testcrc</b> should be in zero page and (obviously) requires 4 bytes of space</li>
+<li> The &quot;magic value&quot; $EDB88320 (bytes $ED, $B8, $83, and $20) are the polynomial</li></ul>
+<h2><span class="mw-headline" id="Code">Code</span></h2>
+<pre>
+;usage:
+;
+;initialize by calling crc32init
+;
+;feed bytes to crc32
+;
+;finish by calling crc32end
+;
+;result is in testcrc0-3
+;
+
+crc32init:   ldx #3
+             lda #$ff
+
+c3il:        sta testcrc+0,x
+             dex
+             bpl c3il
+             rts
+
+
+crc32:       ldx #8
+             eor testcrc+0
+             sta testcrc+0
+
+c32l:        lsr testcrc+3
+             ror testcrc+2
+             ror testcrc+1
+             ror testcrc+0
+             bcc dc32
+             lda #$ed
+             eor testcrc+3
+             sta testcrc+3
+             lda #$b8
+             eor testcrc+2
+             sta testcrc+2
+             lda #$83
+             eor testcrc+1
+             sta testcrc+1
+             lda #$20
+             eor testcrc+0
+             sta testcrc+0
+
+dc32:        dex
+             bne c32l
+             rts
+
+crc32end:    ldx #3
+
+c3el:        lda #$ff
+             eor testcrc+0,x
+             sta testcrc+0,x
+             dex
+             bpl c3el
+             rts
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external free" href="http://mdfs.net/Info/Comp/Comms/CRC32.htm" rel="nofollow">http://mdfs.net/Info/Comp/Comms/CRC32.htm</a></li>
+<li> <a class="external free" href="http://www.6502.org/source/integers/crc.htm" rel="nofollow">http://www.6502.org/source/integers/crc.htm</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 20/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1494-1!*!*!!*!*!* and timestamp 20160208224843 and revision id 9968
+ -->
+<p class="categories">Categories: <a href="Category_Arithmetic.xhtml">Arithmetic</a></p></div></body></html>

@@ -1,0 +1,796 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Visual circuit tutorial</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Visual circuit tutorial</h1><div class="article">
+<p>This is a crash course on making sense of the <a href="#Terms">NMOS</a> circuit displays in <a class="external text" href="http://visual6502.org/" rel="nofollow">Visual 6502</a>/2C02/2A03, written for people without much low-level electronics
+experience (like the primary author). It aims to present the information needed to read
+the diagrams at a basic level in simple language, omitting details that are
+less important when starting out.
+</p><p>You might want to read <a class="external text" href="http://visual6502.org/wiki/index.php?title=JssimUserHelp" rel="nofollow">the Visual 6502 user's guide</a> and the <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a> page first.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#What_the_different_colored_areas_are"><span class="tocnumber">1</span> <span class="toctext">What the different colored areas are</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Basic_building_blocks"><span class="tocnumber">2</span> <span class="toctext">Basic building blocks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Transistors"><span class="tocnumber">2.1</span> <span class="toctext">Transistors</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Power_sources"><span class="tocnumber">2.2</span> <span class="toctext">Power sources</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#An_example_that_brings_together_transistors_and_power_sources"><span class="tocnumber">2.3</span> <span class="toctext">An example that brings together transistors and power sources</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Nodes"><span class="tocnumber">3</span> <span class="toctext">Nodes</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Basic_logic_elements"><span class="tocnumber">4</span> <span class="toctext">Basic logic elements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Inverters"><span class="tocnumber">4.1</span> <span class="toctext">Inverters</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#NOR_gates"><span class="tocnumber">4.2</span> <span class="toctext">NOR gates</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Storage_elements"><span class="tocnumber">5</span> <span class="toctext">Storage elements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Wire_capacitance_as_storage"><span class="tocnumber">5.1</span> <span class="toctext">Wire capacitance as storage</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Latches_.28cross-coupled_inverters.29"><span class="tocnumber">5.2</span> <span class="toctext">Latches (cross-coupled inverters)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Clocked_latches"><span class="tocnumber">5.3</span> <span class="toctext">Clocked latches</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#DRAM_.28Dynamic_RAM.29"><span class="tocnumber">5.4</span> <span class="toctext">DRAM (Dynamic RAM)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#DRAM_refresh"><span class="tocnumber">5.4.1</span> <span class="toctext">DRAM refresh</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#SRAM_.28Static_RAM.29"><span class="tocnumber">5.5</span> <span class="toctext">SRAM (Static RAM)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Miscellaneous_circuitry"><span class="tocnumber">6</span> <span class="toctext">Miscellaneous circuitry</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#Decoders_and_mask_ROMs"><span class="tocnumber">6.1</span> <span class="toctext">Decoders and mask ROMs</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Adders"><span class="tocnumber">6.2</span> <span class="toctext">Adders</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Barrel_shifters"><span class="tocnumber">6.3</span> <span class="toctext">Barrel shifters</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Shift_registers"><span class="tocnumber">6.4</span> <span class="toctext">Shift registers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="#Control_signals"><span class="tocnumber">6.4.1</span> <span class="toctext">Control signals</span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#Shifting"><span class="tocnumber">6.4.2</span> <span class="toctext">Shifting</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#Parallel_load"><span class="tocnumber">6.4.3</span> <span class="toctext">Parallel load</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-25"><a href="#Digital-to-analog_conversion_.28DAC.29"><span class="tocnumber">6.5</span> <span class="toctext">Digital-to-analog conversion (DAC)</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Output_drivers"><span class="tocnumber">6.6</span> <span class="toctext">Output drivers</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Cut-off_connections"><span class="tocnumber">6.7</span> <span class="toctext">Cut-off connections</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#Layers"><span class="tocnumber">7</span> <span class="toctext">Layers</span></a></li>
+<li class="toclevel-1 tocsection-29"><a href="#Transistor_dimensions"><span class="tocnumber">8</span> <span class="toctext">Transistor dimensions</span></a></li>
+<li class="toclevel-1 tocsection-30"><a href="#Clocks"><span class="tocnumber">9</span> <span class="toctext">Clocks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-31"><a href="#6502_core_pins"><span class="tocnumber">9.1</span> <span class="toctext">6502 core pins</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#6502_internal_clock_signals"><span class="tocnumber">9.2</span> <span class="toctext">6502 internal clock signals</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#APU_clock_signals"><span class="tocnumber">9.3</span> <span class="toctext">APU clock signals</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#PPU_clock_signals"><span class="tocnumber">9.4</span> <span class="toctext">PPU clock signals</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Master_clock_and_CPU.2FPPU_clock_alignment"><span class="tocnumber">9.5</span> <span class="toctext">Master clock and CPU/PPU clock alignment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-36"><a href="#6502_cycle_and_phase_timing"><span class="tocnumber">10</span> <span class="toctext">6502 cycle and phase timing</span></a></li>
+<li class="toclevel-1 tocsection-37"><a href="#Terms"><span class="tocnumber">11</span> <span class="toctext">Terms</span></a></li>
+<li class="toclevel-1 tocsection-38"><a href="#Tips_for_working_with_the_simulators"><span class="tocnumber">12</span> <span class="toctext">Tips for working with the simulators</span></a>
+<ul>
+<li class="toclevel-2 tocsection-39"><a href="#Node_names_in_Visual_6502"><span class="tocnumber">12.1</span> <span class="toctext">Node names in Visual 6502</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#Clearing_highlighting"><span class="tocnumber">12.2</span> <span class="toctext">Clearing highlighting</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#Local_copies_of_the_simulator"><span class="tocnumber">12.3</span> <span class="toctext">Local copies of the simulator</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#Extra_node_names"><span class="tocnumber">12.4</span> <span class="toctext">Extra node names</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#PPU_chip_layout_overview"><span class="tocnumber">12.5</span> <span class="toctext">PPU chip layout overview</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="What_the_different_colored_areas_are">What the different colored areas are</span></h2>
+<p>Let's start by defining what the different colors mean:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_areas_png.xhtml"><img alt="Vis areas.png" height="530" src="../wiki-images/Vis_areas.png" width="637"/></a></div>
+<ul><li> Green areas are diffusion connected to ground.</li>
+<li> Red areas are diffusion connected to VCC (power).</li>
+<li> Yellow areas are diffusion that is neither connected directly to ground nor directly to VCC.</li>
+<li> Gray areas are metal.</li>
+<li> Purple areas are polysilicon (often shortened to just &quot;poly&quot;).</li></ul>
+<p>At the level presented here, diffusion, metal, and polysilicon can be thought
+of as roughly equivalent when viewed in isolation; they all conduct current. The
+important difference is in how they interact with each other, which is
+explained below.
+</p>
+<h2><span class="mw-headline" id="Basic_building_blocks">Basic building blocks</span></h2>
+<h3><span class="mw-headline" id="Transistors">Transistors</span></h3>
+<p>When a piece of polysilicon is sandwiched between two areas of diffusion, it
+acts as a <i>gate</i>, only letting current through when the polysilicon is connected to power
+(or, equivalently, is <i>on</i>, <i>conducting</i>, <i>high</i>, or <i>1</i>). The diffusion area from which
+current flows when the gate is high is called the <i>source</i>. The diffusion
+area into which current flows is called the <i>drain</i>. The gate together with
+the source and drain is what makes a <a class="extiw" href="http://en.wikipedia.org/wiki/Field-effect_transistor" title="wikipedia:Field-effect transistor"><i>transistor</i></a>.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_transistor_png.xhtml"><img alt="Vis transistor.png" height="190" src="../wiki-images/Vis_transistor.png" width="402"/></a></div>
+<p>The transistor here is an <a class="extiw" href="http://en.wikipedia.org/wiki/Depletion_and_enhancement_modes" title="wikipedia:Depletion and enhancement modes">enhancement-mode transistor</a>.
+All the &quot;ordinary&quot; selectable (see the <a href="#Nodes">nodes section</a>) transistors have this type.
+</p>
+<h3><span class="mw-headline" id="Power_sources">Power sources</span></h3>
+<p>Around areas of powered diffusion we often see something like the following
+(note the distinctive &quot;hook&quot; in the polysilicon):
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_power_png.xhtml"><img alt="Vis power.png" height="195" src="../wiki-images/Vis_power.png" width="362"/></a></div>
+<p>Here the polysilicon acts roughly like a resistor (or more specifically a <a href="#Terms">pull-up resistor</a>). This prevents there from ever being a short from VCC to ground (through some path of high gates). In the simulators, this entire configuration is simply modeled as a power source.
+</p><p>The transistor here is a <a class="extiw" href="http://en.wikipedia.org/wiki/Depletion_and_enhancement_modes" title="wikipedia:Depletion and enhancement modes">depletion-mode transistor</a>, a different type of
+transistor compared to above (though it appears the same visually).
+</p>
+<h3><span class="mw-headline" id="An_example_that_brings_together_transistors_and_power_sources">An example that brings together transistors and power sources</span></h3>
+<p>In the following curcuit, the gate will be high and <i>A</i> powered/pulled to VCC:
+</p>
+<pre>
+                      VCC
+                       |
+                       |
+                       |
+[power source]------[gate]
+                       |
+                       |
+                       |
+                       A
+</pre>
+<p>No current will ever flow from the power source to <i>A</i> (ideally). The voltage on the gate only controls whether there's a conductive path between VCC and <i>A</i>.
+</p><p>Similarly, the gate will be low and <i>A</i> <i>not</i> powered/pulled to VCC In the following circuit:
+</p>
+<pre>
+                      VCC
+                       |
+                       |
+                       |
+GND-----------------[gate]
+                       |
+                       |
+                       |
+                       A
+</pre>
+<p>Using a switch analogy for transistors (which is common in digital electronics), the above circuits can be viewed as follows:
+</p>
+<pre>
+                                           A
+                                           |
+                                           |
+                                           |
+                                           \
+B----------[remote switch controller]       \   &lt;- controlled switch
+                                             \
+                                           |
+                                           |
+                                           |
+                                           C
+</pre>
+<p>When <i>B</i> is high, the switch is closed, connecting <i>A</i> and <i>C</i>. When <i>B</i> is low, it is open (like in the figure).
+</p>
+<h2><span class="mw-headline" id="Nodes">Nodes</span></h2>
+<p>Electrically common areas are called <i>nodes</i> in Visual 6502/2C02/2A03. Clicking
+on a node highlights it, making it easier to see how things are connected.
+(Clicking on powered or grounded diffusion won't work; these only modify
+properties of other nodes and are not themselves nodes.) When a node is
+highlighted, a numeric ID unique to the node is displayed in the upper
+right, along with a name for the node if it has one. Node names are defined in
+<b>nodenames.js</b>.
+</p><p>Transistors can be selected separately by clicking on the gate (the part of the
+polysilicon between the diffusion areas). They have names that start with 't',
+followed by a numeric ID.
+</p><p>The <b>Find:</b> edit field can be used to locate nodes, either by numeric ID or by
+name. Numeric IDs can also be used to trace the values of nodes without an assigned
+name.
+</p>
+<h2><span class="mw-headline" id="Basic_logic_elements">Basic logic elements</span></h2>
+<h3><span class="mw-headline" id="Inverters">Inverters</span></h3>
+<p>An inverter is constructed like in the image below:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_inverter_png.xhtml"><img alt="Vis inverter.png" height="238" src="../wiki-images/Vis_inverter.png" width="376"/></a></div>
+<p>Note that there is a hook in the gate to the left, meaning the left part of the circuit
+is a power source.
+</p><p>When the input gate is low, current from the power source flows into the output wire. When the input
+gate is high, current from the power source flows into ground, driving the output wire low. The
+output wire is hence the inverse of the input wire.
+</p><p>When one node is the inverse of another, we will say that it <i>inverts into</i> the
+other node.
+</p>
+<h3><span class="mw-headline" id="NOR_gates">NOR gates</span></h3>
+<p>Below is an example of a NOR gate taken from Visual 2A03, related to
+controlling when the first square channel is silenced:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_nor_png.xhtml"><img alt="Vis nor.png" height="324" src="../wiki-images/Vis_nor.png" width="176"/></a></div>
+<p>If any of the gates in red circles are high, the voltage of the highlighted node
+is pulled to ground instead of pulled high (as current will flow from the
+power source on the left into ground through any high gates). The value that
+reaches the gate in the blue circle is hence the NOR of the values on the gates
+in the red circles.
+</p><p>Note that the circles represent the only transistors in this image (except for the
+depletion-mode transistors on the power sources). There are polysilicon
+traces passing above (or in reality, below) metal traces in a few spots, but this
+does not form a transistor. The highlighting (which was activated by clicking on the node)
+shows how things are connected.
+</p><p>The gate in the blue circle is part of a <i>pass transistor</i>, so called because
+it passes current between two nodes rather than driving or grounding a node.
+The gate in this case is <a href="#APU_clock_signals"><b>apu_clk1</b></a>, and we say that
+value is &quot;buffered on <b>apu_clk1</b>&quot;.
+</p>
+<h2><span class="mw-headline" id="Storage_elements">Storage elements</span></h2>
+<h3><span class="mw-headline" id="Wire_capacitance_as_storage">Wire capacitance as storage</span></h3>
+<p>This is the simplest form of storage, and so is covered first.
+</p><p>If a wire is &quot;closed off&quot; so that it is no longer connected to neither power
+nor ground, it retains its value for a while through capacitance. This is
+used to store some short-lived data &quot;on the wire&quot;. As an example, here's the
+read buffer for the 2C02's <b>VBlank</b> flag, which lets its value be read even though
+reading <a href="PPU_registers.xhtml" title="PPU registers">$2002</a> immediately clears the <b>VBlank</b> flag:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_vblbuf_png.xhtml"><img alt="Vis vblbuf.png" height="294" src="../wiki-images/Vis_vblbuf.png" width="119"/></a></div>
+<p>The circled gate is controlled by the <b>/read_2002_output_vblank_flag</b> signal (shortened to <b>ov</b> from here on).
+While <b>ov</b> is high, the value of <b>vbl_flag</b> (or rather <b>/vbl_flag</b> in this case) is connected
+to the highlighted wire. When <b>ov</b> goes low, the value on the wire is held.
+</p><p>A '/' denotes 'inverse', meaning the signal is the inverse of another signal with the same name but without the
+'/'. A '/' can also mean 'active low', meaning the signal is considered &quot;active&quot; when low. Visual 6502
+has a slightly different convention – see <a href="#Node_names_in_Visual_6502">Node names in Visual 6502</a>.
+</p><p>While a node or wire is isolated from both VCC and ground in the above fashion, it is said to
+be <i>floating</i>. For bus lines, a floating line is said to be <i>tri-stated</i>, as the floating
+state can be viewed as a third state in addition to 0 and 1. This third state allows other devices to use
+the bus without interference.
+</p><p>Using capacitance as storage in the above fashion is an instance of
+<a class="extiw" href="http://en.wikipedia.org/wiki/Dynamic_logic_(digital_electronics)" title="wikipedia:Dynamic logic (digital electronics)">dynamic logic</a>,
+so called since it has time-dependent behavior beyond just the input clock. Chips that make
+use of dynamic logic techniques tend to have a minimum clock speed at which they function
+correctly, as values stored via capacitance degrade to zero over time.
+</p>
+<h3><span class="mw-headline" id="Latches_.28cross-coupled_inverters.29">Latches (cross-coupled inverters)</span></h3>
+<p>Two cross-coupled inverters make a <i>latch</i> – an element that stores a single bit.
+</p><p>Below is the VBlank flag from Visual 2C02. In the left-most picture the <b>vbl_flag</b>
+node is highlighted, and in the middle picture its inverse (<b>/vbl_flag</b>) is highlighted.
+As can be seen by the two gates in gray circles, each node inverts into the other, forming
+two cross-coupled inverters.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_crossreg_png.xhtml"><img alt="Vis crossreg.png" height="400" src="../wiki-images/Vis_crossreg.png" width="361"/></a></div>
+<p>The gates marked <i>set</i> and <i>clear</i> set and clear the latch, respectively. To clear
+the latch, <b>vbl_flag</b> is driven low. To set the latch, <b>/vbl_flag</b> is driven low.
+</p><p>This circuit is an example of an <i><a class="extiw" href="http://en.wikipedia.org/wiki/Flip-flop_(electronics)#SR_NOR_latch" title="wikipedia:Flip-flop (electronics)">SR Latch</a></i>, where <i>S</i> stands for <i>set</i> and <i>R</i> for <i>reset</i>, corresponding
+to the <i>set</i> and <i>clear</i> gates above. It is more specifically an SR NOR Latch, as it can be viewed as being
+built of NOR gates. The corresponding schematic using NOR gates is shown in the right-most picture.
+</p>
+<h3><span class="mw-headline" id="Clocked_latches">Clocked latches</span></h3>
+<p>When a latch can be set directly from the value of some line, e.g. a data bus
+line, an arrangement involving a clock is often used. The motivation is to
+avoid having to form both <b>data_line</b> and <b>/data_line</b> and route them to the
+<i>set</i> and <i>clear</i> terminals of the latch, which would use more logic. The clock is
+already routed all around the chip, so mixing it in usually isn't as much of a
+problem.
+</p><p>As an example, here's the <b>noi_lfsrmode</b> node (the <i>Loop noise</i> flag from
+<a href="APU_Noise.xhtml" title="APU Noise">$400E</a>):
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_clockedreg_png.xhtml"><img alt="Vis clockedreg.png" height="430" src="../wiki-images/Vis_clockedreg.png" width="800"/></a></div>
+<p>While <a href="#APU_clock_signals"><b>apu_clk1</b></a> is high, <b>noi_lfsrmode</b> will flow into the floating node
+(so called because it will <a href="#Wire_capacitance_as_storage">float</a> when both <b>apu_clk1</b> and <b>w400e</b> are low),
+which then inverts into <b>noi_/lfsrmode</b>, forming a cross-coupled inverter latch.
+While <b>apu_clk1</b> is low, the loop will be broken momentarily, and during this
+phase a new value can be copied into the latch through the gate controlled by the <b>w400e</b>
+signal (which goes high on writes to $400E). The value let through by the pass transistor is the
+<b>db7</b> node, corresponding to the 8th bit of the data bus. (There's a <a href="#Terms">via</a> between
+the diffusion and the metal <b>db7</b> line – easier to see if the node is highlighted.) If the loop was not
+broken during the write operation, the old value in the latch would interfere with setting a new value.
+</p><p>For another, less cluttered view of the same type of circuit, see <a class="external text" href="http://www.ece.unm.edu/~jimp/vlsi/slides/chap5_2-21.gif" rel="nofollow">this image</a>
+(substitute &quot;<b>apu_clk1</b>&quot; for <b>&quot;/φ₁&quot;</b> and &quot;<b>w400e</b>&quot; for <b>&quot;φ₁&quot;</b>).
+</p><p>(The circuitry in the lower-right corner is a <i>multiplexer</i>, which selects between one of two inputs
+depending on whether <b>noi_lfsrmode</b> or <b>noi_/lfsrmode</b> is high; i.e., depending on whether <b>noi_lfsrmode</b> is 0 or 1.
+The output of the multiplexer is on the left side.)
+</p>
+<h3><span class="mw-headline" id="DRAM_.28Dynamic_RAM.29">DRAM (Dynamic RAM)</span></h3>
+<p>Below is an example of a DRAM cell, taken from the internal PPU <a href="PPU_OAM.xhtml" title="PPU OAM">OAM</a> memory:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_dram_cell_png.xhtml"><img alt="Vis dram cell.png" height="112" src="../wiki-images/Vis_dram_cell.png" width="230"/></a></div>
+<p>In the left and right pictures the two sides of the cell are highlighted (with a different highlight color on the right due to the node being high). The two nodes are always inverses of each other, with the node highlighted in the left picture corresponding to the value held in the cell (low for 0 and high for 1).
+</p><p>Note that this is <i>not</i> an instance of cross-coupled inverters, as neither node is directly connected to a power source. Rather, DRAM depends on capacitance to hold the value, which will fade unless the capacitor is regularly <i>refreshed</i> (the high side recharged). This is the &quot;dynamic&quot; part of DRAM.
+</p><p>Below is a picture of the upper edge of the PPU OAM DRAM array:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_oam_png.xhtml"><img alt="Vis oam.png" height="278" src="../wiki-images/Vis_oam.png" width="777"/></a></div>
+<p>The &quot;column&quot; and &quot;row&quot; labels are conventional memory terminology; they confusingly happen to get the opposite orientation in Visual 2C02. &quot;Row&quot; and &quot;column&quot; below will refer to this terminology.
+</p><p>The <b>spr_row<i>x</i></b> lines (sometimes called <i>word lines</i>) are used to connect a row of memory cells to the horizontal <i>bit lines</i> (by opening up each cell to a pair of <a href="#Terms">vias</a>); this is called <i>opening</i> that row. For example, <b>spr_row16</b> opens the highlighted row, while <b>spr_row0</b> opens the row on its right side. As can be guessed from the node names, the memory layout is not as straightforward as consecutive memory locations being stored in consecutive rows. (Interestingly, we do get consecutive rows if we reverse the bits in the part of the sprite address that selects the row. It is unknown why the row selection bits were not wired to the DRAM in this &quot;correct&quot; configuration instead.)
+</p><p>On the left side of OAM we see pass transistors on the <b>spr_col1</b> and <b>spr_col3</b> lines select the bit lines from the first and second columns of the memory array, respectively (there are other, similar, lines next to them) . Each such <b>spr_col<i>x</i></b> line is connected to eight different columns (16 bit lines), corresponding to the eight bits of the byte to be read or written (increasing bit positions are not stored in consecutive columns either). One notable exception to this pattern is that two columns only connect to <b>five</b> sets of bit lines; these columns correspond to the &quot;flags&quot; bytes in OAM, where the middle 3 bits don't actually exist.
+</p>
+<h4><span class="mw-headline" id="DRAM_refresh">DRAM refresh</span></h4>
+<p>At the right side in the picture above we see <a href="#PPU_clock_signals"><b>pclk0</b></a> running down the edge of OAM, connected to <a href="#Terms">pull-up transistors</a> for each bit line. During <b>pclk0</b>, these are used to <i>precharge</i> the bit lines, after which the pull-up transistors are disabled but the lines remain charged through capacitance. When the selected row is opened after <b>pclk0</b>, it will be exposed to the precharged bit lines, which has the effect of charging up the high side of the cell. On the low side of the cell, the precharge current will simply drain to ground, as the gate on that side will be driven high.
+</p><p>In a typical DRAM circuit, the rows are automatically and periodically refreshed to prevent values from fading. In the PPU, no such logic exists, and rows are only refreshed when explicitly accessed. The reason the PPU (usually) gets away with this is that <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite evaluation</a> will access the entire OAM (provided rendering is enabled), refreshing the rows as a side effect.
+</p><p>In a purely digital simulator the precharge logic is not strictly necessary, as values stored through capacitance will never fade. An earlier version of Visual 2C02 omitted the precharge logic (by removing the pull-up transistors controlled by <b>pclk0</b>) as it caused timing glitches, but changes to the simulator core have since made it necessary to add them back in.
+</p>
+<h3><span class="mw-headline" id="SRAM_.28Static_RAM.29">SRAM (Static RAM)</span></h3>
+<p>SRAM uses cross-coupled inverters for storage and is accessed using a row/column scheme similar to DRAM. Compared to DRAM, SRAM does not need to be refreshed, tends to be faster, uses more die area per memory cell, and draws more power for the <a href="#Terms">NMOS</a> version.
+</p><p>Below is a picture of SRAM memory cells used to store the PPU's <a href="PPU_palettes.xhtml" title="PPU palettes">palette</a> (in this case the rows do go horizontally):
+</p>
+<div class="floatnone"><a class="image" href="File_Vid_sram_png.xhtml"><img alt="Vid sram.png" height="173" src="../wiki-images/Vid_sram.png" width="248"/></a></div>
+<h2><span class="mw-headline" id="Miscellaneous_circuitry">Miscellaneous circuitry</span></h2>
+<h3><span class="mw-headline" id="Decoders_and_mask_ROMs">Decoders and mask ROMs</span></h3>
+<ul><li>A <a class="extiw" href="http://en.wikipedia.org/wiki/Decoder" title="wikipedia:Decoder">decoder</a> is a circuit that maps input values to output values. A decoder that maps <i>m</i> input lines to <i>n</i> output lines is called an <i>m-to-n decoder</i>.</li></ul>
+<ul><li>A <a class="extiw" href="http://en.wikipedia.org/wiki/Mask_ROM" title="wikipedia:Mask ROM">mask ROM</a> is a type of read-only memory constructed by masking off parts of a circuit grid.</li></ul>
+<p>The two elements are covered together since their implementation turns out to be similar in this case.
+</p><p>Pictured below is the decoder and mask ROM that act as the lookup table for initialization of the
+<a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counters</a> in the APU:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_len_rom_png.xhtml"><img alt="Vis len rom.png" height="343" src="../wiki-images/Vis_len_rom.png" width="255"/></a></div>
+<p>The length is set by writing bits 7-3 of e.g. <b>$4003</b> (in the case of the
+first pulse channel), so the inputs to the decoder are bits 7-3 of the data bus.
+The output from the decoder feeds into the mask ROM, and the output from the mask ROM is the
+length from the lookup table. The length is used to initialize a counter that counts down to zero
+before silencing the channel.
+</p><p>The picture below shows a zoomed-in view of the lower part of the decoder and mask ROM:
+</p><p><a class="image" href="File_Vis_len_pla_zoom_png.xhtml"><img alt="Vis len pla zoom.png" height="353" src="../wiki-images/Vis_len_pla_zoom.png" width="817"/></a>
+</p><p>The spots of yellow diffusion in the decoder and mask ROM are connections to the
+metal wires, which run horizontally in the decoder and vertically in the mask ROM.
+By setting the gates connected to the diffusion high, the wires can be driven low.
+</p><p>In the decoder (right part) the input lines and their inverses run
+vertically (<b>/db7</b> has been highlighted to show its connection). By looking
+carefully at the bottom-most horizontal row in the decoder, we see that it is
+powered on the right side, and that the condition for it to remain high as it
+passes into the mask ROM is <span style="border:dotted thin gray"><b>/db7</b> AND <b>/db6</b> AND <b>/db5</b> AND <b>/db4</b> AND <b>/db3</b></span>.
+Another way to put this condition is <b>db7</b>-<b>db3</b> = $00.
+</p><p>Similarly, the condition for the second row from the bottom to be high is
+<span style="border:dotted thin gray"><b>/db7</b> AND <b>/db6</b> AND <b>/db5</b> AND <b>db4</b> AND <b>/db3</b></span>,
+which translates to <b>db7</b>-<b>db3</b> = $02. The conditions for the third and fourth rows from the bottom are <b>db7</b>-<b>db3</b> = $04
+and <b>db7</b>-<b>db3</b> = $06, respectively.
+</p><p>The decoder is set up so that <b>db<i>x</i></b> and <b>/db<i>x</i></b> will never both drive the same
+horizontal line low (which would make it impossible for that line to ever be
+high), and in this case each row has a unique bit pattern that activates it. (It would also be
+possible to insert a &quot;don't care&quot; condition in the decoder by having <i>neither</i> <b>db<i>x</i></b> nor
+<b>/db<i>x</i></b> drive the line low.)
+</p><p>The decoder here is a 5-to-32 decoder, with 32 rows corresponding to the 32 possible bit patterns made with five bits. This type of
+decoder is said to <i>fully decode</i> its inputs, and is an instance of an <i>n-to-2<sup>n</sup> decoder</i>.
+</p><p>In the mask ROM (this one in particular being a NOR ROM), we see that each horizontal line from the decoder when high will cause a particular pattern to appear on the
+<b>len<i>x</i></b> outputs. Reading off the bottom row, this pattern is <b>len7</b>-<b>0</b> = 00001001b = 9.
+Reading off the remaining rows from bottom to top, we get the values
+00010011b = 19, 00100111b = 39, and 01001111b = 79.
+</p><p>Putting together the above, we have the following incomplete map from inputs to
+outputs:
+</p>
+<table>
+<tr>
+<th>Index
+</th>
+<th>Length
+</th></tr>
+<tr>
+<td>$00 </td>
+<td> 9
+</td></tr>
+<tr>
+<td>$02 </td>
+<td> 19
+</td></tr>
+<tr>
+<td>$04 </td>
+<td> 39
+</td></tr>
+<tr>
+<td>$06 </td>
+<td> 79
+</td></tr></table>
+<p>By checking against the <a href="APU_Length_Counter.xhtml" title="APU Length Counter">APU length counter table</a>, we see
+that these indeed are the length values corresponding to those indices (minus one,
+due to details of how the length counter works).
+</p><p>To give an example of a decoder that does not feed into a mask ROM, the picture below shows the
+internal 2A03 address decoder for the address range <b>$4000</b>-<b>$4017</b>, where signals
+such as <b>r4017</b> (read 4017) and <b>w4004</b> (write 4004) are generated.
+</p><p><a class="image" href="File_Vis_addr_pla_png.xhtml"><img alt="Vis addr pla.png" height="220" src="../wiki-images/Vis_addr_pla.png" width="238"/></a>
+</p><p>The theory behind the decoder and mask ROM seen here is closely related to that of
+<a class="extiw" href="http://en.wikipedia.org/wiki/Programmable_logic_array" title="wikipedia:Programmable logic array">PLAs</a> (Programmable Logic Arrays), where we could view the
+decoder as the AND plane and the mask ROM as the OR plane (both implemented with NOR gates).
+<a class="external text" href="http://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Comb/pla.html" rel="nofollow">This introduction to PLAs</a> is helpful.
+</p>
+<h3><span class="mw-headline" id="Adders">Adders</span></h3>
+<p>Pictured below is part of the <a class="extiw" href="http://en.wikipedia.org/wiki/Adder_(electronics)" title="wikipedia:Adder (electronics)">adder</a> used by
+the <a href="APU_Sweep.xhtml" title="APU Sweep">sweep units</a> in the 2A03 to calculate the target period for sweep
+period updates to the second square channel (the first square channel is identical
+except for a small quirk related to subtraction; see below). The pictured part
+calculates the second bit (bit 1) of the sum, along with the carry for that bit
+position.
+</p><p><a class="image" href="File_Vis_adder_png.xhtml"><img alt="Vis adder.png" height="265" src="../wiki-images/Vis_adder.png" width="482"/></a>
+</p><p>The adder is split into two parts. The left-most part (having four columns)
+calculates bit 1 of the sum. The right-most part (with three columns)
+calculates the carry. Both <b>/sum1 out</b> and <b>/carry out</b> are powered,
+and can be forced low by certain combinations of the input signals being high.
+(For e.g. the left-most column, this combination is
+<span style="border:dotted thin gray"><b>addend1</b> AND <b>carry in</b> AND <b>sq1_p1</b></span>).
+The essential information is captured in the following truth table:
+</p>
+<table class="wikitable">
+<tr>
+<th>sq1_p1
+</th>
+<th>addend1
+</th>
+<th>carry in
+</th>
+<th>/sum1 out
+</th>
+<th>/carry out
+</th></tr>
+<tr>
+<td>0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1
+</td></tr>
+<tr>
+<td>0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1
+</td></tr>
+<tr>
+<td>0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1
+</td></tr>
+<tr>
+<td>0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td>1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1
+</td></tr>
+<tr>
+<td>1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td>1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td>1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr></table>
+<p>As expected, this corresponds to an addition operation (with the sum and carry
+inverted).
+</p><p>The same logic is used to perform subtraction, by inverting each bit of the
+addend (using separate logic) and setting the carry in for the zeroth bit to 1.
+This corresponds to the usual invert-bits-and-add-one operation for negating a
+number in two's complement.
+</p><p>For unknown reasons, the inverted carry input for the zeroth bit of the first
+square channel is connected to VCC instead of the inverted sweep direction flag
+(as it is in the other square channel), making the carry input unconditionally zero.
+This leads to the value <i>minus one</i> being subtracted instead on that channel.
+</p>
+<h3><span class="mw-headline" id="Barrel_shifters">Barrel shifters</span></h3>
+<p>The below circuitry forms part of a <a class="extiw" href="http://en.wikipedia.org/wiki/Barrel_shifter" title="wikipedia:Barrel shifter">barrel shifter</a>, used to shift the inputs to
+the adders for sweep unit period updates in this case.
+</p><p><a class="image" href="File_Vis_barrel_shifter_png.xhtml"><img alt="Vis barrel shifter.png" height="209" src="../wiki-images/Vis_barrel_shifter.png" width="206"/></a>
+</p><p>As a side note, the bit inversion for subtraction by the sweep units happens <i>before</i> the bits
+enter the barrel shifter.
+</p>
+<h3><span class="mw-headline" id="Shift_registers">Shift registers</span></h3>
+<p><i>(This section might be considered &quot;advanced&quot; on a first reading. I just wanted an example that made more complex use of clocks.)</i>
+</p><p>The picture below shows the 16-bit <a class="extiw" href="http://en.wikipedia.org/wiki/Shift_register" title="wikipedia:Shift register">shift register</a> that holds the high bits
+for background tiles (see the <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a> page). The upper eight bits can be
+reloaded from PPU VRAM data bus lines, and the output is taken from the lower
+eight bits (in this case, the particular bit to use is selected by the <b><a href="PPU_scrolling.xhtml" title="PPU scrolling">fine x scroll</a></b>).
+Bits flow clockwise through the shift register.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_shift_reg_png.xhtml"><img alt="Vis shift reg.png" height="247" src="../wiki-images/Vis_shift_reg.png" width="250"/></a></div>
+<p>Below is a zoomed-in view of three bits (<b>tile_h15</b>-<b>13</b>) from the upper-left part
+of the shift register:
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_shift_reg_zoom_png.xhtml"><img alt="Vis shift reg zoom.png" height="488" src="../wiki-images/Vis_shift_reg_zoom.png" width="446"/></a></div>
+<p>The value of each bit corresponds to the value on the <b>(2)</b> side.
+</p>
+<h4><span class="mw-headline" id="Control_signals">Control signals</span></h4>
+<p>The following signals control the shifting and reloading of the register (the
+names used were invented for the article and are not standard terminology):
+</p>
+<ul><li> The <b>Invert</b> signal corresponds to <b>pclk0</b>, which is high during the initial half-cycle of a PPU cycle (see the <a href="#Clocks">Clocks</a> section).</li>
+<li> The <b>Shift</b> signal corresponds to <b>pclk1</b>, which is high during the second half-cycle.</li>
+<li> The <b>Parallel load</b> signal controls pass transistors connected to <b>_db0</b>-<b>7</b>, used to load the upper eight bits of the shift register.</li></ul>
+<p><b>Shift</b> does not always exactly mirror <b>pclk1</b>, as explained below, which is
+the reason for the <i>≈</i> notation.
+</p>
+<h4><span class="mw-headline" id="Shifting">Shifting</span></h4>
+<p>Shifting the register is a two-step process:
+</p>
+<ol><li> During <b>pclk0</b>, <b>Invert</b> is driven high, making the value of <b>(1)</b> flow through the pass transistor into the red-highlighted node, which causes <b>(1)</b> to invert into <b>(2)</b>.</li>
+<li> During <b>pclk1</b>, <b>Shift</b> is driven high, which causes the node marked <b>(2)</b> to invert into the node marked <b>(3)</b> (the next bit of the shift register). <b>Invert</b> is low during this phase, and the value on the red-highlighted node is held via <a href="#Wire_capacitance_as_storage">wire capacitance</a>, which makes this a <i><a class="extiw" href="http://en.wikipedia.org/wiki/Dynamic_logic_(digital_electronics)" title="wikipedia:Dynamic logic (digital electronics)">dynamic</a> shift register</i>.</li></ol>
+<p>Due to the bit of powered diffusion circled in red, the default value shifted
+into <b>(1)</b> is 1. However, as the value is held on the inverted side <b>(2)</b>, this
+means that zeroes are being shifted in.
+</p>
+<h4><span class="mw-headline" id="Parallel_load">Parallel load</span></h4>
+<p>To perform a parallel load of the register, step <b>(2)</b> from above is modified so
+that <b>Shift</b> remains low during <b>pclk1</b> and <b>Parallel load</b> goes high instead,
+causing the new value for each cell to come from the data bus lines instead of
+from the previous cell.
+</p><p>The diagram below might clarify how the control signals are related. Each row
+is a PPU half-cycle.
+</p>
+<table class="wikitable">
+<tr>
+<th> pclk0 </th>
+<th> Invert </th>
+<th> Shift </th>
+<th> Parallel load
+</th></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 ← Reloaded here
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="Digital-to-analog_conversion_.28DAC.29">Digital-to-analog conversion (DAC)</span></h3>
+<p>The below Visual 2A03 circuitry controls the volume on the output pin for the two square channels (the triangle, noise, and DMC channels use a separate pin). Note that each successive bit has twice the weight of the preceding one in terms of the amount of powered diffusion connected to it.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_da_conversion_png.xhtml"><img alt="Vis da conversion.png" height="203" src="../wiki-images/Vis_da_conversion.png" width="772"/></a></div>
+<p>This is an example of a <a class="extiw" href="http://en.wikipedia.org/wiki/Digital-to-analog_converter#DAC_types" title="wikipedia:Digital-to-analog converter"><i>binary-weighted DAC</i></a>. A different type of DAC is used for the video output from the PPU (found in the upper-left of Visual 2C02, rotated 90 degrees here):
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_vid_dac_png.xhtml"><img alt="Vis vid dac.png" height="137" src="../wiki-images/Vis_vid_dac.png" width="671"/></a></div>
+<p>The upper-left end is actually connected to VCC, and the lower-right to ground. This is a <a class="extiw" href="http://en.wikipedia.org/wiki/voltage_ladder" title="wikipedia:voltage ladder"><i>voltage ladder</i></a>, and works by tapping the wire (which behaves as a resistor) at different points along the run to get different voltages. As the simulator is purely digital, this circuit is not directly used in the simulation, and some parts that would otherwise interfere with it have been disconnected.
+</p>
+<h3><span class="mw-headline" id="Output_drivers">Output drivers</span></h3>
+<p>These are found on pins capable of doing output, which need to be able to source (generate) and sink large currents to drive the line high or low. The polysilicon wire that would cause the pin to source current is highlighted below.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_output_driver_png.xhtml"><img alt="Vis output driver.png" height="111" src="../wiki-images/Vis_output_driver.png" width="294"/></a></div>
+<p>Large clusters of <a href="#Terms">pull-up and pull-down</a> transistors like these are sometimes called <i>superbuffers</i>. They also appear in some internal circuits that need to source or sink larger currents, e.g. due to having a large <a class="extiw" href="http://en.wikipedia.org/wiki/Fan-out" title="wikipedia:Fan-out"><i>fan-out</i></a> – a large number of connections from the logic gate's output to inputs of other gates.
+</p><p>On lines that are capable of being tri-stated, this is done by activating neither the pull-up nor the pull-down transistors, so that the pin neither sources nor sinks current. This is also done for reads on bidirectional lines, to prevent the output driver from interfering.
+</p>
+<h3><span class="mw-headline" id="Cut-off_connections">Cut-off connections</span></h3>
+<p>Some parts of the chips, especially outside the 6502 core, were designed using a copy-and-paste process called &quot;<a class="extiw" href="http://en.wikipedia.org/wiki/standard_cell" title="wikipedia:standard cell">standard cell</a>&quot;, leading to some seemingly nonsensical and cut-off connections. These carry no special significance. The image below contains an example.
+</p><p>The 6502 core inside the 2A03 is a substantially tighter block of <a href="#Terms">NMOS</a> (having been <a class="extiw" href="http://en.wikipedia.org/wiki/Full_custom" title="wikipedia:Full custom">designed by hand</a>), but it still has a few cut-off connections remaining from removal of the original output drivers.
+</p>
+<div class="floatnone"><a class="image" href="File_Vis_cutoff_png.xhtml"><img alt="Vis cutoff.png" height="87" src="../wiki-images/Vis_cutoff.png" width="288"/></a></div>
+<h2><span class="mw-headline" id="Layers">Layers</span></h2>
+<p>(This information is not essential to reading the diagrams.)
+</p><p>The layers that make up the chip are as follows, in order from bottom to top: <a class="extiw" href="http://en.wikipedia.org/wiki/Substrate_(electronics)" title="wikipedia:Substrate (electronics)">substrate</a>, diffusion, oxide (with holes for <a href="#Terms">buried contacts</a> and <a href="#Terms">vias</a>), polysilicon, more oxide (with holes for vias), metal, and <a class="extiw" href="http://en.wikipedia.org/wiki/Passivation_(chemistry)" title="wikipedia:Passivation (chemistry)">passivation</a> (or &quot;overglass&quot;, containing holes where <a href="#Terms">bond wires</a> connect).
+</p><p>The way diffusion is powered or grounded is through vias to large areas of metal that are either grounded or powered.
+</p>
+<h2><span class="mw-headline" id="Transistor_dimensions">Transistor dimensions</span></h2>
+<p>Visual6502, Visual2A03, and Visual2C02 are purely digital simulators, so the effects of transistor dimensions don't matter. But you will often notice locations in the simulators where transistors are different shapes.
+</p><p>Here's the inverter from the beginning of this tutorial, now annotated with dimensions:
+</p><p><a class="image" href="File_Vis_inverter_dimensions_png.xhtml"><img alt="Vis inverter dimensions.png" height="228" src="../wiki-images/Vis_inverter_dimensions.png" width="367"/></a>
+</p><p>Because the layer of substrate is uniform thickness, everything is calculable in terms of <a class="extiw" href="http://en.wikipedia.org/wiki/Sheet_resistance" title="wikipedia:Sheet resistance">sheet resistance</a>. In the above annotated picture, two transistors are shown: one significantly wider than long, and the other the opposite. The aspect ratio (length divided by width) of the depletion mode pull-up transistor on the left is approximately 3.47, while the aspect ratio of the enhancement mode pull-down transistor on the right is 0.23. As a result, the pull-down transistor is approximately 15 times more effective at sinking current (which is good: it has to be able to override the pull-up).
+</p><p>The 2A03 uses these analog effects in its audio path:
+</p><p><a class="image" href="File_Vis_2a03_pcmout012_png.xhtml"><img alt="Vis 2a03 pcmout012.png" height="264" src="../wiki-images/Vis_2a03_pcmout012.png" width="289"/></a>
+</p><p>Shown are the three least significant bits of the 2A03's APU's PCM channel. <b>pcmout1</b> drives a single transistor (with some resistance R) and <b>pcmout2</b> drives two (resulting in a resistance R÷2). To give <b>pcmout0</b> a resistance or 2·R, they either would have had to make the transistor half as wide or twice as long. Halving the width wasn't an option because the diffusion areas are already as narrow as possible using this manufacturing technology. As a result, the gate for the least significant bit is longer.
+</p>
+<h2><span class="mw-headline" id="Clocks">Clocks</span></h2>
+<p>This section lists node names for various clocks that sequence operations within the chips. Some of the 6502 pin signals might have gained a &quot;c_&quot; prefix in Visual 2A03 compared to Visual 6502.
+</p>
+<h3><span class="mw-headline" id="6502_core_pins">6502 core pins</span></h3>
+<dl><dt> clk0</dt>
+<dd>  The <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">φ0 clock input pin</a>. Goes low at the beginning of a CPU cycle.</dd></dl>
+<dl><dt> clk1out, clk2out</dt>
+<dd>  The <b>φ1</b> and <b>φ2</b> output pins. <b>φ2</b> is used to form <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description"><b>M2</b></a> in the 2A03, which has a modified <a href="Glossary.xhtml" title="Glossary">duty cycle</a>.</dd></dl>
+<h3><span class="mw-headline" id="6502_internal_clock_signals">6502 internal clock signals</span></h3>
+<dl><dt> cp1</dt>
+<dd>  High during the first phase (half-cycle) of a CPU cycle. The inverse of <b>clk0</b>.</dd></dl>
+<dl><dt> cclk</dt>
+<dd>  High during the second phase of a CPU cycle. Roughly equivalent to <b>clk0</b>, but modified slightly to never overlap with <b>cp1</b> (though that won't be visible in the simulators).</dd></dl>
+<h3><span class="mw-headline" id="APU_clock_signals">APU clock signals</span></h3>
+<dl><dt> apu_clk1</dt>
+<dd>  This clock signal has a 25% duty cycle. It ticks at half the rate of the CPU clock, and is high only when <b>φ2</b> is <i>low</i>.</dd></dl>
+<dl><dt> apu_/clk2</dt>
+<dd>  Like <b>apu_clk1</b>, but ticks on the opposite phase, and is also inverted so that it has a 75% duty cycle.</dd></dl>
+<dl><dt> apu_clk2<i>x</i>, where <i>x</i> is <i>a</i>, <i>b</i>, <i>c</i>, etc.</dt>
+<dd>  Inverses of <b>apu_/clk2</b>, used internally in various components.</dd></dl>
+<p>This clock arrangement helps to ensure that timed events (various counters being decremented or reloaded) do not conflict with writes from the CPU (which only happen when <b>φ2</b> is high).
+</p>
+<table>
+<tr>
+<th>φ1
+</th>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<th>φ2
+</th>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1
+</td></tr>
+<tr>
+<th>apu_clk1
+</th>
+<td> <b>1</b> </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <b>1</b> </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<th>apu_/clk2
+</th>
+<td> 1 </td>
+<td> 1 </td>
+<td> <b>0</b> </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <b>0</b> </td>
+<td> 1
+</td></tr>
+<tr>
+<th>apu_clk2<i>x</i>
+</th>
+<td> 0 </td>
+<td> 0 </td>
+<td> <b>1</b> </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <b>1</b> </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="PPU_clock_signals">PPU clock signals</span></h3>
+<dl><dt> clk0</dt>
+<dd>  The input clock, fed from the <a href="Clock_rate.xhtml" title="Clock rate">master clock</a>. Used directly in video waveform generation.</dd></dl>
+<dl><dt> _clk0</dt>
+<dd>  The inverse of <b>clk0</b>.</dd></dl>
+<dl><dt> pclk0</dt>
+<dd>  The <b>p</b>ixel clock. Derived from <b>clk0</b> by dividing by four (NTSC) or five (PAL). One cycle corresponds to a rendered dot, with <b>pclk0</b> being high during the first phase (half-cycle).</dd></dl>
+<dl><dt> pclk1</dt>
+<dd>  The inverse of <b>pclk0</b>. High during the second phase of a pixel clock.</dd></dl>
+<h3><span class="mw-headline" id="Master_clock_and_CPU.2FPPU_clock_alignment">Master clock and CPU/PPU clock alignment</span></h3>
+<p>The clock divider in the PPU is clocked on a zero-to-one transition of the master clock, while the clock divider in the CPU is clocked on a one-to-zero transition.
+Diagrammatically, this might look like below for NTSC (for CPU clock, &quot;!&quot; denotes when the 2A03's M2 line goes high but the 6502's internal clock is still low).
+</p>
+<pre>
+Master clock    | 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 ...
+PPU pixel clock | 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1 0 0 0 0 1 1 ...
+CPU clock       | 0 0 0 0 0 0 0 0 0 ! ! ! 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 ! ! ! 1 ...
+</pre>
+<h2><span class="mw-headline" id="6502_cycle_and_phase_timing">6502 cycle and phase timing</span></h2>
+<p>During each active cycle (i.e., while the RDY line of the 6502 has not been pulled low), the CPU either reads from or writes to memory; there are no &quot;idle&quot; cycles w.r.t. the data bus in the 6502. Each such read or write cycle is split up into two equally long phases, called <b>φ1</b> (phase 1) and <b>φ2</b> (phase 2), corresponding to the clock signals above. <b>φ1</b> takes place while the clock input is low, <b>φ2</b> while it is high.
+</p><p>During each cycle, the <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">R/W signal</a> and the address bus lines are updated during <b>φ1</b>. In the simulators we see them change right away, but in a real 6502 there will be some delay. At the end of <b>φ2</b>, values are read from or written to the data bus lines. The IRQ and NMI interrupt lines appear to be sampled on the falling edge of <b>φ2</b> (as indicated in <a class="external text" href="http://forum.6502.org/viewtopic.php?f=1&amp;t=2532" rel="nofollow">this thread</a> and also from observed behavior relating to the <b>VBlank</b> flag).
+</p><p><a class="external text" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">This document</a> lists data and address bus contents during each cycle of an instruction. For more detailed timing information, see <a class="external text" href="http://users.telenet.be/kim1-6502/6502/hwman.html" rel="nofollow">the MOS hardware manual</a>.
+</p>
+<h2><span class="mw-headline" id="Terms">Terms</span></h2>
+<p>Below are various terms you might run into:
+</p>
+<dl><dt> <a class="extiw" href="http://en.wikipedia.org/wiki/Wire_bonding" title="wikipedia:Wire bonding">Bond wire</a></dt>
+<dd>  A wire that connects an internal pad to an external pin on the chip package; see e.g. <a class="external autonumber" href="http://farm4.staticflickr.com/3270/4562350638_7bd4f62a76_z.jpg" rel="nofollow">[1]</a>.</dd></dl>
+<dl><dt> Buried contact</dt>
+<dd>  A connection between diffusion and polysilicon.</dd></dl>
+<dl><dt> <a class="extiw" href="http://en.wikipedia.org/wiki/NMOS_logic" title="wikipedia:NMOS logic">NMOS</a></dt>
+<dd>  The technology used for the transistors in the 2A03 and 2C02. In NMOS, transistors are made by creating regions of n-doped semiconductor that become the source and drain (&quot;n-doped&quot; because this doping increases the mobility of electrons and their <b>n</b>egative charge). This type of transistor is good at sinking current to ground (this is what causes a 0 bit to usually &quot;win&quot; in <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>), and worse at pulling up. The transistors used in NMOS are more precisely called <i>n(-type )MOSFETs</i>. NMOS transistors are &quot;active&quot; when their gate is connected to a <i>high</i> voltage (i.e. VCC). See <a class="external text" href="http://www.youtube.com/watch?v=IcrBqCFLHIY" rel="nofollow">this YouTube video</a> for another high-level overview of how transistors work.</dd></dl>
+<dl><dt> <a class="extiw" href="http://en.wikipedia.org/wiki/PMOS_logic" title="wikipedia:PMOS logic">PMOS</a></dt>
+<dd>  The counterpart to NMOS, PMOS is an older and slower (but initially easier to manufacture) technology used for making integrated circuits. In PMOS, transistors are made by creating regions of p-doped semiconductor that become the source and drain (&quot;p-doped&quot; because this doping increases the mobility of electron holes and their <b>p</b>ositive charge). This type of transistor is good at sourcing current from VCC, and worse at pulling down. The transistors used in PMOS are more precisely called <i>p(-type )MOSFETs</i>. PMOS transistors are &quot;active&quot; when their gate is connected to a <i>low</i> voltage (i.e. GND).</dd></dl>
+<dl><dt> <a class="extiw" href="http://en.wikipedia.org/wiki/CMOS_logic" title="wikipedia:CMOS logic">CMOS</a></dt>
+<dd>  The <i>combination</i> of NMOS and PMOS within a single design, CMOS chips make use of both n-type <b>and</b> p-type MOSFETs in order to form logic gates. While PMOS requires weak pull-down resistors (often permanently enabled transistors connected to GND) and NMOS requires weak pull-up resistors (originally permanently enabled transistors connected to VCC, but later replaced with <a class="extiw" href="http://en.wikipedia.org/wiki/Depletion-load_NMOS_logic" title="wikipedia:Depletion-load NMOS logic">depletion loads</a>), CMOS makes use of p-type MOSFETs as strong pull-ups and n-type MOSFETs as strong pull-downs, arranged in pairs such that exactly one transistor in each pair is active at any given moment, made even simpler by the fact that a single input signal can connect directly to both transistors (when it is high it activates the NMOS pull-down, and when it is low it activates the PMOS pull-up).</dd></dl>
+<dl><dt> Open drain</dt>
+<dd>  A type of output that works by sinking current from an external pull-up resistor instead of generating current on its own. An example is the PPU's INT pin. The pull-up resistor is denoted &quot;RM1&quot; in <a class="internal" href="/w/images/f/f3/Neswires.jpg" title="Neswires.jpg">this wiring diagram</a>.</dd></dl>
+<dl><dt> Pull-up resistor</dt>
+<dd>  A resistor connected to power. &quot;Pull-up&quot; comes from pulling the wire to a high state.</dd></dl>
+<dl><dt> Pull-up transistor</dt>
+<dd>  A transistor whose gate when high causes current to flow from a power source.</dd></dl>
+<dl><dt> Pull-down transistor</dt>
+<dd>  The analogue of a pull-up transistor for sinking to ground.</dd></dl>
+<dl><dt> Via</dt>
+<dd>  A connection between polysilicon/diffusion and metal.</dd></dl>
+<h2><span class="mw-headline" id="Tips_for_working_with_the_simulators">Tips for working with the simulators</span></h2>
+<h3><span class="mw-headline" id="Node_names_in_Visual_6502">Node names in Visual 6502</span></h3>
+<p>A hash (#) or tilde (~) on a node name signifies active low or negation in Visual 6502. Due to problems passing hashes in URLs, aliases were automatically introduced that use tildes instead (hence the &quot;automatic alias replacing hash with tilde&quot; comments).
+</p>
+<h3><span class="mw-headline" id="Clearing_highlighting">Clearing highlighting</span></h3>
+<p>When the simulator is loaded and after it has been run with &quot;animate during simulation&quot; enabled, nodes that are high will be highlighted. To get rid of this highlighting, click the &quot;clear highlighting&quot; button.
+</p>
+<h3><span class="mw-headline" id="Local_copies_of_the_simulator">Local copies of the simulator</span></h3>
+<p>Being able to add node names to <b>nodenames.js</b> can be very helpful when figuring out a circuit. To do this, a local version of the simulator can be downloaded with e.g. <b>$ wget --convert-links</b> on a *nix system. Please watch the recursion level and avoid downloading data needlessly, as at least Visual 2C02 and Visual 2A03 are hosted on a limited uplink.
+</p>
+<h3><span class="mw-headline" id="Extra_node_names">Extra node names</span></h3>
+<p>Many additional node names for Visual 2C02 can be found <a class="external text" href="https://github.com/ulfalizer/Visual-2C02-nodes" rel="nofollow">in this repository</a>. The repo is maintained separately since it is updated often and not all nodes have been confirmed.
+</p>
+<h3><span class="mw-headline" id="PPU_chip_layout_overview">PPU chip layout overview</span></h3>
+<p>A high-level overview of the layout of the PPU <a class="internal" href="/w/images/9/99/Ppuareas.png" title="Ppuareas.png">can be found here</a>. Another, lower-level analysis <a class="external text" href="http://breaknes.com/files/PPU/tilemap" rel="nofollow">can be found here</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.470 seconds
+Real time usage: 0.490 seconds
+Preprocessor visited node count: 210/1000000
+Preprocessor generated node count: 262/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1067-1!*!0!!en!5!* and timestamp 20160208225957 and revision id 11249
+ -->
+</div></body></html>

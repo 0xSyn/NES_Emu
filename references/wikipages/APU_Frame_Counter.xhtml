@@ -1,0 +1,168 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Frame Counter</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Frame Counter</h1><div class="article">
+<p>The <b><a href="APU.xhtml" title="APU">NES APU</a> frame counter</b> (or <b>frame sequencer</b>) generates low-frequency clocks for the channels and an optional 60 Hz interrupt.
+The name &quot;frame counter&quot; might be slightly misleading because the clocks have nothing to do with the video signal.
+</p><p>The frame counter contains the following: <a class="mw-redirect" href="APU.xhtml" title="APU Misc">divider</a>, looping clock <a class="mw-redirect" href="APU.xhtml" title="APU Misc">sequencer</a>, frame interrupt flag.
+</p><p>The sequencer is clocked on every other CPU cycle, so 2 CPU cycles = 1 APU cycle. The sequencer keeps track of how many APU cycles have elapsed in total, and each step of the sequence will occur once that total has reached the indicated amount (with an additional delay of one CPU cycle for the quarter and half frame signals). Once the last step has executed, the count resets to 0 on the next APU cycle.
+</p>
+<table class="tabular">
+<tr>
+<td> Address </td>
+<td> Bitfield </td>
+<td> Description
+</td></tr>
+<tr>
+<td> <b>$4017</b> </td>
+<td> <tt>MI--.----</tt> </td>
+<td> <b>Set mode and interrupt</b> (write)
+</td></tr>
+<tr>
+<td> Bit 7 </td>
+<td> <tt>M--- ----</tt> </td>
+<td> Sequencer mode: 0 selects 4-step sequence, 1 selects 5-step sequence
+</td></tr>
+<tr>
+<td> Bit 6 </td>
+<td> <tt>-I-- ----</tt> </td>
+<td> Interrupt inhibit flag. If set, the frame interrupt flag is cleared, otherwise it is unaffected.
+</td></tr>
+<tr>
+<td colspan="2"> Side effects </td>
+<td> After 3 or 4 CPU clock cycles*, the timer is reset.<br/>If the mode flag is set, then both &quot;quarter frame&quot; and &quot;half frame&quot; signals are also generated.
+</td></tr></table>
+<p>* If the write occurs <i>during</i> an APU cycle, the effects occur 3 CPU cycles after the <b>$4017</b> write cycle, and if the write occurs <i>between</i> APU cycles, the effects occurs 4 CPU cycles after the write cycle.
+</p><p><i>TODO: describe PAL</i>
+</p><p>The frame interrupt flag is connected to the <a href="CPU.xhtml" title="CPU">CPU</a>'s IRQ line. It is set at a particular point in the 4-step sequence (see below) provided the interrupt inhibit flag in $4017 is clear, and can be cleared either by reading $4015 (which also returns its old status) or by setting the interrupt inhibit flag.
+</p>
+<h3><span class="mw-headline" id="Mode_0:_4-Step_Sequence_.28bit_7_of_.244017_clear.29">Mode 0: 4-Step Sequence (bit 7 of $4017 clear)</span></h3>
+<table class="tabular">
+<tr>
+<td> Step </td>
+<td> APU cycles </td>
+<td> <a href="APU_Envelope.xhtml" title="APU Envelope">Envelopes</a> &amp; <a href="APU_Triangle.xhtml" title="APU Triangle">triangle's linear counter</a> (Quarter frame) </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counters</a> &amp; <a href="APU_Sweep.xhtml" title="APU Sweep">sweep units</a> (Half frame) </td>
+<td> Frame interrupt flag
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 3728.5 </td>
+<td> Clock </td>
+<td>   </td>
+<td>  
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 7456.5 </td>
+<td> Clock </td>
+<td> Clock </td>
+<td>  
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 11185.5 </td>
+<td> Clock </td>
+<td>   </td>
+<td>  
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 14914 </td>
+<td>   </td>
+<td>   </td>
+<td> Set if interrupt inhibit is clear
+</td></tr>
+<tr>
+<td>   </td>
+<td> 14914.5 </td>
+<td> Clock </td>
+<td> Clock </td>
+<td> Set if interrupt inhibit is clear
+</td></tr>
+<tr>
+<td>   </td>
+<td> 0 (14915) </td>
+<td>   </td>
+<td>   </td>
+<td> Set if interrupt inhibit is clear
+</td></tr>
+<tr>
+<td>   </td>
+<td>   </td>
+<td> <i>240 Hz (approx.)</i> </td>
+<td> <i>120 Hz (approx.)</i> </td>
+<td> <i>60 Hz (approx.)</i>
+</td></tr></table>
+<p>In this mode, the interrupt flag is set every 29830 CPU cycles, which is slightly slower than the 29780.5 CPU cycles per NTSC PPU frame.
+</p><p>Some Nintendo arcade boards, even those not directly based on the NES, use the 2A03 CPU as a sound processor.  Examples include <i><a class="extiw" href="http://en.wikipedia.org/wiki/Punch-Out!!_(arcade_game)" title="wikipedia:Punch-Out!! (arcade game)">Punch-Out!!</a></i> and <i><a class="extiw" href="http://en.wikipedia.org/wiki/Donkey_Kong_3" title="wikipedia:Donkey Kong 3">Donkey Kong 3</a></i>.  This IRQ allows the CPU to keep time even if no PPU is connected to the bus.
+</p>
+<h3><span class="mw-headline" id="Mode_1:_5-Step_Sequence_.28bit_7_of_.244017_set.29">Mode 1: 5-Step Sequence (bit 7 of $4017 set)</span></h3>
+<table class="tabular">
+<tr>
+<td> Step </td>
+<td> APU cycles </td>
+<td> <a href="APU_Envelope.xhtml" title="APU Envelope">Envelopes</a> &amp; <a href="APU_Triangle.xhtml" title="APU Triangle">triangle's linear counter</a> (Quarter frame) </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counters</a> &amp; <a href="APU_Sweep.xhtml" title="APU Sweep">sweep units</a> (Half frame)
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 3728.5 </td>
+<td> Clock </td>
+<td>  
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 7456.5 </td>
+<td> Clock </td>
+<td> Clock
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 11185.5 </td>
+<td> Clock </td>
+<td>  
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 14914.5 </td>
+<td>   </td>
+<td>  
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> 18640.5 </td>
+<td> Clock </td>
+<td> Clock
+</td></tr>
+<tr>
+<td>   </td>
+<td> 0 (18641) </td>
+<td>   </td>
+<td>  
+</td></tr>
+<tr>
+<td>   </td>
+<td>   </td>
+<td> <i>192 Hz (approx.), uneven timing</i> </td>
+<td> <i>96 Hz (approx.), uneven timing</i>
+</td></tr></table>
+<p>In this mode, the frame interrupt flag is never set.<br/>
+<b>Note:</b> Writing to $4017 with bit 7 set will <i>immediately</i> generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:183-1!*!0!!*!*!* and timestamp 20160208224721 and revision id 9544
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

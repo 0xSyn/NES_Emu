@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CIC lockout chip</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CIC lockout chip</h1><div class="article">
+<p>The frontloading NES has a <b>CIC Lockout Chip</b>, a microcontroller that performs a proprietary handshake, as an anticompetitive measure. Famicom and toploading NES consoles do not contain this chip.  The abbreviation CIC is short for &quot;Checking Integrated Circuit&quot; according to Nintendo's patents.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Disabling"><span class="tocnumber">2</span> <span class="toctext">Disabling</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Defeating"><span class="tocnumber">3</span> <span class="toctext">Defeating</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Pinout"><span class="tocnumber">4</span> <span class="toctext">Pinout</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Reference"><span class="tocnumber">5</span> <span class="toctext">Reference</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>Both the lockout chip inside the NES and the one on the cartridge are the same IC. The one inside the NES acts as a lock and the one in the Cart a key. The difference is how they are hooked up. The system is wired so that the output of one CIC is connected to the input of other and vice versa. LOCK/KEY is pulled to +5V inside the NES and grounded on the Cart. Both share the same 4MHZ clock on pin 6. The RESET pin on the key is connected to SLAVE CIC RESET on the lock. The lock's RESET pin is connected to the system reset bus. This can be demonstrated by inserting a game with the system already on. The NES will not work until you press the reset button which will reset the lock CIC, which in turn resets the key. /CPU &amp; PPU RESET is not connected on the key, on the lock it is connected to the CPU and PPU reset pins. Pins 11-15 are grounded on both CIC's in an NES; these are actually used in multi-game systems so that multiple CICs may be addressed within one system. Finally VCC goes to +5V.
+</p><p>Once the system comes out of POR the Lock sends the appropriate reset and initialization signals to the key. The key then returns the correct response, otherwise the lock will pull the /CPU &amp; PPU RESET line low with a 1Hz square wave. Since both share the same clock and the lock is able to reset the key, both CIC's stay in sync with each other.
+</p>
+<h2><span class="mw-headline" id="Disabling">Disabling</span></h2>
+<p>In the situation with two key chips, most revisions of the NES CIC will do nothing. Disconnecting pin 4 from the board and tying it to ground will convert the NES's lock into a key. There appears to be an internal pulldown inside the CIC such that merely cutting pin 4 will work.
+</p>
+<h2><span class="mw-headline" id="Defeating">Defeating</span></h2>
+<p>Boards made by <a class="extiw" href="http://en.wikipedia.org/wiki/Camerica" title="wikipedia:Camerica">Camerica</a>, <a class="extiw" href="http://en.wikipedia.org/wiki/Color_Dreams" title="wikipedia:Color Dreams">Color Dreams</a>, <a class="extiw" href="http://en.wikipedia.org/wiki/American_Video_Entertainment" title="wikipedia:American Video Entertainment">AVE</a>, and <a class="extiw" href="http://en.wikipedia.org/wiki/American_Game_Cartridges" title="wikipedia:American Game Cartridges">AGCI</a> boards contain a charge pump to create waveforms involving -5V, which freezes the CIC. Later runs of frontloading NES consoles have diodes to protect against out-of-spec voltages on the CIC data pins, but not on the reset pins.
+</p><p>In late 2006, Tengen's &quot;Rabbit&quot; chip was completely reverse-engineered and a <a class="extiw" href="http://en.wikipedia.org/wiki/PIC_microcontroller" title="wikipedia:PIC microcontroller">PIC</a>-based <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=1219" rel="nofollow">clone</a> was successfully made.
+</p>
+<h2><span class="mw-headline" id="Pinout">Pinout</span></h2>
+<p>A graphical pinout for the CIC can be found <a href="CIC_lockout_chip_pinout.xhtml" title="CIC lockout chip pinout">here</a>.
+</p>
+<h2><span class="mw-headline" id="Reference">Reference</span></h2>
+<ul><li> The CIC is explained in US patents 4,799,635 and 5,070,479.</li>
+<li> A clone cic is patented in US patent 5,004,232 which doesn't look like it should actually work unless it inadvertently stuns the CIC. A chip based on this patent was used by <s>AVE</s>.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:62-1!*!0!!en!*!* and timestamp 20160208215452 and revision id 8932
+ -->
+</div></body></html>

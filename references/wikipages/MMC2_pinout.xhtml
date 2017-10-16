@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC2 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC2 pinout</h1><div class="article">
+<p><a href="MMC2.xhtml" title="MMC2">MMC2</a> Chip:    (40/42 pin shrink-DIP)
+</p><p>Later revisions of the chip are labelled MMC2-L and are 42 pin instead of 40 pin.
+</p>
+<pre>                 .--\/--.
+          GND  - |XX  XX| -  +5V
+  (n)      M2 -&gt; |01  40| -  +5V
+  (n) CPU A14 -&gt; |02  39| -  GND
+  (n) CPU A13 -&gt; |03  38| -&gt; CIRAM A10 (n)
+  (r) PRG A15 &lt;- |04  37| -&gt; CHR A15 (r)
+  (r) PRG A14 &lt;- |05  36| -&gt; CHR A12 (r)
+ (rn) CPU A12 -&gt; |06  35| -&gt; CHR A14 (r)
+  (r) PRG A13 &lt;- |07  34| &lt;- PPU A12 (n)
+  (r) PRG A16 &lt;- |08  33| -&gt; CHR A13 (r)
+  (r) PRG /CE &lt;- |09  32| -&gt; CHR A16 (r)
+ (rn) CPU  D4 -&gt; |10  31| &lt;- PPU  A8 (rn)
+ (rn) CPU  D3 -&gt; |11  30| &lt;- PPU  A5 (rn)
+ (rn) CPU  D0 -&gt; |12  29| &lt;- PPU  A9 (rn)
+ (rn) CPU  D1 -&gt; |13  28| &lt;- PPU  A4 (rn)
+ (rn) CPU  D2 -&gt; |14  27| &lt;- PPU A11 (rn)
+  (n) CPU R/W -&gt; |15  26| &lt;- PPU  A3 (rn)
+  (n) /ROMSEL -&gt; |16  25| &lt;- PPU  A7 (rn)
+ (rn) PPU /RD -&gt; |17  24| &lt;- PPU  A2 (rn)
+ (rn) PPU  A0 -&gt; |18  23| &lt;- PPU A10 (rn)
+ (rn) PPU  A6 -&gt; |19  22| &lt;- PPU  A1 (rn)
+          GND  - |20  21| &lt;- PPU A13 (rn)
+                 `------'
+
+(r) - this pin connects to the ROM chips
+(n) - this pin connects to the NES connector
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.011 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:168-1!*!0!*!*!*!* and timestamp 20160208225555 and revision id 7765
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

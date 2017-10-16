@@ -1,0 +1,255 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Text compression</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Text compression</h1><div class="article">
+<p><b>Text compression</b> refers to techniques that allow fitting more text data into a smaller space.
+General-purpose compression formats that work well on a platform with relatively plentiful RAM, such as a PC, Nintendo 64, or Nintendo DS, may not work on platforms whose RAM is much smaller, such as the NES.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Dictionary_compression_and_DTE"><span class="tocnumber">1</span> <span class="toctext">Dictionary compression and DTE</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Simon.27s_Quest_.28NES.29"><span class="tocnumber">1.1</span> <span class="toctext">Simon's Quest (NES)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Chrono_Trigger_.28SNES.29"><span class="tocnumber">1.2</span> <span class="toctext">Chrono Trigger (SNES)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Joel_Yliluoma.27s_ppu_read_buffer_test_.28NES.29"><span class="tocnumber">1.3</span> <span class="toctext">Joel Yliluoma's ppu_read_buffer test (NES)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Damian_Yerrick.27s_robotfindskitten_.28NES.29"><span class="tocnumber">1.4</span> <span class="toctext">Damian Yerrick's robotfindskitten (NES)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Bitrate_reduction_methods"><span class="tocnumber">2</span> <span class="toctext">Bitrate reduction methods</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Fixed-bit_encoding"><span class="tocnumber">2.1</span> <span class="toctext">Fixed-bit encoding</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Variable-bit_encodings"><span class="tocnumber">2.2</span> <span class="toctext">Variable-bit encodings</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Huffman_coding"><span class="tocnumber">2.2.1</span> <span class="toctext">Huffman coding</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Arithmetic_coding"><span class="tocnumber">2.2.2</span> <span class="toctext">Arithmetic coding</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#LZ_based_methods"><span class="tocnumber">3</span> <span class="toctext">LZ based methods</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Dictionary_compression_and_DTE">Dictionary compression and DTE</span></h2>
+<p>Dictionary compression is a technique where part of the character set is
+reserved to denote references to a &quot;dictionary&quot;. If the byte falls into this range,
+a string is copied from the dictionary rather than the byte being copied verbatim.
+It could be considered the textual equivalent of metatiles in scrolling maps.
+As this compression technique does not require knowledge of past data,
+it is very easy to implement on machines having little memory like the NES.
+</p><p>Sometimes the compression may be applied recursively, where the dictionary string
+itself may contain references to other dictionary strings.
+</p><p>Dual-tile encoding, or DTE for short, is a special case of dictionary compression. It is also known as <a class="extiw" href="https://en.wikipedia.org/wiki/Byte_pair_encoding" title="wikipedia:Byte pair encoding">byte-pair encoding</a>, or digram coding.
+In this case, the dictionary strings are all two bytes long.
+</p><p>Example implementations:
+</p>
+<h3><span class="mw-headline" id="Simon.27s_Quest_.28NES.29">Simon's Quest (NES)</span></h3>
+<p>In <i>Simon's Quest</i> (NES) (all versions), the font is 252 symbols long, although only a small part of that is actual text symbols used in dialog text.
+</p>
+<table class="wikitable">
+<tr>
+<th> Value </th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 00–FB </td>
+<td> Print this symbol.
+</td></tr>
+<tr>
+<td> FC </td>
+<td> Denotes the end of a substring. Restores the string pointer saved by opcode FD.
+</td></tr>
+<tr>
+<td> FD </td>
+<td> Save current string pointer. The next byte determines the string number; this number will be used to calculate the new string pointer. Interpreting will continue from that address.
+</td></tr>
+<tr>
+<td> FE </td>
+<td> Newline.
+</td></tr>
+<tr>
+<td> FF </td>
+<td> End of text. If used in a substring, will not return to the main string. A string that ends in FD can omit the trailing FF, if the substring ends in FF.
+</td></tr></table>
+<p>Dictionary strings are arbitrary length. There is room for only one saved string pointer, so substrings can not refer to other substrings, unless it is to terminate the entire string. The substring mechanism is used in the Japanese diskette version of the game. The cartridge versions of the game also support this mechanism, even though the actual text data does not utilize it.
+</p>
+<h3><span class="mw-headline" id="Chrono_Trigger_.28SNES.29">Chrono Trigger (SNES)</span></h3>
+<p>In <i>Chrono Trigger</i> (SNES) (all versions), the font is 768 symbols long, but a significant number of those symbols can not be printed.
+</p>
+<table class="wikitable">
+<tr>
+<th> Value </th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 00 </td>
+<td> End of string.
+</td></tr>
+<tr>
+<td> 01 </td>
+<td> Read next byte; print symbol <i>byte+0x100</i>.
+</td></tr>
+<tr>
+<td> 02 </td>
+<td> Read next byte; print symbol <i>byte+0x200</i>.
+</td></tr>
+<tr>
+<td> 03–20 </td>
+<td> Various text effects, references to item tables, and references to party member names.
+</td></tr>
+<tr>
+<td> 21–xx </td>
+<td> Reference to a dictionary string. xx is a compile-time constant that determines the length of the dictionary. This number is 0x9F in the USA version and 0x3F in the Japanese version.
+</td></tr>
+<tr>
+<td> xx+1–FF </td>
+<td> Print this symbol.
+</td></tr></table>
+<p>Dictionary strings have a length limit of 255 bytes. They are not applied recursively. The dictionary strings are stored in length-data format without an end delimiter.
+</p>
+<h3><span class="mw-headline" id="Joel_Yliluoma.27s_ppu_read_buffer_test_.28NES.29">Joel Yliluoma's ppu_read_buffer test (NES)</span></h3>
+<p>In Joel Yliluoma's emulator test ROM ppu_read_buffer (<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?t=8847" rel="nofollow">[1]</a>)
+the font is 128 symbols long, and in addition to the alphabet it includes some pre-rendered substrings in variable-width font.
+The ROM uses a combination of DTE and dictionary for text compression. For DTE, the compression is applied recursively, in both DTE bytes.
+Additionally the string may contain a jump label to another string, which forms a <a class="extiw" href="https://en.wikipedia.org/wiki/Deterministic_acyclic_finite_state_automaton" title="wikipedia:Deterministic acyclic finite state automaton">DAFSA</a> that allows the reuse of the same string suffix in different test descriptions.
+</p>
+<table class="wikitable">
+<tr>
+<th> Value </th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 00 </td>
+<td> End of string.
+</td></tr>
+<tr>
+<td> 01–80 </td>
+<td> Print this symbol. After printing, if the stack pointer is wrong, pop a byte and interpret it rather than loading the next byte from the string.
+</td></tr>
+<tr>
+<td> 81–FE </td>
+<td> Push DTE_TABLE1[n-0x81] in stack, and interpret DTE_TABLE0[n-0x81].
+</td></tr>
+<tr>
+<td> FF </td>
+<td> A 16-bit word follows. This word is loaded as a new string pointer and loading continues from that address. The old string pointer is not saved.
+</td></tr></table>
+<h3><span class="mw-headline" id="Damian_Yerrick.27s_robotfindskitten_.28NES.29">Damian Yerrick's robotfindskitten (NES)</span></h3>
+<p><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=11943" rel="nofollow">This implementation</a> of <a class="extiw" href="https://en.wikipedia.org/wiki/robotfindskitten" title="wikipedia:robotfindskitten">robotfindskitten</a> contains a compressor written in Python and a 6502 decompressor.
+Comments in the compressor (<code>dte.py</code>) refer to the method as &quot;digram tree encoding&quot; for two reasons: to emphasize its recursive nature and because code units aren't &quot;tiles&quot;, especially when displayed with a proportional font. The decompressor first copies the compressed string into RAM, into the <i>end</i> of a fixed size buffer, where the first portion of the buffer (and also the string itself) doubles as a stack for the recursive DTE references. The string is then interpreted from the buffer as follows.
+</p>
+<table class="wikitable">
+<tr>
+<th> Value </th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 00    </td>
+<td> End of string. This code is only interpreted when copying the compressed string.
+</td></tr>
+<tr>
+<td> 00–7F </td>
+<td> Print this symbol, and increase the reading position in the compressed string. If the reading position is now at the end of the buffer, the string has ended.
+</td></tr>
+<tr>
+<td> 80–FF </td>
+<td> <i>Replace</i> the current character with bpe_table[n×2+1] and decrease the reading position in the compressed string. Read bpe_table[n×2+0] and interpret it. The multiplication by 2 discards the carry. The replaced character will be interpreted next, when the decompressor again reads bytes from the compressed string.
+</td></tr></table>
+<p>Decompressing with a software stack, rather than the hardware stack, would permit a scheme where a subroutine is repeatedly called to decompress one character at a time. The game however does not do that; it decompresses the entire string first, so that it can then perform operations like word-wrap on the decompressed text.
+</p><p>Ignoring the special meaning of byte 00 when decompressing means that the string itself could include raw 00 bytes, if hidden inside the bytepair tables. They could be used e.g. as newlines. The game however does not do that. Byte 0A acts as a newline, as is traditional on Linux and UNIX systems.
+</p>
+<h2><span class="mw-headline" id="Bitrate_reduction_methods">Bitrate reduction methods</span></h2>
+<h3><span class="mw-headline" id="Fixed-bit_encoding">Fixed-bit encoding</span></h3>
+<p>When the character set is small, such as 64 characters at most,
+strings could be encoded in a bitstream that packs 6 bits per character
+rather than 8 bits per character. This results in 20 % reduction of data size.
+</p><p>Main article: <a href="Fixed_Bit_Length_Encoding.xhtml" title="Fixed Bit Length Encoding">Fixed Bit Length Encoding</a>
+</p>
+<h3><span class="mw-headline" id="Variable-bit_encodings">Variable-bit encodings</span></h3>
+<p>In variable-bit encodings different symbols are stored in different number of bits.
+</p><p>Example assembler code for reading a MSB-first bit stream (adopted from <a href="Tile_compression.xhtml#Tokumaru" title="Tile compression">Tokumaru's tile decompressor</a>):
+</p>
+<pre>InitBitReader:
+        ; Input:   InputStream = pointer to beginning of bitstream
+        ; Output:  Y = buffer position
+        ; Clobber: A,ZN
+        lda #$80
+        sta BitBuffer
+        ldy #0
+        rts
+
+ReadBits:
+        ; Input:   X = number of bits to read (1..8)
+        ;          Y = buffer position (modified)
+        ; Output:  A = integer read
+        ; Clobber: C,ZN
+        lda #0
+@loop:  jsr ReadBit
+        rol a
+        dex
+        bne @loop
+        rts
+
+ReadBit:
+        ; Input:   Y = buffer position (modified)
+        ; Output:  C = bit
+        ; Clobber: ZN
+        asl BitBuffer
+        bne @ret
+        pha
+         lda (InputStream), y
+         iny
+         beq @wrap
+@ret0:   rol a
+         sta BitBuffer
+        pla
+@ret:   rts
+@wrap:  inc InputStream+1
+        bne @ret0</pre>
+<p>Ideally, you would store common symbols using few bits and infrequent symbols using more bits.
+Which brings us to…
+</p>
+<h4><span class="mw-headline" id="Huffman_coding">Huffman coding</span></h4>
+<p>A special case of variable-bit encodings is <a class="extiw" href="https://en.wikipedia.org/wiki/Huffman_coding" title="wikipedia:Huffman coding">Huffman coding</a>. 
+Huffman coding defines the optimal coding for a given set of symbols based on a table of frequencies that each symbol is used.
+</p><p>When combined with static dictionary coding, the technique is called <a class="external text" href="https://pineight.com/mw/?title=Huffword" rel="nofollow">Huffword</a>.
+</p>
+<h4><span class="mw-headline" id="Arithmetic_coding">Arithmetic coding</span></h4>
+<p>Huffman coding is also a special case of arithmetic coding. In arithmetic coding, each symbol
+is represented by a range of binary fractions rather than a particular number of bits.
+As arithmetic coding was covered by a number of patents up to 1993, and it is calculation intensive,
+chances are no NES game uses it.
+However, on the Super NES, the S-DD1 and SPC7110 coprocessors implement a mathematical model that approximates arithmetic coding under license.
+And by 1999, a design-around called &quot;range coding&quot; was discovered, leading to LZMA compression.
+</p>
+<h2><span class="mw-headline" id="LZ_based_methods">LZ based methods</span></h2>
+<p>LZ77 operates based on references to previous decompressed data.
+Decompression requires that either the previous decompressed data be readable
+or that a sliding window of previous data be kept in RAM.
+This isn't very efficient on the NES for two reasons:
+the CPU is connected to only 2K of RAM (plus whatever is in the cartridge),
+and VRAM can be accessed only during vblank.
+</p><p>Lempel-Ziv methods are incapable of efficient random access on a low-RAM system.
+Random access to an LZ77 or LZ78 stream works in one of three ways:
+</p>
+<ul><li> Decompress from the beginning to retrieve a substring. This is time-inefficient for the decompressor.</li>
+<li> Compress each substring independently. As LZ77 relies on correlation within a string, this makes the compressed data larger.</li>
+<li> Buffer the entire decompressed data in RAM. This requires more memory in the decompressor, but the tradeoff may work well on a platform with more RAM, such as the Commodore 64, Genesis, Super NES, or Game Boy Color.</li></ul>
+<dl><dd><i>See also: <a href="Tile_compression.xhtml#LZSS" title="Tile compression">Tile compression#LZSS</a></i></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.076 seconds
+Real time usage: 0.079 seconds
+Preprocessor visited node count: 52/1000000
+Preprocessor generated node count: 68/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1638-1!*!0!!en!*!* and timestamp 20160506210446 and revision id 12290
+ -->
+</div></body></html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 178</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 178</h1><div class="article">
+<p>VirtuaNesEX sources call this mapper &quot;Education / WaiXing / HengGe&quot;. However, virtuanes is among most other emulators in not supporting it fully; a game &quot;Pet Family ES-1081&quot; has a larger PRG than this mapper was originally supposed to handle, and only Nestopia 1.40u4 has been supporting it. The rest of the emulators will manifest a bug in the nametables when the main game engine starts. With r2536, FCEUX supports it; bizhawk does as well.
+</p><p>This is a simple mapper.
+</p>
+<pre>  $4800:  [.... ...M]
+     M = Mirror mode
+         %0 = Vertical
+         %1 = Horizontal
+  
+  $4801:  [...P PPP.]
+     P = Some bits of the selected 32K PRG bank
+  
+  $4802:  [pppp pppp]
+     p = Some more bits of the selected 32K PRG bank
+</pre>
+<p>The selected 32K PRG bank (mapped to $8000) is P + (p&lt;&lt;2). The older emulators are masking this result by &amp; 0xF which is what breaks the larger PRG games. It is unclear whether this mask is necessary for some games to work.
+</p><p>This addition is unusual but would be expected from a multicart if $4802 originally meant &quot;start of program&quot; and $4801 &quot;address within program&quot;. Pet Family seems to boot up and get past the nametable bug using an OR instead of a + which strikes me as much more likely.
+</p><p>The new PRG bank is only committed when $4801 is written. Therefore, you should write $4802 first and then $4801 to complete the remapping.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:795-1!*!*!*!*!*!* and timestamp 20160208225335 and revision id 7161
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

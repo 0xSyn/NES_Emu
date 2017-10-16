@@ -1,0 +1,130 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU power up state</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU power up state</h1><div class="article">
+<p>In March 2008, Blargg reverse-engineered the power-up/reset state and behavior of the NES <a href="PPU.xhtml" title="PPU">PPU</a>, NTSC version.
+</p>
+<table class="wikitable">
+<caption> Initial Register Values
+</caption>
+<tr>
+<th> Register
+</th>
+<th> At Power
+</th>
+<th> After Reset
+</th></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000) </td>
+<td> 0000 0000 </td>
+<td> 0000 0000
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> ($2001) </td>
+<td> 0000 0000 </td>
+<td> 0000 0000
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> ($2002) </td>
+<td> +0+x xxxx </td>
+<td> U??x xxxx
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003) </td>
+<td> $00 </td>
+<td> unchanged<sup>1</sup>
+</td></tr>
+<tr>
+<td> $2005 / $2006 latch </td>
+<td> cleared </td>
+<td> cleared
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> ($2005) </td>
+<td> $0000 </td>
+<td> $0000
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> ($2006) </td>
+<td> $0000 </td>
+<td> unchanged
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> ($2007) read buffer </td>
+<td> $00 </td>
+<td> $00
+</td></tr>
+<tr>
+<td> odd frame </td>
+<td> no </td>
+<td> no
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> </td>
+<td> pattern </td>
+<td> pattern
+</td></tr>
+<tr>
+<td> NT RAM (external, in Control Deck) </td>
+<td> mostly $FF </td>
+<td> unchanged
+</td></tr>
+<tr>
+<td> CHR RAM (external, in Game Pak) </td>
+<td> unspecified pattern </td>
+<td> unchanged
+</td></tr></table>
+<p>? = unknown,
+x = irrelevant,
++ = often set,
+U = unchanged
+</p>
+<ul><li>The PPU comes out of power and reset at the top of the picture. See: <a href="PPU_rendering.xhtml#Frame_timing_diagram" title="PPU rendering">PPU rendering</a>.</li>
+<li>Writes to the following registers are ignored if earlier than ~29658 CPU clocks after reset: <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a>. This also means that the <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>/<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> latch will not toggle. The other registers work immediately: <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004), <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a>, and <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> ($4014).
+<ul><li>There is an internal reset signal that clears <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a>, the <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>/<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> latch, and the <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> read buffer. (Clearing <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> corresponds to clearing the <a href="PPU_scrolling.xhtml" title="PPU scrolling">VRAM address latch (T)</a> and the fine X scroll. Note that the VRAM address itself (V) is <i>not</i> cleared.) This reset signal is set on reset and cleared at the end of VBlank, by the same signal that clears the VBlank, sprite 0, and overflow flags. Attempting to write to a register while it is being cleared has no effect, which explains why writes are &quot;ignored&quot; after reset.</li></ul></li>
+<li>If the NES is powered on after having been off for less than 20 seconds, register writes are ignored as if it were a reset, and register starting values differ: <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> = $80 (VBlank flag set), <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> = $2F or $01, and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> = $0001.</li>
+<li>The VBL flag (<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> bit 7) is random at power, and unchanged by reset. It is next set around 27384, then around 57165.</li>
+<li>Preliminary testing on a PAL NES shows that writes are ignored until ~33132 CPU clocks after power and reset, 9 clocks less than 311 scanlines. It is conjectured that the first VBL flag setting will be close to 241 * 341/3.2 cycles (241 PAL scanlines); further testing by nocash has confirmed this.</li>
+<li>It is known that after power and reset, it is as if the APU's $4017 were written 10 clocks before the first code starts executing. This delay is probably the same source of the 9 clock difference in the times for PPU writes being ignored. The cause is likely the reset sequence of the 2A03, when it reads the reset vector.</li>
+<li><sup>1</sup>: Although <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> is unchanged by reset, it is changed during rendering and cleared at the end of normal rendering, so you should assume its contents will be random.</li>
+<li>During the warmup state, the PPU outputs a solid color screen, usually grey, but it depends on the hardware.</li>
+<li>The Reset button on the Control Deck resets the PPU only on the front-loading NES (NES-001). On top-loaders (Famicom, NES-101), the Reset button resets only the CPU.</li>
+<li>Nametable memory in the Control Deck and CHR RAM in the Game Pak are unchanged by Reset, as are the CHR bank settings of most mappers. Their contents are unspecified at power on.</li></ul>
+<h2><span class="mw-headline" id="Best_practice">Best practice</span></h2>
+<p>The easiest way to make sure that 29658 cycles have passed, and the way used by commercial NES games, involves a pair of loops like this in your <a href="Init_code.xhtml" title="Init code">init code</a>:
+</p>
+<pre>
+  bit PPUSTATUS  ; clear the VBL flag if it was set at reset time
+vwait1:
+  bit PPUSTATUS
+  bpl vwait1     ; at this point, about 27384 cycles have passed
+vwait2:
+  bit PPUSTATUS
+  bpl vwait2     ; at this point, about 57165 cycles have passed
+</pre>
+<p>Due to the <a href="NMI.xhtml#Race_condition" title="NMI">$2002 race condition</a>, alignment between the CPU and PPU clocks at reset may cause the NES to miss an occasional VBL flag setting, but the only consequence of this is that your program will take one frame longer to start up.
+You might want to do various other initialization, such as getting the mapper and RAM into a known state, between the two loops.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="CPU_power_up_state.xhtml" title="CPU power up state">CPU power up state</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=99837#p99837" rel="nofollow">Confirmation by nocash</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=4279" rel="nofollow">Notes on reset color</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=3958" rel="nofollow">PPU warmup testing by Blargg</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.067 seconds
+Real time usage: 0.070 seconds
+Preprocessor visited node count: 32/1000000
+Preprocessor generated node count: 84/1000000
+Post‐expand include size: 24/2097152 bytes
+Template argument size: 2/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:50-1!*!0!!*!*!* and timestamp 20160208225734 and revision id 11010
+ -->
+</div></body></html>

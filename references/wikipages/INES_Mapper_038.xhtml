@@ -1,0 +1,156 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 038</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 038</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>iNES Mapper 038</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Bit Corp.
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=38&amp;group=groupid" rel="nofollow">1 in NesCartDB</a>
+</td></tr>
+
+
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> UNL-PCI556
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 128K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 8k
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> V(hardwired)
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <strong class="selflink">038</strong>
+</td></tr></table>
+</div>
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=38" rel="nofollow">iNES 038</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<p><strong class="selflink">iNES Mapper 038</strong> represents the board used for <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Bit_Corp." title="wikia:c:bootleggames:Bit Corp.">Bit Corp.</a>'s <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=4103" rel="nofollow">Crime Busters</a>. It is another mapper almost identical to <a href="GxROM.xhtml" title="GxROM">GNROM</a> (<b>66</b>) except the bits and writeable port moved around.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Bank_Select_.28.247000-.247FFF.29"><span class="tocnumber">1.1</span> <span class="toctext">Bank Select ($7000-$7FFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Hardware"><span class="tocnumber">2</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Emulator_oversize_support"><span class="tocnumber">3</span> <span class="toctext">Emulator oversize support</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_Select_.28.247000-.247FFF.29">Bank Select ($7000-$7FFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx CCPP
+     ||||
+     ||++- Select 32 KB PRG ROM bank for CPU $8000-$FFFF
+     ++--- Select 8 KB CHR ROM bank for PPU $0000-$1FFF
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>Writes to $F000-$FFFF are very likely to also trigger a bankswitch, but well behaved code has no reason to. The <a href="74138.xhtml" title="74138">74138</a> used by this board uses /ROMSEL and R/W on its enable inputs, but /ROMSEL is 1 while M2 is low, not just while M2 is high and and A15 is low. As a result, before M2 is high, if the 2A03's A14, A13, and A12 lines are 1 and R/W is 0, the <a href="74161.xhtml" title="74161">74161</a>'s /LOAD line will still load from the data bus.
+</p>
+<h2><span class="mw-headline" id="Emulator_oversize_support">Emulator oversize support</span></h2>
+<pre> FCEUX (2.1.5):
+  $7000-$7FFF: [CCCC CCPP]
+
+ Nestopia (1.4.0h):
+  $6000-$7FFF: [CCCC CC..]
+               [PPPP PPPP]
+</pre>
+<p><i>See also:</i> <a href="Oversize.xhtml" title="Oversize">Oversize</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.120 seconds
+Real time usage: 0.126 seconds
+Preprocessor visited node count: 198/1000000
+Preprocessor generated node count: 1813/1000000
+Post‐expand include size: 1201/2097152 bytes
+Template argument size: 143/2097152 bytes
+Highest expansion depth: 9/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:798-1!*!0!!en!*!* and timestamp 20160208225051 and revision id 10998
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

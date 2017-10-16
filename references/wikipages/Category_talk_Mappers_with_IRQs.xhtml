@@ -1,0 +1,28 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Category talk:Mappers with IRQs</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Category talk:Mappers with IRQs</h1><div class="article">
+<h2><span class="mw-headline" id="Where_to_file_fixed-timing_IRQ-sources">Where to file fixed-timing IRQ-sources</span></h2>
+<p>I don't think it makes sense to say that &quot;if it's clocked by M2, regardless of how general it is, it belongs in <a href="Category_Mappers_with_cycle_IRQs.xhtml" title="Category:Mappers with cycle IRQs">Category:Mappers with cycle IRQs</a>&quot;. 1- With such a constraint, the only thing that could possibly make sense in the overarching category would be things that used analog effects for timing ... or the way IRQs are used on &quot;real&quot; computers, where they signal asynchronous events. 2- Because these are not general, it <i>can't</i> be used for arbitrary timing. At best, they're far more crippled than Tepples's demonstration of using the DPCM for mid-screen splits. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:10, 18 May 2015 (MDT)
+</p>
+<dl><dd>Ah, I didn't understand why those 3 were left out of the cycle category. That sounds like a <a href="Category_Mappers_with_fixed_timing_IRQs.xhtml" title="Category:Mappers with fixed-timing IRQs">new category</a> to me, then. Since they're all still cycle counters (even though the timing isn't configurable) I made that a subcategory of cycle IRQs for now, but we can move it back to the parent category if there are other kinds (you mention it on the scanline IRQ category description, but do any exist?). Better to just keep all the fixed ones in their own category, since that's a far more important property than either cycle or scanline counting. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:06, 18 May 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd>For fixed PPU timing, there's <a href="INES_Mapper_091.xhtml" title="INES Mapper 091">iNES Mapper 091</a>, and whatever board <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=12554" rel="nofollow">zxbdragon found</a> here... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:28, 18 May 2015 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd>Okay, I'll move the category up to the parent, then. The reason I thought it would be best to exclude them is that if you want list of &quot;good&quot; cycle/scanline IRQs you probably don't want them in there. Actually... maybe multiple-inheritence would solve this. I'll make two new subcategories, both additionally parented to the fixed-timing one. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:44, 18 May 2015 (MDT)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd>Okay, that's done. I think this should make it easy to find &quot;useful&quot; IRQs, but also easy to find the various subcategories one might be interested in. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:53, 18 May 2015 (MDT)</dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.029 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1541-1!*!0!*!*!*!* and timestamp 20160208230302 and revision id 10837
+ -->
+</div></body></html>

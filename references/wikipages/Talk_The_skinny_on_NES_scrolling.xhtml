@@ -1,0 +1,76 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:The skinny on NES scrolling</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:The skinny on NES scrolling</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Changes_1.2F08.2F2013"><span class="tocnumber">1</span> <span class="toctext">Changes 1/08/2013</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Temporary_X.3F"><span class="tocnumber">2</span> <span class="toctext">Temporary X?</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#hblank"><span class="tocnumber">3</span> <span class="toctext">hblank</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Short_writes"><span class="tocnumber">4</span> <span class="toctext">Short writes</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Actual_timing_for_V.2FT_updates_during_rendering"><span class="tocnumber">5</span> <span class="toctext">Actual timing for V/T updates during rendering</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Split_X.2FY_scroll_simplification"><span class="tocnumber">6</span> <span class="toctext">Split X/Y scroll simplification</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Changes_1.2F08.2F2013">Changes 1/08/2013</span></h2>
+<p>I made the following changes:
+</p>
+<ul><li> I removed the first example, since it appeared to be broken w.r.t. fine Y scroll.</li></ul>
+<ul><li> I added a note about $2007 having side effects on <i>v</i>, please elaborate or correct it if anything is wrong. I note that nintendulator does a weird Y-1 thing if rendering is enabled when it is used? I'm not sure what is going on there.</li></ul>
+<ul><li> Bit 14 of <i>t</i> was inconsistently sometimes referred to as bit 15.</li></ul>
+<ul><li> Added a note about Y increment of <i>v</i>, which appears to occur on pixel 250 in nintendulator? I find this confusing, so I would appreciate if someone with authoritative knowledge could correctly explain the timing for the Y increment of <i>v</i>. Complete wrapping logic would also be helpful.</li></ul>
+<ul><li> The imaginary bit 15 was removed from the examples at the top of the page, for clarity and consistency.</li></ul>
+<ul><li> Added examples for simple scrolling, where only X, or no split is needed.</li></ul>
+<ul><li> Revised the $2006, $2005, $2005, $2006 example to be a more practical example, explaining how to set the scroll for a specific X/Y/nametable.</li></ul>
+<ul><li> Explanation of why the registers work this way, trying to make it easier to remember.</li></ul>
+<p>Please check for errors, and make corrections as necessary. We could also use some information on tile/attribute fetching, timings and which/whether can be changed mid-scanline.
+</p><p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 03:31, 8 January 2013 (MST)
+</p>
+<h2><span class="mw-headline" id="Temporary_X.3F">Temporary X?</span></h2>
+<p>Does <i>x</i> also have a corresponding temporary/reload register that gets copied into <i>x</i> at the beginning of each line?
+</p><p>Correct me if I'm wrong, but can't I write $2005 anywhere in the scanline, and <i>x</i> should be reloaded to the expected value at the start of the next line. If there was no reload value for it, and <i>x</i> is immediately set by $2005, it would be absolutely critical where in the scanline I happen to set it, and I don't remember this ever being the case when trying it on an NES.
+</p><p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 05:01, 8 January 2013 (MST)
+</p>
+<dl><dd>I guess this one doesn't matter. If it is reloaded we can just refer to the reload value as <i>x</i>. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 06:42, 8 January 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="hblank">hblank</span></h2>
+<p>Making scroll writes during hblank... Some threads have suggested this, but is it possible, and how? When I've tried to do scrolling in the past, I could never seem to get timings that accurate, so it was always necessary to pull it back from the right edge and accept some amount of glitching on the end of the line. Glitches like this seem to be very normal for games with split scrolling... can it actually be avoided? Is it bad advice to suggest timing it during hblank?
+</p><p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 05:33, 8 January 2013 (MST)
+</p>
+<dl><dd>Okay, enough information has been gathered on the forum to answer this. The article is updated. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 18:03, 8 January 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Short_writes">Short writes</span></h2>
+<p>Is it worth describing short sequences for quicker (and sometimes easier to calculate) but incomplete scrolling (i.e. 2005/2006, 2006/2006)? —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 19:57, 8 January 2013 (MST)
+</p>
+<dl><dd>I don't see why not. Maybe put them in an &quot;advanced examples&quot; section? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 23:22, 8 January 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Actual_timing_for_V.2FT_updates_during_rendering">Actual timing for V/T updates during rendering</span></h2>
+<p>Some of this was mentioned in the Visual 2C02 forum thread, but I've just double-checked it in the simulator:
+</p>
+<ul><li> Pre-render scanline, <i>all</i> dots 280 thru 304 - copy <b>non</b>-horizontal bits (yyyN.YYYYY.....) from T to V</li>
+<li> Every scanline, dots 328/336/8/16/24/32/.../240/248/256 - increment horizontal bits in V</li>
+<li> Every scanline, dot 256 - increment vertical bits in V</li>
+<li> Every scanline, dot 257 - copy horizontal bits from T to V</li></ul>
+<p>Note that these are using the &quot;revised&quot; cycle timings mentioned <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=9440&amp;start=15#p102081" rel="nofollow">here</a>. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 20:49, 10 January 2013 (MST)
+</p>
+<dl><dd>Wow that's some great information, thanks! I will integrate it into the article when I have some time, if somebody else doesn't get to it first. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 02:49, 11 January 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Split_X.2FY_scroll_simplification">Split X/Y scroll simplification</span></h2>
+<p>The example given in the article for mid-frame X/Y scroll updates uses the write sequence $2006 + $2005 + $2005 + $2006, where both of the $2006 write values need to be calculated ahead of time. Since only the last write is necessary to make the Y-scroll update take place, you can replace the first $2006 write with a $2005 write (if the base nametable isn't going to change, otherwise you'd need an additional write to $2000) which can be a bit simpler to actually code since you'd only need 3 distinct values, allowing you to safely fit the entire sequence within HBLANK (STX $2005; STY $2005; STX $2005; STA $2006). --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> (<s>talk</s>) 14:18, 8 August 2013 (MDT)
+</p>
+<dl><dd> On the one hand, now all four writes can fit in hblank. On the other hand, now all four writes <i>have</i> to be in hblank to avoid visible glitches. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:05, 8 August 2013 (MDT)
+<dl><dd>Correct. There's a window of about 20 CPU cycles when <i>v</i> can be modified, namely during sprite fetch. A sequence of <i>n</i> consecutive writes takes 4<i>n</i> - 3 cycles from the start of the first write to the end of the last: 4<i>n</i> because STA $200x takes four cycles, and - 3 because the first opcode fetch doesn't count toward the timing. The $2006-$2005-$2005-$2006 sequence requires only the last two writes cycle of to be in this window, resulting in a write sequence that occupies 5 of 20 cycles. The simplification requires the whole thing because of the immediate effect of fine X changes, resulting in 13/20, and 7-cycle jitter is at the very limit of what can be achieved with sprite 0 or NMI alone. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 12:28, 9 August 2013 (MDT)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:971-1!*!0!!en!*!* and timestamp 20160208224444 and revision id 8903
+ -->
+</div></body></html>

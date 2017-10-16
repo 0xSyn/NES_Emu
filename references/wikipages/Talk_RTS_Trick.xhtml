@@ -1,0 +1,58 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:RTS Trick</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:RTS Trick</h1><div class="article">
+<h2><span class="mw-headline" id="Indirect_vs._RTS">Indirect vs. RTS</span></h2>
+<p>Is there an advantage over using JMP ($0200), where $0200 has been loaded from the same kind of jump-table?  that's what I wonder, but I'm not gonna count up the cpu cycles needed for either method right now. --<s>Memblers</s> 20:21, 25 Jun 2009 (PDT)
+</p>
+<dl><dd>Not sure.  Seems like a pick'em to me.  Here are some things that come to mind:
+<ul><li> RTS Trick doesn't require any RAM.</li>
+<li> I personally think the RTS Trick is more readable.  If I see a table of pointers in my (or somebody else's) code and they all have a &quot;-1&quot; after them, I immediately know their purpose and how they are used.</li>
+<li> PHA, PHA, RTS requires less bytes than STA, STA, JMP (3 vs. 9).</li></ul></dd>
+<dd>--<a href="User_MetalSlime.xhtml" title="User:MetalSlime">MetalSlime</a> 00:08, 26 Jun 2009 (PDT)
+<dl><dd>JMP ($0200) isn't re-entrant. The RTS/RTI approach uses the stack therefore can be done by mainline and interrupt code freely. <s>Blargg</s> (<a href="User_talk_Blargg.xhtml" title="User talk:Blargg">talk</a>) 02:12, 23 January 2014 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Self-modifying">Self-modifying</span></h2>
+<p>If you use self modifying code and assure that the table has to start at a page border (and store pointers to the routines, without the -1) then you can use a smaller and faster code:
+</p>
+<pre>tb_opcode_launcher_smc:
+	; bytes, cycles
+	asl ; 1, 2
+	sta smc+2 ; 3, 4
+smc:
+	jmp (tb_opcode_rts_table) ; 3, 5
+	; total 7 bytes and 11 cycles
+</pre>
+<pre>tb_opcode_launcher:
+	; bytes, cycles
+	asl ; 1, 2
+	tax ; 1, 2
+	lda tb_opcode_rts_table+1, x ; 3, 4
+	pha ; 1, 3
+	lda tb_opcode_rts_table, x ; 3, 4
+	pha ; 1, 3
+	rts ; 1, 6
+	; total 11 bytes and 24 cycles
+</pre>
+<p>--<s>212.8.208.194</s> (<s>talk</s>)
+</p>
+<dl><dd>Assuming that by <code>sta smc+2</code> you meant <code>sta smc+1</code> because 6502 is little-endian. But if you're doing any sort of nontrivial work in the NMI or IRQ handler, you would need separate 7-byte self-modifying trampolines in RAM for the main, NMI, and possibly IRQ handlers. And with the NES's 2048 byte RAM, 21 bytes might be a lot, though it's still not as bad as it would be on the Atari 2600. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 11:18, 21 May 2013 (MDT)
+<dl><dd>If you have extra PRG RAM in the cartridge, you could use that, too. Also, self-modifying code seems to be especially suitable for disk-based programs (although in many ways other than just this!). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 16:45, 8 December 2013 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Fast_RTS_Trick">Fast RTS Trick</span></h2>
+<p>You can make a bit faster RTS trick also if all of the jump targets are in one 256-byte page. Alternatively, you can align each jump target to a separate page and then not even use a lookup table. In addition, even when using the full addresses, I prefer to store the high bytes in one table and the low bytes in another table, instead of doing it together. This results in a smaller and faster code. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 16:45, 8 December 2013 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:271-1!*!0!!*!*!* and timestamp 20160208224420 and revision id 9066
+ -->
+</div></body></html>

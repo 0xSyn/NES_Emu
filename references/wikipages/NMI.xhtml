@@ -1,0 +1,92 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NMI</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NMI</h1><div class="article">
+<p>The <a href="2A03.xhtml" title="2A03">2A03</a> and most other 6502 family CPUs are capable of processing a <b>non-maskable interrupt</b> (<b>NMI</b>).
+This input is edge-sensitive, meaning that if other circuitry on the board pulls the /NMI pin from high to low voltage, this sets a flip-flop in the CPU.
+When the CPU checks for interrupts and find that the flip-flop is set, it pushes the processor status register and return address on the stack, reads the NMI handler's address from $FFFA-$FFFB, clears the flip-flop, and jumps to this address.
+</p><p>&quot;Non-maskable&quot; means that no state inside the CPU can prevent the NMI from being processed as an interrupt.
+However, most boards that use a 6502 CPU's /NMI line allow the CPU to disable the generation of /NMI signals by writing to a memory-mapped I/O device.
+In the case of the NES, the /NMI line is connected to the NES PPU and is used to detect vertical blanking.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operation"><span class="tocnumber">1</span> <span class="toctext">Operation</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Caveats"><span class="tocnumber">2</span> <span class="toctext">Caveats</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Old_emulators"><span class="tocnumber">2.1</span> <span class="toctext">Old emulators</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Race_condition"><span class="tocnumber">2.2</span> <span class="toctext">Race condition</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Operation">Operation</span></h2>
+<p>Two 1-bit registers inside the PPU control the generation of NMI signals.
+<a href="PPU_frame_timing.xhtml" title="PPU frame timing">Frame timing</a> and accesses to the PPU's <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> registers change these registers as follows, regardless of whether rendering is enabled:
+</p>
+<ol><li>Start of vertical blanking: Set NMI_occurred in PPU to true.</li>
+<li>End of vertical blanking, sometime in pre-render scanline: Set NMI_occurred to false.</li>
+<li>Read <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>: Return old status of NMI_occurred in bit 7, then set NMI_occurred to false.</li>
+<li>Write to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>: Set NMI_output to bit 7.</li></ol>
+<p>The PPU pulls /NMI low if and only if both NMI_occurred and NMI_output are true.
+By toggling NMI_output (<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>.7) during vertical blank without reading <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated.
+</p>
+<h2><span class="mw-headline" id="Caveats">Caveats</span></h2>
+<h3><span class="mw-headline" id="Old_emulators">Old emulators</span></h3>
+<p>Some platforms, such as the Game Boy, keep a flag turned on through the whole vertical blanking interval.
+Some early emulators such as NESticle were developed under the assumption that <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>.7 worked the same way and thus do <i>not</i> turn off NMI_occurred in line 3.
+Thus, some <a class="mw-redirect" href="Program_compatibility.xhtml" title="Program Compatibility">defective homebrew programs</a> developed in this era will wait for <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>.7 to become false and expect this to happen at the end of vblank.
+(The right way to wait for the end of vblank involves triggering a sprite 0 hit and waiting for <i>that</i> flag to become 0.)
+Some newer homebrew programs have been known to display a diagnostic message if an emulator incorrectly returns true on two consecutive reads of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>.7.
+</p>
+<h3><span class="mw-headline" id="Race_condition">Race condition</span></h3>
+<p>If 1 and 3 happen simultaneously, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>.7 is read as false, and NMI_occurred is set to false anyway.
+This means that the following code that waits for vertical blank by spinning on <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a>.7 is likely to miss an occasional frame:
+</p>
+<pre>
+wait_status7:
+  bit PPUSTATUS
+  bpl wait_status7
+  rts
+</pre>
+<p>Code like <code>wait_status7</code> is fine while your program is waiting for <a href="PPU_power_up_state.xhtml" title="PPU power up state">the PPU to warm up</a>.
+But once the game is running, the most reliable way to wait for a vertical blank is to turn on NMI_output and then wait for the NMI handler to set a variable:
+</p>
+<pre>
+wait_nmi:
+  lda retraces
+@notYet:
+  cmp retraces
+  beq @notYet
+  rts
+
+nmi_handler:
+  inc retraces
+  rti
+</pre>
+<p>This handler works for simple cases, and in many cases, it is <a class="external text" href="http://c2.com/xp/DoTheSimplestThingThatCouldPossiblyWork.html" rel="nofollow">the simplest thing that could possibly work</a>.
+But if your game code takes significantly longer than 24,000 cycles, such as if you have too many critters moving on the screen, it may take longer than one frame.
+Waiting for NMI in this way would miss an NMI that happens while other code is running.
+In some cases, this could cause a sprite 0-triggered scroll split to flicker (or worse).
+The next step up involves doing VRAM updates and sprite 0 waiting in a separate <a href="NMI_thread.xhtml" title="NMI thread">NMI thread</a> that is guaranteed to run every frame.
+</p><p>Because Gradius puts its status bar at the bottom, it can't just spin on sprite 0 all the time.
+Instead, it counts the approximate time that each object handler takes and deliberately delays the remaining calculations to the next frame when it might otherwise come close to missing a sprite 0 hit.
+Games developed by <a class="extiw" href="http://en.wikipedia.org/wiki/Micronics" title="wikipedia:Micronics">Micronics</a> are likely to reduce a game's overall frame rate far below 60 frames per second to match the worst case of lag.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.040 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 21/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:52-1!*!0!!en!*!* and timestamp 20160208225642 and revision id 9714
+ -->
+</div></body></html>

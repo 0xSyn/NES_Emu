@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC3 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC3 pinout</h1><div class="article">
+<p>Nintendo <a href="MMC3.xhtml" title="MMC3">MMC3</a>: 44-pin QFP (Canonically <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 4</a>)
+</p>
+<pre>                             / \
+                            / O \
+                    n/c -- /01 44\ -&gt; CHR A16 (r)
+           (r) CHR A10 &lt;- /02   43\ -&gt; CHR A11 (r)
+          (n) PPU A12 -&gt; /03     42\ -&gt; PRG RAM /WE (w)
+         (n) PPU A11 -&gt; /04       41\ -&gt; PRG RAM +CE (w)
+        (n) PPU A10 -&gt; /05         40\ -- GND
+               GND -- /06         \ 39\ &lt;- CPU D3 (nrw)
+      (r) CHR A13 &lt;- /07           \ 38\ &lt;- CPU D2 (nrw)
+     (r) CHR A14 &lt;- /08         \  _\ 37\ &lt;- CPU D4 (nrw)
+    (r) CHR A12 &lt;- /09         \ \|    36\ &lt;- CPU D1 (nrw)
+ (n) CIRAM A10 &lt;- /10           \ \     35\ &lt;- CPU D5 (nrw)
+  (r) CHR A15 &lt;- /11         \  _\    o  34\ &lt;- CPU D0 (nrw)
+  (r) CHR A17 &lt;- \12       /\ \|         33/ &lt;- CPU D6 (nrw)
+      (n) /IRQ &lt;- \13        \ \        32/ &lt;- CPU A0 (nrw)
+    (n) /ROMSEL -&gt; \14   /    \        31/ &lt;- CPU D7 (nrw)
+             GND -- \15  |_   /       30/ -&gt; PRG RAM /CE (w)
+              n/c -- \16   |         29/ &lt;- M2 (n)
+           (n) R/W -&gt; \17  |/       28/ -- GND
+        (r) PRG A15 &lt;- \18         27/ -- VCC
+         (r) PRG A13 &lt;- \19       26/ -&gt; PRG /CE (r)
+          (n) CPU A14 -&gt; \20     25/ -&gt; PRG A17 (r)
+           (r) PRG A16 &lt;- \21   24/ &lt;- CPU A13 (n)
+            (r) PRG A14 &lt;- \22 23/ -&gt; PRG A18 (r)
+                            \ O /
+                             \ /
+
+01, 16: both officially no connection. sometimes shorted to pin 02, 15 respectively
+</pre>
+<p>Note the orientation of the text: &quot;MMC3&quot; when viewed upright specifies pin 1 is bottom face, leftmost.
+</p><p>Mappers <a href="INES_Mapper_037.xhtml" title="INES Mapper 037">37</a> and <a href="INES_Mapper_047.xhtml" title="INES Mapper 047">47</a> connect pins 42 and 30 to a <a href="74161.xhtml" title="74161">74161</a>
+</p><p><a href="INES_Mapper_118.xhtml" title="INES Mapper 118">iNES Mapper 118</a> connects pin 12 to CIRAM A10, and pin 10 is n/c.
+</p><p><a href="INES_Mapper_119.xhtml" title="INES Mapper 119">iNES Mapper 119</a> connects pin 44 to a <a href="7432.xhtml" title="7432">7432</a> and to the CHR RAM's +CE pin.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:169-1!*!0!*!*!*!* and timestamp 20160208225557 and revision id 7763
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

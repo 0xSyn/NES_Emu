@@ -45,6 +45,7 @@
     <Compile Include="APU.cs" />
     <Compile Include="CPU.cs" />
     <Compile Include="CPU_Memory.cs" />
+    <Compile Include="IO.cs" />
     <Compile Include="PPU.cs" />
     <Compile Include="PPU_Memory.cs" />
     <Compile Include="Program.cs" />

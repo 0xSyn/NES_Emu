@@ -1,0 +1,1362 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/MMC3 Variants</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/MMC3 Variants</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Legend_for_bank_style"><span class="tocnumber">1</span> <span class="toctext">Legend for bank style</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#PRG"><span class="tocnumber">1.1</span> <span class="toctext">PRG</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#CHR"><span class="tocnumber">1.2</span> <span class="toctext">CHR</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Outer_banks"><span class="tocnumber">1.3</span> <span class="toctext">Outer banks</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#ASIC_mappers_with_simple_banking"><span class="tocnumber">2</span> <span class="toctext">ASIC mappers with simple banking</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Mappers_with_outer_banks"><span class="tocnumber">3</span> <span class="toctext">Mappers with outer banks</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Discrete_logic_mappers"><span class="tocnumber">4</span> <span class="toctext">Discrete logic mappers</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Legend_for_bank_style">Legend for bank style</span></h2>
+<h3><span class="mw-headline" id="PRG">PRG</span></h3>
+<ul><li> 32 - Banks 32 KiB at a time</li>
+<li> 16+16F - Bottom 16 KiB are bankable, top 16 KiB are fixed</li>
+<li> 16F+16 - Bottom 16 KiB are fixed, top 16 KiB are bankable</li>
+<li> 8+24F - Bottom 8 KiB are fixed, top 24 KiB are fixed</li>
+<li> 3×8+8F - Three independent 8 KiB banks at bottom, topmost 8 KiB are fixed</li>
+<li> N108 - The Namco 108 set the theme that many other bank styles derive from ( a.k.a. 8+8+16F = two independent 8 KiB banks at bottom, topmost 16 KiB are fixed)</li>
+<li> MMC3 - The MMC3 extended the banking style of the Namco 108 ( user switches between N108 and 8F+8+8+8F = bottommost and topmost 8 KiB are fixed, middle two 8 KiB banks are independently bankable)</li></ul>
+<h3><span class="mw-headline" id="CHR">CHR</span></h3>
+<ul><li> 8 - Banks 8 KiB at a time</li>
+<li> 2×4 - Two independent 4 KiB banks</li>
+<li> 4+4F - Bottom 4 KiB are bankable, top 4 KiB are fixed</li>
+<li> 4×2 - Four independent 2 KiB banks</li>
+<li> 8×1 - Eight independent 1 KiB banks</li>
+<li> N108 - Set the trend for CHR banking style also. Equivalent to 2×2+4×1 = two independent 2 KiB banks followed by four independent 1 KiB banks</li>
+<li> MMC3 - allows the user to swap which pattern table gets the &quot;large&quot; and &quot;small&quot; banks</li></ul>
+<h3><span class="mw-headline" id="Outer_banks">Outer banks</span></h3>
+<p>&quot;Outer banks&quot; are things you find in the <a href="Multicart.xhtml" title="Multicart">multicart</a> mappers, where individual games write to the registers of the &quot;regular&quot; mapper and the menu writes to a separate set of registers that chooses which game will be played. For example, Nintendo World Cup appeared on two boards that extend the MMC3 in this way: one with <a href="INES_Mapper_037.xhtml" title="INES Mapper 037"><i>SMB1</i> and <i>Tetris</i></a> and one with <a href="INES_Mapper_047.xhtml" title="INES Mapper 047"><i>Super Spike V'Ball</i></a>. 
+</p><p>This same structure occasionally shows up in ordinary single-game mappers: <a href="INES_Mapper_096.xhtml" title="INES Mapper 096">Bandai's <i>Oeka Kids</i> games</a>, <a href="INES_Mapper_154.xhtml" title="INES Mapper 154">Namco's <i>Devil Man</i></a>, <a href="INES_Mapper_088.xhtml" title="INES Mapper 088">several other Namco games</a>, and a <a href="INES_Mapper_012.xhtml" title="INES Mapper 012">few</a> HKOs <a href="INES_Mapper_014.xhtml" title="INES Mapper 014">that</a> would like better corroboration.
+</p>
+<h2><span class="mw-headline" id="ASIC_mappers_with_simple_banking">ASIC mappers with simple banking</span></h2>
+<p>Also see <a href="Comparison_of_Nintendo_mappers.xhtml" title="Comparison of Nintendo mappers">Comparison of Nintendo mappers</a>
+</p>
+<table class="wikitable sortable">
+
+<tr>
+<th colspan="2">  </th>
+<th colspan="2">PRG </th>
+<th colspan="2">CHR
+</th></tr>
+<tr>
+<th>iNES Mapper </th>
+<th> Short name </th>
+<th> bank style </th>
+<th> max (KiB) </th>
+<th> bank style </th>
+<th> max (KiB) </th>
+<th> Mirroring </th>
+<th> IRQ </th>
+<th> WRAM </th>
+<th> Comments
+</th></tr>
+<tr>
+<td><a href="INES_Mapper_206.xhtml" title="INES Mapper 206">206</a> </td>
+<td> N108 </td>
+<td> 8+8+16F </td>
+<td> 128 </td>
+<td> 2×2+4×1 </td>
+<td> 64 </td>
+<td> fixed </td>
+<td> none </td>
+<td> none </td>
+<td> none
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">4</a> </td>
+<td> <a href="MMC3.xhtml" title="MMC3">MMC3</a>, <a href="MMC6.xhtml" title="MMC6">MMC6</a> </td>
+<td> N108; 8F+8+8+8F </td>
+<td> 512 </td>
+<td> N108; 4×1+2×2 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> scanline </td>
+<td> ext (MMC6 1024B int) </td>
+<td>
+</td></tr>
+<tr>
+<td>(none) </td>
+<td> <a href="Family_Computer_Disk_System.xhtml" title="Family Computer Disk System">Famicom Disk System</a> </td>
+<td> 32RAM+8F </td>
+<td> arbitrary </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> H/V </td>
+<td> cycle </td>
+<td> none </td>
+<td> <a href="FDS_audio.xhtml" title="FDS audio">Expansion audio</a>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="MMC1.xhtml" title="INES Mapper 001">1</a>/<a href="INES_Mapper_155.xhtml" title="INES Mapper 155">155</a> </td>
+<td> <a href="MMC1.xhtml" title="MMC1">MMC1</a> </td>
+<td> 16+16F; 16F+16; 32 </td>
+<td> 256 (512) </td>
+<td> 8; 2×4 </td>
+<td> 128 </td>
+<td> 1/H/V </td>
+<td> none </td>
+<td> <a href="SxROM.xhtml" title="SxROM">sometimes bankable</a> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="MMC5.xhtml" title="INES Mapper 005">5</a> </td>
+<td> <a href="MMC5.xhtml" title="MMC5">MMC5</a> </td>
+<td> 32; 2×16; 16+8+8; 4×8 </td>
+<td> 1024 </td>
+<td> 8; 2×4; 4×2; 8×1 </td>
+<td> 1024 </td>
+<td> arbitrary </td>
+<td> scanline </td>
+<td> bankable ext + 1024B int </td>
+<td> <a href="MMC5_audio.xhtml" title="MMC5 audio">Expansion audio</a>, vertical split, hardware multiplier, 8x8 attribute zones
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="MMC2.xhtml" title="INES Mapper 009">9</a> </td>
+<td> <a href="MMC2.xhtml" title="MMC2">MMC2</a> </td>
+<td> 8+24F </td>
+<td> 128 </td>
+<td> 2×4 </td>
+<td> 128 </td>
+<td> H/V </td>
+<td> none </td>
+<td> none </td>
+<td> tile triggered CHR banking
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="MMC4.xhtml" title="INES Mapper 010">10</a> </td>
+<td> <a href="MMC4.xhtml" title="MMC4">MMC4</a> </td>
+<td> 16+16F </td>
+<td> 256 </td>
+<td> 2×4 </td>
+<td> 128 </td>
+<td> H/V </td>
+<td> none </td>
+<td> ext </td>
+<td> tile triggered CHR banking
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_016.xhtml" title="INES Mapper 016">16</a>/<a href="INES_Mapper_159.xhtml" title="INES Mapper 159">159</a> </td>
+<td> <a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">LZ93D50</a> (I²C) </td>
+<td> 16+16F </td>
+<td> 256 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> serial EEPROM </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_018.xhtml" title="INES Mapper 018">18</a> </td>
+<td> Jaleco SS88006 </td>
+<td> 3×8+8F </td>
+<td> 256? </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> ext </td>
+<td> ADPCM expansion audio
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">19</a> </td>
+<td> <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a> </td>
+<td> 3×8+8F </td>
+<td> 512 </td>
+<td> 12×1 </td>
+<td> 256 </td>
+<td> arbitrary </td>
+<td> cycle </td>
+<td> ext + 128B int </td>
+<td> <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Expansion audio</a>, ROM nametables
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_021.xhtml" title="INES Mapper 021">21</a>/<a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>/<a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a> </td>
+<td> <a href="VRC4.xhtml" title="VRC4">VRC4</a> </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> 8×1 </td>
+<td> 512 </td>
+<td> 1/H/V </td>
+<td> scanline </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_022.xhtml" title="INES Mapper 022">22</a>/<a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>/<a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a> </td>
+<td> <a href="VRC2.xhtml" title="VRC2">VRC2</a> </td>
+<td> N108 </td>
+<td> 256 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> none </td>
+<td> serial EEPROM </td>
+<td>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 024">24</a>/<a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 026">26</a> </td>
+<td> <a href="VRC6.xhtml" title="VRC6">VRC6</a> </td>
+<td> 16+8+8F </td>
+<td> 256 </td>
+<td> 6×1+2×3; 4×2+4×1; 4×1+4×2 </td>
+<td> 256 (512) </td>
+<td> arbitrary </td>
+<td> scanline </td>
+<td> ext </td>
+<td> <a href="VRC6_audio.xhtml" title="VRC6 audio">Expansion audio</a>, ROM nametables
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_027.xhtml" title="INES Mapper 027">27</a> </td>
+<td> &quot;Pirate&quot; VRC4 </td>
+<td> 3×8+8F </td>
+<td> ?256? </td>
+<td> 8×1 </td>
+<td> 512 </td>
+<td> 1/H/V </td>
+<td> ? </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_031.xhtml" title="INES Mapper 031">31</a> </td>
+<td> <a href="NSF.xhtml" title="NSF">NSF</a> subset </td>
+<td> 8×4 </td>
+<td> 1024 </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> fixed </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_032.xhtml" title="INES Mapper 032">32</a> </td>
+<td> Irem G101 </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_033.xhtml" title="INES Mapper 033">33</a>/<a href="INES_Mapper_048.xhtml" title="INES Mapper 048">48</a> </td>
+<td> TC0190 </td>
+<td> N108 </td>
+<td> 512 </td>
+<td> N108 </td>
+<td> 512 </td>
+<td> H/V </td>
+<td> scanline(48) </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="RAMBO_1.xhtml" title="INES Mapper 064">64</a> </td>
+<td> <a href="RAMBO_1.xhtml" title="RAMBO-1">RAMBO-1</a> </td>
+<td> 3×8+8F </td>
+<td> 256 </td>
+<td> MMC3; 8×1 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> scanline/cycle </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_065.xhtml" title="INES Mapper 065">65</a> </td>
+<td> Irem H3001 </td>
+<td> 3×8+8F </td>
+<td> 256 (512?) </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> cycle </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_067.xhtml" title="INES Mapper 067">67</a> </td>
+<td> Sunsoft 3 </td>
+<td> 16+16F </td>
+<td> 128? </td>
+<td> 4×2 </td>
+<td> 128? </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_068.xhtml" title="INES Mapper 068">68</a> </td>
+<td> Sunsoft 4 </td>
+<td> 16+16F </td>
+<td> 256 </td>
+<td> 4×2 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> none </td>
+<td> ext </td>
+<td> ROM nametables
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="INES Mapper 069">69</a> </td>
+<td> <a href="Sunsoft_FME_7.xhtml" title="Sunsoft FME-7">Sunsoft FME-7</a> </td>
+<td> 4×8+8F </td>
+<td> 256 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> ext </td>
+<td> <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Expansion audio</a>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="VRC3.xhtml" title="INES Mapper 073">73</a> </td>
+<td> <a href="VRC3.xhtml" title="VRC3">VRC3</a> </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> fixed </td>
+<td> cycle </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_074.xhtml" title="INES Mapper 074">74</a>/<a href="INES_Mapper_194.xhtml" title="INES Mapper 194">194</a> </td>
+<td> TQROM-like (2kiB) </td>
+<td> MMC3 </td>
+<td> 1024 </td>
+<td> MMC3 </td>
+<td> 254 </td>
+<td> H/V? </td>
+<td> scanline? </td>
+<td> ext? </td>
+<td> CHR RAM and ROM, ?like TQROM?
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="VRC1.xhtml" title="INES Mapper 075">75</a> </td>
+<td> <a href="VRC1.xhtml" title="VRC1">VRC1</a> </td>
+<td> 3×8+8F </td>
+<td> 128 </td>
+<td> 2×4 </td>
+<td> 128 </td>
+<td> H/V </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_076.xhtml" title="INES Mapper 076">76</a> </td>
+<td> N108 (inflated CHR) </td>
+<td> N108 </td>
+<td> 128 </td>
+<td> 4×2 </td>
+<td> 128 </td>
+<td> fixed </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_080.xhtml" title="INES Mapper 080">80</a> </td>
+<td> X1-005 </td>
+<td> 3×8+8F </td>
+<td> 256 </td>
+<td> N108 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> none </td>
+<td> 128B int </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_082.xhtml" title="INES Mapper 082">82</a> </td>
+<td> X1-017 </td>
+<td> 3×8+8F </td>
+<td> 512? </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> ? </td>
+<td> 5120B int </td>
+<td>
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="VRC7.xhtml" title="INES Mapper 085">85</a> </td>
+<td> <a href="VRC7.xhtml" title="VRC7">VRC7</a> </td>
+<td> 3×8+8F </td>
+<td> 512 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> scanline </td>
+<td> ext </td>
+<td> <a href="VRC7_audio.xhtml" title="VRC7 audio">Expansion audio</a>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_090.xhtml" title="INES Mapper 090">90</a> </td>
+<td> for: Tekken 2 HKO </td>
+<td>  8+32F; 8+16+16F; 4×8+8F; 8+32; 8+2×16; 4×8 </td>
+<td> 2048? </td>
+<td> 8; 2×4; 4×2; 8×1 </td>
+<td> 2048? </td>
+<td> 1/H/V </td>
+<td> scanline/cycle/pixel </td>
+<td> ? </td>
+<td> hardware multiplier
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_209.xhtml" title="INES Mapper 209">209</a>/<a href="INES_Mapper_211.xhtml" title="INES Mapper 211">211</a> </td>
+<td> for: Tekken 2 HKO </td>
+<td>  8+32F; 8+16+16F; 4×8+8F; 8+32; 8+2×16; 4×8 </td>
+<td> 2048? </td>
+<td> 8+4×1; 2×4+4×1; 4×2+4×1; 12×1 </td>
+<td> 2048? </td>
+<td> arbitrary </td>
+<td> scanline/cycle/pixel </td>
+<td> ? </td>
+<td> ROM nametables, hardware multiplier
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_091.xhtml" title="INES Mapper 091">91</a> </td>
+<td> for: Street Fighter 3 HKO </td>
+<td> N108 </td>
+<td> 128 </td>
+<td> 4×2 </td>
+<td> 512 </td>
+<td> ? </td>
+<td> ? </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_095.xhtml" title="INES Mapper 095">95</a> </td>
+<td> N108 (nametable) </td>
+<td> N108 </td>
+<td> 128 </td>
+<td> N108 </td>
+<td> 32 </td>
+<td> 1/H </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_097.xhtml" title="INES Mapper 097">97</a> </td>
+<td> Irem TAM-S1 </td>
+<td> 16F+16 </td>
+<td> 256 </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> 1/H/V </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_105.xhtml" title="INES Mapper 105">105</a> </td>
+<td> <a href="NES_EVENT.xhtml" title="NES-EVENT">NES-EVENT</a> </td>
+<td> 16+16F; 16F+16; 32 </td>
+<td> 256 </td>
+<td> 1×8; 2×4 </td>
+<td> 8 </td>
+<td> 1/H/V </td>
+<td> other </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_112.xhtml" title="INES Mapper 112">112</a> </td>
+<td> &quot;chinese&quot; N108 </td>
+<td> N108 </td>
+<td> 256 </td>
+<td> N108 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> ? </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_118.xhtml" title="INES Mapper 118">118</a> </td>
+<td> <a href="TLSROM.xhtml" title="TLSROM">TLSROM</a>, <a href="TKSROM.xhtml" title="TKSROM">TKSROM</a> </td>
+<td> MMC3 </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> arbitrary </td>
+<td> scanline </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_119.xhtml" title="INES Mapper 119">119</a> </td>
+<td> TQROM (8kiB) </td>
+<td> MMC3 </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 64 </td>
+<td> H/V </td>
+<td> scanline </td>
+<td> ext </td>
+<td> CHR RAM and ROM
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_137.xhtml" title="INES Mapper 137">137</a> </td>
+<td> Sachen 8259 type D </td>
+<td> 32 </td>
+<td> 256 </td>
+<td> 4×1+1×4 </td>
+<td> 32 </td>
+<td> 1/H/V/L </td>
+<td> none </td>
+<td> ? </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_153.xhtml" title="INES Mapper 153">153</a> </td>
+<td> <a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">LZ93D50</a> (RAM) </td>
+<td> 16+16F </td>
+<td> 512 </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_157.xhtml" title="INES Mapper 157">157</a> </td>
+<td> <a href="Bandai_FCG_board.xhtml" title="Bandai FCG board">Bandai Datach</a> </td>
+<td> 16+16F </td>
+<td> 256 </td>
+<td> unbanked </td>
+<td> 8 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> serial EEPROMs </td>
+<td> barcode reader
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_158.xhtml" title="INES Mapper 158">158</a> </td>
+<td> RAMBO-1 (nametable) </td>
+<td> 3×8+8F </td>
+<td> 256 </td>
+<td> MMC3; 8×1 </td>
+<td> 128 </td>
+<td> arbitrary </td>
+<td> scanline/cycle </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_165.xhtml" title="INES Mapper 165">165</a> </td>
+<td> MMC2 × MMC3 </td>
+<td> MMC3 </td>
+<td> 512 </td>
+<td> 2×4 </td>
+<td> 128 </td>
+<td> ? </td>
+<td> ? </td>
+<td> ? </td>
+<td> tile triggered CHR banking, CHR RAM and ROM
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_182.xhtml" title="INES Mapper 182">182</a> </td>
+<td> for: Pocahontas </td>
+<td> MMC3 </td>
+<td> 256 (512?) </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> H/V </td>
+<td> scanline </td>
+<td> ? </td>
+<td> ?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_189.xhtml" title="INES Mapper 189">189</a> </td>
+<td> MMC3 × <a href="BNROM.xhtml" title="BNROM">BNROM</a> </td>
+<td> 32 </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> ? </td>
+<td> ? </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_191.xhtml" title="INES Mapper 191">191</a> </td>
+<td> TQROM-like (2kiB) </td>
+<td> MMC3 </td>
+<td> 256 (512?) </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> H/V? </td>
+<td> scanline? </td>
+<td> ext? </td>
+<td> CHR RAM and ROM, ?like TQROM?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_192.xhtml" title="INES Mapper 192">192</a>/<a href="INES_Mapper_195.xhtml" title="INES Mapper 195">195</a> </td>
+<td> TQROM-like (4kiB) </td>
+<td> MMC3 </td>
+<td> 512? </td>
+<td> MMC3 </td>
+<td> 252 </td>
+<td> H/V? </td>
+<td> scanline? </td>
+<td> ext? </td>
+<td> CHR RAM and ROM, ?like TQROM?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_193.xhtml" title="INES Mapper 193">193</a> </td>
+<td> NTDEC TC-112 </td>
+<td> 8+24F </td>
+<td> 256 </td>
+<td> 4+2+2 </td>
+<td> 256 </td>
+<td> fixed </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_207.xhtml" title="INES Mapper 207">207</a> </td>
+<td> X1-005 (nametable) </td>
+<td> 3×8+8F </td>
+<td> 256 </td>
+<td> N108 </td>
+<td> 128 </td>
+<td> 1/H </td>
+<td> none </td>
+<td> 128B int </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_210.xhtml" title="INES Mapper 210">210</a> </td>
+<td> <a href="Namco_163.xhtml" title="Namco 163">Namco 175</a> </td>
+<td> 3×8+8F </td>
+<td> 512 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> fixed </td>
+<td> none </td>
+<td> ext </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_210.xhtml" title="INES Mapper 210">210</a> </td>
+<td> <a href="Namco_163.xhtml" title="Namco 163">Namco 340</a> </td>
+<td> 3×8+8F </td>
+<td> 512 </td>
+<td> 8×1 </td>
+<td> 256 </td>
+<td> 1/H/V </td>
+<td> none </td>
+<td> none </td>
+<td>
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_246.xhtml" title="INES Mapper 246">246</a> </td>
+<td> for: Fong Shen Bang - Zhu Lu Zhi Zhan </td>
+<td> 4×8 </td>
+<td> 512? </td>
+<td> 4×2 </td>
+<td> 512? </td>
+<td> ? </td>
+<td> ? </td>
+<td> ?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_252.xhtml" title="INES Mapper 252">252</a> </td>
+<td> for: San Guo Zhi </td>
+<td> N108 </td>
+<td> 256? </td>
+<td> 8×1 </td>
+<td> 128? </td>
+<td> ? </td>
+<td> scanline </td>
+<td> ? </td>
+<td> ?
+</td></tr>
+<tr>
+<td> (none) </td>
+<td> <a href="UNIF_UNL_DripGame.xhtml" title="UNIF/UNL-DripGame">UNIF/UNL-DripGame</a> </td>
+<td> 16+16F </td>
+<td> 256 </td>
+<td> 4×2 </td>
+<td> 32 </td>
+<td> 1/H/V </td>
+<td> cycle </td>
+<td> ext </td>
+<td> Expansion audio, 8x8 attribute zones
+</td></tr></table>
+<h2><span class="mw-headline" id="Mappers_with_outer_banks">Mappers with outer banks</span></h2>
+<table class="wikitable sortable">
+
+<tr>
+<th colspan="2">  </th>
+<th colspan="3">PRG </th>
+<th colspan="3">CHR </th>
+<th>
+</th></tr>
+<tr>
+<th>iNES Mapper </th>
+<th> Short name </th>
+<th> inner </th>
+<th> outer </th>
+<th> max (KiB) </th>
+<th> inner </th>
+<th> outer </th>
+<th> max (KiB) </th>
+<th> Comments
+</th></tr>
+<tr>
+<td><a href="INES_Mapper_012.xhtml" title="INES Mapper 012">12</a> </td>
+<td> for: dbz5 </td>
+<td> MMC3 </td>
+<td> — </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 2×256 </td>
+<td> 512 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_014.xhtml" title="INES Mapper 014">14</a> </td>
+<td> MMC3 × VRC2 </td>
+<td> MMC3 </td>
+<td> — </td>
+<td> 512 </td>
+<td> MMC3; 8×1 </td>
+<td> 3×256 </td>
+<td> 512 </td>
+<td> H/V, ext WRAM, Scanline IRQ, ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_028.xhtml" title="INES Mapper 028">28</a> </td>
+<td> <a href="Action_53_mapper.xhtml" title="Action 53 mapper">Action 53</a> </td>
+<td> 16+16F; 16F+16; 32 </td>
+<td> 32…256 </td>
+<td> 8192 </td>
+<td> 8 </td>
+<td> — </td>
+<td> 32RAM </td>
+<td> 1/H/V
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_037.xhtml" title="INES Mapper 037">37</a> </td>
+<td> MMC3+'00+'161 </td>
+<td> MMC3 </td>
+<td> 64; 128 </td>
+<td> 256 </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> 256 </td>
+<td> H/V, Scanline IRQ
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_044.xhtml" title="INES Mapper 044">44</a> </td>
+<td> for: Super Big 7-in-1 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 1024 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 1024 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_045.xhtml" title="INES Mapper 045">45</a> </td>
+<td> for: Super 4-in-1 </td>
+<td> MMC3 </td>
+<td> 8…512 </td>
+<td> 1024 (2048?) </td>
+<td> MMC3 </td>
+<td> 1…256 </td>
+<td> 1024 (4096?) </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_047.xhtml" title="INES Mapper 047">47</a> </td>
+<td> MMC3+'161 </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> 256 </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> 256 </td>
+<td> H/V, Scanline IRQ
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_049.xhtml" title="INES Mapper 049">49</a> </td>
+<td> for: Super HIK 4-in-1 </td>
+<td> MMC3; 32 </td>
+<td> 128 </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 128 </td>
+<td> 512 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_052.xhtml" title="INES Mapper 052">52</a> </td>
+<td> for: Mario 7-in-1 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 1024 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 1024 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_088.xhtml" title="INES Mapper 088">88</a>/<a href="INES_Mapper_154.xhtml" title="INES Mapper 154">154</a> </td>
+<td> N108 (pattern split) </td>
+<td> N108 </td>
+<td> — </td>
+<td> 128 </td>
+<td> 2×2/64 + 4×1/64 </td>
+<td> 2×64 </td>
+<td> 128 </td>
+<td> none
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_115.xhtml" title="INES Mapper 115">115</a> </td>
+<td> for: Thunderbolt 2 (ch) </td>
+<td> MMC3; 16+16F; 16+8+8F </td>
+<td> — </td>
+<td> 128 (256?) </td>
+<td> MMC3 </td>
+<td> 256 </td>
+<td> 512 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_116.xhtml" title="INES Mapper 116">116</a> </td>
+<td> MMC1 × MMC3 × VRC2 </td>
+<td> MMC3; 16+16F; 16F+16; 32 </td>
+<td> — </td>
+<td> 256 </td>
+<td> MMC3; 2×4; 8×1 </td>
+<td> 256 </td>
+<td> 512 </td>
+<td> 1/H/V, ?like MMC3?
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="Sachen_8259.xhtml" title="INES Mapper 138">138</a> </td>
+<td> <a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen 8259</a> type B </td>
+<td> 32 </td>
+<td> — </td>
+<td> 256 </td>
+<td> 4×2 </td>
+<td> 16 </td>
+<td> 128 </td>
+<td> 1/H/V/L
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="Sachen_8259.xhtml" title="INES Mapper 139">139</a> </td>
+<td> <a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen 8259</a> type C </td>
+<td> 32 </td>
+<td> — </td>
+<td> 256 </td>
+<td> 4×2 </td>
+<td> 32 </td>
+<td> 256 </td>
+<td> 1/H/V/L
+</td></tr>
+<tr>
+<td><a class="mw-redirect" href="Sachen_8259.xhtml" title="INES Mapper 141">141</a> </td>
+<td> <a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen 8259</a> type A </td>
+<td> 32 </td>
+<td> — </td>
+<td> 256 </td>
+<td> 4×2 </td>
+<td> 64 </td>
+<td> 512 </td>
+<td> 1/H/V/L
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_205.xhtml" title="INES Mapper 205">205</a> </td>
+<td> for: 3-in-1 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 512 </td>
+<td> MMC3 </td>
+<td> 128; 256 </td>
+<td> 512 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td><a href="INES_Mapper_245.xhtml" title="INES Mapper 245">245</a> </td>
+<td> MMC3 × <a href="SxROM.xhtml#Higher_CHR_lines" title="SxROM">SUROM</a> </td>
+<td> MMC3 </td>
+<td> 512 </td>
+<td> 1024 </td>
+<td> unbanked </td>
+<td> — </td>
+<td> 8 </td>
+<td> ?like MMC3?
+</td></tr>
+<tr>
+<td>(none) </td>
+<td> <a href="UNIF_COOLBOY.xhtml" title="UNIF/COOLBOY">UNIF/COOLBOY</a> </td>
+<td> MMC3; 16; 32 </td>
+<td> 128…2048 </td>
+<td> 32768 </td>
+<td> MMC3; 8 </td>
+<td> 128; 256 </td>
+<td> 256RAM </td>
+<td> like MMC3
+</td></tr></table>
+<h2><span class="mw-headline" id="Discrete_logic_mappers">Discrete logic mappers</span></h2>
+<p>Only the ones not made by Nintendo.
+</p><p>This table describes the mappers as they existed, as opposed to any obvious oversize extensions.
+</p><p>See also <a href="Comparison_of_Nintendo_mappers.xhtml" title="Comparison of Nintendo mappers">Comparison of Nintendo mappers</a> and <a href="User_Lidnariq_Discrete_Logic_Table.xhtml" title="User:Lidnariq/Discrete Logic Table">User:Lidnariq/Discrete Logic Table</a>.
+</p><p>You probably don't actually want to use these.
+</p>
+<table class="tabular sortable">
+<tr>
+<th> iNES </th>
+<th> Chips </th>
+<th> Max PRG (KiB) </th>
+<th> PRG bank style </th>
+<th> Max CHR (KiB) </th>
+<th> CHR bank style </th>
+<th> Mirroring </th>
+<th> PRG RAM? </th>
+<th> Bus conflicts?
+</th></tr>
+<tr>
+<td> <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a> (11, <a href="INES_Mapper_144.xhtml" title="INES Mapper 144">144</a>) </td>
+<td> 1 </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_029.xhtml" title="INES Mapper 029">29</a> (RET-CUFROM) </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 32 </td>
+<td> 8 </td>
+<td> V hardwired </td>
+<td> Yes </td>
+<td> No
+</td></tr>
+<tr>
+<td> RET-<a href="UNROM_512.xhtml" title="UNROM 512">UNROM 512</a> (30) </td>
+<td> 3 or 4 </td>
+<td> 512 </td>
+<td> 16+16F </td>
+<td> 32RAM </td>
+<td> 8 </td>
+<td> 1 or V/H hardwired </td>
+<td> No </td>
+<td> Optional (extra IC)
+</td></tr>
+<tr>
+<td> <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> (<a href="INES_Mapper_034.xhtml" title="INES Mapper 034">34</a>) </td>
+<td> 6 </td>
+<td> 64 </td>
+<td> 32 </td>
+<td> 64 </td>
+<td> 4+4 </td>
+<td> V hardwired </td>
+<td> Yes </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_036.xhtml" title="INES Mapper 036">36</a> </td>
+<td> 5? </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_038.xhtml" title="INES Mapper 038">38</a> </td>
+<td> 2 </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 32 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_040.xhtml" title="INES Mapper 040">40</a> / <a href="INES_Mapper_050.xhtml" title="INES Mapper 050">50</a> (w/ IRQ) </td>
+<td> 7-8 </td>
+<td> 128 </td>
+<td> 24F+8+8F </td>
+<td> 8 </td>
+<td> </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_041.xhtml" title="INES Mapper 041">41</a> </td>
+<td> 7 </td>
+<td> 256 </td>
+<td> 32 </td>
+<td> 128 </td>
+<td> 8 inner / 32 outer </td>
+<td> V/H switchable </td>
+<td> Impossible </td>
+<td> Partly
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_070.xhtml" title="INES Mapper 070">70</a> </td>
+<td> 3 </td>
+<td> 256 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_072.xhtml" title="INES Mapper 072">72</a> </td>
+<td> 4+speech </td>
+<td> 256 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_077.xhtml" title="INES Mapper 077">77</a> </td>
+<td> 4 </td>
+<td> 512 </td>
+<td> 32 </td>
+<td> 32+6RAM </td>
+<td> 2+6RAM </td>
+<td> 4 </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_078.xhtml" title="INES Mapper 078">78.1</a> </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> 1 </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_078.xhtml" title="INES Mapper 078">78.3</a> </td>
+<td> 5 </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H switchable </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="NINA_003_006.xhtml" title="INES Mapper 079">79</a> (<a href="INES_Mapper_146.xhtml" title="INES Mapper 146">146</a>) </td>
+<td> 2 </td>
+<td> 64 </td>
+<td> 32 </td>
+<td> 64 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_086.xhtml" title="INES Mapper 086">86</a> </td>
+<td> 3+speech </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 64 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">87</a> (<a href="INES_Mapper_101.xhtml" title="INES Mapper 101">101</a>) </td>
+<td> 2 </td>
+<td> 32 </td>
+<td>  </td>
+<td> 32 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">89</a> </td>
+<td> 2† </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> 1 </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_092.xhtml" title="INES Mapper 092">92</a> </td>
+<td> 5+speech </td>
+<td> 256 </td>
+<td> 16F+16 </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">93</a> </td>
+<td> 2† </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 8‡ </td>
+<td> </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">94</a> </td>
+<td> 2 </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 8 </td>
+<td> </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_096.xhtml" title="INES Mapper 096">96</a> </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 32RAM </td>
+<td> 4+4F inner / 16 outer </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">99</a> </td>
+<td> 0* </td>
+<td> 40 </td>
+<td> 8+24F </td>
+<td> 16 </td>
+<td> 8 </td>
+<td> 4 </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_107.xhtml" title="INES Mapper 107">107</a> </td>
+<td> 1? </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 64 </td>
+<td> 8 </td>
+<td> V hardwired </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_133.xhtml" title="INES Mapper 133">133</a> </td>
+<td> 2? </td>
+<td> 64 </td>
+<td> 32 </td>
+<td> 32 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_140.xhtml" title="INES Mapper 140">140</a> </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_143.xhtml" title="INES Mapper 143">143</a> </td>
+<td> 2? </td>
+<td> 32 </td>
+<td> </td>
+<td> 8 </td>
+<td> </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_145.xhtml" title="INES Mapper 145">145</a> </td>
+<td> 2? </td>
+<td> 32 </td>
+<td> </td>
+<td> 16 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_147.xhtml" title="INES Mapper 147">147</a> </td>
+<td> 2? </td>
+<td> 128 </td>
+<td> 32 </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_148.xhtml" title="INES Mapper 148">148</a> </td>
+<td> 1? </td>
+<td> 64 </td>
+<td> 32 </td>
+<td> 64 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_149.xhtml" title="INES Mapper 149">149</a> </td>
+<td> 1? </td>
+<td> 32 </td>
+<td> </td>
+<td> 16 </td>
+<td> 8 </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_152.xhtml" title="INES Mapper 152">152</a> </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 16+16F </td>
+<td> 128 </td>
+<td> 8 </td>
+<td> 1 </td>
+<td> No </td>
+<td> Likely
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_168.xhtml" title="INES Mapper 168">168</a> (w/ IRQ) </td>
+<td> 7 </td>
+<td> 64 </td>
+<td> 16+16F </td>
+<td> 64RAM </td>
+<td> 4F+4 </td>
+<td> V hardwired </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_174.xhtml" title="INES Mapper 174">174</a> </td>
+<td> 3 </td>
+<td> 128 </td>
+<td> 16 or 32 </td>
+<td> 64 </td>
+<td> 8 </td>
+<td> V/H switchable </td>
+<td> No </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">184</a> </td>
+<td> 3† </td>
+<td> 32 </td>
+<td> </td>
+<td> 32 </td>
+<td> 4+4 </td>
+<td> V/H hardwired </td>
+<td> Impossible </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">185</a> </td>
+<td> 1 </td>
+<td> 32 </td>
+<td> </td>
+<td> 8 </td>
+<td> </td>
+<td> V/H hardwired </td>
+<td> No </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">218</a> </td>
+<td> -1§ </td>
+<td> 32 </td>
+<td> </td>
+<td> 1RAM </td>
+<td> </td>
+<td> 1 hardwired </td>
+<td> No </td>
+<td> No
+</td></tr></table>
+<p>† Mappers <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">89</a>, <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">93</a>, and <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">184</a> exist as a single IC, however their functions are trivially described using a small number of 7400-series ICs, and likely contain multiple silicon dice that were wire bonded together in the same package.
+</p><p>‡ Mapper <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">93</a> is technically the same <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">89</a> other than mirroring, but it only commercially existed using 8kB of CHR-RAM
+</p><p>* the Vs System distributed its original games as five or six 8 KiB ROMs, and decoding on its mainboard allowed banking of CHR like <a href="CNROM.xhtml" title="CNROM">CNROM</a>. It is a little disingenuous to claim that 0 ICs were necessary for banking since the same functionality is not possible on a Famicom, however, banking was incrementally free.
+</p><p>§ Doesn't have CHRROM, hence &quot;-1&quot; ICs
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.615 seconds
+Real time usage: 0.701 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:826-1!*!0!!en!*!* and timestamp 20160612173038 and revision id 12621
+ -->
+</div></body></html>

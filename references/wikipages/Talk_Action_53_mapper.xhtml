@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Action 53 mapper</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Action 53 mapper</h1><div class="article">
+<h2><span class="mw-headline" id="Pin_count">Pin count</span></h2>
+<p>Do few-enough-pin PALs/CPLDs still exist such that pointing out &quot;there's no reason to connect D6 at all and D7 in mode selection could be changed to D5 and free up another input pin&quot; is even remotely useful?—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 19:25, 13 October 2012 (MDT)
+</p>
+<dl><dd>It might free up pins in the current design, but I'm thinking ahead to how oversize expansions would work should the time come. And I don't see how you're getting 25 pins; it looks like 28 to me, especially with the equivalent of a <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">7420 for PRG RAM decoding and bus conflict avoidance</a> included. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 20:30, 13 October 2012 (MDT)
+<dl><dd>I don't think I said 25 pins anywhere? Unrelatedly, my having suggested D5 might not be the best because of this future-proofing you said; using D4 or D1 might be cleaner. But regardless, it looks like there aren't any PALs or CPLDs both cheaper and fewer pins than the XC9536XL infiniteneslives had specified in the <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=101165#p101165" rel="nofollow">forum</a>, so I think my initial &quot;hey, maybe...&quot; is irrelevant. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 01:19, 14 October 2012 (MDT)</dd></dl></dd></dl>
+<h3><span class="mw-headline" id="512-KiB_Mode_-_Is_it_Possible.3F">512-KiB Mode - Is it Possible?</span></h3>
+<hr/>
+<p>I don't think you can fit a 512-KiB game for use in that mapper right now, I think you can replace a mode, or use a new mode if it fits? I possibly doubt it though due to constraints...
+</p><p>Even then, I like the idea of a multicart like this! --<a href="User_Hamtaro126.xhtml" title="User:Hamtaro126">Hamtaro126</a> 01:56, 14 October 2012 (MDT)
+</p>
+<dl><dd>An oversize BNROM game will fit, though only one such game at a time unless each game's bank number table is modified to correspond to its position in the cart. This is the same technique that I had planned for BNROM games in Action 53 before I learned that homebrew developers prefer UNROM over BNROM. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 22:15, 3 November 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Writable_flash">Writable flash</span></h2>
+<p>There are rumors on the BBS that INL will make boards that allow in-circuit programming of the beginning of the PRG flash in 4096 byte sectors as a method for saving the game. An extra 8 KiB of SRAM will be mapped at $6000 for managing a log-structured file system. I think I know how to represent this in NES 2.0: if non-backed and backed PRG RAM are present, the non-backed memory is SRAM at $6000 and the backed memory replaces the first pages of the ROM and is writable through <a class="extiw" href="https://en.wikipedia.org/wiki/Common_Flash_Memory_Interface" title="wikipedia:Common Flash Memory Interface">Common Flash Memory Interface</a> sequences. I'm waiting on INL for details before I add it. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 20:08, 31 January 2014 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:916-1!*!0!!*!*!* and timestamp 20160611172031 and revision id 12610
+ -->
+</div></body></html>

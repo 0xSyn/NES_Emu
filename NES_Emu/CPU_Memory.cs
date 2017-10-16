@@ -44,13 +44,12 @@ namespace NES_Emu {
                 stream.Read(data, 0, data.Length);
 
                 while (CPU.PC < data.Length) {
-                    Console.WriteLine("Running");
+                    //Console.WriteLine("Running");
                     CPU.Emulation_cycle(data);
                 }
                 //for (int i = 0; i < data.Length; i++) {
                 //    memory[i] = data[i];// 4000F bytes
                 //}
-                Console.Write("LOADED");
             }
             else { Console.WriteLine("FILE NOT FOUND"); }
             return 0;

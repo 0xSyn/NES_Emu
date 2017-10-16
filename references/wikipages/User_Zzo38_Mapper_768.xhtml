@@ -1,0 +1,262 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper 768</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper 768</h1><div class="article">
+<p>I am reserving mapper 768 for my own use. This is not currently an official specification, nor is it currently supported by any emulators at the time of this writing, which is why it is not currently in the main namespace.
+</p><p>In all cases, the NES 2.0 file is arranged like (some parts may be omitted, depending on the header):
+</p>
+<ul><li> Header</li>
+<li> Trainer</li>
+<li> PRG ROM</li>
+<li> CHR ROM</li>
+<li> INST-ROM</li>
+<li> PROM</li>
+<li> 128-byte null-terminated ASCII title</li>
+<li> Extra data for mapper 768 (depending on submapper number)</li></ul>
+<p>Omitting parts of the file that are required (according to the header) is not allowed if mapper 768 is used. There is some discussion of extending the format to specify that extra data exists, but this is currently unknown.
+</p><p>Use of <a href="UNIF.xhtml" title="UNIF">UNIF</a> is supported by this specification, but is not recommended; it is meant to be used with <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Submapper_0"><span class="tocnumber">1</span> <span class="toctext">Submapper 0</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Commands"><span class="tocnumber">1.1</span> <span class="toctext">Commands</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#NSF_Interface"><span class="tocnumber">1.2</span> <span class="toctext">NSF Interface</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Examples"><span class="tocnumber">1.3</span> <span class="toctext">Examples</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Simple_bankswitching"><span class="tocnumber">1.3.1</span> <span class="toctext">Simple bankswitching</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Mapper_218"><span class="tocnumber">1.3.2</span> <span class="toctext">Mapper 218</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Double_bus_CHR_RAM"><span class="tocnumber">1.3.3</span> <span class="toctext">Double bus CHR RAM</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Submapper_1"><span class="tocnumber">2</span> <span class="toctext">Submapper 1</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Submapper_0">Submapper 0</span></h1>
+<p>The UNIF name for this mapper is &quot;<tt>X-Custom</tt>&quot;, and has the &quot;<tt>XTRA</tt>&quot; block for extra data.
+</p><p>The extra data stores the code for a virtual machine, to control the mapper. The commands are sixteen bits in small endian format, and are split into subroutine blocks. At the beginning of each block is one byte to tells how many sixteen-bit commands are in this subroutine block (this includes immediate values too).
+</p><p>The first block is always the initialization block.
+</p><p>Anything other than what is written in the codes acts like NROM (iNES mapper 0) (only the first 16K or 32K of PRG ROM is accessible, though).
+</p><p>There is sixteen registers, with sixteen bits each. R0 and R1 are local to a subroutine call, and the R2 to R15 are global registers (all general purpose). There is also two more local registers, called W (working register) and W' (shadow working register).
+</p><p>Subroutine numbers are eight bits long. Each subroutine takes two parameters which is the initial assignment of R0 and R1 registers, and returns a sixteen bit number.
+</p>
+<h2><span class="mw-headline" id="Commands">Commands</span></h2>
+<ul><li> <tt>0000 0000 xxxx yyyy</tt> (XCAL) = Call a subroutine indicated in the low eight bits of Rx, with this call's R0 and R1 as its parameters, and store the result in Ry (leave Ry alone if the result is open bus or CIRAM).</li>
+<li> <tt>0000 0001 0000 xxxx</tt> (COPW) = Copy W to Rx.</li>
+<li> <tt>0000 0001 0001 xxxx</tt> (COPR) = Copy Rx to W.</li>
+<li> <tt>0000 0001 0010 xxxx</tt> (ADDW) = Add W to Rx.</li>
+<li> <tt>0000 0001 0011 xxxx</tt> (ADDR) = Add Rx to W.</li>
+<li> <tt>0000 0001 0100 xxxx</tt> (SUBW) = Subtract W from Rx.</li>
+<li> <tt>0000 0001 0101 xxxx</tt> (SUBR) = Subtract Rx from W.</li>
+<li> <tt>0000 0001 0110 xxxx</tt> (ANDW) = Bitwise AND W to Rx.</li>
+<li> <tt>0000 0001 0111 xxxx</tt> (ANDR) = Bitwise AND Rx to W.</li>
+<li> <tt>0000 0001 1000 xxxx</tt> (IORW) = Bitwise OR W to Rx.</li>
+<li> <tt>0000 0001 1001 xxxx</tt> (IORR) = Bitwise OR Rx to W.</li>
+<li> <tt>0000 0001 1010 xxxx</tt> (XORW) = Bitwise XOR W to Rx.</li>
+<li> <tt>0000 0001 1011 xxxx</tt> (XORR) = Bitwise XOR Rx to W.</li>
+<li> <tt>0000 0001 1100 xxxx</tt> (NANW) = Bitwise NAND W to Rx.</li>
+<li> <tt>0000 0001 1101 xxxx</tt> (NANR) = Bitwise NAND Rx to W.</li>
+<li> <tt>0000 0001 1110 xxxx</tt> (NOTW) = Copy NOT W to Rx.</li>
+<li> <tt>0000 0001 1111 xxxx</tt> (NOTR) = Copy NOT Rx to W.</li>
+<li> <tt>0000 0010 0000 xxxx</tt> (RETR) = Return the value in Rx from this subroutine.</li>
+<li> <tt>0000 0010 0001 0000</tt> (OPEN) = Return open bus from this subroutine.</li>
+<li> <tt>0000 0010 0001 0001</tt> (RETW) = Return the value in W from this subroutine.</li>
+<li> <tt>0000 0010 0001 0010</tt> (CIR0) = Return CIRAM bank 0 from this subroutine. (Returning CIRAM banks is the same as open bus unless the PPU is accessing this memory.)</li>
+<li> <tt>0000 0010 0001 0011</tt> (CIR1) = Return CIRAM bank 1 from this subroutine.</li>
+<li> <tt>0000 0010 0001 0110</tt> (CIRC) = Return CIRAM bank 0 if condition flag is set, or bank 1 if condition flag is clear.</li>
+<li> <tt>0000 0010 0001 0111</tt> (CIRS) = Return CIRAM bank 1 if condition flag is set, or bank 0 if condition flag is clear.</li>
+<li> <tt>0000 0010 0001 1xxx</tt> (RETL) = Return the literal value x (all other bits zero) from this subroutine.</li>
+<li> <tt>0000 0011 0000 0000</tt> (SWAP) = Swap W with W'.</li>
+<li> <tt>0000 0011 0001 xxxx</tt> (IMMR) = Store an immediate value into Rx. The condition flag is set to if the value changed.</li>
+<li> <tt>0000 0011 0010 xxxx</tt> (ASLR) = Shift left Rx. The shifted out bit is stored in the condition flag.</li>
+<li> <tt>0000 0011 0011 xxxx</tt> (ADDI) = Add an immediate value to Rx. The condition flag is set to if there is the signed overflow.</li>
+<li> <tt>0000 0011 0100 xxxx</tt> (ASRR) = Arithmetic shift right Rx. The shifted out bit is stored in the condition flag.</li>
+<li> <tt>0000 0011 0110 xxxx</tt> (RORR) = Rotate right Rx.</li>
+<li> <tt>0000 0011 0111 xxxx</tt> (ANDI) = Bitwise AND an immediate value to Rx. The condition flag is set to if the value changed.</li>
+<li> <tt>0000 0011 1001 xxxx</tt> (IORI) = Bitwise OR an immediate value to Rx. The condition flag is set toif the value changed.</li>
+<li> <tt>0000 0011 1010 xxxx</tt> (LSRR) = Logical shift right Rx. The shifted out bit is stored in the condition flag.</li>
+<li> <tt>0000 0011 1011 xxxx</tt> (XORI) = Bitwise XOR an immediate value to Rx. The condition flag is set to if the value changed.</li>
+<li> <tt>0000 0011 1100 xxxx</tt> (INVR) = Bitwise invert Rx.</li>
+<li> <tt>0000 0011 1101 xxxx</tt> (NANI) = Bitwise NAND an immediate value to Rx. The condition flag is set if and only if the value changed.</li>
+<li> <tt>0000 0011 1110 xxxx</tt> (ZERO) = Set the condition flag if Rx is zero, or clear the condition flag otherwise.</li>
+<li> <tt>0000 0011 1111 xxxx</tt> (EQUA) = Set the condition flag if the immediate value is equal to Rx, or clear the condition flag otherwise.</li>
+<li> <tt>0000 0100 000x xxxx</tt> (SKIT) = Skip x+1 instructions (counting immediate values as instructions) if the condition flag is set.</li>
+<li> <tt>0000 0100 001x xxxx</tt> (SKIF) = Skip x+1 instructions (counting immediate values as instructions) if the condition flag is clear.</li>
+<li> <tt>0000 0100 0100 0000</tt> (TIRQ) = Trigger IRQ.</li>
+<li> <tt>0000 0100 0101 0000</tt> (WPR1) = Force battery RAM to be write-protected.</li>
+<li> <tt>0000 0100 0101 0001</tt> (WPR0) = Turn off the forced write-protection of battery RAM.</li>
+<li> <tt>0000 1000 xxxx yyyy</tt> (COPY) = Copy Rx to Ry.</li>
+<li> <tt>0000 1010 xxxx yyyy</tt> (COPT) = Copy Rx to Ry if condition flag is set.</li>
+<li> <tt>0000 1011 xxxx yyyy</tt> (COPF) = Copy Rx to Ry if condition flag is clear.</li>
+<li> <tt>0001 0000 xxxx xxxx</tt> (RPRG) = Using W as a start address, W' as a end address, and R15 as a mask (any set bits in the mask correspond to address bits that must match that of the start address), set the subroutine calls for reading PRG memory to the subroutine x.</li>
+<li> <tt>0001 0001 xxxx xxxx</tt> (WPRG) = Set the subroutine calls for writing PRG memory to the subroutine x.</li>
+<li> <tt>0001 0010 xxxx xxxx</tt> (RCHR) = Set the subroutine calls for reading CHR memory to the subroutine x.</li>
+<li> <tt>0001 0011 xxxx xxxx</tt> (WCHR) = Set the subroutine calls for writing CHR memory to the subroutine x.</li>
+<li> <tt>0001 0100 xxxx xxxx</tt> (ACHR) = Set the subroutine calls for what happens when the PPU address bus changes without a read or write.</li>
+<li> <tt>0001 1000 xxxx xxxx</tt> (RSET) = Set the subroutine calls for reset to the subroutine x.</li>
+<li> <tt>0001 1001 xxxx xxxx</tt> (DISK) = Set the subroutine calls for FDS IRQ to the subroutine x.</li>
+<li> <tt>0100 xxxx yyyy yyyy</tt> (CTIM) = Set a timer for Rx CPU clocks to call subroutine y (just once, when the timer expires). If Rx is -1 then it is turned off.</li>
+<li> <tt>0101 xxxx yyyy yyyy</tt> (PTIM) = Set a timer for Rx PPU reads to call subroutine y (just once, when the timer expires). If Rx is -1 then it is turned off.</li>
+<li> <tt>1000 xxxx yyyy yyyy</tt> (CALL) = Call subroutine y with this subroutine's W and W' as parameters, and store the result in Rx (leave Rx alone if the result is open bus or CIRAM).</li>
+<li> <tt>1001 0000 xxxx yyyy</tt> (RNSF) = Read from the NSF interface, address in Rx, into Ry.</li>
+<li> <tt>1001 0001 xxxx yyyy</tt> (WNSF) = Write to the NSF interface, address Rx, value Ry.</li>
+<li> <tt>1001 0010 xxxx yyyy</tt> (ROPR) = Read from the PRG ROM, address Rx, into Ry.</li>
+<li> <tt>1001 0100 xxxx yyyy</tt> (ROCH) = Read from the CHR ROM, address Rx, into Ry.</li>
+<li> <tt>1001 0110 xxxx yyyy</tt> (ROTR) = Read from the trainer ROM, address Rx, into Ry.</li>
+<li> <tt>1001 1000 xxxx yyyy</tt> (RNPR) = Read from non-battery PRG RAM, address in Rx, into Ry.</li>
+<li> <tt>1001 1001 xxxx yyyy</tt> (WNPR) = Write to non-battery PRG RAM, address Rx, value Ry.</li>
+<li> <tt>1001 1010 xxxx yyyy</tt> (RNCH) = Read from non-battery CHR RAM, address Rx, into Ry.</li>
+<li> <tt>1001 1011 xxxx yyyy</tt> (WNCH) = Write to non-battery CHR RAM, address Rx, value Ry.</li>
+<li> <tt>1001 1100 xxxx yyyy</tt> (RBPR) = Read from battery PRG RAM, address Rx, into Ry.</li>
+<li> <tt>1001 1101 xxxx yyyy</tt> (WBPR) = Write to battery PRG RAM, address Rx, value Ry.</li>
+<li> <tt>1001 1110 xxxx yyyy</tt> (RBCH) = Read from battery CHR RAM, address Rx, into Ry.</li>
+<li> <tt>1001 1111 xxxx yyyy</tt> (WBCH) = Write to battery CHR RAM, address Rx, value Ry.</li></ul>
+<p>When a subroutine call is triggered due to CPU or PPU read/write, R0 will be the address, and R1 will be the data for writing (R1 is undefined if reading). Returning CIRAM bank 0 or CIRAM bank 1 from PPU read routines causes it to read the CIRAM instead of the cartridge. Returning CIRAM banks from PPU write routines causes it to write to the CIRAM of the specified bank (the routine can do other things too). Returning open bus or any number from any write routine, or any CIRAM bank from any PRG write routine, does nothing. The default return value (if a block ends without an explicit return) is open bus. If a read routine is called for addresses below $4020, it must return open bus or CIRAM banks, otherwise the result is undefined.
+</p>
+<h2><span class="mw-headline" id="NSF_Interface">NSF Interface</span></h2>
+<ul><li> $0000-$00FF: General purpose RAM (stored in the cartridge; not the same as the CPU RAM, or the cartridge PRG RAM and CHR RAM mentioned in the header; this is only accessible by the NSF interface).</li>
+<li> $2000,$2001 (CART_CPU_COUNT): Sixteen bit CPU clock counter; can be written as well.</li>
+<li> $2002,$2003 (CART_PPU_COUNT): Sixteen bit PPU read counter; can be written as well.</li>
+<li> $2005 (CART_BUS_CONFLICT): Write the number of bus conflicts that happen at one time into here. Writing zero does nothing. This might be used by an emulator which counts bus conflicts in order to detect errors in your program.</li>
+<li> $2006 (CART_PRG_ROM_BANK): PRG ROM bank select.</li>
+<li> $2007 (CART_CHR_ROM_BANK): CHR ROM bank select.</li>
+<li> $2008 (CART_PROTECT): Clear the low bit to force battery RAM to be write-protected.</li>
+<li> $2009 (CART_MUTE): Write-only. If bit0 is set, 2A03 audio is muted. If bit1 is set, MMC5 PCM is muted.</li>
+<li> $200A (CART_ADC) : Read-only. An 8-bit analog to digital converter reading the microphone audio mixed with the 2A03 audio.</li>
+<li> $200C (CART_PRG_RAM_BANK): Non-battery PRG RAM bank select.</li>
+<li> $200D (CART_PRG_BAT_BANK): Battery PRG RAM bank select.</li>
+<li> $200E (CART_CHR_RAM_BANK): Non-battery CHR RAM bank select.</li>
+<li> $200F (CART_CHR_BAT_BANK): Battery CHR RAM bank select.</li>
+<li> $4020-$4092: FDS registers. All registers (including audio) are available, although bit3 of $4025 has no effect if PPU read/writes are not acting in NROM mode (i.e. if they have been overridden by the mapper).</li>
+<li> $4800,$F800: Namco 163 audio.</li>
+<li> $5000-$5015: MMC5 audio. (The read mode acts on CPU memory, not NSF memory.)</li>
+<li> $5205,$5206: MMC5 hardware multiplication register.</li>
+<li> $9000-$9003,$A000-$A002,$B000-$B002: VRC6 audio.</li>
+<li> $9010,$9030: VRC7 audio.</li>
+<li> $C000,$E000: Sunsoft 5B audio.</li></ul>
+<p>Bank select registers are always eight high bits of whatever is available (for example if you have 64K ROM and 32K bank size, you should set only the high bit of the PRG ROM bank register).
+</p>
+<h2><span class="mw-headline" id="Examples">Examples</span></h2>
+<h3><span class="mw-headline" id="Simple_bankswitching">Simple bankswitching</span></h3>
+<pre>; Simple bankswitching mapper; write to $8000-$FFFF, low bit of address selects bank.
+@INIT
+IMMR F FFFF
+COPR F
+SWAP
+IMMR F 8000
+COPR F
+ASLR F
+RPRG @READPRG
+WPRG @BANKSET
+@READPRG
+ANDI 0 7FFF
+COPR F
+IORW 0
+ROPR 0 1
+RETR 1
+@BANKSET
+7*ASLR 0
+COPY 0 F
+</pre>
+<h3><span class="mw-headline" id="Mapper_218">Mapper 218</span></h3>
+<pre>; Single-chip mapper
+@INIT
+IMMR F FFFF
+COPR F
+SWAP
+INVR F
+COPR F
+RCHR @PPU_ACCESS
+WCHR @PPU_ACCESS
+@PPU_ACCESS
+IORI 0 2000 ; Change this line for a different CIRAM A10 connection.
+CIRC
+</pre>
+<h3><span class="mw-headline" id="Double_bus_CHR_RAM">Double bus CHR RAM</span></h3>
+<pre>; Write into low four bits of $5000-$5FFF to activate/deactivate CIRAM for PRG memory
+; Write into $1000-$1FFF to copy the values written into the CHR RAM in the cartridge
+@INIT
+IMMR F 0000
+IMMR E 5FFF
+COPR E
+SWAP
+IMMR E 5000
+COPR E
+WPRG @PPU_SET
+IMMR E 3FFF
+COPR E
+SWAP
+IMMR E 0000
+COPR E
+RCHR @CHR_ACCESS
+WCHR @CHR_ACCESS
+IMMR E 1FFF
+COPR E
+SWAP
+IMMR E 1000
+COPR E
+WPRG @CHR_WRITE
+IMMR 8 0000
+IMMR 9 0040
+IMMR A 0080
+IMMR B 00C0
+IMMR C FFFF
+@PPU_SET
+COPY 8 4
+COPY 8 5
+COPT 8 6
+COPY 8 7
+COPY 1 0
+IORI 0 0001
+COPT C 4
+IORI 0 0002
+COPT C 5
+IORI 0 0004
+COPT C 6
+IORI 0 0008
+COPT C 7
+WNSF 8 4
+WNSF 9 5
+WNSF A 6
+WNSF B 7
+@CHR_ACCESS
+COPY 0 1
+ANDI 1 3000
+6*LSRR 1
+;***TODO***
+@CHR_WRITE
+ANDI 0 0FFF
+WNCH 0 1
+</pre>
+<h1><span class="mw-headline" id="Submapper_1">Submapper 1</span></h1>
+<p>The UNIF name for this mapper is &quot;<tt>X-Verilog</tt>&quot;.
+</p><p>Extra data is not used. There is expected to be a file with <tt>.nes.v</tt> extension (otherwise having the same name), which contains a Verilog code for implementing the mapper. Some emulators might require that the Verilog code is compiled first into another file (possibly a DLL or shared object file); if so, such thing should be explained in the documentation for that particular emulator.
+</p><p>The first sixty I/O ports of the <tt>main</tt> module of the Verilog code must correspond to the pins 01 to 60 of the 60-pin Famicom cartridge, in that order. This is followed by the pins for the PRG ROM, CHR ROM, non-battery PRG RAM, non-battery CHR RAM, battery PRG RAM, and battery CHR RAM.
+</p><p>The ROM/RAM pins are only for the ROM/RAM which are existing, and is as follows:
+</p>
+<ul><li> Chip enable (low to enable)</li>
+<li> Write enable (low to enable; not exist for ROM)</li>
+<li> Address pins (the exact number of pins needed for the ROM/RAM of the size specified in the NES 2.0 header)</li>
+<li> Data pins (always eight)</li></ul>
+<p>The commands with <tt>$</tt> at front might not be implemented, but should be safely ignored if not implemented. However, if there is a trainer ROM, there will be an additional command <tt>$trainer</tt> to access 8-bit numbers given the 9-bit address, and <tt>$battery_init</tt> which tell you if you need to initialize the battery RAM.
+</p><p>Analog commands may be used with the audio signals.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.107 seconds
+Real time usage: 0.225 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1008-1!*!0!!en!*!* and timestamp 20160208230554 and revision id 6777
+ -->
+</div></body></html>

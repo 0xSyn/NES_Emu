@@ -1,0 +1,136 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Serial Cable Specification</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Serial Cable Specification</h1><div class="article">
+<p>The RS-232 serial protocol allows two devices to communicate over just a few wires. This page describes a serial cable connection scheme for the NES and Famicom that can use the second controller port or expansion port.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Cable_connections"><span class="tocnumber">1</span> <span class="toctext">Cable connections</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#One-way_cable"><span class="tocnumber">1.1</span> <span class="toctext">One-way cable</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Two-way_cable"><span class="tocnumber">1.2</span> <span class="toctext">Two-way cable</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Software_interface"><span class="tocnumber">2</span> <span class="toctext">Software interface</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Port_pinouts"><span class="tocnumber">3</span> <span class="toctext">Port pinouts</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#NES_controller_port"><span class="tocnumber">3.1</span> <span class="toctext">NES controller port</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Famicom_expansion_port"><span class="tocnumber">3.2</span> <span class="toctext">Famicom expansion port</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#NES_expansion_port"><span class="tocnumber">3.3</span> <span class="toctext">NES expansion port</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Design_rationale"><span class="tocnumber">4</span> <span class="toctext">Design rationale</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Cable_connections">Cable connections</span></h1>
+<p>Each of the two serial signals may be connected to any one of the listed pins.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Serial	</th>
+<th> NES 2nd controller	</th>
+<th> Famicom expansion port	</th>
+<th> NES expansion port
+</th></tr>
+<tr>
+<td> TX		</td>
+<td> D0 (data) or D4		</td>
+<td> 2nd controller D4		</td>
+<td> 2nd controller D2
+</td></tr>
+<tr>
+<td> RX &amp; /CTS	</td>
+<td> OUT0 (strobe)		</td>
+<td> OUT0						</td>
+<td> OUT0
+</td></tr></table>
+<p>TX, RX, and /CTS are TTL-level signals, <b>not</b> RS-232-level signals. TX and RX use +5V for Mark, 0V for Space. <b>Do not</b> connect the NES directly to RS-232; see <a href="Serial_Cable_Construction.xhtml" title="Serial Cable Construction">Serial Cable Construction</a> for proper connection.
+</p>
+<h2><span class="mw-headline" id="One-way_cable">One-way cable</span></h2>
+<p>A one-way cable connects TX to the second controller D0 or D4. On the NES, D0 and D4 are available on the second controller port. On the NES and Famicom, second controller D4 is available on the expansion port.
+</p><p>Any other devices connected to D0, D1, D2 or D4 must drive the line high whenever OUT0 (strobe) is high, as is done when nothing is connected or a controller/Zapper is connected and no buttons are being held.
+</p>
+<h2><span class="mw-headline" id="Two-way_cable">Two-way cable</span></h2>
+<p>A two-way cable additionally connects OUT0 to RX &amp; /CTS. On the NES, OUT0 (strobe) is available on the second controller port. On the NES and Famicom, OUT0 is available on the expansion port.
+</p>
+<h1><span class="mw-headline" id="Software_interface">Software interface</span></h1>
+<p>The TX line is available inverted as the logical OR of bits D0, D1, D2, and D4 of $4017. If zero, TX is high (Mark state). Bits D1 and D2 are included because future serial devices might connect to them.
+</p><p>The RX &amp; /CTS pair is controlled by $4016 D0. /CTS might not be supported by a given cable, in which case flow control can't be done. Software should write zero bits for D2, D3, and D4, in case they are used for other things. Also, at some point D1 may be used by some devices for serial output (since it avoids junk bytes when reading the controllers), so software should output serial data on bits 0 <i>and</i> 1 of $4016.
+</p>
+<h1><span class="mw-headline" id="Port_pinouts">Port pinouts</span></h1>
+<p>D0 (data) and D4 are inputs for second controller ($4017). OUT0 (strobe) is from the CPU ($4016). For clarity, unused pins are not numbered or labeled.
+</p>
+<h2><span class="mw-headline" id="NES_controller_port">NES controller port</span></h2>
+<pre>      _
+ GND |1\ 
+     |.5| +5V
+OUT0 |3.|
+  D0 |47| D4
+     '--'
+</pre>
+<h2><span class="mw-headline" id="Famicom_expansion_port">Famicom expansion port</span></h2>
+<p>Male connector.
+</p>
+<pre>  GND          D4
+-----------------------------------
+\  1   .   .   4   .   .   .   .  /
+ \                               /
+  \  .   .   .  12   .   .  15  /
+   `---------------------------'
+               OUT0        +5V
+</pre>
+<h2><span class="mw-headline" id="NES_expansion_port">NES expansion port</span></h2>
+<pre>          ------- 
+         |  ___  | 
+     +5V | 1  48 | +5V
+     GND | 2  47 | GND
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [  43 | OUT0
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+(back)   | [   ] |   (front of NES)
+         | [   ] |
+         | [   ] |
+      D2 | 15  ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         | [   ] |
+         |  ---  |
+          -------
+</pre>
+<h1><span class="mw-headline" id="Design_rationale">Design rationale</span></h1>
+<p><b>TX connected to four bits:</b> The NES controller port exposes D0, D3, and D4. The expansion ports of NES and Famicom expose D0-D4. The second Famicom controller is hardwired to D0, so we need something in addition to D0. D3 and D4 are available on both, but many NES controller cables don't connect either one. D2 is available on both, but it requires connecting to the NES expansion port, for which the connector is rare/non-existent. External Famicom controllers typically use D1, and might not connect to other data bits. So we use D0, D1, D2, and D4.
+</p><p>D0 allows use of the common NES controller cable. D1 allows use with common Famicom external controller cables. D4 allows modification of a NES extension cable to pass through D0 to a controller, and connect serial at the same time. The Zapper connects to D3 and D4 and has the trigger connected to D4, so it won't generate any false data unless pressed. D2 allows connection via the expansion connector, without disturbing any controllers on NES/Famicom, even the Zapper.
+</p><p>In software, it's simplest to support just D0, since it can be shifted into carry easily. Once it must support multiple bits, any combination of bits becomes just as easy as any other, since it's set by a bit mask to an AND instruction.
+</p><p><b>Active-high TX and RX:</b> A serial cable should be as easy to construct as possible. The FTDI TTL-232R USB-to-RS-232 cable outputs TTL levels, allowing construction of a serial cable with no soldering, just splicing it to a NES controller cable. The MAX232 also uses these levels. Further, simple transistor inverters match these as well. Since RX and /CTS are connected together, and CTS is normally non-inverted, we get the inverted /CTS.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.032 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1288-1!*!0!!en!*!* and timestamp 20160208225832 and revision id 8044
+ -->
+</div></body></html>

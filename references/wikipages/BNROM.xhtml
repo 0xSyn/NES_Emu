@@ -1,0 +1,78 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>BNROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>BNROM</h1><div class="article">
+<p>The designation BNROM refers to the Irem cartridge board &quot;Irem I-IM&quot; and to its NES workalike, the Nintendo cartridge board NES-BNROM.
+These boards were used only for one game: <i>Deadly Towers</i> (Japanese <i>Mashou</i>).
+The <a href="INES.xhtml" title="INES">iNES</a> format assigns <a href="INES_Mapper_034.xhtml" title="INES Mapper 034">mapper 34</a> to BNROM (as well as <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a>).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Solder_pad_config"><span class="tocnumber">3</span> <span class="toctext">Solder pad config</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Bank_select_.28.248000-.24FFFF.29"><span class="tocnumber">4.1</span> <span class="toctext">Bank select ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Hardware"><span class="tocnumber">5</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Variants"><span class="tocnumber">6</span> <span class="toctext">Variants</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 128 KB (mapper implementations may support up to 512 KB or 8 MB)</li>
+<li> PRG ROM bank size: 32 KB</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 8 KB RAM</li>
+<li> CHR bank size: Not bankswitched</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Solder pads select vertical or horizontal mirroring</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes</li></ul>
+<p>Notes:
+</p>
+<ul><li> BNROM PRG uses the DIP-28 Nintendo pinout.</li>
+<li> The bank number at power on is not defined.</li>
+<li> The 6502's vectors must be present in all banks, along with the NMI, reset, and IRQ handlers.</li>
+<li> <a href="INES_Mapper_034.xhtml" title="INES Mapper 034">iNES Mapper 034</a> implementations frequently support either a 4-bit or 8-bit PRG bank select register, allowing up to 512 KB or 8 MB of PRG ROM. This variant may be referred to as <b>BxROM</b>.</li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$FFFF: 32 KB switchable PRG ROM bank</li></ul>
+<h2><span class="mw-headline" id="Solder_pad_config">Solder pad config</span></h2>
+<ul><li> Horizontal mirroring : 'H' disconnected, 'V' connected.</li>
+<li> Vertical mirroring : 'H' connected, 'V' disconnected.</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.24FFFF.29">Bank select ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxPP
+       ||
+       ++- Select 32 KB PRG ROM bank for CPU $8000-$FFFF
+</pre>
+<p>While the original BNROM board connects only 2 bits, it is recommended that emulators implement this as an 8-bit register allowing selection of up to 8 MB PRG ROM if present.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The BxROM board contains a <a href="74161.xhtml" title="74161">74HC161</a> binary counter used as a quad D latch (4-bit register) to select the current PRG bank.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>The iNES mapper used to implement this mapper also includes three additional registers at $7FFD-$7FFF for emulation of the <a href="NINA_001.xhtml" title="NINA-001">NINA-001</a> board (using CHR ROM instead of RAM, as well as supporting 8KB of PRG RAM), which has caused many headaches for NES emulator authors. Emulator developers may consider switching between NINA-001 emulation and BxROM emulation based on the presence of CHR ROM.
+</p><p><a href="AxROM.xhtml" title="AxROM">AMROM</a> is the same as BNROM except it uses bit 4 of the register to control a single screen mirroring configuration, instead of fixed mirroring.
+</p><p>The upper 2 bank select bits on the 74HC161 were left unconnected. These bits could have been used for an <a href="Oversize.xhtml" title="Oversize">oversize</a> variant of BNROM supporting up to 512 KB (4 Mbit) of PRG ROM. Some emulators support this oversize variation, as well as the <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> since a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=79826#p79826" rel="nofollow">mapper update in June 2011</a>.
+The <i><a href="Action_53.xhtml" title="Action 53">Action 53</a></i> multicart used this oversize extension until <a href="INES_Mapper_028.xhtml" title="INES Mapper 028">mapper 28</a> was developed.
+</p><p>Theoretically the bank select register could be implemented with a <a href="74377.xhtml" title="74377">74HC377</a> octal latch, allowing up to 8 MB of PRG ROM.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.038 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 27/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:113-1!*!0!!en!*!* and timestamp 20160208215520 and revision id 11380
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a></p></div></body></html>

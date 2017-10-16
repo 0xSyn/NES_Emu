@@ -1,0 +1,40 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>ELROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>ELROM</h1><div class="article">
+<p><b>ELROM</b> (NES-ELROM and HVC-ELROM) is a common board within the <a href="ExROM.xhtml" title="ExROM">ExROM</a> set. Like other ExROM boards, ELROM uses the <a href="MMC5.xhtml" title="MMC5">Nintendo MMC5</a> ASIC.
+</p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 128, 256 or 512 KB (DIP-28/32 Nintendo pinout)</li>
+<li> PRG ROM bank size: 8 KB, 16 KB, or 32 KB</li>
+<li> PRG RAM: none</li>
+<li> CHR capacity: 128, 256 or 512 KB ROM (DIP-32 Nintendo pinout)</li>
+<li> CHR bank size: 1 KB, 2 KB, 4 KB, or 8 KB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<h2><span class="mw-headline" id="Solder_Pad_Config">Solder Pad Config</span></h2>
+<ul><li> MMC5 in 'CL mode' : 'CL3', 'CL4', 'CL5' and 'CL6' connected, 'SL3', 'SL4', 'SL5' and 'SL6' disconnected.</li>
+<li> MMC5 in 'SL mode' : 'CL3', 'CL4', 'CL5' and 'CL6' disconnected, 'SL3', 'SL4', 'SL5' and 'SL6' connected.</li></ul>
+<ul><li> Sound circuitry used : R1, R2, R4, C2, C3 present, R9 present (NES-ELROM only) or R3 and C4 present (HVC-ELROM only). An American or European NES must be modified to output cartridge audio, even if the audio circuitry is implemented.</li>
+<li> Sound circuitry unused : R1, R2, R3, R4, R9, C2, C3 and C4 not present.</li></ul>
+<p>Note : Maybe there are more than two ways to put the MMC5 in 'CL mode' or 'SL mode' if some pads are set to CL and some other to SL. More testing on this should be done.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="MMC5.xhtml" title="MMC5">Nintendo MMC5</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:120-1!*!0!!*!*!* and timestamp 20160208224922 and revision id 375
+ -->
+</div></body></html>

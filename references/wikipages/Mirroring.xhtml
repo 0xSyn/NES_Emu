@@ -1,0 +1,231 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Mirroring</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Mirroring</h1><div class="article">
+<p>There are two types of mirroring that appear commonly within the scope of NES emulation.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Nametable_Mirroring"><span class="tocnumber">1</span> <span class="toctext">Nametable Mirroring</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Horizontal"><span class="tocnumber">1.1</span> <span class="toctext">Horizontal</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Vertical"><span class="tocnumber">1.2</span> <span class="toctext">Vertical</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Single-Screen"><span class="tocnumber">1.3</span> <span class="toctext">Single-Screen</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#4-Screen"><span class="tocnumber">1.4</span> <span class="toctext">4-Screen</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Other"><span class="tocnumber">1.5</span> <span class="toctext">Other</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Mirroring_chart"><span class="tocnumber">1.6</span> <span class="toctext">Mirroring chart</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Memory_Mirroring"><span class="tocnumber">2</span> <span class="toctext">Memory Mirroring</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#See_also"><span class="tocnumber">3</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Nametable_Mirroring">Nametable Mirroring</span></h2>
+<p>Nametable mirroring affects what is shown past the right and bottom edges of the current nametable. When mirroring is enabled for a particular axis (horizontal and/or vertical), the coordinates simply wrap around on the current nametable. A background &quot;mirrored&quot; in this way is repeated, <i>not</i> flipped. When mirroring is disabled, a second nametable is used. There are four common combinations of mirroring:
+</p>
+<h3><span class="mw-headline" id="Horizontal">Horizontal</span></h3>
+<div class="floatright"><a class="image" href="File_Horizontal_mirroring_diagram_png.xhtml"><img alt="Horizontal mirroring diagram.png" height="248" src="../wiki-images/Horizontal_mirroring_diagram.png" width="288"/></a></div>
+<p>A <b>vertical arrangement</b> of the nametables results in <b>horizontal mirroring</b>, which makes a <b>32x60 tilemap</b>.
+</p><p>This is most commonly used for games which only scroll vertically or in all directions.
+</p><p>Doing any horizontal scrolling using horizontal mirroring is hard to do smoothly because the data on the right of the screen is immediately show on the left due to mirroring. Clever use of hardware left-side screen clipping will hide all name table glitches, but because the attribute tables have a resolution of 2x2 tiles, there will always be attribute glitches on the left and/or the right side of the screen. The best possible way to hide it is to have 4 pixels with potentially wrong attributes on both sides, but most commercial games did worse than that having usually 8 or even more glitchy pixels, so that is why so many NES games have color glitches on the border of the screen.
+</p><p>Some televisions <a href="Overscan.xhtml" title="Overscan">overscan</a> up to 8 pixels on both left and right border, but most doesn't. Perfectionist programmers could use solid black sprites on the right border to hide attribute glitches and make the screen look symmetrical and hide absolutely all attribute glitches, as in the game <i>Alfred Chicken</i>, but very few games do this because it reduces the number of sprites per scanline to 7 and wastes a lot of <a href="PPU_OAM.xhtml" title="PPU OAM">OAM</a> space (roughly 1/4 in 8x16 pixel sprite mode).
+</p><p>To configure a cartridge board for horizontal mirroring, connect PPU A11 to CIRAM A10. 
+On cartridge boards made by Nintendo, this is selected by shorting the &quot;V&quot; solder pad (for &quot;vertical arrangement&quot;).  Note using inverse logic may make more sense, &quot;Leaving the 'H' jumper open gives horizontal mirroring&quot; on Nintendo boards.
+</p>
+<div style="clear:both"/>
+<h3><span class="mw-headline" id="Vertical">Vertical</span></h3>
+<div class="floatright"><a class="image" href="File_Vertical_mirroring_diagram_png.xhtml"><img alt="Vertical mirroring diagram.png" height="248" src="../wiki-images/Vertical_mirroring_diagram.png" width="288"/></a></div>
+<p>A <b>horizontal arrangement</b> of the nametables results in <b>vertical mirroring</b>, which makes a <b>64x30 tilemap</b>.
+</p><p>This is most commonly used for games which only scroll horizontally. Games that scroll vertically (by any amount and without status bar) and that never scroll horizontally by more than one screen would use this mirroring (e.g. Lode Runner, Bomberman, Fire Emblem, Crystal Mines), so that they don't have to load anything when scrolling horizontally.
+</p><p>Of course it is also used for games which scroll in both directions without a status bar. Because data that is on the top/bottom of the screen will immediately show up on the other side, a clever use of NTSC <a href="Overscan.xhtml" title="Overscan">overscan</a> can make it glitch-less multidirectional scrolling, but glitches will appear on PAL televisions (and NTSC televisions with a overscan range which is a little off). The best possible way to hide glitches is to make 4 pixels with wrong tiles and 4 additional pixels with wrong color on both sides, but most commercial games did much worse than this, that's why they look so bad if overscan is disabled.
+</p><p>Perfectionist programmers could use raster split to hide glitches (and possibly also provide more blanking time to update VRAM) as in the games <i>Jurassic Park</i> and <i>M.C. Kids</i>, but it was rarely done because it complicates the code a lot for little benefits.
+</p><p>To configure a cartridge board for vertical mirroring, connect PPU A10 to CIRAM A10. 
+On cartridge boards made by Nintendo, this is selected by shorting the &quot;H&quot; solder pad (for &quot;horizontal arrangement&quot;).  Note using inverse logic may make more sense, &quot;Leaving the 'V' jumper open gives vertical mirroring&quot; on Nintendo boards.
+</p>
+<div style="clear:both"/>
+<h3><span class="mw-headline" id="Single-Screen">Single-Screen</span></h3>
+<div class="floatright"><a class="image" href="File_Single_screen_mirroring_diagram_png.xhtml"><img alt="Single screen mirroring diagram.png" height="496" src="../wiki-images/Single_screen_mirroring_diagram.png" width="288"/></a></div>
+<p>Single-screen mirroring is only available with certain mappers, such as the <a href="AxROM.xhtml" title="AxROM">AxROM</a>, <a href="SxROM.xhtml" title="SxROM">SxROM</a>, and <a href="TLSROM.xhtml" title="TLSROM">TLSROM</a> boards, resulting in <b>two 32x30 tilemaps</b>.
+</p><p>Its main advantage is that it allows using a status bar at the top or bottom of the screen while also allowing the playfield to extend equally in any direction - this can be done by storing the status bar in one nametable, rendering the playfield in the other nametable, and switching mirroring (and scrolling parameters) at the appropriate screen location during rendering.
+</p><p>There is also a lot of other things that can be drastically simplified when using 1-screen mirroring: The formulas used to calculate PPU address of data to be updated to the screen are also significantly simpler, and if the status bar have a variable size or is scrolling, all this would be a headache without 1-screen mirroring.
+</p><p>When this mirroring is used to scroll horizontally, similar glitches and scrolling problems that those of horizontal mirroring will happen. However, as long as there is a status bar, no glitches will happen vertically since the data that falls off the bottom (or the top) of the screen will come in the area that is &quot;hidden&quot; by the status bar, regardless of overscan factors.
+</p><p>There are several different ways to configure a cartridge board for single-screen mirroring.  Some boards have single screen mirroring which is mapper controlled like the MMC1 and AxROM.  For AxROM connect the output of a register (e.g. <a class="mw-redirect" href="74161.xhtml" title="74HC161">74HC161</a>) to CIRAM A10 (AxROM latches PRG D4).  A simpler way to create one screen mirroring that's fixed (non-changable by software) is to simply connect CIRAM A10 to Gnd or Vcc.
+The board that implements <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">iNES Mapper 218</a> wires CIRAM A10 to PPU A10, A11, A12, or A13, so that the game can store tiles in CIRAM without having any CHR ROM or CHR RAM in the cartridge.
+</p>
+<div style="clear:both"/>
+<h3><span class="mw-headline" id="4-Screen">4-Screen</span></h3>
+<div class="floatright"><a class="image" href="File_Four_nametables_diagram_png.xhtml"><img alt="Four nametables diagram.png" height="248" src="../wiki-images/Four_nametables_diagram.png" width="288"/></a></div>
+<p>With additional RAM and/or PPU address mapping present on the cartridge, 4 unique nametables can be addressed through the PPU bus, creating a <b>64x60 tilemap</b>, allowing for more flexible screen layouts. Very few games made use of this type of mirroring.
+</p><p>Example games using 4-screen RAM nametables:
+</p>
+<ul><li> <i>Rad Racer II</i></li>
+<li> <i>Gauntlet</i></li>
+<li> <i>Napoleon Senki</i></li>
+<li> <i>Rocman X (Sachen)</i></li></ul>
+<p>Example games using 4-screen with <a href="Category_Mappers_with_ROM_nametables.xhtml" title="Category:Mappers with ROM nametables">ROM nametables</a>:
+</p>
+<ul><li> <i>Final Lap</i></li>
+<li> <i>King of Kings</i></li></ul>
+<p>Mappers capable of 4-screen mirroring:
+</p>
+<ul><li> <a href="MMC3.xhtml" title="MMC3">MMC3</a> allows 4-screen RAM in some configurations (<i>Rad Racer II</i>, <i>Rocman X</i>).</li>
+<li> <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">iNES 206</a> implements a subset of MMC3 features, and can use 4-screen RAM (<i>Gauntlet</i>).</li>
+<li> <a href="INES_Mapper_077.xhtml" title="INES Mapper 077">iNES 77</a> maps RAM across the PPU memory space, combining with internal VRAM to provide 4 RAM nametables, and a combination of CHR-RAM and ROM for pattern tables (<i>Napoleon Senki</i>).</li>
+<li> <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> had twice as much VRAM as the NES, giving a permanent 4-screen setup. This is most visible as <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">iNES 99</a>, but <a href="Vs__System.xhtml#See_also" title="Vs. System">several other mappers</a> were also used on this hardware.</li>
+<li> <a href="VRC6.xhtml" title="VRC6">VRC6</a> allows 1k CHR-ROM pages to be arbitrarily mapped into the 4 nametable screens.</li>
+<li> <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a> allows 1k CHR-ROM pages to be arbitrarily mapped into the 4 nametable screens (<i>Final Lap</i>, <i>King of Kings</i>).</li>
+<li> The <a href="JY_Company.xhtml" title="JY Company">JY Company</a> mapper allows 1k CHR-ROM pages to be arbitrarily mapped into the 4 nametable screens.</li>
+<li> <a href="MMC5.xhtml" title="MMC5">MMC5</a> can use 1k of extra RAM to create a 3rd nametable, while procedurally generating a blank data page for a 4th, allowing (just barely) 4 different screens to be mapped at once.</li>
+<li> The <a href="INES.xhtml" title="INES">iNES</a> format can specify 4-screen mirroring in the header, allowing 4-screen RAM nametables to be applied to any mappers that don't structurally conflict with this (if supported by the emulator).</li></ul>
+<p>There are several ways to implement extra nametable RAM on a cartridge board:
+</p>
+<ul><li> Add an extra 2 KB of RAM on the board. Decoder logic enables CIRAM only for $2000-$27FF and the cartridge RAM $2800-$2FFF.</li>
+<li> Add a <a class="mw-redirect" href="6264_static_RAM.xhtml" title="6264">6264</a> 8 KB RAM on the board. CIRAM /CE is pulled high, and the cartridge RAM is enabled at $2000-$3FFF. The PPU itself never uses $3000-$3FFF during rendering, but 8 KB RAMs are easier to find than 4 KB RAMs.</li>
+<li> Add a larger RAM on the board and map it to the entire PPU address space. This allows 8 KB of pattern tables at $0000-$1FFF, 4 KB of nametables at $2000-$2FFF, and almost 4 KB of extra memory at $3000-$3EFF.</li></ul>
+<div style="clear:both"/>
+<h3><span class="mw-headline" id="Other">Other</span></h3>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23.5px auto;"><a class="image" href="File_Diagonal_mirroring_diagram_png.xhtml"><img alt="" height="103" src="../wiki-images/Diagonal_mirroring_diagram.png" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>Diagonal
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23.5px auto;"><a class="image" href="File_L_shaped_mirroring_diagram_png.xhtml"><img alt="" height="103" src="../wiki-images/L-shaped_mirroring_diagram.png" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>L-shaped
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23.5px auto;"><a class="image" href="File_ACBC_mirroring_diagram_png.xhtml"><img alt="" height="103" src="../wiki-images/ACBC_mirroring_diagram.png" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>3-screen vertical
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23.5px auto;"><a class="image" href="File_ABCC_mirroring_diagram_png.xhtml"><img alt="" height="103" src="../wiki-images/ABCC_mirroring_diagram.png" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>3-screen horizontal
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23.5px auto;"><a class="image" href="File_ABBC_mirroring_diagram_png.xhtml"><img alt="" height="103" src="../wiki-images/ABBC_mirroring_diagram.png" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>3-screen diagonal
+</p>
+			</div>
+		</div></li>
+</ul>
+<p>Other uncommon types of mirroring are available in other boards, such as <a href="INES_Mapper_119.xhtml" title="INES Mapper 119">TxSROM</a> variations of the MMC3, extended techniques available to the <a href="MMC5.xhtml" title="MMC5">MMC5</a>, arbitrary VRAM mirroring arrangements by the <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a>, or ROM mirroring arrangements using mappers that allow <a href="Category_Mappers_with_ROM_nametables.xhtml" title="Category:Mappers with ROM nametables">ROM nametables</a>.
+</p><p><b>Diagonal mirroring</b> (CIRAM A10 = PA11 XOR PA10) would facilitate changes in scrolling direction without having to flip between Horizontal and Vertical mirroring.
+</p><p><b>L-shaped mirroring</b> (CIRAM A10 = PA11 OR PA10), seen in <a href="INES_Mapper_243.xhtml" title="INES Mapper 243">mapper 243</a> and the <a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen 8259</a> family, allows scrolling in four directions as long as scrolling changes directions only at screen boundaries.
+</p><p>Unusual cases:
+</p>
+<ul><li> <i>Castlevania 3</i> uses the third nametable RAM available on the <a href="MMC5.xhtml" title="MMC5">MMC5</a></li>
+<li> <i>Laser Invasion</i> uses the third nametable RAM available on the <a href="MMC5.xhtml" title="MMC5">MMC5</a></li>
+<li> The <a href="INES_Mapper_068.xhtml" title="INES Mapper 068">Sunsoft-4</a> mapper used by <i>After Burner</i> allows ROM nametables, but only in 2-Screen mirroring configurations.</li>
+<li> <i>Mighty Morphin Power Rangers III, IV (JY Company)</i> uses ROM nametables in a 3-Screen horizontal configuration, though the lower screen is never shown (But, lower screen has been used in the status bar).</li></ul>
+<h3><span class="mw-headline" id="Mirroring_chart">Mirroring chart</span></h3>
+<p>This table lists the more simple and easy to understand mirroring and scrolling techniques. There are a huge variety of more complicated techniques. For a more comprehensive survey, see: <a href="List_of_games_by_mirroring_technique.xhtml" title="List of games by mirroring technique">List of games by mirroring technique</a>
+</p>
+<table class="wikitable">
+<tr>
+<th> Scrolling Type </th>
+<th> Mirroring </th>
+<th> Example Games </th>
+<th> Comment
+</th></tr>
+<tr>
+<td> None
+</td>
+<td> Any
+</td>
+<td> <i>Donkey Kong</i>, <i>Tennis</i>
+</td>
+<td> With only a single fixed screen, any mirroring type can be used.
+</td></tr>
+<tr>
+<td> Horizontal Only
+</td>
+<td> Vertical
+</td>
+<td> <i>Super Mario Bros.</i>, <i>Gimmick!</i>
+</td>
+<td> A <s>status bar</s> at the top is easy to accomplish with a <a class="mw-redirect" href="PPU_OAM.xhtml" title="Sprite-0 hit">sprite-0 hit</a> (see <i>Super Mario Bros.</i>).
+</td></tr>
+<tr>
+<td> Vertical Only
+</td>
+<td> Horizontal
+</td>
+<td> <i>Ice Climber</i>, <i>Gun.Smoke</i>
+</td>
+<td> Without a status bar, horizontal mirroring is the best choice for vertical-only scrolling. With a status bar, vertical or single-screen mirroring give you a place in the nametable to render the status bar, and the scrolling seam should be hidden under the bar.
+</td></tr>
+<tr>
+<td> Alternating Horizontal/Vertical
+</td>
+<td> Mapper switches H/V
+</td>
+<td> <i>Metroid</i>, <i>Air Fortress</i>
+</td>
+<td> Motion is limited to a single axis at any given time, and the direction can only change when a new screen is reached.
+</td></tr>
+<tr>
+<td> Limited Bidirectional
+</td>
+<td> Horizontal/Vertical
+</td>
+<td> <i>Super Mario Bros. 3</i>, <i>Fire Emblem</i>
+</td>
+<td> By limiting one of the scrolling axes to only 2-screens wide, this makes unlimited scrolling in the other axis simple. With unlimited horizontal scrolling there will be unavoidable attribute glitches at one side of the screen (see <i>Super Mario Bros. 3</i>), but with unlimited vertical scrolling this can be hidden by <a href="Overscan.xhtml" title="Overscan">overscan</a> in NTSC regions (see <i>Fire Emblem</i>).
+</td></tr>
+<tr>
+<td> Unlimited Bidirectional
+</td>
+<td> Various
+</td>
+<td> <i>Castlevania II</i>, <i>Battletoads</i>, <i>Crystalis</i>, <i>Final Fantasy</i>
+</td>
+<td> Unlimited scrolling in both axes at once is an advanced technique requiring a game-specific solution.
+</td></tr></table>
+<p>The best way to understand the mirroring techniques used in a game, use a debugging emulator to look at the nametables. <s>Status bars</s> typically require a scrolling split at a timed location on the screen. This can be done most easily with a mapper based <a href="IRQ.xhtml" title="IRQ">IRQ</a>, but can also be accomplished with a <a class="mw-redirect" href="PPU_OAM.xhtml" title="Sprite-0 hit">sprite-0 hit</a> or other techniques.
+</p>
+<h2><span class="mw-headline" id="Memory_Mirroring">Memory Mirroring</span></h2>
+<p>Memory mirroring refers to the appearance of memory or I/O registers at more than one range of addresses, with the same byte being accessible at more than one address.
+This occurs when the full address isn't completely <i>decoded</i>, that is, when a chip ignores one or more address lines.
+Because completely decoding an address usually takes a lot more pins on a chip, incomplete decoding is used to reduce the hardware required; if the mirror occupies otherwise unused address space, it poses no problems.
+</p><p>Within the NES, many things are mirrored:
+</p>
+<ul><li> System memory at $0000-$07FF is mirrored at $0800-$0FFF, $1000-$17FF, and $1800-$1FFF - attempting to access memory at, for example, $0173 is the same as accessing memory at $0973, $1173, or $1973.</li>
+<li> PPU I/O registers at $2000-$2007 are mirrored at $2008-$200F, $2010-$2017, $2018-$201F, and so forth, all the way up to $3FF8-$3FFF.</li>
+<li> The single registers on most <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">simple mappers</a> are mirrored throughout $8000-$FFFF.</li>
+<li> Registers on many common ASIC mappers (such as the MMC1 and MMC3) are also mirrored, in groups, throughout $8000-$FFFF.</li>
+<li> Nametable mirroring, as described above, happens due to memory mirroring within PPU $2000-$2FFF (hence its name). However, in this case the memory mirroring is intentional and necessary.</li>
+<li> In <a href="NROM.xhtml" title="NROM">NROM</a>-128, the 16k PRG ROM is mirrored into both $8000-$BFFF and $C000-$FFFF.</li>
+<li> In most <a href="Mapper.xhtml" title="Mapper">mappers</a>, banks past the end of PRG or CHR ROM show up as mirrors of earlier banks. For example, <a class="mw-redirect" href="UxROM.xhtml" title="UNROM">UNROM</a> PRG banks 8-15 are duplicates of banks 0-7 respectively.</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.172 seconds
+Real time usage: 0.180 seconds
+Preprocessor visited node count: 53/1000000
+Preprocessor generated node count: 88/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:59-1!*!0!!en!5!* and timestamp 20160208222600 and revision id 11725
+ -->
+</div></body></html>

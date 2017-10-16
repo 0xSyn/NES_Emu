@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sunsoft 4 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sunsoft 4 pinout</h1><div class="article">
+<p><a href="INES_Mapper_068.xhtml" title="INES Mapper 068">Sunsoft 4</a>: 40-pin 0.6&quot; PDIP
+</p>
+<pre>             .---\/---.
+       M2 -&gt; | 01  40 | -- +5V
+  /ROMSEL -&gt; | 02  39 | &lt;- R/W
+  CPU A14 -&gt; | 03  38 | &lt;- CPU D6
+  CPU A13 -&gt; | 04  37 | &lt;- CPU D5
+  CPU A12 -&gt; | 05  36 | &lt;- CPU D4
+ PPU /A13 -&gt; | 06  35 | &lt;- CPU D3
+  PPU A12 -&gt; | 07  34 | &lt;- CPU D2
+  PPU A11 -&gt; | 08  33 | &lt;- CPU D1
+  PPU A10 -&gt; | 09  32 | &lt;- CPU D0
+     ?GND -&gt; | 10  31 | &lt;- OR A (PPU /RD)
+  PRG /CE &lt;- | 11  30 | &lt;- OR B (SS4 /CHRSEL)
+  CHR A17 &lt;- | 12  29 | -&gt; OR Y (CHR /CS)
+  CHR A16 &lt;- | 13  28 | -&gt; CIRAM /CS
+  CHR A15 &lt;- | 14  27 | -&gt; SS4 /CHRSEL
+  CHR A14 &lt;- | 15  26 | -&gt; WRAM /CE
+  CHR A13 &lt;- | 16  25 | -&gt; PRG A14
+  CHR A12 &lt;- | 17  24 | -&gt; PRG A15
+  CHR A11 &lt;- | 18  23 | -&gt; PRG A16
+  CHR A10 &lt;- | 19  22 | -&gt; PRG A17
+      GND -- | 20  21 | -&gt; WRAM +CE
+             `--------'
+
+10 probably actually some control, not a supply pin
+19 also connects to CIRAM A10
+29,30,31 actually just an OR gate; for use with a 28-pin 128KB CHR-ROM
+</pre>
+<p>Reference: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=106818#p106818" rel="nofollow">Naruko's notes</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:982-1!*!0!*!*!*!* and timestamp 20160208225854 and revision id 5430
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

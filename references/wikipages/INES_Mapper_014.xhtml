@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 014</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 014</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 014</strong> is an <a href="MMC3.xhtml" title="MMC3">MMC3</a> variant mapper used in the pirate port of Samurai Spirits by Rex Game Soft. It is very similar to an MMC3, but contains an alternative mode that when used controls banking and mirroring independently of the normal MMC3 mode.
+</p><p>This mapper is not widely supported by emulators. The following notes are based on Nestopia's SOMERITEAM SL-1632 mapper implementation.
+</p><p>GoodNES 3.1.4 has Samurai Spirits as a UNIF dump with MAPR <i>UNL-SL1632</i> and as <a href="INES_Mapper_116.xhtml" title="INES Mapper 116">iNES Mapper 116</a>. However, the documentation for mapper 116 implies that SL1632 is substantively different.
+</p>
+<h2><span class="mw-headline" id="Mapper_Mode_Control:_.24A131">Mapper Mode Control: $A131</span></h2>
+<pre>7  bit  0
+---------
+A.B. C.M.
+       |
+       +- Mode (1: MMC3, 0: VRC2)
+</pre>
+<ul><li> When M is set, writes to $8000-FFFF operate mostly as normal for <a href="MMC3.xhtml" title="MMC3">MMC3</a>.</li>
+<li> When M is clear, alternative functions appear (see MMC3 Mode Clear below).</li>
+<li> When M is written, the CHR and PRG banks must be switched either to their MMC3 banks (MMC3 Mode Set), or the alternative banks (MMC3 Mode Clear).</li></ul>
+<p>In MMC3 mode, bits 7, 5, and 3 of this register also control high bits of the CHR banks, allowing 512k of CHR ROM. This works in conjunction with the current 2k/1k CHR banking mode.
+</p>
+<ul><li> If A is set add $100 to both 2k CHR banks.</li>
+<li> If B is set add $100 to lower two 1k CHR banks.</li>
+<li> If C is set add $100 to upper two 1k CHR banks.</li></ul>
+<h2><span class="mw-headline" id="MMC3_Mode">MMC3 Mode</span></h2>
+<p>Note that when the Mode bit is set to MMC3, this mapper operates mostly like the MMC3, except the $A000-BFFE even register does not control the nametable mirroring (it can only be controlled when in VRC2 mode). Additionally, a write to the specific address $A131 will alter the MMC3 Mode bit as above.
+</p>
+<ul><li> $8000-9FFE even - as MMC3</li>
+<li> $8001-9FFF odd - as MMC3</li>
+<li> $A000-BFFE even - ignored</li>
+<li> $A001-BFFF odd - as MMC3</li>
+<li> $C000-DFFE even - as MMC3</li>
+<li> $C001-DFFF odd - as MMC3</li>
+<li> $E000-FFFE even - as MMC3</li>
+<li> $E001-FFFF odd - as MMC3</li></ul>
+<p>There may be a conflict between $A131 and the $A001-BFFF odd register if PRG RAM is present. The Nestopia implementation also writes to the corresponding MMC3 register when writing $A131 if the MMC3 Mode bit is set.
+</p>
+<h2><span class="mw-headline" id="VRC2_Mode">VRC2 Mode</span></h2>
+<p>This mode is very similar to <a href="VRC2.xhtml" title="VRC2">VRC2b</a>.
+</p><p>These banking registers are independent of the banking registers used when MMC3 Mode is set.
+</p>
+<ul><li> $8000-$8FFC - as VRC2
+<ul><li> $8001, $8002, $8003, and their mirrors do not respond</li></ul></li>
+<li> $9000-$9FFC - subset of VRC2
+<ul><li> $9001, $9002, $9003, and their mirrors do not respond</li>
+<li> It is unclear whether the 2s bit exists, supporting H/V/1a/1b mirroring, or just the 1s bit (as the MMC3)</li></ul></li>
+<li> $A000-$AFFC - as VRC2
+<ul><li> $A001, $A002, $A003, and their mirrors do not respond</li></ul></li>
+<li> $B000-$EFFF - superset of VRC2b
+<ul><li> Reportedly the $800s bit should be ORed into the 2s bit to select which CHR register is updated. This is odd: perhaps this actually describes two different versions of the hardware. (If so, what other games use it?)</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:863-1!*!0!!*!*!* and timestamp 20160208225009 and revision id 10793
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

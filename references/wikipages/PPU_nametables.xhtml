@@ -1,0 +1,64 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU nametables</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU nametables</h1><div class="article">
+<p>A <b>nametable</b> is a 1024 byte area of memory used by the PPU to lay out backgrounds.
+Each byte in the nametable controls one 8x8 pixel character cell, and each nametable has 30 rows of 32 tiles each, for 960 ($3C0) bytes; the rest is used by each nametable's <a href="PPU_attribute_tables.xhtml" title="PPU attribute tables">attribute table</a>.
+With each tile being 8x8 pixels, this makes a total of 256x240 pixels in one map, the same size as one full screen.
+</p>
+<div style="float:right; margin-left: 1em">
+<pre>     (0,0)     (256,0)     (511,0)
+       +-----------+-----------+
+       |           |           |
+       |           |           |
+       |   $2000   |   $2400   |
+       |           |           |
+       |           |           |
+(0,240)+-----------+-----------+(511,240)
+       |           |           |
+       |           |           |
+       |   $2800   |   $2C00   |
+       |           |           |
+       |           |           |
+       +-----------+-----------+
+     (0,479)   (256,479)   (511,479)
+</pre>
+</div>
+<dl><dd><i>See also: <a href="PPU_memory_map.xhtml" title="PPU memory map">PPU memory map</a></i></dd></dl>
+<h2><span class="mw-headline" id="Mirroring">Mirroring</span></h2>
+<dl><dd><i>Main article: <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a></i></dd></dl>
+<p>The NES has four nametables, arranged in a 2x2 pattern. Each occupies a 1 KiB chunk of PPU address space, starting at $2000 at the top left, $2400 at the top right, $2800 at the bottom left, and $2C00 at the bottom right.
+</p><p>But the NES system board itself has only 2 KiB of VRAM (called CIRAM, stored in a separate SRAM chip), enough for two nametables; hardware on the cartridge controls address bit 10 of CIRAM to map one nametable on top of another.
+</p>
+<ul><li> Vertical mirroring: $2000 equals $2800 and $2400 equals $2C00 (e.g. <i>Super Mario Bros.</i>)</li>
+<li> Horizontal mirroring: $2000 equals $2400 and $2800 equals $2C00 (e.g. <i>Kid Icarus</i>)</li>
+<li> One-screen mirroring: All nametables refer to the same memory at any given time, and the mapper directly manipulates CIRAM address bit 10 (e.g. many <a href="Rare.xhtml" title="Rare">Rare</a> games using <a href="AxROM.xhtml" title="AxROM">AxROM</a>)</li>
+<li> Four-screen mirroring: CIRAM is disabled, and the cartridge contains additional VRAM used for all nametables (e.g. <i>Gauntlet</i>, <i>Rad Racer 2</i>)</li>
+<li> Other: Some advanced mappers can present arbitrary combinations of CIRAM, VRAM, or even CHR ROM in the nametable area.  Such exotic setups are rarely used.</li></ul>
+<h2><span class="mw-headline" id="Background_evaluation">Background evaluation</span></h2>
+<dl><dd><i>Main article: <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a></i></dd></dl>
+<p>Conceptually, the PPU does this 33 times for each scanline:
+</p>
+<ol><li> Fetch a nametable entry from $2000-$2FBF.</li>
+<li> Fetch the corresponding attribute table entry from $23C0-$2FFF and increment the current VRAM address within the same row.</li>
+<li> Fetch the low-order byte of a 8x1 pixel sliver of pattern table from $0000-$0FF7 or $1000-$1FF7.</li>
+<li> Fetch the high-order byte of this sliver from an address 8 bytes higher.</li>
+<li> Turn the attribute data and the pattern table data into palette indices, and combine them with data from <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite data</a> using <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">priority</a>.</li></ol>
+<p>It also does a fetch of a 34th (nametable, attribute, pattern) tuple that is never used, but some <a href="Mapper.xhtml" title="Mapper">mappers</a> rely on this fetch for timing purposes.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.051 seconds
+Real time usage: 0.056 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 68/2097152 bytes
+Template argument size: 22/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:22-1!*!0!!*!*!* and timestamp 20160208222625 and revision id 8295
+ -->
+</div></body></html>

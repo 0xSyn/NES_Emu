@@ -1,0 +1,266 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU basics</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU basics</h1><div class="article">
+<p>This tutorial covers basic usage of the APU's four waveform channels on an NTSC NES. It does not cover the DMC or more advanced usage. Any registers unrelated to basic operation are not even mentioned here. A simplified though fully usable model of the APU is presented, one that will serve many programmers.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Channels"><span class="tocnumber">1</span> <span class="toctext">Channels</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Register_initialization"><span class="tocnumber">2</span> <span class="toctext">Register initialization</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Pulse_wave_channels"><span class="tocnumber">3</span> <span class="toctext">Pulse wave channels</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Triangle_wave_channel"><span class="tocnumber">4</span> <span class="toctext">Triangle wave channel</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Noise_channel"><span class="tocnumber">5</span> <span class="toctext">Noise channel</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Playing_a_musical_note"><span class="tocnumber">6</span> <span class="toctext">Playing a musical note</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Channels">Channels</span></h2>
+<p>The APU has five channels: two pulse waves, triangle wave, noise, and DMC (sample playback). Only the first four are covered here.
+</p><p>The channel registers begin at $4000, and each channel has four registers devoted to it. All but the triangle wave have 4-bit volume control (the triangle just has an un-mute flag).
+</p>
+<table class="tabular" width="60%">
+<tr>
+<td width="20%"> $4000-$4003	</td>
+<td> First pulse wave
+</td></tr>
+<tr>
+<td> $4004-$4007		</td>
+<td> Second pulse wave
+</td></tr>
+<tr>
+<td> $4008-$400B		</td>
+<td> Triangle wave
+</td></tr>
+<tr>
+<td> $400C-$400F		</td>
+<td> Noise
+</td></tr></table>
+<p>In register descriptions below, bits listed as - can have any value written to them, while bits listed as 1 <b>must</b> have a 1 written, otherwise other APU features will be enabled, causing the registers to behave differently than described here.
+</p>
+<h2><span class="mw-headline" id="Register_initialization">Register initialization</span></h2>
+<p>Before using the APU, first initialize all the registers to known values that silence all channels.
+</p>
+<pre>
+init_apu:
+        ; Init $4000-4013
+        ldy #$13
+@loop:  lda @regs,y
+        sta $4000,y
+        dey
+        bpl @loop
+ 
+        ; We have to skip over $4014 (OAMDMA)
+        lda #$0f
+        sta $4015
+        lda #$40
+        sta $4017
+   
+        rts
+@regs:
+        .byte $30,$08,$00,$00
+        .byte $30,$08,$00,$00
+        .byte $80,$00,$00,$00
+        .byte $30,$00,$00,$00
+        .byte $00,$00,$00,$00
+</pre>
+<p>The initialization above prepares the APU to a known state, ready to be used by the examples below.
+In particular, it disables hardware <a href="APU_Sweep.xhtml" title="APU Sweep">sweep</a>, <a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a>, and <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length</a>, which this tutorial does not use.
+</p>
+<h2><span class="mw-headline" id="Pulse_wave_channels">Pulse wave channels</span></h2>
+<dl><dd><i>Main article: <a href="APU_Pulse.xhtml" title="APU Pulse">APU Pulse</a></i></dd></dl>
+<p>There are two pulse wave channels, each with pitch, volume, and timbre controls.
+</p>
+<table class="tabular">
+<tr>
+<td> $4000	</td>
+<td> $4004	</td>
+<td> <tt>%DD11VVVV</tt> </td>
+<td> Duty cycle and volume<br/>
+<p>DD: 00=12.5% 01=25% 10=50% 11=75%<br/>
+VVVV: 0000=silence 1111=maximum
+</p>
+</td></tr>
+<tr>
+<td> $4002	</td>
+<td> $4006	</td>
+<td> <tt>%LLLLLLLL</tt> </td>
+<td> Low 8 bits of raw period
+</td></tr>
+<tr>
+<td> $4003	</td>
+<td> $4007	</td>
+<td> <tt>%-----HHH</tt> </td>
+<td> High 3 bits of raw period
+</td></tr></table>
+<p>To determine the raw period for a given frequency in Hz, use this formula (round the result to a whole number)::
+</p>
+<dl><dd>raw period = 111860.8/frequency - 1</dd></dl>
+<p>The following code plays a 400 Hz square wave (50% duty) at maximum volume:
+</p>
+<pre>
+jsr init_apu
+
+lda #&lt;279
+sta $4002
+
+lda #&gt;279
+sta $4003
+
+lda #%10111111
+sta $4000
+</pre>
+<p>All parameters can be changed while the tone is playing. To fade a note out, for example, write to $4000 or $4004 with the lower 4 bits decreasing every few frames.
+</p><p>Note that writing to $4003 and $4007 resets the phase, which causes a slight pop. This is an issue when doing vibrato, for example, and beyond the scope of this article.
+</p>
+<h2><span class="mw-headline" id="Triangle_wave_channel">Triangle wave channel</span></h2>
+<dl><dd><i>Main article: <a href="APU_Triangle.xhtml" title="APU Triangle">APU Triangle</a></i></dd></dl>
+<p>The triangle channel allows control over frequency and muting.
+</p>
+<table class="tabular">
+<tr>
+<td> $4008	</td>
+<td> <tt>%1U------</tt> </td>
+<td> Un-mute
+</td></tr>
+<tr>
+<td> $400A	</td>
+<td> <tt>%LLLLLLLL</tt> </td>
+<td> Low 8 bits of raw period
+</td></tr>
+<tr>
+<td> $400B	</td>
+<td> <tt>%-----HHH</tt> </td>
+<td> High 3 bits of raw period
+</td></tr>
+<tr>
+<td> $4017	</td>
+<td> <tt>%1-------</tt> </td>
+<td> Apply un-muting immediately
+</td></tr></table>
+<p>For any given period, the triangle channel's frequency is half that of the pulse channel, or a pitch one octave lower. To determine the raw period for a given frequency in Hz, use this formula (round the result to a whole number):
+</p>
+<dl><dd>raw period = 55930.4/frequency - 1</dd></dl>
+<p>The following code plays a 400 Hz triangle wave:
+</p>
+<pre>
+jsr init_apu
+
+lda #&lt;139
+sta $400A
+
+lda #&gt;139
+sta $400B
+
+lda #%11000000
+sta $4008
+sta $4017
+</pre>
+<p>The raw period can be changed while the channel is playing.
+</p><p>To silence the wave, write %10000000 to $4008 and then $4017. Writing a raw period of 0 also silences the wave, but produces a pop, so it's not the preferred method.
+</p>
+<h2><span class="mw-headline" id="Noise_channel">Noise channel</span></h2>
+<dl><dd><i>Main article: <a href="APU_Noise.xhtml" title="APU Noise">APU Noise</a></i></dd></dl>
+<p>The noise channel allows control over frequency, volume, and timbre.
+</p>
+<table class="tabular">
+<tr>
+<td> $400C	</td>
+<td> <tt>%--11VVVV</tt> </td>
+<td> Volume<br/>
+<p>VVVV: 0000=silence 1111=maximum
+</p>
+</td></tr>
+<tr>
+<td> $400E	</td>
+<td> <tt>%T---PPPP</tt> </td>
+<td> Tone mode enable, Period
+</td></tr></table>
+<p>The following code plays a tone-like noise at maximum volume:
+</p>
+<pre>
+jsr init_apu
+
+lda #%10000101
+sta $400E
+
+lda #%00111111
+sta $400C
+</pre>
+<p>All parameters can be changed while the noise is playing.
+</p>
+<h2><span class="mw-headline" id="Playing_a_musical_note">Playing a musical note</span></h2>
+<p>To easily play a musical note, use the <a href="APU_period_table.xhtml" title="APU period table">APU period table</a>. The following code sets the first pulse wave's frequency based on the note number in the X register:
+</p>
+<pre>
+; Set first pulse channel's frequency to note code in X register
+lda periodTableHi,x
+sta $4003
+
+lda periodTableLo,x
+sta $4002
+
+...
+
+; NTSC period table generated by mktables.py
+periodTableLo:
+  .byte $f1,$7f,$13,$ad,$4d,$f3,$9d,$4c,$00,$b8,$74,$34
+  .byte $f8,$bf,$89,$56,$26,$f9,$ce,$a6,$80,$5c,$3a,$1a
+  .byte $fb,$df,$c4,$ab,$93,$7c,$67,$52,$3f,$2d,$1c,$0c
+  .byte $fd,$ef,$e1,$d5,$c9,$bd,$b3,$a9,$9f,$96,$8e,$86
+  .byte $7e,$77,$70,$6a,$64,$5e,$59,$54,$4f,$4b,$46,$42
+  .byte $3f,$3b,$38,$34,$31,$2f,$2c,$29,$27,$25,$23,$21
+  .byte $1f,$1d,$1b,$1a,$18,$17,$15,$14
+
+periodTableHi:
+  .byte $07,$07,$07,$06,$06,$05,$05,$05,$05,$04,$04,$04
+  .byte $03,$03,$03,$03,$03,$02,$02,$02,$02,$02,$02,$02
+  .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
+  .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+  .byte $00,$00,$00,$00,$00,$00,$00,$00
+</pre>
+<p>The triangle plays an octave lower for the same raw period.
+There are two ways to compensate for this.
+One way is to halve the value from the above table to get the desired note:
+</p>
+<pre>
+; Set triangle frequency to note code in X register
+lda periodTableHi,x
+lsr a
+sta $400B
+
+lda periodTableLo,x
+ror a
+sta $400A
+</pre>
+<p>The other way is to read period values one octave later in the table:
+</p>
+<pre>
+; Set triangle frequency to note code in X register
+lda periodTableHi+12,x
+sta $400B
+
+lda periodTableLo+12,x
+sta $400A
+</pre>
+<p>The following full program plays pulse and triangle scales:
+</p><p><a class="external text" href="http://blargg.8bitalley.com/parodius/nes-code/apu_scale.s" rel="nofollow">apu_scale.s</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.079 seconds
+Real time usage: 0.082 seconds
+Preprocessor visited node count: 86/1000000
+Preprocessor generated node count: 228/1000000
+Post‐expand include size: 99/2097152 bytes
+Template argument size: 30/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:493-1!*!0!!en!*!* and timestamp 20160825192106 and revision id 12831
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

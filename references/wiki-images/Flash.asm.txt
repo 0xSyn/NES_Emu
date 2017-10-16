@@ -1,0 +1,162 @@
+;Flash Writing code written to be easily located in any spot within WRAM.
+;It is recommended that you verify the data to be saved is actually different from what is in flash, before you actually write to the flash
+;as flash chips have a finite number of erase/write cycles,  Usually 100,000 for the chips used in the games to be written.
+;
+;A sector needs to be erased before it is written to.
+;If the sector is not erased first, the data written will be a bitwise AND of the existing data and the data you wish to write, which may
+;not be the desired behavior. :)
+;
+;Also be careful that you don't accidently target sectors where your code is stored, or you will brick your code. :)
+;For obvious reasons, the Chip erase command is not included in this code.
+	
+	
+FlashRamPage	.EQU	$0100	;Needs to be located in WRAM.
+
+TargetBank		.EQU	$F8		;These variables need to be located in the Zero Page, due to the need for Indirect addressing.
+TargetAddress	.EQU	$F9
+TargetAddress_h	.EQU	$FA
+SourceAddress	.EQU	$FB
+SourceAddress_h	.EQU	$FC
+ReturnBank		.EQU	$FD
+
+;Some macro defines for calling the functions.  You must include this file in whatever bank this code is going to be run from, then make the calls to
+;these macros.
+	
+CallWriteVerify	.macro	;Internally used by CallEraseSector and CallWriteByte.
+	
+	.endm
+	
+;CallSoftwareIdentify - Returns Chip Manufacturer and Chip ID information. THis can be used
+;to determine how much free space you have, if for example, your game only uses 128KB, but is flashed
+;to a 256KB or 512KB flash chip.  The chip manufacturer for most of the installed chips is likely to
+;be 0xBF, and Chip ID be 0xB5 for 128KB, 0xB6 for 256KB or 0xB7 for 512KB.
+;
+;This is the one command you can attempt to execute to determine if flash saving is enabled on the cart or not.
+;Just make sure you don't have 0xBF in address 0, and 0xB5/0xB6/0xB7 in address 1, as these are the addresses this command
+;actually reads.
+CallSoftwareIdentify	.macro	;Uses ReturnBank. A destroyed, X = Chip Manufacturer, Y = Chip ID
+	JSR (FlashRamPage+(SoftwareIdentify-WriteVerify))
+	.endm
+	
+;CallEraseSector - Used to erase a 4KB sector of flash.
+;Erasing sets every single byte in that sector to 0xFF.
+;If there are any values you wish to save, read them out before 
+;erasing the sector.
+CallEraseSector	.macro	;Uses TargetBank, TargetAddress, ReturnBank. A & Y destroyed.
+	JSR (FlashRamPage+(EraseSector-WriteVerify))
+	.endm
+	
+;CallWriteByte - Used to write a byte to flash.
+;The byte actually written is a logical bitwise AND of the desired value to write, and the value currently stored in flash.
+;Because of this, writes will progress from 0xFF towards 0x00.  Flash bits can only be cleared with this function.
+CallWriteByte	.macro	;Byte to Write in A, Address is TargetAddress+Y. Uses TargetBank, TargetAddress, ReturnBank.
+	JSR (FlashRamPage+(WriteByte-WriteVerify))
+	.endm
+	
+;JmpExitBank - mostly needed only for flash saving hacks. Put the bank to exit with on the A register, then use this macro.
+JmpExitBank	.macro	;Bank to switch to on return in A register.
+	JMP (FlashRamPage+(ReturnToBank-WriteVerify))
+	.endm
+
+	
+WriteVerify:
+	LDA [TargetAddress],Y
+	CMP [TargetAddress],Y
+	BNE WriteVerify
+	RTS
+	
+EraseSector:
+	LDA #$01
+	STA $C000
+	LDA #$AA
+	STA $9555
+	LDA #$00
+	STA $C000
+	LDA #$55
+	STA $AAAA
+	LDA #$01
+	STA $C000
+	LDA #$80
+	STA $9555
+	LDA #$01
+	STA $C000
+	LDA #$AA
+	STA $9555
+	LDA #$00
+	STA $C000
+	LDA #$55
+	STA $AAAA
+	LDA TargetBank
+	STA $C000
+	LDY #$00
+	LDA #$30
+	STA [TargetAddress],Y
+	JSR FlashRamPage
+	LDA ReturnBank
+ReturnToBank:
+	STA $C000
+	RTS
+	
+WriteByte:
+	PHA
+	LDA #$01
+	STA $C000
+	LDA #$AA
+	STA $9555
+	LDA #$00
+	STA $C000
+	LDA #$55
+	STA $AAAA
+	LDA #$01
+	STA $C000
+	LDA #$A0
+	STA $9555
+	LDA TargetBank
+	STA $C000
+	PLA
+	STA [TargetAddress],Y
+	JSR FlashRamPage
+	LDA ReturnBank
+	STA $C000
+	RTS
+	
+SoftwareIdentify:
+	LDA #$80
+	STA TargetAddress_h
+	LDA #$01
+	STA TargetAddress
+	STA $C000
+	LDA #$AA
+	STA $9555
+	LDA #$00
+	STA $C000
+	LDA #$55
+	STA $AAAA
+	LDA #$01
+	STA $C000
+	LDA #$90
+	STA $9555
+	JSR FlashRamPage
+	LDA $8000
+	TAX
+	LDA $8001
+	TAY
+	LDA #$F0
+	STA $8000
+	JSR FlashRamPage
+	LDA ReturnBank
+	STA $C000
+	RTS
+
+;Call this routine to copy all the flash related functions into ram.
+CopyFlashRoutine:
+	LDY #$00
+CopyFlashRoutineLoop:
+	LDA WriteVerify,Y
+	STA FlashRamPage,Y
+	INY
+	CPY #(CopyFlashRoutine-WriteVerify)
+	BNE CopyFlashRoutineLoop
+	RTS
+	
+

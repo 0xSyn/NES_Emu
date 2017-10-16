@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PC10 ROM-Images</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PC10 ROM-Images</h1><div class="article">
+<p>Playchoice 10 ROM-Images can be stored in two formats:
+</p>
+<h2><span class="mw-headline" id="iNES_Format">iNES Format</span></h2>
+<p>PC10 games in <a href="INES.xhtml" title="INES">iNES</a> format are indicated by Bit1 of Byte 7 of the iNES header. If the flag is set, then the file should contain some additional entries after the PRG ROM and CHR ROM areas:
+</p>
+<ul><li> 8Kbyte INST ROM (containing data and Z80 code for instruction screens)</li>
+<li> 16 bytes RP5H01 PROM Data output (needed to decrypt the INST ROM)</li>
+<li> 16 bytes RP5H01 PROM CounterOut output (needed to decrypt the INST ROM) (usually constant: 00,00,00,00,FF,FF,FF,FF,00,00,00,00,FF,FF,FF,FF)</li></ul>
+<p>The two required PROM sections are missing in older ROM-images. A tool for upgrading such incomplete dumps can be found at <a class="external free" href="http://problemkaputt.de/pc10make.zip" rel="nofollow">http://problemkaputt.de/pc10make.zip</a>
+</p><p>Note: Some very old ROM-images don't have the PC10 flag set in the header, and, instead, they declare the 8K INST ROM as an additional VROM bank.
+</p>
+<h2><span class="mw-headline" id="MAME_Format">MAME Format</span></h2>
+<p>Instead of using a single ROM-image file, MAME stores all ROMs, EPROMs, and PROMs chips in separate files.
+</p><p>The PROM data is typically stored in a file called &quot;security.prm&quot;. It contains only the 16 Data bytes (not the CounterOut bytes). All bits in the PROM file are inverted, and the bit ordering is reversed: bit0 (the first bit of the PROM's serial bit-stream) is stored in bit7 of the 1st byte of the file).
+</p>
+<h2><span class="mw-headline" id="PC10_Emulators">PC10 Emulators</span></h2>
+<p>The iNES format is used by no$nes. The MAME format is used by MAME.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:935-1!*!0!!*!*!* and timestamp 20160208225726 and revision id 10851
+ -->
+</div></body></html>

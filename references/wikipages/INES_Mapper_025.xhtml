@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 025</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 025</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 025</strong> is used to represent the <a href="VRC4.xhtml" title="VRC4">VRC4b</a> (PCB <b>351406</b>) and VRC4d (PCB <b>352400</b>) variants of Konami's <a href="VRC4.xhtml" title="VRC4">VRC4</a> mapper, as well as the <a href="VRC2.xhtml" title="VRC2">VRC2</a>-using board <b>351948</b> used for <i>Ganbare Goemon Gaiden: Keita Ougon Kiseru</i>. The last has 8kB RAM (like VRC4) and doesn't divide the CHR bank numbers by two (unlike <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">mapper 22</a>).
+</p><p>For details see the following:
+</p>
+<ul><li> <a href="INES_Mapper_021.xhtml" title="INES Mapper 021">INES Mapper 021</a> / <a href="VRC4.xhtml" title="VRC4">VRC4</a></li>
+<li> <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">INES Mapper 022</a> / <a href="VRC2.xhtml" title="VRC2">VRC2</a></li></ul>
+<p>Note that the VRC4d variant uses different address lines to select registers than <b>351948</b> and the VRC4b variants. Your emulator implementation must either combine address lines (like FCEUX; bitwise OR is good enough), use checksums, or NES 2.0 submappers.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:210-1!*!0!*!*!*!* and timestamp 20160730005935 and revision id 12763
+ -->
+<p class="categories">Categories: <a href="Category_NES_2_0_mappers_with_submappers.xhtml">NES 2.0 mappers with submappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 226</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 226</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 226          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ 76-in-1
+ Super 42-in-1
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range, Mask:  $8000-FFFF, $8001
+ 
+   $8000:  [PMOP PPPP]
+      P = Low 6 bits of PRG Reg
+      M = Mirroring (0=Horz, 1=Vert)
+      O = PRG Mode
+ 
+   $8001:  [.... ...H]
+      H = high bit of PRG
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+ Low 6 bits of the PRG Reg come from $8000, high bit comes from $8001
+ 
+ 
+                $8000   $A000   $C000   $E000  
+              +-------------------------------+
+ PRG Mode 0:  |             &lt;Reg&gt;             |
+              +-------------------------------+
+ PRG Mode 1:  |      Reg      |      Reg      |
+              +---------------+---------------+
+</pre>
+<p>The <a class="external text" href="http://nesdev.com/226.txt" rel="nofollow">original describing document</a> states the 2s bit of the register at $8001 disables CHRRAM writes. No games seem to rely on it, though. It also says that the mapper hardware is made of a 74LS74A, 74LS273, 74LS139, 74LS02, and 74LS153.
+</p><p>The multicart <a class="external text" href="http://web.archive.org/web/20030602133825/http://www.nesplayer.com/pirates/76in1.htm" rel="nofollow">reportedly relies</a> on the value of uninitialized memory to determine exactly how many games are available.
+</p><p>The multicart clears both registers on soft reset.
+</p><p>See also: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=5642" rel="nofollow">Repair of one such cartridge</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:708-1!*!*!*!*!*!* and timestamp 20160208225444 and revision id 11165
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

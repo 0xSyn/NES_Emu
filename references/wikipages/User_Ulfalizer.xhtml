@@ -1,0 +1,377 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Ulfalizer</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Ulfalizer</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Misc._timing_stuff_brought_together_in_one_place"><span class="tocnumber">1</span> <span class="toctext">Misc. timing stuff brought together in one place</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Reads_and_writes"><span class="tocnumber">1.1</span> <span class="toctext">Reads and writes</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Read_.28LDA_.241234.2C_NOP.29"><span class="tocnumber">1.1.1</span> <span class="toctext">Read (LDA $1234, NOP)</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Write_.28LDA_.23.24AB.2C_STA_.241234.2C_NOP.29"><span class="tocnumber">1.1.2</span> <span class="toctext">Write (LDA #$AB, STA $1234, NOP)</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Read.2Fwrite_observations"><span class="tocnumber">1.1.3</span> <span class="toctext">Read/write observations</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Read.2Fwrite_timing"><span class="tocnumber">1.1.4</span> <span class="toctext">Read/write timing</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Interrupts"><span class="tocnumber">1.2</span> <span class="toctext">Interrupts</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Detection_intervals_for_various_instructions"><span class="tocnumber">1.2.1</span> <span class="toctext">Detection intervals for various instructions</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Interrupt_hijacking"><span class="tocnumber">1.2.2</span> <span class="toctext">Interrupt hijacking</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Reset"><span class="tocnumber">1.2.3</span> <span class="toctext">Reset</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#M2_duty_cycle"><span class="tocnumber">1.3</span> <span class="toctext">M2 duty cycle</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#PPU_interface"><span class="tocnumber">1.4</span> <span class="toctext">PPU interface</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Timing_charts"><span class="tocnumber">1.5</span> <span class="toctext">Timing charts</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Sprite_overflow_bug"><span class="tocnumber">2</span> <span class="toctext">Sprite overflow bug</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Misc._timing_stuff_brought_together_in_one_place">Misc. timing stuff brought together in one place</span></h1>
+<h2><span class="mw-headline" id="Reads_and_writes">Reads and writes</span></h2>
+<h3><span class="mw-headline" id="Read_.28LDA_.241234.2C_NOP.29">Read (LDA $1234, NOP)</span></h3>
+<p><a class="external free" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/?graphics=false&amp;logmore=Execute,phi2&amp;a=0&amp;d=ad3412ea&amp;steps=25" rel="nofollow">http://www.qmtpro.com/~nes/chipimages/visual2a03/?graphics=false&amp;logmore=Execute,phi2&amp;a=0&amp;d=ad3412ea&amp;steps=25</a>
+</p><p>Tick-by-tick from <a class="external free" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">http://nesdev.com/6502_cpu.txt</a> interleaved with steps from Visual 2A03:
+</p>
+<pre>
+ #  address R/W description
+--- ------- --- -------------------------------------------------
+ 1    PC     R  fetch opcode, increment PC
+    ab    db  rw  pc    phi2
+    0000  ad  1   0000  0
+    0000  ad  1   0000  1
+ 2    PC     R  fetch low byte of address, increment PC
+    ab    db  rw  pc    phi2
+    0001  34  1   0001  0
+    0001  34  1   0001  1
+ 3    PC     R  fetch high byte of address, increment PC
+    ab    db  rw  pc    phi2
+    0002  12  1   0002  0
+    0002  12  1   0002  1
+ 4  address  R  read from effective address
+    ab    db  rw  pc    phi2
+    1234  00  1   0003  0
+    1234  00  1   0003  1
+</pre>
+<h3><span class="mw-headline" id="Write_.28LDA_.23.24AB.2C_STA_.241234.2C_NOP.29">Write (LDA #$AB, STA $1234, NOP)</span></h3>
+<p><a class="external free" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/?graphics=false&amp;logmore=Execute,phi2&amp;a=0&amp;d=a9ab8d3412ea&amp;steps=29" rel="nofollow">http://www.qmtpro.com/~nes/chipimages/visual2a03/?graphics=false&amp;logmore=Execute,phi2&amp;a=0&amp;d=a9ab8d3412ea&amp;steps=29</a>
+</p><p>Tick-by-tick from <a class="external free" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">http://nesdev.com/6502_cpu.txt</a> interleaved with steps from Visual 2A03:
+</p>
+<pre>
+ #  address R/W description
+--- ------- --- ------------------------------------------
+ 1    PC     R  fetch opcode, increment PC
+    ab    db  rw  pc    phi2
+    0002  8d  1   0002  0
+    0002  8d  1   0002  1
+ 2    PC     R  fetch low byte of address, increment PC
+    ab    db  rw  pc    phi2
+    0003  34  1   0003  0
+    0003  34  1   0003  1
+ 3    PC     R  fetch high byte of address, increment PC
+    ab    db  rw  pc    phi2
+    0004  12  1   0004  0
+    0004  12  1   0004  1
+ 4  address  W  write register to effective address
+    ab    db  rw  pc    phi2
+    1234  12  0   0005  0
+    1234  ab  0   0005  1
+</pre>
+<h3><span class="mw-headline" id="Read.2Fwrite_observations">Read/write observations</span></h3>
+<ul><li> Address bus and <b>rw</b> changes right away (during <b>φ1</b>).</li>
+<li> Values appear to be read during <b>φ2</b> (<b>db<i>x</i></b> pins buffered on <b>cclk</b>), and <b>db</b> changes during <b>φ2</b> for writes too.</li>
+<li> <a href="Visual_circuit_tutorial.xhtml#Clocks" title="Visual circuit tutorial">Clocks section of tutorial</a>.</li></ul>
+<h3><span class="mw-headline" id="Read.2Fwrite_timing">Read/write timing</span></h3>
+<p>&quot;The address is guaranteed to be stable 300 nanoseconds after the leading edge of Phase One, and the data must be stable 100 nanoseconds before the trailing edge of Phase Two.  At 1.0 MHz operation, this allows the memory devices approximately 575 ns to make data available on the data bus.&quot;, from <a class="external free" href="http://users.telenet.be/kim1-6502/6502/hwman.html" rel="nofollow">http://users.telenet.be/kim1-6502/6502/hwman.html</a>.
+</p>
+<h2><span class="mw-headline" id="Interrupts"><a href="CPU_interrupts.xhtml" title="CPU interrupts">Interrupts</a></span></h2>
+<p>Sampled on the falling edge of <b>φ2</b>. IRQ detection depends on nodes nnT2BR (branch-related) and 646 (maybe a &quot;sampling points&quot; signal) being low.
+</p>
+<h3><span class="mw-headline" id="Detection_intervals_for_various_instructions">Detection intervals for various instructions</span></h3>
+<p>Smallest IRQ assertion interval that will trigger an IRQ for LDA #FF:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=58A9FF1890FE&amp;irq0=5&amp;irq1=6&amp;steps=20" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=58A9FF1890FE&amp;irq0=5&amp;irq1=6&amp;steps=20</a>
+</p><p>Ditto for LSR $AB:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=5846AB1890FE&amp;irq0=11&amp;irq1=12&amp;steps=20" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=5846AB1890FE&amp;irq0=11&amp;irq1=12&amp;steps=20</a>
+</p><p>Ditto for LSR $AB with NMI instead of IRQ:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,nmi,~NMIG,State&amp;a=0&amp;d=58461890FE&amp;nmi0=11&amp;nmi1=12&amp;steps=20" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,nmi,~NMIG,State&amp;a=0&amp;d=58461890FE&amp;nmi0=11&amp;nmi1=12&amp;steps=20</a>
+</p><p>IRQ triggered by assertion during first cycle of BCC - no page crossing, offset 0, pad with SEDs:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=58189000F8F8&amp;irq0=9&amp;irq1=10&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=58189000F8F8&amp;irq0=9&amp;irq1=10&amp;steps=30</a>
+</p><p>IRQ triggered by assertion during first cycle of BCC - page crossing, offset E0 (backwards jump), pad with SEDs:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=581890E0&amp;a=ffe4&amp;d=F8F8&amp;irq0=9&amp;irq1=10&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=581890E0&amp;a=ffe4&amp;d=F8F8&amp;irq0=9&amp;irq1=10&amp;steps=30</a>
+</p><p>IRQ triggered by assertion before fixup cycle of BCC - page crossing, offset E0 (backwards jump), pad with SEDs:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=581890E0&amp;a=ffe4&amp;d=F8F8&amp;irq0=13&amp;irq1=14&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=581890E0&amp;a=ffe4&amp;d=F8F8&amp;irq0=13&amp;irq1=14&amp;steps=30</a>
+</p><p>IRQ during JMP Absolute (to after JMP instruction):
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=584C0400F8F8&amp;irq0=7&amp;irq1=8&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=584C0400F8F8&amp;irq0=7&amp;irq1=8&amp;steps=30</a>
+</p><p>IRQ during JMP Relative (address stored after JMP instruction, to next location after that):
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=586C04000600F8F8&amp;irq0=11&amp;irq1=12&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=586C04000600F8F8&amp;irq0=11&amp;irq1=12&amp;steps=30</a>
+</p><p>RTI - interrupt flag changes *before* poll location:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=40&amp;irq0=9&amp;irq1=10&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=40&amp;irq0=9&amp;irq1=10&amp;steps=30</a>
+</p><p>CLI+SEI - interrupt flag changes *after* poll location for both:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=5878&amp;irq0=5&amp;irq1=6&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=5878&amp;irq0=5&amp;irq1=6&amp;steps=30</a>
+</p><p>PLP - interrupt flag changes *after* poll location:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=28F8F8&amp;irq0=5&amp;irq1=6&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,State,nnT2BR,646&amp;a=0&amp;d=28F8F8&amp;irq0=5&amp;irq1=6&amp;steps=30</a>
+</p>
+<h3><span class="mw-headline" id="Interrupt_hijacking">Interrupt hijacking</span></h3>
+<p><a class="external free" href="http://en.wikipedia.org/wiki/Interrupts_in_65xx_processors" rel="nofollow">http://en.wikipedia.org/wiki/Interrupts_in_65xx_processors</a>
+</p><p>BRK hijacked by NMI:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,nmi,~NMIG,State,nnT2BR,646&amp;a=0&amp;d=5800&amp;nmi0=11&amp;nmi1=12&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,nmi,~NMIG,State,nnT2BR,646&amp;a=0&amp;d=5800&amp;nmi0=11&amp;nmi1=12&amp;steps=30</a>
+</p><p>IRQ hijacked by NMI:
+<a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,nmi,~NMIG,State,nnT2BR,646&amp;a=0&amp;d=58F8F8&amp;irq0=5&amp;irq1=6&amp;nmi0=15&amp;nmi1=16&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,nmi,~NMIG,State,nnT2BR,646&amp;a=0&amp;d=58F8F8&amp;irq0=5&amp;irq1=6&amp;nmi0=15&amp;nmi1=16&amp;steps=30</a>
+</p>
+<h3><span class="mw-headline" id="Reset">Reset</span></h3>
+<p>Seems to take 1+7 cycles, where the last 7 is the ordinary interrupt sequence.
+</p><p><a class="external free" href="http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,nmi,~NMIG,State,nnT2BR,646,Reset0,res&amp;a=0&amp;d=58F8F8F8F8&amp;reset0=5&amp;reset1=6&amp;steps=30" rel="nofollow">http://visual6502.org/JSSim/expert.html?logmore=Execute,irq,IRQP,nmi,~NMIG,State,nnT2BR,646,Reset0,res&amp;a=0&amp;d=58F8F8F8F8&amp;reset0=5&amp;reset1=6&amp;steps=30</a>
+</p>
+<h2><span class="mw-headline" id="M2_duty_cycle">M2 duty cycle</span></h2>
+<p>The M2 duty cycle is 5/8 - <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=10029&amp;start=15#p111322" rel="nofollow">forum post</a> and <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">CPU pin-out page</a>.
+Low for 9/8 PPU cycles, high for 15/8 PPU cycles. Low for 4.5 master cycles, high for 7.5 master cycles. Low for ~210 ns, high for ~349 ns.
+</p>
+<h2><span class="mw-headline" id="PPU_interface">PPU interface</span></h2>
+<ul><li> <a class="internal" href="/w/images/f/f3/Neswires.jpg" title="Neswires.jpg">Wiring diagram</a></li>
+<li> <a class="external text" href="http://www.datasheetcatalog.org/datasheet/motorola/SN54LS139J.pdf" rel="nofollow">Address decoder datasheet</a></li></ul>
+<div class="mw-collapsible mw-collapsed">
+<p>Input map:
+</p>
+<pre>
+Binding         | Interpretation
+----------------+--------------------------------------
+0   -&gt; 15       | 0     -&gt; /Enable second demultiplexer
+a15 -&gt; 13       | a15   -&gt; A_1b
+a14 -&gt; 3        | a14   -&gt; A_1a
+a13 -&gt; 2        | a13   -&gt; A_0a
+M2  -&gt; 14       | M2    -&gt; A_0b
+11  -&gt; 1        | /O_1b -&gt; /Enable first demultiplexer
+9   -&gt; /ROM SEL | /O_3b -&gt; /ROM SEL
+5   -&gt; /DBE     | /O_1a -&gt; /DBE
+4   -&gt; RAM CS   | /O_0a -&gt; RAM CS
+</pre>
+<p>Input/output map:
+</p>
+<pre>
+Inputs   | Outputs
+---------+----------------
+E  A0 A1 | O_0 O_1 O_2 O_3
+---------+----------------
+1  x  x  | 1   1   1   1
+0  0  0  | 0   1   1   1
+0  1  0  | 1   0   1   1
+0  0  1  | 1   1   0   1
+0  1  1  | 1   1   1   0
+</pre>
+<p>Hence:
+</p>
+<pre>
+ROM SEL = M2 &amp;&amp; a15
+&lt;Enable first demultiplexer&gt; = M2 &amp;&amp; !a15
+DBE = &lt;Enable first demultiplexer&gt; &amp;&amp; !a14 &amp;&amp; a13
+RAM CS = &lt;Enable first demultiplexer&gt; &amp;&amp; !a14 &amp;&amp; !a13
+</pre>
+<p>Summary:
+</p>
+</div>
+<p>When M2 high,
+</p>
+<pre>
+A15-13 | Signal
+-------+--------
+1xx    | ROM SEL
+001    | DBE
+000    | RAM CS
+</pre>
+<ul><li> <b>rw</b> signal together with ab lines directly generates signals like <b>/r2002</b>.</li>
+<li> <b>_io_ce</b> follows <i>inverted</i> <b>M2</b>.</li>
+<li> <b>vbl_flag</b> is set via a <i>vpos was 241 and vpos is not 241</i> comparison. Goes high at hpos = 1 during at pclk0.</li>
+<li> The <b>set_vbl_flag</b> signal is high during <b>pclk0</b> of <b>vpos</b>=241/<b>hpos</b>=1.</li>
+<li> <b>spr0_hit</b> goes high at tick x+2, during <b>pclk1</b>. Reading uses same <b>_io_ce</b> behavior as <b>vbl_flag</b>.</li>
+<li> <b>spr_overflow</b> reading behavior just like <b>spr0_hit</b>. <i>TODO:</i> set timing.</li>
+<li> $2005/$2006 and $2000 nametable bits writes use the same timing.</li></ul>
+<h2><span class="mw-headline" id="Timing_charts">Timing charts</span></h2>
+<pre>
+Around VBL flag setting:
+
+               set_vbl_flag signal active during this interval
+                                  |
+                                 [++]
+Master: 0101010101010101010101010101010101010101010101010101010101010101010101010
+PPU:     [p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1]
+CPU:      [  Low  ][     High    ]                                 -&gt; 0, NMI (-8)
+CPU:        [  Low  ][     High    ]                               -&gt; 0, NMI (-7)
+CPU:          [  Low  ][     High    ]                             -&gt; 0, no NMI (-6)
+CPU:            [  Low  ][     High    ]                           -&gt; 0, no NMI (-5)
+CPU:              [  Low  ][     High    ]                         -&gt; 0, no NMI (-4)
+CPU:                [  Low  ][     High    ]                       -&gt; 0, no NMI (-3)
+CPU:                  [  Low  ][     High    ]                     -&gt; 0, no NMI (-2)
+CPU:                    [  Low  ][     High    ]                   -&gt; 0, no NMI (-1)
+CPU:                      [  Low  ][     High    ]                 -&gt; 1, no NMI (0)
+CPU:                        [  Low  ][     High    ]               -&gt; 1, no NMI (1)
+CPU:                          [  Low  ][     High    ]             -&gt; 1, no NMI (2)
+CPU:                            [  Low  ][     High    ]           -&gt; 1, no NMI (3)
+CPU:                              [  Low  ][     High    ]         -&gt; 1, no NMI (4)
+CPU:                                [  Low  ][     High    ]       -&gt; 1, no NMI (5)
+CPU:                                  [  Low  ][     High    ]     -&gt; 1, no NMI (6)
+CPU:                                    [  Low  ][     High    ]   -&gt; 1, NMI (7)
+CPU:                                      [  Low  ][     High    ] -&gt; 1, NMI (8)
+
+(NOTE: Read buffer latches the data, so value when high phase starts matters. Value at end probably matters for the rest.)
+
+Around VBL flag clearing:        cleared during this interval
+                                 [+++++++++++...
+Master: 0101010101010101010101010101010101010101010101010101010101010101010101010
+PPU:     [p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1]
+CPU:      [  Low  ][     High    ]                                 -&gt; 1
+CPU:        [  Low  ][     High    ]                               -&gt; 1
+CPU:          [  Low  ][     High    ]                             -&gt; 1
+CPU:            [  Low  ][     High    ]                           -&gt; 1
+CPU:              [  Low  ][     High    ]                         -&gt; 1
+CPU:                [  Low  ][     High    ]                       -&gt; 1
+CPU:                  [  Low  ][     High    ]                     -&gt; 1
+CPU:                    [  Low  ][     High    ]                   -&gt; 0 (?)
+CPU:                      [  Low  ][     High    ]                 -&gt; 0
+CPU:                        [  Low  ][     High    ]               -&gt; 0
+CPU:                          [  Low  ][     High    ]             -&gt; 0
+CPU:                            [  Low  ][     High    ]           -&gt; 0
+CPU:                              [  Low  ][     High    ]         -&gt; 0
+CPU:                                [  Low  ][     High    ]       -&gt; 0
+CPU:                                  [  Low  ][     High    ]     -&gt; 0
+CPU:                                    [  Low  ][     High    ]   -&gt; 0
+CPU:                                      [  Low  ][     High    ] -&gt; 0
+
+Sprite zero/overflow flag clearing:      cleared during this interval
+                                         [+++++++++++.... 
+Master: 0101010101010101010101010101010101010101010101010101010101010101010101010
+PPU:     [p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1]
+CPU:      [  Low  ][     High    ]                                 -&gt; 1
+CPU:        [  Low  ][     High    ]                               -&gt; 1
+CPU:          [  Low  ][     High    ]                             -&gt; 1
+CPU:            [  Low  ][     High    ]                           -&gt; 1
+CPU:              [  Low  ][     High    ]                         -&gt; 0 (?)
+CPU:                [  Low  ][     High    ]                       -&gt; 0
+CPU:                  [  Low  ][     High    ]                     -&gt; 0
+CPU:                    [  Low  ][     High    ]                   -&gt; 0
+CPU:                      [  Low  ][     High    ]                 -&gt; 0
+CPU:                        [  Low  ][     High    ]               -&gt; 0
+CPU:                          [  Low  ][     High    ]             -&gt; 0
+CPU:                            [  Low  ][     High    ]           -&gt; 0
+CPU:                              [  Low  ][     High    ]         -&gt; 0
+CPU:                                [  Low  ][     High    ]       -&gt; 0
+                          
+                      Pixel location      Flag goes high
+Sprite 0 setting:        --------            -----------------...
+Master: 0101010101010101010101010101010101010101010101010101010101010101010101010
+PPU:     [p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1][p0][p1]
+CPU:      [  Low  ][     High    ]                                 -&gt; 0
+CPU:        [  Low  ][     High    ]                               -&gt; 0
+CPU:          [  Low  ][     High    ]                             -&gt; 0
+CPU:            [  Low  ][     High    ]                           -&gt; 0
+CPU:              [  Low  ][     High    ]                         -&gt; 0
+CPU:                [  Low  ][     High    ]                       -&gt; 0
+CPU:                  [  Low  ][     High    ]                     -&gt; 1 (?)
+CPU:                    [  Low  ][     High    ]                   -&gt; 1
+CPU:                      [  Low  ][     High    ]                 -&gt; 1
+CPU:                        [  Low  ][     High    ]               -&gt; 1
+CPU:                          [  Low  ][     High    ]             -&gt; 1
+CPU:                            [  Low  ][     High    ]           -&gt; 1
+CPU:                              [  Low  ][     High    ]         -&gt; 1
+CPU:                                [  Low  ][     High    ]       -&gt; 1
+CPU:                                  [  Low  ][     High    ]     -&gt; 1
+CPU:                                    [  Low  ][     High    ]   -&gt; 1
+CPU:                                      [  Low  ][     High    ] -&gt; 1
+</pre>
+<h1><span class="mw-headline" id="Sprite_overflow_bug"><a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">Sprite overflow bug</a></span></h1>
+<p>Appears to be caused by a timing issue.
+</p><p>Signal trace for a &quot;good&quot; sprite skip (eight sprites not found yet, current sprite not in range):
+</p>
+<pre>
+hpos  spr_addr_clear_low_bump_high_setup  spr_addr_load_next_value  /spr_load_next_value_or_write_2003_reg
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04c   0                                   0                         1
+04b   1                                   0                         1
+04b   1                                   0                         1
+04b   1                                   0                         1
+04b   1                                   0                         1
+04b   1-----------------------------------1                         0
+04b   1             Overlap               1                         0
+04b   1   Clears low and bumps high       1                         0
+04b   1-----------------------------------1                         0
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+04a   1                                   0                         1
+049   0                                   0                         1
+049   0                                   0                         1
+049   0                                   0                         1
+049   0                                   0                         1
+049   0                                   1                         0
+049   0                                   1                         0
+049   0                                   1                         0
+049   0                                   1                         0
+048   0                                   0                         1
+</pre>
+<p>Signal trace for a glitchy sprite skip (eight sprites found, current sprite not in range):
+</p>
+<pre>
+hpos  spr_addr_clear_low_bump_high_setup  spr_addr_load_next_value  /spr_load_next_value_or_write_2003_reg
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08e   1                                   0                         1
+08d   0                                   0                         1
+08d   0                                   0                         1
+08d   0                                   0                         1
+08d   0                                   0                         1
+08d   0-----------------------------------1                         0
+08d   0           No overlap              1                         0
+08d   0       Bumps low and high          1                         0
+08d   0-----------------------------------1                         0
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08c   1                                   0                         1
+08b   0                                   0                         1
+08b   0                                   0                         1
+08b   0                                   0                         1
+08b   0                                   0                         1
+08b   0                                   1                         0
+08b   0                                   1                         0
+08b   0                                   1                         0
+08b   0                                   1                         0
+08a   1                                   0                         1
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.142 seconds
+Real time usage: 0.171 seconds
+Preprocessor visited node count: 124/1000000
+Preprocessor generated node count: 242/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1094-1!*!0!!en!*!* and timestamp 20160208230532 and revision id 7257
+ -->
+</div></body></html>

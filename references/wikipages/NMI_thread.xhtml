@@ -1,0 +1,90 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NMI thread</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NMI thread</h1><div class="article">
+<div class="thumb tright"><div class="thumbinner" style="width:322px;"><a class="image" href="File_Sprite_0_in_top_status_bar_jpg.xhtml"><img alt="" class="thumbimage" height="240" src="../wiki-images/Sprite_0_in_top_status_bar.jpg" width="320"/></a>  <div class="thumbcaption">Sprite 0 hit is used to split the screen.</div></div></div>
+<p>There are three main ways that a game loop on the NES can be organized:
+</p>
+<dl><dt>Main only</dt>
+<dd>Game logic and output in the main loop, and only incrementing a flag in the <a href="NMI.xhtml" title="NMI">NMI</a> handler to let the main loop know that vertical blanking has begun. The drawback is that it's very easy for music to slow down or for raster splits to fail if the game is using too much CPU time. Several Squaresoft games use something like this.</dd>
+<dt>NMI only</dt>
+<dd>Game logic and output with the NMI handler in an infinite JMP loop. The NMI handler performs the following steps in order: PPU output, APU output, read controls, game logic. For example, <i>Super Mario Bros.</i> uses this.</dd>
+<dt>NMI and main</dt>
+<dd>Game logic in the main loop, PPU and APU output in the NMI handler.</dd></dl>
+<p>Waiting for vertical blank by waiting for the NMI handler to increment a flag is <a class="external text" href="http://c2.com/xp/DoTheSimplestThingThatCouldPossiblyWork.html" rel="nofollow">the simplest thing that could possibly work</a>.
+And it does work for games without a status bar or for games whose upper limit on CPU use is easy to predict.
+It may also work for games whose mapper has a scanline counter that triggers an IRQ.
+</p><p>But once your game world becomes more complex, the simple method may cause problems.
+For example, consider a video game that has a status bar and several critters running around.
+It may occasionally take longer than one screen to process AI, physics, and display updates once enough critters with complex movement patterns are spawned, such as multiple Hammer Brothers in <i>Super Mario Bros.</i> or all the <del>ducks</del> turtles in the middle of World 3-7 of <i>Super Mario Bros. 3</i>.
+This will cause your game to slow down when an NMI occurs while your game is doing something else.
+And if your scanline counter is based on sprite 0 hit and not an IRQ, it will cause visual glitches as the status bar flickers.
+</p><p>So sometimes, it's useful to do more than the bare minimum in your NMI handler.
+To make a top status bar rock-solid in the face of excessive game logic, you can move VRAM uploads and sprite 0 handling into the NMI handler.
+The main program <a href="The_frame_and_NMIs.xhtml" title="The frame and NMIs">prepares VRAM updates in main RAM</a>, and once the VRAM update request is ready, it turns on a flag VRAM_update_ready to let the NMI handler know.
+This is similar to <a class="extiw" href="http://en.wikipedia.org/wiki/Thread_(computer_science)" title="wikipedia:Thread (computer science)">multithreaded programming</a>, but because the NMI handler itself is never interrupted, the locking can be much simpler than it is in multithreaded programming on a PC.
+</p><p>The NMI thread has these steps:
+</p>
+<ol><li>Let the main program know that NMI has occurred, as in the simple method.</li>
+<li>Push all registers.</li>
+<li>If VRAM_update_ready is false, go to step 5.</li>
+<li>Copy data from the VRAM update request areas in RAM into VRAM and OAM.</li>
+<li>Set VRAM_update_ready to false.</li>
+<li>Set the scroll position using <a href="PPU_registers.xhtml" title="PPU registers">PPUCTRL and PPUSCROLL</a>.</li>
+<li>(Optional) Run the music code.</li>
+<li>(Optional) Wait for sprite 0 hit and change the VRAM address.</li>
+<li>Pull all registers and return.</li></ol>
+<p>Make sure to do anything related to VRAM and OAM <i>before</i> other things like music.
+Vertical blanking time is valuable, and you should make the most of it.
+</p><p>Even though the NES CPU has only one NMI vector, ordinarily within ROM, it's possible to switch among multiple NMI handlers using a small amount of self-modifying code.
+</p>
+<pre>
+RTI_opcode = $40
+JMP_opcode = $4C
+
+.segment &quot;BSS&quot;
+nmi_trampoline: .res 3
+
+.segment &quot;CODE&quot;
+; other code
+
+  ldx #&lt;some_nmi_handler
+  ldy #&gt;some_nmi_handler
+  jsr change_nmi_handler
+
+; other code
+
+;;
+; Sets the NMI handler to the ISR whose code begins at YYXX.
+; If an NMI occurs during this process, it will be ignored (RTI).
+change_nmi_handler:
+  lda #RTI_opcode
+  sta nmi_trampoline
+  stx nmi_trampoline+1
+  sty nmi_trampoline+2
+  lda #JMP_opcode
+  sta nmi_trampoline
+  rts
+
+.segment &quot;VECTORS&quot;
+  .addr nmi_trampoline, reset_handler, irq_trampoline
+</pre>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a href="Consistent_frame_synchronization.xhtml" title="Consistent frame synchronization">Consistent frame synchronization</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.081 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 12/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:412-1!*!0!*!*!5!* and timestamp 20160229033521 and revision id 11985
+ -->
+</div></body></html>

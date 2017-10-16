@@ -1,0 +1,153 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>16-bit BCD</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>16-bit BCD</h1><div class="article">
+<p>The following code for ca65 converts a 16-bit unsigned integer to decimal digits, in roughly 700 cycles, without using the decimal mode that was removed from the 2A03.
+</p><p>To understand how curDigit is used, see <a class="extiw" href="http://en.wikipedia.org/wiki/Ring_counter" title="wikipedia:Ring counter">Wikipedia:Ring counter</a>.
+</p>
+<pre>
+; bcd16.s
+; version 20060201
+;
+; Copyright (C) 2006 Damian Yerrick
+;
+; Copying and distribution of this file, with or without
+; modification, are permitted in any medium without royalty provided
+; the copyright notice and this notice are preserved in any source
+; code copies.  This file is offered as-is, without any warranty.
+;
+
+.p02
+
+.exportzp bcdNum, bcdResult
+.export bcdConvert
+
+; bcdConvert
+;
+; Given a number in bcdNum (16-bit), converts it to 5 decimal digits
+; in bcdResult.  Unlike most 6502 binary-to-decimal converters, this
+; subroutine doesn't use the decimal mode that was removed from the
+; 2A03 variant of the 6502 processor.
+;
+; For each value of n from 4 to 1, it compares the number to 8*10^n,
+; then 4*10^n, then 2*10^n, then 1*10^n, each time subtracting if
+; possible. After finishing all the comparisons and subtractions in
+; each decimal place value, it writes the digit to the output array
+; as a byte value in the range [0, 9].  Finally, it writes the
+; remainder to element 0.
+;
+; Extension to 24-bit and larger numbers is straightforward:
+; Add a third bcdTable, increase BCD_BITS, and extend the
+; trial subtraction.
+
+; Constants _________________________________________________________
+; BCD_BITS
+;   The highest possible number of bits in the BCD output. Should
+;   roughly equal 4 * log10(2) * x, where x is the width in bits
+;   of the largest binary number to be put in bcdNum.
+; bcdTableLo[y], bcdTableHi[y]
+;   Contains (1 &lt;&lt; y) converted from BCD to binary.
+BCD_BITS = 19
+
+; Variables _________________________________________________________
+; bcdNum (input)
+;   Number to be converted to decimal (16-bit little endian).
+;   Overwritten.
+; bcdResult (output)
+;   Decimal digits of result (5-digit little endian).
+; X
+;   Offset of current digit being worked on.
+; Y
+;   Offset into bcdTable*.
+; curDigit
+;   The lower holds the digit being constructed.
+;   The upper nibble contains a sentinel value; when a 1 is shifted
+;   out, the byte is complete and should be copied to result.
+;   (This behavior is called a &quot;ring counter&quot;.)
+;   Overwritten.
+; b
+;   Low byte of the result of trial subtraction.
+;   Overwritten.
+bcdNum = 0
+bcdResult = 2
+curDigit = 7
+b = 2
+
+;
+; Completes within 670 cycles.
+;
+
+bcdConvert:
+  lda #$80 &gt;&gt; ((BCD_BITS - 1) &amp; 3)
+  sta curDigit
+  ldx #(BCD_BITS - 1) &gt;&gt; 2
+  ldy #BCD_BITS - 5
+
+@loop:
+  ; Trial subtract this bit to A:b
+  sec
+  lda bcdNum
+  sbc bcdTableLo,y
+  sta b
+  lda bcdNum+1
+  sbc bcdTableHi,y
+
+  ; If A:b &gt; bcdNum then bcdNum = A:b
+  bcc @trial_lower
+  sta bcdNum+1
+  lda b
+  sta bcdNum
+@trial_lower:
+
+  ; Copy bit from carry into digit and pick up 
+  ; end-of-digit sentinel into carry
+  rol curDigit
+  dey
+  bcc @loop
+
+  ; Copy digit into result
+  lda curDigit
+  sta bcdResult,x
+  lda #$10  ; Empty digit; sentinel at 4 bits
+  sta curDigit
+  ; If there are digits left, do those
+  dex
+  bne @loop
+  lda bcdNum
+  sta bcdResult
+  rts
+
+bcdTableLo:
+  .byt &lt;10, &lt;20, &lt;40, &lt;80
+  .byt &lt;100, &lt;200, &lt;400, &lt;800
+  .byt &lt;1000, &lt;2000, &lt;4000, &lt;8000
+  .byt &lt;10000, &lt;20000, &lt;40000
+
+bcdTableHi:
+  .byt &gt;10, &gt;20, &gt;40, &gt;80
+  .byt &gt;100, &gt;200, &gt;400, &gt;800
+  .byt &gt;1000, &gt;2000, &gt;4000, &gt;8000
+  .byt &gt;10000, &gt;20000, &gt;40000
+</pre>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="HexToDecimal_8.xhtml" title="HexToDecimal.8">HexToDecimal.8</a></li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://www.piclist.com/techref/microchip/math/radix/b2bu-16b5d.htm" rel="nofollow">Another 16-bit binary to decimal converter written in PIC assembly</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=11341" rel="nofollow">Even faster converters by Omegamatrix</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:225-1!*!0!!*!*!* and timestamp 20160208224647 and revision id 9024
+ -->
+<p class="categories">Categories: <a href="Category_Arithmetic.xhtml">Arithmetic</a></p></div></body></html>

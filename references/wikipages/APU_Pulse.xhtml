@@ -1,0 +1,137 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Pulse</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Pulse</h1><div class="article">
+<p>Each of the two <a href="APU.xhtml" title="APU">NES APU</a> pulse (square) wave channels generate a pulse wave with variable duty.
+</p><p>Each pulse channel contains the following: <a href="APU_Envelope.xhtml" title="APU Envelope">envelope generator</a>, <a href="APU_Sweep.xhtml" title="APU Sweep">sweep unit</a>, <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a>, 8-step <a class="mw-redirect" href="APU.xhtml" title="APU Misc">sequencer</a>, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter</a>.
+</p>
+<pre>
+                     Sweep -----&gt; Timer
+                       |            |
+                       |            |
+                       |            v 
+                       |        Sequencer   Length Counter
+                       |            |             |
+                       |            |             |
+                       v            v             v
+    Envelope -------&gt; Gate -----&gt; Gate -------&gt; Gate ---&gt;(to mixer)
+</pre>
+<table class="tabular">
+<tr>
+<th> Address </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> <b>$4000</b> </td>
+<td> <tt>DDlc.vvvv</tt> </td>
+<td> <b>Pulse 1</b> duty, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter halt</a>, constant volume/<a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a> flag, and volume/envelope divider period (write)
+</td></tr>
+<tr>
+<td> <b>$4004</b> </td>
+<td> <tt>DDlc.vvvv</tt> </td>
+<td> <b>Pulse 2</b> duty, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter halt</a>, constant volume/<a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a> flag, and volume/envelope divider period (write)
+</td></tr>
+<tr>
+<td> bits 7-6 </td>
+<td> <tt>DD-- ----</tt> </td>
+<td> The duty cycle is set (see table below). The sequencer's current position is not changed.
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4002</b> </td>
+<td> <tt>LLLL.LLLL</tt> </td>
+<td> <b>Pulse 1</b> timer low (write)
+</td></tr>
+<tr>
+<td> <b>$4006</b> </td>
+<td> <tt>LLLL.LLLL</tt> </td>
+<td> <b>Pulse 2</b> timer low (write)
+</td></tr>
+<tr>
+<td> bits 7-0 </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Timer low 8 bits
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4003</b> </td>
+<td> <tt>llll.lHHH</tt> </td>
+<td> <b>Pulse 1</b> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter load</a> and timer high (write)
+</td></tr>
+<tr>
+<td> <b>$4007</b> </td>
+<td> <tt>llll.lHHH</tt> </td>
+<td> <b>Pulse 2</b> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter load</a> and timer high (write)
+</td></tr>
+<tr>
+<td> bits 2-0 </td>
+<td> <tt>---- -HHH</tt> </td>
+<td> Timer high 3 bits
+</td></tr>
+<tr>
+<td colspan="2"> Side effects </td>
+<td> The sequencer is restarted at the first value of the current sequence. The <a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a> is also restarted.
+</td></tr></table>
+<p><b>Duty Cycle Sequences</b>
+</p>
+<table>
+<tr>
+<th> Duty </th>
+<th> Waveform sequence
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> <tt>0 1 0 0 0 0 0 0</tt> (12.5%)
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> <tt>0 1 1 0 0 0 0 0</tt> (25%)
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> <tt>0 1 1 1 1 0 0 0</tt> (50%)
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> <tt>1 0 0 1 1 1 1 1</tt> (25% negated)
+</td></tr></table>
+<dl><dd>The reason for these odd sequences is that the sequence counter is initialized to zero but counts <i>downward</i> rather than upward</dd></dl>
+<p>The sequencer is clocked by an 11-bit <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a>. Given the timer value <i>t = HHHLLLLLLLL</i> formed by timer high and timer low,
+this timer is updated every APU cycle (i.e., every second CPU cycle), and counts <i>t, t-1, ..., 0, t, t-1, ...</i>, clocking the waveform
+generator when it goes from 0 to t. Since the period of the timer is <i>t+1</i> APU cycles and the sequencer has 8 steps, the period of the waveform is
+<i>8*(t+1)</i> APU cycles, or equivalently <i>16*(t+1)</i> CPU cycles.
+</p><p>Hence
+</p>
+<ul><li> f<sub>pulse</sub> = f<sub>CPU</sub>/(16*(t+1)) (where f<sub>CPU</sub> is 1.789773 MHz for NTSC, 1.662607 MHz for PAL, and 1.773448 MHz for Dendy)</li>
+<li> t = f<sub>CPU</sub>/(16*f<sub>pulse</sub>) - 1</li></ul>
+<p>A period of <i>t &lt; 8</i>, either set explicitly or via a sweep period update, silences the corresponding pulse channel. The highest frequency a pulse channel can output is hence about 12.4 kHz for NTSC. (<b>TODO:</b> PAL behavior?)
+</p><p>The <a href="APU_Mixer.xhtml" title="APU Mixer">mixer</a> receives the current <a href="APU_Envelope.xhtml" title="APU Envelope">envelope volume</a> except when
+</p>
+<ul><li> The sequencer output is zero, or</li>
+<li> overflow from the <a href="APU_Sweep.xhtml" title="APU Sweep">sweep</a> unit's adder is silencing the channel, or</li>
+<li> the <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter</a> is zero, or</li>
+<li> the timer has a value less than eight.</li></ul>
+<p>The behavior of the two pulse channels differs only in the effect of the negate mode of their <a href="APU_Sweep.xhtml" title="APU Sweep">sweep units</a>.
+</p><p>Notice that a few Famiclone units have swapped APU duty cycles, as 12.5, 50, 25 and 25 negated instead.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.046 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:176-1!*!0!*!*!*!* and timestamp 20160208224728 and revision id 9263
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

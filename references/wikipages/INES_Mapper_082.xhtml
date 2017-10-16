@@ -1,0 +1,165 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 082</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 082</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 082</strong> represents boards using Taito's X1-017 mapper IC, which provides something a little more sophisticated than <a href="MMC6.xhtml" title="MMC6">MMC6</a>. It loses the indirect addressing, adds a 3rd 8 KiB ROM slice, and has 5 KiB of battery-backed RAM.
+</p><p>The cartridge connector's /IRQ line <i>is</i> connected to the mapper IC, but it is not known how to trigger one.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#CHR_Select_0_.28.247EF0.29"><span class="tocnumber">3.1</span> <span class="toctext">CHR Select 0 ($7EF0)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CHR_Select_1_.28.247EF1.29"><span class="tocnumber">3.2</span> <span class="toctext">CHR Select 1 ($7EF1)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_Select_2_.28.247EF2.29"><span class="tocnumber">3.3</span> <span class="toctext">CHR Select 2 ($7EF2)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#CHR_Select_3_.28.247EF3.29"><span class="tocnumber">3.4</span> <span class="toctext">CHR Select 3 ($7EF3)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#CHR_Select_4_.28.247EF4.29"><span class="tocnumber">3.5</span> <span class="toctext">CHR Select 4 ($7EF4)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#CHR_Select_5_.28.247EF5.29"><span class="tocnumber">3.6</span> <span class="toctext">CHR Select 5 ($7EF5)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#CHR_Mode_.2F_Mirroring_Control_.28.247EF6.29"><span class="tocnumber">3.7</span> <span class="toctext">CHR Mode / Mirroring Control ($7EF6)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#PRG_RAM_enable_0_.28.247EF7.29"><span class="tocnumber">3.8</span> <span class="toctext">PRG RAM enable 0 ($7EF7)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#PRG_RAM_enable_1_.28.247EF8.29"><span class="tocnumber">3.9</span> <span class="toctext">PRG RAM enable 1 ($7EF8)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#PRG_RAM_enable_2_.28.247EF9.29"><span class="tocnumber">3.10</span> <span class="toctext">PRG RAM enable 2 ($7EF9)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#PRG_Select_0_.28.247EFA.29"><span class="tocnumber">3.11</span> <span class="toctext">PRG Select 0 ($7EFA)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#PRG_Select_1_.28.247EFB.29"><span class="tocnumber">3.12</span> <span class="toctext">PRG Select 1 ($7EFB)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#PRG_Select_2_.28.247EFC.29"><span class="tocnumber">3.13</span> <span class="toctext">PRG Select 2 ($7EFC)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Example_Games"><span class="tocnumber">4</span> <span class="toctext">Example Games</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#See_Also"><span class="tocnumber">5</span> <span class="toctext">See Also</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 256 KiB (maybe 512 KiB?)</li>
+<li> PRG ROM bank size: 8 KiB</li>
+<li> PRG RAM: Yes, internal, battery backed.</li>
+<li> CHR capacity: 256 KiB ROM</li>
+<li> CHR bank size: 1 KiB and 2 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: no </li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$73FF: 5 KiB PRG RAM divided into 3 protection regions</li>
+<li> CPU $7EF0-$7EFF: Mapper registers</li>
+<li> CPU $8000-$9FFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $E000-$FFFF: 8 KB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$07FF (or $1000-$17FF): 2 KB switchable CHR bank</li>
+<li> PPU $0800-$0FFF (or $1800-$1FFF): 2 KB switchable CHR bank</li>
+<li> PPU $1000-$13FF (or $0000-$03FF): 1 KB switchable CHR bank</li>
+<li> PPU $1400-$17FF (or $0400-$07FF): 1 KB switchable CHR bank</li>
+<li> PPU $1800-$1BFF (or $0800-$0BFF): 1 KB switchable CHR bank</li>
+<li> PPU $1C00-$1FFF (or $0C00-$0FFF): 1 KB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="CHR_Select_0_.28.247EF0.29">CHR Select 0 ($7EF0)</span></h3>
+<pre>7  bit  0
+CCCC CCC.
+|||| |||
+++++-+++-- Select 2 KiB CHR ROM at PPU $0000 or $1000
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_1_.28.247EF1.29">CHR Select 1 ($7EF1)</span></h3>
+<pre>7  bit  0
+CCCC CCC.
+|||| |||
+++++-+++-- Select 2 KiB CHR ROM at PPU $0800 or $1800
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_2_.28.247EF2.29">CHR Select 2 ($7EF2)</span></h3>
+<pre>7  bit  0
+CCCC CCCC
+|||| ||||
+++++-++++- Select 1 KiB CHR ROM at PPU $1000 or $0000
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_3_.28.247EF3.29">CHR Select 3 ($7EF3)</span></h3>
+<pre>7  bit  0
+CCCC CCCC
+|||| ||||
+++++-++++- Select 1 KiB CHR ROM at PPU $1400 or $0400
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_4_.28.247EF4.29">CHR Select 4 ($7EF4)</span></h3>
+<pre>7  bit  0
+CCCC CCCC
+|||| ||||
+++++-++++- Select 1 KiB CHR ROM at PPU $1800 or $0800
+</pre>
+<h3><span class="mw-headline" id="CHR_Select_5_.28.247EF5.29">CHR Select 5 ($7EF5)</span></h3>
+<pre>7  bit  0
+CCCC CCCC
+|||| ||||
+++++-++++- Select 1 KiB CHR ROM at PPU $1C00 or $0C00
+</pre>
+<h3><span class="mw-headline" id="CHR_Mode_.2F_Mirroring_Control_.28.247EF6.29">CHR Mode / Mirroring Control ($7EF6)</span></h3>
+<pre>7  bit  0
+.... ..CM
+       ||
+       |+- Mirroring (0:Horizontal, 1:Vertical)
+       +-- CHR A12 inversion (0: two 2 KB banks at $0000-$0FFF,
+                                 four 1 KB banks at $1000-$1FFF;
+                              1: two 2 KB banks at $1000-$1FFF,
+                                 four 1 KB banks at $0000-$0FFF)
+</pre>
+<h3><span class="mw-headline" id="PRG_RAM_enable_0_.28.247EF7.29">PRG RAM enable 0 ($7EF7)</span></h3>
+<pre>7  bit  0
+XXXX XXXX
+|||| ||||
+++++-++++- Write $CA to enable RAM from $6000 to $67FF, write anything else to disable
+</pre>
+<h3><span class="mw-headline" id="PRG_RAM_enable_1_.28.247EF8.29">PRG RAM enable 1 ($7EF8)</span></h3>
+<pre>7  bit  0
+XXXX XXXX
+|||| ||||
+++++-++++- Write $69 to enable RAM from $6800 to $6FFF, write anything else to disable
+</pre>
+<h3><span class="mw-headline" id="PRG_RAM_enable_2_.28.247EF9.29">PRG RAM enable 2 ($7EF9)</span></h3>
+<pre>7  bit  0
+XXXX XXXX
+|||| ||||
+++++-++++- Write $84 to enable RAM from $7000 to $73FF, write anything else to disable
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_0_.28.247EFA.29">PRG Select 0 ($7EFA)</span></h3>
+<pre>7  bit  0
+PPPP PP..
+|||| ||
+++++-++--- Select 8 KiB PRG ROM at $8000
+</pre>
+<p>Note:  remember that the low 2 bits are not used (right-shift written values by 2)
+</p>
+<h3><span class="mw-headline" id="PRG_Select_1_.28.247EFB.29">PRG Select 1 ($7EFB)</span></h3>
+<pre>7  bit  0
+PPPP PP..
+|||| ||
+++++-++--- Select 8 KiB PRG ROM at $A000
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_2_.28.247EFC.29">PRG Select 2 ($7EFC)</span></h3>
+<pre>7  bit  0
+PPPP PP..
+|||| ||
+++++-++--- Select 8 KiB PRG ROM at $C000
+</pre>
+<h2><span class="mw-headline" id="Example_Games">Example Games</span></h2>
+<ul><li> SD Keiji - Blader</li>
+<li> Kyuukyoku Harikiri Stadium</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a href="INES_Mapper_080.xhtml" title="INES Mapper 080">Taito X1-005</a></li>
+<li> <a href="INES_Mapper_207.xhtml" title="INES Mapper 207">Taito X1-005 with alternate mirroring control</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> BootGod mentions the RAM protect registers: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=30165" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=30165</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.048 seconds
+Preprocessor visited node count: 77/1000000
+Preprocessor generated node count: 84/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:673-1!*!0!!en!*!* and timestamp 20160208225152 and revision id 7441
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

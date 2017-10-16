@@ -1,0 +1,207 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU rendering</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU rendering</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Preface"><span class="tocnumber">1</span> <span class="toctext">Preface</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Line-by-line_timing"><span class="tocnumber">2</span> <span class="toctext">Line-by-line timing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Pre-render_scanline_.28-1.2C_261.29"><span class="tocnumber">2.1</span> <span class="toctext">Pre-render scanline (-1, 261)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Visible_scanlines_.280-239.29"><span class="tocnumber">2.2</span> <span class="toctext">Visible scanlines (0-239)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Cycle_0"><span class="tocnumber">2.2.1</span> <span class="toctext">Cycle 0</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Cycles_1-256"><span class="tocnumber">2.2.2</span> <span class="toctext">Cycles 1-256</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Cycles_257-320"><span class="tocnumber">2.2.3</span> <span class="toctext">Cycles 257-320</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Cycles_321-336"><span class="tocnumber">2.2.4</span> <span class="toctext">Cycles 321-336</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Cycles_337-340"><span class="tocnumber">2.2.5</span> <span class="toctext">Cycles 337-340</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Post-render_scanline_.28240.29"><span class="tocnumber">2.3</span> <span class="toctext">Post-render scanline (240)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Vertical_blanking_lines_.28241-260.29"><span class="tocnumber">2.4</span> <span class="toctext">Vertical blanking lines (241-260)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#PPU_address_bus_contents"><span class="tocnumber">3</span> <span class="toctext">PPU address bus contents</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Frame_timing_diagram"><span class="tocnumber">4</span> <span class="toctext">Frame timing diagram</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Preface">Preface</span></h2>
+<p>The PPU contains the following:
+</p>
+<ul><li>Background
+<ul><li>VRAM address, temporary VRAM address, fine X scroll, and first/second write toggle - This controls the addresses that the PPU reads during background rendering. See <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a>.</li>
+<li>2 16-bit shift registers - These contain the bitmap data for two tiles. Every 8 cycles, the bitmap data for the next tile is loaded into the upper 8 bits of this shift register. Meanwhile, the pixel to render is fetched from one of the lower 8 bits.</li>
+<li>2 8-bit shift registers - These contain the palette attributes for the lower 8 pixels of the 16-bit shift register. These registers are fed by a latch which contains the palette attribute for the next tile. Every 8 cycles, the latch is loaded with the palette attribute for the next tile.</li></ul></li>
+<li>Sprites
+<ul><li>Primary OAM (holds 64 sprites for the frame)</li>
+<li>Secondary OAM (holds 8 sprites for the current scanline)</li>
+<li>8 pairs of 8-bit shift registers - These contain the bitmap data for up to 8 sprites, to be rendered on the current scanline. Unused sprites are loaded with an all-transparent bitmap.</li>
+<li>8 latches - These contain the attribute bytes for up to 8 sprites.</li>
+<li>8 counters - These contain the X positions for up to 8 sprites.</li></ul></li></ul>
+<pre>                                         [BBBBBBBB] - Next tile's pattern data,
+                                         [BBBBBBBB] - 2 bits per pixel
+                                          ||||||||
+                                          vvvvvvvv
+      Serial-to-parallel - [AAAAAAAA] &lt;- [BBBBBBBB] - Parallel-to-serial
+         shift registers - [AAAAAAAA] &lt;- [BBBBBBBB] - shift registers
+                            vvvvvvvv
+                            ||||||||           [Sprites 0..7]----+
+                            ||||||||                             |
+[fine_x selects a bit]----&gt;[  Mux   ]--------------------&gt;[Priority mux]-----&gt;[Pixel]
+                            ||||||||
+                            ^^^^^^^^
+                           [PPPPPPPP] &lt;- [1-bit latch]
+                           [PPPPPPPP] &lt;- [1-bit latch]
+                                               ^
+                                               |
+                    [2-bit Palette Attribute for next tile (from attribute table)]
+</pre>
+<p>Every cycle, a bit is fetched from the 4 background shift registers in order to create a pixel on screen. Exactly which bit is fetched depends on the fine X scroll, set by $2005 (this is how fine X scrolling is possible). Afterwards, the shift registers are shifted once, to the data for the next pixel.
+</p><p>Every 8 cycles/shifts, new data is loaded into these registers.
+</p><p>Every cycle, the 8 x-position counters for the sprites are decremented by one. For each sprite, if the counter is still nonzero, nothing else happens. If the counter is zero, the sprite becomes &quot;active&quot;, and the respective pair of shift registers for the sprite is shifted once every cycle. This output accompanies the data in the sprite's latch, to form a pixel. The current pixel for each &quot;active&quot; sprite is checked (from highest to lowest priority), and the first non-transparent pixel moves on to a multiplexer, where it joins the BG pixel.
+</p>
+<table class="wikitable floatright">
+<caption> Priority multiplexer decision table
+</caption>
+<tr>
+<th> BG pixel </th>
+<th> Sprite pixel </th>
+<th> Priority </th>
+<th> Output
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> X </td>
+<td> <a href="Talk_PPU_pin_out_and_signal_description.xhtml" title="Talk:PPU pin out and signal description">BG ($3F00)</a>
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 1-3 </td>
+<td> X </td>
+<td> Sprite
+</td></tr>
+<tr>
+<td> 1-3 </td>
+<td> 0 </td>
+<td> X </td>
+<td> BG
+</td></tr>
+<tr>
+<td> 1-3 </td>
+<td> 1-3 </td>
+<td> 0 </td>
+<td> Sprite
+</td></tr>
+<tr>
+<td> 1-3 </td>
+<td> 1-3 </td>
+<td> 1 </td>
+<td> BG
+</td></tr></table>
+<ul><li> If the sprite has foreground priority or the BG pixel is zero, the sprite pixel is output.</li>
+<li> If the sprite has background priority and the BG pixel is nonzero, the BG pixel is output. (<b>Note:</b> Even though the sprite is &quot;behind the background&quot;, it was <i>still</i> the the highest priority sprite to have a non-transparent pixel, and thus the only sprite to be looked at. Therefore, the BG pixel is output even if another foreground priority sprite is present at this pixel. This is where the <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">sprite priority quirk</a> comes from.)</li></ul>
+<p><br clear="all"/>
+</p>
+<h2><span class="mw-headline" id="Line-by-line_timing">Line-by-line timing</span></h2>
+<p>The PPU renders 262 scanlines per frame. Each scanline lasts for 341 PPU clock cycles (113.667 CPU clock cycles; 1 CPU cycle = 3 PPU cycles), with each clock cycle producing one pixel. The line numbers given here correspond to how the internal PPU frame counters count lines.
+</p><p>The information in this section is summarized in the diagram in the next section.
+</p><p>The timing below is for NTSC PPUs.
+PPUs for 50 Hz TV systems <a href="Clock_rate.xhtml" title="Clock rate">differ</a>:
+PAL NES PPUs render 70 vblank scanlines instead of 20, and Dendy PPUs render 51 post-render scanlines instead of 1.
+</p>
+<h3><span class="mw-headline" id="Pre-render_scanline_.28-1.2C_261.29">Pre-render scanline (-1, 261)</span></h3>
+<p>This is a dummy scanline, whose sole purpose is to fill the shift registers with the data for the first two tiles of the next scanline. Although no pixels are rendered for this scanline, the PPU <i>still</i> makes the same memory accesses it would for a regular scanline.
+</p><p>This scanline varies in length, depending on whether an even or an odd frame is being rendered. For odd frames, the cycle at the end of the scanline is skipped (this is done internally by jumping directly from (339,261) to (0,0), replacing the idle tick at the beginning of the first visible scanline with the last tick of the last dummy nametable fetch). For even frames, the last cycle occurs normally. This is done to compensate for some shortcomings with the way the PPU physically outputs its video signal, the end result being a crisper image when the screen isn't scrolling. However, this behavior can be bypassed by keeping rendering disabled until after this scanline has passed, which results in an image that looks more like a traditionally interlaced picture.
+</p><p>During pixels 280 through 304 of this scanline, the vertical scroll bits are reloaded if rendering is enabled.
+</p>
+<h3><span class="mw-headline" id="Visible_scanlines_.280-239.29">Visible scanlines (0-239)</span></h3>
+<p>These are the visible scanlines, which contain the graphics to be displayed on the screen. This includes the rendering of both the background and the sprites. During these scanlines, the PPU is busy fetching data, so the program should <i>not</i> access PPU memory during this time, <a href="PPU_registers.xhtml#Mask_.28.242001.29_.3E_write" title="PPU registers">unless rendering is turned off</a>.
+</p>
+<h4><span class="mw-headline" id="Cycle_0">Cycle 0</span></h4>
+<p>This is an idle cycle. The value on the PPU address bus during this cycle appears to be the same CHR address that is later used to fetch the low background tile byte starting at dot 5 (possibly calculated during the two unused NT fetches at the end of the previous scanline).
+</p>
+<h4><span class="mw-headline" id="Cycles_1-256">Cycles 1-256</span></h4>
+<p>The data for each tile is fetched during this phase. Each memory access takes 2 PPU cycles to complete, and 4 must be performed per tile:
+</p>
+<ol><li>Nametable byte</li>
+<li>Attribute table byte</li>
+<li>Tile bitmap low</li>
+<li>Tile bitmap high (+8 bytes from tile bitmap low)</li></ol>
+<p>The data fetched from these accesses is placed into internal latches, and then fed to the appropriate shift registers when it's time to do so (every 8 cycles). Because the PPU can only fetch an attribute byte every 8 cycles, each sequential string of 8 pixels is forced to have the same palette attribute.
+</p><p>Sprite zero hits act as if the image starts at cycle 2 (which is the same cycle that the shifters shift for the first time), so the sprite zero flag will be raised at this point at the earliest. Actual pixel output is delayed further due to internal render pipelining, and the first pixel is output during cycle 4.
+</p><p>The shifters are reloaded during ticks 9, 17, 25, ..., 257.
+</p><p><b>Note:</b> At the beginning of each scanline, the data for the first two tiles is already loaded into the shift registers (and ready to be rendered), so the first tile that gets fetched is Tile 3.
+</p><p>While all of this is going on, <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite evaluation</a> for the <i>next</i> scanline is taking place as a seperate process, independent to what's happening here.
+</p>
+<h4><span class="mw-headline" id="Cycles_257-320">Cycles 257-320</span></h4>
+<p>The tile data for the sprites on the <i>next</i> scanline are fetched here. Again, each memory access takes 2 PPU cycles to complete, and 4 are performed for each of the 8 sprites:
+</p>
+<ol><li>Garbage nametable byte</li>
+<li>Garbage nametable byte</li>
+<li>Tile bitmap low</li>
+<li>Tile bitmap high (+8 bytes from tile bitmap low)</li></ol>
+<p>The garbage fetches occur so that the same circuitry that performs the BG tile fetches could be reused for the sprite tile fetches.
+</p><p>If there are less than 8 sprites on the next scanline, then dummy fetches to tile $FF occur for the left-over sprites, because of the dummy sprite data in the secondary OAM (see <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite evaluation</a>). This data is then discarded, and the sprites are loaded with a transparent bitmap instead.
+</p><p>In addition to this, the X positions and attributes for each sprite are loaded from the secondary OAM into their respective counters/latches. This happens during the second garbage nametable fetch, with the attribute byte loaded during the first tick and the X coordinate during the second.
+</p>
+<h4><span class="mw-headline" id="Cycles_321-336">Cycles 321-336</span></h4>
+<p>This is where the first two tiles for the <i>next</i> scanline are fetched, and loaded into the shift registers. Again, each memory access takes 2 PPU cycles to complete, and 4 are performed for the two tiles:
+</p>
+<ol><li>Nametable byte</li>
+<li>Attribute table byte</li>
+<li>Tile bitmap low</li>
+<li>Tile bitmap high (+8 bytes from tile bitmap low)</li></ol>
+<h4><span class="mw-headline" id="Cycles_337-340">Cycles 337-340</span></h4>
+<p>Two bytes are fetched, but the purpose for this is unknown. These fetches are 2 PPU cycles each.
+</p>
+<ol><li>Nametable byte</li>
+<li>Nametable byte</li></ol>
+<p>Both of the bytes fetched here are the same nametable byte that will be fetched at the beginning of the next scanline (tile 3, in other words).
+At least <a href="MMC5.xhtml" title="MMC5">one mapper</a> is known to use this string of three consecutive nametable fetches to clock a scanline counter.
+</p>
+<h3><span class="mw-headline" id="Post-render_scanline_.28240.29">Post-render scanline (240)</span></h3>
+<p>The PPU just idles during this scanline. Even though accessing PPU memory from the program would be safe here, the VBlank flag isn't set until <i>after</i> this scanline.
+</p>
+<h3><span class="mw-headline" id="Vertical_blanking_lines_.28241-260.29">Vertical blanking lines (241-260)</span></h3>
+<p>The VBlank flag of the PPU is set at tick 1 (the <i>second</i> tick) of scanline 241, where the VBlank NMI also occurs. The PPU makes no memory accesses during these scanlines, so PPU memory can be freely accessed by the program.
+</p>
+<h2><span class="mw-headline" id="PPU_address_bus_contents">PPU address bus contents</span></h2>
+<p>During frame rendering, provided rendering is enabled (i.e., when either background or sprite rendering is enabled in <a href="PPU_registers.xhtml" title="PPU registers">$2001:3-4</a>), the value on the PPU address bus is as indicated in the descriptions above and in the frame timing diagram below. During VBlank and when rendering is disabled, the value on the PPU address bus is the current value of the <a href="PPU_scrolling.xhtml" title="PPU scrolling">v</a> register.
+</p><p>To save pins, the PPU multiplexes the lower eight VRAM address pins, also using them as the VRAM data pins. This leads to each VRAM access taking two PPU cycles:
+</p>
+<ol><li> During the first cycle, the entire VRAM address is output on the PPU address pins and the lower eight bits stored in an external octal latch by asserting the ALE (Address Latch Enable) line. (The octal latch is the lower chip to the right of the PPU in <a class="internal" href="/w/images/f/f3/Neswires.jpg" title="Neswires.jpg">this wiring diagram</a>.)</li>
+<li> During the second cycle, the PPU only outputs the upper six bits of the address, with the octal latch providing the lower eight bits (VRAM addresses are 14 bits long). During this cycle, the value is read from or written to the lower eight address pins.</li></ol>
+<p>As an example, the PPU VRAM address pins will have the value $2001 followed by the value $20AB for a read from VRAM address $2001 that returns the value $AB.
+</p>
+<h2><span class="mw-headline" id="Frame_timing_diagram">Frame timing diagram</span></h2>
+<div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="File_Ntsc_timing_png.xhtml"><img alt="" class="thumbimage" height="272" src="../wiki-images/Ntsc_timing.png" srcset="/w/images/thumb/d/d1/Ntsc_timing.png/993px-Ntsc_timing.png 1.5x, /w/images/thumb/d/d1/Ntsc_timing.png/1324px-Ntsc_timing.png 2x" width="662"/></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="File_Ntsc_timing_png.xhtml" title="Enlarge"/></div>NTSC timing diagram</div></div></div>
+<p>(<a href="File_Ppu_svg.xhtml" title="File:Ppu.svg">Source SVG file</a>)
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="mw-redirect" href="PPU_nametables.xhtml" title="Nametable">Nametable</a></li>
+<li> <a class="mw-redirect" href="PPU_attribute_tables.xhtml" title="Attribute table">Attribute table</a></li>
+<li> <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a></li>
+<li> <a href="PPU_frame_timing.xhtml" title="PPU frame timing">PPU frame timing</a></li></ul>
+<h1><span class="mw-headline" id="References">References</span></h1>
+<ul><li><a class="external text" href="http://nesdev.com/2C02%20technical%20reference.TXT" rel="nofollow">NTSC 2C02 technical reference</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.161 seconds
+Real time usage: 0.166 seconds
+Preprocessor visited node count: 59/1000000
+Preprocessor generated node count: 66/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:565-1!*!0!!en!5!* and timestamp 20160607010222 and revision id 12586
+ -->
+</div></body></html>

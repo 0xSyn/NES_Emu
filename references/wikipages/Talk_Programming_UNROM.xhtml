@@ -1,0 +1,39 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Programming UNROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Programming UNROM</h1><div class="article">
+<h2><span class="mw-headline" id="NES_2.0_advocacy">NES 2.0 advocacy</span></h2>
+<p>Converting a ROM from original iNES to NES 2.0 isn't strictly necessary unless the mapper is ≥ 256 or the iNES header is ambiguous. For example:
+</p>
+<ul><li> Several VRC mappers are ambiguous as to which low CPU address lines are connected to the mapper's port select.</li>
+<li> Mapper 1 is ambiguous between SIROM (PRG A14 from MMC1 output) and other <a href="SxROM.xhtml" title="SxROM">SxROM</a> boards using 32K PRG (PRG A14 from CPU A14).</li>
+<li> Mappers 1, 4, and 5 are ambiguous among PRG RAM sizes. For example, SNROM vs. SOROM, MMC3 vs. MMC6.</li>
+<li> A few games (notably <i>Low G Man</i>) require the PRG RAM to be absent.</li></ul>
+<p>What's ambiguous about mappers 2 (UxROM), 3 (CNROM), and 7 (AOROM), other than whether or not the ROM has a positive chip enable to avoid bus conflicts? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 22:19, 26 February 2013 (MST)
+</p>
+<dl><dd> Two things- 
+<ol><li> the comment about PRG-RAM: due to iNES's shortcomings one can't distinguish between 0=&quot;no ram&quot; and 0=&quot;unspecified ram&quot;; and</li>
+<li> the entire point behind NES2.0's backwards compatibility is the encouragement of its adoption without infringing on non-NES2.0-aware emulators. Creating mindshare makes it possible to say that it really is a solution.</li></ol></dd>
+<dd>—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 01:50, 27 February 2013 (MST)
+<dl><dd>True, perhaps NES 2.0 might be warranted to keep programs from relying on an implied <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">PRG RAM circuit</a> that iNES emulators emulate but which is not present on official mapper 2 boards. I'll see how I can work it in. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 11:45, 27 February 2013 (MST)
+<dl><dd>Leaving the <tt>  .byte $00       ;UNROM has no PRG RAM</tt> comment is explicitly misleading in light of the above.</dd>
+<dd>In any case, because of NES2.0's backwards compatibility, I don't see an argument for why we should recommend plain iNES headers. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:51, 27 February 2013 (MST)
+<dl><dd>If old iNES headers are used, the emulator ought to assume 8K PRG RAM for any mapper that doesn't already have PRG RAM and doesn't use $6000-$7FFF for anything else; this way it is compatible if something does add RAM there. If the header version bits specifies NES 2.0 then it ought to assume no RAM if the NES 2.0 header specifies that there is no RAM. (For example, I might want to make some UNROM game that includes PRG RAM and lacks CHR RAM; even the old iNES header probably supports this, isn't it? Some emulator might not support it so how do you deal with such things like this?) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 00:30, 24 June 2013 (MDT)
+<dl><dd>Do you mean UNROM with 8 KiB CHR ROM, sort of like what <i><a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3479" rel="nofollow">Morita Shogi</a></i> does on the SNROM board? Technically that should be supported but I don't see the point. For one thing, it's two custom mask ROMs, one for PRG and one for CHR, instead of one and a cheap 6264. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 00:39, 24 June 2013 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.049 seconds
+Real time usage: 0.051 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1000-1!*!0!*!*!*!* and timestamp 20160208224407 and revision id 6819
+ -->
+</div></body></html>

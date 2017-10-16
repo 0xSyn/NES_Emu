@@ -1,0 +1,149 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 156</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 156</h1><div class="article">
+<p>As of 04-sep-2012, fceux supports this mapper correctly (r2648). The code was taken from fceu-mm which had some bugs related to missing reset logic. It is additionally supported by the Nestopia 1.40u4 hack. Mednafen also supports this mapper.
+</p><p>It is described as &quot;DIS23C01 <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Daou_Infosys" title="wikia:c:bootleggames:Daou Infosys">DAOU</a> ROM CONTROLLER, Korea&quot; and is used by the following games:
+</p>
+<ul><li> Metal Force (K)</li>
+<li> Buzz and Waldog (K)</li>
+<li> General's Son (K)</li></ul>
+<p>The following description of it is based on FCEUX's implementation. It appears to fully-decode them, but that's probably inaccurate.
+</p>
+<ul><li> PRG-ROM (16KiB switchable + 16KiB fixed-to-last banks)</li>
+<li> PRG-RAM (8KiB, the usual @ $6000-$7FFF, sometimes battery-backed?)</li>
+<li> CHR-ROM (8x1KiB banks)</li>
+<li> Mirroring (only written on General's Son?)</li></ul>
+<table class="wikitable sortable">
+<caption> Registers
+</caption>
+<tr>
+<th> Address </th>
+<th> Purpose </th>
+<th> Size </th>
+<th> Target's address range
+</th></tr>
+<tr>
+<td> $C000 </td>
+<td> CHR bank(low) </td>
+<td> 1KiB </td>
+<td> $0000-$03FF
+</td></tr>
+<tr>
+<td> $C001 </td>
+<td> CHR bank(low) </td>
+<td> 1KiB </td>
+<td> $0400-$07FF
+</td></tr>
+<tr>
+<td> $C002 </td>
+<td> CHR bank(low) </td>
+<td> 1KiB </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> $C003 </td>
+<td> CHR bank(low) </td>
+<td> 1KiB </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> $C004 </td>
+<td> CHR bank(hi) </td>
+<td> 1KiB </td>
+<td> $0000-$03FF
+</td></tr>
+<tr>
+<td> $C005 </td>
+<td> CHR bank(hi) </td>
+<td> 1KiB </td>
+<td> $0400-$07FF
+</td></tr>
+<tr>
+<td> $C006 </td>
+<td> CHR bank(hi) </td>
+<td> 1KiB </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> $C007 </td>
+<td> CHR bank(hi) </td>
+<td> 1KiB </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> $C008 </td>
+<td> CHR bank(low)  </td>
+<td> 1KiB </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> $C009 </td>
+<td> CHR bank(low)  </td>
+<td> 1KiB </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> $C00A </td>
+<td> CHR bank(low)  </td>
+<td> 1KiB </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> $C00B </td>
+<td> CHR bank(low)  </td>
+<td> 1KiB </td>
+<td> $1C00-$1FFF
+</td></tr>
+<tr>
+<td> $C00C </td>
+<td> CHR bank(hi)  </td>
+<td> 1KiB </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> $C00D </td>
+<td> CHR bank(hi)  </td>
+<td> 1KiB </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> $C00E </td>
+<td> CHR bank(hi)  </td>
+<td> 1KiB </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> $C00F </td>
+<td> CHR bank(hi)  </td>
+<td> 1KiB </td>
+<td> $1C00-$1FFF
+</td></tr>
+<tr>
+<td> $C010 </td>
+<td> PRG bank </td>
+<td> 16KiB </td>
+<td> $8000-$BFFF
+</td></tr>
+<tr>
+<td> $C014 </td>
+<td> Mirroring </td>
+<td> d0, 1 for H
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:841-1!*!*!*!*!*!* and timestamp 20160615215625 and revision id 12644
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

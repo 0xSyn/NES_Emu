@@ -1,0 +1,76 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 243</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 243</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 243</strong> describes Sachen's <a href="Sachen_74LS374N_pinout.xhtml" title="Sachen 74LS374N pinout">“74LS374N” mapper IC</a>, which in no way resembles its namesake.
+</p><p>The IC as described by Санчез neither supports games with more than 64 KiB PRG, nor do any exist as images in GoodNES, so it's unclear why he specifies three bits for PRG banking.
+</p>
+<pre> Example Games:
+ --------------------------
+ Honey
+ Poker III 5-in-1
+ 
+ Registers:
+ ---------------------------
+ Mask: $C101
+ 
+ Both variants-
+   $4100:  [.... .AAA]   Address for use with $4101
+ 
+ Variant one (Nestopia calls &quot;374b&quot;, FCEUmm calls S74LS374N, both meaning <a href="INES_Mapper_150.xhtml" title="INES Mapper 150">iNES Mapper 150</a>, but what Санчез specified for m243) :
+   $4101:   Write only- Data port
+      R:2 -&gt; [.... ...B]  High bit of CHR reg AND ALSO sets PRG reg to B.
+      R:4 -&gt; [.... ...C]  Middle bit of CHR reg
+      R:5 -&gt; [.... .PPP]  PRG reg  (32k @ $8000)
+      R:6 -&gt; [.... ..DE]  Low bits of CHR reg
+      R:7 -&gt; [.... .MM.]  Mirroring
+          %00 = Horz
+          %01 = Vert
+          %10 = L-shaped; see below
+          %11 = 1ScA
+   $4100 reads: [.... .aaa]
+             aaa = ~AAA XOR (counter &amp; 1)   - where counter toggles on every reset
+ 
+  Variant two (Nestopia calls &quot;374a&quot;, FCEUmm calls S74LS374NA, Nocash's specification, all meaning m243) :
+   $4101:   Data port
+      R:0 -&gt; [.... ....]  Writes reset CHR bank to 3 and PRG bank to 0
+      R:2 -&gt; [.... ...B]  High bit of CHR reg
+      R:4 -&gt; [.... ...E]  Low bit of CHR reg
+      R:5 -&gt; [.... ...P]  PRG reg  (32k @ $8000)
+      R:6 -&gt; [.... ..CD]  Middle bits of CHR reg
+      R:7 -&gt; [.... ...M]  Mirroring
+           0 = Horz
+           1 = Vert
+ 
+ Mirroring:
+ ---------------------------  
+ Mirroring mode %10 is not quite 1ScB:
+   [  NTA  ][  NTB  ]
+   [  NTB  ][  NTB  ]
+ 
+ CHR Setup:
+ ---------------------------  
+ 8k CHR page @ $0000 is selected according to the BCDE bits.
+</pre>
+<p>Of all the images marked as mapper 243 in GoodNES 3.1.4, Nestopia's database leaves ONLY <i>Poker III (Sachen) [!]</i> and <i>Poker III (Sachen) [a1].nes</i> as variant 374a, and refiles the rest as variant 374b (m150).
+</p><p>There are two different dumps of &quot;Poker III&quot; in GoodNES, both marked with [!]. This has caused some confusion. There is no difference in the PRG of these two images! The only difference seems to be the different interpretation of CHR order. Given that Санчез described the pinout, and so presumably actually figured out which pin connected to which pin on the ROMs, it seems likely that his interpretation is the true one.
+</p><p>This still doesn't address the difference in mirroring behavior. Nocash says that no game ever wrote anything other than $05 to the register anyway.
+</p><p>Given the above, it seems that mapper 243 should possibly be deprecated, and all existing dumps either discarded or refiled to mapper 150.
+</p><p>Reference: <a class="external text" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">Санчез</a>, <a class="external text" href="https://github.com/rdanbrook/nestopia/blob/master/source/core/board/NstBoardSachen74x374.cpp" rel="nofollow">Nestopia's source</a>, <a class="external text" href="http://problemkaputt.de/everynes.htm#mapper243sachenpokerprg32kvrom8k" rel="nofollow">Nocash</a>, <a class="external text" href="http://sourceforge.net/p/fceumm/code/HEAD/tree/src/boards/sachen.c" rel="nofollow">FCEUmm source</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:717-1!*!0!*!*!*!* and timestamp 20160208225509 and revision id 10856
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

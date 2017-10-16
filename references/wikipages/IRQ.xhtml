@@ -1,0 +1,75 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>IRQ</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>IRQ</h1><div class="article">
+<p><b>IRQ</b> (interrupt request) is a signal on the NES CPU.
+</p><p>If the CPU's /IRQ input is 0 at the end of an instruction, then the CPU pushes the program counter and the processor status register, sets the I flag to ignore further IRQs, and the Program Counter takes the value read at $fffe and $ffff.
+</p><p>/IRQ functions as an open collector input: it is normally 1, but any device on the CPU bus can pull it down to 0.
+An IRQ handler is expected to push any registers it uses, acknowledge the interrupt by writing to a port so that the source no longer forces /IRQ to 0, pull the registers back, and return with RTI.
+</p><p>Therefore if a program uses more than one source of IRQ, the priority between the conflicting interrupts should be handled in software.
+</p><p>Sources of IRQ on a Famicom or NES include
+</p>
+<table class="tabular">
+
+<tr>
+<th> Source </th>
+<th> Enable </th>
+<th> Disable </th>
+<th> Acknowledge
+</th></tr>
+<tr>
+<td> <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a> finish </td>
+<td> $4010 write with bit 7 = 1 </td>
+<td> $4010 write otherwise </td>
+<td> Disable then reenable, or play another sample
+</td></tr>
+<tr>
+<td> <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">APU Frame Counter</a> </td>
+<td> $4017 write with bits 7-6 = 00 </td>
+<td> $4017 write otherwise </td>
+<td> <a class="mw-redirect" href="APU.xhtml" title="APU Status">APU Status</a> ($4015) read
+</td></tr>
+<tr>
+<td> <a href="MMC3.xhtml" title="MMC3">MMC3</a> </td>
+<td> Write to $E001 </td>
+<td> Write to $E000 </td>
+<td> Disable then reenable
+</td></tr>
+<tr>
+<td> <a href="MMC5.xhtml" title="MMC5">MMC5</a> </td>
+<td> Write $80 to $5204 </td>
+<td> Write $00 to $5204 </td>
+<td> Read $5204
+</td></tr>
+<tr>
+<td> <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC4/6/7</a> </td>
+<td> see mapper </td>
+<td> see mapper </td>
+<td> see mapper
+</td></tr>
+<tr>
+<td> <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="FDS">FDS</a> </td>
+<td> Write $02 to $4022 </td>
+<td> Write $00 to $4022 </td>
+<td> Read $4030
+</td></tr></table>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="mw-redirect" href="Mapper.xhtml" title="MMC">MMC</a>, common source of cartridge IRQs</li>
+<li><a href="NMI.xhtml" title="NMI">NMI</a>, the other interrupt signal on the CPU</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:486-1!*!0!*!*!*!* and timestamp 20160208225523 and revision id 11833
+ -->
+</div></body></html>

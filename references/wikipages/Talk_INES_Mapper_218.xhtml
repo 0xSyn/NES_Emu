@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 218</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 218</h1><div class="article">
+<h2><span class="mw-headline" id="Alternate_PPU_memory_maps">Alternate PPU memory maps</span></h2>
+<p>I can make a suggestion of the variant of mapper 218 using <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header. If the header specifies neither CHR ROM nor CHR RAM, then it acts as described in this document. If it does specify either CHR ROM or CHR RAM (only one or the other is allowed, not both; RAM can optionally be battery-backed (but you can't combine battery with non-battery)), then it is mirrored across 16K, and the mirroring flags control how many positions to shift the high bit of the address (if vertical mirroring is specified, this is the ordinary memory mirroring; this also means specifying 2K non-battery RAM is the same as using CIRAM, regardless of mirroring setting, and that specifying 1K non-battery RAM and vertical mirroring acts like using CIRAM but connecting CIRAM A10 to ground). This is no longer a single chip cartridge, but it does seem to be what would be a variant of this iNES mapper nevertheless. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:55, 30 December 2013 (MST)
+</p>
+<dl><dd> I cannot fathom the use of variants that map any size of ROM over the entire PPU address space. The background would never be anything more than a static 512x480 (or smaller) picture.</dd>
+<dd> Otherwise, I think you're describing the following six new modes:
+<ol><li> 4KiB RAM, RAM A10,11 = PPU A10,A11 : Nametables and both pattern tables all from the same RAM. Technically allows four screen layout, but not in a particularly useful way</li>
+<li> 4KiB RAM, RAM A10,11 = PPU A11,A12 : Each pattern table gets 2KiB, but the left pattern table is shared with the nametables (which are equivalently in horizontal mirroring)</li>
+<li> 4KiB RAM, RAM A10,11 = PPU A12,A13 : 1-screen mirroring, 1KiB for each pattern table</li>
+<li> 8KiB RAM, RAM A10,11,12 = PPU A10,11,12 : Four-screen layout, but left pattern table is more or less unusable</li>
+<li> 8KiB RAM, RAM A10,11,12 = PPU A11,12,13 : Each pattern table gets 2KiB and the nametables are in horizontal mirroring</li>
+<li> 16KiB RAM, all connected : traditional 8KiB CHRRAM + 4 screen layout.</li></ol></dd>
+<dd> The reason, as I understand it, that m218 is interesting is that it lets you save on populating one IC, so that you only need PRG ROM and maybe the CIC. One you have to add an extra IC, you may as well add it in a useful layout; therefore an 8KiB RAM for patterns with the NES's CIRAM for nametables is strictly more useful than variants 2, 3, and 5. Variants 1 and 4 could have some merit, but only because there's no established variant that uses 10KiB of RAM for anything other than (8KiB pattern + 2KiB NT) or <a href="INES_Mapper_077.xhtml" title="INES Mapper 077">mapper 77</a>. Variant 6 is already the default behavior for all mappers than have CHRRAM and 4-screen layout specified. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:55, 30 December 2013 (MST)</dd></dl>
+<dl><dd><dl><dd>You are correct I agree that mapper 218 is interesting since PRG ROM is the only IC needed (other than CIC, if necessary); however, there is a potential interest for the variant I mentioned, which seems like it would be a reasonable thing for mapper 218 to do if the NES 2.0 header specifies the existence of CHR-ROM or CHR-RAM (regardless of how useful it might be). However, full area CHR-ROM might not be entirely useless; maybe it can be useful for some kind of very simple game that uses only a scrolling static background and sprites (one example of such a game might be Pong). The 16KiB RAM can of course also be useful (if you don't want mirroring); doing this also gives you some extra RAM (usable only when not rendering), and if it is battery-backed you might use it for save game data. Of course what is useful depends much on the program. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 19:29, 31 December 2013 (MST)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1266-1!*!0!*!*!*!* and timestamp 20160208224201 and revision id 7938
+ -->
+</div></body></html>

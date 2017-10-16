@@ -1,0 +1,286 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sunsoft 5B audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sunsoft 5B audio</h1><div class="article">
+<p>The <b>Sunsoft 5B</b> is a superset of the <a href="Sunsoft_FME_7.xhtml" title="Sunsoft FME-7">Sunsoft FME-7</a>. It is identical to the FME-7 except it contains extra audio hardware. This audio hardware was only used in one game, <i>Gimmick!</i> Because this game did not use many features of the chip (e.g. noise, envelope), its features are often only partially implemented by emulators.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Audio_Register_Select_.28.24C000-.24DFFF.29"><span class="tocnumber">1.1</span> <span class="toctext">Audio Register Select ($C000-$DFFF)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Audio_Register_Write_.28.24E000-.24FFFF.29"><span class="tocnumber">1.2</span> <span class="toctext">Audio Register Write ($E000-$FFFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Internal_audio_registers"><span class="tocnumber">1.3</span> <span class="toctext">Internal audio registers</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Sound"><span class="tocnumber">2</span> <span class="toctext">Sound</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Tone"><span class="tocnumber">2.1</span> <span class="toctext">Tone</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Noise"><span class="tocnumber">2.2</span> <span class="toctext">Noise</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Envelope"><span class="tocnumber">2.3</span> <span class="toctext">Envelope</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Period"><span class="tocnumber">2.3.1</span> <span class="toctext">Period</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Shape"><span class="tocnumber">2.3.2</span> <span class="toctext">Shape</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Output"><span class="tocnumber">2.4</span> <span class="toctext">Output</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>The audio hardware is a type of Yamaha YM2149F, which is itself a variant of the General Instrument AY-3-8910 PSG.
+</p>
+<h3><span class="mw-headline" id="Audio_Register_Select_.28.24C000-.24DFFF.29">Audio Register Select ($C000-$DFFF)</span></h3>
+<pre>7......0
+----RRRR
+    ++++- The 4-bit internal register to select for use with $E000
+</pre>
+<h3><span class="mw-headline" id="Audio_Register_Write_.28.24E000-.24FFFF.29">Audio Register Write ($E000-$FFFF)</span></h3>
+<pre>7......0
+VVVVVVVV
+++++++++- The 8-bit value to write to the internal register selected with $C000
+</pre>
+<h3><span class="mw-headline" id="Internal_audio_registers">Internal audio registers</span></h3>
+<p>The YM2149F has 16 internal audio registers, selected with $C000 and written to with $E000.
+</p>
+<table class="tabular">
+<tr>
+<th> Register </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $00 </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Channel A low period
+</td></tr>
+<tr>
+<td> $01 </td>
+<td> <tt>---- HHHH</tt> </td>
+<td> Channel A high period
+</td></tr>
+<tr>
+<td> $02 </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Channel B low period
+</td></tr>
+<tr>
+<td> $03 </td>
+<td> <tt>---- HHHH</tt> </td>
+<td> Channel B high period
+</td></tr>
+<tr>
+<td> $04 </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Channel C low period
+</td></tr>
+<tr>
+<td> $05 </td>
+<td> <tt>---- HHHH</tt> </td>
+<td> Channel C high period
+</td></tr>
+<tr>
+<td> $06 </td>
+<td> <tt>---P PPPP</tt> </td>
+<td> Noise period
+</td></tr>
+<tr>
+<td> $07 </td>
+<td> <tt>--CB Acba</tt> </td>
+<td> Noise disable on channels C/B/A, Tone disable on channels c/b/a
+</td></tr>
+<tr>
+<td> $08 </td>
+<td> <tt>---E VVVV</tt> </td>
+<td> Channel A envelope enable (E), volume (V)
+</td></tr>
+<tr>
+<td> $09 </td>
+<td> <tt>---E VVVV</tt> </td>
+<td> Channel B envelope enable (E), volume (V)
+</td></tr>
+<tr>
+<td> $0A </td>
+<td> <tt>---E VVVV</tt> </td>
+<td> Channel C envelope enable (E), volume (V)
+</td></tr>
+<tr>
+<td> $0B </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Envelope low period
+</td></tr>
+<tr>
+<td> $0C </td>
+<td> <tt>HHHH HHHH</tt> </td>
+<td> Envelope high period
+</td></tr>
+<tr>
+<td> $0D </td>
+<td> <tt>---- CAaH</tt> </td>
+<td> Envelope reset and shape: continue (C), attack (A), alternate (a), hold (H)
+</td></tr>
+<tr>
+<td> $0E </td>
+<td> <tt>---- ----</tt> </td>
+<td> I/O port A (unused)
+</td></tr>
+<tr>
+<td> $0F </td>
+<td> <tt>---- ----</tt> </td>
+<td> I/O port B (unused)
+</td></tr></table>
+<h2><span class="mw-headline" id="Sound">Sound</span></h2>
+<p>There are three channels that output a square wave tone. In addition there is one noise generator, and one envelope generator, both of which may be shared by any of the three channels.
+</p><p>The 5B's audio is driven by the <a href="Clock_rate.xhtml" title="Clock rate">CPU clock</a> (1.789773 MHz), but like the NES's <a href="APU.xhtml" title="APU">APU</a>, the YM2149F has an optional clock divider which halves the internal clock speed. By comparison of the produced pitches in <i>Gimmick!</i> with the register values used, it appears that the 5B is a YM2149F operating in this mode. To use an AY-3-8910 as a substitute, you would need an external divider to reduce the clock speed by half.
+</p><p>The frequency formulas given below assume the standard 1.789773 MHz as the <i>Clock</i> value; note that each formula includes an additional divide by 2 to compensate for the YM2149F's internal divider.
+</p>
+<h3><span class="mw-headline" id="Tone">Tone</span></h3>
+<p>The tone generators produce a square wave with a period controlled by the CPU clock and the 12-bit period value in registers $00-05.
+</p>
+<ul><li> <i>Frequency</i> = <i>Clock</i> / (2 * 16 * <i>Period</i>)</li>
+<li> <i>Period</i> = <i>Clock</i> / (2 * 16 * <i>Frequency</i>)</li></ul>
+<p>Register $07 controls the mixing of tone and noise components of each channel. A bit of 0 enables the noise/tone on the specified channel, and a bit of 1 disables it. If both bits are 1, the channel outputs a constant signal at the specified volume. If both bits are 0, the result is the logical and of noise and tone.
+</p><p>If bit 4 of registers $08-$0A is set, the volume of the channel is controlled by the envelope generator. Otherwise, it is controlled by the 4-bit value in bits 3-0 of the same register.
+</p>
+<h3><span class="mw-headline" id="Noise">Noise</span></h3>
+<p>The noise generator produces a 1-bit random wave with a period controlled by the CPU clock and the 5-bit period value in register $06.
+</p>
+<ul><li> <i>Frequency</i> = <i>Clock</i> / (2 * 16 * <i>Period</i>)</li>
+<li> <i>Period</i> = <i>Clock</i> / (2 * 16 * <i>Frequency</i>)</li></ul>
+<p>It is likely implemented as a 17-bit linear feedback shift register with taps at bits 16 and 13.
+</p>
+<h3><span class="mw-headline" id="Envelope">Envelope</span></h3>
+<p>The envelope produces a ramp that can be directed up or down, or to oscillate by various shape parameters.
+</p>
+<h4><span class="mw-headline" id="Period">Period</span></h4>
+<p>The ramp has a frequency controlled by the CPU clock and the 16-bit period value in registers $0B-0C. Note this formula is the frequency of a single ramp, and not individual steps in it.
+</p>
+<ul><li> <i>Frequency</i> = <i>Clock</i> / (2 * 256 * <i>Period</i>)</li>
+<li> <i>Period</i> = <i>Clock</i> / (2 * 256 * <i>Frequency</i>)</li></ul>
+<p>The YM2149F subdivides divides each ramp into 32 steps. Note that where alternating envelope shapes are used (triangle wave), the resulting pitch of the envelope is one octave down, since one wave cycle requires two ramps (up and down). Because the envelope is primarily intended for low (sub-audio) frequencies, its pitch control is not as accurate in audio frequency ranges as the tone channels.
+</p><p>The AY-3-8910 instead subdivides the ramp frequency by 16, and as a result has half the resolution for its envelopes. Because they both subdivide the same ramp frequency, the ramp's pitch will be the same as long as the clock speeds are equivalent.
+</p>
+<h4><span class="mw-headline" id="Shape">Shape</span></h4>
+<p>Writing register $0D resets the envelope and chooses its shape. The shape has four parameters: continue, attack, alternate, and hold.
+</p>
+<ul><li> Continue specifies whether the envelope continues to oscillate after the attack. If it is 0, the alternate and hold parameters have no effect.</li></ul>
+<ul><li> Attack specifies whether the attack goes from high to low (0) or low to high (1).</li></ul>
+<ul><li> Alternate specifies whether the signal continues to alternate up and down after the attack. If combined with hold it provides an immediate flip after the attack followed by the hold.</li></ul>
+<ul><li> Hold specifies that the value shall be held after the attack. If combined with alternate, the value at the end of the attack will be immediately flipped before holding.</li></ul>
+<table class="tabular">
+<tr>
+<th> Value </th>
+<th> Continue </th>
+<th> Attack </th>
+<th> Alternate </th>
+<th> Hold </th>
+<th> Shape
+</th></tr>
+<tr>
+<td> $00 - $03 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> x </td>
+<td> x </td>
+<td> <tt>\_______</tt>
+</td></tr>
+<tr>
+<td> $04 - $07 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> x </td>
+<td> x </td>
+<td> <tt>/_______</tt>
+</td></tr>
+<tr>
+<td> $08 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <tt>\\\\\\\\</tt>
+</td></tr>
+<tr>
+<td> $09 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> <tt>\_______</tt>
+</td></tr>
+<tr>
+<td> $0A </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> <tt>\/\/\/\/</tt>
+</td></tr>
+<tr>
+<td> $0B </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <tt>\¯¯¯¯¯¯¯</tt>
+</td></tr>
+<tr>
+<td> $0C </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <tt>////////</tt>
+</td></tr>
+<tr>
+<td> $0D </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> <tt>/¯¯¯¯¯¯¯</tt>
+</td></tr>
+<tr>
+<td> $0E </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0 </td>
+<td> <tt>/\/\/\/\</tt>
+</td></tr>
+<tr>
+<td> $0F </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <tt>/_______</tt>
+</td></tr></table>
+<h3><span class="mw-headline" id="Output">Output</span></h3>
+<p>The tone channels each produce a 5-bit signal which is then converted to analog with a logarithmic DAC. Note that the least significant bit cannot be controlled by the volume register, it is only used by the YM2149F's double-resolution envelope generator. The logarithmic curve increases by 1.5 decibels for each step in the 5-bit signal. This can easily be implemented as a lookup table.
+</p><p>Some emulator implementations that are based on the AY-3-8190 instead treat it as a 4-bit signal with a 3dB per step curve. Since the only extant 5B game does not use the envelope, the difference is unimportant unless accuracy is desired for homebrew 5B work.
+</p><p>The three output channels are mixed together linearly. The output is mixed with the 2A03 and amplified. It is very loud compared to other audio expansion carts.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> YM2149 datasheet: <a class="external free" href="http://pdf1.alldatasheet.com/datasheet-pdf/view/103366/ETC/YM2149.html" rel="nofollow">http://pdf1.alldatasheet.com/datasheet-pdf/view/103366/ETC/YM2149.html</a></li>
+<li> GI AY-3-8910 datasheet: <a class="external free" href="http://www.speccy.org/hardware/datasheet/ay38910.pdf" rel="nofollow">http://www.speccy.org/hardware/datasheet/ay38910.pdf</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.077 seconds
+Real time usage: 0.081 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 52/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:745-1!*!0!!en!*!* and timestamp 20160208222806 and revision id 9265
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a></p></div></body></html>

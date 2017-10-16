@@ -1,0 +1,314 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU ALL</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU ALL</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#CPU"><span class="tocnumber">1</span> <span class="toctext">CPU</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Sections"><span class="tocnumber">1.1</span> <span class="toctext">Sections</span></a></li>
+<li class="toclevel-2"><a href="#CPU_signals_and_frequencies"><span class="tocnumber">1.2</span> <span class="toctext">CPU signals and frequencies</span></a></li>
+<li class="toclevel-2"><a href="#Notes"><span class="tocnumber">1.3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-2"><a href="#See_also"><span class="tocnumber">1.4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#Memory_map"><span class="tocnumber">2</span> <span class="toctext">Memory map</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Pin_out_and_signal_description"><span class="tocnumber">3</span> <span class="toctext">Pin out and signal description</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Pin_out"><span class="tocnumber">3.1</span> <span class="toctext">Pin out</span></a></li>
+<li class="toclevel-2"><a href="#Signal_description"><span class="tocnumber">3.2</span> <span class="toctext">Signal description</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Power_up_state"><span class="tocnumber">4</span> <span class="toctext">Power up state</span></a>
+<ul>
+<li class="toclevel-2"><a href="#At_power-up"><span class="tocnumber">4.1</span> <span class="toctext">At power-up</span></a></li>
+<li class="toclevel-2"><a href="#After_reset"><span class="tocnumber">4.2</span> <span class="toctext">After reset</span></a></li>
+<li class="toclevel-2"><a href="#See_also_2"><span class="tocnumber">4.3</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-2"><a href="#Notes_2"><span class="tocnumber">4.4</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Status_flag_behavior"><span class="tocnumber">5</span> <span class="toctext">Status flag behavior</span></a>
+<ul>
+<li class="toclevel-2"><a href="#The_B_flag"><span class="tocnumber">5.1</span> <span class="toctext">The B flag</span></a></li>
+<li class="toclevel-2"><a href="#External_links"><span class="tocnumber">5.2</span> <span class="toctext">External links</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="CPU">CPU</span></h1>
+<p>The NES CPU core is based on the 6502 processor and runs at approximately 1.79 MHz (1.66 MHz in a PAL NES). It is made by <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh" rel="nofollow">Ricoh</a> and lacks the MOS6502's decimal mode. In the NTSC NES, the <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh_2A03" rel="nofollow">RP2A03</a> chip contains the CPU and APU; in the PAL NES, the CPU and APU are contained within the <a class="external text" href="http://en.wikipedia.org/wiki/Ricoh_2A03" rel="nofollow">RP2A07</a> chip. 
+</p>
+<h3><span class="mw-headline" id="Sections">Sections</span></h3>
+<ul><li> <a href="6502_instructions.xhtml" title="6502 instructions">CPU instructions</a></li>
+<li> <a href="CPU_addressing_modes.xhtml" title="CPU addressing modes">CPU addressing modes</a></li>
+<li> <a href="CPU_memory_map.xhtml" title="CPU memory map">CPU memory map</a></li>
+<li> <a href="CPU_power_up_state.xhtml" title="CPU power up state">CPU power-up state</a></li>
+<li> <a href="CPU_registers.xhtml" title="CPU registers">CPU registers</a></li>
+<li> <a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">CPU status flag behavior</a></li>
+<li> <a href="CPU_interrupts.xhtml" title="CPU interrupts">CPU interrupts</a></li>
+<li> <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">Unofficial opcodes</a></li>
+<li> <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">CPU pin-out and signals</a>, and other <a href="Hardware_pinout.xhtml" title="Hardware pinout">hardware pin-outs</a></li></ul>
+<h3><span class="mw-headline" id="CPU_signals_and_frequencies">CPU signals and frequencies</span></h3>
+<p>The CPU generates its clock signal by dividing the master clock signal.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Rate </th>
+<th> NTSC NES/Famicom </th>
+<th> PAL NES </th>
+<th> PAL Famiclone
+</th></tr>
+<tr>
+<td> Color subcarrier frequency <i>f<sub>sc</sub></i> (exact) </td>
+<td> 39375000/11 Hz </td>
+<td> 4433618.75 Hz </td>
+<td> 4433618.75 Hz
+</td></tr>
+<tr>
+<td> Color subcarrier frequency <i>f<sub>sc</sub></i> (approx.) </td>
+<td> 3.579545 MHz </td>
+<td> 4.433619 MHz </td>
+<td> 4.433619 MHz
+</td></tr>
+<tr>
+<td> Master clock frequency 6<i>f<sub>sc</sub></i> </td>
+<td> 21.477272 MHz </td>
+<td> 26.601712 MHz </td>
+<td> 26.601712 MHz
+</td></tr>
+<tr>
+<td> Clock divisor <i>d</i> </td>
+<td> 12 </td>
+<td> 16 </td>
+<td> 15
+</td></tr>
+<tr>
+<td> CPU clock frequency 6<i>f<sub>sc</sub></i>/<i>d</i> </td>
+<td> 1.789773 MHz (~559 ns per cycle) </td>
+<td> 1.662607 MHz (~601 ns per cycle) </td>
+<td> 1.773448 MHz (~564 ns per cycle)
+</td></tr></table>
+<h3><span class="mw-headline" id="Notes">Notes</span></h3>
+<ul><li> Kevtris has confirmed that all illegal 6502 opcodes execute identically on the 2A03/2A07. He has even went as far as to integrate them into the CopyNES BIOS.</li>
+<li> Every cycle on 6502 is either a read or a write cycle.</li>
+<li> A printer friendly version covering all section is available <strong class="selflink">here</strong>.</li></ul>
+<h3><span class="mw-headline" id="See_also">See also</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/2A03%20technical%20reference.txt" rel="nofollow">2A03 technical reference</a> by Brad Taylor. (Pretty old at this point; information on the wiki might be more up-to-date.)</li></ul>
+<h1><span class="mw-headline" id="Memory_map">Memory map</span></h1>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Device
+</th></tr>
+<tr>
+<td> $0000-$07FF </td>
+<td> $0800 </td>
+<td> 2KB internal RAM
+</td></tr>
+<tr>
+<td> $0800-$0FFF </td>
+<td> $0800 </td>
+<td rowspan="3"> <a href="Mirroring.xhtml" title="Mirroring">Mirrors</a> of $0000-$07FF
+</td></tr>
+<tr>
+<td> $1000-$17FF </td>
+<td> $0800
+</td></tr>
+<tr>
+<td> $1800-$1FFF </td>
+<td> $0800
+</td></tr>
+<tr>
+<td> $2000-$2007 </td>
+<td> $0008 </td>
+<td> <a href="PPU_registers.xhtml" title="PPU registers">NES PPU</a> registers
+</td></tr>
+<tr>
+<td> $2008-$3FFF </td>
+<td> $1FF8 </td>
+<td> Mirrors of $2000-2007 (repeats every 8 bytes)
+</td></tr>
+<tr>
+<td> $4000-$4017 </td>
+<td> $0018 </td>
+<td> <a href="APU.xhtml" title="APU">NES APU</a> and <a href="2A03.xhtml" title="2A03">I/O registers</a>
+</td></tr>
+<tr>
+<td> $4018-$401F </td>
+<td> $0008 </td>
+<td> APU and I/O functionality that is normally disabled. See <a href="CPU_Test_Mode.xhtml" title="CPU Test Mode">CPU Test Mode</a>.
+</td></tr>
+<tr>
+<td> $4020-$FFFF </td>
+<td> $BFE0 </td>
+<td> Cartridge space: PRG ROM, PRG RAM, and <a href="Mapper.xhtml" title="Mapper">mapper</a> registers (See Note)
+</td></tr></table>
+<p>See <a href="Sample_RAM_map.xhtml" title="Sample RAM map">Sample RAM map</a> for an example allocation strategy for the 2KB of internal RAM at $0000-$0800.
+</p><p>Note: Most common boards and iNES mappers address ROM and Save/Work RAM in this format:
+</p>
+<ul><li>$6000-$7FFF = Battery Backed Save or Work RAM</li>
+<li>$8000-$FFFF = Usual ROM, commonly with Mapper Registers (see <a href="MMC1.xhtml" title="MMC1">MMC1</a> and <a href="UxROM.xhtml" title="UxROM">UxROM</a> for example)</li></ul>
+<p>The CPU expects interrupt vectors in a fixed place at the end of the cartridge space:
+</p>
+<ul><li>$FFFA-$FFFB = NMI vector</li>
+<li>$FFFC-$FFFD = Reset vector</li>
+<li>$FFFE-$FFFF = IRQ/BRK vector</li></ul>
+<p>If a mapper doesn't fix $FFFA-$FFFF to some known bank (typically, along with the rest of the bank containing them, e.g. $C000-$FFFF for a 16KiB banking mapper) or use some sort of reset detection, the vectors need to be stored in all banks.
+</p>
+<h1><span class="mw-headline" id="Pin_out_and_signal_description">Pin out and signal description</span></h1>
+<h3><span class="mw-headline" id="Pin_out">Pin out</span></h3>
+<pre>        .--\/--.
+ AD1 &lt;- |01  40| -- +5V
+ AD2 &lt;- |02  39| -&gt; OUT0
+/RST -&gt; |03  38| -&gt; OUT1
+ A00 &lt;- |04  37| -&gt; OUT2
+ A01 &lt;- |05  36| -&gt; /OE1
+ A02 &lt;- |06  35| -&gt; /OE2
+ A03 &lt;- |07  34| -&gt; R/W
+ A04 &lt;- |08  33| &lt;- /NMI
+ A05 &lt;- |09  32| &lt;- /IRQ
+ A06 &lt;- |10  31| -&gt; M2
+ A07 &lt;- |11  30| &lt;- TST (usually GND)
+ A08 &lt;- |12  29| &lt;- CLK
+ A09 &lt;- |13  28| &lt;&gt; D0
+ A10 &lt;- |14  27| &lt;&gt; D1
+ A11 &lt;- |15  26| &lt;&gt; D2
+ A12 &lt;- |16  25| &lt;&gt; D3
+ A13 &lt;- |17  24| &lt;&gt; D4
+ A14 &lt;- |18  23| &lt;&gt; D5
+ A15 &lt;- |19  22| &lt;&gt; D6
+ GND -- |20  21| &lt;&gt; D7
+        `------'
+</pre>
+<h3><span class="mw-headline" id="Signal_description">Signal description</span></h3>
+<table class="metadata plainlinks mbox mbox-notice" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> <b>Active-Low signals are prefixed by a / (slash) symbol. Every cycle is either a read or a write cycle.</b> </td>
+</tr>
+</table>
+<ul><li> <b>CLK</b> : 21.47727 MHz (NTSC) or 26.6017 MHz (PAL) clock input. Internally, this clock is divided by 12 (NTSC <a href="CPU.xhtml" title="CPU">2A03</a>) or 16 (PAL <a href="CPU.xhtml" title="CPU">2A07</a>) to feed the 6502's clock input φ0, which is in turn inverted to form φ1, which is then inverted to form φ2. φ1 is high during the first phase (half-cycle) of each CPU cycle, while φ2 is high during the second phase.</li>
+<li> <b>AD1</b> : Audio out pin (both pulse waves).</li>
+<li> <b>AD2</b> : Audio out pin (triangle, noise, and DPCM).</li>
+<li> <b>Axx</b> and <b>Dx</b> : Address and data bus, respectively. <b>Axx</b> holds the target address during the entire read/write cycle. For reads, the value is read from <b>Dx</b> during φ2. For writes, the value appears on <b>Dx</b> during φ2 (and no sooner).</li>
+<li> <b>OUT0..OUT2</b> : Output pins used by the controllers ($4016 output latch bits 0-2). These 3 pins are connected to either the <a href="NES_expansion_port_pinout.xhtml" title="NES expansion port pinout">NES</a> or <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">Famicom's</a> expansion port, and <b>OUT0</b> is additionally used as the &quot;strobe&quot; signal (OUT) on both <a href="Controller_port_pinout.xhtml" title="Controller port pinout">controller ports</a>.</li>
+<li> <b>/OE1</b> and <b>/OE2</b> : Controller ports (for controller #1 and #2 respectively). Each enable the output of their respective controller, if present.</li>
+<li> <b>R/W</b> : Read/write signal, which is used to indicate operations of the same names. Low is write. <b>R/W</b> stays high/low during the entire read/write cycle.</li>
+<li> <b>/NMI</b> : Non-maskable interrupt pin. See the 6502 manual and <a href="CPU_interrupts.xhtml" title="CPU interrupts">CPU interrupts</a> for more details.</li>
+<li> <b>/IRQ</b> : Interrupt pin. See the 6502 manual and <a href="CPU_interrupts.xhtml" title="CPU interrupts">CPU interrupts</a> for more details.</li>
+<li> <b>M2</b> : Can be considered as a &quot;signals ready&quot; pin. It is a modified version the 6502's φ2 (which roughly corresponds to the CPU input clock φ0) that allows for slower ROMs. CPU cycles begin at the point where <b>M2</b> goes low.
+<ul><li> In the NTSC 2A03, <b>M2</b> has a <a href="Glossary.xhtml" title="Glossary">duty cycle</a> of 5/8th, or 350ns/559ns. Equivalently, a CPU read (which happens during the second, high phase of <b>M2</b>) takes 1 and 7/8th PPU cycles. The internal φ2 duty cycle is exactly 1/2 (one half).</li>
+<li> In the PAL 2A07, the duty cycle is not known, but suspected to be 19/32.</li></ul></li>
+<li> <b><a href="CPU_Test_Mode.xhtml" title="CPU Test Mode">TST</a></b> : (tentative name) Pin 30 is special: normally it is grounded in the NES, Famicom, PC10/VS. NES and other Nintendo Arcade Boards (Punch-Out!! and Donkey Kong 3). But if it is pulled high on the RP2A03G, extra diagnostic registers to test the sound hardware are enabled from $4018 through $401A, and the joystick ports $4016 and $4017 become open bus. On older revisions of the CPU, pulling pin 30 high instead causes the CPU to stop execution.</li></ul>
+<h1><span class="mw-headline" id="Power_up_state">Power up state</span></h1>
+<p>The following results are from a US (NTSC) NES, original front-loading design, RP2A03G CPU chip, NES-CPU-07 main board revision, manufactured in 1988. The memory values are probably slightly different for each individual NES console. Please note that you should NOT rely on the state of any registers after Power-UP and especially not the stack register and RAM ($0000-$07FF).
+</p>
+<h2><span class="mw-headline" id="At_power-up">At power-up</span></h2>
+<dl><dd>P = $34<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> (IRQ disabled)<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup></dd>
+<dd>A, X, Y = 0</dd>
+<dd>S = $FD</dd>
+<dd>$4017 = $00 (frame irq enabled)</dd>
+<dd>$4015 = $00 (all channels disabled)</dd>
+<dd>$4000-$400F = $00 (not sure about $4010-$4013)</dd></dl>
+<dl><dd>Internal memory ($0000-$07FF) has unreliable startup state. Some machines may have consistent RAM contents at power-on, but others do not.
+<ul><li> Emulators often implement a consistent RAM startup state (e.g. all $00 or $FF, or a particular pattern), and flash carts like the <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> may partially or fully initialize RAM before starting a program, so an NES programmer must be careful not to rely on the startup contents of RAM.</li></ul></dd></dl>
+<h2><span class="mw-headline" id="After_reset">After reset</span></h2>
+<dl><dd>A, X, Y were not affected</dd>
+<dd>S was decremented by 3 (but nothing was written to the stack)</dd>
+<dd>The I (IRQ disable) flag was set to true (status ORed with $04)</dd>
+<dd>The internal memory was unchanged</dd>
+<dd>APU mode in $4017 was unchanged</dd>
+<dd>APU was silenced ($4015 = 0)</dd></dl>
+<h2><span class="mw-headline" id="See_also_2">See also</span></h2>
+<ul><li><a href="PPU_power_up_state.xhtml" title="PPU power up state">Power-up state of PPU</a></li></ul>
+<h2><span class="mw-headline" id="Notes_2">Notes</span></h2>
+<h1><span class="mw-headline" id="Status_flag_behavior">Status flag behavior</span></h1>
+<p>The <b>flags</b> register, also called <b>processor status</b> or just <b>P</b>, is one of the six architectural registers on the 6502 family CPU.
+It is composed of six one-bit registers (see <a href="Status_flags.xhtml" title="Status flags">Status flags</a>); instructions modify one or more bits and leave others unchanged.
+</p><p>Instructions that save or restore the flags map them to bits in the architectural 'P' register as follows:
+</p>
+<pre>7  bit  0
+---- ----
+NVss DIZC
+|||| ||||
+|||| |||+- Carry: 1 if last addition or shift resulted in a carry, or if
+|||| |||     last subtraction resulted in no borrow
+|||| ||+-- Zero: 1 if last operation resulted in a 0 value
+|||| |+--- Interrupt: Interrupt inhibit
+|||| |       (0: /IRQ and /NMI get through; 1: only /NMI gets through)
+|||| +---- Decimal: 1 to make ADC and SBC use binary-coded decimal arithmetic
+||||         (ignored on second-source 6502 like that in the NES)
+||++------ s: No effect, used by the stack copy, see note below
+|+-------- Overflow: 1 if last ADC or SBC resulted in signed overflow,
+|            or D6 from last BIT
++--------- Negative: Set to bit 7 of the last operation
+</pre>
+<h2><span class="mw-headline" id="The_B_flag">The B flag</span></h2>
+<p>There are six and only six flags in the processor status register within the CPU.
+Despite what some 6502 references might appear to claim on a first reading, there is no &quot;B flag&quot; stored within the CPU's status register.
+</p><p>Two interrupts (/<a href="IRQ.xhtml" title="IRQ">IRQ</a> and /<a href="NMI.xhtml" title="NMI">NMI</a>) and two instructions (PHP and BRK) push the flags to the stack. In the byte pushed, bit 5 is always set to 1, and bit 4 is 1 if from an instruction (PHP or BRK) or 0 if from an interrupt line being pulled low (/IRQ or /NMI).  This is the only time and place where the B flag actually exists: not in the status register itself, but in bit 4 of the copy that is written to the stack.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Instruction </th>
+<th> Bits 5 and 4 </th>
+<th> Side effects after pushing
+</th></tr>
+<tr>
+<td> PHP </td>
+<td> 11 </td>
+<td> None
+</td></tr>
+<tr>
+<td> BRK </td>
+<td> 11 </td>
+<td> I is set to 1
+</td></tr>
+<tr>
+<td> /<a href="IRQ.xhtml" title="IRQ">IRQ</a> </td>
+<td> 10 </td>
+<td> I is set to 1
+</td></tr>
+<tr>
+<td> /<a href="NMI.xhtml" title="NMI">NMI</a> </td>
+<td> 10 </td>
+<td> I is set to 1
+</td></tr></table>
+<p>Two instructions (PLP and RTI) pull a byte from the stack and set all the flags. They ignore bits 5 and 4.
+</p><p>The only way for an IRQ handler to distinguish /IRQ from BRK is to read the flags byte from the stack and test bit 4.
+The slowness of this is one reason why BRK wasn't used as a syscall mechanism.
+Instead, it was more often used to trigger a patching mechanism that hung off the /IRQ vector: a single byte in PROM, UVEPROM, flash, etc. would be forced to 0, and the IRQ handler would pick something to do instead based on the program counter.
+</p><p>Unlike bits 5 and 4, bit 3 actually exists in P, even though it doesn't affect the ALU operation on the 2A03 or 2A07 CPU the way it does in MOS Technology's own chips.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=64224#p64224" rel="nofollow">koitsu's explanation</a></li></ul>
+<h1><span class="mw-headline" id="References">References</span></h1>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text">The <a href="Emulator_tests.xhtml" title="Emulator tests">golden log of nestest</a> differs from this in the <a href="CPU_status_flag_behavior.xhtml" title="CPU status flag behavior">irrelevant bits 5 and 4 of P</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text">IRQ was first asserted about 1/60 second after power-up, by APU.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.258 seconds
+Real time usage: 0.270 seconds
+Preprocessor visited node count: 191/1000000
+Preprocessor generated node count: 1021/1000000
+Post‐expand include size: 12911/2097152 bytes
+Template argument size: 240/2097152 bytes
+Highest expansion depth: 8/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:39-1!*!0!!en!5!* and timestamp 20160812115206 and revision id 11576
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

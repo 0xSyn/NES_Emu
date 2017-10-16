@@ -1,0 +1,84 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Myask/Myapper thoughts</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Myask/Myapper thoughts</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#8x8_attributes.2C_beginning_of_8x1"><span class="tocnumber">1</span> <span class="toctext">8x8 attributes, beginning of 8x1</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#8x1_attributes.3F"><span class="tocnumber">2</span> <span class="toctext">8x1 attributes?</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Flipping"><span class="tocnumber">3</span> <span class="toctext">Flipping</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#DMA_theft"><span class="tocnumber">4</span> <span class="toctext">DMA theft</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Slideshow_mirroring"><span class="tocnumber">5</span> <span class="toctext">Slideshow mirroring</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Fill_Mode"><span class="tocnumber">6</span> <span class="toctext">Fill Mode</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="8x8_attributes.2C_beginning_of_8x1">8x8 attributes, beginning of 8x1</span></h2>
+<p><a href="User_Myask_MyaGrafx.xhtml" title="User:Myask/MyaGrafx">User:Myask/MyaGrafx</a>
+</p>
+<h2><span class="mw-headline" id="8x1_attributes.3F">8x1 attributes?</span></h2>
+<p>It's all in the fine Y and keeping it in mind. The intensive solution is to watch the PPU bus and keep our own copy of PPUSCROLL, which requires knowing the latch and thus watching several of the registers.
+Pattern-fetch snooping can yield it, but as it is after the attribute fetch, it does not work for the first fetch of a scanline.
+Triple fetch is after said 2 pre-fetched tiles. Is really a double-fetch duplicating next one normally, but VBLANK is between the last line's double-fetch and the first of pre-render, which is interrupted by whatever the program wants to access.
+One could count tiles, then:
+</p>
+<pre>if(this_fetch == last_fetch) reset(counter);
+if(is_AT(this_fetch) &amp;&amp; is_NT(last_fetch)) counter += 1;
+if(counter == (32? 33? 34?)) //override the usual pattern, we're doing first prefetch
+///...after which we can just let the pattern fetch give us the information
+</pre>
+<p>But is this any simpler than register-snooping?
+This segues nicely into a scanline counter interrupt, though for some reason I have the thought of a nametable-relative Y-based interrupt instead (which is just a different frame of reference on the same thing.)
+Resetting to &quot;scanline 0&quot; if no triple-fetch detected in 128 CPU clocks seems workable.
+</p>
+<h2><span class="mw-headline" id="Flipping">Flipping</span></h2>
+<p>BG tileflipping is pretty easy.
+</p>
+<pre>chr_a[2:0] = ppu_a[2:0] ^ {3{is_chr_access &amp; vert_flip}};
+ppu_d[7:0] = (is_chr_access) ? (horiz_flip ? chr_d[0:7] : chr_d[7:0]) : something_else);
+</pre>
+<p>If one stored the attributes in the same byte you can piggyback that to set the flip bits.
+But what to use the other four bits for? Just do two tiles per byte? Allow MMC5-like extended tile index allowance? Allow swapping of two colors in the attribute?
+</p>
+<pre>wire invert_cur = ppu_a[4] ? invert_plane1 : invert_plane0;
+ppu_d[7:0] = (is_chr_access) ? (invert_cur ^ (horiz_flip ? chr_d[0:7] : chr_d[7:0])) : something_else);
+</pre>
+<p>Rotation would require orthogonal accesses, all-but requiring in-chip CHR.
+Note: one should only do this if things are following (AT,NT,PT,PT) pattern. If not, one is fetching sprite patterns. While it is of mild interest that there are 64 sprites filling out the 32x32 count, OAM already deals with that better.
+</p><p>Though, one could use the garbage NT fetches (which are a double fetch, can leech off logic detecting the triple fetch!) to add extended per-sprite banking, though detecting which sprite is which is Another Problem, requiring either duplicating/spying OAM's tile entry, or requiring some specific pattern of sprite arrangement (useful for static images?). This also allows some odd bits, like changing sprite tile mid-sprite (vertically).
+</p>
+<h2><span class="mw-headline" id="DMA_theft">DMA theft</span></h2>
+<p>If you watch for a $4014 write, you can then watch the DMA happen...and thus have another destination to copy it to. This could alleviate the VBLANK crunch a bit (for e.g. the 8x1 mapper), as DMA copies much faster than program can. Obviously bringing it into the chip 'à la' MMC5 means one could allow access to both buses, but that costs a lot of chip resources. 
+</p>
+<h2><span class="mw-headline" id="Slideshow_mirroring">Slideshow mirroring</span></h2>
+<pre>PPUDOUT[0:7] = PPUDIN[0:7] &amp; {8,{~PPUA[11]&amp;PPUA[9]}};// (relies on tile 0 being blank)
+CIRAMA10 = PPUA[10];
+//ab
+//00
+</pre>
+<p>Of course, the slideshow effect could be done without any special hardware just by using a render-disable raster effect instead of a scroll.
+</p>
+<h2><span class="mw-headline" id="Fill_Mode">Fill Mode</span></h2>
+<p>…is an expansion of the above:
+</p>
+<pre>wire is_fill_mode = (nt_mapping[PPU_A[11:10]] == FILL_MODE) &amp;&amp; is_nt_fetch;
+PPUDOUT[0:7] = is_fill_mode ? fill_chr[0:7] : chrdin[0:7];
+</pre>
+<p>Actually, now I think it, &quot;CIRAM0, CIRAM1, disable, fill mode&quot; isn't a bad set of 4. Catch is, of course, that that would mean cartside NT0-3 makes it 12 bits of mirroring to allow full control, two writes. That leaves four bits of unused write…
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.054 seconds
+Real time usage: 0.056 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1530-1!*!0!!en!*!* and timestamp 20160701183357 and revision id 12682
+ -->
+</div></body></html>

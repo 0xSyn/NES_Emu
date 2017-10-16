@@ -1,0 +1,79 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Namcot 163 family pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Namcot 163 family pinout</h1><div class="article">
+<p>The Namcot 129 and 163 seem to be identical.
+The Namcot 175 and 340 have minor but vital differences.
+</p><p><a href="Namco_163.xhtml" title="Namco 163">Namcot 129 and 163</a>: 48-pin QFP (canonically <a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">iNES Mapper 019</a>)
+</p>
+<pre>                             /   \
+            (f) SOUND   &lt;-  /01 48\ -&gt; CHR A14 (r)
+           (r) CHR A13 &lt;-  /02   47\ -&gt; CHR A15 (r)
+          (r) CHR A12 &lt;-  /03     46\ -&gt; CHR A16 (r)
+         (r) CHR A11 &lt;-  /04       45\ -&gt; CHR A17 (r)
+       (fr)*CHR A10 &lt;-  /05         44\ -&gt; ?
+               GND  -  /06           43\ -- +5v
+      (r) PRG A18 &lt;-  /07             42\ -&gt; CIRAM /CE (f)
+     (r) PRG A17 &lt;-  /08               41\ -&gt; CHR ROM /CE (r)
+    (r) PRG A16 &lt;-  /09                 40\ -&gt; WRAM /CE (w)
+   (r) PRG A15 &lt;-  /10                   39\ -&gt; /IRQ (f)
+  (r) PRG A14 &lt;-  /11                     38\ &lt;- PPU A10 (f)
+ (r) PRG A13 &lt;-  /12                       37\ &lt;- PPU A11 (f)
+(fr)  CPU D7 &lt;-&gt; \13                       36/ &lt;- PPU A12 (f)
+ (fr)  CPU D6 &lt;-&gt; \14                     35/ &lt;- PPU A13 (f)
+  (fr)  CPU D5 &lt;-&gt; \15                   34/ -- GND
+   (fr)  CPU D4 &lt;-&gt; \16                 33/ &lt;- PPU /RD (f) or GND (see below)
+    (fr)  CPU D3 &lt;-&gt; \17               32/ -- +5V
+     (fr)  CPU D2 &lt;-&gt; \18             31/ -- GND
+               +5v  -  \19           30/ &lt;- M2 (f)
+       (fr)  CPU D1 &lt;-&gt; \20         29/ &lt;- R/W (fw)
+        (fr)  CPU D0 &lt;-&gt; \21       28/ &lt;- /ROMSEL (f)
+                 GND?  -  \22     27/ &lt;- CPU A14 (f)
+           (r) PRG /CE  &lt;- \23   26/ &lt;- CPU A13 (f)
+           (fr) CPU A11  -&gt; \24 25/ &lt;- CPU A12 (fr)
+                             \   /
+                              \_/
+05 also connects to CIRAM A10
+19,32,43 Some boards connect a battery (through a standard diode switch) to this pin to make the waveform memory nonvolatile
+22 Some boards this is connected to +5V, some to Gnd, so probably an input
+30 pull-down resistor present on boards with battery for low-power mode
+33 Ground this pin with if CHR's nOE and nCS lines are separate
+34 No function
+40 6264 /CE connected to this pin
+44 Might be an enable for CHR RAM, can't find an example of it being used
+
+(r) - this pin connects to the ROM chips
+(f) - this pin connects to the Famicom connector
+(w) - this pin connects to the WRAM
+</pre>
+<p>Namcot 175: 48-pin QFP (canonically <a href="INES_Mapper_210.xhtml" title="INES Mapper 210">iNES Mapper 210</a>)
+</p>
+<pre>01 sound was removed
+05 CIRAM A10 is hardwired to PPU A10 or A11 as appropriate
+39 does not provide IRQs
+42 does not allow for ROM nametables
+</pre>
+<p>Namcot 340: 48-pin QFP (also <a href="INES_Mapper_210.xhtml" title="INES Mapper 210">iNES Mapper 210</a>)
+</p>
+<pre> 42\ -&gt; <b>?</b>
+  41\ -&gt; <b>?</b>
+   40\ -&gt; <b>CHR /CE (r)</b>
+    39\ -&gt; <b>CIRAM A10 (f)</b>
+01 sound was also removed.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.046 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:788-1!*!0!*!*!*!* and timestamp 20160713134909 and revision id 12720
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Emulator tests</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Emulator tests</h1><div class="article">
+<p>There are many ROMs available that test an emulator for <a href="Accuracy.xhtml" title="Accuracy">inaccuracies</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Validation_ROMs"><span class="tocnumber">1</span> <span class="toctext">Validation ROMs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Multiple"><span class="tocnumber">1.1</span> <span class="toctext">Multiple</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#CPU"><span class="tocnumber">1.2</span> <span class="toctext">CPU</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#PPU"><span class="tocnumber">1.3</span> <span class="toctext">PPU</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#APU"><span class="tocnumber">1.4</span> <span class="toctext">APU</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Mapper"><span class="tocnumber">1.5</span> <span class="toctext">Mapper</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Controller"><span class="tocnumber">1.6</span> <span class="toctext">Controller</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Automated_testing"><span class="tocnumber">2</span> <span class="toctext">Automated testing</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Validation_ROMs">Validation ROMs</span></h2>
+<p>There is a substantial archive of test roms available at <a class="external free" href="https://github.com/christopherpow/nes-test-roms" rel="nofollow">https://github.com/christopherpow/nes-test-roms</a>
+</p>
+<h3><span class="mw-headline" id="Multiple">Multiple</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/NEStress.zip" rel="nofollow">NEStress</a> partially tests PPU, CPU, and controller operation (old; some tests seem to always fail).</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-tests/" rel="nofollow">Blargg's test ROMs</a> partially test APU, misc PPU behavior, sprite 0 hit, and MMC3 operation. Refer to <a href="PPU_frame_timing.xhtml" title="PPU frame timing">PPU frame timing</a> for new information that the PPU ROMs test.</li></ul>
+<h3><span class="mw-headline" id="CPU">CPU</span></h3>
+<ul><li> <a class="external text" href="http://nickmass.com/images/nestest.nes" rel="nofollow">nestest</a> (<a class="external text" href="http://www.qmtpro.com/~nes/misc/nestest.txt" rel="nofollow">doc</a>) fairly thoroughly tests CPU operation. This is the best test to start with when getting a CPU emulator working for the first time. Start execution at $C000 and compare execution with a <a class="external text" href="http://www.qmtpro.com/~nes/misc/nestest.log" rel="nofollow">log</a> from <a href="Nintendulator.xhtml" title="Nintendulator">Nintendulator</a>, an emulator whose CPU is known to work correctly (apart from some details of the power-up state).</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-tests/instr_test-v4.zip" rel="nofollow">instr_test</a> tests official and unofficial CPU instructions and lists which ones failed. It will work even if emulator has no PPU and only supports NROM, writing a copy of output to $6000 (see readme). This more thoroughly tests instructions, but can't help you figure out what's wrong beyond what instruction(s) are failing, so it's better for testing mature CPU emulators.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/nes_instr_misc.zip" rel="nofollow">instr_misc</a> tests some miscellaneous aspects of instructions, including behavior when 16-bit address wraps around, and dummy reads.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/instr_timing.zip" rel="nofollow">instr_timing</a> tests timing of all instructions, including unofficial ones, page-crossing, etc.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/cpu_interrupts_v2.zip" rel="nofollow">cpu_interrupts_v2</a> tests the behavior and timing of CPU in the presence of interrupts, both IRQ and NMI; see <a href="CPU_interrupts.xhtml" title="CPU interrupts">CPU interrupts</a>.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/cpu_reset.zip" rel="nofollow">cpu_reset</a> tests CPU registers just after power and changes during reset, and that RAM isn't changed during reset.</li></ul>
+<h3><span class="mw-headline" id="PPU">PPU</span></h3>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=626" rel="nofollow">Sprite 0 Hit</a> test ROMs.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=567" rel="nofollow">Misc PPU Tests</a>.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/ppu_vbl_nmi.zip" rel="nofollow">ppu_vbl_nmi</a> tests the behavior and timing of the NTSC PPU's VBL flag, NMI enable, and NMI interrupt. Timing is tested to an accuracy of one PPU clock.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-tests/sprite_overflow_tests.zip" rel="nofollow">PPU sprite overflow flag timing tests</a> ($2002 bit 5), covering general operation, timing, and obscure pathological behavior (<a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=11416#p11416" rel="nofollow">discussion</a>).</li>
+<li> <a class="external text" href="http://pics.pineight.com/nes/tvpassfail.zip" rel="nofollow">tvpassfail</a>: NTSC color and NTSC/PAL pixel aspect ratio test ROM.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=13264" rel="nofollow">NTSC palette display</a></li>
+<li> <a href="Full_palette_demo.xhtml" title="Full palette demo">Full palette demo</a> displays the full palette with all emphasis states, demonstrates direct PPU color control</li></ul>
+<h3><span class="mw-headline" id="APU">APU</span></h3>
+<ul><li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/apu_test.zip" rel="nofollow">apu_test</a> tests many aspects of the APU that are visible to the CPU. Really obscure things are not tested here.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/apu_mixer.zip" rel="nofollow">apu_mixer</a> verifies proper operation of the APU's sound channel mixer, including relative volumes of channels and non-linear mixing. <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/apu_mixer_recordings.zip" rel="nofollow">recordings when run on NES</a> are available for comparison, though the tests are made so that you don't really need these.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/apu_reset.zip" rel="nofollow">apu_reset</a> tests initial APU state at power, and the effect of reset.</li>
+<li> <a class="external text" href="http://pics.pineight.com/nes/volume_tests.zip" rel="nofollow">volume_tests</a> plays tones on all the APU's channels to show their relative volumes at various settings of $4011. Package includes a recording from an NES's audio output for comparison.</li>
+<li> <a class="external text" href="http://blargg.8bitalley.com/nes-tests/apu_sweep-3.zip" rel="nofollow">apu_sweep</a> tests the sweep unit's add, subtract, overflow cutoff, and minimum period behaviors.</li></ul>
+<h3><span class="mw-headline" id="Mapper">Mapper</span></h3>
+<ul><li> <a class="external text" href="http://blargg.8bitalley.com/parodius/nes-tests/mmc3_test_2.zip" rel="nofollow">mmc3_test</a> tests the <a href="MMC3.xhtml" title="MMC3">MMC3</a> scanline counter and IRQ generation, not much else currently.</li>
+<li> <a class="external text" href="http://pics.pineight.com/nes/bntest.zip" rel="nofollow">BNTest</a> tests how many PRG banks are reachable in <a class="mw-redirect" href="BNROM.xhtml" title="BxROM">BxROM</a> and <a href="AxROM.xhtml" title="AxROM">AxROM</a>.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=102693#p102693" rel="nofollow">test28</a> tests the <a href="Action_53_mapper.xhtml" title="Action 53 mapper">Action 53 mapper</a> exhaustively.</li>
+<li> <a class="external text" href="http://pineight.com/nes/" rel="nofollow">Holy Diver Batman</a> by <a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> detects over a dozen mappers and verifies that all PRG ROM and CHR ROM banks are reachable, that PRG RAM and CHR RAM can be written and read back without error, and that nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>, IRQ, and WRAM protection work.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=142243#p142243" rel="nofollow">FME-7 IRQ acknowledge test</a> by <a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> checks some IRQ acknowledgment behiaviors of <a href="Sunsoft_FME_7.xhtml" title="Sunsoft FME-7">Sunsoft FME-7</a> that emulators were getting wrong in 2015.</li></ul>
+<h3><span class="mw-headline" id="Controller">Controller</span></h3>
+<ul><li> <a class="external text" href="http://rdev.g-pw.org/makimura/homebrew" rel="nofollow">Mouse test</a> for a Super Famicom <a href="Mouse.xhtml" title="Mouse">mouse</a> wired in a Famicom expansion port as controller 3</li></ul>
+<h2><span class="mw-headline" id="Automated_testing">Automated testing</span></h2>
+<p>It's best if your emulator can automatically run a suite of tests at the press of a button. This allows you to re-run them every time you make a change, without any effort. Automation can be difficult, because the emulator must be able to determine success/failure without your help.
+</p><p>The first part of automated testing is support for a &quot;movie&quot; or &quot;demo&quot;, or a list of what buttons were pressed when.
+An emulator makes a movie by recording presses while the user is playing, and then it plays the movie by feeding the recorded presses back through the input system.
+This not only helps automated testing but also makes your emulator attractive to <a class="extiw" href="https://en.wikipedia.org/wiki/Speedrun" title="wikipedia:Speedrun">speedrunners</a>.
+</p><p>To create a test case, record a movie of the player activating all tests in a ROM, take a screenshot of each result screen, and log the time and a <a class="extiw" href="https://en.wikipedia.org/wiki/Hash_function" title="wikipedia:Hash function">hash</a> of each screenshot.
+The simplest test ROMs won't require any button presses.
+ROMs that test more than one thing are more likely to require them, and an <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">actual game</a> will require a playthrough.
+Then to run a test case, play the movie in fast-forward (no delay between frames) and take screenshots at the same times.
+If a screenshot's hash differs from that of the corresponding screenshot from when the test case was created, make a note of this difference in the log.
+Then you can compare the emulator's output frame-by-frame to that of the previous release of your emulator running the same test case.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.101 seconds
+Real time usage: 0.108 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:233-1!*!0!!en!*!* and timestamp 20160612173043 and revision id 12623
+ -->
+</div></body></html>

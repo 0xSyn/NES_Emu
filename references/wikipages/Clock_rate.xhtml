@@ -1,0 +1,270 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Clock rate</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Clock rate</h1><div class="article">
+<p>The <b>clock rate</b> of various components in the NES differs between consoles in the USA and Europe due to the different television standards used (NTSC M vs. PAL B). The color encoding method used by the NES (see <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a>) requires that the master clock frequency be six times that of the color subcarrier, but this frequency is about 24% higher on PAL than on NTSC. In addition, PAL has more scanlines per field and fewer fields per second than NTSC.
+Furthermore, the PAL CPU's master clock could have been divided by 15 to preserve the ratio between CPU and PPU speeds, but Nintendo chose to keep the <a class="extiw" href="https://en.wikipedia.org/wiki/Ring_counter" title="wikipedia:Ring counter">Johnson counter</a> structure, which always has an even period, and divide by 16 instead.
+</p><p>So the main differences between the NTSC and PAL PPUs are depicted in the following table:
+</p>
+<table class="tabular">
+<tr>
+<th> Property
+</th>
+<th> NTSC (2C02)
+</th>
+<th> PAL (2C07)
+</th>
+<th> Dendy
+</th>
+<th> RGB (2C03)
+</th>
+<th> RGB (Vs. 4)
+</th>
+<th> RGB (2C05)
+</th></tr>
+<tr>
+<td> Master clock speed
+</td>
+<td> 21.477272 MHz ± 40 Hz<br/>236.25 MHz ÷ 11 by definition
+</td>
+<td> 26.601712 MHz ± 50 Hz<br/>26.6017125 MHz by definition
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> CPU
+</td>
+<td> Ricoh 2A03
+</td>
+<td> Ricoh 2A07
+</td>
+<td> UMC 6527P
+</td>
+<td align="center" colspan="3">Ricoh 2A03
+</td></tr>
+<tr>
+<td> CPU clock speed
+</td>
+<td> 21.47~ MHz ÷ 12 = 1.789773 MHz<br/>Same as NTSC Amiga clock ÷ 4
+</td>
+<td> 26.60~ MHz ÷ 16 = 1.662607 MHz
+</td>
+<td> 26.60~ MHz ÷ 15 = 1.773448 MHz<br/>Same as PAL Amiga clock ÷ 4
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">APU Frame Counter</a> rate
+</td>
+<td> 60 Hz
+</td>
+<td> 50 Hz<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=160349#p160349" rel="nofollow">[1]</a>
+</td>
+<td> 59 Hz<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=174970#p174970" rel="nofollow">[2]</a>
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> PPU
+</td>
+<td> Ricoh 2C02
+</td>
+<td> Ricoh 2C07
+</td>
+<td> UMC 6538
+</td>
+<td> Ricoh 2C03
+</td>
+<td> Ricoh 2C04-0001 through 2C04-0004
+</td>
+<td> Ricoh 2C05
+</td></tr>
+<tr>
+<td> PPU clock speed
+</td>
+<td> 21.477272 MHz ÷ 4
+</td>
+<td> 26.601712 MHz ÷ 5
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> PPU dots per CPU cycle
+</td>
+<td> 3
+</td>
+<td> 3.2
+</td>
+<td> 3
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> Height of picture
+</td>
+<td> 240 scanlines
+</td>
+<td> 239 scanlines
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> Nominal visible picture height (see <a href="Overscan.xhtml" title="Overscan">Overscan</a>)
+</td>
+<td> 224 scanlines
+</td>
+<td> 268 scanlines
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> &quot;Post-render&quot; blanking lines between end of picture and <a href="NMI.xhtml" title="NMI">NMI</a>
+</td>
+<td> 1 scanline
+</td>
+<td> 1 scanline
+</td>
+<td> 51 scanlines
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> Length of vertical blanking after NMI
+</td>
+<td> 20 scanlines
+</td>
+<td> 70 scanlines
+</td>
+<td> 20 scanlines
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> Time during which <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> can be written
+</td>
+<td> Vertical or forced blanking
+</td>
+<td> Only during first 20 scanlines after NMI
+</td>
+<td> Like NTSC
+</td>
+<td align="center" colspan="3">Like NTSC
+</td></tr>
+<tr>
+<td> &quot;Pre-render&quot; lines between vertical blanking and next picture
+</td>
+<td align="center" colspan="6"> 1 scanline
+</td></tr>
+<tr>
+<td> Total number of dots per frame
+</td>
+<td> 341 × 261 + 340.5 = 89341.5<br/>(pre-render line is one dot shorter in every other frame)
+</td>
+<td> 341 × 312 = 106392
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3"> 341 × 262 = 89342
+</td></tr>
+<tr>
+<td> Vertical scan rate
+</td>
+<td> 60.0988 Hz
+</td>
+<td> 50.0070 Hz
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">60.0985 Hz
+</td></tr>
+<tr>
+<td> Color of top and bottom borders
+</td>
+<td> N/A
+</td>
+<td> Always black ($1D)
+</td>
+<td> Like PAL
+</td>
+<td> ?
+</td>
+<td> ?
+</td>
+<td> ?
+</td></tr>
+<tr>
+<td> Side borders
+</td>
+<td> <a href="PPU_palettes.xhtml" title="PPU palettes">Palette</a> entry at $3F00
+</td>
+<td> Always black ($1D), <a href="Overscan.xhtml#PAL" title="Overscan">intruding on left and right 2 pixels and top 1 pixel of picture</a>
+</td>
+<td> Like PAL
+</td>
+<td> ?
+</td>
+<td> ?
+</td>
+<td> ?
+</td></tr>
+<tr>
+<td> Color emphasis<br/>(with correlating bit in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a>)
+</td>
+<td> Blue (D7), green (D6), red (D5)
+</td>
+<td> Blue (D7), red (D6), green (D5)
+</td>
+<td> Like PAL
+</td>
+<td align="center" colspan="3">Blue, green, red (full scale)
+</td></tr>
+<tr>
+<td> Other quirks
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td> Missing $2D and $3D greys
+</td>
+<td> Permutated palette
+</td>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> are swapped; revision ID in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> (D4-D0)
+</td></tr></table>
+<p>Some frequencies in the above table are rounded.
+</p><p>The 2C03, 2C04, and 2C05 PPUs were all found in Nintendo's <a class="extiw" href="https://en.wikipedia.org/wiki/Nintendo_VS._System" title="wikipedia:Nintendo VS. System">Vs. System</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/PlayChoice-10" title="wikipedia:PlayChoice-10">PlayChoice-10</a> (a.k.a. PC10 or PC-10) arcade systems.
+Famicom Titler, Famicom TVs, and RGB-modded NES consoles would use either the 2C03 or a 2C05 with glue logic to unswap $2000 and $2001.
+(Later RGB mods used a 2C02 in output mode and faked out all palette logic.)
+</p><p>The color emphasis bits on the PAL NES have their red and green bits in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> swapped
+</p><p>The authentic NES sold in Brazil is an NTSC NES with an adapter board to turn the NTSC video into <a class="extiw" href="https://en.wikipedia.org/wiki/PAL-M" title="wikipedia:PAL-M">PAL-M video</a>, a variant of PAL using NTSC frequencies but PAL's color modulation.
+</p><p><a class="extiw" href="https://en.wikipedia.org/wiki/Dendy_(console)" title="wikipedia:Dendy (console)">Dendy</a> is a clone of the Famicom distributed by Steepler and sold in Russia.
+The chipset in Dendy and several other PAL famiclones (6527P+6538) is designed for compatibility with Famicom games, including games with CPU cycle counting mappers (e.g. <a href="VRC4.xhtml" title="VRC4">VRC4</a>) and games that use a cycle-timed NMI handler (e.g. <i>Balloon Fight</i>).
+This explains the faster CPU divider and longer post-render period vs. the authentic PAL NES.
+</p><p>To compensate for these differences, you can <a href="Detect_TV_system.xhtml" title="Detect TV system">detect the TV system</a> at power-on.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.072 seconds
+Real time usage: 0.074 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:25-1!*!0!*!*!*!* and timestamp 20160709004547 and revision id 12702
+ -->
+</div></body></html>

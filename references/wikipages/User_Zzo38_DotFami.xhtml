@@ -1,0 +1,409 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/DotFami</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/DotFami</h1><div class="article">
+<p>This is a draft for <tt>.fami</tt> format of NES/Famicom ROM image files. This format allows title text, debugging information, custom mapper, and a few more.
+</p><p>(N.B. Do not delete or move this file until the draft is completed.)
+</p><p>Difference of this format with others includes:
+</p>
+<ul><li> You can specify NTSC and PAL.</li>
+<li> Can include descriptive text.</li>
+<li> There is no fixed set of mapper numbers; instead the components of the cartridge are configured individually.</li>
+<li> Debugging symbols can be included.</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#File_Order"><span class="tocnumber">1</span> <span class="toctext">File Order</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Header"><span class="tocnumber">2</span> <span class="toctext">Header</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Mapper_Codes"><span class="tocnumber">3</span> <span class="toctext">Mapper Codes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#.28.2400.29_Add_non-audio_component"><span class="tocnumber">3.1</span> <span class="toctext">($00) Add non-audio component</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.28.2401.29_Add_audio_component"><span class="tocnumber">3.2</span> <span class="toctext">($01) Add audio component</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.28.2404.29_Connection_of_components_to_components"><span class="tocnumber">3.3</span> <span class="toctext">($04) Connection of components to components</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.28.2405.29_Connection_of_components_to_cartridge_pins"><span class="tocnumber">3.4</span> <span class="toctext">($05) Connection of components to cartridge pins</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.28.2406.29_Connection_of_cartridge_to_cartridge"><span class="tocnumber">3.5</span> <span class="toctext">($06) Connection of cartridge to cartridge</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.28.24FD.29_External_condition"><span class="tocnumber">3.6</span> <span class="toctext">($FD) External condition</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.28.24FE.29_External_parameter"><span class="tocnumber">3.7</span> <span class="toctext">($FE) External parameter</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.28.24FF.29_External_selector"><span class="tocnumber">3.8</span> <span class="toctext">($FF) External selector</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Symbol_Data"><span class="tocnumber">4</span> <span class="toctext">Symbol Data</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Mapper_Components"><span class="tocnumber">5</span> <span class="toctext">Mapper Components</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#.28.2400.29_ROM"><span class="tocnumber">5.1</span> <span class="toctext">($00) ROM</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.28.2401.29_RAM"><span class="tocnumber">5.2</span> <span class="toctext">($01) RAM</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.28.2402.29_Logic_gates"><span class="tocnumber">5.3</span> <span class="toctext">($02) Logic gates</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.28.2403.29_Multiplication"><span class="tocnumber">5.4</span> <span class="toctext">($03) Multiplication</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.28.2404.29_Shift_register"><span class="tocnumber">5.5</span> <span class="toctext">($04) Shift register</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.28.2405.29_Flip-flops"><span class="tocnumber">5.6</span> <span class="toctext">($05) Flip-flops</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.28.2406.29_Multiplexer"><span class="tocnumber">5.7</span> <span class="toctext">($06) Multiplexer</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.28.2407.29_Diskette_drive"><span class="tocnumber">5.8</span> <span class="toctext">($07) Diskette drive</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.28.2408.29_File_loading_interface"><span class="tocnumber">5.9</span> <span class="toctext">($08) File loading interface</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.28.2409.29_Bandai_EEPROM"><span class="tocnumber">5.10</span> <span class="toctext">($09) Bandai EEPROM</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.28.240A.29_Expansion_terminal"><span class="tocnumber">5.11</span> <span class="toctext">($0A) Expansion terminal</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#.28.240B.29_Counter"><span class="tocnumber">5.12</span> <span class="toctext">($0B) Counter</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#.28.240C.29_System_reset_initializer"><span class="tocnumber">5.13</span> <span class="toctext">($0C) System reset initializer</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#.28.240D.29_Addressable_register"><span class="tocnumber">5.14</span> <span class="toctext">($0D) Addressable register</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#Mapper_Audio"><span class="tocnumber">6</span> <span class="toctext">Mapper Audio</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#.28.2400.29_Extra_2A03_audio"><span class="tocnumber">6.1</span> <span class="toctext">($00) Extra 2A03 audio</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#.28.2401.29_Famicom_Disk_System_audio"><span class="tocnumber">6.2</span> <span class="toctext">($01) Famicom Disk System audio</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#.28.2402.29_VRC6_audio"><span class="tocnumber">6.3</span> <span class="toctext">($02) VRC6 audio</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#.28.2403.29_VRC7_audio"><span class="tocnumber">6.4</span> <span class="toctext">($03) VRC7 audio</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#.28.2404.29_MMC5_audio"><span class="tocnumber">6.5</span> <span class="toctext">($04) MMC5 audio</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#.28.2405.29_Sunsoft_audio"><span class="tocnumber">6.6</span> <span class="toctext">($05) Sunsoft audio</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#.28.2406.29_Namco_audio"><span class="tocnumber">6.7</span> <span class="toctext">($06) Namco audio</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#.28.2407.29_JF-13_audio"><span class="tocnumber">6.8</span> <span class="toctext">($07) JF-13 audio</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#.28.2408.29_Digital_to_analog_converter"><span class="tocnumber">6.9</span> <span class="toctext">($08) Digital to analog converter</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-38"><a href="#ASCII.2Fshortkana_Table"><span class="tocnumber">7</span> <span class="toctext">ASCII/shortkana Table</span></a></li>
+<li class="toclevel-1 tocsection-39"><a href="#Other_File_Formats"><span class="tocnumber">8</span> <span class="toctext">Other File Formats</span></a>
+<ul>
+<li class="toclevel-2 tocsection-40"><a href="#.rom"><span class="tocnumber">8.1</span> <span class="toctext">.rom</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#.cart"><span class="tocnumber">8.2</span> <span class="toctext">.cart</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#.symb"><span class="tocnumber">8.3</span> <span class="toctext">.symb</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#ines.map"><span class="tocnumber">8.4</span> <span class="toctext">ines.map</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#unif.map"><span class="tocnumber">8.5</span> <span class="toctext">unif.map</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#.native"><span class="tocnumber">8.6</span> <span class="toctext">.native</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-46"><a href="#Supported_programs"><span class="tocnumber">9</span> <span class="toctext">Supported programs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-47"><a href="#Emulators_.28compile_time.29"><span class="tocnumber">9.1</span> <span class="toctext">Emulators (compile time)</span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#Emulators_.28run_time.29"><span class="tocnumber">9.2</span> <span class="toctext">Emulators (run time)</span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#Hardware_programmers"><span class="tocnumber">9.3</span> <span class="toctext">Hardware programmers</span></a></li>
+<li class="toclevel-2 tocsection-50"><a href="#Assemblers.2Fcompilers"><span class="tocnumber">9.4</span> <span class="toctext">Assemblers/compilers</span></a></li>
+<li class="toclevel-2 tocsection-51"><a href="#Hardware_description_language"><span class="tocnumber">9.5</span> <span class="toctext">Hardware description language</span></a></li>
+<li class="toclevel-2 tocsection-52"><a href="#Miscellaneous"><span class="tocnumber">9.6</span> <span class="toctext">Miscellaneous</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="File_Order">File Order</span></h2>
+<ul><li> Header</li>
+<li> ROM data</li>
+<li> Mapper codes</li>
+<li> Symbol data</li>
+<li> Descriptive text</li></ul>
+<p>(Note: Sixteen bit numbers throughout the file are small-endian form.)
+</p>
+<h2><span class="mw-headline" id="Header">Header</span></h2>
+<pre>  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|'F'|'A'|'M'|'I'|cpu| * | banks |textLen|mapLen |symLen | * | * |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</pre>
+<ul><li> The first four bytes of the header must be the ASCII codes for &quot;<tt>FAMI</tt>&quot;.</li>
+<li> <tt>banks</tt>: Number 8K ROM banks.</li>
+<li> <tt>cpu</tt>: CPU mode flag:
+<ul><li> bit0: Set if decimal mode should work (not used in NES/Famicom, although some Famiclones may have decimal mode).</li>
+<li> bit1: Set if the 2A03 APU noise Mode flag should be ignored.</li>
+<li> bit2: Swap PPUCTRL and PPUMASK (used in some <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> games).</li>
+<li> bit3: RGB PPU (tint bits maximize intensity, and some other differences).</li>
+<li> bit4: Buggy Famiclone audio (switched bit7/bit6 or duty 1 and 2 are switched).</li>
+<li> bit5: Can be used with Dendy TV mode.</li>
+<li> bit6: Can be used with PAL TV mode.</li>
+<li> bit7: Can be used with NTSC TV mode.</li></ul></li>
+<li> <tt>*</tt>: Reserved bytes; set to zero.</li>
+<li> <tt>textLen</tt>: Length of descriptive text.</li>
+<li> <tt>mapLen</tt>: Length of mapper codes.</li>
+<li> <tt>symLen</tt>: Length of symbol data.</li></ul>
+<p>Note for TV modes: It can set multiple bits to indicate if it is OK with multiple TV modes. If none of these bits are set, it means to use NTSC timing, but use RGB palettes, no NTSC color artifacts, square pixels, and the entire 256x240 screen to be visible.
+</p><p>Note: It is recommended that the user be able to change all the settings listed in the CPU mode flag.
+</p>
+<h2><span class="mw-headline" id="Mapper_Codes">Mapper Codes</span></h2>
+<p>Each mapper command consists of a length byte, followed by a command code, an ID number, and the parameters which have the length indicated by the length byte (the first byte of parameters is called parameter <tt>$00</tt>, etc).
+</p>
+<h3><span class="mw-headline" id=".28.2400.29_Add_non-audio_component">($00) Add non-audio component</span></h3>
+<ul><li> ID number: ID of added component (must be unique for each component; non-audio and audio components additionally may not share ID numbers with themselves or each other).</li>
+<li> Parameter <tt>$00</tt>: Type of component to add.</li>
+<li> Parameter <tt>$01</tt>...: Parameters of component (depends on type of component).</li></ul>
+<h3><span class="mw-headline" id=".28.2401.29_Add_audio_component">($01) Add audio component</span></h3>
+<ul><li> ID number: ID of added component (must be unique for each component; non-audio and audio components additionally may not share ID numbers with themselves or each other).</li>
+<li> Parameter <tt>$00</tt>: Type of component to add.</li>
+<li> Parameter <tt>$01</tt>: Volume from 0 to 64.</li>
+<li> Parameter <tt>$02</tt>: Panning from 0 (left) to 64 (right), or 100 for surround. This parameter can be safely ignored by emulators and hardware.</li>
+<li> Parameter <tt>$03</tt>...: Parameters of component (depends on type of component).</li></ul>
+<h3><span class="mw-headline" id=".28.2404.29_Connection_of_components_to_components">($04) Connection of components to components</span></h3>
+<ul><li> ID number: ID of first component.</li>
+<li> Parameter <tt>$00</tt>: ID of second component.</li>
+<li> Parameter <tt>$01</tt>: Low 4 bits = impedance (0=direct, 15=high). High 4 bits = propagation delay (0=not applicable).</li>
+<li> Parameter <tt>$02</tt>: Pin of first component.</li>
+<li> Parameter <tt>$03</tt>: Pin of second component.</li>
+<li> Parameter <tt>$04</tt>...: Repeat of parameters <tt>$02</tt> and <tt>$03</tt> for each connection.</li></ul>
+<h3><span class="mw-headline" id=".28.2405.29_Connection_of_components_to_cartridge_pins">($05) Connection of components to cartridge pins</span></h3>
+<ul><li> ID number: ID of component.</li>
+<li> Parameter <tt>$00</tt>: Reserved for future use; please set to zero.</li>
+<li> Parameter <tt>$01</tt>: Low 4 bits = impedance (0=direct, 15=high). High 4 bits = propagation delay (0=not applicable).</li>
+<li> Parameter <tt>$02</tt>: Pin of component.</li>
+<li> Parameter <tt>$03</tt>: Pin of cartridge.</li>
+<li> Parameter <tt>$04</tt>...: Repeat of parameters <tt>$02</tt> and <tt>$03</tt> for each connection.</li></ul>
+<p>The pin numbers are the same as the 60-pin Famicom cartridge, except that pins 16, 31, 45, and 46 are not used.
+</p>
+<h3><span class="mw-headline" id=".28.2406.29_Connection_of_cartridge_to_cartridge">($06) Connection of cartridge to cartridge</span></h3>
+<ul><li> ID number: Reserved for future use; please set to zero.</li>
+<li> Parameter <tt>$00</tt>: Reserved for future use; please set to zero.</li>
+<li> Parameter <tt>$01</tt>: Low 4 bits = impedance (0=direct, 15=high). High 4 bits = propagation delay (0=not applicable).</li>
+<li> Parameter <tt>$02</tt>: First pin.</li>
+<li> Parameter <tt>$03</tt>: Second pin.</li>
+<li> Parameter <tt>$04</tt>...: Repeat of parameters <tt>$02</tt> and <tt>$03</tt> for each connection.</li></ul>
+<h3><span class="mw-headline" id=".28.24FD.29_External_condition">($FD) External condition</span></h3>
+<p>This command should only appear in a <tt>.cart</tt> file; not in a <tt>.fami</tt> file. The ID number is the ID number of an external parameter, parameter <tt>$00</tt> is the number of commands in a block, and the rest are values which, if the external parameter has any of them the commands in the block will be used, and if they don't have them then the commands in the block will be ignored.
+</p>
+<h3><span class="mw-headline" id=".28.24FE.29_External_parameter">($FE) External parameter</span></h3>
+<p>This command should only appear in a <tt>.cart</tt> file; not in a <tt>.fami</tt> file. The ID number is the ID number of an external parameter, and the rest are numbers of parameter slots of the next command which should be XORed by the external parameter value.
+</p><p>For example:
+</p>
+<pre>01 FE 00 03
+04 01 00 05 40 20 00
+</pre>
+<p>This adds a Sunsoft audio but the clock speed is configured from external parameter number zero.
+</p>
+<h3><span class="mw-headline" id=".28.24FF.29_External_selector">($FF) External selector</span></h3>
+<p>This command should only appear in a <tt>.cart</tt> file; not in a <tt>.fami</tt> file. The ID number is the ID number of an external parameter, and the rest are numbers of commands in the corresponding block (parameter <tt>$00</tt> for block zero, parameter <tt>$01</tt> for block one, etc). Whatever the value of the external parameter is, that is the only following block which will be used; the other blocks mentioned will be ignored. (If the value specifies a block which there are not enough parameters to specify length of a used block, the length is treated as zero.)
+</p>
+<h2><span class="mw-headline" id="Symbol_Data">Symbol Data</span></h2>
+<p>Symbol data consists of zero or more blocks consisting of a 16-bit ID followed by a 16-bit address followed by data. (If the mode is 0, 1, or 2, then the address must be an address within the ROM, mapper component, or CPU memory, and the data is an ASCII text giving its name).
+</p><p>The ID is formed as follows:
+</p>
+<ul><li> bit0-bit5: Length of data (0 to 63 bytes).</li>
+<li> bit6-bit7: Mode (0=ROM, 1=mapper, 2=CPU memory, 3=extra)</li>
+<li> bit8-bit15: Depend on mode as follows:
+<ul><li> 0: High bits of address.</li>
+<li> 1: Component ID.</li>
+<li> 2: bit8=read, bit9=write, bit10=execute, bit11=16-bit data, bit12-bit15=reserved (set to zero).</li>
+<li> 3: ID number of what kind of extra it is.</li></ul></li></ul>
+<p>The extras would be:
+</p>
+<ul><li> <tt>$00</tt>: Arcade cabinet switch. Bit0-bit2 of address is the switch number, bit8 of address is the default setting (1=on, 0=off). Data is the name of the switch.</li>
+<li> <tt>$01</tt>: Cartridge component name. Address bit0-bit7 = component ID, bit8-bit15 = pin. Data is name of component.</li>
+<li> <tt>$02</tt>: ASCII/shortkana text. Address indicate what the text means: 0=title, 1=author, 2=copyright, 3=mapper name, 4=license, 5=publisher, 6=version, 7=date, 8=composer of original, 9=composer of cover, 10=Nintendo four-letter code (do not use for homebrew/unofficial unless an emulated version is made available officially on Wii Virtual Console or whatever), 11=arcade cabinet model number, 12=programmer.</li>
+<li> <tt>$03</tt>: RGB palette. Address is from 0 to 63 indicating which palette index is used at first, data is the RGB triples (one byte per channel) starting from the specified palette index, ranging from 0 for black to 255 for full intensity. (This is basically like the <a href="_pal.xhtml" title=".pal">.pal</a> format but made into 63-byte chunks) It is recommended that the user can change this setting.</li>
+<li> <tt>$04</tt>: Track name. Address is track number (0 to 255 only). Data is the name of the track in ASCII/shortkana text. Names can be blank, and if higher track number is given name but lower one is not, the lower numbered tracks still exist and have blank name. If this field is used, the initial value of accumulator is the track number to start at, and the mapper codes can also use the track number (which will not change at runtime unless the mapper code tells it to) to decide which ROM bank to enable and so on.</li>
+<li> <tt>$05</tt>: CIC region code. Data should be empty or ASCII name of region code. Address should be a number identifying the region code (0=unused or Japan). (needs more list? does Nintendo or any other format define 8-bit ID numbers for CIC?)</li></ul>
+<h2><span class="mw-headline" id="Mapper_Components">Mapper Components</span></h2>
+<p>Note: In all cases, unconnected/unmentioned pins are not used, rather than being undefined or whatever else.
+</p>
+<h3><span class="mw-headline" id=".28.2400.29_ROM">($00) ROM</span></h3>
+<p>Parameters:
+</p>
+<ul><li> <tt>$01</tt>...<tt>$20</tt>: Address of ROM data in ROM area of file.</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>...<tt>$07</tt>: Data</li>
+<li> <tt>$08</tt>...<tt>$7D</tt>: Address</li>
+<li> <tt>$7E</tt>: Chip select (inverted)</li>
+<li> <tt>$80</tt>...<tt>$FE</tt>: Second port, same as above</li></ul>
+<h3><span class="mw-headline" id=".28.2401.29_RAM">($01) RAM</span></h3>
+<p>The RAM can be used as a single byte register if none of the address pins are connected.
+</p><p>Parameters:
+</p>
+<ul><li> <tt>$01</tt>: Set to 1 for battery RAM, 0 if not battery.</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>...<tt>$07</tt>: Data</li>
+<li> <tt>$08</tt>...<tt>$7D</tt>: Address</li>
+<li> <tt>$7E</tt>: Chip select (inverted)</li>
+<li> <tt>$7F</tt>: Write enable (inverted)</li>
+<li> <tt>$80</tt>...<tt>$FF</tt>: Second port, same as above</li></ul>
+<h3><span class="mw-headline" id=".28.2402.29_Logic_gates">($02) Logic gates</span></h3>
+<p>Parameters:
+</p>
+<ul><li> <tt>$01</tt>: Gate type: 0=AND, 1=OR, 2=XOR, 16=NAND, 17=NOR, 18=XNOR.</li>
+<li> <tt>$02</tt>: Number of inputs per gate (this can be 1 if just using as a buffer or inverter).</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>: Output of first gate.</li>
+<li> <tt>$01</tt>...<tt>$xx</tt>: Inputs of first gate.</li>
+<li> <tt>$xx+1</tt>: Output of second gate.</li>
+<li> And so on for each gate.</li></ul>
+<h3><span class="mw-headline" id=".28.2403.29_Multiplication">($03) Multiplication</span></h3>
+<p>This is a hardware multiplication for <a href="MMC5.xhtml" title="MMC5">MMC5</a>.
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>...<tt>$0F</tt>: First input data.</li>
+<li> <tt>$10</tt>...<tt>$1F</tt>: Second input data.</li>
+<li> <tt>$20</tt>...<tt>$3F</tt>: Output data.</li>
+<li> <tt>$40</tt>: First input enable (inverted).</li>
+<li> <tt>$50</tt>: Second input enable (inverted).</li>
+<li> <tt>$60</tt>: Output enable (inverted).</li></ul>
+<h3><span class="mw-headline" id=".28.2404.29_Shift_register">($04) Shift register</span></h3>
+<h3><span class="mw-headline" id=".28.2405.29_Flip-flops">($05) Flip-flops</span></h3>
+<p>This component represents thirty-two JK flip-flops. You can leave some pins unconnected to act as D flip-flop, SR flip-flop, etc.
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$x0</tt>: Clock</li>
+<li> <tt>$x1</tt>: Data</li>
+<li> <tt>$x2</tt>: Set</li>
+<li> <tt>$x3</tt>: Reset</li>
+<li> <tt>$x4</tt>: J</li>
+<li> <tt>$x5</tt>: K</li>
+<li> <tt>$x6</tt>: Out</li>
+<li> <tt>$x7</tt>: Out (inverted)</li></ul>
+<h3><span class="mw-headline" id=".28.2406.29_Multiplexer">($06) Multiplexer</span></h3>
+<p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>...<tt>$7F</tt>: Signal inputs</li>
+<li> <tt>$80</tt>...<tt>$86</tt>: Selector inputs</li>
+<li> <tt>$FE</tt>: Output</li>
+<li> <tt>$FF</tt>: Output (inverted)</li></ul>
+<h3><span class="mw-headline" id=".28.2407.29_Diskette_drive">($07) Diskette drive</span></h3>
+<p>Parameters:
+</p>
+<ul><li> <tt>$01</tt>: Hardware copy protection enable (0=no protection, 1=use protection)</li></ul>
+<h3><span class="mw-headline" id=".28.2408.29_File_loading_interface">($08) File loading interface</span></h3>
+<p>Parameters:
+</p>
+<ul><li> <tt>$01</tt>: Base 2 log of bits per byte of file. (Value: <tt>$00</tt>=1 bit, <tt>$01</tt>=2 bits, <tt>$02</tt>=4 bits, <tt>$03</tt>=8 bits, <tt>$04</tt>=16 bits, etc)</li></ul>
+<p>Pins:
+</p>
+<ul><li> <tt>$00</tt>...<tt>$7F</tt>: Data out</li>
+<li> <tt>$80</tt>: Chip select (inverted)</li>
+<li> <tt>$81</tt>: Clock</li>
+<li> <tt>$82</tt>: Rewind</li>
+<li> <tt>$83</tt>: End of file</li></ul>
+<h3><span class="mw-headline" id=".28.2409.29_Bandai_EEPROM">($09) Bandai EEPROM</span></h3>
+<h3><span class="mw-headline" id=".28.240A.29_Expansion_terminal">($0A) Expansion terminal</span></h3>
+<h3><span class="mw-headline" id=".28.240B.29_Counter">($0B) Counter</span></h3>
+<h3><span class="mw-headline" id=".28.240C.29_System_reset_initializer">($0C) System reset initializer</span></h3>
+<h3><span class="mw-headline" id=".28.240D.29_Addressable_register">($0D) Addressable register</span></h3>
+<h2><span class="mw-headline" id="Mapper_Audio">Mapper Audio</span></h2>
+<p>Note that you can have multiple instances of each and that their parameters can differ as well as how the address lines are connected by using other mapper codes.
+</p>
+<h3><span class="mw-headline" id=".28.2400.29_Extra_2A03_audio">($00) Extra 2A03 audio</span></h3>
+<p>(see <a href="APU.xhtml" title="APU">APU</a>)
+</p><p>This need not be indicated if using only the NES/Famicom internal audio; this is if you need an additional 2A03 audio as well as the internal one.
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<h3><span class="mw-headline" id=".28.2401.29_Famicom_Disk_System_audio">($01) Famicom Disk System audio</span></h3>
+<p>(see <a href="FDS_audio.xhtml" title="FDS audio">FDS audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<h3><span class="mw-headline" id=".28.2402.29_VRC6_audio">($02) VRC6 audio</span></h3>
+<p>(see <a href="VRC6_audio.xhtml" title="VRC6 audio">VRC6 audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<h3><span class="mw-headline" id=".28.2403.29_VRC7_audio">($03) VRC7 audio</span></h3>
+<p>(see <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> Parameter <tt>$03</tt>: Register write delay (1=on/0=off) (should be on; turn it off if it is necessary to emulate a program that does not properly wait for the register to be ready)</li>
+<li> Parameter <tt>$04</tt>..<tt>$7B</tt>: Internal patch set (8 bytes each for 15 instruments) (optional; please set the length to 4 if you are not using this parameter)</li></ul>
+<h3><span class="mw-headline" id=".28.2404.29_MMC5_audio">($04) MMC5 audio</span></h3>
+<p>(see <a href="MMC5_audio.xhtml" title="MMC5 audio">MMC5 audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<h3><span class="mw-headline" id=".28.2405.29_Sunsoft_audio">($05) Sunsoft audio</span></h3>
+<p>(see <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> Parameter <tt>$03</tt>: Clock speed (0=half, 1=full) (should be 0 to emulate Sunsoft 5B audio)</li></ul>
+<h3><span class="mw-headline" id=".28.2406.29_Namco_audio">($06) Namco audio</span></h3>
+<p>(see <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Namco 163 audio</a>)
+</p><p>Parameters:
+</p>
+<ul><li> (none)</li></ul>
+<h3><span class="mw-headline" id=".28.2407.29_JF-13_audio">($07) JF-13 audio</span></h3>
+<p>Parameters:
+</p>
+<ul><li> Parameter <tt>$03</tt>...<tt>$22</tt>: ROM address of audio data</li></ul>
+<h3><span class="mw-headline" id=".28.2408.29_Digital_to_analog_converter">($08) Digital to analog converter</span></h3>
+<p>Parameters:
+</p>
+<ul><li> Parameter <tt>$03</tt>: Default normalized output level</li>
+<li> Parameter <tt>$04</tt>: (linear/non-linear?)</li></ul>
+<p>Pins:
+</p>
+<ul><li> Pin <tt>$00</tt>: 1x audio level.</li>
+<li> Pin <tt>$01</tt>: 2x audio level.</li>
+<li> Pin <tt>$02</tt>: 4x audio level.</li>
+<li> Pin <tt>$03</tt>: 8x audio level.</li>
+<li> etc, up to pin <tt>$FF</tt> for an extremely high level.</li></ul>
+<h2><span class="mw-headline" id="ASCII.2Fshortkana_Table">ASCII/shortkana Table</span></h2>
+<tt><table border="1">
+<tr><th>#</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+<tr><th>0</th><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td></tr>
+<tr><th>1</th><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td><td>***</td></tr>
+<tr><th>2</th><td>sp</td><td>!</td><td>&quot;</td><td>#</td><td>$</td><td>%</td><td>&amp;</td><td>'</td><td>(</td><td>)</td><td>*</td><td>+</td><td>,</td><td>-</td><td>.</td><td>/</td></tr>
+<tr><th>3</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>:</td><td>;</td><td>&lt;</td><td>=</td><td>&gt;</td><td>?</td></tr>
+<tr><th>4</th><td>@</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td></tr>
+<tr><th>5</th><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>[</td><td>\</td><td>]</td><td>^</td><td>_</td></tr>
+<tr><th>6</th><td>`</td><td>a</td><td>b</td><td>c</td><td>d</td><td>e</td><td>f</td><td>g</td><td>h</td><td>i</td><td>j</td><td>k</td><td>l</td><td>m</td><td>n</td><td>o</td></tr>
+<tr><th>7</th><td>p</td><td>q</td><td>r</td><td>s</td><td>t</td><td>u</td><td>v</td><td>w</td><td>x</td><td>y</td><td>z</td><td>{</td><td>|</td><td>}</td><td>~</td><td>***</td></tr>
+<tr><th>8</th><td>Ç</td><td>ü</td><td>é</td><td>â</td><td>ä</td><td>à</td><td>å</td><td>ç</td><td>ê</td><td>ë</td><td>è</td><td>ï</td><td>î</td><td>ì</td><td>Ä</td><td>Å</td></tr>
+<tr><th>9</th><td>É</td><td>æ</td><td>Æ</td><td>ô</td><td>ö</td><td>ò</td><td>û</td><td>ù</td><td>ÿ</td><td>Ö</td><td>Ü</td><td>¢</td><td>£</td><td>¥</td><td>«</td><td>»</td></tr>
+<tr><th>A</th><td>ア</td><td>カ</td><td>ガ</td><td>サ</td><td>ザ</td><td>タ</td><td>ダ</td><td>ナ</td><td>ハ</td><td>バ</td><td>パ</td><td>マ</td><td>ヤ</td><td>ャ</td><td>ラ</td><td>ァ</td></tr>
+<tr><th>B</th><td>イ</td><td>キ</td><td>ギ</td><td>シ</td><td>ジ</td><td>チ</td><td>ヂ</td><td>ニ</td><td>ヒ</td><td>ビ</td><td>ピ</td><td>ミ</td><td>ワ</td><td>ン</td><td>リ</td><td>ィ</td></tr>
+<tr><th>C</th><td>ウ</td><td>ク</td><td>グ</td><td>ス</td><td>ズ</td><td>ツ</td><td>ヅ</td><td>ヌ</td><td>フ</td><td>ブ</td><td>プ</td><td>ム</td><td>ユ</td><td>ュ</td><td>ル</td><td>ゥ</td></tr>
+<tr><th>D</th><td>エ</td><td>ケ</td><td>ゲ</td><td>セ</td><td>ゼ</td><td>テ</td><td>デ</td><td>ネ</td><td>ヘ</td><td>ベ</td><td>ペ</td><td>メ</td><td>ッ</td><td>ヲ</td><td>レ</td><td>ェ</td></tr>
+<tr><th>E</th><td>オ</td><td>コ</td><td>ゴ</td><td>ソ</td><td>ゾ</td><td>ト</td><td>ド</td><td>ノ</td><td>ホ</td><td>ボ</td><td>ポ</td><td>モ</td><td>ヨ</td><td>ョ</td><td>ロ</td><td>ォ</td></tr>
+<tr><th>F</th><td>á</td><td>í</td><td>ó</td><td>ú</td><td>ñ</td><td>Ñ</td><td>???</td><td>???</td><td>¿</td><td>???</td><td>???</td><td>???</td><td>???</td><td>¡</td><td>ー</td><td>***</td></tr>
+</table></tt>
+<ul><li> <tt>***</tt> indicates permanently reserved codes would should not be used in ASCII/shortkana text.</li>
+<li> <tt>???</tt> indicates codes which are reserved for future use.</li></ul>
+<p>There are suggestions to use different encodings (such as UTF-8 or UTF-16, although I don't want UTF-16 or anything else that is incompatible with ASCII), so it might be changed in future. <b>For now use only ASCII please.</b>
+</p>
+<h2><span class="mw-headline" id="Other_File_Formats">Other File Formats</span></h2>
+<h3><span class="mw-headline" id=".rom">.rom</span></h3>
+<p>This file consists of the ROM data only, with no header. The file size should be a multiple of 8K.
+</p>
+<h3><span class="mw-headline" id=".cart">.cart</span></h3>
+<p>This file consists of the mapper codes only, with no header.
+</p>
+<h3><span class="mw-headline" id=".symb">.symb</span></h3>
+<p>This file consists of the symbols only, with no header.
+</p>
+<h3><span class="mw-headline" id="ines.map">ines.map</span></h3>
+<p>This plain text file is used to automatically associate <tt>.cart</tt> files with <tt>.nes</tt> files, based on mapper numbers, ROM sizes, checksums, and other things. Values of external parameters can also be specified.
+</p><p>I intend that it can make the official &quot;<tt>ines.map</tt>&quot; and FamicomHDL files on this wiki, and can then be updated emulators, both static (the <tt>ines.map</tt> and <tt>*.cart</tt> are compiled into a C code and compiled with the emulator), and dynamic (the emulator converts <tt>.nes</tt> to <tt>.fami</tt> at runtime and JIT-compiles and emulates the mapper codes).
+</p><p>Description of file: <a href="User_Zzo38_ines_map_and_unif_map.xhtml" title="User:Zzo38/ines.map and unif.map">User:Zzo38/ines.map and unif.map</a>
+</p>
+<h3><span class="mw-headline" id="unif.map">unif.map</span></h3>
+<p>This plain text file is used to automatically associate <tt>.cart</tt> files with <tt>.unif</tt> files based on the contents of the file. Values of external parameters can also be specified.
+</p><p>Description of file: <a href="User_Zzo38_ines_map_and_unif_map.xhtml" title="User:Zzo38/ines.map and unif.map">User:Zzo38/ines.map and unif.map</a>
+</p>
+<h3><span class="mw-headline" id=".native">.native</span></h3>
+<p>The format of this file depends on the emulator using it, and some might not use it; however, the first eight bytes should indicate what emulator it is for and what computer it is for, so that one program does not get mixed up by another program.
+</p><p>Generally this file would contain a native code for emulating the mapper codes.
+</p>
+<h2><span class="mw-headline" id="Supported_programs">Supported programs</span></h2>
+<h3><span class="mw-headline" id="Emulators_.28compile_time.29">Emulators (compile time)</span></h3>
+<h3><span class="mw-headline" id="Emulators_.28run_time.29">Emulators (run time)</span></h3>
+<h3><span class="mw-headline" id="Hardware_programmers">Hardware programmers</span></h3>
+<h3><span class="mw-headline" id="Assemblers.2Fcompilers">Assemblers/compilers</span></h3>
+<h3><span class="mw-headline" id="Hardware_description_language">Hardware description language</span></h3>
+<ul><li> FamicomHDL (Haskell library)</li></ul>
+<h3><span class="mw-headline" id="Miscellaneous">Miscellaneous</span></h3>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.263 seconds
+Real time usage: 0.266 seconds
+Preprocessor visited node count: 208/1000000
+Preprocessor generated node count: 214/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:818-1!*!0!!en!*!* and timestamp 20160208230546 and revision id 5048
+ -->
+</div></body></html>

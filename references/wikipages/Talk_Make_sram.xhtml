@@ -1,0 +1,36 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Make sram</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Make sram</h1><div class="article">
+<h2><span class="mw-headline" id="Super_NES_support">Super NES support</span></h2>
+<p>Blargg and others <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=59070#p59070" rel="nofollow">requested</a> adding support for Super NES games to make_sram.py.
+In order to determine when to create a .sav or .srm file, follow these rules:
+</p>
+<ul><li> filename.lower().endswith(('.sfc', '.smc', '.swc', '.fig'))</li>
+<li> ROM image size is a multiple of 32768 bytes. If the size is 512 bytes more than this, a copier header is present, and the ROM image proper starts at $200 in the file. Presence of a copier header is not correlated with the file name suffix.</li>
+<li> The internal header is 32 bytes at $7FC0 (plus copier header) for LoROM or $FFC0 (plus copier header) for HiROM.</li>
+<li> To make sure the header is a valid Super NES ROM image, at least two out of three should match:
+<ul><li> internal_header[$15] is $20/$30 for LoROM or $21/$31 for HiROM.</li>
+<li> TV system is internal_header[$19] and should be less than $10.</li>
+<li> internal_header[$1e] = internal_header[$1c] EOR $FF, and internal_header[$1f] = internal_header[$1d] EOR $FF.</li>
+<li> The header contains a checksum of the entire ROM (subject to mirroring if the ROM is not a power of 2 bytes in size). But ROM hacks often fail this checksum especially when stacked, and ROM hacks are part of PowerPak's reason for existence, so just ignore it.</li></ul></li>
+<li> internal_header[$16] tells what components are on the board. Value $02 indicates a battery-backed PRG RAM and no coprocessor.</li>
+<li> Size of PRG RAM is 1024 &lt;&lt; internal_header[$18] bytes; this byte must be in range $01 through $05.</li></ul>
+<p>--<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 14:37, 27 March 2010 (UTC)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:411-1!*!0!*!*!*!* and timestamp 20160208224241 and revision id 5205
+ -->
+</div></body></html>

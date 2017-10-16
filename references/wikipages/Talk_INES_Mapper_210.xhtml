@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 210</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 210</h1><div class="article">
+<p>Does this mapper actually exist? The boards Disch mentions as #210 are #19 in Bootgod's DB and don't seem to have hardwired mirroring when I trace the board. <a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 23:11, 15 June 2012 (PDT)
+</p>
+<dl><dd>I checked out a bunch of roms. They all came to me as mapper 19. I removed the 210 special logic from this mapper, and they all seemed to work, as long as the default nametable registers were $FE, $FF, $FE, $FF (vertical mirroring). Wagyan 2 depended on this. Wagyan 2 is NAMCOT-175. Splatterhouse 2 is NAMCOT-175 as well, and it needs vertical mirroring as well, but it sets its registers. So Wagyan 2 must be on a board that uses the nametable regs and is truly depending on the default values. Therefore, I agree that there is no difference between 019 and 210.</dd></dl>
+<dl><dd>Even if there is no functional difference between 019 and 210, if there are roms in the wild that are 210, we should keep the mapper reserved for it, at the very least with notes similar to this. Itd be a good candidate for recovery, but there are better. Ill have to scour my roms and see if there are any 210 left. </dd>
+<dd><a href="User_Zeromus.xhtml" title="User:Zeromus">Zeromus</a> 08:49, 16 June 2012 (PDT)</dd></dl>
+<dl><dd><dl><dd> I wonder if m210 is 'supposed' to represent the Namco175/340, with its simpler mirroring control (as described <a class="external text" href="http://d.hatena.ne.jp/na6ko/20110501" rel="nofollow">by naruko</a>). It's just close enough, and few enough games were released, that I could see how &quot;fixed mirroring&quot; or &quot;correct default&quot; might be good enough to make the games work. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 12:04, 18 June 2012 (PDT)</dd></dl></dd></dl>
+<p><br/>
+Ok, so having looked over Naruko's notes and added them to the <a href="Namco_163.xhtml" title="Namco 163">Namco 163</a> description, my take is:
+</p>
+<ul><li> Mapper 19 is Namcot 129/163, or an unseen variant of it without sound.</li>
+<li> Mapper 210 was originally for Namcot 175, which has hardwired mirroring, but has only one functionality conflict (register at $c000 becomes WRAM protect, but Naruko only mentions one game that has it), and so almost any game that used the Namcot 175 can probably actually be emulated safely using Mapper 19.</li>
+<li> No mapper was allocated for the Namcot 340, which uses the top bits of $e000 to select 1ScA/H/V/1ScB mirroring.</li></ul>
+<p>I think I can interpret Naruko's documentation to recommend that m210 be reallocated to the n340, and that the one n175-with-wram game be emulated as n340. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 12:53, 24 June 2012 (PDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:786-1!*!0!*!*!*!* and timestamp 20160208224159 and revision id 9148
+ -->
+</div></body></html>

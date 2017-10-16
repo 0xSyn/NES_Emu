@@ -1,0 +1,190 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Mask ROM pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Mask ROM pinout</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#8kB_.2F_16kB_.2F_32kB_.2F_64kBytes_.2828pin.29_ROMs"><span class="tocnumber">1</span> <span class="toctext">8kB / 16kB / 32kB / 64kBytes (28pin) ROMs</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#128.2F256.2F512_KBytes_.2828.2F32pin.29_ROMs"><span class="tocnumber">2</span> <span class="toctext">128/256/512 KBytes (28/32pin) ROMs</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Variants"><span class="tocnumber">3</span> <span class="toctext">Variants</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Nintendo_RROM_CHR_ROM_pinout_-_8_KBytes_.2828pin.29"><span class="tocnumber">3.1</span> <span class="toctext">Nintendo RROM CHR ROM pinout - 8 KBytes (28pin)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Nintendo_SROM_CHR_ROM_pinout_-_8_KBytes_.2824pin.29"><span class="tocnumber">3.2</span> <span class="toctext">Nintendo SROM CHR ROM pinout - 8 KBytes (24pin)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Nintendo_AOROM_PRG_ROM_pinout_-_128.2F256.2FKBytes_.2832pin.29"><span class="tocnumber">3.3</span> <span class="toctext">Nintendo AOROM PRG ROM pinout - 128/256/KBytes (32pin)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Signal_descriptions"><span class="tocnumber">4</span> <span class="toctext">Signal descriptions</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Converting_a_donor_board"><span class="tocnumber">5</span> <span class="toctext">Converting a donor board</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#See_also"><span class="tocnumber">6</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="8kB_.2F_16kB_.2F_32kB_.2F_64kBytes_.2828pin.29_ROMs">8kB / 16kB / 32kB / 64kBytes (28pin) ROMs</span></h2>
+<p>Nintendo used by default JEDEC standard compatible pinouts for all their mask ROMs of 64 kBytes and below (but some particular boards might be exceptions !).
+Names [in brackets] applies when the corresponding address pin is unused. On boards where an adress pin is never used (for example, A15 is never used on <a href="NROM.xhtml" title="NROM">NROM</a> boards as the ROM can't be greater than 32k), what is in brackets connects to the unused pin.
+</p><p>For some unknown reasons, unused address lines on smaller ROMs <b>had to be</b> put to +5V, as Nintendo made different boards for each size (as opposed to place EPROMs of different sizes into the same slot). Some boards, such as CNROM, features solder pads in order to force those pins to +5V though.
+As Nintendo liked to use Mask ROMs from various manufacturers, apparently unused pins could be either not connected or additional active high CE enable lines. This would ensure that if Nintendo would order mask ROMs with additional enable lines that aren't used, they could place them on the board without having the fear of having them disabled accidentally.
+</p><p>This doesn't apply to CHR ROMs - i.e. a smaller ROM can always fit a slot made with a larger ROM in mind. Probably as the game will work if the ROM is &quot;accidentally&quot; disabled before the first write to CHR bankswitching registers.
+</p>
+<pre>  27C64/128/256/512 EPROM pinout
+
+              ---_---
+ [+5V] A15 - |01   28| - +5V
+       A12 - |02   27| - A14 [PGM]
+       A7  - |03   26| - A13 [NC]
+       A6  - |04   25| - A8
+       A5  - |05   24| - A9
+       A4  - |06   23| - A11
+       A3  - |07   22| - /OE
+       A2  - |08   21| - A10
+       A1  - |09   20| - /CE
+       A0  - |10   19| - D7
+       D0  - |11   18| - D6
+       D1  - |12   17| - D5
+       D2  - |13   16| - D4
+       GND - |14   15| - D3
+              -------
+</pre>
+<h2><span class="mw-headline" id="128.2F256.2F512_KBytes_.2828.2F32pin.29_ROMs">128/256/512 KBytes (28/32pin) ROMs</span></h2>
+<p>Nintendo used the standard pinout for (extremely rare) prototype boards intended to take a 27C010/020/040 EPROM.
+But retail Game Paks made by Nintendo have mask ROMs with a different pinout which is not compatible.
+This pinout, with reshuffled enable lines and higher address lines, allows a 32-pin hole to take a 28-pin 128 KiB PRG ROM in pin 3 to pin 30.
+</p><p>For games using 256 KiB and larger ROMs, other companies producing Famicom or NES boards used either epoxy blobs or standard EPROM pinout. But games with 128 KiB of PRG were more often in a 28-pin package than not.
+</p><p>On Nintendo's boards where PRG A18 is never used, pin 2 is connected with pin 22.
+</p><p>Nintendo's MMC5 boards use the same pinout for both PRG and CHR ROMs, and even 128 KB PRG ROMs are 32-pin so they can have a VCC pin.
+</p>
+<pre style="display:inline-block">
+        CHR ROM, PRG ROM, and 27C010/020/040/080 EPROM pinouts compared
+ 
+ MMC5    CHR        PRG      EPROM                   EPROM        PRG   CHR   MMC5
+                                         ---_---
+ A17    A17 [+5V]  A17      [VPP] A19 - |01   32| - +5V
+ A18    /CE        A18 [/CE]      A16 - |02   31| - A18 [PGM]    +5V    /CE    /CE
+                                  A15 - |03   30| - A17 [NC]     +5V    +5V    A19
+                                  A12 - |04   29| - A14
+                                  A7  - |05   28| - A13
+                                  A6  - |06   27| - A8
+                                  A5  - |07   26| - A9
+                                  A4  - |08   25| - A11
+                                  A3  - |09   24| - /OE          A16    A16    A16
+                                  A2  - |10   23| - A10
+                                  A1  - |11   22| - /CE
+                                  A0  - |12   21| - D7
+                                  D0  - |13   20| - D6
+                                  D1  - |14   19| - D5
+                                  D2  - |15   18| - D4
+                                  GND - |16   17| - D3
+                                         -------
+
+PRG and CHR pins are listed only if they differ from EPROM.
+
+</pre>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>Here is a list of multiple variants of Nintendo's pinouts above. Only a couple of enable pins typically differs (which are shown in bold).
+</p>
+<h3><span class="mw-headline" id="Nintendo_RROM_CHR_ROM_pinout_-_8_KBytes_.2828pin.29">Nintendo RROM CHR ROM pinout - 8 KBytes (28pin)</span></h3>
+<p>This particular board is functionally identical to NROM but with a strange CHR pinout :
+</p>
+<pre>  <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=2314" rel="nofollow">RROM</a> Non-standard 64-kbit CHR pinout
+             ---_---
+      <b>A7</b>  - |01   28| - +5V
+      <b>A6</b>  - |02   27| - <b>A8</b>
+      <b>A5</b>  - |03   26| - <b>A9</b>
+      <b>A4</b>  - |04   25| - <b>A12</b>
+      <b>A3</b>  - |05   24| - <b>/CE</b>
+      <b>+5V</b> - |06   23| - <b>NC</b>
+      <b>+5V</b> - |07   22| - /OE
+      A2  - |08   21| - A10
+      A1  - |09   20| - <b>A11</b>
+      A0  - |10   19| - D7
+      D0  - |11   18| - D6
+      D1  - |12   17| - D5
+      D2  - |13   16| - D4
+      GND - |14   15| - D3
+             -------
+</pre>
+<h3><span class="mw-headline" id="Nintendo_SROM_CHR_ROM_pinout_-_8_KBytes_.2824pin.29">Nintendo SROM CHR ROM pinout - 8 KBytes (24pin)</span></h3>
+<p>This particular board is functionally identical to NROM but the CHR uses a 24-pin 8KB ROM with pinout very similar to the 27C32:
+</p>
+<pre>  SROM  23C62/64 JEDEC-Standard 64-kbit CHR pinout
+            ---_---
+      A7 - |01   24| - Vcc
+      A6 - |02   23| - A8
+      A5 - |03   22| - A9
+      A4 - |04   21| - <b>A12</b>
+      A3 - |05   20| - /OE
+      A2 - |06   19| - A10
+      A1 - |07   18| - <b>A11</b>
+      A0 - |08   17| - D7
+      D0 - |09   16| - D6
+      D1 - |10   15| - D5
+      D2 - |11   14| - D4
+     Gnd - |12   13| - D3
+            -------
+</pre>
+<p>With only one output enable, the board synthesizes the signal (/OE = PPU A13 + PPU /RD) using two transistors and a resistor.
+</p>
+<h3><span class="mw-headline" id="Nintendo_AOROM_PRG_ROM_pinout_-_128.2F256.2FKBytes_.2832pin.29">Nintendo AOROM PRG ROM pinout - 128/256/KBytes (32pin)</span></h3>
+<p>Very slight variant of the standard PRG-ROM pinout above, where an additional active high enable line is used to prevent bus conflicts.
+</p>
+<pre>                 ---_---
+      PRG A17 - |01   32| - +5V
+      PRG /CE - |02   31| - <b>CE (R/W)</b>
+      PRG A15 - |03   30| - +5V
+      PRG A12 - |04   29| - PRG A14
+      PRG A7  - |05   28| - PRG A13
+      PRG A6  - |06   27| - PRG A8 
+      PRG A5  - |07   26| - PRG A9
+      PRG A4  - |08   25| - PRG A11
+      PRG A3  - |09   24| - PRG A16
+      PRG A2  - |10   23| - PRG A10
+      PRG A1  - |11   22| - PRG /CE
+      PRG A0  - |12   21| - PRG D7
+      PRG D0  - |13   20| - PRG D6
+      PRG D1  - |14   19| - PRG D5
+      PRG D2  - |15   18| - PRG D4
+      GND     - |16   17| - PRG D3
+                 -------
+</pre>
+<h2><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h2>
+<dl><dt>A0-A12 </dt>
+<dd> address</dd>
+<dt>D0-D7 </dt>
+<dd> data</dd>
+<dt>/CE, /OE </dt>
+<dd> The ROM will output data at address A on pins D only if all its CE and OE pins are active (CE active high, /CE active low). /CE (chip enable) is sometimes called /CS (chip select). A memory will respond faster to /CE than to /OE.</dd>
+<dt>PGM, VPP </dt>
+<dd> Used only during EPROM programing / erasing process.</dd></dl>
+<p>See <a href="Cartridge_connector.xhtml#Signal_Descriptions" title="Cartridge connector">Cartridge connector</a> for other signals descriptions.
+</p>
+<h2><span class="mw-headline" id="Converting_a_donor_board">Converting a donor board</span></h2>
+<p>To convert a cartridge board to accept EPROM:
+</p>
+<ol><li> Compare the pinout of your EPROM to the mask ROM pinout expected by the board.</li>
+<li> Lift any pins whose signals differ.</li>
+<li> Solder short wires to the corresponding holes.</li>
+<li> Solder down the memory or socket with the pins that do not differ.</li>
+<li> Solder each lifted pin to the hole with the same signal.</li></ol>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/NES%20EPROM%20Conversions.txt" rel="nofollow">NES EPROM Conversions</a> by Drk. Instructions on how to modify certain boards to use EPROMs.</li>
+<li> <a class="external text" href="http://nesdev.com/NES%20ROM%20Pinouts.txt" rel="nofollow">NES ROM pinouts</a> by Drk. Covers all PRG, CHR, and RAM chips used in NES cartridges.</li>
+<li> <a class="external text" href="http://nesdev.com/EPROM%20Pinouts.txt" rel="nofollow">EPROM pinouts</a> by Drk.</li>
+<li> <a class="external text" href="http://callanbrown.com/index.php/advanced-mmc3-nes-reproduction" rel="nofollow">Advanced MMC3 NES Reproduction Tutorial</a> by Callan Brown</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=171375#p171375" rel="nofollow">SNROM to SUROM</a> by Ice Man</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.069 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:76-1!*!0!!en!*!* and timestamp 20160524235836 and revision id 12391
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

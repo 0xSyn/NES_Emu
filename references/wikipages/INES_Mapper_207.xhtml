@@ -1,0 +1,60 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 207</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 207</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 207</strong> represents the board used for <i>Fudou Myouou Den</i>.
+</p><p>It modifies Taito's X1-005 (<a href="INES_Mapper_080.xhtml" title="INES Mapper 080">80</a>) in the exact same way that <a href="TLSROM.xhtml" title="TLSROM">TLSROM</a> (<a href="INES_Mapper_118.xhtml" title="INES Mapper 118">118</a>) differs from <a href="MMC3.xhtml" title="MMC3">MMC3</a> (<a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">4</a>), by which we mean the X1-005's CHR A17 output is connected to CIRAM A10. Thus, it achieves 1scA/1scB/H controllable mirroring instead of H/V.
+</p>
+<pre> ========================
+ =  Mapper 207          =
+ ========================
+ 
+  Registers:
+ ---------------------------
+ 
+   $7EF0:  [MCCC CCCC]
+      M = Mirroring 0
+      C = CHR Reg 0
+ 
+   $7EF1:  [MCCC CCCC]
+      M = Mirroring 1
+      C = CHR Reg 1
+ 
+   $7EF2-7EF5:  CHR Regs 2-5
+ 
+   $7EF6-7EF7:  was old mirroring control register, now ignored
+ 
+   $7EF8-7EFF:  see <a href="INES_Mapper_080.xhtml" title="INES Mapper 080">iNES Mapper 080</a>
+ 
+ CHR Setup:
+ ---------------------------
+ 
+        $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+      +---------------+---------------+-------+-------+-------+-------+
+      |    &lt;$7EF0&gt;    |    &lt;$7EF1&gt;    | $7EF2 | $7EF3 | $7EF4 | $7EF5 |
+      +---------------+---------------+-------+-------+-------+-------+
+ 
+ Mirroring:
+ ---------------------------
+ 
+   [ $7EF0 ][ $7EF0 ]
+   [ $7EF1 ][ $7EF1 ]
+ 
+ Mirroring bit of appropriate reg selects NTA or NTB
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:704-1!*!0!*!*!*!* and timestamp 20160208225419 and revision id 5376
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

@@ -1,0 +1,475 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Serial Cable Routines</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Serial Cable Routines</h1><div class="article">
+<p>This page covers implementation of bit-banged serial read/write routines for use with a <a href="Serial_Cable_Construction.xhtml" title="Serial Cable Construction"> serial cable</a>. It's meant if you're implementing your own, or want to understand how the library routines work.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Serial"><span class="tocnumber">1</span> <span class="toctext">Serial</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Encoding"><span class="tocnumber">1.1</span> <span class="toctext">Encoding</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Decoding"><span class="tocnumber">1.2</span> <span class="toctext">Decoding</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Stop_bit.2Fidle"><span class="tocnumber">1.3</span> <span class="toctext">Stop bit/idle</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Implementation"><span class="tocnumber">2</span> <span class="toctext">Implementation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Timing"><span class="tocnumber">2.1</span> <span class="toctext">Timing</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Initialization"><span class="tocnumber">2.2</span> <span class="toctext">Initialization</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Transmit"><span class="tocnumber">2.3</span> <span class="toctext">Transmit</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Receive"><span class="tocnumber">2.4</span> <span class="toctext">Receive</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Timing_accuracy"><span class="tocnumber">2.5</span> <span class="toctext">Timing accuracy</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Serial">Serial</span></h1>
+<h2><span class="mw-headline" id="Encoding">Encoding</span></h2>
+<p>Serial data bytes are transferred as a series of bits followed by an idle state until the next byte. Each bit lasts the same amount of time. An 8-bit byte is transferred as 10 bits, with the first and last bits serving as markers of the start and end of the byte. The start bit is encoded as a 0, and the stop bit and idle state as a 1. Data bit 0 is first.
+</p>
+<pre>-----       ----- ----- ----- ----- ----- ----- ----- ----- ---------
+     \     /     X     X     X     X     X     X     X     /            
+      ----- ----- ----- ----- ----- ----- ----- ----- -----
+      start   0     1     2     3     4     5     6     7   stop
+</pre>
+<p>For example, the byte 00110001 ($31) is encoded as
+</p>
+<pre>--------       -----                   -----------             ----------
+        \     /     \                 /           \           /
+         -----       -----------------             -----------
+           0     1     0     0     0     1     1     0     0     1
+</pre>
+<h2><span class="mw-headline" id="Decoding">Decoding</span></h2>
+<p>To decode a byte, the receiver must read each bit, ideally in its center:
+</p>
+<pre>--------       ----- ----- ----- ----- ----- ----- ----- ----- ---------
+        \     /     X     X     X     X     X     X     X     /
+         ----- ----- ----- ----- ----- ----- ----- ----- -----
+                 *     *     *     *     *     *     *     *
+</pre>
+<p>The transmitter and receiver each have their own clock to time the bits, and these might differ. So the receiver might slowly shift towards one edge due to timing differences. If it weren't aiming for the center, it would be more likely to hit an edge. At that point, it might read an adjacent bit.
+</p><p>The receiver must re-synchronize on each byte because its clock can't be accurate enough stay in sync with the transmitter's over long periods. The beginning of the start bit provides a known transition it can wait for. Once this occurs, it knows a byte is beginning, and that it should wait 1.5 bits before reading bit 0 (one bit to skip the start bit, and a half bit to get to the middle of bit 0).
+</p>
+<pre>--------       ----- ----- ----- ----- ----- ----- ----- ----- ---------
+        \     /     X     X     X     X     X     X     X     /
+         ----- ----- ----- ----- ----- ----- ----- ----- -----
+                 *     *     *     *     *     *     *     *
+        ^     ^  ^
+      edge    1  .5
+</pre>
+<p>Above the receiver waits for the edge, then one bit, then a half bit to read bit 0.
+</p>
+<h2><span class="mw-headline" id="Stop_bit.2Fidle">Stop bit/idle</span></h2>
+<p>The idle state between bytes is also a 1, so it's as if the stop bit lasts until the next start bit. It can last any amount longer than a normal bit, and doesn't have to be a multiple of a bit long. That is, two bytes may be back-to-back, have a stop bit that's slightly longer than normal, or have one that's much longer than normal:
+</p>
+<pre>--- ----- ----- ----- ----- ----- -----       ----- ----- ----- ----- -----
+   X     X     X     X     X     /     \     X     X     X     X     X 
+--- ----- ----- ----- ----- -----       ----- ----- ----- ----- ----- -----
+      3     4     5     6     7   stop  start   0     1    2      3     4
+</pre>
+<pre>--- ----- ----- ----- ----- ----- -------       ----- ----- ----- ----- ---
+   X     X     X     X     X     /       \     X     X     X     X     X 
+--- ----- ----- ----- ----- -----         ----- ----- ----- ----- ----- ---
+      3     4     5     6     7    stop   start   0     1    2      3    
+</pre>
+<pre>--- ----- ----- ----- ----- ----- -------------------------------       ---
+   X     X     X     X     X     /                               \     X  
+--- ----- ----- ----- ----- -----                                 ----- ---
+      3     4     5     6     7   stop          idle              start
+</pre>
+<h1><span class="mw-headline" id="Implementation">Implementation</span></h1>
+<p>The following implementation is for clarity rather than usability or efficiency.
+</p>
+<h2><span class="mw-headline" id="Timing">Timing</span></h2>
+<p>A serial rate of 57600 bits per second is the most useful on the NES. This gives the following timings:
+</p>
+<table class="tabular">
+
+<tr>
+<th>					</th>
+<th>	NTSC		</th>
+<th> PAL
+</th></tr>
+<tr>
+<td> CPU Clock			</td>
+<td>	1789773Hz	</td>
+<td>	1662607Hz
+</td></tr>
+<tr>
+<td> Clocks per bit	</td>
+<td>	31.07		</td>
+<td>	28.86
+</td></tr>
+<tr>
+<td> Rounded clocks	</td>
+<td>	31			</td>
+<td>	29
+</td></tr>
+<tr>
+<td> Error				</td>
+<td>	-0.2%		</td>
+<td>	+0.5%
+</td></tr></table>
+<p>Rounding to 31 (29 PAL) cycles per bit gives less than half a percent timing error, well within RS-232 tolerances. This allows the code to be written as simple loops.
+</p>
+<h2><span class="mw-headline" id="Initialization">Initialization</span></h2>
+<p>Before transmitting or receiving for the first time, write $03 to $4016 and delay:
+</p>
+<pre>        ldx #$03
+        stx $4016
+        ldx #350/5      ; delay 350 cycles, more than 10 bit lengths on NTSC
+wait:   dex
+        bne wait
+</pre>
+<p>This puts an idle state on the output lines so that the first byte sent will not be corrupt. It also prevents Famicom or other controllers also connected from interfering with receiving (as long as the A button isn't being pressed).
+</p>
+<h2><span class="mw-headline" id="Transmit">Transmit</span></h2>
+<p>To transmit a byte, output each of the 10 bits for 31 cycles each (29 for PAL).
+</p>
+<table class="tabular">
+
+<tr>
+<th>					</th>
+<th>	NTSC		</th>
+<th> PAL
+</th></tr>
+<tr>
+<td colspan="3"> Output start bit (0)
+</td></tr>
+<tr>
+<td> Delay				</td>
+<td>	31			</td>
+<td>	29
+</td></tr>
+<tr>
+<td colspan="3"> Output bit 0
+</td></tr>
+<tr>
+<td> Delay				</td>
+<td>	31			</td>
+<td>	29
+</td></tr>
+<tr>
+<td colspan="3">  ...
+</td></tr>
+<tr>
+<td colspan="3">  Output bit 7
+</td></tr>
+<tr>
+<td> Delay				</td>
+<td>	31			</td>
+<td>	29
+</td></tr></table>
+<p><br/>
+</p>
+<pre>        clc             ; start bit
+        ldx #10
+loop:   tay
+        lda #$ff        ; replicate carry in low two bits and output
+        adc #0
+        eor #$ff
+        and #%11
+        sta $4016
+        tya
+        sec             ; stop bit
+        ror a           ; next bit into carry, stop bit into shift reg
+        nop             ; delay 6 cycles
+        nop
+        nop             ; remove for PAL timing
+        dex
+        bne loop
+</pre>
+<p>Remove the indicated NOP for PAL timing.
+</p><p>This outputs the start bit (0), 8 data bits, and the stop bit (1), each lasting 31 cycles. Note how it only outputs on bits 0 and 1 of $4016, and clears the others. Some serial connections may be using bit 1 in the future, so a routine should write to both bits if possible. Other devices may be using higher bits, so these should always be clear.
+</p>
+<h2><span class="mw-headline" id="Receive">Receive</span></h2>
+<p>The NES inverts serial input, but not output, so when receiving data, things are inverted: a start bit is 1, a stop bit 0, and data bits are inverted.
+</p><p>To receive a byte, wait for the start bit, delay 1.5 bits = 46.5 cycles (42.5 for PAL), read bit 0, delay 31 cycles (29 for PAL), read bit 1, etc.
+</p>
+<table class="tabular">
+
+<tr>
+<th>					</th>
+<th>	NTSC		</th>
+<th> PAL
+</th></tr>
+<tr>
+<td colspan="3"> Wait for beginning of start bit
+</td></tr>
+<tr>
+<td> Delay				</td>
+<td>	46.5		</td>
+<td>	42.5
+</td></tr>
+<tr>
+<td colspan="3"> Input bit 0
+</td></tr>
+<tr>
+<td> Delay				</td>
+<td>	31			</td>
+<td>	29
+</td></tr>
+<tr>
+<td colspan="3"> ...
+</td></tr>
+<tr>
+<td colspan="3">  Input bit 7
+</td></tr></table>
+<pre>        lda #%10111 ; wait for start bit
+start:  bit $4017
+        beq start
+                    ; LDA $4017 here would be 9.5 cycles after start bit
+        nop         ; delay 17 cycles
+        nop
+        nop
+        nop
+        nop
+        pha
+        pla
+        ldx #8      ; read 8 data bits
+        nop         ; remove for PAL timing
+loop:   nop         ; remove for PAL timing
+        nop         ; delay 10 cycles
+        nop
+        nop
+        nop
+        nop
+        tay
+        lda #%10111 ; mask input lines and put into carry
+        and $4017
+        cmp #1
+        tya
+        ror a       ; shift into output byte
+        dex
+        bne loop
+        eor #$FF    ; invert final byte
+</pre>
+<p>Remove both indicated NOPs for PAL timing.
+</p><p>The receive loop masks the bits serial data might come in on, and sets the carry if any of these is not zero. It shifts this bit into the shift register, and un-inverts everything in the end.
+</p><p>The start bit loop waits for the beginning of the start bit. It reads $4017 every 7 cycles:
+</p>
+<pre>bit $4017 ; 4 read
+beq start ; 3
+bit $4017 ; 4 read
+beq start ; 2 (not taken)
+nop
+...
+</pre>
+<p>The start bit could occur anywhere between two of these reads, so the next read to notice it will be seeing it from 0 to almost 7 cycles later. It might read just as the start bit begins and see it immediately, or it might read just before it begins and not see it until 7 cycles later when it reads again. On average it thus notices it 3.5 cycles after it began. So we must add 3.5 cycles to our calculations of how long it's been since the start bit began. This means that if we put an LDA $4017 just after the BEQ, it would read on average 9.5 cycles after the start bit began (3.5+4+2):
+</p>
+<pre>bit $4017 ; 4 read
+beq start ; 3
+bit $4017 ; 4 read
+beq start ; 2 (not taken)
+lda $4017 ; 4 reads 9.5 cycles on average after start bit began
+</pre>
+<h2><span class="mw-headline" id="Timing_accuracy">Timing accuracy</span></h2>
+<p>The 31/29 and 46.5/42.5 delays give the following timings, in cycles relative to the beginning of the start bit. The actual NTSC/PAL time is listed, then the ideal time, and the error (difference).
+</p><p>Transmit timing is only a quarter of a percent off for NTSC and half a percent for PAL. Listed is the starting time for each bit.
+</p>
+<table class="tabular">
+
+<tr>
+<th>Bit</th>
+<th>	NTSC	</th>
+<th> Ideal	</th>
+<th> Error	</th>
+<th> PAL		</th>
+<th>	Ideal	</th>
+<th> Error
+</th></tr>
+<tr>
+<td> Start	</td>
+<td>	0.0	</td>
+<td>	0.0		</td>
+<td>	0.0		</td>
+<td>	0.0		</td>
+<td>	0.0		</td>
+<td>	0.0
+</td></tr>
+<tr>
+<td> 0	</td>
+<td>	31.0	</td>
+<td>	31.1	</td>
+<td>	-0.1	</td>
+<td>	29.0	</td>
+<td>	28.9	</td>
+<td>	0.1
+</td></tr>
+<tr>
+<td> 1	</td>
+<td>	62.0	</td>
+<td>	62.1	</td>
+<td>	-0.1	</td>
+<td>	58.0	</td>
+<td>	57.7	</td>
+<td>	0.3
+</td></tr>
+<tr>
+<td> 2	</td>
+<td>	93.0	</td>
+<td>	93.2	</td>
+<td>	-0.2	</td>
+<td>	87.0	</td>
+<td>	86.6	</td>
+<td>	0.4
+</td></tr>
+<tr>
+<td> 3	</td>
+<td>	124.0	</td>
+<td>	124.3	</td>
+<td>	-0.3	</td>
+<td>	116.0	</td>
+<td>	115.5	</td>
+<td>	0.5
+</td></tr>
+<tr>
+<td> 4	</td>
+<td>	155.0	</td>
+<td>	155.4	</td>
+<td>	-0.4	</td>
+<td>	145.0	</td>
+<td>	144.3	</td>
+<td>	0.7
+</td></tr>
+<tr>
+<td> 5	</td>
+<td>	186.0	</td>
+<td>	186.4	</td>
+<td>	-0.4	</td>
+<td>	174.0	</td>
+<td>	173.2	</td>
+<td>	0.8
+</td></tr>
+<tr>
+<td> 6	</td>
+<td>	217.0	</td>
+<td>	217.5	</td>
+<td>	-0.5	</td>
+<td>	203.0	</td>
+<td>	202.1	</td>
+<td>	0.9
+</td></tr>
+<tr>
+<td> 7	</td>
+<td>	248.0	</td>
+<td>	248.6	</td>
+<td>	-0.6	</td>
+<td>	232.0	</td>
+<td>	230.9	</td>
+<td>	1.1
+</td></tr>
+<tr>
+<td> Stop</td>
+<td>279.0	</td>
+<td>	279.7	</td>
+<td>	-0.7	</td>
+<td>	261.0	</td>
+<td>	259.8	</td>
+<td>	1.2
+</td></tr></table>
+<p>Receive timing is good on average, though all the times can be +/- 3.5 cycles shifted due to the start bit loop. Listed is the times the routine reads each bit in the middle, along with the ideal and error.
+</p>
+<table class="tabular">
+
+<tr>
+<th>Bit</th>
+<th>	NTSC	</th>
+<th> Ideal	</th>
+<th> Error	</th>
+<th> PAL		</th>
+<th>	Ideal	</th>
+<th> Error
+</th></tr>
+<tr>
+<td> 0	</td>
+<td>	46.5	</td>
+<td>	46.6	</td>
+<td>	-0.1	</td>
+<td>	42.5	</td>
+<td>	43.3	</td>
+<td>	-0.8
+</td></tr>
+<tr>
+<td> 1	</td>
+<td>	77.5	</td>
+<td>	77.7	</td>
+<td>	-0.2	</td>
+<td>	71.5	</td>
+<td>	72.2	</td>
+<td>	-0.7
+</td></tr>
+<tr>
+<td> 2	</td>
+<td>	108.5	</td>
+<td>	108.8	</td>
+<td>	-0.3	</td>
+<td>	100.5	</td>
+<td>	101.0	</td>
+<td>	-0.5
+</td></tr>
+<tr>
+<td> 3	</td>
+<td>	139.5	</td>
+<td>	139.8	</td>
+<td>	-0.3	</td>
+<td>	129.5	</td>
+<td>	129.9	</td>
+<td>	-0.4
+</td></tr>
+<tr>
+<td> 4	</td>
+<td>	170.5	</td>
+<td>	170.9	</td>
+<td>	-0.4	</td>
+<td>	158.5	</td>
+<td>	158.8	</td>
+<td>	-0.3
+</td></tr>
+<tr>
+<td> 5	</td>
+<td>	201.5	</td>
+<td>	202.0	</td>
+<td>	-0.5	</td>
+<td>	187.5	</td>
+<td>	187.6	</td>
+<td>	-0.1
+</td></tr>
+<tr>
+<td> 6	</td>
+<td>	232.5	</td>
+<td>	233.0	</td>
+<td>	-0.5	</td>
+<td>	216.5	</td>
+<td>	216.5	</td>
+<td>	0.0
+</td></tr>
+<tr>
+<td> 7	</td>
+<td>	263.5	</td>
+<td>	264.1	</td>
+<td>	-0.6	</td>
+<td>	245.5	</td>
+<td>	245.3	</td>
+<td>	0.2
+</td></tr></table>
+<p>In the above tables, the best we can do in software is to keep the error within -0.5 to +0.5 cycles, so we can't improve on most of the above timings. To correct the rest, we'd do the following. Transmit, NTSC: extra cycle during bit 6, PAL: one fewer cycle during bit 3. Receive, NTSC: extra cycle after bit 5, PAL: extra cycle before bit 0, one fewer cycle after bit 2. This requires unrolled loops so these special actions can be done on particular iterations.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.067 seconds
+Real time usage: 0.069 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1311-1!*!0!!en!*!* and timestamp 20160208225830 and revision id 8166
+ -->
+</div></body></html>

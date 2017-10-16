@@ -1,0 +1,36 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNIF/FARID UNROM 8-IN-1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNIF/FARID UNROM 8-IN-1</h1><div class="article">
+<p>UNIF MAPR <b>FARID_UNROM_8-IN-1</b> (note underscores) describes a multicart designed by Farid in 2013. It contains eight 128 KiB UNROM games.
+</p><p>It adds a shadowed &quot;outer bank&quot; register on top of the normal UNROM banking register:
+</p><p>Note: bus conflicts are present!
+</p>
+<pre>$8000-$FFFF: [KOOO .III]
+              ||||  |||
+              ||||  +++-- Normal UNROM bank register; now inner bank
+              |+++------- Outer bank
+              +---------- 0 then 1: Latch value written to outer bank and prevent any subsequent writes to outer bank
+</pre>
+<p>On both warm and cold boot, the outer bank register is cleared (and the ability to latch a new outer bank is re-enabled).
+</p><p>Like normal UNROM, the <i>III</i> bits ignore the status of K. 
+</p><p>See also:
+</p>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=11099" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=11099</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.006 seconds
+Real time usage: 0.006 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1665-1!*!*!*!*!*!* and timestamp 20160604041800 and revision id 12582
+ -->
+</div></body></html>

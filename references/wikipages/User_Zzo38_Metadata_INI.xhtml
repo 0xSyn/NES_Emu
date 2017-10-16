@@ -1,0 +1,374 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Metadata INI</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Metadata INI</h1><div class="article">
+<p>You can have a INI file, with the .nes.ini (or .unif.ini or .fds.ini or .qdi.ini) extension, to describe preferred controllers and other information about a game other than what is in the ROM image file.
+</p><p>Anything in the file not understood by whatever program is reading this file, should be ignored. <b>Everything is optional</b> (both for writing and for reading; different blocks may be meaningful for different programs that would use this information). The reason for this is to avoid complicating an implementation, while still allowing features that someone may use.
+</p><p>If numbers are expected in a value, they are normally decimal, and can be hexadecimal by <tt>0x</tt> prefix.
+</p><p>(Note: For QDI format disk images, the INI file must correspond to the file for the bootable side.)
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Blocks"><span class="tocnumber">1</span> <span class="toctext">Blocks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Main"><span class="tocnumber">1.1</span> <span class="toctext">Main</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Title"><span class="tocnumber">1.1.1</span> <span class="toctext">Title</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Author"><span class="tocnumber">1.1.2</span> <span class="toctext">Author</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#URL"><span class="tocnumber">1.1.3</span> <span class="toctext">URL</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Version"><span class="tocnumber">1.1.4</span> <span class="toctext">Version</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#TV"><span class="tocnumber">1.1.5</span> <span class="toctext">TV</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#License"><span class="tocnumber">1.1.6</span> <span class="toctext">License</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#CRC"><span class="tocnumber">1.1.7</span> <span class="toctext">CRC</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Bootgod"><span class="tocnumber">1.1.8</span> <span class="toctext">Bootgod</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Text"><span class="tocnumber">1.1.9</span> <span class="toctext">Text</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#PPUID"><span class="tocnumber">1.1.10</span> <span class="toctext">PPUID</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-13"><a href="#Controller"><span class="tocnumber">1.2</span> <span class="toctext">Controller</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#Players"><span class="tocnumber">1.2.1</span> <span class="toctext">Players</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Player1"><span class="tocnumber">1.2.2</span> <span class="toctext">Player1</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Player2"><span class="tocnumber">1.2.3</span> <span class="toctext">Player2</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Player3"><span class="tocnumber">1.2.4</span> <span class="toctext">Player3</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Player4"><span class="tocnumber">1.2.5</span> <span class="toctext">Player4</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Expansion"><span class="tocnumber">1.2.6</span> <span class="toctext">Expansion</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#FourScore"><span class="tocnumber">1.2.7</span> <span class="toctext">FourScore</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-21"><a href="#License_2"><span class="tocnumber">1.3</span> <span class="toctext">License</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="#Name"><span class="tocnumber">1.3.1</span> <span class="toctext">Name</span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#FreeSoftware"><span class="tocnumber">1.3.2</span> <span class="toctext">FreeSoftware</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#OpenSource"><span class="tocnumber">1.3.3</span> <span class="toctext">OpenSource</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#PublicDomain"><span class="tocnumber">1.3.4</span> <span class="toctext">PublicDomain</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-26"><a href="#Mapper"><span class="tocnumber">1.4</span> <span class="toctext">Mapper</span></a>
+<ul>
+<li class="toclevel-3 tocsection-27"><a href="#Name_2"><span class="tocnumber">1.4.1</span> <span class="toctext">Name</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Number"><span class="tocnumber">1.4.2</span> <span class="toctext">Number</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#NumberEx"><span class="tocnumber">1.4.3</span> <span class="toctext">NumberEx</span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="#Feature"><span class="tocnumber">1.4.4</span> <span class="toctext">Feature</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Mirror"><span class="tocnumber">1.4.5</span> <span class="toctext">Mirror</span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#RAM"><span class="tocnumber">1.4.6</span> <span class="toctext">RAM</span></a></li>
+<li class="toclevel-3 tocsection-33"><a href="#BusConflict"><span class="tocnumber">1.4.7</span> <span class="toctext">BusConflict</span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#Audio"><span class="tocnumber">1.4.8</span> <span class="toctext">Audio</span></a></li>
+<li class="toclevel-3 tocsection-35"><a href="#Verilog"><span class="tocnumber">1.4.9</span> <span class="toctext">Verilog</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-36"><a href="#Switch"><span class="tocnumber">1.5</span> <span class="toctext">Switch</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#Emulator"><span class="tocnumber">1.6</span> <span class="toctext">Emulator</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Dump"><span class="tocnumber">1.7</span> <span class="toctext">Dump</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#Hardware"><span class="tocnumber">1.8</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#EmuTest"><span class="tocnumber">1.9</span> <span class="toctext">EmuTest</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#Tag"><span class="tocnumber">1.10</span> <span class="toctext">Tag</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#File"><span class="tocnumber">1.11</span> <span class="toctext">File</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#Memory"><span class="tocnumber">1.12</span> <span class="toctext">Memory</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#Enhance"><span class="tocnumber">1.13</span> <span class="toctext">Enhance</span></a>
+<ul>
+<li class="toclevel-3 tocsection-45"><a href="#PopReduction"><span class="tocnumber">1.13.1</span> <span class="toctext">PopReduction</span></a></li>
+<li class="toclevel-3 tocsection-46"><a href="#CueAudio"><span class="tocnumber">1.13.2</span> <span class="toctext">CueAudio</span></a></li>
+<li class="toclevel-3 tocsection-47"><a href="#PointingDeviceRAM"><span class="tocnumber">1.13.3</span> <span class="toctext">PointingDeviceRAM</span></a></li>
+<li class="toclevel-3 tocsection-48"><a href="#SpriteLimit"><span class="tocnumber">1.13.4</span> <span class="toctext">SpriteLimit</span></a></li>
+<li class="toclevel-3 tocsection-49"><a href="#HighScore"><span class="tocnumber">1.13.5</span> <span class="toctext">HighScore</span></a></li>
+<li class="toclevel-3 tocsection-50"><a href="#ScreenMode"><span class="tocnumber">1.13.6</span> <span class="toctext">ScreenMode</span></a></li>
+<li class="toclevel-3 tocsection-51"><a href="#Overscan"><span class="tocnumber">1.13.7</span> <span class="toctext">Overscan</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-52"><a href="#GameGenie"><span class="tocnumber">1.14</span> <span class="toctext">GameGenie</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-53"><a href="#Example"><span class="tocnumber">2</span> <span class="toctext">Example</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Blocks">Blocks</span></h1>
+<h2><span class="mw-headline" id="Main">Main</span></h2>
+<h3><span class="mw-headline" id="Title">Title</span></h3>
+<p>The title of this game. This does not have to be the same as the title in a UNIF file or the title added to the end of some iNES files.
+</p>
+<h3><span class="mw-headline" id="Author">Author</span></h3>
+<p>The name of the author of this game.
+</p>
+<h3><span class="mw-headline" id="URL">URL</span></h3>
+<p>URL to access information of this game. Any URI scheme is allowed, but <tt>file:///</tt> and LAN addresses is not recommended for files distributed on the internet.
+</p>
+<h3><span class="mw-headline" id="Version">Version</span></h3>
+<p>Game version number.
+</p>
+<h3><span class="mw-headline" id="TV">TV</span></h3>
+<p>Specify the TV mode supported, separated by vertical bars if there is more than one.
+</p>
+<ul><li> <tt>NTSC</tt>: NTSC Famicom or NTSC NES.</li>
+<li> <tt>RGB</tt>: RGB Famicom or Vs System.</li>
+<li> <tt>PAL</tt>: PAL NES.</li>
+<li> <tt>Dendy</tt>: Dendy PAL Famiclone.</li></ul>
+<p>Usually, a subset of this information is specified in the ROM image header.
+</p>
+<h3><span class="mw-headline" id="License">License</span></h3>
+<p>Specify if the game is officially licensed.
+</p>
+<ul><li> <tt>Official</tt> means it is licensed by Nintendo.</li>
+<li> <tt>Unofficial</tt> means that it is not licensed by Nintendo; for example, anything published by Tengen, Codemasters, or Color Dreams, or homebrew software.</li></ul>
+<h3><span class="mw-headline" id="CRC">CRC</span></h3>
+<p>Specify the CRC32 checksum. If it doesn't match, it is error (alternatives are to make it a warning, or to just ignore the rest of the INI file if the checksum doesn't match).
+</p>
+<h3><span class="mw-headline" id="Bootgod">Bootgod</span></h3>
+<p>The ID number for the game in bootgod database. Emulators should not use klugy hacks to work with specific games if the INI file exists and does not have either the <tt>Bootgod</tt> entry specified or the emulator's entry in the <tt>Emulator</tt> block set.
+</p>
+<h3><span class="mw-headline" id="Text">Text</span></h3>
+<p>Absolute address into ROM image file of a null-terminatd text. It is not required for UNIF, although it is still allowed.
+</p>
+<h3><span class="mw-headline" id="PPUID">PPUID</span></h3>
+<p>The low five bits of the value which should be read from $2002. Normally this is read from the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header, but in case that is not available, it is specified here.
+</p>
+<h2><span class="mw-headline" id="Controller">Controller</span></h2>
+<h3><span class="mw-headline" id="Players">Players</span></h3>
+<p>Tells how many players. Can be 1, 2, 3, 4, or can be multiples separated by vertical bars.
+</p>
+<h3><span class="mw-headline" id="Player1">Player1</span></h3>
+<p>Specify the device connected to the first NES controller port. You can have multiple values separated by vertical bars; it can also be blank entries meaning nothing is connected.
+</p>
+<ul><li> <tt>Standard</tt>: The <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> of NES/Famicom.</li>
+<li> <tt>DoubleFisted</tt>: The standard NES controller, rotated 90 degrees with the Control Pad at the top and A at the bottom like a Wii Remote.</li>
+<li> <tt>Mouse</tt>: Super NES <a href="Mouse.xhtml" title="Mouse">Mouse</a>.</li>
+<li> <tt>LightGun</tt>: <a href="Zapper.xhtml" title="Zapper">Zapper</a>.</li>
+<li> <tt>Arkanoid</tt>: <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a> (NES version).</li>
+<li> <tt>SuperNintendo</tt>: Super Nintendo standard controller.</li>
+<li> <tt>SuperPakPak</tt>: Super PakPak analog controller.</li>
+<li> <tt>VsSystem</tt>: VS System. Player 1 VS system controller must be specified in the player 2 slot and vice versa.</li>
+<li> <tt>VsLightGun</tt>: VS System serial light gun. Player 1 VS system controller must be specified in the player 2 slot and vice versa.</li>
+<li> <tt>PowerPad</tt>, <tt>PowerPadB</tt>, <tt>FamilyTrainer</tt>, <tt>FamilyTrainerB</tt>: Power Pad B side.</li>
+<li> <tt>PowerPadA</tt>, <tt>FamilyTrainerA</tt>: Power Pad A side.</li>
+<li> <tt>PowerPadLeft</tt>, <tt>FamilyTrainerLeft</tt>: Power Pad B side, rotated by 90 degrees so that the encoder is at the left.</li>
+<li> <tt>StandardDDR</tt>: Dance mat which is using the protocol of the standard controller and allows Left+Right and Up+Down presses. Used by some NOAC-based dance mats.</li></ul>
+<h3><span class="mw-headline" id="Player2">Player2</span></h3>
+<p>Specify the device connected to the second NES controller port. They are the same as <tt>Player1</tt> devices, except for the following:
+</p>
+<ul><li> <tt>Standard</tt>: Does not include SELECT and START buttons.</li>
+<li> <tt>StandardSelectStart</tt>: Does include SELECT and START buttons.</li>
+<li> <tt>StandardMicrophone</tt>: Uses the microphone.</li></ul>
+<h3><span class="mw-headline" id="Player3">Player3</span></h3>
+<p>Used if <code>Expansion=FourPlayers</code> or <code>FourScore=Yes</code> is specified. Must be a controller that uses D0 or D1, not D3-D4.
+</p>
+<h3><span class="mw-headline" id="Player4">Player4</span></h3>
+<p>Used if <code>Expansion=FourPlayers</code> or <code>FourScore=Yes</code> is specified. Must be a controller that uses D0 or D1, not D3-D4.
+</p>
+<h3><span class="mw-headline" id="Expansion">Expansion</span></h3>
+<p>Specify the device connected to the Famicom expansion port. (In case of some devices that work on Player2 or the expansion port, it can be specified either way.)
+</p>
+<ul><li> <tt>Keyboard</tt>: Famicom keyboard.</li>
+<li> <tt>OekaKids</tt>: Oeka Kids tablet.</li>
+<li> <tt>KeyboardTape</tt>: Famicom keyboard and tape recorder.</li>
+<li> <tt>FourPlayers</tt>: Four players game (parallel multiplayer adapter). The <tt>Player3</tt> and <tt>Player4</tt> fields specify the controller for player 3 and 4 whose D0 is connected to the Famicom's D1.</li>
+<li> <tt>LightGun</tt>, <tt>FamilyTrainer</tt>, <tt>FamilyTrainerB</tt>, <tt>FamilyTrainerA</tt>, <tt>FamilyTrainerLeft</tt>, <tt>StandardDDR</tt>: As above (considered as player 2 port). CaH4e3 claims that <i>Dance 2000 12-in-1</i> uses <tt>StandardDDR</tt>.</li>
+<li> <tt>Arkanoid</tt>: Arkanoid controller (Famicom version).</li>
+<li> <tt>HoriTrack</tt>: Hori trackball.</li>
+<li> <tt>ExciteBoxing</tt>: Exciting boxing.</li>
+<li> <tt>Mahjong</tt>: Mahjong.</li>
+<li> <tt>Stereovision</tt>: Famicom 3D glasses.</li></ul>
+<h3><span class="mw-headline" id="FourScore">FourScore</span></h3>
+<p>Specifies if NES Four Score (serial multiplayer adapter) is used. Values can be <tt>No</tt> and <tt>Yes</tt>. You can have multiple values separated by vertical bars.
+</p><p>If <code>Expansion=FourPlayers</code> or <code>FourScore=Yes</code> is specified, the <tt>Player1</tt>, <tt>Player2</tt>, <tt>Player3</tt>, and <tt>Player4</tt> indicate device connected to the adapter (such as <tt>Standard</tt>, <tt>DoubleFisted</tt>, or <tt>StandardDDR</tt>).
+Devices using D2-D4 won't work on either adapter, and devices using a long report, such as the Super NES Controller and Super NES Mouse, work only with <code>Expansion=FourPlayers</code>, not <code>FourScore=Yes</code>.
+If a game specifies both a four-player adapter and a peripheral incompatible with the adapter, the emulator MUST provide a way to switch between the adapter and the other peripheral.
+</p>
+<h2><span class="mw-headline" id="License_2">License</span></h2>
+<h3><span class="mw-headline" id="Name">Name</span></h3>
+<p>Name of a software license.
+</p>
+<h3><span class="mw-headline" id="FreeSoftware">FreeSoftware</span></h3>
+<p>The value can be <tt>No</tt> and <tt>Yes</tt>. Specify if it meets the Free Software definition (<a class="external text" href="http://www.gnu.org/philosophy/free-sw.html" rel="nofollow">from FSF</a>).
+</p>
+<h3><span class="mw-headline" id="OpenSource">OpenSource</span></h3>
+<p>The value can be <tt>No</tt> and <tt>Yes</tt>. Specify if it meets the Open Source definition (<a class="external text" href="http://opensource.org/docs/definition.php" rel="nofollow">from OSI</a>).
+</p><p>Usually this value will be the same as the <tt>FreeSoftware</tt> value, but there are some exceptions.
+</p>
+<h3><span class="mw-headline" id="PublicDomain">PublicDomain</span></h3>
+<p>The value can be <tt>No</tt> and <tt>Yes</tt>. Specify if it is effectively public domain (e.g.: public domain, WTFPL, Unlicense, CC0).
+</p>
+<h2><span class="mw-headline" id="Mapper">Mapper</span></h2>
+<p>Information of mapper.
+</p>
+<h3><span class="mw-headline" id="Name_2">Name</span></h3>
+<p>Name of the mapper. You can have multiple values separated by vertical bars.
+</p>
+<h3><span class="mw-headline" id="Number">Number</span></h3>
+<p>The iNES <a href="Mapper.xhtml" title="Mapper">mapper</a> number (0-255 for basic plane, 256-4095 for <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> planes), optionally followed by a dot and the submapper number (0-15 or A-F). If no submapper is specified, submapper 0 is assumed. You can have multiple values separated by vertical bars. If used with NES 2.0 format ROM image files, at least one of the numbers listed here MUST be the same as in the ROM image file (and will normally be the first one), if this line is used at all. In old iNES files, it is probably going to be the same, although in some cases it might not be (these cases are fixed by the NES 2.0 format).
+</p>
+<h3><span class="mw-headline" id="NumberEx">NumberEx</span></h3>
+<p>Specifies extensions to the mapper which are not necessarily relevant for emulation (or which are already disambiguated by the ROM and RAM sizes). You can have multiple numbers separated by vertical bars, but usually you won't, since you will only specify the features actually used on this mapper (some games might have been released with multiple mapper settings though, for some reason).
+</p><p>This is a sixteen-bit number. Its meaning depends on the first iNES mapper number specified in the <tt>Number</tt>; the low four bits have the same meaning as submapper numbers.
+</p>
+<h3><span class="mw-headline" id="Feature">Feature</span></h3>
+<p>Specifies features used by the mapper, separated by vertical bars.
+These specify that a game will run correctly in a subset of a mapper, such as one that fits in a smaller CPLD or FPGA than the full mapper.
+An emulator is not required to care about this, but a debugging emulator MAY raise a stink if a program uses an unlisted feature.
+Reproduction carts using new EEPROMs with the original ASIC mapper on a donor board need not care about this either.
+The possible features depend on which mapper is in use:
+</p>
+<ul><li> <a href="MMC5.xhtml" title="MMC5">MMC5</a>: <tt>SquareWave</tt>, <tt>PCM_Write</tt>, <tt>PCM_Read</tt>, <tt>PCM_Zero_IRQ</tt>, <tt>PRGmode0</tt>, <tt>PRGmode1</tt>, <tt>PRGmode2</tt>, <tt>PRGmode3</tt>, <tt>CHRmode0</tt>, <tt>CHRmode1</tt>, <tt>CHRmode2</tt>, <tt>CHRmode3</tt>, <tt>RAM_Protect</tt>, <tt>ExNametable</tt>, <tt>ExAttribute</tt>, <tt>ExRAM</tt>, <tt>ExRAM_Protect</tt>, <tt>ExRAM_Write_Zero</tt>, <tt>FillMode</tt>, <tt>Vsplit</tt>, <tt>Scanline_IRQ</tt>, <tt>Multiply</tt>.</li>
+<li> <a href="MMC3.xhtml" title="MMC3">MMC3</a>: <tt>PRGmode0</tt>, <tt>PRGmode1</tt>, <tt>CHRmode0</tt>, <tt>CHRmode1</tt>, <tt>RAM_Protect</tt>, <tt>Scanline_IRQ</tt></li></ul>
+<h3><span class="mw-headline" id="Mirror">Mirror</span></h3>
+<p>Set the mirroring. You can have multiple values separated by vertical bars.
+</p>
+<ul><li> <tt>H</tt>: Horizontal.</li>
+<li> <tt>V</tt>: Vertical.</li>
+<li> <tt>1</tt>: One screen.</li>
+<li> <tt>4</tt>: Four screen.</li>
+<li> <tt>?</tt>: Anything other than specified here (usually this means dynamically controlled mirroring).</li></ul>
+<h3><span class="mw-headline" id="RAM">RAM</span></h3>
+<p>Specify the amount of PRG RAM used in the cartridge, in bytes. If the file is <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> format, the number specified here MUST NOT be greater than the PRG RAM amount in the NES 2.0 header (although it is allowed to be less, but usually shouldn't be).
+</p>
+<h3><span class="mw-headline" id="BusConflict">BusConflict</span></h3>
+<p>Specify if bus conflict is used. You can have multiple values separated by vertical bars.
+</p>
+<ul><li> <tt>No</tt>: Require not bus conflict.</li>
+<li> <tt>Yes</tt>: Require bus conflict.</li></ul>
+<h3><span class="mw-headline" id="Audio">Audio</span></h3>
+<p>Use of expansion audio. Can be <tt>No</tt> and <tt>Yes</tt>.
+</p>
+<h3><span class="mw-headline" id="Verilog">Verilog</span></h3>
+<p>Version number of Verilog and/or extension of Verilog in use. You can have multiple values separated by vertical bars. This is only for use with mapper 768 submapper 1.
+</p>
+<h2><span class="mw-headline" id="Switch">Switch</span></h2>
+<p>This block specifies the name and default settings of VS Unisystem switches. The names are given by <tt>Name0</tt> to <tt>Name7</tt>, and the default value is given by <tt>Default0</tt> to <tt>Default7</tt> which have the values <tt>0</tt> and <tt>1</tt>.
+</p>
+<h2><span class="mw-headline" id="Emulator">Emulator</span></h2>
+<p>Specify klugy features of specific emulators. The key is the name of the emulator; the value is not described here.
+</p>
+<h2><span class="mw-headline" id="Dump">Dump</span></h2>
+<p>Information about who dumped the ROM image from the cartridge, what hardware/software is used, etc.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>Specify what NES/Famicom hardware and hardware clone it is tested with. 
+The values are:
+</p>
+<ul><li> <tt>Work</tt>: It works.</li>
+<li> <tt>NotWork</tt>: It doesn't works.</li>
+<li> <tt>Partial</tt>: It works partially; probably it is good enough.</li>
+<li> <tt>Untested</tt>: It is not tested.</li></ul>
+<p>The keys are (not limited to):
+</p>
+<ul><li> <tt>Nintendo</tt>: The official hardware from Nintendo. (It ought to work!)</li></ul>
+<h2><span class="mw-headline" id="EmuTest">EmuTest</span></h2>
+<p>Same as the <tt>Hardware</tt> block, but for emulators. You can also specify version numbers in this block, separated by vertical bars.
+</p>
+<h2><span class="mw-headline" id="Tag">Tag</span></h2>
+<p>Miscellaneous metadata for use with search engines. (The format is not currently specified here.)
+</p>
+<h2><span class="mw-headline" id="File">File</span></h2>
+<p>This block indicates what files are included, and what purpose of the files. The keys are the filename, and the values specify what they mean. You can have multiple values separated by vertical bars.
+</p>
+<ul><li> <tt>ROM</tt>: ROM image file; usually implied (so is not needed).</li>
+<li> <tt>Documentation</tt>: Documentation in HTML, XHTML, DocBook, DVI, DjVu, PDF, PostScript, or PCL format.</li>
+<li> <tt>DocumentationASCII</tt>: Documentation in plain ASCII text. (This is separate from the above since plain ASCII has no &quot;magic number&quot; to detect, unlike all the above formats.)</li>
+<li> <tt>MetaFont</tt>: METAFONT file for fonts used in DVI.</li>
+<li> <tt>SourceCode</tt>: Source codes.</li>
+<li> <tt>Disk</tt>: A disk image (in QDI format; not needed for FDS format).</li>
+<li> <tt>Icon</tt>: Icons for use with iPhone, Android, etc.</li>
+<li> <tt>License</tt>: License file (normally in plain ASCII text).</li>
+<li> <tt>ADPCM</tt>: ADPCM waveform data for expansion audio.</li>
+<li> <tt>Label60</tt>: Label for 60-pins cartridge.</li>
+<li> <tt>Label72</tt>: Label for 72-pins cartridge.</li>
+<li> <tt>Boxart</tt>: Box art.</li>
+<li> <tt>BIOS</tt>: FDS BIOS ROM. (Normally there is no need to use this type even for FDS games, since the BIOS is not normally included with the disk image. However, it might be helpful in some cases.)</li>
+<li> <tt>Palette</tt>: Recommended RGB palette data (for RGB mode only). It is not necessarily going to be used, but it can improve the color slightly.</li>
+<li> <tt>Enhance2xCHRROM</tt>: Double-resolution CHR ROM for enhancement.</li>
+<li> <tt>EnhanceData</tt>: Miscellaneous files for enhancement, refer by other files such as cue files.</li>
+<li> <tt>EnhanceAudioCue</tt>: Cue file for telling what sounds to play when values are written to RAM. (TODO: Specify format of this file.)</li>
+<li> <tt>EnhanceTiles</tt>: File containing full-color tiles mapping to CHR ROM bank/attribute pairs. (TODO: Specify format of this file.)</li>
+<li> <tt>InstrumentsFM</tt>: File of exactly 120 bytes containing OPLL-format FM instruments numbered 1 to 15. (There is actually only one set of instruments, but unfortunately they may be unknown; this file may be provided if the author of a homebrew VRC7 game does not know the correct settings and/or believes it sounds best with specific settings.)</li>
+<li> <tt>SaveGame</tt>: Default initial contents of battery RAM. (PRG RAM comes first if the cartridge uses battery RAM for both PRG and CHR)</li>
+<li> <tt>DatachEEPROM</tt>: Shared EEPROM data for mapper 157; writable (and may not be distributed with the game). (If not specified, the emulator should create its own file.)</li></ul>
+<h2><span class="mw-headline" id="Memory">Memory</span></h2>
+<p>Specify the memory mapping of the ROM and RAM for this game, for purpose of debugging, cheat codes, ROM hacks, etc. (TODO: need to specify details)
+</p>
+<h2><span class="mw-headline" id="Enhance">Enhance</span></h2>
+<p>This block lists enhancements that might be used in some emulators (the emulator should offer an option to turn them off, even if they are supported, though). Some may work on hardware too, but that does not usually affect the cartridge, so this block is probably not used when loading on hardware.
+</p>
+<h3><span class="mw-headline" id="PopReduction">PopReduction</span></h3>
+<p>Values can be <tt>No</tt> or <tt>Yes</tt>. You can have multiple values separated by vertical bars.
+</p>
+<h3><span class="mw-headline" id="CueAudio">CueAudio</span></h3>
+<p>Values can be <tt>No</tt> or <tt>Yes</tt>. You can have multiple values separated by vertical bars.
+</p>
+<h3><span class="mw-headline" id="PointingDeviceRAM">PointingDeviceRAM</span></h3>
+<p>This is used to write the coordinates of a pointing device into RAM. There are multiple values separated by commas, as follows:
+</p>
+<ul><li> RAM address for X coordinate.</li>
+<li> RAM address for Y coordinate.</li>
+<li> Leftmost coordinate.</li>
+<li> Rightmost coordinate.</li>
+<li> Topmost coordinate.</li>
+<li> Bottommost coordinate.</li></ul>
+<h3><span class="mw-headline" id="SpriteLimit">SpriteLimit</span></h3>
+<p>Values can be <tt>8</tt>, <tt>15</tt>, or <tt>NoLimit</tt>. You can have multiple values separated by vertical bars.
+</p>
+<dl><dt>8</dt>
+<dd> Normal sprite evaluation. Clear secondary OAM in 1-64, <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">evaluate</a> starting at 65, fetch patterns every 8 dots starting at 261.</dd>
+<dt>15</dt>
+<dd> Optimized sprite evaluation. Clear secondary OAM in 1-30, evaluate starting at 31, fetch patterns every 4 dots starting at 261.</dd>
+<dt>NoLimit</dt>
+<dd> No limit of sprites on one scanline. If evaluation or fetch overflows the allotted time, mapper side effects are disabled until it completes.</dd></dl>
+<h3><span class="mw-headline" id="HighScore">HighScore</span></h3>
+<p>This is a list of RAM addresses separated by vertical bars, which store high score data. The emulator might choose to somehow make them persist, or to do other things with it.
+</p>
+<h3><span class="mw-headline" id="ScreenMode">ScreenMode</span></h3>
+<p>Values can be <tt>Normal</tt>, <tt>2xCHRROM</tt>, <tt>Tiles</tt>, <tt>Overlay2xPPU</tt>, <tt>Super2xSaI</tt>, <tt>Scale2x</tt>, or <tt>hq2x</tt>. You can have multiple values separated by vertical bars.
+</p>
+<h3><span class="mw-headline" id="Overscan">Overscan</span></h3>
+<p>Four numbers separated by commas. The first is the number of top lines that can be safely cut off, second is bottom lines, third is left side, fourth is right side. (It should not assume that they necessarily will be cut off; only that it can be.)
+</p>
+<h2><span class="mw-headline" id="GameGenie">GameGenie</span></h2>
+<p>Contains unencoded <a class="external text" href="http://tuxnes.sourceforge.net/gamegenie.html" rel="nofollow">Game Genie</a> codes. The keys are the name of the code, and the value are one or more 32-bit numbers separated by vertical bars (normally written in hex format, with <tt>0x</tt> prefix).
+</p>
+<ul><li> Bit14-bit0: Low 15 bits of address. High bit is always set.</li>
+<li> Bit15: Set if this is a compare code.</li>
+<li> Bit23-bit18: Value to read from that address.</li>
+<li> Bit31-bit24: If it is a compare code, the value will not be changed unless it matches the value placed here.</li></ul>
+<h1><span class="mw-headline" id="Example">Example</span></h1>
+<p>(Note: This is a old example! The stuff above is correct; not necessarily as shown in this example!)
+</p>
+<pre>
+[Main]
+Title=&quot;Famicom Hangman&quot;
+TV=NTSC|RGB ; NTSC and RGB both work (emphasis bits are not used)
+License=Unofficial ; Not officially license by Nintendo
+
+[Controller]
+Players=1 ; Single player game
+Player1= ; Player 1 controller is explicitly not used.
+Expansion=Keyboard ; Using Famicom keyboard
+Player2=|StandardMicrophone ; Player 2 controller is optional, and can use the microphone if available
+
+[License]
+Name=&quot;Public domain&quot;
+Watermark=No ; Copies are not watermarked
+Copy=Allow
+Modify=Allow
+Commercial=Allow
+
+[Mapper]
+Mirror=H|V|1|4 ; Program doesn't care about nametablem mirroring
+RAM=0 ; PRG RAM is not used (this line is redundant if the ROM image is NES 2.0)
+BusConflict=No|Yes ; Program doesn't care if bus conflicts are used or not
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.141 seconds
+Real time usage: 0.142 seconds
+Preprocessor visited node count: 214/1000000
+Preprocessor generated node count: 236/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1009-1!*!0!!en!*!* and timestamp 20160208230618 and revision id 7857
+ -->
+</div></body></html>

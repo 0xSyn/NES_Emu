@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:MMC2</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:MMC2</h1><div class="article">
+<h2><span class="mw-headline" id="Sprite_Splits">Sprite Splits</span></h2>
+<p>I read carefully the operation of the PPU rendering and sprite evaluation, and it seems to me that you could use the sprites to adjust the CHR latch per scanlines (for example, make a sprite $FE and one line down $FD (if after the first one in the OAM) might make a single scanline to use the other bank). Is this correct? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 11:07, 16 June 2013 (MDT)
+</p>
+<dl><dd> Yes, this could work. As you suggest, if you're willing to use sprites from the same pattern table as the background tiles you can do no-CPU-time raster effects. But that's also a big downside. I'm a little skeptical that the inclusion of two switchable banks is particularly useful, given how few pixels all the sprites can cover (using 8x16 sprites, only 14% of the screen). Maybe if you want to clip more than two sprites vertically on the same line, since currently the only solution is overlaying a sprite with another transparent sprite. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 11:37, 16 June 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Circuit_to_convert_MMC2-.3EMMC4_and_vice-versa">Circuit to convert MMC2-&gt;MMC4 and vice-versa</span></h2>
+<p>I just realize the circuits I drew here several years ago are completely useless, apparently Nintendo didn't use such circuit in their cartridges, and nobody else is likely ever going to use them. They serve no &quot;encyclopedic&quot; purpose, it's merely a theoretical possibility that was never put in practice.
+Is it okay if I remove them ?
+<s>128.178.180.88</s> 02:05, 15 April 2014 (MDT)
+I forgot to log in but it's me, who wrote the paragraph above.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 08:14, 15 April 2014 (MDT)
+</p>
+<dl><dd> They illustrate the difference in a manner I find useful. I object to removing the MMC2→MMC4 one, at least; the MMC4→MMC2 one is enough more complex that I am open to argument. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:21, 15 April 2014 (MDT)</dd></dl>
+<p>Then is it okay if I just remove the part on the MMC4 article (which is more complicated) and leave the one that is on this (MMC2) article which is more simple, &quot;prooving&quot; that it's possible to make a MMC4 from a MMC2 and a single 74xx series chip ? (although the proof is only theoretical, nobody ever prooved it for real as far I know) ?
+I'd say that if there is no objection I'll remove the MMC4 schematic in a few days.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 00:26, 29 April 2014 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1101-1!*!0!!*!*!* and timestamp 20160208224227 and revision id 8598
+ -->
+</div></body></html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 144</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 144</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 144</strong>, allocated for the game <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1223" rel="nofollow">Death Race</a>, describes a intentionally defective variant of the <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a> board (<b>mapper 11</b>).
+</p><p>This game's PCB (labelled <b>50282</b>) is almost identical to the <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?pcb=UNK-COLORDREAMS-REVB" rel="nofollow">revision B Color Dreams boards</a>, but a 300Ω resistor was added between CPU D0 and the combination of mapper hardware and ROM. This addition means that <i>only</i> the ROM's <i>least significant bit</i> always wins bus conflicts.
+</p><p>Nestopia-1.4.0 implements this as <code>EffectiveData = (WrittenData &amp; ROM[address]) | (ROM[address] &amp; 1)</code>
+</p><p>FCEUX-2.1.5 works around this by ignoring writes to 0x8000
+</p><p>The most succinct description is <code>EffectiveData = (ROM[address] &amp; (WrittenData|1))</code>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:816-1!*!0!*!*!*!* and timestamp 20160208225247 and revision id 8567
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

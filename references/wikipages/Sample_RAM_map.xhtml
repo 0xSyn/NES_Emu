@@ -1,0 +1,74 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sample RAM map</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sample RAM map</h1><div class="article">
+<p>Documents about programming for systems using the 6502 CPU often refer to RAM in 256-byte &quot;pages&quot;.
+The NES has a 2048 byte RAM connected to the CPU, which provides eight such pages at $0000-$07FF.
+The optional PRG RAM chip on some cartridge boards is an 8192 byte SRAM that provides 32 pages at $6000-$7FFF.
+</p><p>It's up to you to find uses for this memory, within certain restrictions imposed by the NES's architecture.
+Indirect addressing modes on 6502 rely on the &quot;zero page&quot; or &quot;direct page&quot;, which lies at $0000-$00FF.
+Some other addressing modes can read or write the zero page slightly faster.
+The stack instructions (PHA, PLA, PHP, PLP, JSR, RTS, BRK, RTI) always access the &quot;stack page&quot;, which lies at $0100-$01FF.
+But you can use the parts of the stack page that those instructions aren't using.
+</p><p>Here's a sketch of a memory map that may work for your programs.
+Feel free to adapt it to fit your needs.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Addresses </th>
+<th> Size </th>
+<th> What can go there
+</th></tr>
+<tr>
+<td>$0000-$000F </td>
+<td> 16 bytes </td>
+<td> Local variables and function arguments
+</td></tr>
+<tr>
+<td>$0010-$00FF </td>
+<td> 240 bytes </td>
+<td> Global variables accessed most often, including certain pointer tables
+</td></tr>
+<tr>
+<td>$0100-$019F </td>
+<td> 160 bytes </td>
+<td> Data to be copied to <a href="PPU_nametables.xhtml" title="PPU nametables">nametable</a> during next vertical blank (see <a href="The_frame_and_NMIs.xhtml" title="The frame and NMIs">The frame and NMIs</a>)
+</td></tr>
+<tr>
+<td>$01A0-$01FF </td>
+<td> 96 bytes </td>
+<td> Stack
+</td></tr>
+<tr>
+<td>$0200-$02FF </td>
+<td> 256 bytes </td>
+<td> Data to be copied to <a class="mw-redirect" href="PPU_OAM.xhtml" title="OAM">OAM</a> during next vertical blank
+</td></tr>
+<tr>
+<td>$0300-$03FF </td>
+<td> 256 bytes </td>
+<td> Variables used by sound player, and possibly other variables
+</td></tr>
+<tr>
+<td>$0400-$07FF </td>
+<td> 1024 bytes </td>
+<td> Arrays and less-often-accessed global variables
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:516-1!*!0!*!*!*!* and timestamp 20160208225823 and revision id 2143
+ -->
+</div></body></html>

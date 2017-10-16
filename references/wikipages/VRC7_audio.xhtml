@@ -1,0 +1,299 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC7 audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC7 audio</h1><div class="article">
+<p>The <a href="VRC7.xhtml" title="VRC7">Konami VRC7</a>, in addition to being a mapper chip, also produces 6 channels of 2-operator FM Synthesis Audio. It is a derivative of the Yamaha YM2413 OPLL, implementing a subset of its features and containing a custom fixed patch set.
+</p><p>VRC7 audio was only used in one game, <i>Lagrange Point</i>. The chip also appears in <i>Tiny Toon Adventures 2</i>, but this cart does not use the audio, and its board lacks required additional audio mixing circuitry.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Audio_Register_Select_.28.249010.29"><span class="tocnumber">1.1</span> <span class="toctext">Audio Register Select ($9010)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Audio_Register_Write_.28.249030.29"><span class="tocnumber">1.2</span> <span class="toctext">Audio Register Write ($9030)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Register_Write_Delay"><span class="tocnumber">1.3</span> <span class="toctext">Register Write Delay</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Internal_Audio_Registers"><span class="tocnumber">1.4</span> <span class="toctext">Internal Audio Registers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Custom_Patch"><span class="tocnumber">1.4.1</span> <span class="toctext">Custom Patch</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Channels"><span class="tocnumber">1.4.2</span> <span class="toctext">Channels</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Internal_patch_set"><span class="tocnumber">2</span> <span class="toctext">Internal patch set</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Differences_from_OPLL"><span class="tocnumber">3</span> <span class="toctext">Differences from OPLL</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#External_links"><span class="tocnumber">5</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Audio_Register_Select_.28.249010.29">Audio Register Select ($9010)</span></h3>
+<pre>7......0
+VVVVVVVV
+++++++++- The 8-bit internal register to select for use with $9030
+</pre>
+<p>This register is write-only.
+</p><p>After writing to this register, the program must not write to $9030 (or $9010 again) for at least 6 CPU clock cycles while the VRC7 internally sets up the address.
+</p>
+<h3><span class="mw-headline" id="Audio_Register_Write_.28.249030.29">Audio Register Write ($9030)</span></h3>
+<pre>7......0
+VVVVVVVV
+++++++++- The 8-bit value to write to the internal register selected with $9010
+</pre>
+<p>This register is write-only.
+</p><p>After writing to this register, the program must not write to $9010 (or $9030 again) for at least 42 CPU clock cycles while the VRC7 internally handles the write.
+</p>
+<h3><span class="mw-headline" id="Register_Write_Delay">Register Write Delay</span></h3>
+<p>Lagrange Point uses the following delay routine after writes to $9010 and $9030 to ensure enough time passes between writes:
+</p>
+<pre>
+wait_9030:          ; JSR to this label immediately after writing to $9030
+    STX $0082       ; stores X temporarily (address is arbitrary)
+    LDX #$08
+@wait_loop:
+    DEX
+    BNE @wait_loop
+    LDX $0082       ; restores X
+wait_9010:          ; JSR to this label immediately after writing to $9010
+    RTS
+</pre>
+<h3><span class="mw-headline" id="Internal_Audio_Registers">Internal Audio Registers</span></h3>
+<p>The VRCVII appears to have 26 internal registers.
+Registers $00-$07 define a custom patch that can be played on any channel set to use instrument $0.
+Registers $10-$15, $20-25, and $30-35 control 6 channels for FM synthesis.
+Other register values appear to be ignored.
+</p>
+<h4><span class="mw-headline" id="Custom_Patch">Custom Patch</span></h4>
+<table class="tabular">
+<tr>
+<th> Register </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $00 </td>
+<td> <tt>TVSK MMMM</tt> </td>
+<td> Modulator tremolo (T), vibrato (V), sustain (S), key rate scaling (K), multiplier (M)
+</td></tr>
+<tr>
+<td> $01 </td>
+<td> <tt>TVSK MMMM</tt> </td>
+<td> Carrier tremolo (T), vibrato (V), sustain (S), key rate scaling (K), multiplier (M)
+</td></tr>
+<tr>
+<td> $02 </td>
+<td> <tt>KKOO OOOO</tt> </td>
+<td> Modulator key level scaling (K), output level (O)
+</td></tr>
+<tr>
+<td> $03 </td>
+<td> <tt>KK-Q WFFF</tt> </td>
+<td> Carrier key level scaling (K), unused (-), carrier waveform (Q), modulator waveform (W), feedback (F)
+</td></tr>
+<tr>
+<td> $04 </td>
+<td> <tt>AAAA DDDD</tt> </td>
+<td> Modulator attack (A), decay (D)
+</td></tr>
+<tr>
+<td> $05 </td>
+<td> <tt>AAAA DDDD</tt> </td>
+<td> Carrier attack (A), decay (D)
+</td></tr>
+<tr>
+<td> $06 </td>
+<td> <tt>SSSS RRRR</tt> </td>
+<td> Modulator sustain (S), release (R)
+</td></tr>
+<tr>
+<td> $07 </td>
+<td> <tt>SSSS RRRR</tt> </td>
+<td> Carrier sustain (S), release (R)
+</td></tr></table>
+<p>The patch defines a 2-operator FM unit with a single modulator and carrier. The carrier produces the output tone, and the output of the modulator modulates its frequency. The patch has the following parameters:
+</p>
+<ul><li> <b>$00/$01 T</b> Tremolo applies amplitude modulation at a predefined rate.</li>
+<li> <b>$00/$01 V</b> Vibrato applies pitch modulation at a predefined rate.</li>
+<li> <b>$00/$01 S</b> Sustain determines whether the operator uses the sustain section of the envelope or not.</li>
+<li> <b>$00/$01 K</b> Key rate scaling adjusts the ADSR envelope speed, faster for high frequencies, slower for low ones.</li>
+<li> <b>$00/$01 MMMM</b> Multiplier is a multiplier on the operator's frequency according to a lookup table (see below).</li>
+<li> <b>$02/$03 KK</b> Key level scaling attenuates the operator at higher frequencies $0 = none, $3 = most.</li>
+<li> <b>$02 OOOOOO</b> Modulator output level, this value reduces the modulator volume in 0.75db increments.</li>
+<li> <b>$03 Q/W</b> Operator waveform, 0 = sine, 1 = half-wave rectified sine (where sine values less than 0 are clipped to 0).</li>
+<li> <b>$03 FFF</b> Feedback applied to modulator according to a lookup table (see below).</li>
+<li> <b>$04/$05 AAAA</b> Attack is the speed of the attack fade in after key-on. $0 = halt, $1 = slowest, $F = fastest.</li>
+<li> <b>$04/$05 DDDD</b> Decay is the speed of the decay fade to sustain after attack. $0 = halt, $1 = slowest, $F = fastest.</li>
+<li> <b>$06/$07 SSSS</b> Sustain is the attenuation after decay, in 3db increments. $0 = highest volume, $F = lowest.</li>
+<li> <b>$06/$07 RRRR</b> Release is the speed of the release fade to silent after sustain. $0 = halt, $1 = slowest, $F = fastest.</li></ul>
+<p>If a note is released before the attack or decay finishes, release begins from the current volume level.
+If the sustain bit is not set in <b>$00/$01 S</b>, release begins immediately after decay.
+</p><p>If the sustain bit is set in the channel control register <b>$2X S</b> (see <i>Channels</i> section below), the release value in the patch
+is ignored and replaced with $5.
+</p><p>The modulator's sustain bit (<b>$00 S</b>) also disables the release section of its envelope.
+If its sustain bit is set, the Attack, Decay, and Sustain portions of the envelope are used, but when the note is released the modulator will continue to sustain while the carrier releases.
+The carrier does not behave this way: its envelope always enters release when the note is released.
+</p>
+<table class="tabular">
+<tr>
+<th> $00/$01 MMMM </th>
+<th> $0 </th>
+<th> $1 </th>
+<th> $2 </th>
+<th> $3 </th>
+<th> $4 </th>
+<th> $5 </th>
+<th> $6 </th>
+<th> $7 </th>
+<th> $8 </th>
+<th> $9 </th>
+<th> $A </th>
+<th> $B </th>
+<th> $C </th>
+<th> $D </th>
+<th> $E </th>
+<th> $F
+</th></tr>
+<tr>
+<th scope="row"> Multiplier
+</th>
+<td> 1/2 </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> 3 </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> 6 </td>
+<td> 7 </td>
+<td> 8 </td>
+<td> 9 </td>
+<td> 10 </td>
+<td> 10 </td>
+<td> 12 </td>
+<td> 12 </td>
+<td> 15 </td>
+<td> 15
+</td></tr></table>
+<table class="tabular">
+<tr>
+<th> $03 FFF </th>
+<th> $0 </th>
+<th> $1 </th>
+<th> $2 </th>
+<th> $3 </th>
+<th> $4 </th>
+<th> $5 </th>
+<th> $6 </th>
+<th> $7
+</th></tr>
+<tr>
+<th scope="row"> Modulation Index
+</th>
+<td> 0 </td>
+<td> π/16 </td>
+<td> π/8 </td>
+<td> π/4 </td>
+<td> π/2 </td>
+<td> π </td>
+<td> 2π </td>
+<td> 4π
+</td></tr></table>
+<h4><span class="mw-headline" id="Channels">Channels</span></h4>
+<table class="tabular">
+<tr>
+<th> Register </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $10-$15 </td>
+<td> <tt>LLLL LLLL</tt> </td>
+<td> Channel low 8 bits of frequency
+</td></tr>
+<tr>
+<td> $20-$25 </td>
+<td> <tt>--ST OOOH</tt> </td>
+<td> Channel sustain (S), trigger (T), octave (O), high bit of frequency (H)
+</td></tr>
+<tr>
+<td> $30-$35 </td>
+<td> <tt>IIII VVVV</tt> </td>
+<td> Channel instrument (I), volume (V)
+</td></tr></table>
+<p>Each channel <b>X</b> is controlled by three registers at <b>$1X</b>, <b>$2X</b>, and <b>$3X</b>.
+</p><p>The 8 bits of <b>$1X</b> with a 9th bit from bit 0 of <b>$2X</b> create a 9-bit frequency value (<i>freq</i>).
+This is combined with a 3-bit octave value from <b>$2X</b> (<i>octave</i>) to define the output frequency (<i>F</i>):
+</p>
+<pre>     49716 Hz * freq
+F = -----------------
+     2^(19 - octave)
+</pre>
+<p>The VRC7 is clocked by an external ceramic oscillator running at 3.58 MHz (roughly twice the NTSC NES CPU <a href="Clock_rate.xhtml" title="Clock rate">clock rate</a>, but not synchronized with it), and it takes 72 internal clock cycles to update all of its channels, which means each channel is updated with a frequency of 49716 Hz (or roughly 36 NES CPU clocks). During these 72 cycles, the channels are output in series rather than mixed (like <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Namco's 163</a>), but because the frequency is so high it is not audibly different from mixed output.
+</p><p>Writing to register <b>$2X</b> can begin a key-on or key-off event, depending on the value in the trigger bit (T).
+If the trigger bit changes from 0 to 1 (key-on), a new note begins. If it changes from 1 to 0 (key-off), it will begin the release portion of its envelope which will eventually silence the channel (unless release is $0). If the trigger bit does not change, no new key-on or key-off will be generated.
+</p><p>Using the sustain bit (S) in <b>$2X</b> overrides the normal release value for the patch with a value of $5.
+</p><p>Register <b>$3X</b> selects the instrument patch to use, and chooses a volume. Note that volume value is inverted:
+$F is the lowest volume and $0 is the highest. There is no silent volume value; its output scale is logarithmic in 3db increments.
+</p>
+<h2><span class="mw-headline" id="Internal_patch_set">Internal patch set</span></h2>
+<p>There are 16 different instrument patches available on the VRC7. With the exception of instrument $0, which
+can be controlled by registers $00-$07 (see above), these are hardwired into the chip and cannot be altered.
+</p><p>Exact values for the fixed patch set are not known, but the following table is very close:
+</p>
+<pre>     00 01 02 03 04 05 06 07
+     -----------------------
+ 0 | -- -- -- -- -- -- -- --
+ 1 | 03 21 05 06 B8 82 42 27
+ 2 | 13 41 13 0D D8 D6 23 12
+ 3 | 31 11 08 08 FA 9A 22 02
+ 4 | 31 61 18 07 78 64 30 27
+ 5 | 22 21 1E 06 F0 76 08 28
+ 6 | 02 01 06 00 F0 F2 03 F5
+ 7 | 21 61 1D 07 82 81 16 07
+ 8 | 23 21 1A 17 CF 72 25 17
+ 9 | 15 11 25 00 4F 71 00 11
+ A | 85 01 12 0F 99 A2 40 02
+ B | 07 C1 69 07 F3 F5 A7 12
+ C | 71 23 0D 06 66 75 23 16
+ D | 01 02 D3 05 A3 92 F7 52
+ E | 61 63 0C 00 94 AF 34 06
+ F | 21 62 0D 00 B1 A0 54 17
+</pre>
+<h2><span class="mw-headline" id="Differences_from_OPLL">Differences from OPLL</span></h2>
+<p>The synthesis core is related to the Yamaha YM2413 OPLL, which is itself a cost-reduced version of the YM3182 OPL2 chip made popular by AdLib and SoundBlaster sound cards.
+</p>
+<ul><li> Register layout is the same.</li>
+<li> VRC7 has 6 channels, OPLL has 9.</li>
+<li> VRC7 has no rhythm channels, OPLL does (the last 3 channels are either FM or Rhythm on OPLL).</li>
+<li> VRC7 built-in instruments are not the same as OPLL instruments.</li>
+<li> VRC7 has no readily-accessible status register, under normal circumstances it is write-only; OPLL has an undocumented, 2-bit 'internal state' register.</li>
+<li> VRC7 has an internal state output pin (may be serial version of the 2 bit internal state register) and has one output pin for audio, multiplexed for all 6 channels; OPLL has two output pins, one for FM and one for Rhythm, and has no special status pin.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> VRC7 chip info by Kevin Horton: <a class="external free" href="http://kevtris.org/nes/vrcvii.txt" rel="nofollow">http://kevtris.org/nes/vrcvii.txt</a></li>
+<li> YM2413 datasheets: <a class="external free" href="http://www.datasheetarchive.com/YM2413-datasheet.html" rel="nofollow">http://www.datasheetarchive.com/YM2413-datasheet.html</a></li>
+<li> VRC7 audio test program: <a class="external free" href="http://zzo38computer.org/nes_program/vrc7test.zip" rel="nofollow">http://zzo38computer.org/nes_program/vrc7test.zip</a></li>
+<li> VRC7 patch set revision 8/01/2012: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=6&amp;t=9141" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=6&amp;t=9141</a></li>
+<li> Discussion of modulator sustain: <a class="external free" href="http://famitracker.com/forum/posts.php?id=6804" rel="nofollow">http://famitracker.com/forum/posts.php?id=6804</a></li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://www.smspower.org/maxim/Documents/YM2413ApplicationManual" rel="nofollow">Programmer's guide to the YM2413 from SMSPower</a></li>
+<li><a class="external text" href="https://docs.google.com/Doc?id=dd8kqn9f_13cqjkf4gp" rel="nofollow">How logsin and exp tables work in OPL2</a></li>
+<li><a class="external text" href="http://gendev.spritesmind.net/forum/viewtopic.php?t=386" rel="nofollow">Yamaha FM internal bit depths</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=9102" rel="nofollow">VRC7 discussion on NESdev BBS</a></li>
+<li><a class="external text" href="https://github.com/Henne/dosbox-svn/blob/ac06986809899ea5f922cb29a194e0770169e1ad/src/hardware/opl.cpp" rel="nofollow">OPL emulator in DOSBox</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 52/1000000
+Preprocessor generated node count: 68/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:102-1!*!0!!en!*!* and timestamp 20160208225949 and revision id 11698
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a></p></div></body></html>

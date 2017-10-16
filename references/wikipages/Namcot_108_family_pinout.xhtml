@@ -1,0 +1,61 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Namcot 108 family pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Namcot 108 family pinout</h1><div class="article">
+<p>Namcot 108, 109, 118, 119: 28-pin shrink PDIP, also Tengen 337001 or MIMIC-1: 28-pin 0.6&quot; PDIP (Canonically <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">mapper 206</a>).
+</p>
+<pre>               .--\/--.
+(n) CPU A14 -&gt; |01  28| -&gt; PRG A15 (r)
+ (s) CPU A0 -&gt; |02  27| -&gt; PRG A14 (r)
+ (s) CPU D5 -&gt; |03  26| &lt;- M2 (n)      
+ (s) CPU D0 -&gt; |04  25| -&gt; PRG A13 (r)
+ (s) CPU D4 -&gt; |05  24| &lt;- CPU A13 (n)
+ (s) CPU D1 -&gt; |06  23| -&gt; PRG A16 (r)
+        Gnd -- |07  22| -&gt; PRG /CE (r)
+ (s) CPU D3 -&gt; |08  21| -- +5V
+ (s) CPU D2 -&gt; |09  20| -&gt; CHR A13 (r)
+(n) /ROMSEL -&gt; |10  19| -&gt; CHR A11 (r)
+    (n) R/W -&gt; |11  18| -&gt; CHR A10 (r)
+(r) CHR A15 &lt;- |12  17| &lt;- PPU A10 (n)
+(r) CHR A14 &lt;- |13  16| &lt;- PPU A11 (n)
+(r) CHR A12 &lt;- |14  15| &lt;- PPU A12 (n)
+               `------'
+</pre>
+<p>No behavioral differences are known between the five different part numbers; <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3247" rel="nofollow">several</a> <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3185" rel="nofollow">games</a> were released on the same board with identical code and different mapper ICs.
+</p><p>Many boards (and thus iNES mappers) redefined parts of the pinout for various extensions, mostly to increase the amount of addressable CHR ROM.
+</p><p><a href="INES_Mapper_076.xhtml" title="INES Mapper 076">Mapper 76</a>:
+</p>
+<pre> (s) CPU D2 -&gt; |09  20| -&gt; CHR <b>A14</b> (r)
+(n) /ROMSEL -&gt; |10  19| -&gt; CHR <b>A12</b> (r)
+    (n) R/W -&gt; |11  18| -&gt; CHR <b>A11</b> (r)
+(r) CHR <b>A16</b> &lt;- |12  17| &lt;- PPU <b>A11</b> (n)
+(r) CHR <b>A15</b> &lt;- |13  16| &lt;- PPU <b>A12</b> (n)
+(r) CHR <b>A13</b> &lt;- |14  15| &lt;- <b>+5V</b>
+               `------'
+
+      <b>(n) PPU A10 -&gt; CHR A10 (r)</b>
+</pre>
+<p>Mappers <a href="INES_Mapper_088.xhtml" title="INES Mapper 088">88</a> and <a href="INES_Mapper_154.xhtml" title="INES Mapper 154">154</a> connect (n) PPU A12 -&gt; CHR A16 (r), skipping the mapper IC altogether.
+</p><p><a href="INES_Mapper_095.xhtml" title="INES Mapper 095">Mapper 95</a>:
+</p>
+<pre><b>(n) CIRAM A10</b> &lt;- |12  17| &lt;- PPU A10 (n)
+  (r) CHR A14 &lt;- |13  16| &lt;- PPU A11 (n)
+  (r) CHR A12 &lt;- |14  15| &lt;- PPU A12 (n)
+                 `------'
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:785-1!*!0!*!*!*!* and timestamp 20160208225658 and revision id 7609
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

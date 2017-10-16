@@ -1,0 +1,73 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper D</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper D</h1><div class="article">
+<p>This mapper is designed to be possible to write a game that can run on both this mapper and the <a href="MMC5.xhtml" title="MMC5">MMC5</a>, even though most of the features of MMC5 aren't needed.
+</p><p>(The main reason for inventing this is so that a game can be written using 64K RAM and 256K ROM, can be emulated using existing emulators without modifying it, and can be easily made into a cartridge using discrete logic components.)
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.245113:_PRG_RAM_bank"><span class="tocnumber">1.1</span> <span class="toctext">$5113: PRG RAM bank</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.245115:_PRG_ROM_bank"><span class="tocnumber">1.2</span> <span class="toctext">$5115: PRG ROM bank</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Using_MMC5_as_this_mapper"><span class="tocnumber">2</span> <span class="toctext">Using MMC5 as this mapper</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>There are two (write-only) registers. Canonically they're mapped at $5113 and $5115, but they respond to writes at any address matching this pattern:
+</p>
+<pre>[..01 .... .... .?..]
+</pre>
+<p>Where the question mark selects the register.
+There will be bus conflicts if you write the register using the addresses which are in the ROM ($9000-$9FFF or $D000-$DFFF), and writes to mirrors of internal RAM at $1000-$1FFF also trigger this register (you shouldn't ordinarily do this).
+</p>
+<h3><span class="mw-headline" id=".245113:_PRG_RAM_bank">$5113: PRG RAM bank</span></h3>
+<p>Register 0 is the RAM bank register. All the bits are used to select a 8K RAM bank at $6000-$7FFF. (According to Disch's notes, assume 64K RAM if the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header isn't present.)
+</p>
+<h3><span class="mw-headline" id=".245115:_PRG_ROM_bank">$5115: PRG ROM bank</span></h3>
+<p>Register 1 is the ROM bank register. All bits except for the highest and lowest bit select a 16K ROM bank at $8000-$BFFF.
+</p>
+<pre>
+7654 3210
+|||| ||||
+|||| |||+- Always 0
+|+++-+++-- Select 16K PRG ROM bank at $8000-$BFFF
++--------- Always 1
+</pre>
+<h2><span class="mw-headline" id="Using_MMC5_as_this_mapper">Using MMC5 as this mapper</span></h2>
+<p>If you want to write a program which works both with MMC5 and with the mapper described here, there are a few things to do.
+</p><p>One is to initialize the MMC5 registers. All initializations must be in the last 8K bank at $E000-$FFFF. The assignments listed below should work (I hope):
+</p>
+<ul><li> $5100: $01</li>
+<li> $5101: $00</li>
+<li> $5102: $01</li>
+<li> $5103: $02</li>
+<li> $5105: Set according to mirroring bit in header</li>
+<li> $5200: $00</li>
+<li> $5204: $00</li></ul>
+<p>Now when writing to the registers of this mapper, you must use:
+</p>
+<ul><li> $5113 for accessing register 0</li>
+<li> $5115 for accessing register 1, and the high bit of the data must be set</li></ul>
+<p>In addition, you shouldn't write to $1000-$1FFF since that is both RAM and registers in this mapper, but is RAM only for MMC5; it mirrors the $0000-$07FF RAM internally in the console unit but due to this reason, don't try to write to there.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.037 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1137-1!*!0!!en!*!* and timestamp 20160208230602 and revision id 8085
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_large_PRG_RAM.xhtml">Mappers with large PRG RAM</a></p></div></body></html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Family BASIC Data Recorder</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Family BASIC Data Recorder</h1><div class="article">
+<h2><span class="mw-headline" id="Example_codes">Example codes</span></h2>
+<p>Can someone please add some example codes for how you would record data on the tape and play it back? It might help if someone want to use it. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 18:11, 23 November 2013 (MST)
+</p>
+<dl><dd>The source for <a class="external text" href="http://www.chrismcovell.com/TapeDump_Controls.html" rel="nofollow">TapeDump</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=9909" rel="nofollow">TapeDump's FDS writer</a> are representative, and could easily be adapted by replacing the writes to $4011 with writes to $4016.0 and reads from $4016.2 with reads from $4017.1</dd>
+<dd><font size="-2"><i>(At some point I though &quot;It'd be cool to implement something more sophisticated than KCS, like MFM or RLL2,7&quot; but then I realized ... really, when is anyone going to use it? The best bit density we can reasonably expect to work would be small—maybe 3600bps. For hysterical raisins, everything in an emulator more easily pretends it has battery-backed RAM, and for new manufacture, using Flash PRG or CHR or a serial EEPROM and storing save data in them is easier. And KCS has the advantage that lots of software decoder/encoders already exist.)</i></font> —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 20:32, 23 November 2013 (MST)
+<dl><dd>Ah, OK, such source-codes may help. However, about your smaller text comment about the battery RAM, you still might want to have separate data files rather than the save file in the cartridge, in several cases, especially if the software also involves the keyboard (for example, if there is a built-in level editor which operates using the keyboard, and saves on tapes, that you can copy the tapes and so on; the main game may not require the keyboard or tape though, and just use the ROM levels instead); in addition, you cannot easily use disks for this purpose either since no emulators I know of support .QDI disk image formats (whose purpose is so that you can create new disks, copy individual disks, and share disks between programs and so on)! --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 13:16, 24 November 2013 (MST)</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 10/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1251-1!*!0!*!*!*!* and timestamp 20160208224026 and revision id 7774
+ -->
+</div></body></html>

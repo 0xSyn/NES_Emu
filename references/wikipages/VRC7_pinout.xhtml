@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC7 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC7 pinout</h1><div class="article">
+<p>Konami <a href="VRC7.xhtml" title="VRC7">VRC7</a>: 48-pin 0.6&quot; PDIP marked: &quot;VRC VII 053982&quot; (canonically <a class="mw-redirect" href="VRC7.xhtml" title="INES Mapper 085">iNES Mapper 085</a>)
+</p>
+<pre>               .---\/---.
+    PPU /RD -&gt; | 01  48 | -&gt; NC
+    PPU A13 -&gt; | 02  47 | &lt;- M2
+        GND -- | 03  46 | -&gt; WRAM /CS
+        R/W -&gt; | 04  45 | &lt;- /ROMSEL
+       /IRQ &lt;- | 05  44 | -&gt; PRG /CS
+  CIRAM A10 &lt;- | 06  43 | -&gt; Audio Out
+     CPU D0 -&gt; | 07  42 | -- +5V
+     CPU D1 -&gt; | 08  41 | -&gt; CHR A17
+     CPU D2 -&gt; | 09  40 | -&gt; CHR A16
+     CPU D3 -&gt; | 10  39 | -&gt; CHR A15
+     CPU D4 -&gt; | 11  38 | -&gt; CHR A14
+     CPU D5 -&gt; | 12  37 | -&gt; CHR A13
+     CPU D6 -&gt; | 13  36 | -&gt; CHR A12
+     CPU D7 -&gt; | 14  35 | -&gt; CHR A11
+        +5V -&gt; | 15  34 | -&gt; CHR A10
+     CPU A5 -&gt; | 16  33 | &lt;- PPU A12
+ Crystal X2 -&gt; | 17  32 | &lt;- PPU A11
+ Crystal X1 &lt;- | 18  31 | &lt;- PPU A10
+     CPU An -&gt; | 19  30 | -- +5V
+    PRG A13 &lt;- | 20  29 | &lt;- CPU A14
+    PRG A14 &lt;- | 21  28 | &lt;- CPU A13
+    PRG A15 &lt;- | 22  27 | &lt;- CPU A12
+    PRG A16 &lt;- | 23  26 | -&gt; PRG A18
+        GND -- | 24  25 | -&gt; PRG A17
+               `--------'
+ 
+ 01,02: this doesn't make sense; 
+        the VRC7 provides none of hardware nametables, control of CIRAM /CE, or CHR /CE.
+        maybe pin 48 is {pin1 OR pin2}, i.e. CHR /CE for a 28-pin CHR ROM?
+        then why didn't TTA2 use it?
+ 17,18: missing on TTA2, 3.58MHz <a class="extiw" href="http://en.wikipedia.org/wiki/Ceramic_resonator" title="wikipedia:Ceramic resonator">ceramic resonator</a> on LP
+ 19: A3 on TTA2, A4 on LP
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:173-1!*!0!*!*!*!* and timestamp 20160208225951 and revision id 9524
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

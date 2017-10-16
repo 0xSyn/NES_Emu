@@ -1,0 +1,101 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC1 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC1 pinout</h1><div class="article">
+<p><a href="MMC1.xhtml" title="MMC1">MMC1</a>: 24 pin shrink-DIP (canonically mappers <b>1</b> and <a href="INES_Mapper_155.xhtml" title="INES Mapper 155">155</a>)
+</p><p>Comes in several varieties: 'MMC1', 'MMC1A', and 'MMC1B2'                                  
+</p>
+<pre>                .--\/--.
+ PRG A14 (r) &lt;- |01  24| -- +5V
+ PRG A15 (r) &lt;- |02  23| &lt;- M2 (n)
+ PRG A16 (r) &lt;- |03  22| &lt;- CPU A13 (nr)
+ PRG A17 (r) &lt;- |04  21| &lt;- CPU A14 (n)
+ PRG /CE (r) &lt;- |05  20| &lt;- /ROMSEL (n)
+WRAM +CE (w) &lt;- |06  19| &lt;- CPU D7 (nrw)
+ CHR A12 (r) &lt;- |07  18| &lt;- CPU D0 (nrw)
+ CHR A13 (r) &lt;- |08  17| &lt;- CPU R/W (nw)
+ CHR A14 (r) &lt;- |09  16| -&gt; CIRAM A10 (n)
+ CHR A15 (r) &lt;- |10  15| &lt;- PPU A12 (nr)
+ CHR A16 (r) &lt;- |11  14| &lt;- PPU A11 (nr)
+         GND -- |12  13| &lt;- PPU A10 (nr)
+                `------'
+
+(r) - this pin connects to the ROM chips
+(n) - this pin connects to the NES connector
+(w) - this pin connects to the WRAM
+</pre>
+<p>As with many other ASIC mappers, parts of the pinout are often repurposed:
+</p><p>SEROM, SHROM, SH1ROM: doesn't support PRG banking
+</p>
+<pre>                .--\/--.
+         <b>n/c</b> &lt;- |01  24| -- +5V
+         <b>n/c</b> &lt;- |02  23| &lt;- M2 (n)
+         <b>n/c</b> &lt;- |03  22| &lt;- CPU A13 (nr)
+         <b>n/c</b> &lt;- |04  21| &lt;- CPU A14 (n)
+
+       <b>CPU A14 (n) -&gt; PRG A14 (r)</b>
+</pre>
+<p>SNROM: uses CHR A13-A16 as a PRG-RAM disable
+</p>
+<pre>          <b>n/c</b> &lt;- |08  17| &lt;- CPU R/W (nw)
+          <b>n/c</b> &lt;- |09  16| -&gt; CIRAM A10 (n)
+          <b>n/c</b> &lt;- |10  15| &lt;- PPU A12 (n)
+ <b>WRAM /CE (w)</b> &lt;- |11  14| &lt;- PPU A11 (nr)
+          GND -- |12  13| &lt;- PPU A10 (nr)
+                 `------'
+</pre>
+<p>SOROM: uses CHR A13-A16 as PRG-RAM banking
+</p>
+<pre>          <b>n/c</b> &lt;- |08  17| &lt;- CPU R/W (nw)
+          <b>n/c</b> &lt;- |09  16| -&gt; CIRAM A10 (n)
+ <b>WRAM A13 (w)</b> &lt;- |10  15| &lt;- PPU A12 (n)
+          <b>n/c</b> &lt;- |11  14| &lt;- PPU A11 (nr)
+          GND -- |12  13| &lt;- PPU A10 (nr)
+                 `------'
+</pre>
+<p>SOROM is actually implemented using the WRAMs' /CE inputs and an inverter to select only one RAM at a time.
+</p><p>SUROM: uses CHR A13-A16 as PRG-ROM banking
+</p>
+<pre>          <b>n/c</b> &lt;- |08  17| &lt;- CPU R/W (nw)
+          <b>n/c</b> &lt;- |09  16| -&gt; CIRAM A10 (n)
+          <b>n/c</b> &lt;- |10  15| &lt;- PPU A12 (n)
+  <b>PRG A18 (r)</b> &lt;- |11  14| &lt;- PPU A11 (nr)
+          GND -- |12  13| &lt;- PPU A10 (nr)
+                 `------'
+</pre>
+<p>SXROM: uses CHR A13-A16 as PRG-ROM and PRG-RAM banking
+</p>
+<pre>          <b>n/c</b> &lt;- |08  17| &lt;- CPU R/W (nw)
+ <b>WRAM A13 (w)</b> &lt;- |09  16| -&gt; CIRAM A10 (n)
+ <b>WRAM A14 (w)</b> &lt;- |10  15| &lt;- PPU A12 (n)
+  <b>PRG A18 (r)</b> &lt;- |11  14| &lt;- PPU A11 (nr)
+          GND -- |12  13| &lt;- PPU A10 (nr)
+                 `------'
+</pre>
+<p><a href="NES_EVENT.xhtml" title="NES-EVENT">EVENT</a>: uses CHR A13-A16 as more complicated PRG-ROM banking and timer control
+</p>
+<pre>    <b>PRG2 A15</b> &lt;- |08  17| &lt;- CPU R/W (nw)
+    <b>PRG2 A16</b> &lt;- |09  16| -&gt; CIRAM A10 (n)
+     <b>PRG SEL</b> &lt;- |10  15| &lt;- PPU A12 (n)
+ <b>TIMER RESET</b> &lt;- |11  14| &lt;- PPU A11 (nr)
+         GND -- |12  13| &lt;- PPU A10 (nr)
+                `------'
+</pre>
+<p>Since the PPU A12 input's only purpose is to switch the CHR A12 .. A16 outputs, it's not clear why Nintendo didn't tie the MMC1's PPU A12 input low and connect CHR A12 directly to PPU A12. Doing so would have cost nothing (the ability to swap the two nametables is already granted through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>), would have prevented mistakes (unless the same value is in both CHR registers, 4KB mode causes erratic switching of bank during rendering), and would have freed up another bit of control.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.025 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:167-1!*!0!*!*!*!* and timestamp 20160607010236 and revision id 12595
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

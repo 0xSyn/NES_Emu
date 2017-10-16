@@ -1,0 +1,172 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:PPU rendering</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:PPU rendering</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#0.3Dblank_vs._0.3Dactive"><span class="tocnumber">1</span> <span class="toctext">0=blank vs. 0=active</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Garbage_nametable_byte"><span class="tocnumber">2</span> <span class="toctext">Garbage nametable byte</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Out_of_date"><span class="tocnumber">3</span> <span class="toctext">Out of date</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Delay_between_shifters_shifting_and_drawing"><span class="tocnumber">4</span> <span class="toctext">Delay between shifters shifting and drawing</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Does_it_fetch_everything.3F"><span class="tocnumber">5</span> <span class="toctext">Does it fetch everything?</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Pre-render_scanline_dummy_fetches...where.3F"><span class="tocnumber">6</span> <span class="toctext">Pre-render scanline dummy fetches...where?</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="0.3Dblank_vs._0.3Dactive">0=blank vs. 0=active</span></h2>
+<p>There are two different conventions:
+</p>
+<table class="tabular">
+<tr>
+<th> 0=active </th>
+<th> 0=blanking </th>
+<th> Description
+</th></tr>
+<tr>
+<td> 261 or -1 </td>
+<td> 20 </td>
+<td> Pre-render scanline
+</td></tr>
+<tr>
+<td> 0-239 </td>
+<td> 21-260 </td>
+<td> Active picture
+</td></tr>
+<tr>
+<td> 240 </td>
+<td> 261 </td>
+<td> Post-render scanline
+</td></tr>
+<tr>
+<td> 241-260 </td>
+<td> 0-19 </td>
+<td> Vertical blanking
+</td></tr></table>
+<p>You're using the 0=blanking convention. But more often on the BBS and elsewhere on this wiki, I've seen 0=active. The <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a> appears to agree with 0=active, as do the (X, Y) coordinate displays in the debugger of FCEUX and Nintendulator and the VCOUNT register on the Game Boy ($FF44) and Game Boy Advance ($04000006). The 0=active convention makes it easier to consolidate discussion of NTSC, PAL, and PAL clone timing as well. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 20:15, 3 April 2011 (UTC)
+</p>
+<dl><dd> Ahh, ok. I was just simply going off of what's in Brad Taylor's docs. The 0=blank method didn't make a lot of sense to me either, as does some of the other stuff in this doc (The shift registers make more sense if they shift <i>left</i> rather than right). I'll adjust this. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 20:47, 3 April 2011 (UTC)</dd></dl>
+<p>I think at some point, it would be worthwhile to document how the PPU outputs the vertical/horizontal sync signals. If for nothing else than to satisfy my own curiosity. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 05:30, 6 July 2011 (UTC)
+</p>
+<h2><span class="mw-headline" id="Garbage_nametable_byte">Garbage nametable byte</span></h2>
+<p>Before each sprite's patterns are loaded, at x=257, 259, 265, 267, ..., 313, 315, there is a garbage nametable fetch. Has anyone discovered a pattern to these fetches' addresses that, say, a mapper could use? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 16:07, 6 July 2011 (UTC)
+</p>
+<dl><dd>I was going to ask the same question, what are the addresses of the garbage nametable bytes? I would like to know, too. It would be useful for this purpose, as well as if you are making a hardware clone or whatever and want it accurate. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 13:37, 17 March 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Out_of_date">Out of date</span></h2>
+<p>Some of the timing information is out of date now (see forums.nesdev.com/viewtopic.php?f=3&amp;t=9901). I'll update it once I get my account activated. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 18:38, 15 March 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Delay_between_shifters_shifting_and_drawing">Delay between shifters shifting and drawing</span></h2>
+<p>As the notes in the diagram mention, there's actually a delay of two ticks from when the shifters shift to when the pixel is output. Looks like this is due to palette lookup. Here's a Visual 2C02 trace around the beginning of a scanline with the high and low pattern bits = 0x80 (so that the palette index is 3 for the first pixel and 0 for the rest):
+</p>
+<pre>
+hpos	vid_	tile_l	tile_h	pal_ptr
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+000	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+001	080	fefe	0101	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+002	080	ff7f	8080	00
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+003	080	ffbf	c040	03
+004	080	ffdf	e020	00
+004	080	ffdf	e020	00
+004	080	ffdf	e020	00
+004	080	ffdf	e020	00
+004	400	ffdf	e020	00
+004	400	ffdf	e020	00
+004	400	ffdf	e020	00
+004	400	ffdf	e020	00
+005	400	ffef	f010	00
+005	400	ffef	f010	00
+005	400	ffef	f010	00
+005	400	ffef	f010	00
+005	080	ffef	f010	00
+005	080	ffef	f010	00
+005	080	ffef	f010	00
+005	080	ffef	f010	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+006	080	fff7	f808	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+007	080	fffb	fc04	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+008	080	fffd	fe02	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+009	080	fefe	0101	00
+00a	080	ff7f	8080	00
+00a	080	ff7f	8080	00
+</pre>
+<p>The shifters shift at h=2, the palette address changes at h=3 for the palette lookup, and the pixel is drawn during h=4 (as seen by vid_ changing).
+</p><p>It also looks like the shift registers are actually reloaded at h=9,17,25,... instead of at h=8,16,24,..., so that should be fixed. :/  -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 17:14, 5 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Does_it_fetch_everything.3F">Does it fetch everything?</span></h2>
+<p>If at least one of the background or sprites is enabled, will it still fetch both even though only one is used? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 01:25, 18 June 2013 (MDT)
+</p>
+<dl><dd> During rendering, the PPU's address bus is <i>never idle</i>. I don't know what addresses it reads if background is disabled, but I think the sprite reads from tile #$FF. (Visual2C02 can tell you the right answer) —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 02:44, 18 June 2013 (MDT)</dd>
+<dd> IIRC, disabling only one of them doesn't affect sprite evaluation and fetches at all, but only the final drawing stage (where sprite zero hit detection happens as well). I think you can re-enable sprite rendering in the middle of a sprite and have half of it draw fine. --<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 08:56, 18 June 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Pre-render_scanline_dummy_fetches...where.3F">Pre-render scanline dummy fetches...where?</span></h2>
+<p>&quot;Although no pixels are rendered for this scanline, the PPU still makes the same memory accesses it would for a regular scanline.&quot;
+But *which* memory accesses? Which line is it looking at for the dummy fetches? Same as line 0? Something else? <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 23:46, 20 April 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.050 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:566-1!*!0!!en!*!* and timestamp 20160606132026 and revision id 10051
+ -->
+</div></body></html>

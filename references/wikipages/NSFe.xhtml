@@ -1,0 +1,150 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NSFe</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NSFe</h1><div class="article">
+<p><br/>
+<b>NSFe</b> is the <b>Extended Nintendo Sound Format</b> created by Disch and popularized by the NotSoFatso NSF player. It is based on the original <a href="NSF.xhtml" title="NSF">NSF</a> file format, but its data is organized differently and is not backward compatible.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Structure"><span class="tocnumber">1</span> <span class="toctext">Structure</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Chunks"><span class="tocnumber">2</span> <span class="toctext">Chunks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#INFO"><span class="tocnumber">2.1</span> <span class="toctext">INFO</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#DATA"><span class="tocnumber">2.2</span> <span class="toctext">DATA</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#NEND"><span class="tocnumber">2.3</span> <span class="toctext">NEND</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#BANK"><span class="tocnumber">2.4</span> <span class="toctext">BANK</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#plst"><span class="tocnumber">2.5</span> <span class="toctext">plst</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#time"><span class="tocnumber">2.6</span> <span class="toctext">time</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#fade"><span class="tocnumber">2.7</span> <span class="toctext">fade</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#tlbl"><span class="tocnumber">2.8</span> <span class="toctext">tlbl</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#auth"><span class="tocnumber">2.9</span> <span class="toctext">auth</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#text"><span class="tocnumber">2.10</span> <span class="toctext">text</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Structure">Structure</span></h2>
+<p>The NSFe begins with a four byte header, containing the four characters 'NSFE'.
+</p>
+<pre>offset  # of bytes   Function
+----------------------------
+$0000   4   FOURCC   'N','S','F','E' (header)
+</pre>
+<p>After the header, a series of chunks will appear.
+</p>
+<h2><span class="mw-headline" id="Chunks">Chunks</span></h2>
+<p>All chunks have the same primary structure:
+</p>
+<pre>offset  # of bytes   Function
+----------------------------
+$0000   4   DWORD    Length of chunk data (n). Does not include the chunk's 8 byte header.
+$0004   4   FOURCC   Four character chunk ID.
+$0008   n   ----     Chunk data of specified length.
+</pre>
+<p>There are three chunks that are required for a well formed NSFe:
+</p>
+<ul><li> 'INFO' - Similar to an NSF header, must appear before 'DATA' chunk.</li>
+<li> 'DATA' - Raw ROM data.</li>
+<li> 'NEND' - Last NSFe chunk in file.</li></ul>
+<p>Note the 'INFO' chunk must precede the 'DATA' chunk, and the 'NEND' chunk marks the end of the file; no further chunks should be read past 'NEND'.
+</p><p>If the first byte of a chunk's FourCC ID is a capital letter (i.e. 'A' to 'Z'), it indicates that this chunk is mandatory, and if the NSFe player cannot read this type of chunk it should not attempt to play the file. All other chunks are considered optional, and may be skipped by the NSFe player if necessary.
+</p><p>The NSFe format does not have a version number. Future revisions of the format, if necessary, can be accomplished with new mandatory chunk types.
+</p>
+<h3><span class="mw-headline" id="INFO">INFO</span></h3>
+<p>This required chunk describes the music data contained. This is similar to the NSF header.
+</p>
+<pre>offset  # of bytes   Function
+----------------------------
+$0000   2   WORD    (lo, hi) load address of data ($8000-FFFF)
+$0002   2   WORD    (lo, hi) init address of data ($8000-FFFF)
+$0004   2   WORD    (lo, hi) play address of data ($8000-FFFF)
+$0006   1   BYTE    PAL/NTSC bits
+                bit 0: if clear, this is an NTSC tune
+                bit 0: if set, this is a PAL tune
+                bit 1: if set, this is a dual PAL/NTSC tune
+                bits 2-7: not used. they *must* be 0
+$0007   1   BYTE    Extra Sound Chip Support
+                bit 0: if set, this song uses <a href="VRC6_audio.xhtml" title="VRC6 audio">VRC6 audio</a>
+                bit 1: if set, this song uses <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a>
+                bit 2: if set, this song uses <a href="FDS_audio.xhtml" title="FDS audio">FDS audio</a>
+                bit 3: if set, this song uses <a href="MMC5_audio.xhtml" title="MMC5 audio">MMC5 audio</a>
+                bit 4: if set, this song uses <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Namco 163 audio</a>
+                bit 5: if set, this song uses <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a>
+                bits 6,7: future expansion: they *must* be 0
+$0008   1   BYTE    Total songs   (1=1 song, 2=2 songs, etc)
+$0009   1   BYTE    Starting song (0=1st song, 1=2nd song, etc)
+</pre>
+<p>Note the following differences from NSF:
+</p>
+<ul><li> Title, author, and copyright information is not mandatory. See the 'auth' chunk for details.</li>
+<li> If bankswitching is required, it is specified in a subsequent 'BANK' chunk.</li>
+<li> There is no custom playback speed; the play routine will be called at the NMI rate for the specified system (NTSC or PAL).</li>
+<li> The first song in the NSFe is 0, unlike NSF which begins with 1.</li></ul>
+<p>This chunk must be at least 9 bytes long. If starting song is missing, 0 may be assumed. Any extra data in this chunk may be ignored.
+</p>
+<h3><span class="mw-headline" id="DATA">DATA</span></h3>
+<p>This chunk contains the raw ROM data. It will be placed at the load address specified by the 'INFO' chunk, unless bankswitched (the same as in NSF). There is no minimum length for this chunk, but data past 1MB is unusable due to the bank switching mechanisms of the NSF mapper.
+</p>
+<h3><span class="mw-headline" id="NEND">NEND</span></h3>
+<p>This chunk may be any length, but any contained data may be ignored. Typically it will have 0 length.
+</p><p>There should be no chunks following the 'NEND' chunk.
+</p>
+<h3><span class="mw-headline" id="BANK">BANK</span></h3>
+<p>If the bank chunk is present, this NSFe should use bankswitching, and it contains 8 bytes specifying the 8 banks to initialize with. See <a href="NSF.xhtml" title="NSF">NSF</a> for bankswitching details.
+</p><p>If this chunk is less than 8 bytes, presume 0 for the missing bytes. If longer, ignore the extra bytes.
+</p>
+<h3><span class="mw-headline" id="plst">plst</span></h3>
+<p>This optional chunk specifies the order in which to play tracks. Each byte specifies a track from the NSFe (note that the first track in the NSFe is track 0).
+</p><p>The length of the playlist is specified by the length of this chunk. It is not required to play all tracks, and they may be duplicated.
+</p><p>A player should normally stop when the playlist is finished. It may be useful to allow the user to turn off the playlist and select tracks from the NSFe manually.
+</p>
+<h3><span class="mw-headline" id="time">time</span></h3>
+<p>This optional chunk contains a list of 4 byte signed integers. Each integer represents the length in milliseconds for the corresponding NSFe track. Note this is unrelated to the 'plst' chunk; the times are for the tracks in the NSFe, not the tracks int he playlist. When the track has played for the specified time, it should begin fading out. A time of 0 is valid, and should begin fadeout immediately. A time of less than 0 represents the &quot;default&quot; time, which should be handled accordingly by the player.
+</p><p>This chunk should come after the 'INFO' chunk, so that the number of tracks is already known.
+</p><p>If this chunk is not long enough to specify all tracks in the NSF, a default time should be assumed for these tracks. Any extra data should be ignored.
+</p>
+<h3><span class="mw-headline" id="fade">fade</span></h3>
+<p>This optional chunk contains a list of 4 byte signed integers. It is like the 'time' chunk, but instead specifies a fadeout length in milliseconds for each track. A fade time of 0 means the track should immediately end rather than fading out. A fade time of less than 0 represents the default fade time.
+</p><p>This chunk should come after the 'INFO' chunk, so that the number of tracks is already known.
+</p><p>If this chunk is not long enough to specify all tracks in the NSF, a default time should be assumed for these tracks. Any extra data should be ignored.
+</p>
+<h3><span class="mw-headline" id="tlbl">tlbl</span></h3>
+<p>This optional chunk contains names for each track (tlbl = track label). This contains a series of null-terminated strings, in track order. (Like 'time' and 'fade', this is not related to the 'plst' chunk's playlist.)
+</p><p>This chunk should come after the 'INFO' chunk, so that the number of tracks is already known.
+</p><p>If there are not enough strings for every track, subsequent tracks should recieve a default label (or no label) according to the player. Extra strings can be ignored.
+</p>
+<h3><span class="mw-headline" id="auth">auth</span></h3>
+<p>This optional chunk contains four null-terminated strings describing in order:
+</p>
+<ol><li> Game title</li>
+<li> Artist</li>
+<li> Copyright</li>
+<li> Ripper</li></ol>
+<p>If not all strings are present, a default string (typically &quot;&lt;?&gt;&quot;) can be assumed by the player.
+</p>
+<h3><span class="mw-headline" id="text">text</span></h3>
+<p>This optional chunk contains a single null-terminated string of any length. This may include a description of the contents, or any message from the author.
+</p><p>Newlines may either be CR+LF or LF, as commonly found in text files.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://slickproductions.org/docs/NSF/nsfespec.txt" rel="nofollow">NSFe specification by Disch, revision 2. (9/3/2003)</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.046 seconds
+Real time usage: 0.048 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:951-1!*!0!!en!*!* and timestamp 20160208225652 and revision id 5117
+ -->
+<p class="categories">Categories: <a href="Category_File_formats.xhtml">File formats</a>, <a href="Category_Audio.xhtml">Audio</a></p></div></body></html>

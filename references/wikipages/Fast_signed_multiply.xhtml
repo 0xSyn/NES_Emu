@@ -1,0 +1,73 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Fast signed multiply</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Fast signed multiply</h1><div class="article">
+<p>The following code multiplies two 8-bit signed integers, of range (-64..+64). The output is a signed 16-bit result, in range (-4096..4096). It uses a 256 byte lokup table, but is quite fast.
+</p>
+<pre>
+;Fast table driven signed multiply routine
+;It multiplies Y with A, and relies on the mathematical fact (a+b)^2-(a-b)^2 = 4*a*b
+;Also both inputs and outputs are SIGNED and are never supposed to be outside of the range (-64; +64)
+;Return with YA = 4*A*Y (result can be shifted as necessary)
+
+Multiply
+	sty Temp
+	pha
+	clc
+	adc Temp	;Add two multiplicands together
+	bpl +
+	eor #$ff
+	clc
+	adc #$01	;If result is negative, force it to be positive
++	asl A
+	tax		;The square of a negative number is equal to its pos counterpart anyways
+
+	pla
+	sec
+	sbc Temp       ;Compute difference of two multiplicands
+	bpl +
+	eor #$ff       ;Again, force the result to be positive
+	clc
+	adc #$01
++	asl A
+	tay
+
+	lda SquareTbl,X
+	sec
+	sbc SquareTbl,Y    ;Compute (a+y)^2-(a-y)^2
+	pha
+	lda SquareTbl+1,X
+	sbc SquareTbl+1,Y
+	tay
+	pla
+	rts
+
+;This is a square table for the multiply routine
+;Note that this macro is for WLA-DX, but can be adapted
+;For most assemblers
+
+SquareTbl
+.def i = 0
+.rept 128
+	.dw i^2			;Create a square table with 128 word entries
+	.redef i i+1
+.endr
+.ends
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.011 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:234-1!*!*!*!*!*!* and timestamp 20160208224939 and revision id 9012
+ -->
+<p class="categories">Categories: <a href="Category_Arithmetic.xhtml">Arithmetic</a></p></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU/current</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU/current</h1><div class="article">
+<p>Looking at Visual 2A03 and e.g. the sq0_on and sq0_len nodes, it seems that disabling a channel doesn't touch the length counter at all. Rather, there are internal channel enable flags (eg. sq0_on) that get set when the length counter is initialized (presumably only for non-zero values, though I haven't checked) and cleared when either the length counter reaches zero or the channel is disabled. These are the flags you get back from $4015/read as well. Even if this page only describes &quot;abstract APU operation&quot;, that's not any more complicated than the current version, so maybe the descriptions should be updated. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 23:30, 28 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Glossary_entry_for_.22timer.22">Glossary entry for &quot;timer&quot;</span></h2>
+<p>The glossary entry for timer says
+</p>
+<blockquote> The triangle channel's timer is clocked on every CPU cycle, but the pulse, noise, and DMC timers are clocked only on every second CPU cycle and thus produce only even periods.</blockquote>
+<p>But my understanding is the triangle, noise, and DMC timers are clocked on every CPU cycle, and only the pulse channel timers are clocked on every second CPU cycle. Have I understood correctly? --<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 21:29, 19 February 2014 (MST)
+</p>
+<dl><dd>Then why do noise and DMC timers produce only even periods? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 07:22, 20 February 2014 (MST)</dd></dl>
+<dl><dd><dl><dd>The <a href="APU_Noise.xhtml" title="APU Noise">noise</a> and <a href="APU_DMC.xhtml" title="APU DMC">DMC</a> channels use lookup tables to set the period of their timers. It looks like all of the lookup table entries happen to be even.</dd></dl></dd></dl>
+<dl><dd><dl><dd>I've been studying the NES sound capabilities as a hobby, let me know if I've gotten something wrong. Here's what I understand.</dd></dl></dd></dl>
+<dl><dd><dl><dd>From the References section, I read <a class="external text" href="http://nesdev.com/apu_ref.txt" rel="nofollow">Blargg's NES APU Reference</a>. In that document, the &quot;Timer&quot; section says &quot;All channels use a timer which is a divider driven by the ~1.79 MHz clock.&quot; I interpret this to mean all sound channels have a timer clocked by the <a href="Clock_rate.xhtml" title="Clock rate">CPU clock</a>. In the same document, the &quot;Square Channel&quot; section block diagram has a block called &quot;Timer / 2&quot;, whereas the block diagrams in all other channels have a block called &quot;Timer&quot;.</dd></dl></dd></dl>
+<dl><dd><dl><dd>If I understand correctly, a &quot;Timer / 2&quot; clocked by every CPU clock would be the same as a &quot;Timer&quot; clocked by every other CPU clock. I'm not sure which one it really is implemented as. My main concern was it seems the statement in the glossary may be wrong regarding the noise and DMC timers, if I understand correctly, they are clocked every CPU clock. --<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 19:02, 20 February 2014 (MST)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> The terminology here is problematic. The APU clock, which is used by all audio hardware except the triangle channel, is formed by dividing the CPU clock by two. In practice, the formulæ on this page already include this division, and any differences in implementation will likely only show up on the most pedantic of tests. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:41, 20 February 2014 (MST)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd>I see. Blargg's document states it's just an functional model that may differ from actual implementation, so I guess it's not usable as proof of how the timers are actually implemented.</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd>To make sure I understand: The lookup tables at <a href="APU_Noise.xhtml" title="APU Noise">APU Noise</a> and <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a> are in terms of CPU clocks, correct? But you're saying the hardware implementation of the lookup tables are actually in terms of APU clocks (using values that are half those shown in the documents), and the actual noise and DMC timers in hardware are clocked by APU clocks?--<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 21:11, 20 February 2014 (MST)</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd> You understand correctly. If you go to <a class="external text" href="http://www.qmtpro.com/~nes/chipimages/visual2a03/" rel="nofollow">visual2a03</a> you can find the signals <i>apu_clk1</i>, <i>apu_/clk2</i>, <i>apu_clk2a</i>, …b, …c, …d, which control this. This is briefly mentioned in <a href="Visual_circuit_tutorial.xhtml#APU_clock_signals" title="Visual circuit tutorial">Visual circuit tutorial#APU clock signals</a>. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 23:28, 20 February 2014 (MST)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd><dl><dd>From a different approach, the DPCM tunings are all evidently a closest match to an A440 tuning scheme (notwithstanding 2 mistakes in the PAL table implementation), but <i>only</i> if we're using half-clocks. If the DPCM tables could have &quot;odd&quot; values in it, the DPCM tuning scheme would have used them to better fit it. More info here: <a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?f=6&amp;t=5473" rel="nofollow">[1]</a> - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 07:44, 22 February 2014 (MST)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Lengthcounter_and_Framecounter_inconsistency">Lengthcounter and Framecounter inconsistency</span></h2>
+<p>The page about the APU Framecounter suggests that the Lenghtcounter is clocked twice per sequence (regardless of the Framecounter mode flag). Oddly the documentation for the lengthcunter assumes that it is clocked only once. So what is right? If it is really clocked twice per sequence, the bpm values would be 150 bpm and 180 bpm instead of 75 bpm and 90 bpm. In this case the document would also completely miss that the notes are slower if the framecounter mode flag is set. This would provide two alternative paces of 120 bpm (MSB set) and 144 bpm (MSB clear). 
+</p><p>The resource document (Blargg's NES APU Reference) also says that the lengthcounter is clocked twice per sequence.
+</p>
+<dl><dd>The length counter is clocked twice per sequence. Where on the Wiki does it say otherwise? (This would need to be corrected.) - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:32, 19 September 2014 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1106-1!*!0!!*!*!* and timestamp 20160208223900 and revision id 9084
+ -->
+</div></body></html>

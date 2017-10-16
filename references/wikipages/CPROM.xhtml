@@ -1,0 +1,64 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPROM</h1><div class="article">
+<p>NES-<strong class="selflink">CPROM</strong> (no <a href="Famicom.xhtml" title="Famicom">HVC</a>-CPROM known) is a particular Nintendo cartridge board which uses discrete logic to provide up to four 4 KB banks of CHR RAM.
+The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>mapper 13</b> to this board.
+Only <i><a class="extiw" href="https://en.wikipedia.org/wiki/Videomation" title="wikipedia:Videomation">Videomation</a></i>, a paint program for NES, is known to use it.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Bank_select_.28.248000-.24FFFF.29"><span class="tocnumber">3.1</span> <span class="toctext">Bank select ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Hardware"><span class="tocnumber">4</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 32 KiB (DIP-28 standard pinout)</li>
+<li> PRG ROM bank size: Not bankswitched</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 16 KiB RAM (in two <a href="6264_static_RAM.xhtml" title="6264 static RAM">8KiB RAMs</a>)</li>
+<li> CHR bank size: 4 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Vertical</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes</li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> PPU $0000-$0FFF: 4 KiB fixed CHR RAM bank (first page)</li>
+<li> PPU $1000-$1FFF: 4 KiB swappable CHR RAM page</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.24FFFF.29">Bank select ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxCC
+       ||
+       ++- Select 4 KiB CHR RAM bank for PPU $1000-$1FFF
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The CPROM board uses a <a href="74161.xhtml" title="74161">74HC161</a> (4-bit latch) and a <a href="7408.xhtml" title="7408">74HC08</a> (quad 2-input AND gate), with a <a href="7404.xhtml" title="7404">74HC04</a> (hex inverter) to unify the two RAMs.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://kevtris.org/mappers/nes_discrete/NES_CPROM.html" rel="nofollow">Kevtris's notes</a></li>
+<li> The <a href="NROM_368.xhtml" title="NROM-368">NROM-368</a> proposal is also compatible with this board.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.054 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:117-1!*!0!!en!*!* and timestamp 20160612173051 and revision id 12627
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a></p></div></body></html>

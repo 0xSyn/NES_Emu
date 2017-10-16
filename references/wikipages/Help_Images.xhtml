@@ -1,0 +1,282 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Help:Images</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Help:Images</h1><div class="article">
+<table style="color:#000000; border:solid 1px #A8A8A8; padding:0.5em; margin:0.5em 0; background-color:#FFFFFF;font-size:95%; vertical-align:middle;">
+<tr>
+<td style="padding:1em;width: 40px">
+</td>
+<td><b>Important note:</b> When you edit this page, you agree to release your contribution into the <a class="mw-redirect" href="Public_domain.xhtml" title="En:Public domain">public domain</a>. If you don't want this or can't do this because of license restrictions, please don't edit. This page is one of the <s>Public Domain Help Pages</s>, which can be freely copied into fresh wiki installations and/or distributed with MediaWiki software.}}
+</td>
+<td style="padding:1em;width: 40px">
+</td></tr></table>
+<p>This page explains the <b>image</b> syntax when editing the wiki. You or another user must usually <s>upload an image</s> before you can use it on a page.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Syntax"><span class="tocnumber">1</span> <span class="toctext">Syntax</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Format"><span class="tocnumber">2</span> <span class="toctext">Format</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Alignment"><span class="tocnumber">3</span> <span class="toctext">Alignment</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Vertical_alignment"><span class="tocnumber">3.1</span> <span class="toctext">Vertical alignment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Size_and_Frame"><span class="tocnumber">4</span> <span class="toctext">Size and Frame</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Stopping_text_flow"><span class="tocnumber">5</span> <span class="toctext">Stopping text flow</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Gallery_of_images"><span class="tocnumber">6</span> <span class="toctext">Gallery of images</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Parameters"><span class="tocnumber">6.1</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Link_to_description_page"><span class="tocnumber">7.1</span> <span class="toctext">Link to description page</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Link_directly_to_file"><span class="tocnumber">7.2</span> <span class="toctext">Link directly to file</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Requisites"><span class="tocnumber">8</span> <span class="toctext">Requisites</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Files_at_other_websites"><span class="tocnumber">9</span> <span class="toctext">Files at other websites</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Syntax">Syntax</span></h2>
+<p>The full syntax for displaying an image is:
+</p>
+<pre> [[File:{file_name}|{options}]]
+</pre>
+<p>Where options can be zero or more of the following, separated by pipes:
+</p>
+<ul><li> <i>border</i>, <i>frame</i>, <i>thumb</i>, or <i>frameless</i>: Controls how the image is formatted</li>
+<li> <i>left</i>, <i>right</i>, <i>center</i>, <i>none</i>: Controls the alignment of the image within a text</li>
+<li> <i>baseline</i>, <i>sub</i>, <i>super</i>, <i>top</i>, <i>text-top</i>, <i>middle</i>, <i>bottom</i>, <i>text-bottom</i>: Controls the vertical alignment of the image within a text</li>
+<li> <i>{width} px</i>: Resizes the image to the given width in pixels</li>
+<li> <i>{width}x{height}px</i>: Resizes the image to fit within the given width and height in pixels; it is possible to specify only the height by writing <i>x{height}px</i>
+<ul><li> <i>Note that the image will always retain its aspect ratio.</i></li></ul></li>
+<li>  <i>link={destination}</i>: Allows to link to an arbitrary title, URL or just nowhere (<s>Template:Mediawiki</s>)
+<ul><li> <i>link= </i>: Will display an image without link, e.g. <code>[[File:Name.jpg|20px|link=Help:Images]]</code> → <s>20px</s>.</li>
+<li> <i>Note that </i>link<i> cannot be used in conjunction with </i>thumb<i> as thumb is always meant to link to the larger version of the image.  In addition, </i>link<i> cannot be used with </i>frame<i>.</i></li></ul></li>
+<li> <i>alt={alternative text}</i>: For changing the alternative text (<i>alt=&quot;&quot;</i>) of an image (<s>Template:Mediawiki</s>)</li>
+<li> Special cases:
+<ul><li> <i>page=1</i>: Displays the specified page when showing a djvu or pdf file</li></ul></li></ul>
+<p>The options can be given in any order. If the given options conflict each other, the latter is applied, except for the format options, where the options take the priority in the order of <i>frame</i>, <i>thumb</i>, and <i>frameless</i> and/or <i>border</i>. If a given option does not match any of the other possibilities, it is assumed to be the caption text. Caption text can contain wiki links or other formatting.
+</p>
+<h2><span class="mw-headline" id="Format">Format</span></h2>
+<p>The following table shows the effect of all available formats.
+</p>
+<table class="wikitable plainlinks">
+
+<tr>
+<th>Description
+</th>
+<th>You type
+</th>
+<th>You get
+<p><s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+</p>
+</th></tr></table>
+<p>When the height of an image in thumbnail is bigger than its width and you find it too outstanding, you may try the option <code>upright</code>, which will try to adjust its size to more desirable size.
+</p><p>Note that by writing <code>thumb={filename}</code>, you can use a different image for the thumbnail.
+</p>
+<h2><span class="mw-headline" id="Alignment">Alignment</span></h2>
+<p>Note that when using <code>frame</code> or <code>thumb</code>, the default alignment will be <code>right</code>.
+</p>
+<table class="wikitable">
+<tr>
+<th>Description
+</th>
+<th>You type
+</th>
+<th>You get
+<p><s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+<s>Help:Images/frame</s>
+</p>
+</th></tr></table>
+<h3><span class="mw-headline" id="Vertical_alignment">Vertical alignment</span></h3>
+<pre>text text [[File:Example.jpg|20px]]
+text text [[File:Example.jpg|20px|baseline]]
+text text [[File:Example.jpg|20px|sub]]
+text text [[File:Example.jpg|20px|super]]
+text text [[File:Example.jpg|20px|text-top]]
+text text [[File:Example.jpg|20px|middle]]
+text text [[File:Example.jpg|20px|bottom]]
+text text [[File:Example.jpg|20px|text-bottom]]
+</pre>
+<p>results in (the text is underlined to show the result more clearly)
+</p><p><u>text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: baseline" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: sub" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: super" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: text-top" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: middle" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: bottom" width="20"/></a>
+text text <a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="13" src="../wiki-images/Example.jpg" srcset="/w/images/thumb/a/a9/Example.jpg/30px-Example.jpg 1.5x, /w/images/thumb/a/a9/Example.jpg/40px-Example.jpg 2x" style="vertical-align: text-bottom" width="20"/></a></u>
+</p>
+<h2><span class="mw-headline" id="Size_and_Frame">Size and Frame</span></h2>
+<p>Among different formats, the effect of the size parameter may be different, as shown below.
+</p>
+<ul><li> When the format is not specified, or only <code>border</code>ed, the size can be both reduced and enlarged.</li>
+<li> An image with <code>frame</code> always ignores the size specification.</li>
+<li> The size of an image with <code>thumb</code> and <code>frameless</code> can be reduced, but can not be enlarged beyond the original size of the image.</li></ul>
+<p>For how it appears when its size is not specified, see <a href="#Format">Format</a> section above.
+</p>
+<table class="wikitable">
+<tr>
+<th>Format</th>
+<th>Reduced</th>
+<th> Enlarged
+<p><s>Help:Images/size</s>
+<s>Help:Images/size</s>
+<s>Help:Images/size</s>
+<s>Help:Images/size</s>
+<s>Help:Images/size</s>
+</p>
+</th></tr></table>
+<h2><span class="mw-headline" id="Stopping_text_flow">Stopping text flow</span></h2>
+<p>On occasion it is desirable to stop text from flowing around an image.  Depending on the web browser's screen resolution and such, text flow on the right side of an image may cause a section header (for instance, == My Header ==) to appear to the right of the image, instead of below it, as a user may expect.  The text flow can be stopped by placing <b>&lt;br style=&quot;clear: both&quot; /&gt;</b> before the text that should start after the image.  See <s>Template:-</s> for additional explanation.
+</p>
+<h2><span class="mw-headline" id="Gallery_of_images">Gallery of images</span></h2>
+<p>It's easy to make a gallery of <b>thumbnails only</b>, not other images, with the <code>&lt;gallery&gt;</code> tag. The syntax is:
+</p>
+<pre>&lt;gallery&gt;
+File:Image Name.ext|caption
+File:Image Name.ext|caption
+{...}
+&lt;/gallery&gt;
+</pre>
+<p>Note that the image code is not enclosed in brackets when enclosed in gallery tags. 
+</p><p>Captions are optional, and may contain wiki links or other formatting.
+</p><p>for example:
+</p>
+<pre>&lt;gallery&gt;
+File:Example.jpg|Item 1
+File:Example.jpg|a link to [[Help:Contents]]
+File:Example.jpg
+File:Example.jpg
+File:Example.jpg| ''italic caption''
+File:Example.jpg|on page &quot;{{PAGENAME}}&quot;
+&lt;/gallery&gt;
+</pre>
+<p>is formatted as:
+</p>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>Item 1
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>a link to <a href="Help_Contents.xhtml" title="Help:Contents">Help:Contents</a>
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="Example.jpg" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p><i>italic caption</i>
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35px auto;"><a class="image" href="File_Example_jpg.xhtml"><img alt="" height="80" src="../wiki-images/Example.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+<p>on page &quot;Images&quot;
+</p>
+			</div>
+		</div></li>
+</ul>
+<h3><span class="mw-headline" id="Parameters">Parameters</span></h3>
+<p>The gallery tag itself takes several additional parameters:
+</p>
+<pre>&lt;gallery {parameters}&gt;
+{images}
+&lt;/gallery&gt;</pre>
+<ul><li> <code>caption={caption}</code>: sets a caption on the gallery.</li>
+<li> <code>widths={width}px</code>: sets the widths of the images.</li>
+<li> <code>heights={heights}px</code>: sets the (max) heights of the images.</li>
+<li> <code>perrow={integer}</code>: sets the number of images per row.</li></ul>
+<h2><span class="mw-headline" id="Links">Links</span></h2>
+<h3><span class="mw-headline" id="Link_to_description_page">Link to description page</span></h3>
+<p>If you put a colon (<code>:</code>) before <code>File:</code>, the image will not be embedded and the link will lead to the description page of the file.
+</p>
+<pre>[[:File:Example.jpg]]
+[[:File:Example.jpg|Sunflowers]]
+</pre>
+<p>results in
+</p><p><a href="File_Example_jpg.xhtml" title="File:Example.jpg">File:Example.jpg</a>
+<a href="File_Example_jpg.xhtml" title="File:Example.jpg">Sunflowers</a>
+</p>
+<h3><span class="mw-headline" id="Link_directly_to_file">Link directly to file</span></h3>
+<p>You can use the pseudo-namespace “Media” to link directly to a file, bypassing the description page.
+</p>
+<pre>[[Media:Example.jpg]]
+[[Media:Example.jpg|Sunflowers]]
+</pre>
+<p>results in
+</p><p><a class="internal" href="/w/images/a/a9/Example.jpg" title="Example.jpg">Media:Example.jpg</a>
+<a class="internal" href="/w/images/a/a9/Example.jpg" title="Example.jpg">Sunflowers</a>
+</p><p>You can also use: 
+</p>
+<pre>[[Special:FilePath/Example.jpg]]
+</pre>
+<p>which can be used to link to a potential file, even if it doesn't exist. You can also use:
+</p>
+<pre>{{FILEPATH:Example.jpg}}
+</pre>
+<p>which generates an external URL to the file inline: <a class="external free" href="http://wiki.nesdev.com/w/images/a/a9/Example.jpg" rel="nofollow">http://wiki.nesdev.com/w/images/a/a9/Example.jpg</a>
+</p>
+<h2><span class="mw-headline" id="Requisites">Requisites</span></h2>
+<p>Before using images in your page, the system administrator of your wiki must have <s>Template:Mediawiki</s> and a user has to <s>upload the file</s>. System administrators may also set the wiki to accept files from <s>Template:Mediawiki</s>, such as the <a class="external text" href="http://commons.wikimedia.org/wiki/Main_Page" rel="nofollow">Wikimedia Commons</a>.
+</p>
+<h2><span class="mw-headline" id="Files_at_other_websites">Files at other websites</span></h2>
+<p>You can link to an external file available online using the same syntax used for linking to an external web page. 
+</p>
+<pre>[http://url.for/some/image.png]</pre>
+<p>Or with different text:
+</p>
+<pre>[http://url.for/some/image.png link text here]</pre>
+<p>If it is enabled on your wiki (see <s>Template:Mediawiki</s>), you can also embed external images. To do that, simply insert the image's url:
+</p>
+<pre>http://url.for/some/image.png</pre>
+<p>. . . . . . . . . .
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.310 seconds
+Real time usage: 0.331 seconds
+Preprocessor visited node count: 438/1000000
+Preprocessor generated node count: 1498/1000000
+Post‐expand include size: 1405/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:310-1!*!0!!en!5!* and timestamp 20160208230146 and revision id 826
+ -->
+<p class="categories">Categories: <a href="Category_Help.xhtml">Help</a>, <a href="Category_Pages_with_broken_file_links.xhtml">Pages with broken file links</a></p></div></body></html>

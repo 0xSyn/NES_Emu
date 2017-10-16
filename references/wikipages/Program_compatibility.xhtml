@@ -1,0 +1,102 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Program compatibility</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Program compatibility</h1><div class="article">
+<dl><dd><i>This page describes defects in homebrew games. For defects in games prior to 1996, see <a href="Game_bugs.xhtml" title="Game bugs">Game bugs</a>.</i></dd></dl>
+<p>Homebrew development is as subject to bugs as old software was, but many suffer from additional <a href="Accuracy.xhtml" title="Accuracy">compatibility problems</a> with the NES hardware due to being tested on emulators exclusively. This page is an incomplete list of homebrew releases that have known bugs, or especially hardware compatibility problems.
+</p><p>For a partial list of homebrew projects, see: <a href="Projects.xhtml" title="Projects">Projects</a>
+</p>
+<table class="wikitable sortable">
+<tr>
+<th> Title
+</th>
+<th> Year
+</th>
+<th class="unsortable"> Problem Description
+</th></tr>
+<tr>
+<td> Dikki Painguin in: TKO for the Third Reich (<a class="external text" href="http://bobrost.com/nes/games.php" rel="nofollow">ROM</a>)
+</td>
+<td> 2004
+</td>
+<td> Incorrectly implemented parallax scrolling effect causes a severe graphical problem.
+</td></tr>
+<tr>
+<td> Final Fantasy II (English translation, Neo Demiforce) (<a class="external text" href="http://www.romhacking.net/trans/139/" rel="nofollow">Patch</a>)
+</td>
+<td> 1998
+</td>
+<td> Version 1.02 and 1.03 — graphic glitches during intro, no text during prologue (blue screen without text).
+<p>Caused by incorrect setting of nametables in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>, misuse of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>, and reading of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> to detect VBlank.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p>
+</td></tr>
+<tr>
+<td> LAN Master (<a class="external text" href="https://shiru.untergrund.net/software.shtml" rel="nofollow">ROM</a>)
+</td>
+<td> 2012
+</td>
+<td> The original release had occasional nametable corruptions when resuming from pause. If the pause dialog was opened during a drum hit, the <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a> could cause byte deletions when reading back nametables from $2007. If this happened, it would fail to restore the background tiles correctly when unpausing. The ROM was updated with a fix on 10/27/2015.
+</td></tr>
+<tr>
+<td> Mouser (<a class="external text" href="http://nesdev.com/mouser.zip" rel="nofollow">ROM</a>)
+</td>
+<td> 1998
+</td>
+<td> Severe graphical problems prevent any useful gameplay.
+<p>Its author later created a sequel that addressed the compatibility problems.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+</td></tr>
+<tr>
+<td> RTC Demo (<a class="external text" href="http://nesdev.com/rtc-y2k.zip" rel="nofollow">ROM</a>)
+</td>
+<td> 2000
+</td>
+<td> Graphical glitches at the raster-bars portion because it incorrectly expects a sprite-0 hit on X=255.<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup>
+<p>The sound-mode portion erratically advances tracks due to <a class="mw-redirect" href="APU_DMC.xhtml" title="DPCM conflict">DPCM conflict</a> with the controller read.
+</p><p>Ironically, this demo has a screen that attempts to detect the user of an emulator and warns the user that they are not playing it on hardware (this screen still triggers if played on a PowerPak).
+</p>
+</td></tr>
+<tr>
+<td> Sack of Flour, Heart of Gold (<a class="external text" href="http://nesdev.com/SOF_v1d.zip" rel="nofollow">ROM</a>)
+</td>
+<td> 2002
+</td>
+<td> Severe graphical problems on some screens due to $2007 access outside of vblank.<sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup>
+</td></tr></table>
+<h2><span class="mw-headline" id="Common_compatibility_problems">Common compatibility problems</span></h2>
+<p>This is a list of issues that commonly appear due to lack of popular support in emulators, or sometimes even hardware limitations of flash-carts like the <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a>.
+Many emulators are merely trying to be compatible with existing games, rather than accurately reflecting the hardware, making them inadequate for verifying the correctness of new software.
+</p>
+<ul><li> Use of DPCM samples causes a <a class="mw-redirect" href="APU_DMC.xhtml" title="DPCM conflict">conflict</a> with controller and PPU reads during sample playback.</li>
+<li> Writes to <a href="PPU_registers.xhtml" title="PPU registers">PPU registers</a> outside of <s>vblank</s> with rendering enabled conflicts with internal use of the PPU address, causing graphical corruption.</li>
+<li> Failure to initialize registers not guaranteed by the <a href="CPU_power_up_state.xhtml" title="CPU power up state">CPU power up state</a> or the <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a>.</li>
+<li> Failure to initialize RAM, nametables, or <a href="Mapper.xhtml" title="Mapper">mapper</a> registers. (Few mappers have guaranteed power up states.)</li>
+<li> Failure to delay use of the PPU after power/reset to avoid conflicts with its <a href="PPU_power_up_state.xhtml" title="PPU power up state">warm up state</a>.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=53111#p53111" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=53111#p53111</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=22&amp;t=10594" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=22&amp;t=10594</a></span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text"><a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=4965#p4965" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=4965#p4965</a></span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text"><a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=3522" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=3522</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.085 seconds
+Real time usage: 0.090 seconds
+Preprocessor visited node count: 91/1000000
+Preprocessor generated node count: 318/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:243-1!*!0!!*!*!* and timestamp 20160208222653 and revision id 11758
+ -->
+</div></body></html>

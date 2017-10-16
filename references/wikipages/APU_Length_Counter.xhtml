@@ -1,0 +1,164 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Length Counter</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Length Counter</h1><div class="article">
+<p>The length counter provides automatic duration control for the <a href="APU.xhtml" title="APU">NES APU</a> waveform channels. Once loaded with a value, it can optionally count down (when the length counter halt flag is clear). Once it reaches zero, the corresponding channel is silenced.
+</p>
+<table class="tabular">
+<tr>
+<th> Address </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> <b>$4015</b> </td>
+<td> <tt>---d.nt21</tt> </td>
+<td> <b><a href="APU_DMC.xhtml" title="APU DMC">DMC</a> control and length counter <a class="mw-redirect" href="APU.xhtml" title="APU Status">enabled flags</a></b> (write)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4000</b> </td>
+<td> <tt>ssHc.vvvv</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 1</a> duty cycle, length counter halt, constant volume flag, and volume/<a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4004</b> </td>
+<td> <tt>ssHc.vvvv</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 2</a> duty cycle, length counter halt, constant volume flag, and volume/<a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$400C</b> </td>
+<td> <tt>--Hc.vvvv</tt> </td>
+<td> <b><a href="APU_Noise.xhtml" title="APU Noise">Noise channel</a> length counter halt, constant volume flag, and volume/<a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a></b> (write)
+</td></tr>
+<tr>
+<td> bit 5 </td>
+<td> <tt>--H- ----</tt> </td>
+<td> Halt length counter (this bit is also the <a href="APU_Envelope.xhtml" title="APU Envelope">envelope's loop flag</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4008</b> </td>
+<td> <tt>Hlll.llll</tt> </td>
+<td> <b><a href="APU_Triangle.xhtml" title="APU Triangle">Triangle channel</a> length counter halt and linear counter load</b> (write)
+</td></tr>
+<tr>
+<td> bit 7 </td>
+<td> <tt>H--- ----</tt> </td>
+<td> Halt length counter (this bit is also the <a href="APU_Triangle.xhtml" title="APU Triangle">linear counter's control flag</a>)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4003</b> </td>
+<td> <tt>LLLL.Lttt</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 1</a> length counter load and <a href="APU_Pulse.xhtml" title="APU Pulse">timer</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$4007</b> </td>
+<td> <tt>LLLL.Lttt</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 2</a> length counter load and <a href="APU_Pulse.xhtml" title="APU Pulse">timer</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$400B</b> </td>
+<td> <tt>LLLL.Lttt</tt> </td>
+<td> <b><a href="APU_Triangle.xhtml" title="APU Triangle">Triangle channel</a> length counter load and <a href="APU_Triangle.xhtml" title="APU Triangle">timer</a></b> (write)
+</td></tr>
+<tr>
+<td> <b>$400F</b> </td>
+<td> <tt>LLLL.L---</tt> </td>
+<td> <b><a href="APU_Noise.xhtml" title="APU Noise">Noise channel</a> length counter load</b> (write)
+</td></tr>
+<tr>
+<td> bits 7-3 </td>
+<td> <tt>LLLL L---</tt> </td>
+<td> If the <a class="mw-redirect" href="APU.xhtml" title="APU Status">enabled flag</a> is set, the length counter is loaded with entry L of the length table:
+<pre>
+     |  0   1   2   3   4   5   6   7    8   9   A   B   C   D   E   F
+-----+----------------------------------------------------------------
+00-0F  10,254, 20,  2, 40,  4, 80,  6, 160,  8, 60, 10, 14, 12, 26, 14,
+10-1F  12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30
+</pre>
+</td></tr>
+<tr>
+<td colspan="2"> Side effects </td>
+<td> The <a href="APU_Envelope.xhtml" title="APU Envelope">envelope is restarted</a>, for pulse channels phase is reset, for triangle the linear counter reload flag is set.
+</td></tr></table>
+<h2><span class="mw-headline" id="Clocking">Clocking</span></h2>
+<p>When the <a class="mw-redirect" href="APU.xhtml" title="APU Status">enabled</a> bit is cleared (via <b>$4015</b>), the length counter is forced to 0 and cannot be changed until enabled is set again (the length counter's previous value is lost). There is no immediate effect when enabled is set.
+</p><p>When clocked by the <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame counter</a>, the length counter is decremented <i>except</i> when:
+</p>
+<ul><li> The length counter is 0, or</li>
+<li> The halt flag is set</li></ul>
+<h2><span class="mw-headline" id="Table_structure">Table structure</span></h2>
+<p>The structure of the length table becomes clearer when rearranged like in the following index to length map (which corresponds to the order in which the values appear in the <a href="Visual_circuit_tutorial.xhtml#Decoders_and_mask_ROMs" title="Visual circuit tutorial">internal APU lookup table</a>):
+</p>
+<pre>
+Legend:
+&lt;bit pattern&gt; (&lt;value of bit pattern&gt;) =&gt; &lt;note length&gt;
+
+Linear length values:
+1 1111 (1F) =&gt; 30
+1 1101 (1D) =&gt; 28
+1 1011 (1B) =&gt; 26
+1 1001 (19) =&gt; 24
+1 0111 (17) =&gt; 22
+1 0101 (15) =&gt; 20
+1 0011 (13) =&gt; 18
+1 0001 (11) =&gt; 16
+0 1111 (0F) =&gt; 14
+0 1101 (0D) =&gt; 12
+0 1011 (0B) =&gt; 10
+0 1001 (09) =&gt; 8
+0 0111 (07) =&gt; 6
+0 0101 (05) =&gt; 4
+0 0011 (03) =&gt; 2
+0 0001 (01) =&gt; 254
+
+Notes with base length 12 (4/4 at 75 bpm):
+1 1110 (1E) =&gt; 32  (96 times 1/3, quarter note triplet)
+1 1100 (1C) =&gt; 16  (48 times 1/3, eighth note triplet)
+1 1010 (1A) =&gt; 72  (48 times 1 1/2, dotted quarter)
+1 1000 (18) =&gt; 192 (Whole note)
+1 0110 (16) =&gt; 96  (Half note)
+1 0100 (14) =&gt; 48  (Quarter note)
+1 0010 (12) =&gt; 24  (Eighth note)
+1 0000 (10) =&gt; 12  (Sixteenth)
+
+Notes with base length 10 (4/4 at 90 bpm, with relative durations being the same as above):
+0 1110 (0E) =&gt; 26  (Approx. 80 times 1/3, quarter note triplet)
+0 1100 (0C) =&gt; 14  (Approx. 40 times 1/3, eighth note triplet)
+0 1010 (0A) =&gt; 60  (40 times 1 1/2, dotted quarter)
+0 1000 (08) =&gt; 160 (Whole note)
+0 0110 (06) =&gt; 80  (Half note)
+0 0100 (04) =&gt; 40  (Quarter note)
+0 0010 (02) =&gt; 20  (Eighth note)
+0 0000 (00) =&gt; 10  (Sixteenth)
+</pre>
+<p>With the least significant bit set, the remaining bits select a linear length (with the exception of the 0 entry). Otherwise, we get note lengths based on a base length of 10 (MSB clear) or 12 (MSB set).
+</p>
+<h2><span class="mw-headline" id="Length_counter_internals">Length counter internals</span></h2>
+<p>In the actual APU, the length counter silences the channel when clocked <i>while already zero</i> (provided the length counter halt flag isn't set). The values in the above table are the actual values the length counter gets loaded with <i>plus one</i>, to allow us to use a model where the channel is silenced when the length counter <i>becomes</i> zero.
+</p><p>The triangle's linear counter works differently, and does silence the channel when it <i>reaches</i> zero.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.052 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 29/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:181-1!*!0!!*!*!* and timestamp 20160208224723 and revision id 6713
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

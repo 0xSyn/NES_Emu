@@ -1,0 +1,123 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming guide</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming guide</h1><div class="article">
+<p>This programming guide is the complement to the <a href="NES_reference_guide.xhtml" title="NES reference guide">NES reference guide</a>.  You will find more in-depth documentation about specific topics, tutorials on the most common problems encountered,  a list of existing tools that will assist you during you development phase and more. If you're new to NES development, you should give a look to the &quot;<a class="mw-redirect" href="Programming_guide.xhtml" title="Getting started">Getting started</a>&quot; section first.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Getting_started"><span class="tocnumber">1</span> <span class="toctext">Getting started</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#General_reference"><span class="tocnumber">2</span> <span class="toctext">General reference</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Tutorials"><span class="tocnumber">3</span> <span class="toctext">Tutorials</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Libraries_and_samples"><span class="tocnumber">4</span> <span class="toctext">Libraries and samples</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Reverse_engineered_techniques"><span class="tocnumber">5</span> <span class="toctext">Reverse engineered techniques</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Useful_reference_materials"><span class="tocnumber">6</span> <span class="toctext">Useful reference materials</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Books"><span class="tocnumber">6.1</span> <span class="toctext">Books</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Online"><span class="tocnumber">6.2</span> <span class="toctext">Online</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Getting_started">Getting started</span></h3>
+<ul><li><a href="Before_the_basics.xhtml" title="Before the basics">Before the basics</a></li>
+<li><a href="Installing_CC65.xhtml" title="Installing CC65">Installing CC65</a></li>
+<li><a href="Programming_Basics.xhtml" title="Programming Basics">Programming Basics</a></li></ul>
+<h3><span class="mw-headline" id="General_reference">General reference</span></h3>
+<ul><li> <a href="PPU_power_up_state.xhtml#Best_practice" title="PPU power up state">Waiting for the PPU to power on</a></li>
+<li> <a class="mw-redirect" href="CHR_ROM_vs__CHR_RAM.xhtml" title="CHR-ROM vs CHR-RAM">CHR-ROM vs CHR-RAM</a> and how to switch an NROM project from the former to the latter</li>
+<li> <a class="mw-redirect" href="Emulation_libraries.xhtml" title="Emulation Libraries">Emulation Libraries</a></li>
+<li> <a href="Catch_up.xhtml" title="Catch-up">Catch-up</a> technique used by emulators</li>
+<li> <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> / <a href="Everdrive_N8.xhtml" title="Everdrive N8">Everdrive N8</a></li>
+<li> <a href="Music.xhtml" title="Music">Music</a>: <a href="Category_Expansion_audio.xhtml" title="Category:Expansion audio">Expansion audio</a>, <a href="Music_tools.xhtml" title="Music tools">tools</a></li>
+<li> <a href="Tools.xhtml" title="Tools">Tools</a></li>
+<li> Graphic tools</li>
+<li> <a href="Battery_holder.xhtml" title="Battery holder">Battery holder</a> (note: must find proper section for this)</li></ul>
+<h3><span class="mw-headline" id="Tutorials">Tutorials</span></h3>
+<ul><li> <a href="CPU.xhtml" title="CPU">CPU basics</a></li>
+<li> <a href="APU_basics.xhtml" title="APU basics">APU basics</a></li>
+<li> <a href="Compression.xhtml" title="Compression">Compression</a>
+<ul><li> <a href="Fixed_Bit_Length_Encoding.xhtml" title="Fixed Bit Length Encoding">Fixed Bit Length Encoding</a></li></ul></li>
+<li> <a href="Programming_mappers.xhtml" title="Programming mappers">Programming mappers</a>
+<ul><li> <a href="Programming_UNROM.xhtml" title="Programming UNROM">UNROM and UOROM</a></li>
+<li> <a href="Programming_MMC1.xhtml" title="Programming MMC1">MMC1</a></li></ul></li>
+<li> Programming Techniques
+<ul><li> <a href="6502_assembly_optimisations.xhtml" title="6502 assembly optimisations">6502 assembly optimisations</a></li>
+<li> <a href="RTS_Trick.xhtml" title="RTS Trick">RTS Trick</a></li>
+<li> <a class="mw-redirect" href="Jump_table.xhtml" title="Jump Table">Jump Table</a></li>
+<li> <a class="mw-redirect" href="Scanning_tables.xhtml" title="Scanning Tables">Scanning Tables</a></li>
+<li> <a class="mw-redirect" href="Scanning_large_tables.xhtml" title="Scanning Large Tables">Scanning Large Tables</a></li>
+<li> <a class="mw-redirect" href="Synthetic_instructions.xhtml" title="Synthetic Instructions">Synthetic Instructions</a></li>
+<li> <a href="Programming_with_unofficial_opcodes.xhtml" title="Programming with unofficial opcodes">Programming with unofficial opcodes</a></li>
+<li> <a href="Pointer_table.xhtml" title="Pointer table">Pointer tables</a></li>
+<li> <a href="Divide_by_3.xhtml" title="Divide by 3">Divide by 3</a></li>
+<li> <a href="Multibyte_constant.xhtml" title="Multibyte constant">Multibyte constant</a></li></ul></li>
+<li> <a href="Limitations.xhtml" title="Limitations">Limitations</a></li>
+<li> <a class="mw-redirect" href="Emulation_tutorials.xhtml" title="Emulation Tutorials">Emulation Tutorials</a></li>
+<li> How to organize data (interleaved, column based, screen based compressed etc)</li>
+<li> <a href="Sample_RAM_map.xhtml" title="Sample RAM map">Sample RAM map</a></li>
+<li> <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a>
+<ul><li> How to scroll an infinite map</li>
+<li> How to scroll with less artifact</li>
+<li> How to split the screen for a status bar</li>
+<li> How to do parallax scrolling with the scroll register</li></ul></li>
+<li> <a href="Sprite_size.xhtml" title="Sprite size">Sprite size</a></li>
+<li> <s>How to make raster effects</s> by Bregalad (<a class="external text" href="http://jonathan.microclub.ch/NES_raster/nes_raster.txt" rel="nofollow">external link</a>)</li>
+<li> How to keep state</li>
+<li> Frame based algorithm</li>
+<li> <a href="The_frame_and_NMIs.xhtml" title="The frame and NMIs">The frame and NMIs</a> by Disch
+<ul><li> <a href="NMI_thread.xhtml" title="NMI thread">NMI thread</a>: Make your status bar rock-solid</li></ul></li>
+<li> Trick of the trade from well known commercial games</li>
+<li> Music, how to make, to play, sound fx
+<ul><li> <a href="Nerdy_Nights_sound.xhtml" title="Nerdy Nights sound">Nerdy Nights sound</a></li></ul></li>
+<li> Do and don't</li></ul>
+<h3><span class="mw-headline" id="Libraries_and_samples">Libraries and samples</span></h3>
+<ul><li> <a href="Programming_Libraries.xhtml" title="Programming Libraries">Programming Libraries</a></li>
+<li> <a href="Placeholder_graphics.xhtml" title="Placeholder graphics">Placeholder graphics</a></li>
+<li> <a href="Nerdtracker_player_in_NESASM.xhtml" title="Nerdtracker player in NESASM">Nerdtracker player in NESASM</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=142703#p142703" rel="nofollow">RLE decompression code for CHR</a> by <a href="User_Koitsu.xhtml" title="User:Koitsu">koitsu</a></li>
+<li> <a href="Random_number_generator.xhtml" title="Random number generator">Random number generator</a></li></ul>
+<h3><span class="mw-headline" id="Reverse_engineered_techniques">Reverse engineered techniques</span></h3>
+<ul><li> <a href="Bad_Apple.xhtml" title="Bad Apple">Bad Apple</a> video compression</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=5860" rel="nofollow">Codemasters tile compression</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8675" rel="nofollow">Big Bird's Hide and Speak sample compression</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8609" rel="nofollow">Battletoads text compression</a> (Huffman coding)</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8588" rel="nofollow">Rad Racer rendering</a></li></ul>
+<h3><span class="mw-headline" id="Useful_reference_materials">Useful reference materials</span></h3>
+<h4><span class="mw-headline" id="Books">Books</span></h4>
+<ul><li> Cady, Fredrick M. (1997). <i>Microcontrollers and Microcomputers: Principles of Software and Hardware Engineering</i>. New York: Oxford University Press. <s>ISBN 0-19-511008-0</s>.</li>
+<li> Eyes, David; Lichty, Ron (1986). <i>Programming the 65816 including the 6502, 65C02, and 65802</i>. New York: Brady Books/Prentice Hall Press (Simon &amp; Schuster, Inc). <s>ISBN 0-89303-789-3</s>.</li>
+<li> Fernandez, Judi N. (1983). <i>6502 Assembly Language Programming (Self-teaching Guides)</i>. John Wiley &amp; Sons Inc. <s>ISBN 978-0471861201</s>.</li>
+<li> Leventhal, Lance A. (1986). <i>6502 Assembly Language Programming 2nd Edition</i>. Osborne/McGraw-Hill. <s>ISBN 0-07-881216-X</s>.</li>
+<li> Zaks, Rodnay (1983). <i>Programming the 6502 (Fourth Edition)</i>. Sybex, Inc. <s>ISBN 0-89588-135-7</s>.</li>
+<li> Zaks, Rodnay (1982). <i>Advanced 6502 Programming</i>. Sybex, Inc. <s>ISBN 0-89588-089-X</s>.</li>
+<li> Zaks, Rodnay (1980). <i>Programming the 6502 (Third Edition)</i>. Sybex, Inc. <s>ISBN 0-89588-046-6</s>.</li></ul>
+<h4><span class="mw-headline" id="Online">Online</span></h4>
+<ul><li> <a class="external text" href="http://65xx.com/Products/Programming_and_Hardware-Manuals/" rel="nofollow">Programming the 65816 (including the 6502, 65C02, and 65802)</a> by Western Design Center
+<ol><li> <a class="external text" href="http://www.westerndesigncenter.com/wdc/documentation/Programmingthe65816_ProgManual.pdf" rel="nofollow">Programmingthe65816_ProgManual.pdf</a> — 54MBytes, created 2015/03/27.
+<ul><li> This is a full scan of the original Eyes/Lichty book using full images for each page, with the added bonus of OCR being applied so that text is searchable and copy-paste-able.  Accurate/reliable given the nature of the scan.  A backup copy, if the 65xx.com site is down, <a class="external text" href="http://jdc.koitsu.org/lj/Programmingthe65816_ProgManual.pdf" rel="nofollow">is available</a> via <a href="User_Koitsu.xhtml" title="User:Koitsu">Koitsu</a>.</li></ul></li>
+<li> <a class="internal" href="/w/images/7/76/Programmanual.pdf" title="Programmanual.pdf">Programmanual.pdf</a> (a.k.a. WDC65C816_Program_Manual.pdf) — 1.7MBytes, created 2007/04/16.
+<ul><li> This is a &quot;pure text&quot; version of the Eyes/Lichty book, however it is rife with very dangerous typos (wrong opcodes, etc.) in many areas, and contains a large number of formatting/layout mistakes not present in the original book.  Bill Mensch (6502/65C02/65816 architect/designer) <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=142722#p142722" rel="nofollow">confirmed these mistakes</a>, stating WDC is in the process of fixing them.  If at all possible, use the newer PDF mentioned above.</li>
+<li> It is suspected that WDC has pulled this PDF entirely from <a class="external text" href="http://65xx.com/Products/Programming_and_Hardware-Manuals/" rel="nofollow">their website</a>, instead advocating purchasing a &quot;redone&quot; version of the Lichty/Eyes book via Amazon.  Kindle and paperback versions are available, but I (<a href="User_Koitsu.xhtml" title="User:Koitsu">Koitsu</a>) have not reviewed it.</li></ul></li></ol></li></ul>
+<h3><span class="mw-headline" id="Links">Links</span></h3>
+<ul><li><a class="external text" href="http://www.zophar.net/documents/6502/6502-txt.html" rel="nofollow">The infamous 6502.txt</a>: allegedly complete info on the 6502 instructions</li>
+<li><a class="external text" href="http://www.atariarchives.org/mlb/" rel="nofollow">Machine Language for Beginners</a>: a 1983 introduction to 6502 assembly language</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.097 seconds
+Real time usage: 0.101 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:265-1!*!0!!en!*!* and timestamp 20160608192720 and revision id 12605
+ -->
+</div></body></html>

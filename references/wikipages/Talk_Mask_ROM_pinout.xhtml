@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Mask ROM pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Mask ROM pinout</h1><div class="article">
+<h2><span class="mw-headline" id="SLxROM.2C_TLxROM">SLxROM, TLxROM</span></h2>
+<p>Does anyone have the pinout for SLxROM and TLxROM boards ? Such boards were apparently rarely/never used in PAL games so I can't do much about it, unless I pay more than $30 to import USA games.
+—<s>User:Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 04:34, 08 February 2014 (MST)
+</p>
+<dl><dd> The pictures on NesCartDB show the SL3ROM, SL1ROM, and TL1ROM boards are using ordinary 28-pin 128KiB mask ROMs for CHR, combining PPU A13 and PPU /RD with a 74'32 (*-TL1ROM, NES-SL1ROM, NES-SL3ROM) or a one-transistor A≤B gate (HVC-SL1ROM).</dd>
+<dd> The pictures on NesCartDB of SLRROM and SL2ROM similarly only indicate parts with typical pinouts: they have a standard 32-pin 128KiB mask ROM for CHR.</dd>
+<dd> Only one copy of game, without photos, claims to have a TL2ROM board, which I'm going to declare a typo until further evidence arrives. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:57, 8 February 2014 (MST)</dd></dl>
+<dl><dd><dl><dd> When you say &quot;standard&quot;, does it mean JEDEC, or standards in regard to Nintendo's habits ?<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 15:07, 8 February 2014 (MST)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> The 28-pin ROM is the standard 28-pin 128KiB mask ROM pinout (JEDEC 21-C, p3.2.1-6 which specifies mask ROM pinout of 28-pin ROMs from 8KiB to 128KiB). The 32-pin CHRROMs look to be Nintendo's standard 32-pin layout, since at least one IC, µPD23C1013, is used as CHR on both SLRROM and TLROM. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 18:17, 8 February 2014 (MST)</dd></dl></dd></dl></dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Nintendo_SROM_CHR_ROM_pinout_-_8_KBytes_.2824pin.29">Nintendo SROM CHR ROM pinout - 8 KBytes (24pin)</span></h2>
+<p>The pinout of this 64Kb (8KB) ROM is the same as the Motorola MCM68764/MCM68766 EPROM.
+Enjoy! - RJ @ arcadecomponents.com
+</p>
+<h2><span class="mw-headline" id="Higher_CHR_lines">Higher CHR lines</span></h2>
+<p>Apparently, the unused high address lines of PRG and CHR mask ROMs must be connected to VCC, but this was vital only on PRG ROMs as the CHR-ROM are not required to be enabled for booting, before the first mapper write.
+So, does games which don't use all their available CHR-space uses '1' for the unused bits ? For instance, a 32kb CHR-ROM MMC1 game should use either CHR bank range 8-15 or 24-31 instead of using 0-7 which would happen naturally, in order to set A15 to '1'. Does commercial games do this ?—<s>User:Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 04:34, 08 February 2014 (MST)
+</p>
+<dl><dd> No, most commercial games more often use the lowest mirror (although sometimes a random mirror) of undersized ROMs. I'm not clear where the &quot;must be&quot; comment came from. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:57, 8 February 2014 (MST)</dd></dl>
+<p>I think it came from me. It's a known fact Nintendo used different boards for different PRG sizes of compatible pinout (16k, 32k, 64k - respectively 128, 256 and 512 kbits). The only difference between these boards is that higher address lines that goes unused on smaller sizes are hard-wired to VCC, instead of being connected to the mapper. If the pins were unused on the mask ROMs, then it wouldn't matter to connect them on the mapper, so they could just use the biggest sized board for everything (i.e. NROM-256 instead of NROM-128, SBROM instead of SEROM, SAROM instead of SIROM, etc, etc...). CNROM boards also have a solder pad to choose between connecting A14 and forcing it to VCC (resulting in a 16k PRG-ROM).
+</p><p>It's clear that designing and producing more different boards with no reason makes few sense, so they probably had a reason for forcing unused higher address lines to VCC. My theory is that it could in some cases be either an enable signal, or a higher address lines, as they could use larger mask ROM, and program only the upper half/quarter and tie the line to VCC in order to mirror it to the whole range (effectively making it almost the same as an enable signal, bus conflicts aside).
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 15:08, 8 February 2014 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1323-1!*!0!!*!*!* and timestamp 20160208224245 and revision id 8841
+ -->
+</div></body></html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 107</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 107</h1><div class="article">
+<p><i><a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Magic_Dragon" title="wikia:c:bootleggames:Magic Dragon">Magic Dragon</a></i> is a side-scrolling shoot-em-up by Magicseries.
+It is heavily inspired by Irem's <i>R-Type</i>.
+</p><p>Here are Disch's original notes:  
+</p>
+<pre> ========================
+ =  Mapper 107          =
+ ========================
+ 
+ Example Game:
+ --------------------------
+ Magic Dragon
+ 
+ 
+ Registers:
+ ---------------------------
+ I do not know whether or not this mapper suffers from bus conflicts.  Use caution!
+ 
+   $8000-FFFF:  [PPPP PPP.]
+                [CCCC CCCC]
+     P = Selects 32k PRG @ $8000
+     C = Selects 8k CHR @ $0000
+ 
+ This is very strange.  Bits 1-7 seem to be used by both CHR and PRG.
+</pre>
+<p>FCEUX implements only the bottom 3 bits of the unified register.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:685-1!*!*!*!*!*!* and timestamp 20160208225231 and revision id 8607
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_with_overlapping_PRG_and_CHR_registers.xhtml">Mappers with overlapping PRG and CHR registers</a></p></div></body></html>

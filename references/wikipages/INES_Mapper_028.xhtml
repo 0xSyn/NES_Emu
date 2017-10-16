@@ -1,0 +1,185 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 028</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 028</h1><div class="article">
+<p><b>iNES Mapper 028</b> is assigned to a <a href="Action_53_mapper.xhtml" title="Action 53 mapper">multicart mapper</a> developed by Tepples and Infiniteneslives in October 2012, as an extension of the <a href="Action_53.xhtml" title="Action 53">Action 53</a> project to cover <a href="CNROM.xhtml" title="CNROM">CNROM</a> and <a class="mw-redirect" href="UxROM.xhtml" title="UNROM">UNROM</a> games.
+It is used for <i>STREEMERZ: Action 53 Function 16 Volume One</i> and <i>Double Action 53</i>.
+</p><p>Implemented in FCEUX as of r2739 (<a class="external text" href="https://sourceforge.net/p/fceultra/bugs/550/" rel="nofollow">tracking bug</a>) but appears to have been dropped sometime between 2.2.0 and 2.2.1.
+Implemented in Bizhawk as of r3680.
+</p>
+<h2><span class="mw-headline" id="Disch">Disch</span></h2>
+<p>Aping <a href="INES_Mapper_DischDocs.xhtml" title="INES Mapper DischDocs">Disch's style</a>:
+</p>
+<pre>
+========================
+=  Mapper 028          =
+========================
+
+aka
+--------------------------
+Multi-discrete
+
+
+Example Games:
+--------------------------
+Action 53 series
+
+
+Notes:
+--------------------------
+This mapper is designed for making multicarts of games that
+use NROM, CNROM, UNROM, BNROM, or AOROM.  It looks like the
+love child of MMC3, MMC1, and the Nintendo discrete mappers.
+It has separate address and data ports like MMC3 (and FME-7),
+its mode register is laid out in a way reminiscent of MMC1,
+and it has the data port at $8000-$FFFF for compatibility with
+the discrete mappers that it is designed to simulate.
+
+Registers:
+--------------------------
+
+Range,Mask:   $5000-$5FFF, $F000
+
+  $5000:  [A... ...A]   Address for use with $8000
+
+Range,Mask:   $8000-$FFFF, $8000
+
+  $8000:  [..DD DDDD]   Data port
+    R:$00 -&gt;  CHR Reg
+    R:$01 -&gt;  PRG Reg
+    R:$80 -&gt;  Mode
+    R:$81 -&gt;  Outer PRG Reg
+
+These registers are internal, written through the data port:
+
+  R:$00:  [...M ..CC]
+    C = CHR Reg
+    M = Mirroring
+        This bit overwrites bit 0 of R:$80, but only if bit 1 of
+        R:$80 is clear
+
+  R:$01:  [...M PPPP]
+    P = PRG Reg
+    M = Mirroring
+        This bit overwrites bit 0 of R:$80, but only if bit 1 of
+        R:$80 is clear
+
+  R:$80:  [..GG PSMM]
+    G = Game Size (0=32K, 1=64K, 2=128K, 3=256K)
+    P = PRG Size (0=32k mode, 1=16k mode)
+    S = Slot select:
+        0 = $C000 swappable, $8000 fixed to bottom of 32K outer bank
+        1 = $8000 swappable, $C000 fixed to top of 32K outer bank
+        This bit is ignored when 'P' is clear (32k mode)
+    M = Mirroring control:
+        %00 = 1ScA
+        %01 = 1ScB
+        %10 = Vert
+        %11 = Horz
+
+  R:$81:  [..BB BBBB]
+    Outer PRG Reg
+
+
+CHR Setup:
+---------------------------
+
+    $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+  +---------------------------------------------------------------+
+  |                             R:$00                             |
+  +---------------------------------------------------------------+
+
+
+PRG Setup:
+---------------------------
+
+There is 1 PRG reg and 3 PRG modes, corresponding to mappers 34, 2,
+and 180. When 32K PRG mode is used (P = 0), R:$01 specifies a 32K
+bank number between 0 and 7 (i.e., the high bit is ignored). When
+16K PRG mode is used (P = 1), R:$01 specifies a 16K bank number
+between 0 and F.
+
+                     $8000   $A000   $C000   $E000
+                   +-------------------------------+
+  P = 0:           |             R:$01             |
+                   +-------------------------------+
+  P = 1, S = 0:    |    &quot;Fixed&quot;    |     R:$01     |
+                   +---------------+---------------+
+  P = 1, S = 1:    |     R:$01     |    &quot;Fixed&quot;    |
+                   +---------------+---------------+
+
+The &quot;fixed&quot; banks aren't really fixed.  They represent the first and
+second half of the currently selected outer bank, as if temporarily
+forcing P=0 and G=0 for a single read.
+
+The 4-bit output I (Inner) from this phase tells which 16K bank within a
+single game is being read.  The value is fed into the multicart logic.
+The game size G controls how many bits of I are kept, the rest being
+replaced with bits of the outer bank number O = 2 * R:$81.  This can
+be thought of as an inner-AND and outer-AND value controlled by G.
+I is ANDed with inner-AND, O is ANDed with outer-AND, and the results
+are ORed to form a 16K page number.
+
+  'G'   Block size   Inner-AND   Outer-AND
+  ----------------------------------------
+   0        32K         $01        $7E
+   1        64K         $03        $7C
+   2       128K         $07        $78
+   3       256K         $0F        $70
+
+This 16K page number is concatenated with bits A13-A0 to form the
+PRG ROM address.
+
+An easy way to visualize the 16K bank number in 16K PRG mode is as
+follows:
+
+           |        
+B5 B4 B3 B2|B1 B0       Outer PRG bits from R:$81
+         P3|P2 P1 P0    Inner PRG bits from R:$01
+           |
+
+The location of the separator is determined by the game size selected
+in R:$80. The above separator location corresponds to 128K. Moving
+the separator one step to the left or right would be 256K and 64K,
+respectively. The 16K bank number is formed by the outer PRG bits to
+the left of the separator and the inner PRG bits to the right, giving
+the bank number B5 B4 B3 B2 P2 P1 P0 in this example.
+
+The only difference in 32K PRG mode is that the inner PRG bits are
+shifted one step to the left:
+
+           |        
+B5 B4 B3 B2|B1 B0       Outer PRG bits from R:$81
+      P3 P2|P1 P0 x     Inner PRG bits from R:$01
+           |
+
+This gives the 16K bank number B5 B4 B3 B2 P1 P0 x, where x = 0 is
+the lower 16K part of the 32K bank and x = 1 the higher 16K part.
+ 
+Powerup and Reset:
+---------------------------
+
+The last 16K PRG bank is switched into $C000-$FFFF on powerup.
+Registers are unchanged on reset.
+
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=101111#p101111" rel="nofollow">Forum post announcing reservation of #28</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=101970#p101970" rel="nofollow">Forum post announcing implementation in NESICIDE</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.039 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:915-1!*!0!!*!*!* and timestamp 20160612173032 and revision id 12620
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a></p></div></body></html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Template:Infobox iNES mapper</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Template:Infobox iNES mapper</h1><div class="article">
+<ul><li><b><span style="font-size: 150%; color:#C00"><tt>{{<strong class="selflink">Infobox iNES mapper</strong>}}</tt> error: <code>prgmax</code> is not specified</span></b></li>
+<li><b><span style="font-size: 150%; color:#C00"><tt>{{<strong class="selflink">Infobox iNES mapper</strong>}}</tt> error: <code>chrmax</code> is not specified</span></b></li></ul>
+<div class="infobox">
+<div style="text-align: center"><b>{{{name}}}</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> <i>unknown</i>
+</td></tr>
+
+
+
+
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> <i>unknown</i>
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> {{{prgmax}}}
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> {{{chrmax}}}
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> Fixed H or V, controlled by solder pads
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> <i>unknown</i>
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> [[iNES Mapper {{{mapper}}}|{{{mapper}}}]]
+</td></tr></table>
+</div>
+<p>There are edit wars going on in <a href="Category_talk_In_NesCartDB.xhtml" title="Category talk:In NesCartDB">Category talk:In NesCartDB</a> and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=145801#p145801" rel="nofollow">Current state of NESDev Main Page and Wiki</a>.
+Koitsu and I agree that we need some organization.
+As Timon the meerkat put it: &quot;<a class="external text" href="https://www.youtube.com/watch?v=XuhgHzuPYiI" rel="nofollow">It starts.</a>&quot;
+</p>
+<div class="template-documentation iezoomfix" id="template-documentation"><div style="padding-bottom: 3px; border-bottom: 1px solid #aaa; margin-bottom: 1ex;"> <span style="font-weight: bold; font-size: 125%"><a href="File_Template_info_svg.xhtml" title="File:Template-info.svg">File:Template-info.svg</a> Template documentation</span></div>
+<p>Copy and paste this at the top of a mapper page:
+</p>
+<pre>
+{{Infobox iNES mapper
+|name=MMC1
+|name2=SxROM
+|company=Nintendo, others
+|mapper=1
+|othermappers=[[iNES Mapper 155|155]]
+|nescartdbgames=69
+|complexity=ASIC
+|boards=SKROM, SLROM,&lt;br/&gt;SNROM, others
+|prgmax=512K
+|prgpage=16K + 16K fixed or 32K
+|wrammax=32K
+|wrampage=8K
+|chrmax=128K
+|chrpage=4K + 4K or 8K
+|mirroring=H, V, or 1, switchable
+|busconflicts=No
+|irq=No
+|audio=No
+}}
+</pre>
+<p>Categories:
+</p>
+<ul><li> If you provide <code>nescartdbgames</code>, it automatically inserts <a href="Category_In_NesCartDB.xhtml" title="Category:In NesCartDB">Category:In NesCartDB</a> and a link to a list of games on NesCartDB using the mapper provided in <code>mapper</code> (without regional duplicates). The argument need not be a number; it can be a string such as &quot;Few&quot; or &quot;Many&quot;.</li>
+<li> <code>complexity</code> needs to be <code>Discrete logic</code> (for <a href="Category_Discrete_logic_mappers.xhtml" title="Category:Discrete logic mappers">Category:Discrete logic mappers</a>) or <code>ASIC</code> (for <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">Category:ASIC mappers</a>).</li>
+<li> Page sizes are hidden if the corresponding max size is not specified or if <code>wrampage=Impossible</code> (which is used for mappers with ports in $6000-$7FFF).</li></ul>
+<p>To do:
+</p>
+<ul><li> Do string processing on <code>busconflicts</code>, <code>irq</code>, and <code>audio</code> to trigger adding to categories such as <a href="Category_Mappers_with_bus_conflicts.xhtml" title="Category:Mappers with bus conflicts">Category:Mappers with bus conflicts</a>.</li></ul>
+<div style="clear: both;"/>
+</div><table class="mbox mbox-wide mbox-notice" id="documentation-meta-data" style="background-color: #ecfcf4; width: 100%;">
+<tr>
+<td class="mbox-empty-cell"/>
+<td class="mbox-text" style="font-style: italic;"> The above <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Template_documentation" title="wikipedia:Wikipedia:Template documentation">documentation</a> is <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Transclusion" title="wikipedia:Wikipedia:Transclusion">transcluded</a> from <a href="Template_Infobox_iNES_mapper_doc.xhtml" title="Template:Infobox iNES mapper/doc">Template:Infobox iNES mapper/doc</a>. <small style="font-style: normal">(<s>edit</s> | <s>history</s>)</small> <br/>Editors can experiment in this template's sandbox <small style="font-style: normal">(<s>create</s>)</small> and <a href="Template_Infobox_iNES_mapper_testcases.xhtml" title="Template:Infobox iNES mapper/testcases">testcases</a> <small style="font-style: normal">(<s>edit</s>)</small> pages. <br/>Please add categories and interwikis to the <a href="Template_Infobox_iNES_mapper_doc.xhtml" title="Template:Infobox iNES mapper/doc">/doc</a> subpage. <s>Subpages of this template</s>. </td>
+</tr>
+</table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.225 seconds
+Real time usage: 0.236 seconds
+Preprocessor visited node count: 344/1000000
+Preprocessor generated node count: 3073/1000000
+Post‐expand include size: 19644/2097152 bytes
+Template argument size: 1760/2097152 bytes
+Highest expansion depth: 12/40
+Expensive parser function count: 4/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1510-1!*!0!*!*!5!* and timestamp 20160208222811 and revision id 10514
+ -->
+</div></body></html>

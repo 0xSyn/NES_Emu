@@ -1,0 +1,1269 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU programmer reference</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU programmer reference</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#PPU_Registers"><span class="tocnumber">1</span> <span class="toctext">PPU Registers</span></a></li>
+<li class="toclevel-1"><a href="#Summary"><span class="tocnumber">2</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1"><a href="#Ports"><span class="tocnumber">3</span> <span class="toctext">Ports</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Controller_.28.242000.29_.3E_write"><span class="tocnumber">3.1</span> <span class="toctext"><span><span>Controller ($2000) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Master.2Fslave_mode_and_the_EXT_pins"><span class="tocnumber">3.1.1</span> <span class="toctext">Master/slave mode and the EXT pins</span></a></li>
+<li class="toclevel-3"><a href="#Bit_0_bus_conflict"><span class="tocnumber">3.1.2</span> <span class="toctext">Bit 0 bus conflict</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Mask_.28.242001.29_.3E_write"><span class="tocnumber">3.2</span> <span class="toctext"><span><span>Mask ($2001) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Render_Control"><span class="tocnumber">3.2.1</span> <span class="toctext">Render Control</span></a></li>
+<li class="toclevel-3"><a href="#Color_Control"><span class="tocnumber">3.2.2</span> <span class="toctext">Color Control</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Status_.28.242002.29_.3C_read"><span class="tocnumber">3.3</span> <span class="toctext"><span><span>Status ($2002) &lt; read</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Notes"><span class="tocnumber">3.3.1</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#OAM_address_.28.242003.29_.3E_write"><span class="tocnumber">3.4</span> <span class="toctext"><span><span>OAM address ($2003) &gt; write</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Values_during_rendering"><span class="tocnumber">3.4.1</span> <span class="toctext">Values during rendering</span></a></li>
+<li class="toclevel-3"><a href="#OAMADDR_precautions"><span class="tocnumber">3.4.2</span> <span class="toctext">OAMADDR precautions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#OAM_data_.28.242004.29_.3C.3E_read.2Fwrite"><span class="tocnumber">3.5</span> <span class="toctext"><span><span>OAM data ($2004) &lt;&gt; read/write</span></span></span></a></li>
+<li class="toclevel-2"><a href="#Scroll_.28.242005.29_.3E.3E_write_x2"><span class="tocnumber">3.6</span> <span class="toctext"><span><span>Scroll ($2005) &gt;&gt; write x2</span></span></span></a></li>
+<li class="toclevel-2"><a href="#Address_.28.242006.29_.3E.3E_write_x2"><span class="tocnumber">3.7</span> <span class="toctext"><span><span>Address ($2006) &gt;&gt; write x2</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#note"><span class="tocnumber">3.7.1</span> <span class="toctext">note</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Data_.28.242007.29_.3C.3E_read.2Fwrite"><span class="tocnumber">3.8</span> <span class="toctext"><span><span>Data ($2007) &lt;&gt; read/write</span></span></span></a>
+<ul>
+<li class="toclevel-3"><a href="#The_PPUDATA_read_buffer_.28post-fetch.29"><span class="tocnumber">3.8.1</span> <span class="toctext">The PPUDATA read buffer (post-fetch)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#OAM_DMA_.28.244014.29_.3E_write"><span class="tocnumber">3.9</span> <span class="toctext"><span><span>OAM DMA ($4014) &gt; write</span></span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Pattern_tables"><span class="tocnumber">5</span> <span class="toctext">Pattern tables</span></a></li>
+<li class="toclevel-1"><a href="#Addressing"><span class="tocnumber">6</span> <span class="toctext">Addressing</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#OAM"><span class="tocnumber">7</span> <span class="toctext">OAM</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Byte_0"><span class="tocnumber">7.1</span> <span class="toctext">Byte 0</span></a></li>
+<li class="toclevel-2"><a href="#Byte_1"><span class="tocnumber">7.2</span> <span class="toctext">Byte 1</span></a></li>
+<li class="toclevel-2"><a href="#Byte_2"><span class="tocnumber">7.3</span> <span class="toctext">Byte 2</span></a></li>
+<li class="toclevel-2"><a href="#Byte_3"><span class="tocnumber">7.4</span> <span class="toctext">Byte 3</span></a></li>
+<li class="toclevel-2"><a href="#DMA"><span class="tocnumber">7.5</span> <span class="toctext">DMA</span></a></li>
+<li class="toclevel-2"><a href="#Sprite_zero_hits"><span class="tocnumber">7.6</span> <span class="toctext">Sprite zero hits</span></a></li>
+<li class="toclevel-2"><a href="#Sprite_overlapping"><span class="tocnumber">7.7</span> <span class="toctext">Sprite overlapping</span></a></li>
+<li class="toclevel-2"><a href="#Internal_operation"><span class="tocnumber">7.8</span> <span class="toctext">Internal operation</span></a></li>
+<li class="toclevel-2"><a href="#See_also"><span class="tocnumber">7.9</span> <span class="toctext">See also</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Nametables"><span class="tocnumber">8</span> <span class="toctext">Nametables</span></a></li>
+<li class="toclevel-1"><a href="#Mirroring"><span class="tocnumber">9</span> <span class="toctext">Mirroring</span></a></li>
+<li class="toclevel-1"><a href="#Background_evaluation"><span class="tocnumber">10</span> <span class="toctext">Background evaluation</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Attribute_tables"><span class="tocnumber">11</span> <span class="toctext">Attribute tables</span></a></li>
+<li class="toclevel-1"><a href="#Worked_example"><span class="tocnumber">12</span> <span class="toctext">Worked example</span></a></li>
+<li class="toclevel-1"><a href="#Glitches"><span class="tocnumber">13</span> <span class="toctext">Glitches</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Palettes"><span class="tocnumber">14</span> <span class="toctext">Palettes</span></a></li>
+<li class="toclevel-1"><a href="#Memory_Map"><span class="tocnumber">15</span> <span class="toctext">Memory Map</span></a></li>
+<li class="toclevel-1"><a href="#Palettes_2"><span class="tocnumber">16</span> <span class="toctext">Palettes</span></a>
+<ul>
+<li class="toclevel-2"><a href="#2C02"><span class="tocnumber">16.1</span> <span class="toctext">2C02</span></a></li>
+<li class="toclevel-2"><a href="#2C03_and_2C05"><span class="tocnumber">16.2</span> <span class="toctext">2C03 and 2C05</span></a></li>
+<li class="toclevel-2"><a href="#2C04"><span class="tocnumber">16.3</span> <span class="toctext">2C04</span></a>
+<ul>
+<li class="toclevel-3"><a href="#RP2C04-0001"><span class="tocnumber">16.3.1</span> <span class="toctext">RP2C04-0001</span></a></li>
+<li class="toclevel-3"><a href="#RP2C04-0002"><span class="tocnumber">16.3.2</span> <span class="toctext">RP2C04-0002</span></a></li>
+<li class="toclevel-3"><a href="#RP2C04-0003"><span class="tocnumber">16.3.3</span> <span class="toctext">RP2C04-0003</span></a></li>
+<li class="toclevel-3"><a href="#RP2C04-0004"><span class="tocnumber">16.3.4</span> <span class="toctext">RP2C04-0004</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Backdrop_color_.28palette_index_0.29_uses"><span class="tocnumber">17</span> <span class="toctext">Backdrop color (palette index 0) uses</span></a></li>
+<li class="toclevel-1"><a href="#The_background_palette_hack"><span class="tocnumber">18</span> <span class="toctext">The background palette hack</span></a></li>
+<li class="toclevel-1"><a href="#Color_names"><span class="tocnumber">19</span> <span class="toctext">Color names</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Luma"><span class="tocnumber">19.1</span> <span class="toctext">Luma</span></a></li>
+<li class="toclevel-2"><a href="#Chroma"><span class="tocnumber">19.2</span> <span class="toctext">Chroma</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Memory_map_2"><span class="tocnumber">20</span> <span class="toctext">Memory map</span></a>
+<ul>
+<li class="toclevel-2"><a href="#PPU_memory_map"><span class="tocnumber">20.1</span> <span class="toctext">PPU memory map</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Hardware_mapping"><span class="tocnumber">21</span> <span class="toctext">Hardware mapping</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="PPU_Registers">PPU Registers</span></h2>
+<p>The PPU exposes eight memory-mapped registers to the CPU. These nominally sit at $2000 through $2007 in the CPU's address space, but because they're incompletely decoded, they're <a href="Mirroring.xhtml" title="Mirroring">mirrored</a> in every 8 bytes from $2008 through $3FFF, so a write to $3456 is the same as a write to $2006.
+</p><p>Immediately after powerup, the PPU isn't necessarily in a usable state.
+The program needs to do a few things to get it going; see <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU power up state</a> and <a href="Init_code.xhtml" title="Init code">Init code</a>. 
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Summary">Summary</span></h2>
+<table class="tabular">
+<tr>
+<th> Common Name
+</th>
+<th> Address
+</th>
+<th> Bits
+</th>
+<th> Notes
+</th></tr>
+<tr>
+<th> <a href="#PPUCTRL">PPUCTRL</a>
+</th>
+<th> $2000
+</th>
+<td> <tt style="white-space: nowrap">VPHB SINN</tt> </td>
+<td> NMI enable (V), PPU master/slave (P), sprite height (H), background tile select (B), sprite tile select (S), increment mode (I), nametable select (NN)
+</td></tr>
+<tr>
+<th> <a href="#PPUMASK">PPUMASK</a>
+</th>
+<th> $2001
+</th>
+<td> <tt style="white-space: nowrap">BGRs bMmG</tt> </td>
+<td> color emphasis (BGR), sprite enable (s), background enable (b), sprite left column enable (M), background left column enable (m), greyscale (G)
+</td></tr>
+<tr>
+<th> <a href="#PPUSTATUS">PPUSTATUS</a>
+</th>
+<th> $2002
+</th>
+<td> <tt style="white-space: nowrap">VSO- ----</tt> </td>
+<td> vblank (V), sprite 0 hit (S), sprite overflow (O), read resets write pair for $2005/2006
+</td></tr>
+<tr>
+<th> <a href="#OAMADDR">OAMADDR</a>
+</th>
+<th> $2003
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> OAM read/write address
+</td></tr>
+<tr>
+<th> <a href="#OAMDATA">OAMDATA</a>
+</th>
+<th> $2004
+</th>
+<td> <tt style="white-space: nowrap">dddd dddd</tt> </td>
+<td> OAM data read/write
+</td></tr>
+<tr>
+<th> <a href="#PPUSCROLL">PPUSCROLL</a>
+</th>
+<th> $2005
+</th>
+<td> <tt style="white-space: nowrap">xxxx xxxx</tt> </td>
+<td> fine scroll position (two writes: X, Y)
+</td></tr>
+<tr>
+<th> <a href="#PPUADDR">PPUADDR</a>
+</th>
+<th> $2006
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> PPU read/write address (two writes: MSB, LSB)
+</td></tr>
+<tr>
+<th> <a href="#PPUDATA">PPUDATA</a>
+</th>
+<th> $2007
+</th>
+<td> <tt style="white-space: nowrap">dddd dddd</tt> </td>
+<td> PPU data read/write
+</td></tr>
+<tr>
+<th> <a href="#OAMDMA">OAMDMA</a>
+</th>
+<th> $4014
+</th>
+<td> <tt style="white-space: nowrap">aaaa aaaa</tt> </td>
+<td> OAM DMA high address
+</td></tr></table>
+<h2><span class="mw-headline" id="Ports">Ports</span></h2>
+<p>The PPU has an internal data bus that it uses for communication with the CPU.
+This bus, called <code>_io_db</code> in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a> and <code>PPUGenLatch</code> in FCEUX,<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> behaves as an 8-bit dynamic latch due to capacitance of very long traces that run to various parts of the PPU.
+Writing any value to any PPU port, even to the nominally read-only PPUSTATUS, will fill this latch.
+Reading any readable port (PPUSTATUS, OAMDATA, or PPUDATA) also fills the latch with the bits read.
+Reading a nominally &quot;write-only&quot; register returns the latch's current value, as do the unused bits of PPUSTATUS.
+This value begins to decay after a frame or so, faster once the PPU has warmed up, and it is likely that values with alternating bit patterns (such as $55 or $AA) will decay faster.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+<h3><span class="mw-headline" id="Controller_.28.242000.29_.3E_write"><span id="PPUCTRL"><span id="Reg2000">Controller ($2000) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>PPUCTRL</b></li>
+<li> Description: PPU control register</li>
+<li> Access: write</li></ul>
+<p>Various flags controlling PPU operation
+</p>
+<pre>7  bit  0
+---- ----
+VPHB SINN
+|||| ||||
+|||| ||++- Base nametable address
+|||| ||    (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
+|||| |+--- VRAM address increment per CPU read/write of PPUDATA
+|||| |     (0: add 1, going across; 1: add 32, going down)
+|||| +---- Sprite pattern table address for 8x8 sprites
+||||       (0: $0000; 1: $1000; ignored in 8x16 mode)
+|||+------ Background pattern table address (0: $0000; 1: $1000)
+||+------- Sprite size (0: 8x8; 1: 8x16)
+|+-------- PPU master/slave select
+|          (0: read backdrop from EXT pins; 1: output color on EXT pins)
++--------- Generate an <a href="NMI.xhtml" title="NMI">NMI</a> at the start of the
+           <a class="extiw" href="https://en.wikipedia.org/wiki/Vertical_blanking_interval" title="wikipedia:Vertical blanking interval">vertical blanking interval</a> (0: off; 1: on)
+</pre>
+<p>Equivalently, bits 0 and 1 are the most significant bit of the scrolling coordinates (see <a href="PPU_nametables.xhtml" title="PPU nametables">Nametables</a> and <a href="#PPUSCROLL">PPUSCROLL</a>):
+</p>
+<pre>7  bit  0
+---- ----
+.... ..YX
+       ||
+       |+- 1: Add 256 to the X scroll position
+       +-- 1: Add 240 to the Y scroll position
+</pre>
+<p>Another way of seeing the explanation above is that when you reach the end of a nametable, you must switch to the next one, hence, changing the nametable address.
+</p><p><a href="PPU_power_up_state.xhtml" title="PPU power up state">After power/reset</a>, writes to this register are ignored for about 30000 cycles.
+</p><p>When turning on the NMI flag in bit 7, if the PPU is currently in vertical blank and the <a href="#PPUSTATUS">PPUSTATUS</a> ($2002) vblank flag is set, an NMI will be generated immediately.
+This can result in graphical errors (most likely a misplaced scroll) if the NMI routine is executed too late in the blanking period to finish on time.
+To avoid this problem it is prudent to read $2002 immediately before writing $2000 to clear the vblank flag.
+</p>
+<h4><span class="mw-headline" id="Master.2Fslave_mode_and_the_EXT_pins">Master/slave mode and the EXT pins</span></h4>
+<p>When bit 6 of PPUCTRL is clear (the usual case), the PPU gets the <a href="PPU_palettes.xhtml" title="PPU palettes">palette index</a> for the background color from the EXT pins. The stock NES grounds these pins, making palette index 0 the background color as expected. A secondary picture generator connected to the EXT pins would be able to replace the background with a different image using colors from the background palette, which could be used e.g. to implement parallax scrolling.
+</p><p>Setting bit 6 causes the PPU to output the lower four bits of the palette memory index on the EXT pins for each pixel (in addition to normal image drawing) - since only four bits are output, background and sprite pixels can't normally be distinguished this way. As the EXT pins are grounded on an unmodified NES, setting bit 6 is discouraged as it could potentially damage the chip whenever it outputs a non-zero pixel value (due to it effectively shorting Vcc and GND together). Looking at the relevant circuitry in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a>, it appears that the <a href="PPU_palettes.xhtml" title="PPU palettes">background palette hack</a> would not be functional for output from the EXT pins; they would always output index 0 for the background color.
+</p>
+<h4><span class="mw-headline" id="Bit_0_bus_conflict">Bit 0 bus conflict</span></h4>
+<p>Be very careful when writing to this register outside vertical blanking if you are using vertical mirroring (horizontal arrangement) or 4-screen VRAM.
+For specific CPU-PPU alignments, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=112424#p112424" rel="nofollow">a write near the end of a visible scanline</a> may cause only the next scanline to be erroneously drawn from the left nametable.
+This can cause a visible glitch.
+Worse, it can theoretically cause a sprite 0 hit to fail, which may crash a game using a sprite 0 spin loop that's not resilient.
+</p><p>Only writes at the exact moment between active picture and horizontal blanking cause this glitch; well-timed mid-scanline writes do not, nor do writes that land well within horizontal blanking.
+The glitch has no effect in horizontal or one-screen mirroring.
+It also does not appear if bit 0 of the written value is 0; this always correctly sets the left nametable.
+</p><p>This produces an occasionally <a href="Game_bugs.xhtml" title="Game bugs">visible glitch</a> in <i>Super Mario Bros.</i> when the program writes to PPUCTRL at the end of game logic.
+It appears to be turning NMI off during game logic and then turning NMI back on once the game logic has finished in order to prevent the NMI handler from being called again before the game logic finishes.
+To work around this in new productions, have your game logic set a flag that your NMI handler checks.
+</p>
+<h3><span class="mw-headline" id="Mask_.28.242001.29_.3E_write"><span id="PPUMASK"><span id="Reg2001">Mask ($2001) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>PPUMASK</b></li>
+<li> Description: PPU mask register</li>
+<li> Access: write</li></ul>
+<p>This register controls the rendering of sprites and backgrounds, as well as colour effects.
+</p>
+<pre>7  bit  0
+---- ----
+BGRs bMmG
+|||| ||||
+|||| |||+- Greyscale (0: normal color, 1: produce a greyscale display)
+|||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide
+|||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide
+|||| +---- 1: Show background
+|||+------ 1: Show sprites
+||+------- Emphasize red*
+|+-------- Emphasize green*
++--------- Emphasize blue*
+</pre>
+<p>* NTSC colors. PAL and Dendy swaps green and red<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup><sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup>.
+</p>
+<h4><span class="mw-headline" id="Render_Control">Render Control</span></h4>
+<ul><li> Bits 3 and 4 enable the rendering of background and sprites, respectively.</li></ul>
+<ul><li> Bits 1 and 2 enable rendering of the background and sprites in the leftmost 8 pixel columns. Setting these bits to 0 will mask these columns, which is often useful in horizontal scrolling situations where you want partial sprites or tiles to scroll in from the left.</li></ul>
+<ul><li> A value of $1E enables all rendering, with no color effects. A value of $00 disables all rendering. It is usually best practice to write this register only during vblank, to prevent partial-frame visual artifacts.</li></ul>
+<ul><li> If either of bits 3 or 4 is enabled, at any time outside of the vblank interval the PPU will be making continual use to the PPU address and data bus to fetch tiles to render, as well as internally fetching sprite data from the OAM. If you wish to make changes to PPU memory outside of vblank (via <b>$2007</b>), you must set <i>both</i> of these bits to 0 to disable rendering and prevent conflicts.</li></ul>
+<ul><li> Disabling rendering (clear both bits 3 and 4) during a visible part of the frame can be problematic. It can cause a corruption of the sprite state, which will display incorrect sprite data on the next frame. (See: <a href="Errata.xhtml" title="Errata">Errata</a>) It is, however, perfectly fine to mask sprites but leave the background on (set bit 3, clear bit 4) at any time in the frame.</li></ul>
+<ul><li> Sprite 0 hit does not trigger in any area where the background or sprites are hidden.</li></ul>
+<h4><span class="mw-headline" id="Color_Control">Color Control</span></h4>
+<ul><li> Bit 0 controls a greyscale mode, which causes the palette to use only the colors from the grey column: $00, $10, $20, $30. This is implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF, both on the display and through <a href="#PPUDATA">PPUDATA</a>. Writes to the palette through <a href="#PPUDATA">PPUDATA</a> are not affected. Also note that black colours like $0F will be replaced by a non-black grey $00.</li></ul>
+<ul><li> Bits 5,6,7 control a color &quot;emphasis&quot; or &quot;tint&quot; effect. Each bit emphasizes 1 color while darkening the other two. Setting all three emphasis bits will darken all colors.
+<ul><li> Bit 5 emphasizes red on the NTSC PPU, and green on the PAL &amp; Dendy PPUs.</li>
+<li> Bit 6 emphasizes green on the NTSC PPU, and red on the PAL &amp; Dendy PPUs.</li>
+<li> Bit 7 emphasizes blue on the NTSC, PAL, &amp; Dendy PPUs.</li>
+<li> See <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> for a description of how bits 5-7 work on NTSC and PAL PPUs.</li>
+<li> The <a href="Vs__System.xhtml" title="Vs. System">RGB PPU</a> used by PlayChoice and some other systems treat the emphasis bits differently. Instead of darkening other RGB components, it forces one component to maximum brightness. <a href="Colour_emphasis_games.xhtml" title="Colour-emphasis games">A few games</a>, which set all three tint bits to darken all colors, are unplayable on these PPUs.</li></ul></li></ul>
+<ul><li> The emphasis bits are applied independently of greyscale, so they will still tint the color of the grey image.</li></ul>
+<h3><span class="mw-headline" id="Status_.28.242002.29_.3C_read"><span id="PPUSTATUS"><span id="Reg2002">Status ($2002) &lt; read</span></span></span></h3>
+<ul><li> Common name: <b>PPUSTATUS</b></li>
+<li> Description: PPU status register</li>
+<li> Access: read</li></ul>
+<p>This register reflects the state of various functions inside the PPU.
+It is often used for determining timing.
+<span id="Sprite_0">To determine when the PPU has reached a given pixel of the screen, put an opaque pixel of sprite 0 there.</span>
+</p>
+<pre>7  bit  0
+---- ----
+VSO. ....
+|||| ||||
+|||+-++++- Least significant bits previously written into a PPU register
+|||        (due to register not being updated for this address)
+||+------- Sprite overflow. The intent was for this flag to be set
+||         whenever more than eight sprites appear on a scanline, but a
+||         hardware bug causes the actual behavior to be more complicated
+||         and generate false positives as well as false negatives; see
+||         <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a>. This flag is set during sprite
+||         evaluation and cleared at dot 1 (the second dot) of the
+||         pre-render line.
+|+-------- Sprite 0 Hit.  Set when a nonzero pixel of sprite 0 overlaps
+|          a nonzero background pixel; cleared at dot 1 of the pre-render
+|          line.  Used for raster timing.
++--------- Vertical blank has started (0: not in vblank; 1: in vblank).
+           Set at dot 1 of line 241 (the line *after* the post-render
+           line); cleared after reading $2002 and at dot 1 of the
+           pre-render line.
+</pre>
+<h4><span class="mw-headline" id="Notes">Notes</span></h4>
+<ul><li> Reading the status register will clear D7 mentioned above and also the address latch used by <a href="#PPUSCROLL">PPUSCROLL</a> and <a href="#PPUADDR">PPUADDR</a>. It does not clear the sprite 0 hit or overflow bit.</li>
+<li> Once the sprite 0 hit flag is set, it will not be cleared until the end of the next vertical blank.  If attempting to use this flag for raster timing, it is important to ensure that the sprite 0 hit check happens outside of vertical blank, otherwise the CPU will &quot;leak&quot; through and the check will fail.  The easiest way to do this is to place an earlier check for D6 = 0, which will wait for the pre-render scanline to begin.</li>
+<li> If using sprite 0 hit to make a bottom scroll bar below a vertically scrolling or freely scrolling playfield, be careful to ensure that the tile in the playfield behind sprite 0 is opaque.</li>
+<li> Sprite 0 hit is not detected at x=255, nor is it detected at x=0 through 7 if the background or sprites are hidden in this area.</li>
+<li> See: <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a> for more information on the timing of setting and clearing the flags.</li>
+<li> Some <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> PPUs return a constant value in D4-D0 that the game checks.</li>
+<li> <b>Caution:</b> Reading PPUSTATUS at the exact start of vertical blank will return 0 in bit 7 but clear the latch anyway, causing the program to miss frames. See <a href="NMI.xhtml" title="NMI">NMI</a> for details.</li></ul>
+<h3><span class="mw-headline" id="OAM_address_.28.242003.29_.3E_write"><span id="OAMADDR"><span id="Reg2003">OAM address ($2003) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>OAMADDR</b></li>
+<li> Description: OAM address port</li>
+<li> Access: write</li></ul>
+<p>Write the address of <a href="PPU_OAM.xhtml" title="PPU OAM">OAM</a> you want to access here.  Most games just write $00 here and then use <a href="#OAMDMA">OAMDMA</a>. (DMA is implemented in the 2A03/7 chip and works by repeatedly writing to <a href="#OAMDATA">OAMDATA</a>)
+</p>
+<h4><span class="mw-headline" id="Values_during_rendering">Values during rendering</span></h4>
+<p>OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines.
+</p><p>The value of OAMADDR when sprite evaluation starts at tick 65 of the visible scanlines will determine where in OAM sprite evaluation starts, and hence which sprite gets treated as sprite 0. The first OAM entry to be checked during sprite evaluation is the one starting at <tt>OAM[OAMADDR]</tt>. If OAMADDR is unaligned and does not point to the y position (first byte) of an OAM entry, then whatever it points to (tile index, attribute, or x coordinate) will be reinterpreted as a y position, and the following bytes will be similarly reinterpreted. No more sprites will be found once the end of OAM is reached, effectively hiding any sprites before <tt>OAM[OAMADDR]</tt>.
+</p>
+<h4><span class="mw-headline" id="OAMADDR_precautions">OAMADDR precautions</span></h4>
+<p>On the 2C02, writes to OAMADDR reliably corrupt OAM.<sup class="reference" id="cite_ref-OAMglitch_5-0"><a href="#cite_note-OAMglitch-5">[5]</a></sup> This can then be worked around by writing all 256 bytes of OAM.
+</p><p>It is also the case that if OAMADDR is not less than eight when rendering starts, the eight bytes starting at <tt>OAMADDR &amp; 0xF8</tt> are copied to the first eight bytes of OAM; it seems likely that this is related. The former bug is known to have been fixed in the 2C07; the latter is suspected to be. On the Dendy, the latter bug is required for 2C02 compatibility.
+</p>
+<h3><span class="mw-headline" id="OAM_data_.28.242004.29_.3C.3E_read.2Fwrite"><span id="OAMDATA"><span id="Reg2004">OAM data ($2004) &lt;&gt; read/write</span></span></span></h3>
+<ul><li> Common name: <b>OAMDATA</b></li>
+<li> Description: OAM data port</li>
+<li> Access: read, write</li></ul>
+<p>Write OAM data here. Writes will increment <a href="#OAMADDR">OAMADDR</a> after the write; reads during vertical or forced blanking return the value from OAM at that address but do not increment.
+</p><p>Because changes to OAM should normally be made only during vblank, writing through OAMDATA is only effective for partial updates (it is too slow). Most games will use the DMA feature through <a href="#OAMDMA">OAMDMA</a> instead.
+</p>
+<ul><li> Reading OAMDATA while the PPU is rendering will expose internal OAM accesses during sprite evaluation and loading; Micro Machines does this.</li></ul>
+<ul><li> Writes to OAMDATA during rendering (on the pre-render line and the visible lines 0-239, provided either sprite or background rendering is enabled) do not modify values in OAM, but do perform a glitchy increment of <a href="#OAMADDR">OAMADDR</a>, bumping only the high 6 bits (i.e., it bumps the <i>[n]</i> value in <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a> - it's plausible that it could bump the low bits instead depending on the current status of sprite evaluation). This extends to DMA transfers via <a href="#OAMDMA">OAMDMA</a>, since that uses writes to $2004. For emulation purposes, it is probably best to completely ignore writes during rendering.</li></ul>
+<ul><li> It used to be thought that reading from this register wasn't reliable<sup class="reference" id="cite_ref-6"><a href="#cite_note-6">[6]</a></sup>, however more recent evidence seems to suggest that this is solely due to corruption by <a href="#OAMADDR">OAMADDR</a> writes.</li></ul>
+<ul><li> In the oldest instantiations of the PPU, as found on earlier Famicoms and NESes, this register is not readable<sup class="reference" id="cite_ref-7"><a href="#cite_note-7">[7]</a></sup>. The readability was added on the RP2C02G, found on most NESes and later Famicoms.<sup class="reference" id="cite_ref-8"><a href="#cite_note-8">[8]</a></sup></li></ul>
+<ul><li> In the 2C07, sprite evaluation can <i>never</i> be fully disabled, and will always start 20 scanlines after the start of vblank<sup class="reference" id="cite_ref-9"><a href="#cite_note-9">[9]</a></sup> (same as when the prerender scanline would have been on the 2C02). As such, you must upload anything to OAM that you intend to within the first 20 scanlines after the 2C07 signals vertical blanking.</li></ul>
+<h3><span class="mw-headline" id="Scroll_.28.242005.29_.3E.3E_write_x2"><span id="PPUSCROLL"><span id="Reg2005">Scroll ($2005) &gt;&gt; write x2</span></span></span></h3>
+<ul><li> Common name: <b>PPUSCROLL</b></li>
+<li> Description: PPU scrolling position register</li>
+<li> Access: write twice</li></ul>
+<p>This register is used to change the <a href="PPU_scrolling.xhtml" title="PPU scrolling">scroll position</a>, that is, to tell the PPU which pixel of the nametable selected through <a href="#PPUCTRL">PPUCTRL</a> should be at the top left corner of the rendered screen. Typically, this register is written to during vertical blanking, so that the next frame starts rendering from the desired location, but it can also be modified during rendering in order to split the screen. Changes made to the vertical scroll during rendering will only take effect on the next frame.
+</p><p>After reading <a href="#PPUSTATUS">PPUSTATUS</a> to reset the address latch, write the horizontal and vertical scroll offsets here just before turning on the screen:
+</p>
+<pre> bit PPUSTATUS
+ ; possibly other code goes here
+ lda cam_position_x
+ sta PPUSCROLL
+ lda cam_position_y
+ sta PPUSCROLL
+</pre>
+<p>Horizontal offsets range from 0 to 255. &quot;Normal&quot; vertical offsets range from 0 to 239, while values of 240 to 255 are treated as -16 through -1 in a way, but tile data is incorrectly fetched from the attribute table.
+</p><p>By changing the values here across several frames and writing tiles to newly revealed areas of the nametables, one can achieve the effect of a camera panning over a large background.
+</p>
+<h3><span class="mw-headline" id="Address_.28.242006.29_.3E.3E_write_x2"><span id="PPUADDR"><span id="Reg2006">Address ($2006) &gt;&gt; write x2</span></span></span></h3>
+<ul><li> Common name: <b>PPUADDR</b></li>
+<li> Description: PPU address register</li>
+<li> Access: write twice</li></ul>
+<p>Because the CPU and the PPU are on separate buses, neither has direct access to the other's memory.
+The CPU writes to VRAM through a pair of registers on the PPU.
+First it loads an address into <a href="#PPUADDR">PPUADDR</a>, and then it writes repeatedly to <a href="#PPUDATA">PPUDATA</a> to fill VRAM.
+</p><p>After reading <a href="#PPUSTATUS">PPUSTATUS</a> to reset the address latch, write the 16-bit address of VRAM you want to access here, upper byte first.
+For example, to set the VRAM address to $2108:
+</p>
+<pre>  lda #$21
+  sta PPUADDR
+  lda #$08
+  sta PPUADDR
+</pre>
+<p>Valid addresses are $0000-$3FFF; higher addresses will be <a href="Mirroring.xhtml" title="Mirroring">mirrored</a> down.
+</p>
+<h4><span class="mw-headline" id="note">note</span></h4>
+<p>Access to <a href="#PPUSCROLL">PPUSCROLL</a> and <a href="#PPUADDR">PPUADDR</a> during screen refresh produces interesting raster effects; the starting position of each scanline can be set to any pixel position in nametable memory. For more information, see <a href="PPU_scrolling.xhtml" title="PPU scrolling">PPU scrolling</a> and tokumaru's sample code on the BBS.<sup class="reference" id="cite_ref-10"><a href="#cite_note-10">[10]</a></sup>
+</p><p><b> Editor's note:</b> Last comment about external page should be re-directed to the getting started section instead.
+</p>
+<h3><span class="mw-headline" id="Data_.28.242007.29_.3C.3E_read.2Fwrite"><span id="PPUDATA"><span id="Reg2007">Data ($2007) &lt;&gt; read/write</span></span></span></h3>
+<ul><li> Common name: <b>PPUDATA</b></li>
+<li> Description: PPU data port</li>
+<li> Access: read, write</li></ul>
+<p>VRAM read/write data register. After access, the video memory address will increment by an amount determined by $2000:2.
+</p><p>When the screen is turned off by disabling the background/sprite rendering flag with the <a href="#PPUMASK">PPUMASK</a> or during vertical blank, you can read or write data from VRAM through this port. Since accessing this register increments the VRAM address, it should not be accessed outside vertical or forced blanking because it will cause graphical glitches, and if writing, write to an unpredictable address in VRAM. However, two games are known to <a href="Reading_2007_during_rendering.xhtml" title="Reading 2007 during rendering">read from PPUDATA during rendering</a>: see <a href="Tricky_to_emulate_games.xhtml" title="Tricky-to-emulate games">Tricky-to-emulate games</a>.
+</p><p>VRAM reading and writing shares the same internal address register that rendering uses. So after loading data into video memory, the program should reload the scroll position afterwards with <a href="#PPUSCROLL">PPUSCROLL</a> writes in order to avoid wrong scrolling.
+</p>
+<h4><span class="mw-headline" id="The_PPUDATA_read_buffer_.28post-fetch.29">The PPUDATA read buffer (post-fetch)</span></h4>
+<p>When reading while the VRAM address is in the range 0-$3EFF (i.e., before the palettes), the read will return the contents of an internal read buffer. This internal buffer is updated <b>only</b> when reading <a href="#PPUDATA">PPUDATA</a>, and so is preserved across frames. After the CPU reads and gets the contents of the internal buffer, the PPU will immediately update the internal buffer with the byte at the current VRAM address. Thus, after setting the VRAM address, one should first read this register and discard the result.
+</p><p>Reading palette data from $3F00-$3FFF works differently. The palette data is placed immediately on the data bus, and hence no dummy read is required. Reading the palettes still updates the internal buffer though, but the data placed in it is the mirrored nametable data that would appear &quot;underneath&quot; the palette. (Checking the <a href="PPU_memory_map.xhtml" title="PPU memory map">PPU memory map</a> should make this clearer.)
+</p>
+<h3><span class="mw-headline" id="OAM_DMA_.28.244014.29_.3E_write"><span id="Reg4014"><span id="OAMDMA">OAM DMA ($4014) &gt; write</span></span></span></h3>
+<ul><li> Common name: <b>OAMDMA</b></li>
+<li> Description: OAM DMA register (high byte)</li>
+<li> Access: write</li></ul>
+<p>This port is located on the CPU. Writing $XX will upload 256 bytes of data from CPU page $XX00-$XXFF to the internal PPU OAM. This page is typically located in internal RAM, commonly $0200-$02FF, but cartridge RAM or ROM can be used as well.
+</p>
+<ul><li> The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick. (1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)</li></ul>
+<ul><li> The OAM DMA is the only effective method for initializing all 256 bytes of OAM. Because of the decay of OAM's dynamic RAM when rendering is disabled, the initialization should take place within vblank. Writes through <a href="#OAMDATA">OAMDATA</a> are generally too slow for this task.</li></ul>
+<ul><li> The DMA transfer will begin at the current OAM write address. It is common practice to initialize it to 0 with a write to <a href="#OAMADDR">OAMADDR</a> before the DMA transfer. Different starting addresses can be used for a simple OAM cycling technique, to alleviate sprite priority conflicts by flickering. If using this technique, after the DMA <a href="#OAMADDR">OAMADDR</a> should be set to 0 before the end of vblank to prevent potential OAM corruption (See: <a href="Errata.xhtml" title="Errata">Errata</a>). However, due to OAMADDR writes also having a &quot;corruption&quot; effect<sup class="reference" id="cite_ref-OAMglitch_5-1"><a href="#cite_note-OAMglitch-5">[5]</a></sup> this technique is not recommended.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://sourceforge.net/p/fceultra/code/HEAD/tree/fceu/trunk/src/ppu.cpp#l183" rel="nofollow">ppu.cpp</a> by Bero and Xodnizel</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=143801#p143801" rel="nofollow">Reply to &quot;Riding the open bus&quot;</a> by lidnariq</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text">PAL PPU swaps green and red emphasis bits: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=131889#p13188" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=131889#p13188</a></span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text">Dendy PPU swaps green and red emphasis bits: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=155513#p155513" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=155513#p155513</a></span>
+</li>
+<li id="cite_note-OAMglitch-5"><span class="mw-cite-backlink">↑ <sup><a href="#cite_ref-OAMglitch_5-0">5.0</a></sup> <sup><a href="#cite_ref-OAMglitch_5-1">5.1</a></sup></span> <span class="reference-text">Manual OAM write glitchyness: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=10189" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=10189</a></span>
+</li>
+<li id="cite_note-6"><span class="mw-cite-backlink"><a href="#cite_ref-6">↑</a></span> <span class="reference-text">$2004 reading reliable? <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6424" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6424</a></span>
+</li>
+<li id="cite_note-7"><span class="mw-cite-backlink"><a href="#cite_ref-7">↑</a></span> <span class="reference-text">$2003 not readable on early revisions: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=62137#p62137" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=62137#p62137</a></span>
+</li>
+<li id="cite_note-8"><span class="mw-cite-backlink"><a href="#cite_ref-8">↑</a></span> <span class="reference-text">hardware revisions and $2003 reads: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=12958&amp;start=45#p150926" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=2&amp;t=12958&amp;start=45#p150926</a></span>
+</li>
+<li id="cite_note-9"><span class="mw-cite-backlink"><a href="#cite_ref-9">↑</a></span> <span class="reference-text">2C07 PPU sprite evaluation notes: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=11041" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=9&amp;t=11041</a></span>
+</li>
+<li id="cite_note-10"><span class="mw-cite-backlink"><a href="#cite_ref-10">↑</a></span> <span class="reference-text">PPU synchronization from NMI: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?p=64111#p64111" rel="nofollow">http://forums.nesdev.com/viewtopic.php?p=64111#p64111</a></span>
+</li>
+</ol>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Pattern_tables">Pattern tables</span></h2>
+<p>The <b>pattern table</b> is an area of memory connected to the PPU that defines the shapes of tiles that make up backgrounds and sprites.
+Each tile in the pattern table is 16 bytes, made of two planes.
+The first plane controls bit 0 of the color; the second plane controls bit 1. Any pixel whose color is 0 is background/transparent (represented by '.' in the following diagram):
+</p>
+<pre>Bit Planes            Pixel Pattern
+$0xx0=$41  01000001
+$0xx1=$C2  11000010
+$0xx2=$44  01000100
+$0xx3=$48  01001000
+$0xx4=$10  00010000
+$0xx5=$20  00100000         .1.....3
+$0xx6=$40  01000000         11....3.
+$0xx7=$80  10000000  =====  .1...3..
+                            .1..3...
+$0xx8=$01  00000001  =====  ...3.22.
+$0xx9=$02  00000010         ..3....2
+$0xxA=$04  00000100         .3....2.
+$0xxB=$08  00001000         3....222
+$0xxC=$16  00010110
+$0xxD=$21  00100001
+$0xxE=$42  01000010
+$0xxF=$87  10000111
+</pre>
+<p>The pattern table is divided into two 256-tile sections: $0000-$0FFF, nicknamed &quot;left&quot;, and $1000-$1FFF, nicknamed &quot;right&quot;.
+The nicknames come from how emulators with a debugger display the pattern table.
+Traditionally, they are displayed as two side-by-side 128x128 pixel sections, each representing 16x16 tiles from the pattern table, with $0000-$0FFF on the left and $1000-$1FFF on the right.
+</p><p>An important aspect of a <a href="Mapper.xhtml" title="Mapper">mapper</a>'s capability is how finely it allows bank switching parts of the pattern table.
+</p>
+<h2><span class="mw-headline" id="Addressing">Addressing</span></h2>
+<p>PPU addresses within the pattern tables can be decoded as follows:
+</p>
+<pre>DCBA98 76543210
+---------------
+0HRRRR CCCCPTTT
+|||||| |||||+++- T: Fine Y offset, the row number within a tile
+|||||| ||||+---- P: Bit plane (0: &quot;lower&quot;; 1: &quot;upper&quot;)
+|||||| ++++----- C: Tile column
+||++++---------- R: Tile row
+|+-------------- H: Half of sprite table (0: &quot;left&quot;; 1: &quot;right&quot;)
++--------------- 0: Pattern table is at $0000-$1FFF
+</pre>
+<p>The value written to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000) controls whether the background and sprites use the left half ($0000-$0FFF) or the right half ($1000-$1FFF) of the pattern table.
+PPUCTRL bit 4 applies to backgrounds, bit 3 applies to 8x8 sprites, and bit 0 of each OAM entry's tile number applies to 8x16 sprites.
+</p><p>For example, if rows of a tile are numbered 0 through 7, row 1 of tile $69 in the left pattern table is stored with plane 0 in $0691 and plane 1 in $0699.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="OAM">OAM</span></h2>
+<p>The OAM (Object Attribute Memory) is internal memory inside the PPU that contains a display list of up to 64 sprites, where each sprite's information occupies 4 bytes.
+</p>
+<h3><span class="mw-headline" id="Byte_0">Byte 0</span></h3>
+<p>Y position of top of sprite
+</p><p>Sprite data is delayed by one scanline; you must subtract 1 from the sprite's Y coordinate before writing it here.
+Hide a sprite by writing any values in $EF-$FF here.
+Sprites are never displayed on the first line of the picture, and it is impossible to place a sprite partially off the top of the screen.
+</p>
+<h3><span class="mw-headline" id="Byte_1">Byte 1</span></h3>
+<p>Tile index number
+</p><p>For 8x8 sprites, this is the tile number of this sprite within the pattern table selected in bit 3 of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000).
+</p><p>For 8x16 sprites, the PPU ignores the pattern table selection and selects a pattern table from bit 0 of this number.
+</p>
+<pre>76543210
+||||||||
+|||||||+- Bank ($0000 or $1000) of tiles
++++++++-- Tile number of top of sprite (0 to 254; bottom half gets the next tile)
+</pre>
+<p>Thus, the pattern table memory map for 8x16 sprites looks like this:
+</p>
+<ul><li>$00: $0000-$001F</li>
+<li>$01: $1000-$101F</li>
+<li>$02: $0020-$003F</li>
+<li>$03: $1020-$103F</li>
+<li>$04: $0040-$005F<br/>[...]</li>
+<li>$FE: $0FE0-$0FFF</li>
+<li>$FF: $1FE0-$1FFF</li></ul>
+<h3><span class="mw-headline" id="Byte_2">Byte 2</span></h3>
+<p>Attributes
+</p>
+<pre>76543210
+||||||||
+||||||++- Palette (4 to 7) of sprite
+|||+++--- Unimplemented
+||+------ Priority (0: in front of background; 1: behind background)
+|+------- Flip sprite horizontally
++-------- Flip sprite vertically
+</pre>
+<p>Flipping does not change the position of the sprite's bounding box, just the position of pixels within the sprite.
+If, for example, a sprite covers (120, 130) through (127, 137), it'll still cover the same area when flipped.
+In 8x16 mode, vertical flip flips each of the subtiles and also exchanges their position; the odd-numbered tile of a vertically flipped sprite is drawn on top.
+This behavior differs from the behavior of the <a class="external text" href="http://wiki.superfamicom.org/snes/show/Registers#obsel__object_size_and_character_address_8" rel="nofollow">unofficial 16x32 and 32x64 pixel sprite sizes on the Super NES</a>, which <a class="external text" href="http://wiki.superfamicom.org/snes/show/Sprites" rel="nofollow">will only vertically flip each square sub-region</a>.
+</p><p>The three unimplemented bits of each sprite's byte 2 do not exist in the PPU and always read back as 0 on PPU revisions that allow reading PPU OAM through <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004). This can be emulated by ANDing byte 2 with $E3 either when writing to or when reading from OAM. It has not been determined whether the PPU actually drives these bits low or whether this is the effect of data bus capacitance from reading the last byte of the instruction (LDA $2004, which assembles to AD 04 20).
+</p>
+<h3><span class="mw-headline" id="Byte_3">Byte 3</span></h3>
+<p>X position of left side of sprite.
+</p><p>X-scroll values of $F9-FF results in parts of the sprite to be past the right edge of the screen, thus invisible. It is not possible to have a sprite partially visible on the left edge. Instead, left-clipping through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK"> PPUMASK ($2001)</a> can be used to simulate this effect.
+</p>
+<h3><span class="mw-headline" id="DMA">DMA</span></h3>
+<p>Most programs write to a copy of OAM somewhere in CPU addressable RAM (often $0200-$02FF) and then copy it to OAM each frame using the <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> ($4014) register. Writing N to this register causes the DMA circuitry inside the 2A03/07 to fully initialize the OAM by writing <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> 256 times using successive bytes from starting at address $100*N). The CPU is suspended while the transfer is taking place.
+</p><p>The address range to copy from could lie outside RAM, though this is only useful for static screens with no animation.
+</p><p>Not counting the <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> write tick, the above procedure takes 513 CPU cycles (+1 on odd CPU cycles): first one (or two) idle cycles, and then 256 pairs of alternating read/write cycles. (For comparison, an unrolled LDA/STA loop would usually take four times as long.)
+</p>
+<h3><span class="mw-headline" id="Sprite_zero_hits">Sprite zero hits</span></h3>
+<p>Sprites are conventionally numbered 0 to 63.
+Sprite 0 is the sprite controlled by OAM addresses $00-$03, sprite 1 is controlled by $04-$07, ..., and sprite 63 is controlled by $FC-$FF.
+</p><p>While the PPU is drawing the picture, when an opaque pixel of sprite 0 overlaps an opaque pixel of the background, this is a <b>sprite zero hit</b>.
+The PPU detects this condition and sets bit 6 of <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> ($2002) to 1 starting at this pixel, letting the CPU know how far along the PPU is in drawing the picture.
+</p><p>Sprite 0 hit does not happen:
+</p>
+<ul><li> If background or sprite rendering is disabled in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> ($2001)</li>
+<li> At x=0 to x=7 if the left-side clipping window is enabled (if bit 2 or bit 1 of PPUMASK is 0).</li>
+<li> At x=255, for an obscure reason related to the pixel pipeline.</li>
+<li> At any pixel where the background or sprite pixel is transparent (2-bit color index from the CHR pattern is %00).</li>
+<li> If sprite 0 hit has already occurred this frame. Bit 6 of PPUSTATUS ($2002) is cleared to 0 at dot 1 of the pre-render line. This means only the first sprite 0 hit in a frame can be detected.</li></ul>
+<p>Sprite 0 hit happens regardless of the following:
+</p>
+<ul><li> Sprite priority. Sprite 0 can still hit the background from behind.</li>
+<li> The pixel colors. Only the CHR pattern bits are relevant, not the actual rendered colors, and <i>any</i> CHR color index except %00 is considered opaque.</li>
+<li> The palette. The contents of the palette are irrelevant to sprite 0 hits. For example: a black ($0F) sprite pixel can hit a black ($0F) background as long as neither is the transparent color index %00.</li>
+<li> The PAL PPU blanking on the left and right edges at x=0, x=1, and x=254 (see <a href="Overscan.xhtml#PAL" title="Overscan">Overscan</a>).</li></ul>
+<h3><span class="mw-headline" id="Sprite_overlapping">Sprite overlapping</span></h3>
+<p><a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">Priority between sprites</a> is determined by their address inside OAM.
+So to have a sprite displayed in front of another sprite in a scanline, the sprite data that occurs first will overlap any other sprites after it.
+For example, when sprites at OAM $0C and $28 overlap, the sprite at $0C will appear in front.
+</p>
+<h3><span class="mw-headline" id="Internal_operation">Internal operation</span></h3>
+<p>In addition to the primary OAM memory, the PPU contains 32 bytes (enough for 8 sprites) of secondary OAM memory that is not directly accessible by the program. During each visible scanline this secondary OAM is first cleared, and then a linear search of the entire primary OAM is carried out to find sprites that are within y range for the <b>next</b> scanline (the <i>sprite evaluation</i> phase). The OAM data for each sprite found to be within range is copied into the secondary OAM, which is then used to initialize eight internal sprite output units.
+</p><p>See <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a> for information on precise timing.
+</p><p>The reason sprites at lower addresses in OAM overlap sprites at higher addresses is that sprites at lower addresses also get assigned a lower address in the secondary OAM, and hence get assigned a lower-numbered sprite output unit during the loading phase. Output from lower-numbered sprite output units is wired inside the PPU to take priority over output from higher-numbered sprite output units.
+</p><p>Sprite zero hit detection relies on the fact that sprite zero, when it is within y range for the next scanline, always gets assigned the first sprite output unit. The hit condition is basically <i>sprite zero is in range</i> <b>AND</b> <i>the first sprite output unit is outputting a non-zero pixel</i> <b>AND</b> <i>the background drawing unit is outputting a non-zero pixel</i>. (Internally the PPU actually uses <b>two</b> flags: one to keep track of whether sprite zero occurs on the <i>next</i> scanline, and another one—initialized from the first—to keep track of whether sprite zero occurs on the <i>current</i> scanline. This is to avoid sprite evaluation, which takes place concurrently with potential sprite zero hits, trampling on the second flag.)
+</p>
+<h3><span class="mw-headline" id="See_also">See also</span></h3>
+<ul><li> <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">PPU sprite evaluation</a></li>
+<li> <a href="Sprite_overflow_games.xhtml" title="Sprite overflow games">Sprite overflow games</a></li></ul>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Nametables">Nametables</span></h2>
+<p>A <b>nametable</b> is a 1024 byte area of memory used by the PPU to lay out backgrounds.
+Each byte in the nametable controls one 8x8 pixel character cell, and each nametable has 30 rows of 32 tiles each, for 960 ($3C0) bytes; the rest is used by each nametable's <a href="PPU_attribute_tables.xhtml" title="PPU attribute tables">attribute table</a>.
+With each tile being 8x8 pixels, this makes a total of 256x240 pixels in one map, the same size as one full screen.
+</p>
+<div style="float:right; margin-left: 1em">
+<pre>     (0,0)     (256,0)     (511,0)
+       +-----------+-----------+
+       |           |           |
+       |           |           |
+       |   $2000   |   $2400   |
+       |           |           |
+       |           |           |
+(0,240)+-----------+-----------+(511,240)
+       |           |           |
+       |           |           |
+       |   $2800   |   $2C00   |
+       |           |           |
+       |           |           |
+       +-----------+-----------+
+     (0,479)   (256,479)   (511,479)
+</pre>
+</div>
+<dl><dd><i>See also: <a href="PPU_memory_map.xhtml" title="PPU memory map">PPU memory map</a></i></dd></dl>
+<h2><span class="mw-headline" id="Mirroring">Mirroring</span></h2>
+<dl><dd><i>Main article: <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a></i></dd></dl>
+<p>The NES has four nametables, arranged in a 2x2 pattern. Each occupies a 1 KiB chunk of PPU address space, starting at $2000 at the top left, $2400 at the top right, $2800 at the bottom left, and $2C00 at the bottom right.
+</p><p>But the NES system board itself has only 2 KiB of VRAM (called CIRAM, stored in a separate SRAM chip), enough for two nametables; hardware on the cartridge controls address bit 10 of CIRAM to map one nametable on top of another.
+</p>
+<ul><li> Vertical mirroring: $2000 equals $2800 and $2400 equals $2C00 (e.g. <i>Super Mario Bros.</i>)</li>
+<li> Horizontal mirroring: $2000 equals $2400 and $2800 equals $2C00 (e.g. <i>Kid Icarus</i>)</li>
+<li> One-screen mirroring: All nametables refer to the same memory at any given time, and the mapper directly manipulates CIRAM address bit 10 (e.g. many <a href="Rare.xhtml" title="Rare">Rare</a> games using <a href="AxROM.xhtml" title="AxROM">AxROM</a>)</li>
+<li> Four-screen mirroring: CIRAM is disabled, and the cartridge contains additional VRAM used for all nametables (e.g. <i>Gauntlet</i>, <i>Rad Racer 2</i>)</li>
+<li> Other: Some advanced mappers can present arbitrary combinations of CIRAM, VRAM, or even CHR ROM in the nametable area.  Such exotic setups are rarely used.</li></ul>
+<h2><span class="mw-headline" id="Background_evaluation">Background evaluation</span></h2>
+<dl><dd><i>Main article: <a href="PPU_rendering.xhtml" title="PPU rendering">PPU rendering</a></i></dd></dl>
+<p>Conceptually, the PPU does this 33 times for each scanline:
+</p>
+<ol><li> Fetch a nametable entry from $2000-$2FBF.</li>
+<li> Fetch the corresponding attribute table entry from $23C0-$2FFF and increment the current VRAM address within the same row.</li>
+<li> Fetch the low-order byte of a 8x1 pixel sliver of pattern table from $0000-$0FF7 or $1000-$1FF7.</li>
+<li> Fetch the high-order byte of this sliver from an address 8 bytes higher.</li>
+<li> Turn the attribute data and the pattern table data into palette indices, and combine them with data from <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite data</a> using <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">priority</a>.</li></ol>
+<p>It also does a fetch of a 34th (nametable, attribute, pattern) tuple that is never used, but some <a href="Mapper.xhtml" title="Mapper">mappers</a> rely on this fetch for timing purposes.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Attribute_tables">Attribute tables</span></h2>
+<p>The <b>attribute table</b> is a 64-byte array at the end of each <a href="PPU_nametables.xhtml" title="PPU nametables">nametable</a> that controls which palette is assigned to each part of the background.
+</p><p>Each attribute table, starting at $23C0, $27C0, $2BC0, or $2FC0, is arranged as an 8x8 byte array:
+</p>
+<pre>
+       2xx0    2xx1    2xx2    2xx3    2xx4    2xx5    2xx6    2xx7
+     ,-------+-------+-------+-------+-------+-------+-------+-------.
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xC0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xC8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xD0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xD8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xE0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xE8:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+2xF0:| - + - | - + - | - + - | - + - | - + - | - + - | - + - | - + - |
+     |   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+2xF8:|   .   |   .   |   .   |   .   |   .   |   .   |   .   |   .   |
+     `-------+-------+-------+-------+-------+-------+-------+-------'
+</pre>
+<div style="float:right">
+<pre>,---+---+---+---.
+|   |   |   |   |
++ D1-D0 + D3-D2 +
+|   |   |   |   |
++---+---+---+---+
+|   |   |   |   |
++ D5-D4 + D7-D6 +
+|   |   |   |   |
+`---+---+---+---'
+</pre>
+</div>
+<p>Each byte controls the palette of a 32x32 pixel part of the nametable and is divided into four 2-bit areas.
+Each area covers four tiles or 16x16 pixels, the size of a [?] block in <i>Super Mario Bros.</i>
+Given palette numbers topleft, topright, bottomleft, bottomright, each in the range 0 to 3, the value of the byte is
+</p>
+<pre>value = (topleft &lt;&lt; 0) | (topright &lt;&lt; 2) | (bottomleft &lt;&lt; 4) | (bottomright &lt;&lt; 6)
+</pre>
+<p>Most games for the NES use 16x16 pixel <s>metatiles</s> (size of <i>Super Mario Bros.</i> ? block) or 32x32 pixel metatiles (width of <b>SMB</b> pipe) in order to align the map with the attribute areas.
+</p>
+<h2><span class="mw-headline" id="Worked_example">Worked example</span></h2>
+<div style="clear: both">
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_bg_with_attr_grid_png.xhtml"><img alt="" class="thumbimage" height="512" src="../wiki-images/Thwaite_bg_with_attr_grid.png" width="640"/></a>  <div class="thumbcaption">The background in the game <i><a href="Thwaite.xhtml" title="Thwaite">Thwaite</a></i>, with an overlaid attribute grid.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_attrs_png.xhtml"><img alt="" class="thumbimage" height="512" src="../wiki-images/Thwaite_attrs.png" width="640"/></a>  <div class="thumbcaption">Each 16x16 pixel color area has one of four color sets assigned to it, and one byte controls four color areas.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="File_Thwaite_palette_color_sets_png.xhtml"><img alt="" class="thumbimage" height="96" src="../wiki-images/Thwaite_palette_color_sets.png" width="640"/></a>  <div class="thumbcaption">The background palette is divided into four color sets.</div></div></div></div>
+<p>The byte at $23F2 has color set 3 at top left, 1 at top right, 2 at bottom left, and 2 at bottom right.
+Thus its attribute is calculated as follows:
+</p>
+<pre>value = (topleft &lt;&lt; 0) | (topright &lt;&lt; 2) | (bottomleft &lt;&lt; 4) | (bottomright &lt;&lt; 6)
+      = (3       &lt;&lt; 0) | (1        &lt;&lt; 2) | (2          &lt;&lt; 4) | (2           &lt;&lt; 6)
+      = $03            | $04             | $20               | $80
+      = $A7
+</pre>
+</div>
+<h2><span class="mw-headline" id="Glitches">Glitches</span></h2>
+<p>Nametable tiles are 8x8 pixels, and the left-side clipping window in <a href="PPU_registers.xhtml" title="PPU registers">PPUMASK ($2001)</a> is 8 pixels wide, but attribute table tiles are 16x16 pixels. This is why games that use the horizontal or vertical <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> mode for diagonal <a href="PPU_scrolling.xhtml" title="PPU scrolling">scrolling</a> often have color artifacts on one side of the screen (on the right side in <i>Super Mario Bros. 3</i>; on the trailing side of the scroll in <i>Kirby's Adventure</i>; at the top and bottom in <i>Super C</i>).
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Palettes">Palettes</span></h2>
+<h2><span class="mw-headline" id="Memory_Map">Memory Map</span></h2>
+<p>The palette for the background runs from VRAM $3F00 to $3F0F; the palette for the sprites runs from $3F10 to $3F1F. Each color takes up one byte.
+</p>
+<table class="wikitable">
+<tr>
+<th> Address </th>
+<th> Purpose
+</th></tr>
+<tr>
+<td> $3F00 </td>
+<td> Universal background color
+</td></tr>
+<tr>
+<td> $3F01-$3F03 </td>
+<td> Background palette 0
+</td></tr>
+<tr>
+<td> $3F05-$3F07 </td>
+<td> Background palette 1
+</td></tr>
+<tr>
+<td> $3F09-$3F0B </td>
+<td> Background palette 2
+</td></tr>
+<tr>
+<td> $3F0D-$3F0F </td>
+<td> Background palette 3
+</td></tr>
+<tr>
+<td> $3F11-$3F13 </td>
+<td> Sprite palette 0
+</td></tr>
+<tr>
+<td> $3F15-$3F17 </td>
+<td> Sprite palette 1
+</td></tr>
+<tr>
+<td> $3F19-$3F1B </td>
+<td> Sprite palette 2
+</td></tr>
+<tr>
+<td> $3F1D-$3F1F </td>
+<td> Sprite palette 3
+</td></tr></table>
+<p>Each palette has three colors.
+Each 16x16 pixel area of the background can use the backdrop color and the three colors from one of the four background palettes.
+The choice of palette for each 16x16 pixel area is controlled by bits in the attribute table at the end of each <a href="PPU_nametables.xhtml" title="PPU nametables">nametable</a>.
+Each sprite can use the three colors from one of the sprite palettes.
+The choice of palette is in attribute 2 of each sprite (see <a href="PPU_OAM.xhtml" title="PPU OAM">PPU OAM</a>).
+</p><p>Addresses $3F04/$3F08/$3F0C can contain unique data, though these values are not used by the PPU when normally rendering (since the pattern values that would otherwise select those cells select the backdrop color instead). They can still be shown using the background palette hack, explained below.
+</p><p>Addresses $3F10/$3F14/$3F18/$3F1C are mirrors of $3F00/$3F04/$3F08/$3F0C. Note that this goes for writing as well as reading.
+A symptom of not having implemented this correctly in an emulator is the sky being black in <i>Super Mario Bros.</i>, which writes the backdrop color through $3F10.
+</p><p>Thus, indices into the palette are formed as follows:
+</p>
+<pre>43210
+|||||
+|||++- Pixel value from tile data
+|++--- Palette number from attribute table or OAM
++----- Background/Sprite select
+</pre>
+<p>As in some second-generation game consoles, values in the NES palette are based on <a class="extiw" href="https://en.wikipedia.org/wiki/HSL_and_HSV" title="wikipedia:HSL and HSV">hue and brightness</a>:
+</p>
+<pre>76543210
+||||||||
+||||++++- Hue (phase, determines NTSC/PAL chroma)
+||++----- Value (voltage, determines NTSC/PAL luma)
+++------- Unimplemented, reads back as 0
+</pre>
+<p>Hue $0 is light gray, $1-$C are blue to red to green to cyan, $D is dark gray, and $E-$F are mirrors of $1D (black).
+The canonical code for &quot;black&quot; is $0F or $1D.
+$0D should not be used; it results in a &quot;blacker than black&quot; signal that may cause problems for some TVs.
+It works this way because of the way colors are represented in an NTSC or PAL signal, with the phase of a color subcarrier controlling the hue. For details, see <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a>, or for a list see <a href="Color__0D_games.xhtml" title="Color $0D games">Color $0D games</a>.
+</p><p>The 2C03 RGB PPU used in the PlayChoice-10 and Famicom Titler renders hue $D as black, not dark gray.
+The 2C04 PPUs used in many <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> arcade games have completely different palettes as a copy protection measure.
+</p>
+<h2><span class="mw-headline" id="Palettes_2">Palettes</span></h2>
+<h3><span class="mw-headline" id="2C02">2C02</span></h3>
+<div class="thumb tright"><div class="thumbinner" style="width:386px;"><a class="image" href="File_Savtool_swatches_png.xhtml"><img alt="" class="thumbimage" height="120" src="../wiki-images/Savtool-swatches.png" width="384"/></a>  <div class="thumbcaption">NES palette generated with Bisqwit's tool</div></div></div>
+<p>The RF Famicom, AV Famicom, NES (both front- and top-loading), and the North American version of the Sharp Nintendo TV use the 2C02 PPU.
+Unlike some other consoles' video circuits, the 2C02 does not generate RGB video and then encode that to composite.
+Instead it generates <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> directly in the composite domain.
+The TV decodes this into RGB to drive its picture tube, and most TVs' decoders intentionally deviate somewhat from the NTSC standard.
+</p><p>Some emulators decode the NTSC signal in real time.
+Others use a predefined palette, such as one commonly stored in <a class="external text" href="http://www.shikadi.net/moddingwiki/VGA_Palette" rel="nofollow">Classic VGA Palette format</a> (<a href="_pal.xhtml" title=".pal">.pal</a>), in which each triplet represents the sRGB color that results from decoding a large flat area with a given palette value.
+Using such a table directly will result in overly &quot;clean&quot; video that looks somewhat more like a PlayChoice (see 2C03 below), and some games will look graphically sterile if quirks of the NES's video output are not emulated.
+However, sometimes people want something functional before they bother with actually generating a composite signal and decoding it, or they're making an emulator for a low-end device that cannot decode NTSC video in real time.
+</p><p>The following table was generated using <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6484" rel="nofollow">blargg's Full Palette demo</a> on <a href="Emulators.xhtml" title="Emulators">Nestopia</a>:
+</p>
+<pre style="font-size: 70%">
+ 84  84  84    0  30 116    8  16 144   48   0 136   68   0 100   92   0  48   84   4   0   60  24   0   32  42   0    8  58   0    0  64   0    0  60   0    0  50  60    0   0   0
+152 150 152    8  76 196   48  50 236   92  30 228  136  20 176  160  20 100  152  34  32  120  60   0   84  90   0   40 114   0    8 124   0    0 118  40    0 102 120    0   0   0
+236 238 236   76 154 236  120 124 236  176  98 236  228  84 236  236  88 180  236 106 100  212 136  32  160 170   0  116 196   0   76 208  32   56 204 108   56 180 204   60  60  60
+236 238 236  168 204 236  188 188 236  212 178 236  236 174 236  236 174 212  236 180 176  228 196 144  204 210 120  180 222 120  168 226 144  152 226 180  160 214 228  160 162 160
+</pre>
+<p>Other tools for generating a palette include <a class="external text" href="http://bisqwit.iki.fi/utils/nespalette.php" rel="nofollow">one by Bisqwit</a> and <a class="external text" href="http://drag.wootest.net/misc/palgen.html" rel="nofollow">one by Drag</a>.
+These simulate generating a large area of one flat color and then decoding that with the adjustment knobs set to various settings.
+</p><p>The 2C03, 2C04, and 2C05, on the other hand, all output analog red, green, blue, and sync (RGBS) signals.
+The sync signal contains horizontal and vertical sync pulses in the same format as an all-black composite signal.
+Each of the three video channels uses a 3-bit DAC driven by a look-up table in a 64x9-bit ROM inside the PPU.
+The look-up tables (one digit for each of red, green, and blue, in order) are given below:
+</p>
+<h3><span class="mw-headline" id="2C03_and_2C05">2C03 and 2C05</span></h3>
+<p>This palette is intentionally similar to the NES's standard palette, but notably is missing the greys in entries $2D and $3D.
+The 2C03 is used in <i>Vs. Duck Hunt</i>, <i>Vs. Tennis</i>, all PlayChoice games, the Famicom Titler, and the Famicom TV.
+The 2C05 is used in some later Vs. games as a copy protection measure.
+Both have been used in RGB mods for the NES, as a circuit implementing <code>A0' = A0 xor (A1 nor A2)</code> can swap PPUCTRL and PPUMASK to make a 2C05 behave as a 2C03.
+</p>
+<pre>333,014,006,326,403,503,510,420,320,120,031,040,022,000,000,000
+555,036,027,407,507,704,700,630,430,140,040,053,044,000,000,000
+777,357,447,637,707,737,740,750,660,360,070,276,077,000,000,000
+777,567,657,757,747,755,764,772,773,572,473,276,467,000,000,000
+</pre>
+<table class="wikitable">
+
+<tr>
+<td style="border:0px;background-color:#6D6D6D;width:32px;height:32px;color:#fff;text-align:center">0x00
+</td>
+<td style="border:0px;background-color:#002491;width:32px;height:32px;color:#fff;text-align:center">0x01
+</td>
+<td style="border:0px;background-color:#0000DA;width:32px;height:32px;color:#fff;text-align:center">0x02
+</td>
+<td style="border:0px;background-color:#6D48DA;width:32px;height:32px;color:#fff;text-align:center">0x03
+</td>
+<td style="border:0px;background-color:#91006D;width:32px;height:32px;color:#fff;text-align:center">0x04
+</td>
+<td style="border:0px;background-color:#B6006D;width:32px;height:32px;color:#fff;text-align:center">0x05
+</td>
+<td style="border:0px;background-color:#B62400;width:32px;height:32px;color:#fff;text-align:center">0x06
+</td>
+<td style="border:0px;background-color:#914800;width:32px;height:32px;color:#fff;text-align:center">0x07
+</td>
+<td style="border:0px;background-color:#6D4800;width:32px;height:32px;color:#fff;text-align:center">0x08
+</td>
+<td style="border:0px;background-color:#244800;width:32px;height:32px;color:#fff;text-align:center">0x09
+</td>
+<td style="border:0px;background-color:#006D24;width:32px;height:32px;color:#fff;text-align:center">0x0A
+</td>
+<td style="border:0px;background-color:#009100;width:32px;height:32px;color:#fff;text-align:center">0x0B
+</td>
+<td style="border:0px;background-color:#004848;width:32px;height:32px;color:#fff;text-align:center">0x0C
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x0D
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x0E
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x0F
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#B6B6B6;width:32px;height:32px;color:#fff;text-align:center">0x10
+</td>
+<td style="border:0px;background-color:#006DDA;width:32px;height:32px;color:#fff;text-align:center">0x11
+</td>
+<td style="border:0px;background-color:#0048FF;width:32px;height:32px;color:#fff;text-align:center">0x12
+</td>
+<td style="border:0px;background-color:#9100FF;width:32px;height:32px;color:#fff;text-align:center">0x13
+</td>
+<td style="border:0px;background-color:#B600FF;width:32px;height:32px;color:#fff;text-align:center">0x14
+</td>
+<td style="border:0px;background-color:#FF0091;width:32px;height:32px;color:#fff;text-align:center">0x15
+</td>
+<td style="border:0px;background-color:#FF0000;width:32px;height:32px;color:#fff;text-align:center">0x16
+</td>
+<td style="border:0px;background-color:#DA6D00;width:32px;height:32px;color:#fff;text-align:center">0x17
+</td>
+<td style="border:0px;background-color:#916D00;width:32px;height:32px;color:#fff;text-align:center">0x18
+</td>
+<td style="border:0px;background-color:#249100;width:32px;height:32px;color:#fff;text-align:center">0x19
+</td>
+<td style="border:0px;background-color:#009100;width:32px;height:32px;color:#fff;text-align:center">0x1A
+</td>
+<td style="border:0px;background-color:#00B66D;width:32px;height:32px;color:#fff;text-align:center">0x1B
+</td>
+<td style="border:0px;background-color:#009191;width:32px;height:32px;color:#fff;text-align:center">0x1C
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x1D
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x1E
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x1F
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#FFFFFF;width:32px;height:32px;color:#000;text-align:center">0x20
+</td>
+<td style="border:0px;background-color:#6DB6FF;width:32px;height:32px;color:#000;text-align:center">0x21
+</td>
+<td style="border:0px;background-color:#9191FF;width:32px;height:32px;color:#000;text-align:center">0x22
+</td>
+<td style="border:0px;background-color:#DA6DFF;width:32px;height:32px;color:#000;text-align:center">0x23
+</td>
+<td style="border:0px;background-color:#FF00FF;width:32px;height:32px;color:#000;text-align:center">0x24
+</td>
+<td style="border:0px;background-color:#FF6DFF;width:32px;height:32px;color:#000;text-align:center">0x25
+</td>
+<td style="border:0px;background-color:#FF9100;width:32px;height:32px;color:#000;text-align:center">0x26
+</td>
+<td style="border:0px;background-color:#FFB600;width:32px;height:32px;color:#000;text-align:center">0x27
+</td>
+<td style="border:0px;background-color:#DADA00;width:32px;height:32px;color:#000;text-align:center">0x28
+</td>
+<td style="border:0px;background-color:#6DDA00;width:32px;height:32px;color:#000;text-align:center">0x29
+</td>
+<td style="border:0px;background-color:#00FF00;width:32px;height:32px;color:#000;text-align:center">0x2A
+</td>
+<td style="border:0px;background-color:#48FFDA;width:32px;height:32px;color:#000;text-align:center">0x2B
+</td>
+<td style="border:0px;background-color:#00FFFF;width:32px;height:32px;color:#000;text-align:center">0x2C
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#f00;text-align:center">0x2D
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x2E
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x2F
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#FFFFFF;width:32px;height:32px;color:#000;text-align:center">0x30
+</td>
+<td style="border:0px;background-color:#B6DAFF;width:32px;height:32px;color:#000;text-align:center">0x31
+</td>
+<td style="border:0px;background-color:#DAB6FF;width:32px;height:32px;color:#000;text-align:center">0x32
+</td>
+<td style="border:0px;background-color:#FFB6FF;width:32px;height:32px;color:#000;text-align:center">0x33
+</td>
+<td style="border:0px;background-color:#FF91FF;width:32px;height:32px;color:#000;text-align:center">0x34
+</td>
+<td style="border:0px;background-color:#FFB6B6;width:32px;height:32px;color:#000;text-align:center">0x35
+</td>
+<td style="border:0px;background-color:#FFDA91;width:32px;height:32px;color:#000;text-align:center">0x36
+</td>
+<td style="border:0px;background-color:#FFFF48;width:32px;height:32px;color:#000;text-align:center">0x37
+</td>
+<td style="border:0px;background-color:#FFFF6D;width:32px;height:32px;color:#000;text-align:center">0x38
+</td>
+<td style="border:0px;background-color:#B6FF48;width:32px;height:32px;color:#000;text-align:center">0x39
+</td>
+<td style="border:0px;background-color:#91FF6D;width:32px;height:32px;color:#000;text-align:center">0x3A
+</td>
+<td style="border:0px;background-color:#48FFDA;width:32px;height:32px;color:#000;text-align:center">0x3B
+</td>
+<td style="border:0px;background-color:#91DAFF;width:32px;height:32px;color:#000;text-align:center">0x3C
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#f00;text-align:center">0x3D
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x3E
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">0x3F
+</td></tr></table>
+<h3><span class="mw-headline" id="2C04">2C04</span></h3>
+<p>All four 2C04 PPUs contain the same master palette, but in different permutations. It's almost a superset of the 2C03/5 palette, adding four greys, six other colors, and making the bright yellow more pure.
+</p><p><b>No version of the 2C04 was ever made with the below ordering</b>, but it shows the similarity to the 2C03:
+</p>
+<table class="wikitable">
+
+<tr>
+<td style="border:0px;background-color:#6D6D6D;width:32px;height:32px;color:#fff;text-align:center">333
+</td>
+<td style="border:0px;background-color:#002491;width:32px;height:32px;color:#fff;text-align:center">014
+</td>
+<td style="border:0px;background-color:#0000DA;width:32px;height:32px;color:#fff;text-align:center">006
+</td>
+<td style="border:0px;background-color:#6D48DA;width:32px;height:32px;color:#fff;text-align:center">326
+</td>
+<td style="border:0px;background-color:#91006D;width:32px;height:32px;color:#fff;text-align:center">403
+</td>
+<td style="border:0px;background-color:#B6006D;width:32px;height:32px;color:#fff;text-align:center">503
+</td>
+<td style="border:0px;background-color:#B62400;width:32px;height:32px;color:#fff;text-align:center">510
+</td>
+<td style="border:0px;background-color:#914800;width:32px;height:32px;color:#fff;text-align:center">420
+</td>
+<td style="border:0px;background-color:#6D4800;width:32px;height:32px;color:#fff;text-align:center">320
+</td>
+<td style="border:0px;background-color:#244800;width:32px;height:32px;color:#fff;text-align:center">120
+</td>
+<td style="border:0px;background-color:#006D24;width:32px;height:32px;color:#fff;text-align:center">031
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#f00;text-align:center;font-size:50%;line-height:normal;">dup of ↙
+</td>
+<td style="border:0px;background-color:#004848;width:32px;height:32px;color:#fff;text-align:center">022
+</td>
+<td style="border:0px;background-color:#242424;width:32px;height:32px;color:#fff;text-align:center">111
+</td>
+<td style="border:0px;background-color:#00006d;width:32px;height:32px;color:#fff;text-align:center">003
+</td>
+<td style="border:0px;background-color:#004800;width:32px;height:32px;color:#fff;text-align:center">020
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#B6B6B6;width:32px;height:32px;color:#fff;text-align:center">555
+</td>
+<td style="border:0px;background-color:#006DDA;width:32px;height:32px;color:#fff;text-align:center">036
+</td>
+<td style="border:0px;background-color:#0048FF;width:32px;height:32px;color:#fff;text-align:center">027
+</td>
+<td style="border:0px;background-color:#9100FF;width:32px;height:32px;color:#fff;text-align:center">407
+</td>
+<td style="border:0px;background-color:#B600FF;width:32px;height:32px;color:#fff;text-align:center">507
+</td>
+<td style="border:0px;background-color:#FF0091;width:32px;height:32px;color:#fff;text-align:center">704
+</td>
+<td style="border:0px;background-color:#FF0000;width:32px;height:32px;color:#fff;text-align:center">700
+</td>
+<td style="border:0px;background-color:#DA6D00;width:32px;height:32px;color:#fff;text-align:center">630
+</td>
+<td style="border:0px;background-color:#916D00;width:32px;height:32px;color:#fff;text-align:center">430
+</td>
+<td style="border:0px;background-color:#249100;width:32px;height:32px;color:#fff;text-align:center">140
+</td>
+<td style="border:0px;background-color:#009100;width:32px;height:32px;color:#fff;text-align:center">040
+</td>
+<td style="border:0px;background-color:#00B66D;width:32px;height:32px;color:#fff;text-align:center">053
+</td>
+<td style="border:0px;background-color:#009191;width:32px;height:32px;color:#fff;text-align:center">044
+</td>
+<td style="border:0px;background-color:#484848;width:32px;height:32px;color:#fff;text-align:center">222
+</td>
+<td style="border:0px;background-color:#480000;width:32px;height:32px;color:#fff;text-align:center">200
+</td>
+<td style="border:0px;background-color:#6d2400;width:32px;height:32px;color:#fff;text-align:center">310
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#FFFFFF;width:32px;height:32px;color:#000;text-align:center">777
+</td>
+<td style="border:0px;background-color:#6DB6FF;width:32px;height:32px;color:#000;text-align:center">357
+</td>
+<td style="border:0px;background-color:#9191FF;width:32px;height:32px;color:#000;text-align:center">447
+</td>
+<td style="border:0px;background-color:#DA6DFF;width:32px;height:32px;color:#000;text-align:center">637
+</td>
+<td style="border:0px;background-color:#FF00FF;width:32px;height:32px;color:#000;text-align:center">707
+</td>
+<td style="border:0px;background-color:#FF6DFF;width:32px;height:32px;color:#000;text-align:center">737
+</td>
+<td style="border:0px;background-color:#FF9100;width:32px;height:32px;color:#000;text-align:center">740
+</td>
+<td style="border:0px;background-color:#FFB600;width:32px;height:32px;color:#000;text-align:center">750
+</td>
+<td style="border:0px;background-color:#DADA00;width:32px;height:32px;color:#000;text-align:center">660
+</td>
+<td style="border:0px;background-color:#6DDA00;width:32px;height:32px;color:#000;text-align:center">360
+</td>
+<td style="border:0px;background-color:#00FF00;width:32px;height:32px;color:#000;text-align:center">070
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#f00;text-align:center;font-size:50%;line-height:normal;">dup of ↓
+</td>
+<td style="border:0px;background-color:#00FFFF;width:32px;height:32px;color:#000;text-align:center">077
+</td>
+<td style="border:0px;background-color:#919191;width:32px;height:32px;color:#000;text-align:center">444
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">000
+</td>
+<td style="border:0px;background-color:#000000;width:32px;height:32px;color:#fff;text-align:center">000
+</td></tr>
+<tr>
+<td style="border:0px;background-color:#FFFFFF;width:32px;height:32px;color:#000;text-align:center">777
+</td>
+<td style="border:0px;background-color:#B6DAFF;width:32px;height:32px;color:#000;text-align:center">567
+</td>
+<td style="border:0px;background-color:#DAB6FF;width:32px;height:32px;color:#000;text-align:center">657
+</td>
+<td style="border:0px;background-color:#FFB6FF;width:32px;height:32px;color:#000;text-align:center">757
+</td>
+<td style="border:0px;background-color:#FF91FF;width:32px;height:32px;color:#000;text-align:center">747
+</td>
+<td style="border:0px;background-color:#FFB6B6;width:32px;height:32px;color:#000;text-align:center">755
+</td>
+<td style="border:0px;background-color:#FFDA91;width:32px;height:32px;color:#000;text-align:center">764
+</td>
+<td style="border:0px;background-color:#FFFF00;width:32px;height:32px;color:#000;text-align:center">770
+</td>
+<td style="border:0px;background-color:#FFFF6D;width:32px;height:32px;color:#000;text-align:center">773
+</td>
+<td style="border:0px;background-color:#B6FF48;width:32px;height:32px;color:#000;text-align:center">572
+</td>
+<td style="border:0px;background-color:#91FF6D;width:32px;height:32px;color:#000;text-align:center">473
+</td>
+<td style="border:0px;background-color:#48FFDA;width:32px;height:32px;color:#000;text-align:center">276
+</td>
+<td style="border:0px;background-color:#91DAFF;width:32px;height:32px;color:#000;text-align:center">467
+</td>
+<td style="border:0px;background-color:#dadada;width:32px;height:32px;color:#000;text-align:center">666
+</td>
+<td style="border:0px;background-color:#dab66d;width:32px;height:32px;color:#000;text-align:center">653
+</td>
+<td style="border:0px;background-color:#ffda00;width:32px;height:32px;color:#000;text-align:center">760
+</td></tr></table>
+<p>The <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> monochrome bit has the same implementation as on the 2C02, and so it has an unintuitive effect on the 2C04 CPUs. Rather than forcing colors to grayscale, it instead forces them to the first column.
+</p>
+<h4><span class="mw-headline" id="RP2C04-0001">RP2C04-0001</span></h4>
+<p>MAME's source claims that <i>Baseball</i>, <i>Freedom Force</i>, <i>Gradius</i>, <i>Hogan's Alley</i>, <i>Mach Rider</i>, <i>Pinball</i>, and <i>Platoon</i> require this palette.
+</p>
+<pre>755,637,700,447,044,120,222,704,777,333,750,503,403,660,320,777
+357,653,310,360,467,657,764,027,760,276,000,200,666,444,707,014
+003,567,757,070,077,022,053,507,000,420,747,510,407,006,740,000
+000,140,555,031,572,326,770,630,020,036,040,111,773,737,430,473
+</pre>
+<h4><span class="mw-headline" id="RP2C04-0002">RP2C04-0002</span></h4>
+<p>MAME's source claims that <i>Castlevania</i>, <i>Mach Rider (Endurance Course)</i>, <i>Raid on Bungeling Bay</i>, <i>Slalom</i>, <i>Soccer</i>, <i>Stroke &amp; Match Golf</i> (both versions), and <i>Wrecking Crew</i> require this palette.
+</p>
+<pre>000,750,430,572,473,737,044,567,700,407,773,747,777,637,467,040
+020,357,510,666,053,360,200,447,222,707,003,276,657,320,000,326
+403,764,740,757,036,310,555,006,507,760,333,120,027,000,660,777
+653,111,070,630,022,014,704,140,000,077,420,770,755,503,031,444
+</pre>
+<h4><span class="mw-headline" id="RP2C04-0003">RP2C04-0003</span></h4>
+<p>MAME's source claims that <i>Balloon Fight</i>, <i>Dr. Mario</i>, <i>Excitebike</i> (US), <i>Goonies</i>, and <i>Soccer</i> require this palette.
+</p>
+<pre>507,737,473,555,040,777,567,120,014,000,764,320,704,666,653,467
+447,044,503,027,140,430,630,053,333,326,000,006,700,510,747,755
+637,020,003,770,111,750,740,777,360,403,357,707,036,444,000,310
+077,200,572,757,420,070,660,222,031,000,657,773,407,276,760,022
+</pre>
+<h4><span class="mw-headline" id="RP2C04-0004">RP2C04-0004</span></h4>
+<p>MAME's source claims that <i>Clu Clu Land</i>, <i>Excitebike</i> (Japan), <i>Ice Climber</i> (both versions), and <i>Super Mario Bros.</i> require this palette.
+</p>
+<pre>430,326,044,660,000,755,014,630,555,310,070,003,764,770,040,572
+737,200,027,747,000,222,510,740,653,053,447,140,403,000,473,357
+503,031,420,006,407,507,333,704,022,666,036,020,111,773,444,707
+757,777,320,700,760,276,777,467,000,750,637,567,360,657,077,120
+</pre>
+<h2><span class="mw-headline" id="Backdrop_color_.28palette_index_0.29_uses">Backdrop color (palette index 0) uses</span></h2>
+<p>During forced blanking, when neither background nor sprites are enabled in <a href="PPU_registers.xhtml" title="PPU registers">PPUMASK ($2001)</a>, the picture will show the backdrop color.
+If only the background or sprites are disabled, or if the left 8 pixels are clipped off, the PPU continues its <a href="PPU_rendering.xhtml" title="PPU rendering">normal video memory access pattern</a> but uses the backdrop color for anything disabled.
+</p>
+<h2><span class="mw-headline" id="The_background_palette_hack">The background palette hack</span></h2>
+<p>If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color.
+(Looking at the relevant circuitry in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a>, this is an intentional feature of the PPU and not merely a side effect of how rendering works.)
+This can be used to display colors from the normally unused $3F04/$3F08/$3F0C palette locations.
+A loop that fills the palette will cause each color in turn to be shown on the screen, so to avoid horizontal rainbow bar glitches while loading the palette, wait for a real vertical blank first using an <a href="NMI.xhtml" title="NMI">NMI</a> technique.
+</p>
+<h2><span class="mw-headline" id="Color_names">Color names</span></h2>
+<p>When programmers and artists are communicating, it's often useful to have human-readable names for colors.
+Many graphic designers who have done web or game work will be familiar with <a class="extiw" href="https://en.wikipedia.org/wiki/Web_colors#HTML_color_names" title="wikipedia:Web colors">HTML color names</a>.
+</p>
+<h3><span class="mw-headline" id="Luma">Luma</span></h3>
+<ul><li> $0F: Black</li>
+<li> $00: Dark gray</li>
+<li> $10: Light gray or silver</li>
+<li> $20: White</li>
+<li> $01-$0C: Dark colors, medium mixed with black</li>
+<li> $11-$1C: Medium colors, similar brightness to dark gray</li>
+<li> $21-$2C: Light colors, similar brightness to light gray</li>
+<li> $31-$3C: Pale colors, light mixed with white</li></ul>
+<h3><span class="mw-headline" id="Chroma">Chroma</span></h3>
+<ul><li> $x2: Blue</li>
+<li> $x4: Magenta</li>
+<li> $x6: Red</li>
+<li> $x7: Orange</li>
+<li> $x8: Yellow or olive</li>
+<li> $xA: Green</li>
+<li> $xC: Cyan</li></ul>
+<p>These NES colors approximate colors in the classic Windows or EGA palette, though the NES doesn't really have a good yellow:
+</p>
+<ul><li> $02: Navy</li>
+<li> $06: Maroon</li>
+<li> $12: Blue</li>
+<li> $14: Purple</li>
+<li> $16: Red</li>
+<li> $17: Brown</li>
+<li> $18: Olive</li>
+<li> $1A: Green</li>
+<li> $1C: Aqua</li>
+<li> $24: Fuchsia/Magenta</li>
+<li> $2A: Lime</li>
+<li> $2C: Teal</li></ul>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Memory_map_2">Memory map</span></h2>
+<h3><span class="mw-headline" id="PPU_memory_map">PPU memory map</span></h3>
+<p>The <a href="PPU.xhtml" title="PPU">PPU</a> addresses a 16kB space, $0000-3FFF, completely separate from the CPU's address bus. It is either directly accessed by the PPU itself, or via the CPU with <a href="PPU_registers.xhtml" title="PPU registers">memory mapped registers</a> at $2006 and $2007.
+</p><p>The NES has 2kB of RAM dedicated to the PPU, normally mapped to the nametable address space from $2000-2FFF, but this can be rerouted through custom cartridge wiring.
+</p>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $0000-$0FFF </td>
+<td> $1000 </td>
+<td> <a href="PPU_pattern_tables.xhtml" title="PPU pattern tables">Pattern table</a> 0
+</td></tr>
+<tr>
+<td> $1000-$1FFF </td>
+<td> $1000 </td>
+<td> Pattern Table 1
+</td></tr>
+<tr>
+<td> $2000-$23FF  </td>
+<td> $0400 </td>
+<td> <a href="PPU_nametables.xhtml" title="PPU nametables">Nametable</a> 0
+</td></tr>
+<tr>
+<td> $2400-$27FF  </td>
+<td> $0400 </td>
+<td> Nametable 1
+</td></tr>
+<tr>
+<td> $2800-$2BFF  </td>
+<td> $0400 </td>
+<td> Nametable 2
+</td></tr>
+<tr>
+<td> $2C00-$2FFF  </td>
+<td> $0400 </td>
+<td> Nametable 3
+</td></tr>
+<tr>
+<td> $3000-$3EFF  </td>
+<td> $0F00 </td>
+<td> Mirrors of $2000-$2EFF
+</td></tr>
+<tr>
+<td> $3F00-$3F1F  </td>
+<td> $0020 </td>
+<td> <a href="PPU_palettes.xhtml" title="PPU palettes">Palette RAM</a> indexes
+</td></tr>
+<tr>
+<td> $3F20-$3FFF  </td>
+<td> $00E0 </td>
+<td> Mirrors of $3F00-$3F1F
+</td></tr></table>
+<p>In addition, the PPU internally contains 256 bytes of memory known as <a href="PPU_OAM.xhtml" title="PPU OAM">Object Attribute Memory</a> which determines how sprites are rendered. The CPU can manipulate this memory through <a href="PPU_registers.xhtml" title="PPU registers">memory mapped registers</a> at <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003), <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004), and <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> ($4014).
+</p>
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $00-$0C (0 of 4) </td>
+<td> $40 </td>
+<td> Sprite Y coordinate
+</td></tr>
+<tr>
+<td> $01-$0D (1 of 4) </td>
+<td> $40 </td>
+<td> Sprite tile #
+</td></tr>
+<tr>
+<td> $02-$0E (2 of 4) </td>
+<td> $40 </td>
+<td> Sprite attribute
+</td></tr>
+<tr>
+<td> $03-$0F (3 of 4) </td>
+<td> $40 </td>
+<td> Sprite X coordinate
+</td></tr></table>
+<h2><span class="mw-headline" id="Hardware_mapping">Hardware mapping</span></h2>
+<p>The mappings above are the fixed addresses from which the PPU uses to fetch data during rendering. The actual device that the PPU fetches data from, however, may be configured by the cartridge.
+</p>
+<ul><li> $0000-1FFF is normally mapped by the cartridge to a <a href="CHR_ROM_vs__CHR_RAM.xhtml" title="CHR ROM vs. CHR RAM">CHR-ROM or CHR-RAM</a>, often with a bank switching mechanism.</li></ul>
+<ul><li> $2000-2FFF is normally mapped to the 2kB NES internal VRAM, providing 2 nametables with a <a href="Mirroring.xhtml#Nametable_Mirroring" title="Mirroring">mirroring</a> configuration controlled by the cartridge, but it can be partly or fully remapped to RAM on the cartridge, allowing up to 4 simultaneous nametables.</li></ul>
+<ul><li> $3000-3EFF is usually a mirror of the 2kB region from $2000-2EFF. The PPU does not render from this address range, so this space has negligible utility.</li></ul>
+<ul><li> $3F00-3FFF is not configurable, always mapped to the internal palette control.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.646 seconds
+Real time usage: 0.662 seconds
+Preprocessor visited node count: 306/1000000
+Preprocessor generated node count: 1010/1000000
+Post‐expand include size: 66989/2097152 bytes
+Template argument size: 22/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:51-1!*!0!!en!5!* and timestamp 20160828195100 and revision id 1472
+ -->
+</div></body></html>

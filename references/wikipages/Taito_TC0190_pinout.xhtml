@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Taito TC0190 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Taito TC0190 pinout</h1><div class="article">
+<p>Taito TC0190: 0.6&quot; 40-pin high-density PDIP (Canonically <a href="INES_Mapper_033.xhtml" title="INES Mapper 033">iNES Mapper 033</a>)
+</p>
+<pre>                 .--\/--.
+  (s)  CPU D0 -&gt; |01  40| -- Vcc
+  (s)  CPU D1 -&gt; |02  39| &lt;- R/W (F)
+  (s)  CPU D2 -&gt; |03  38| &lt;- /ROMSEL (F)
+  (s)  CPU D3 -&gt; |04  37| &lt;- M2 (F)
+  (s)  CPU D4 -&gt; |05  36| ?? NC
+  (s)  CPU D5 -&gt; |06  35| ?? NC
+  (s)  CPU D6 -&gt; |07  34| &lt;- PPU A10 (F)
+  (s)  CPU D7 -&gt; |08  33| &lt;- PPU A11 (F)
+  (r) PRG A13 &lt;- |09  32| &lt;- PPU A12 (F)
+  (r) PRG A14 &lt;- |10  31| ?? GND
+  (r) PRG A15 &lt;- |11  30| -&gt; CIRAM A10 (F)
+  (r) PRG A16 &lt;- |12  29| -&gt; CHR A10 (r)
+  (r) PRG A17 &lt;- |13  28| -&gt; CHR A11 (r)
+  (r) PRG A18 &lt;- |14  27| -&gt; CHR A12 (r)
+  (s)  CPU A0 -&gt; |15  26| -&gt; CHR A13 (r)
+  (s)  CPU A1 -&gt; |16  25| -&gt; CHR A14 (r)
+  (F) CPU A13 -&gt; |17  24| -&gt; CHR A15 (r)
+  (F) CPU A14 -&gt; |18  23| -&gt; CHR A16 (r)
+  (r) PRG /CE &lt;- |19  22| -&gt; CHR A17 (r)
+          GND -- |20  21| -&gt; CHR A18 (r)
+                 '------'
+</pre>
+<p>Some boards added a PAL to the TC0190. As far as we can tell, the only purpose of the PAL was to move the mirroring control bit. This becomes a subset of <a href="INES_Mapper_048.xhtml" title="INES Mapper 048">iNES Mapper 048</a> instead:
+</p>
+<pre>TC0190 pin 30: (was CIRAM A10) now NC
+TC0190 pin 38: (was /ROMSEL) now from PAL pin 12
+
+                 PAL16R4
+                  --\/--
+  (F) /ROMSEL -&gt; |01  20| -- Vcc
+  (F) /ROMSEL -&gt; |02  19| -&gt; CIRAM A10 (F)
+  (F)     R/W -&gt; |03  18| ?? NC
+  (F) CPU A14 -&gt; |04  17| -&gt; NC (latched value written to D6)
+  (F) CPU A13 -&gt; |05  16| -&gt; NC
+  (s)  CPU A1 -&gt; |06  15| -&gt; NC
+  (s)  CPU A0 -&gt; |07  14| -&gt; NC
+  (F) PPU A11 -&gt; |08  13| &lt;- CPU D6 (s)
+  (F) PPU A10 -&gt; |09  12| -&gt; to TC0190 pin 38
+          GND -- |10  11| &lt;- GND (PAL /OE signal)
+                  ------
+</pre>
+<p><a class="extiw" href="http://en.wikipedia.org/wiki/Programmable_Array_Logic" title="wikipedia:Programmable Array Logic">PALs</a> allow the programming of arbitrary logic functions, but in the PAL16R4, pins 1 and 11 have fixed functionality. This is why /ROMSEL is connected to both pins 1 and pin 2: pin 1 can <i>only</i> be used as a clock input to latch the value of D6, but /ROMSEL is also connected to pin 2 so that the PAL can fail to pass through the write to the TC0190 when the CPU writes to $E000.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1211-1!*!0!*!*!*!* and timestamp 20160208225912 and revision id 7541
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

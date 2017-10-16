@@ -1,0 +1,93 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 118</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 118</h1><div class="article">
+<p><b>TxSROM</b> is used to designate <a href="TKSROM.xhtml" title="TKSROM">TKSROM</a> and <a href="TLSROM.xhtml" title="TLSROM">TLSROM</a> boards, both of which use the <a class="mw-redirect" href="MMC3.xhtml" title="Nintendo MMC3">Nintendo MMC3</a> in a nonstandard way. The only known difference between these boards and <a class="mw-redirect" href="TxROM.xhtml" title="TKROM">TKROM</a> and <a class="mw-redirect" href="TxROM.xhtml" title="TLROM">TLROM</a> is the mirroring configuration. The CHR A17 line connects directly to CIRAM A10 line instead of MMC3's CIRAM A10 output, to compensate for the MMC3's lack of single-screen <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>.
+The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>iNES Mapper 118</b> to these boards.
+</p><p>Example games:
+</p>
+<ul><li> <i>Armadillo</i></li>
+<li> <i>Pro Sport Hockey</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Bank_data_.28.248001-.249FFF.2C_odd.29"><span class="tocnumber">1.1</span> <span class="toctext">Bank data ($8001-$9FFF, odd)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Mirroring_.28.24A000-.24BFFE.2C_even.29"><span class="tocnumber">1.2</span> <span class="toctext">Mirroring ($A000-$BFFE, even)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Variants"><span class="tocnumber">2</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>The behavior of these boards differs from that of a typical MMC3 board in the use of the upper CHR address line.
+This board relies on the fact that the MMC3's CHR bank circuit ignores A13 when calculating CHR A10-A17, responding to <a class="mw-redirect" href="PPU_nametables.xhtml" title="Nametable">nametable</a> fetches from $2000-$2FFF the same way as fetches from the first pattern table at $0000-$0FFF.
+This means that the 1KB/2KB banking scheme used for CHR bankswitching is active even during nametable fetches while the CHR ROM/RAM is disabled.
+</p><p>However, on these particular boards, the CHR bankswitching directly affects the <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> mapping the nametable RAM.
+This allows programs to select which nametable is mapped to each slot, much like CHR banks are mapped to pattern table slots, in either two 2KB banks (allowing only single-screen or horizontal mirroring) or four 1KB banks (allowing all mirroring modes one can think of, because this is equal to the size of a nametable) at the price of mapping the 1KB CHR banks to the first pattern table by setting bit 7 of $8000.
+If the IRQ counter is being used in a standard way, this involves having sprites bankswitched in 2KB banks and backgrounds in 1KB banks.
+</p>
+<h3><span class="mw-headline" id="Bank_data_.28.248001-.249FFF.2C_odd.29">Bank data ($8001-$9FFF, odd)</span></h3>
+<pre>7  bit  0
+---- ----
+MDDD DDDD
+|||| ||||
+|+++-++++- New bank value, based on last value written to Bank select register
+|          0: Select 2 KB CHR bank at PPU $0000-$07FF (or $1000-$17FF);
+|          1: Select 2 KB CHR bank at PPU $0800-$0FFF (or $1800-$1FFF);
+|          2: Select 1 KB CHR bank at PPU $1000-$13FF (or $0000-$03FF);
+|          3: Select 1 KB CHR bank at PPU $1400-$17FF (or $0400-$07FF);
+|          4: Select 1 KB CHR bank at PPU $1800-$1BFF (or $0800-$0BFF);
+|          5: Select 1 KB CHR bank at PPU $1C00-$1FFF (or $0C00-$0FFF);
+|          6, 7: as standard MMC3
+|
++--------- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> configuration, based on the last value
+           written to Bank select register
+           0: Select Nametable at PPU $2000-$27FF
+           1: Select Nametable at PPU $2800-$2FFF
+           Note : Those bits are ignored if corresponding CHR banks
+           are mapped at $1000-$1FFF via $8000.
+           
+           2 : Select Nametable at PPU $2000-$23FF
+           3 : Select Nametable at PPU $2400-$27FF
+           4 : Select Nametable at PPU $2800-$2BFF
+           5 : Select Nametable at PPU $2C00-$2FFF
+           Note : Those bits are ignored if corresponding CHR banks
+           are mapped at $1000-$1FFF via $8000.
+</pre>
+<h3><span class="mw-headline" id="Mirroring_.28.24A000-.24BFFE.2C_even.29">Mirroring ($A000-$BFFE, even)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxM
+        |
+        +- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a>
+           This bit is bypassed by the configuration described above, so writing here has no effect.
+</pre>
+<p>Note: In theory, the CHR limitation is 256 KB like all <a href="MMC3.xhtml" title="MMC3">MMC3</a> boards. But because CHR A17 has another usage, having a CHR greater than 128 KB would require very careful CHR ROM layout because CHR bankswitching and mirroring will be linked through the same selection bits. Probably for this reason, official Nintendo TLSROM boards doesn't allow for 256 KB CHR-ROMs. However, a mapper 118 game that uses a third party MMC3/board, using 1-screen mirroring could draw the playfield with the lower 128 KB of CHR ROM and the lower nametable, and draw the status bar and menus with the upper 128 KB of CHR ROM and the upper nametable.
+Sprite tile banks could go in whatever space remains in either or both halves.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>Mappers <a href="INES_Mapper_158.xhtml" title="INES Mapper 158">158</a> and <a href="INES_Mapper_207.xhtml" title="INES Mapper 207">207</a> do the exact same thing but with Tengen's <a href="RAMBO_1.xhtml" title="RAMBO-1">RAMBO-1</a> and Taito's <a href="INES_Mapper_080.xhtml" title="INES Mapper 080">X1-005</a>, respectively.
+<a href="INES_Mapper_095.xhtml" title="INES Mapper 095">Mapper 95</a> is almost the same thing, but with a <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">reduced MMC3 made by Namco</a> instead of a full MMC3 and with the nametable select bit on A15 instead of A17 because the Namco mapper has only six CHR bank bits.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper list</a> by Disch.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.054 seconds
+Real time usage: 0.056 seconds
+Preprocessor visited node count: 21/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:220-1!*!0!!en!*!* and timestamp 20160208222750 and revision id 11545
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a></p></div></body></html>

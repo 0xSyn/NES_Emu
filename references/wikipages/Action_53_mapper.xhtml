@@ -1,0 +1,352 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Action 53 mapper</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Action 53 mapper</h1><div class="article">
+<p>The <b>Action 53 mapper</b> allows making a multicart of games that use multiple discrete mappers.
+As a random sample, it'd support 1943: The Battle of Midway/Valhalla (UNROM), 3-D Battles of Worldrunner (UNROM), Battle City (NROM-128), Battle Kid: Fortress of Peril (UOROM), Battle Tank (CNROM), Battleship (CNROM), Battletoads (AOROM), and Gekitotsu Yonku Battle (UNROM).
+<a href="INES_Mapper_028.xhtml" title="INES Mapper 028">iNES Mapper 028</a> has been assigned.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.245000:_Register_select"><span class="tocnumber">1.1</span> <span class="toctext">$5000: Register select</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.2400:_CHR_bank"><span class="tocnumber">1.2</span> <span class="toctext">$00: CHR bank</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.2401:_Inner_bank"><span class="tocnumber">1.3</span> <span class="toctext">$01: Inner bank</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.2480:_Mode"><span class="tocnumber">1.4</span> <span class="toctext">$80: Mode</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.2481:_Outer_bank"><span class="tocnumber">1.5</span> <span class="toctext">$81: Outer bank</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Power_up_state"><span class="tocnumber">2</span> <span class="toctext">Power up state</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Configurations"><span class="tocnumber">3</span> <span class="toctext">Configurations</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Reference_implementations"><span class="tocnumber">4</span> <span class="toctext">Reference implementations</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Hardware_implementations"><span class="tocnumber">5</span> <span class="toctext"><span>Hardware implementations</span></span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Implementation_notes"><span class="tocnumber">6</span> <span class="toctext">Implementation notes</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#External_links"><span class="tocnumber">7</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<dl><dt>$5000-$5FFF</dt>
+<dd> Register select</dd>
+<dt>$8000-$FFFF</dt>
+<dd> Register value</dd></dl>
+<h3><span class="mw-headline" id=".245000:_Register_select">$5000: Register select</span></h3>
+<pre>
+7654 3210
+S       R
+|       +- Select register
++--------- 0: User registers; 1: Supervisor registers
+</pre>
+<p>In a multicart, registers $00 and $01 change the bank within a game, and registers $80 and $81 remain constant throughout a given game's execution.
+Some games ported from <a href="SxROM.xhtml" title="SxROM">SGROM</a> may rewrite register $80, usually to change mirroring.
+</p>
+<h3><span class="mw-headline" id=".2400:_CHR_bank">$00: CHR bank</span></h3>
+<pre>
+7654 3210
+   M   BB
+   |   ++- Set CHR RAM A14-A13
+   +------ Set mirroring mode bit 0 if H/V mirroring is disabled
+</pre>
+<h3><span class="mw-headline" id=".2401:_Inner_bank">$01: Inner bank</span></h3>
+<pre>
+7654 3210
+   M BBBB
+   | ++++- Set current PRG ROM bank
+   +------ Set mirroring mode bit 0 if H/V mirroring is disabled
+</pre>
+<p>If the current mirroring mode is one of the 1-screen modes (0 or 1), writes to registers $00 and $01 change bit 0 of the mirroring mode to D4 of the written value.
+(This simulates the mirroring control of <a href="AxROM.xhtml" title="AxROM">AxROM</a>.)
+If the current mirroring mode is vertical or horizontal (2 or 3), D4 is ignored.
+</p>
+<h3><span class="mw-headline" id=".2480:_Mode">$80: Mode</span></h3>
+<pre>
+7654 3210
+  SS PPMM
+  || ||++- Nametable mirroring mode
+  || ++--- PRG bank mode
+  ++------ PRG outer bank size
+</pre>
+<table class="tabular">
+<caption> Mirroring modes
+</caption>
+<tr>
+<th> Mode </th>
+<th> Effect </th>
+<th> A10 output </th>
+<th> Effect of write to register $00 or $01
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 1-screen lower bank </td>
+<td> 0 </td>
+<td> D4 changes bit 0 of the mirroring mode
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1-screen upper bank </td>
+<td> 1 </td>
+<td> D4 changes bit 0 of the mirroring mode
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> Vertical </td>
+<td> PPU A10 </td>
+<td> D4 is ignored
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> Horizontal </td>
+<td> PPU A11 </td>
+<td> D4 is ignored
+</td></tr></table>
+<p>While the mirroring mode is 0 or 1 (1-screen), bit 0 is can be written in three places: bit 0 of $80, bit 4 of $00, or bit 4 of $01.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:160px;"><a class="image" href="File_Multi_discrete_PRG_bank_png.xhtml"><img alt="" class="thumbimage" height="242" src="../wiki-images/Multi-discrete_PRG_bank.png" width="158"/></a>  <div class="thumbcaption">Logic table, with o = $81 value and i = $01 value</div></div></div>
+<table class="tabular">
+<caption> PRG bank mode
+</caption>
+<tr>
+<th> Mode </th>
+<th> Simulates </th>
+<th> Effect
+</th></tr>
+<tr>
+<td> 0, 1 </td>
+<td> BNROM/AOROM </td>
+<td> Current 32 KiB bank in $8000-$FFFF
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> UNROM (#180) </td>
+<td> Fixed bottom half of outer bank in $8000-$BFFF<br/>Current bank in $C000-$FFFF
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> UNROM (#2) </td>
+<td> Current bank in $8000-$BFFF<br/>Fixed top half of outer bank in $C000-$FFFF
+</td></tr></table>
+<p>When the fixed bank ($8000-$BFFF in mode 2 or $C000-$FFFF in mode 3) is accessed, it treats accesses to the fixed bank the same way as accesses in mode 0 with 32K: the outer bank bits are passed straight through.
+For example, this would allow the fixed $C000 bank in mode 3 128K to be set to 16K bank 7 (as in mapper 2) or 1, 3, or 5.
+In mode 2 128K, the fixed $8000 bank could be configured as 16K bank 0 (as in mapper 180) or 2, 4, or 6.
+</p>
+<table class="tabular">
+<caption> PRG outer bank size
+</caption>
+<tr>
+<th> Size </th>
+<th> Effect
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> A15 and up controlled by outer bank (32 KiB)
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> A16 and up controlled by outer bank (64 KiB)
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> A17 and up controlled by outer bank (128 KiB)
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> A18 and up controlled by outer bank (256 KiB)
+</td></tr></table>
+<p>Again, when a fixed bank is being accessed, this is temporarily forced to 32K, allowing all outer bank bits to come through.
+</p><p>These are the outputs on A22-A14 in each of the 12 combinations of mode and size, with <b>o</b> used for outer bank bits and <b>i</b> used for inner bank bits:
+</p>
+<table class="tabular">
+<tr>
+<th> Mode value </th>
+<th> PRG bank mode </th>
+<th> Outer bank size </th>
+<th> Bank in $8000 </th>
+<th> Bank in $C000
+</th></tr>
+<tr>
+<td> $00-$07 </td>
+<td> 32 KiB      </td>
+<td> 32 KiB </td>
+<td> <code>oooooooo<span style="background:#FF6">0</span></code> </td>
+<td> <code>oooooooo<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $08-$0B </td>
+<td> Fixed $8000 </td>
+<td> 32 KiB </td>
+<td> <code>oooooooo<span style="background:#FF6">0</span></code> </td>
+<td> <code>ooooooooi</code>
+</td></tr>
+<tr>
+<td> $0C-$0F </td>
+<td> Fixed $C000 </td>
+<td> 32 KiB </td>
+<td> <code>ooooooooi</code> </td>
+<td> <code>oooooooo<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $10-$17 </td>
+<td> 32 KiB      </td>
+<td> 64 KiB </td>
+<td> <code>oooooooi<span style="background:#FF6">0</span></code> </td>
+<td> <code>oooooooi<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $18-$1B </td>
+<td> Fixed $8000 </td>
+<td> 64 KiB </td>
+<td> <code>oooooooo<span style="background:#FF6">0</span></code> </td>
+<td> <code>oooooooii</code>
+</td></tr>
+<tr>
+<td> $1C-$1F </td>
+<td> Fixed $C000 </td>
+<td> 64 KiB </td>
+<td> <code>oooooooii</code> </td>
+<td> <code>oooooooo<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $20-$27 </td>
+<td> 32 KiB      </td>
+<td> 128 KiB </td>
+<td> <code>ooooooii<span style="background:#FF6">0</span></code> </td>
+<td> <code>ooooooii<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $28-$2B </td>
+<td> Fixed $8000 </td>
+<td> 128 KiB </td>
+<td> <code>oooooooo<span style="background:#FF6">0</span></code> </td>
+<td> <code>ooooooiii</code>
+</td></tr>
+<tr>
+<td> $2C-$2F </td>
+<td> Fixed $C000 </td>
+<td> 128 KiB </td>
+<td> <code>ooooooiii</code> </td>
+<td> <code>oooooooo<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $30-$37 </td>
+<td> 32 KiB      </td>
+<td> 256 KiB </td>
+<td> <code>oooooiii<span style="background:#FF6">0</span></code> </td>
+<td> <code>oooooiii<span style="background:#FF6">1</span></code>
+</td></tr>
+<tr>
+<td> $38-$3B </td>
+<td> Fixed $8000 </td>
+<td> 256 KiB </td>
+<td> <code>oooooooo<span style="background:#FF6">0</span></code> </td>
+<td> <code>oooooiiii</code>
+</td></tr>
+<tr>
+<td> $3C-$3F </td>
+<td> Fixed $C000 </td>
+<td> 256 KiB </td>
+<td> <code>oooooiiii</code> </td>
+<td> <code>oooooooo<span style="background:#FF6">1</span></code>
+</td></tr></table>
+<p>For all of these cases, the &quot;o&quot;s come from the <b>topmost</b> outer bank bits and the &quot;i&quot;s come from the <b>bottommost</b> inner bank bits.
+</p>
+<h3><span class="mw-headline" id=".2481:_Outer_bank">$81: Outer bank</span></h3>
+<pre>
+7654 3210
+BBBB BBBB
+++++-++++- Set outer PRG ROM bank
+</pre>
+<p>When the outer bank size is set greater than 32K, the bank number is not barrel shifted.
+Instead, the least significant bits are ignored.
+Bits 5 through 3, for example, always control PRG ROM A20 through A18.
+</p><p>Many implementations recognize only the lower 4 or 6 bits for two reasons: memory cost and the practical limit of 2 MiB PRG ROM in an <a href="INES.xhtml" title="INES">iNES</a> ROM image.
+The PowerPak uses only the low 4 bits, as it has only 512 KiB of RAM for PRG ROM.
+And by the 2010s, 5-volt 8-bit parallel flash memories larger than 2Mx8 had become hard to find.
+An implementation supporting <a href="NES_2_0.xhtml#Byte_9_.28Upper_bits_of_ROM_size.29" title="NES 2.0">NES 2.0 large ROMs</a> should <a href="Oversize.xhtml" title="Oversize">recognize all bits</a> for a maximum of 8 MiB.
+</p>
+<h2><span class="mw-headline" id="Power_up_state">Power up state</span></h2>
+<p>At power on, the last 16 KiB of the ROM is mapped into $C000-$FFFF.
+The rest of the state is unspecified.
+The mapper state is unchanged on reset.
+</p><p><i>Non-normative:</i>
+One possible init sequence involves setting reg $81 = $FF and reg $80 = $02 to get into oversize-BNROM mode.
+</p><p><i>Non-normative:</i>
+If desired, games in a multicart can be patched with an appropriate reset stub to allow returning to the menu.
+The Action 53 build tool does this semi-automatically for NROM games.
+</p>
+<h2><span class="mw-headline" id="Configurations">Configurations</span></h2>
+<dl><dt>NROM-128 (<a class="mw-redirect" href="NROM.xhtml" title="INES Mapper 000">#0</a>)</dt>
+<dd> Outer bank size 0, PRG mode 2 or 3, mirroring H or V, select $01</dd>
+<dt>NROM-256 (<a class="mw-redirect" href="NROM.xhtml" title="INES Mapper 000">#0</a>)</dt>
+<dd> Outer bank size 0, PRG mode 0, mirroring H or V, select $01</dd>
+<dt>CNROM (<a href="INES_Mapper_003.xhtml" title="INES Mapper 003">#3</a>)</dt>
+<dd> Outer bank size 0, PRG mode 0, mirroring H or V, select $00</dd>
+<dt>BNROM (<a href="INES_Mapper_034.xhtml" title="INES Mapper 034">#34</a>)</dt>
+<dd> Outer bank size 1-3, PRG mode 0, mirroring H or V, select $01</dd>
+<dt>BNROM oversize (<a href="INES_Mapper_034.xhtml" title="INES Mapper 034">#34</a> as emulated)</dt>
+<dd> Outer bank size 0, PRG mode 0, mirroring H or V, select $81, and modify bus-conflict-avoidance table for position within multicart</dd>
+<dt>UNROM (common) (<a class="mw-redirect" href="UxROM.xhtml" title="INES Mapper 002">#2</a>)</dt>
+<dd> Outer bank size 1-3, PRG mode 3, mirroring H or V, select $01</dd>
+<dt>UNROM (Crazy Climber and MGC 2011) (<a href="INES_Mapper_180.xhtml" title="INES Mapper 180">#180</a>)</dt>
+<dd> Outer bank size 1-3, PRG mode 2, mirroring H or V, select $01</dd>
+<dt>AOROM (<a class="mw-redirect" href="AxROM.xhtml" title="INES Mapper 007">#7</a>)</dt>
+<dd> Outer bank size 1-3, PRG mode 0, mirroring 1-screen, select $01</dd></dl>
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Reference_implementations">Reference implementations</span></h2>
+<p>See <a href="Action_53_mapper_Reference_implementations.xhtml" title="Action 53 mapper/Reference implementations">Action 53 mapper/Reference implementations</a> for functions in Python and 6502 assembly language that calculate the bank number output to PRG ROM A20-A14 as described above. These may be used to verify emulator or hardware implementations.
+</p>
+<h2><span class="mw-headline" id="Hardware_implementations"><span id="Verilog_Code">Hardware implementations</span></span></h2>
+<p>Two <a href="Action_53_mapper_Verilog.xhtml" title="Action 53 mapper/Verilog">implementations in Verilog</a> are designed for use on a CPLD.
+One has been tested on a PowerPak as <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=102718#p102718" rel="nofollow">MAP1C.MAP</a>.
+</p><p>The MiST FPGA computer includes an <a class="external text" href="https://github.com/mist-devel/mist-board/blob/master/cores/nes/src/mmu.v" rel="nofollow">implementation in Verilog</a>.
+</p>
+<h2><span class="mw-headline" id="Implementation_notes">Implementation notes</span></h2>
+<p>Input pins: 2 power, 16 signal
+</p>
+<ul><li> Power and ground</li>
+<li> CPU D7, D5-D0 (D6 used only in 4-8 MB version)</li>
+<li> CPU A14-A12, /PRGSEL, M2, R/W</li>
+<li> PPU A12-A10</li></ul>
+<p>Output pins: 12 signal
+</p>
+<ul><li> CHR RAM A14-A13</li>
+<li> CIRAM A10</li>
+<li> PRG ROM A20-A14, /CE</li>
+<li> Optional PRG RAM enable ($6000-$7FFF)</li></ul>
+<p>A CPLD requires one macrocell per bit of state and one for each output pin controlled by a multiplexer, plus possibly a couple more for more complex operations.
+When configured for PRG ROM up to 2 MB, this mapper requires 20 bits of state and 7 multiplexed outputs, which fits comfortably in a 32- or 36-cell CPLD.
+</p>
+<ul><li> Register select: 2 bits</li>
+<li> Register $00: 2 bits (D4 is directed to register $80)</li>
+<li> Register $01: 4 bits (D4 is directed to register $80)</li>
+<li> Register $80: 6 bits</li>
+<li> Register $81: 6 bits</li>
+<li> A17-A14: 4 multiplexed outputs</li>
+<li> CIRAM A10: 1 multiplexed output</li>
+<li> PRG ROM /CE: 1 multiplexed output</li>
+<li> PRG RAM /CE: 1 multiplexed output</li></ul>
+<p>After synthesizing and laying fitting within a XC9536XL CPLD 27/36 Macrocells were consumed (75%).
+Additionally this design requires 25/34 available pins on the XC9536XL.
+</p><p>Adding WRAM control requires 2 Macrocells and 2 pins.
+</p><p>Lowering to 1 MB by shaving off PRG ROM A20 would save 1 Macrocell and 1 pin, if desired.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=102693#p102693" rel="nofollow">test28</a>, a comprehensive test ROM</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.188 seconds
+Real time usage: 0.192 seconds
+Preprocessor visited node count: 109/1000000
+Preprocessor generated node count: 186/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:860-1!*!0!!en!5!* and timestamp 20160611171537 and revision id 12618
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

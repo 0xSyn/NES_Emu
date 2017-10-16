@@ -1,0 +1,353 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>JY Company</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>JY Company</h1><div class="article">
+<p><b>JY Company</b> was a publisher of pirate-original Famicom games, including many by Hummer Team.
+</p><p>The following is adapted from Disch's notes:  
+</p>
+<pre> ========================
+ =  Mapper <a href="INES_Mapper_090.xhtml" title="INES Mapper 090">090</a>          =
+ =       + <a href="INES_Mapper_209.xhtml" title="INES Mapper 209">209</a>          =
+ =       + <a href="INES_Mapper_211.xhtml" title="INES Mapper 211">211</a>          =
+ ========================
+ 
+ aka
+ --------------------------
+ Tekken 2 Pirate Cart
+ a big fat pile of ass
+ 
+ 
+ Example Games:
+ --------------------------
+ Tekken 2                (090)
+ Mortal Kombat 2         (090)
+ Super Contra 3          (090)
+ Super Mario World       (090)
+ Shin Samurai Spirits 2  (209)
+ Donkey Kong Country 4   (211)
+ 
+ 
+ Rants:
+ ---------------------------
+ Disch hated this mapper with a passion.  It was used for poorly balanced games with poorly tuned music.
+ But overall it isn't too much more complicated than, say, MMC5 without ExGrafix.
+ 
+ 
+ 090 vs. 209 vs. 211
+ ---------------------------
+ 209 and 211 split from 090 somewhere along the line, but at some time, 090 was shared by both.
+ Therefore you may come across ROMs mislabelled as 090 that are actually 209.
+ 
+ The two mappers are exactly the same.  The only difference is a jumper setting which controls the extended
+ nametable control.  090 has extended NT control permanently disabled, 209 has it enabled.  This jumper
+ setting keeps games designed for older versions of the IC from inadvertently enabling it.
+ 
+ This doc, as a whole, applies to both 090 and 209 -- with the exception of the Mirroring section, which draws
+ the distinctions between the two.
+ 
+ 
+ Notes:
+ ---------------------------
+ This mapper has no PRG-RAM, which is unusual for an ASIC mapper,
+ 
+ In addition to the above mentioned jumper setting that controls mirroring, there are 2 other DIP switch
+ settings which can be read back by the game via reg $5000.  Changing the DIP switch can change details
+ of the played in some ROMs.
+ 
+ 
+ This document's organization:
+ ---------------------------
+ Since there are so many registers for this mapper, registers will be listed and outlined as the features are
+ explained.  The overall registers section will be extremely brief, serving primarily as a very quick
+ reference or checklist.
+ 
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+  $8000-8003 are PRG regs.  $8004-8007 are mirrors of them.
+     $8000-$8003:  [.PPP PPPP]
+ 
+  $D000 is the PRG mode select (among other things):
+     $D000:  [SRNC CPPP]
+       R,N = Relate to Mirroring (see mirroring section for details)
+       C = Relate to CHR Setup (see chr setup for details)
+       S = Put PRG @ $6000-7FFF
+       P = PRG Mode Select
+ 
+ If 'S' is clear, $6000-7FFF is always open bus.  It is only when 'S' is set, that $6000 reflects the page
+ indicated in the setup chart below.
+ 
+ Notice that page numbers are &quot;actual&quot; pages.
+ 
+ Some modes are bit reversed (as marked below).  This means that the PRG registers are to be interpretted
+ backwards:
+ 
+   [.ABC DEFG]  normal order
+   [.GFE DCBA]  bit reversed order
+ 
+ 
+                       $6000        $8000   $A000   $C000   $E000  
+                +-----------------+-------------------------------+
+ PRG Mode %000  |  ($8003 * 4)+3  |             { -1}             |
+                +-----------------+-------------------------------+
+ PRG Mode %001  |  ($8003 * 2)+1  |     $8001     |     { -1}     |
+                +-----------------+---------------+---------------+
+ PRG Mode %010  |      $8003      | $8000 | $8001 | $8002 | { -1} |
+                +-----------------+-------+-------+-------+-------+
+ PRG Mode %011  |      $8003      | $8000 | $8001 | $8002 | { -1} |  *BIT REVERSE*
+                +-----------------+-------------------------------+
+ PRG Mode %100  |  ($8003 * 4)+3  |             $8003             |
+                +-----------------+-------------------------------+
+ PRG Mode %101  |  ($8003 * 2)+1  |     $8001     |     $8003     |
+                +-----------------+---------------+---------------+
+ PRG Mode %110  |      $8003      | $8000 | $8001 | $8002 | $8003 |
+                +-----------------+-------+-------+-------+-------+
+ PRG Mode %111  |      $8003      | $8000 | $8001 | $8002 | $8003 |  *BIT REVERSE*
+                +-----------------+-------+-------+-------+-------+
+ 
+ 
+ In case you don't see the patterns:
+  - PRG modes %1xx are the same as %0xx, only $8003 is used for the last page instead of {-1}
+  - $6000 is always swapped to the last 8k in the block specified by $8003.  In %1xx modes, this means $6000
+ will always mirror $E000.
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+    $9000-9007 are CHR regs -- each specifies the low 8 bits of the CHR page
+    $A000-A007 -- specifies the high 8 bits of the CHR page (work with above regs)
+ 
+ The rest of this section refers to above regs as $900x only -- but note that it all includes $900x and $A00x.
+ 
+ CHR Mode is set by the following:
+ 
+    $D000:  [SRNC CPPP]
+      R,N = Relate to Mirroring (see mirroring section for details)
+      S,P = Relate to PRG (see prg setup for details)
+      C = CHR Mode
+ 
+    $D003:  [M.BH HHHH]
+      M = Mirror CHR (very strange, see below)
+      B = CHR Block mode (0=enabled, 1=disabled)
+      H = CHR Block (when in block mode)
+ 
+ 
+ In CHR Block mode ('B' clear), $A00x is ignored, and instead, the H bits selects a 256k block for all CHR.
+ $9000-9007 select a page within that block.
+ 
+ In normal mode ('B' set), $9000-9007 select a page from the entire CHR.
+ 
+ Mirror CHR mode ('M' set), only takes effect when in 1k or 2k mode ('C' = %10 or %11).  In this mode,
+ $0800-$0FFF always mirrors $0000-07FF.  ($1800 is unaffected, however).  This is relatively easily
+ emulatable by using $9000+$9001 in place of $9002+$9003 in the chart below.
+ 
+ Note that page numbers are in &quot;actual&quot; pages.
+ 
+                  $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+                +---------------------------------------------------------------+
+ CHR Mode %00:  |                             $9000                             |
+                +---------------------------------------------------------------+
+ CHR Mode %01:  |             $9000             |             $9004             |
+                +-------------------------------+-------------------------------+
+ CHR Mode %10:  |     $9000     |     $9002     |     $9004     |     $9006     |
+                +---------------+---------------+---------------+---------------+
+ CHR Mode %11:  | $9000 | $9001 | $9002 | $9003 | $9004 | $9005 | $9006 | $9007 |
+                +-------+-------+-------+-------+-------+-------+-------+-------+
+ 
+ 
+ 
+ Mirroring:
+ ---------------------------
+ 
+ At first glance, mirroring appears simple, using the same values as <a href="Sunsoft_FME_7.xhtml#Name_Table_Mirroring_.28.24C.29" title="Sunsoft FME-7">FME-7 register 12</a>:
+ 
+   $D001:  [.... ..MM]
+     %00 = Vert
+     %01 = Horz
+     %10 = 1ScA
+     %11 = 1ScB
+ 
+ However there is a special setting to complicate this, of course.
+ 
+    $D000:  [SRNC CPPP]
+      S,P = Relate to PRG (see prg setup for details)
+      C = Relates to CHR (see chr setup for details)
+      N = Enable advanced NT control (0=disabled, 1=enabled)
+      R = disable NT RAM (0=NT can be RAM or ROM, 1=NT ROM only)
+ 
+ When 'N' is clear, $D001 controls mirroring, and all other mirroring regs are ignored (including 'R' bit of
+ $D000).  When 'N' is set, $D001 is ignored, and the below regs control mirroring.
+ 
+ Mapper 211 behaves as though N were always set (1), and mapper 090 behaves as though
+ N were always clear (0).
+ 
+ 
+    $D002:  [A... ....]   NT RAM select bit
+    $B000-B003   NT Regs (low 8 bits)
+    $B004-B007   NT Regs (high 8 bits)
+ 
+ Just like with normal CHR Regs, NT CHR regs are 16-bits... $B000-B003 specify the low bits, and $B004-B007
+ specify the high bit.  They are arranged in the following:
+ 
+    [ $B000 ][ $B001 ]
+    [ $B002 ][ $B003 ]
+ 
+ When 'R' is set, $D002 is ignored, and CHR-ROM is always used as NT (with page selected by appropriate reg).
+ When 'R' is clear... CHR-ROM is only used if bit 7 of the NT Reg does not match the 'A' bit of $D002.  If the
+ bits match, then NES internal NT RAM is used instead (either NTA or NTB, depending on bit 0 of the NT reg)
+ 
+ Typical Examples:
+
+           $B000 $B001 $B002 $B003
+           -----------------------
+    Horz:   $00   $00   $01   $01
+    Vert:   $00   $01   $00   $01
+    1ScA:   $00   $00   $00   $00
+    1ScB:   $01   $01   $01   $01
+ 
+ 
+ IRQs
+ ---------------------------
+ 
+ IRQs on this mapper are generated by a fairly flexible if somewhat obfuscated programmable interval timer.
+ 
+ IRQs are triggered by any one of 4 sources:
+  1) CPU Cycles
+  2) A12 Rises
+  3) PPU Reads (which happen 170 times per active scanline)
+  4) CPU Writes (wtf, I know, but it's true)
+ 
+ I *think* the only method used by any games is the A12.  CPU Cycles may also be used... and I really doubt
+ the other two are used anywhere.
+ 
+ A12 rises operate just like they do for MMC3 (mapper 004 -- see that doc for details).  One key difference:
+ Unlike the MMC3, nearby rises are not ignored.  This means that under &quot;normal&quot; conditions, this IRQ counter
+ is clocked 8 times per scanline (not just once).
+ 
+ Clocks are first run through a prescaler, which divides the clocks by either 256 or 8.  Prescaling by 8
+ is useful with A12 source, and prescaling by 256 is handy with CPU cycle or PPU read source.  For example,
+ if the source is PPU reads prescaled by 256, a value of 64 causes a wait of just under 96 lines.
+ 
+ Also.. the counter can be configured to count up, or count down!  Among other oddities.
+ 
+ Related regs are as follows:
+ 
+   $C001:  [DD.. FPSS]
+     D = Count direction (10=down, 01=up, 00/11=pause counter)
+     F = Funky mode (0=disabled, 1=enabled) -- see below
+     P = Prescaler size (0=256, 1=8)
+     S = IRQ source:
+       %00 = CPU Cycles
+       %01 = PPU A12 rising edges
+       %10 = PPU Reads
+       %11 = CPU Writes
+ 
+ 
+   $C002:  [.... ....]   Any write here will acknowledge and disable IRQs
+   $C003:  [.... ....]   Any write here will enable IRQs
+   $C000:  [.... ...E]   Alternate method:
+      writing to this reg with E=0:  same as writing to $C002
+      writing to this reg with E=1:  same as writing to $C003
+ 
+   $C004:  [PPPP PPPP]  Prescaler.  Any write here will set the prescaler to 'P' XOR $C006
+   $C005:  [IIII IIII]  IRQ Counter.  Any write here will set the IRQ counter to 'I' XOR $C006
+   $C006:  [XXXX XXXX]  This value is used as a XOR when writing to $C004/5
+ 
+   $C007:  Funky Mode Reg
+ 
+ 
+ 
+ $C004 and $C005 directly change the IRQ counter/prescaler.  They do not change a reload value.
+ 
+ When the prescaler is in 3-bit mode (divide by 8), the high 5 bits of the prescaler remain unchanged when
+ clocked and only the low 3 bits are used.  When the low 3 bits wrap, the IRQ counter is clocked.  8-bit mode
+ (divide by 256) works as you'd expect.
+ 
+ When the IRQ counter wraps (either $FF-&gt;00 or $00-&gt;FF, depending on whether it's incrementing or
+ decrementing), an IRQ is tripped (if enabled).
+ 
+ Disabling IRQs does not stop the counter or prescaler from counting, it simply stops the IRQ from being
+ generated.  Only setting the count direction to 00 (neither down nor up) or 11 (both down and up)
+ stops the counting.
+ 
+ 
+ 
+ Funky Mode:
+ 
+ When 'F' in $C001 is clear, $C007 is ignored.  When set, exact operation is unknown.  It appears to funkify
+ the prescaler.  $C007 containing any value other than $FF will result in the IRQ counter not being clocked at
+ all... and $FF will result in the prescaler dividing by strange amounts (sometimes 8?  sometimes 12?
+ sometimes 257?).  Details are unknown.  Fortunately, no games use this funky mode.
+ 
+ 
+ Other crap:
+ ---------------------------
+ 
+   $5000:  [DD.. ....]   DIP switch settings (readable only)
+     These bits can be read back as any value depending on DIP switch settings on the cart.  The high bit, in
+ paticular, has an effect in some games.
+ 
+ 
+   $5800, $5801:   8*8-&gt;16 multiplication reg.  (read+write)
+     These are similar to the multiplication registers on the MMC5 and the Super NES.  You write two unsigned
+ 8-bit values you want multiplied to $5801 and $5800, then the 16-bit product can be read back ($5800 has low
+ 8 bits, $5801 has high 8 bits).  Multiplication appears to need 8 CPU cycles of processing time.
+ 
+   $5803:  a single byte of RAM (read+write)
+ 
+ 
+   $5804-$5807 may also be RAM -- it's unknown.
+ 
+ 
+ 
+ Registers:
+ ---------------------------
+ Registers were all covered in detail in previous sections.  This section is just an overall
+ reference/checklist.
+ 
+ 
+ 
+ Range, Mask:  $5000-FFFF, $F007
+ 
+ 
+   $5000:        DIP switch         (read only)
+   $5800-5801:   8*8-&gt;16 multiplier (read+write)
+   $5803:        RAM                (read+write)
+   $5804-5807:   ???                (possibly RAM)
+ 
+   $8000-8003:   PRG Regs
+   $8004-8007:   Mirror of PRG Regs
+ 
+   $9000-9007:   CHR Regs (low bits)
+   $A000-A007:   CHR Regs (high bits)
+ 
+   $B000-B003:   NT Regs (low bits)
+   $B004-B007:   NT Regs (high bits)
+ 
+   $C000-C007:   IRQ Regs
+ 
+   $D000-D003:   Control/Mode Regs
+   $D004-D007:   mirror $D000-D003
+</pre>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:JY_Company" title="wikia:c:bootleggames:JY Company">wikia:c:bootleggames:JY Company</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.091 seconds
+Real time usage: 0.096 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:677-1!*!0!*!*!*!* and timestamp 20160208225539 and revision id 10243
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_ROM_nametables.xhtml">Mappers with ROM nametables</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a></p></div></body></html>

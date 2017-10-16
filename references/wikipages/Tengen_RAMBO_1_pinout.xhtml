@@ -1,0 +1,85 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Tengen RAMBO-1 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Tengen RAMBO-1 pinout</h1><div class="article">
+<p>Tengen 337006 or <a href="RAMBO_1.xhtml" title="RAMBO-1">RAMBO-1</a>: 40-pin 0.6&quot; PDIP (Canonically <b>mapper 64</b>)
+</p>
+<pre>                  .--\/--.
+        (n) M2 -&gt; |01  40| -- +5V
+   (r) PRG A16 &lt;- |02  39| -&gt; PRG A17 (r)
+   (r) PRG A15 &lt;- |03  38| &lt;- CPU A13 (n)
+   (r) PRG A13 &lt;- |04  37| -&gt; PRG A14 (r)
+   (r) PRG /CE &lt;- |05  36| &lt;- CPU A14 (n)
+   (rn) CPU D6 -&gt; |06  35| &lt;- CPU D7 (rn)
+   (rn) CPU A0 -&gt; |07  34| &lt;- CPU D5 (rn)
+   (rn) CPU D4 -&gt; |08  33| &lt;- CPU D0 (rn)
+   (rn) CPU D2 -&gt; |09  32| &lt;- CPU D1 (rn)
+       (n) R/W -&gt; |10  31| &lt;- CPU D3 (rn)
+   (n) /ROMSEL -&gt; |11  30| -&gt; /IRQ (n)
+   (r) CHR A10 &lt;- |12  29| -&gt; CIRAM A10 (n)
+   (n) PPU A10 -&gt; |13  28| -&gt; CHR A11 (r)
+   (n) PPU A12 -&gt; |14  27| &lt;- PPU A11 (n)
+ (n) CIC toPak -&gt; |15  26| -&gt; CHR A13 (r)
+  (n) CIC toMB &lt;- |16  25| -&gt; CHR A12 (r)
+  (n) CIC +RST -&gt; |17  24| -&gt; CHR A14 (r)
+   (n) CIC CLK -&gt; |18  23| -&gt; CHR A15 (r)
+           GND ?? |19  22| -&gt; CHR A17 (r)
+           GND -- |20  21| -&gt; CHR A16 (r)
+                  '------'
+</pre>
+<p>Variant pinout for <a href="INES_Mapper_158.xhtml" title="INES Mapper 158">iNES Mapper 158</a>:
+</p>
+<pre>   (n) /ROMSEL -&gt; |11  30| -&gt; /IRQ (n)
+   (r) CHR A10 &lt;- |12  29| -&gt; <b>n/c</b>
+   (n) PPU A10 -&gt; |13  28| -&gt; CHR A11 (r)
+   (n) PPU A12 -&gt; |14  27| &lt;- PPU A11 (n)
+ (n) CIC toPak -&gt; |15  26| -&gt; CHR A13 (r)
+  (n) CIC toMB &lt;- |16  25| -&gt; CHR A12 (r)
+  (n) CIC +RST -&gt; |17  24| -&gt; CHR A14 (r)
+   (n) CIC CLK -&gt; |18  23| -&gt; CHR A15 (r)
+           GND ?? |19  22| -&gt; <b>CIRAM A10 (n)</b>
+           GND -- |20  21| -&gt; CHR A16 (r)
+                  '------'
+</pre>
+<p><br/>
+On the PCB 800032, there are seven jumpers:
+</p>
+<ul><li> R1 connects PRG ROM pin 22(28 pin IC)/24(32 pin IC) to ground, for use with ROMs that follow the standard EPROM pinout.</li>
+<li> R2 connects the same pin to RAMBO-1 PRG A16, for use with 28-pin 128 KiB JEDEC mask ROMs.</li></ul>
+<p>Exactly one of R1 and R2 should be populated.
+</p>
+<ul><li> R3 connects CHR ROM pin 22(28 pin IC)/24(32 pin IC) to PPU /RD, for use with ROMs that follow the standard EPROM pinout.</li>
+<li> R4 connects the same pin to RAMBO-1 CHR A16, for use with 28-pin 128 KiB JEDEC mask ROMs.</li>
+<li> R5 (unlabeled, under the 74'32 socket) connects CHR ROM pin 20(28 pin IC)/22(32 pin IC) to PPU A13, for use with ROMs that follow the standard EPROM pinout.</li>
+<li> Populating the 74'32 in the upper right corner of the board connects CHR ROM pin 20(28 pin IC)/22(32 pin IC) to <i>PPU /RD OR PPU A13</i>, for use with 28-pin 128 KiB JEDEC mask ROMs.</li></ul>
+<p>If R4 is populated, the 74'32 should be populated.
+Exactly one of R3 and R4 should be populated.
+Exactly one of R5 and the 74'32 should be populated.
+</p>
+<ul><li> R6 and R7 tie the RAMBO-1's pins 15 and 17 to ground, respectively.</li></ul>
+<p>Additionally, there are two cut &amp; solder jumpers:
+</p>
+<ul><li> P28 (on the underside of the board) controls whether PRG pin 28(28 pin IC)/30(32 pin IC) is connected to +5V or to RAMBO-1 PRG A17.</li>
+<li> C28 controls whether CHR pin 28(28 pin IC)/30(32 pin IC) is connected to +5V or to RAMBO-1 CHR A17.</li></ul>
+<p><br/>
+Source:
+</p>
+<ul><li> Kevtris <a class="external autonumber" href="http://kevtris.org/mappers/tengen/800032.html" rel="nofollow">[1]</a> <a class="external autonumber" href="http://kevtris.org/mappers/tengen/800037.html" rel="nofollow">[2]</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=125092#p125092" rel="nofollow">FrankWDoom's Hard Drivin' reproduction</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1221-1!*!0!*!*!*!* and timestamp 20160208225916 and revision id 11909
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

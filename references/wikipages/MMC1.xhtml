@@ -1,0 +1,348 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC1</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>MMC1</b>
+<br/><b>SxROM</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Nintendo, others
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=1&amp;group=groupid" rel="nofollow">390 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> SKROM, SLROM,<br/>SNROM, others
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 512K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 16K + 16K fixed or 32K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 128K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 4K + 4K or 8K
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H, V, or 1, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="MMC1.xhtml" title="INES Mapper 001">001</a>, <a href="INES_Mapper_105.xhtml" title="INES Mapper 105">105</a>, <a href="INES_Mapper_155.xhtml" title="INES Mapper 155">155</a>
+</td></tr></table>
+</div>
+<p>The <b>Nintendo MMC1</b> is a <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> used in Nintendo's <a href="SxROM.xhtml" title="SxROM">SxROM</a> and <a href="NES_EVENT.xhtml" title="NES-EVENT">NES-EVENT</a> Game Pak boards. Most common SxROM boards are assigned to <b>iNES Mapper 1</b>. This chip first appeared in the April of 1987.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Load_register_.28.248000-.24FFFF.29"><span class="tocnumber">2.1</span> <span class="toctext">Load register ($8000-$FFFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Control_.28internal.2C_.248000-.249FFF.29"><span class="tocnumber">2.2</span> <span class="toctext">Control (internal, $8000-$9FFF)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29"><span class="tocnumber">2.3</span> <span class="toctext">CHR bank 0 (internal, $A000-$BFFF)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29"><span class="tocnumber">2.4</span> <span class="toctext">CHR bank 1 (internal, $C000-$DFFF)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#PRG_bank_.28internal.2C_.24E000-.24FFFF.29"><span class="tocnumber">2.5</span> <span class="toctext">PRG bank (internal, $E000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Variants"><span class="tocnumber">4</span> <span class="toctext">Variants</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#SNROM"><span class="tocnumber">4.1</span> <span class="toctext">SNROM</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29_2"><span class="tocnumber">4.1.1</span> <span class="toctext">CHR bank 0 (internal, $A000-$BFFF)</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29_2"><span class="tocnumber">4.1.2</span> <span class="toctext">CHR bank 1 (internal, $C000-$DFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-13"><a href="#SOROM.2C_SUROM_and_SXROM"><span class="tocnumber">4.2</span> <span class="toctext">SOROM, SUROM and SXROM</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29_3"><span class="tocnumber">4.2.1</span> <span class="toctext">CHR bank 0 (internal, $A000-$BFFF)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29_3"><span class="tocnumber">4.2.2</span> <span class="toctext">CHR bank 1 (internal, $C000-$DFFF)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#iNES_Mapper_001"><span class="tocnumber">5</span> <span class="toctext">iNES Mapper 001</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Heuristic_disambiguation"><span class="tocnumber">5.1</span> <span class="toctext">Heuristic disambiguation</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#NES_2.0_combined_implementation"><span class="tocnumber">5.2</span> <span class="toctext">NES 2.0 combined implementation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#See_also"><span class="tocnumber">7</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: 8 KB PRG RAM bank, fixed on all boards but SOROM and SXROM</li>
+<li> CPU $8000-$BFFF: 16 KB PRG ROM bank, either switchable or fixed to the first bank</li>
+<li> CPU $C000-$FFFF: 16 KB PRG ROM bank, either fixed to the last bank or switchable</li>
+<li> PPU $0000-$0FFF: 4 KB switchable CHR bank</li>
+<li> PPU $1000-$1FFF: 4 KB switchable CHR bank</li></ul>
+<p>Through writes to the MMC1 control register, it is possible for the program to swap the fixed and switchable PRG ROM banks or to set up 32 KB PRG bankswitching (like <a href="BNROM.xhtml" title="BNROM">BNROM</a>), but most games use the default setup, which is similar to that of <a href="UxROM.xhtml" title="UxROM">UxROM</a>.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Unlike almost all other mappers, the MMC1 is configured through a serial port in order to reduce pin count. CPU $8000-$FFFF is connected to a common shift register.
+Writing a value with bit 7 set ($80 through $FF) to any address in $8000-$FFFF clears the shift register to its initial state.
+To change a register's value, the CPU writes five times with bit 7 clear and a bit of the desired value in bit 0.
+On the first four writes, the MMC1 shifts bit 0 into a shift register.
+On the fifth write, the MMC1 copies bit 0 and the shift register contents into an internal register selected by bits 14 and 13 of the address, and then it clears the shift register.
+Only on the fifth write does the address matter, and even then, only bits 14 and 13 of the address matter because the mapper registers are incompletely decoded like the <a href="PPU_registers.xhtml" title="PPU registers">PPU registers</a>. After the fifth write, the shift register is cleared automatically, so a write to the shift register with bit 7 on to reset it is not needed.
+</p><p>When the CPU writes to the serial port on consecutive cycles, the MMC1 ignores all writes but the first.
+This happens when the 6502 executes read-modify-write (RMW) instructions, such as DEC and ROR, by writing back the old value and then writing the new value on the next cycle.  At least <i>Bill &amp; Ted's Excellent Adventure</i> resets the MMC1 by doing INC on a ROM location containing $FF; the MMC1 sees the $FF written back and ignores the $00 written on the next cycle.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>  The reason for this is that resetting and shifting happen on a falling edge of R/W, and RMW instructions hold R/W low for both writes.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p><p>To switch a bank, a program will execute code similar to the following:
+</p>
+<pre>
+;
+; Sets the switchable PRG ROM bank to the value of A.
+;
+              ;  A          MMC1_SR  MMC1_PB
+setPRGBank:   ;  000edcba    10000             Start with an empty shift register (SR).  The 1 is used
+  sta $E000   ;  000edcba -&gt; a1000             to detect when the SR has become full.
+  lsr a       ; &gt;0000edcb    a1000
+  sta $E000   ;  0000edcb -&gt; ba100
+  lsr a       ; &gt;00000edc    ba100
+  sta $E000   ;  00000edc -&gt; cba10
+  lsr a       ; &gt;000000ed    cba10
+  sta $E000   ;  000000ed -&gt; dcba1             Once a 1 is shifted into the last position, the SR is full.
+  lsr a       ; &gt;0000000e    dcba1             
+  sta $E000   ;  0000000e    dcba1 -&gt; edcba    A write with the SR full copies D0 and the SR to a bank register
+              ;              10000             ($E000-$FFFF means PRG bank number) and then clears the SR.
+  rts
+</pre>
+<p>But because only the fifth write sets the destination register, the following equivalent (if <a href="Watermarking.xhtml#Instruction_encoding" title="Watermarking">obfuscated</a>) subroutine changes the PRG ROM bank in the same manner:
+</p>
+<pre>
+setPRGBank:
+  sta $8765
+  lsr a
+  sta $FACE
+  lsr a
+  sta $BA11
+  lsr a
+  sta $AD2E
+  lsr a
+  sta $EAD5
+  rts
+</pre>
+<h3><span class="mw-headline" id="Load_register_.28.248000-.24FFFF.29">Load register ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+Rxxx xxxD
+|       |
+|       +- Data bit to be shifted into shift register, LSB first
++--------- 1: Reset shift register and write Control with (Control OR $0C),
+              locking PRG ROM at $C000-$FFFF to the last bank.
+</pre>
+<h3><span class="mw-headline" id="Control_.28internal.2C_.248000-.249FFF.29">Control (internal, $8000-$9FFF)</span></h3>
+<pre>4bit0
+-----
+CPPMM
+|||||
+|||++- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> (0: one-screen, lower bank; 1: one-screen, upper bank;
+|||               2: vertical; 3: horizontal)
+|++--- PRG ROM bank mode (0, 1: switch 32 KB at $8000, ignoring low bit of bank number;
+|                         2: fix first bank at $8000 and switch 16 KB bank at $C000;
+|                         3: fix last bank at $C000 and switch 16 KB bank at $8000)
++----- CHR ROM bank mode (0: switch 8 KB at a time; 1: switch two separate 4 KB banks)
+</pre>
+<h3><span class="mw-headline" id="CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29">CHR bank 0 (internal, $A000-$BFFF)</span></h3>
+<pre>4bit0
+-----
+CCCCC
+|||||
++++++- Select 4 KB or 8 KB CHR bank at PPU $0000 (low bit ignored in 8 KB mode)
+</pre>
+<p>MMC1 can do CHR banking in 4KB chunks. Known carts with CHR RAM have 8 KiB, so that makes 2 banks. RAM vs ROM doesn't make any difference for address lines. For carts with 8 KiB of CHR (be it ROM or RAM), MMC1 follows the common behavior of using only the low-order bits: the bank number is in effect ANDed with 1.
+</p>
+<h3><span class="mw-headline" id="CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29">CHR bank 1 (internal, $C000-$DFFF)</span></h3>
+<pre>4bit0
+-----
+CCCCC
+|||||
++++++- Select 4 KB CHR bank at PPU $1000 (ignored in 8 KB mode)
+</pre>
+<h3><span class="mw-headline" id="PRG_bank_.28internal.2C_.24E000-.24FFFF.29">PRG bank (internal, $E000-$FFFF)</span></h3>
+<pre>4bit0
+-----
+RPPPP
+|||||
+|++++- Select 16 KB PRG ROM bank (low bit ignored in 32 KB mode)
++----- PRG RAM chip enable (0: enabled; 1: disabled; ignored on MMC1A)
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>At least 6 different versions of the MMC1 are known to exist: MMC1, MMC1A, MMC1B1, MMC1B2, MMC1B3, and MMC1C. The known differences are as follows:
+</p>
+<ul><li> MMC1A: PRG RAM is always enabled. Two games abuse this lack of feature: they have been allocated to <a href="INES_Mapper_155.xhtml" title="INES Mapper 155">iNES Mapper 155</a>.</li>
+<li> MMC1B: PRG RAM is enabled by default.</li>
+<li> MMC1C: PRG RAM is disabled by default.</li></ul>
+<p>The MMC1 most commonly exists in a <a href="MMC1_pinout.xhtml" title="MMC1 pinout">24-pin shrink-DIP package</a>.
+</p><p>Boards using an MMC1 may contain a battery connected to the PRG RAM's power line to preserve the data.
+Boards doing so will allow extra circuitry to be used, with 2 diodes and 2 resistors.
+A diode is needed from both voltage sources: The battery and the NES 5V, so that one cannot supply current to the other, and there is a resistor in series with the battery so that no current is drained from the battery when 5V is present. A pull-down resistor is needed on the CE line so that the SRAM is disabled when the MMC1 isn't powered. Finally, the battery powered SRAMs have an additional larger decoupling capacitor to make sure voltage transitions are smooth. Very early NES-SNROM-03 and lower revisions lacks that capcity, and saves are lost much more easily on those boards.
+</p><p>Nintendo transitioned from the original MMC1 (manufactured by ROHM) to the MMC1A (manufactured probably by Ricoh) around the 39th week of 1988. (Based on comparison of otherwise identical SMB/DH/WCTM carts from 38th and 39th weeks of '88)
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>Because the higher CHR lines aren't used when the MMC1 mapper is used with a 8KB CHR RAM, those lines are sometimes put to other uses depending on the board :
+</p>
+<h3><span class="mw-headline" id="SNROM">SNROM</span></h3>
+<h4><span class="mw-headline" id="CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29_2">CHR bank 0 (internal, $A000-$BFFF)</span></h4>
+<pre>4bit0
+-----
+ExxxC
+|   |
+|   +- Select 4 KB CHR RAM bank at PPU $0000 (ignored in 8 KB mode)
++----- PRG RAM disable (0: enable, 1: open bus)
+</pre>
+<h4><span class="mw-headline" id="CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29_2">CHR bank 1 (internal, $C000-$DFFF)</span></h4>
+<pre>4bit0
+-----
+ExxxC
+|   |
+|   +- Select 4 KB CHR RAM bank at PPU $1000 (ignored in 8 KB mode)
++----- PRG RAM disable (0: enable, 1: open bus) (ignored in 8 KB mode)
+</pre>
+<p>Both the <code>E</code> bit and the <code>R</code> bit (in standard MMC1 registers) should be clear in order for the PRG RAM to be writable or readable. This bit is more &quot;reliable&quot; on authentic hardware as it is implemented even in older boards with older MMC1's, while the <code>R</code> bit was only introduced later.
+But because the <code>E</code> bit wasn't confirmed by the homebrew community until October 2010<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup>, emulators tend not to implement it.
+</p>
+<h3><span class="mw-headline" id="SOROM.2C_SUROM_and_SXROM">SOROM, SUROM and SXROM</span></h3>
+<h4><span class="mw-headline" id="CHR_bank_0_.28internal.2C_.24A000-.24BFFF.29_3">CHR bank 0 (internal, $A000-$BFFF)</span></h4>
+<pre>4bit0
+-----
+PSSxC
+||| |
+||| +- Select 4 KB CHR RAM bank at PPU $0000 (ignored in 8 KB mode)
+|++--- Select 8 KB PRG RAM bank
++----- Select 256 KB PRG ROM bank
+</pre>
+<h4><span class="mw-headline" id="CHR_bank_1_.28internal.2C_.24C000-.24DFFF.29_3">CHR bank 1 (internal, $C000-$DFFF)</span></h4>
+<pre>4bit0
+-----
+PSSxC
+||| |
+||| +- Select 4 KB CHR RAM bank at PPU $1000 (ignored in 8 KB mode)
+|++--- Select 8 KB PRG RAM bank (ignored in 8 KB mode)
++----- Select 256 KB PRG ROM bank (ignored in 8 KB mode)
+</pre>
+<p>The SOROM board only implements the upper <code>S</code> bit, while the SUROM board only implements the <code>P</code> bit. For SXROM, the upper <code>S</code> (bit 3) selects the SRAM's A14, and the lower <code>S</code> (bit 2) selects A13<sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup>.
+</p><p>The 256 KB PRG bank selection applies to all the PRG area, <i>including the supposedly &quot;fixed&quot; bank</i>.
+</p><p>In 4KB CHR bank mode, the <code>P</code>, <code>S</code> and <code>E</code> bits in both CHR bank registers must be set to the same values, or the PRG ROM and/or RAM will be bankswitched/enabled as the PPU renders, in a similar fashion as <a href="MMC3.xhtml#Hardware" title="MMC3">MMC3</a>'s scanline counter. As there is not much of a reason to use 4 KB bankswitching with CHR RAM, it is wise for programs to just set 8 KB bankswitching mode in the <a href="MMC1.xhtml#Control_.28internal.2C_.248000-.249FFF.29" title="MMC1">Control register</a>.
+</p>
+<h2><span class="mw-headline" id="iNES_Mapper_001">iNES Mapper 001</span></h2>
+<p><b>iNES Mapper 001</b> is used to designate the <a href="SxROM.xhtml" title="SxROM">SxROM</a> boardset, all of which use Nintendo's <b>MMC1</b>.
+</p><p>This has proven to be problematic for boards (such as SOROM, SUROM and SXROM) which use the upper CHR bank select lines to select additional PRG ROM or PRG RAM data; games which use SOROM or SXROM often must be handled individually based on the ROM checksum.
+</p>
+<h3><span class="mw-headline" id="Heuristic_disambiguation">Heuristic disambiguation</span></h3>
+<p>In the absence of data beyond basic <a href="INES.xhtml" title="INES">iNES</a> header data, an emulator may follow the following procedure to guess a board type useful for emulation:
+</p>
+<ol><li> Determine whether PRG ROM is &quot;large&quot; (512 KiB) or &quot;small&quot; (256 KiB or less) and whether CHR is &quot;large&quot; (16-128 KiB CHR ROM) or &quot;small&quot; (8 KiB CHR ROM or CHR RAM).</li>
+<li> When PRG ROM is large, the highest CHR line (CHR A16) switches 256 KiB PRG ROM banks as in SUROM.</li>
+<li> When CHR is large, MMC1 registers act &quot;normal&quot;.</li>
+<li> When CHR is small, the MMC1's CHR bank registers switch PRG RAM banks as in SXROM. If the battery bit is present, only banks which are written to are saved to the disk when the game is quit. When loading a game with the battery bit set, if a 8KB .sav file is present, it is repeated equally across all banks. This will lead to data being saved when it wasn't supposed to for SOROM games, but 8KB of hard disk space isn't a problem, and no known NES game had the copy protection based on PRG RAM size that was common in the Super NES era.</li>
+<li> When both PRG ROM and CHR are small, CHR A16 disables PRG RAM when turned on.</li></ol>
+<h3><span class="mw-headline" id="NES_2.0_combined_implementation">NES 2.0 combined implementation</span></h3>
+<p>Because <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> can disambiguate the variant function by PRG ROM, PRG RAM, and CHR RAM sizes, the alternate function of the CHR banking registers can be described together:
+</p>
+<pre>$A000 and $C000:
+4bit0
+-----
+EDCBA
+|||||
+||||+- CHR A12
+|||+-- CHR A13, if extant (CHR &gt;= 16k)
+||+--- CHR A14, if extant; and PRG RAM A14, if extant (PRG RAM = 32k)
+|+---- CHR A15, if extant; and PRG RAM A13, if extant (PRG RAM &gt;= 16k)
++----- CHR A16, if extant; and PRG ROM A18, if extant (PRG ROM = 512k)
+</pre>
+<p>The <code>E</code> bit also acts as a PRG RAM disable for SNROM (PRG ROM &lt;= 256k, CHR RAM = 8k, PRG RAM = 8k), though this is merely for write protection and not strictly required for compatible emulation.
+</p><p>The <code>D</code> and <code>C</code> lines are swapped for SXROM (32k PRG RAM) here; the <code>D</code> line actually selects the <i>upper</i> SRAM address line, though this reversal might be irrelevant to an emulator's implementation.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://nesdev.com/6502_cpu.txt" rel="nofollow">6502_cpu.txt</a>.  See the section labelled Instruction Timing, subsections Absolute addressing, Read-Modify-Write instructions</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text">#nesdev IRC chat, 2015/05/23.  kevtris: &quot;I think I figured out why the MMC1 ignores the second write.  It seems to be because it uses R/W as a clock, and it stays low for 2 cycles, instead of pulsing so only the first is written.&quot;</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=7045" rel="nofollow">Form topic:</a> NES SNROM to 512K cart?</span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=4596" rel="nofollow">Forum post:</a> tracing the SXROM PCB</span>
+</li>
+</ol>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="Programming_MMC1.xhtml" title="Programming MMC1">Programming MMC1</a></li>
+<li><a href="MMC1_pinout.xhtml" title="MMC1 pinout">MMC1 pinout</a></li>
+<li><a class="external text" href="http://nesdev.com/mmc1.txt" rel="nofollow">&quot;Nintendo MMC1 info for 8-bit NES carts&quot; by Matthew J. Richey</a></li>
+<li><a class="external text" href="http://kevtris.org/mappers/mmc1/index.html" rel="nofollow">MMC1 doc by Kevin Horton</a></li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information on SUROM/SXROM carts (512k carts, 1024k carts) is inaccurate</li>
+<li> US Patent 4,949,298</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.305 seconds
+Real time usage: 0.330 seconds
+Preprocessor visited node count: 293/1000000
+Preprocessor generated node count: 1061/1000000
+Post‐expand include size: 1255/2097152 bytes
+Template argument size: 299/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:87-1!*!0!!en!*!* and timestamp 20160607010226 and revision id 12593
+ -->
+<p class="categories">Categories: <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_large_PRG_RAM.xhtml">Mappers with large PRG RAM</a></p></div></body></html>

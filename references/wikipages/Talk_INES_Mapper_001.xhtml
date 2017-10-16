@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 001</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 001</h1><div class="article">
+<p>Would it be okay to add a note to Disch's note explaining the &quot;too close together&quot; behavior? Kev says it's due to edge-triggering.
+</p><p>The note would clearly indicate that it's an edit and not part of the original notes. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 00:14, 19 March 2013 (MDT)
+</p>
+<dl><dd>I'm torn about what to do with Disch's notes, especially when they're wrong. Sometimes I've just completely replaced them (<a href="INES_Mapper_234.xhtml" title="INES Mapper 234">iNES Mapper 234</a>). Sometimes I've completely rewritten them (<a href="INES_Mapper_072.xhtml" title="INES Mapper 072">iNES Mapper 072</a>). Sometimes I just put a big warning label at the top of the article (<a class="mw-redirect" href="Namco_163.xhtml" title="INES Mapper 019">iNES Mapper 019</a>). We don't have a standing policy of not editing Disch's notes, although I've accidentally caused confusion by not marking it when I've done so... oops.</dd>
+<dd>Anyway, I'm not clear how edge triggered behavior causes what's happening here, unless the MMC1 ignores M2 altogether. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 01:33, 19 March 2013 (MDT)
+<dl><dd>It's likely that the writing mechanism might be ignoring M2. The only thing M2 is really needed for is enabling the PRG RAM chip. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 06:51, 19 March 2013 (MDT)</dd>
+<dd>Maybe someone should ask Disch, if he's easy to reach. I personally wouldn't mind people correcting mistakes in documents that are still credited to me. ;) --<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 13:22, 19 March 2013 (MDT)</dd></dl></dd>
+<dd>I wouldn't add this information on a &quot;Kev says&quot; basis, please test it first, or add a &quot;big warning label&quot; that it's just speculation. The reason I'm skeptical about it is the fact that MMC1 (seemingly) only ignores consecutive writes if the high bit of the first write is set. If it was edge-triggered, it would seem logical that the ignoring would also happen for non-reset writes. Then again, that, too, is just speculation (although parts of it have been tested on hardware). :) --<a href="User_Thefox.xhtml" title="User:Thefox">Thefox</a> (<s>talk</s>) 00:03, 14 July 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="hey_everyone">hey everyone</span></h2>
+<p>hello
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.027 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1011-1!*!0!*!*!*!* and timestamp 20160208224040 and revision id 7884
+ -->
+</div></body></html>

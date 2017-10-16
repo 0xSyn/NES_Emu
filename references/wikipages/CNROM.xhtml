@@ -1,0 +1,190 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CNROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CNROM</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>CNROM</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Nintendo, others
+</td></tr>
+
+
+
+
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> CNROM
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> n/a
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> Fixed H or V, controlled by solder pads
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">003</a>, <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">185</a>
+</td></tr></table>
+</div>
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=3" rel="nofollow">iNES 003</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=185" rel="nofollow">iNES 185</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=CNROM" rel="nofollow">CNROM</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<p>NES-<strong class="selflink">CNROM</strong> (and its <a href="Famicom.xhtml" title="Famicom">HVC</a> counterpart) is a particular Nintendo cartridge board which uses uses discrete logic to provide up to four 8 KB banks of CHR ROM.  The most common usage of this board, as well as other third-party compatible boards, is assigned to <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">iNES mapper 3</a>. (See <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">iNES Mapper 003</a> for the suggested emulator implementation.)  A small collection of non-bankswitching CNROM boards that have an incompatible copy-protection issue are assigned to <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bank_select_.28.248000-.24FFFF.29"><span class="tocnumber">2.1</span> <span class="toctext">Bank select ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Solder_Pad_Config"><span class="tocnumber">3.1</span> <span class="toctext">Solder Pad Config</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Variants"><span class="tocnumber">4</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#See_Also"><span class="tocnumber">6</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$FFFF: 16 KB PRG ROM, fixed (if 16 KB PRG ROM used, then this is the same as $C000-$FFFF)</li>
+<li> CPU $C000-$FFFF: 16 KB PRG ROM, fixed</li>
+<li> PPU $0000-$1FFF: 8 KB switchable CHR ROM bank</li></ul>
+<p>For 16 KB PRG ROM testing, <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=423" rel="nofollow">Joust (NES)</a> makes a worthwhile test subject.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.24FFFF.29">Bank select ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxDD xxCC
+  ||   ||
+  ||   ++- Select 8 KB CHR ROM bank for PPU $0000-$1FFF
+  ++------ Security diodes config
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The CNROM board contains a <a href="74161.xhtml" title="74161">74HC161</a> binary counter used as a quad D latch (4-bit register) to select the current CHR bank.
+</p><p>Early CNROM boards allow security diodes to be placed. If the latched bits 4 and 5 do not correspond to the configuration of the 2 diodes placed on the board while the PPU is rendering, the latched signal will conflict with some of the PPU's addresses bus and create bus conflicts. This system was probably created to make dumping cartridges harder, because the dumping device would have to write the correct value into the 74HC161 latch to dump the CHR ROM properly, or else bus conflicts will appear and possibly damage the dumping device.
+This anti-dump precaution wasn't very effective, and Nintendo quickly gave up on this. Only Japanese games released in 1986 are known to have these diodes present.
+</p><p>Some Japanese CNROM games combine the diode security with special CHR ROM where higher addresses are actually additional chip enable signals. This will cause the game's CHR ROM to be disabled at all if the wrong CHR bank is selected, making only one actual 8K CHR bank available (the games could in theory run in a <a href="NROM.xhtml" title="NROM">NROM</a> board without being affected).
+Those games typically turn the PPU off, switch in the wrong CHR bank (that return open bus) with wrong diode configuration, read a CHR byte in a specific place where the bus conflicts with the mapper will not appear even with the wrong diode config, then read the same byte with the correct bank and diode config latched, and enter in an infinite loop if the two reads matches. Those games have been assigned to <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a>. Trying to dump them as regular NROM games will create bus conflicts with the dumping device, and even if this is bypassed the game will not run because the CHR ROM will be mirrored for all 8K bank select values.
+</p>
+<h3><span class="mw-headline" id="Solder_Pad_Config">Solder Pad Config</span></h3>
+<ul><li> Horizontal mirroring : 'H' disconnected, 'V' connected.</li>
+<li> Vertical mirroring : 'H' connected, 'V' disconnected.</li></ul>
+<ul><li> 16 KB PRG ROM : 'SL' connected, 'CL' disconnected.</li>
+<li> 32 KB PRG ROM : 'SL' disconnected, 'CL' connected.</li></ul>
+<ul><li> Bit 4 security implemented to '0' : D2 cathode set to '3' (CHR A12) and D2 anode set to '4' (latch).</li>
+<li> Bit 4 security implemented to '1' : D2 cathode set to '4' (latch) and D2 anode set to '3' (CHR A12).</li>
+<li> Bit 5 security implemented to '0' : D1 cathode set to '1' (CHR A10) and D1 anode set to '2' (latch).</li>
+<li> Bit 5 security implemented to '1' : D1 cathode set to '2' (latch) and D1 anode set to '1' (CHR A10).</li>
+<li> Security unimplemented : D1 and D2 not present.</li></ul>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>CNROM operates identically to a <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM</a> with one PRG bank.
+</p><p>The upper 2 bank select bits on the <a href="74161.xhtml" title="74161">74HC161</a> were connected to security diodes.
+If they were connected to CHR ROM address lines instead, this board could have theoretically supported up to 128 KB of CHR ROM.
+In fact, <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">iNES Mapper 003</a> encompasses both CNROM and similar boards that used more CHR ROM, such as those made by <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=4090" rel="nofollow">Bandai</a> and <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1838" rel="nofollow">Panesian</a>.
+</p><p>The <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=3953" rel="nofollow">Japanese version of <i>Dance Aerobics</i></a> adds a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=102300#p102300" rel="nofollow">sound playback IC</a> to a CNROM-like board. It adds a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=9449" rel="nofollow">register mapped from $6000-$7FFF</a> that can play one of eight voice recordings. However, the specifics of the compression are not yet known, and there is no standardized way to bundle audio data with <a href="INES.xhtml" title="INES">iNES</a> images.
+</p><p>Theoretically the bank select register could be implemented with a <a href="74377.xhtml" title="74377">74HC377</a> octal D latch, allowing up to 2 megabytes of CHR ROM.
+</p>
+<h2><span class="mw-headline" id="Notes">Notes</span></h2>
+<p>Many CNROM games such as <i>Milon's Secret Castle</i> store data tables in otherwise unused portions of CHR ROM and access them through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> ($2007) reads. If an emulator can show the title screen of the <a href="NROM.xhtml" title="NROM">NROM</a> game <i>Super Mario Bros.</i>, but CNROM games don't work, the emulator's PPUDATA readback is likely failing to consider CHR ROM bankswitching.
+</p>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a href="INES_Mapper_003.xhtml" title="INES Mapper 003">iNES Mapper 003</a> - The common emulator implementation used for this board, which includes some compatible additions.</li>
+<li> <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a> - Emulation for a subset of CNROM boards that implement a weak form of copy protection.</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.167 seconds
+Real time usage: 0.174 seconds
+Preprocessor visited node count: 302/1000000
+Preprocessor generated node count: 1889/1000000
+Post‐expand include size: 1693/2097152 bytes
+Template argument size: 301/2097152 bytes
+Highest expansion depth: 11/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:116-1!*!0!!en!*!* and timestamp 20160208224823 and revision id 10993
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a>, <a href="Category_CNROM_like_mappers.xhtml">CNROM-like mappers</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a></p></div></body></html>

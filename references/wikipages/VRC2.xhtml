@@ -1,0 +1,198 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC2</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC2</h1><div class="article">
+<p>The Konami VRC2 is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Revisions"><span class="tocnumber">3</span> <span class="toctext">Revisions</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#PRG_Select_0_.28.248000.2C_.248001.2C_.248002.2C_.248003.29"><span class="tocnumber">4.1</span> <span class="toctext">PRG Select 0 ($8000, $8001, $8002, $8003)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#PRG_Select_1_.28.24A000.2C_.24A001.2C_.24A002.2C_.24A003.29"><span class="tocnumber">4.2</span> <span class="toctext">PRG Select 1 ($A000, $A001, $A002, $A003)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Mirroring_Control_.28.249000.2C_.249001.2C_.249002.2C_.249003.29"><span class="tocnumber">4.3</span> <span class="toctext">Mirroring Control ($9000, $9001, $9002, $9003)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#CHR_Select_0_low.28.24B000.29.2C_high.28.24B001.29"><span class="tocnumber">4.4</span> <span class="toctext">CHR Select 0 low($B000), high($B001)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#CHR_Select_1_low.28.24B002.29.2C_high.28.24B003.29"><span class="tocnumber">4.5</span> <span class="toctext">CHR Select 1 low($B002), high($B003)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#CHR_Select_2.E2.80.A67_.28.24C000-.24EFFF.29"><span class="tocnumber">4.6</span> <span class="toctext">CHR Select 2…7 ($C000-$EFFF)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Microwire_interface_.28.246000-.246FFF.29"><span class="tocnumber">4.7</span> <span class="toctext">Microwire interface ($6000-$6FFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 256 KB</li>
+<li> PRG ROM bank size: 8 KiB</li>
+<li> PRG RAM: One bit or 8 KiB</li>
+<li> CHR bank size: 1 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>The Konami VRC2 is almost identical to the <a href="VRC4.xhtml" title="VRC4">VRC4</a>, but a bit more limited.
+</p><p>See <a href="VRC2_pinout.xhtml" title="VRC2 pinout">VRC2 pinout</a> for chip pinout.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$6FFF: 1 bit latch, or</li>
+<li> CPU $6000-$7FFF: optional 8 KiB RAM</li>
+<li> CPU $8000-$9FFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last 16 KiB</li>
+<li> PPU $0000-$03FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0400-$07FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0800-$0BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $0C00-$0FFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1000-$13FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1400-$17FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1800-$1BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1C00-$1FFF: 1 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Revisions">Revisions</span></h2>
+<p>This mapper had two known revisions:  VRC2a and VRC2b.  Both revisions uses Address lines A0, A1, and A12-A15 for registers, however VRC2a has A0 and A1 &quot;backwards&quot; from the norm.  Address $x001 on VRC2b would be $x002 on VRC2a, and $x002 on VRC2b would be $x001 on VRC2a.
+</p><p>Additionally, VRC2a has 7-bit wide CHR registers, whereas VRC2b has 8-bit wide CHR registers.
+</p><p>The two wiring variants correspond to iNES mappers <a href="INES_Mapper_022.xhtml" title="INES Mapper 022">22</a> and <a href="INES_Mapper_023.xhtml" title="INES Mapper 023">23</a>.
+</p><p>A third variant (similar to VRC2a but with full-width CHR registers and PRG-RAM) is canonically emulated as using the VRC4, and it's assigned to <a href="INES_Mapper_025.xhtml" title="INES Mapper 025">mapper 25</a>.
+</p><p>This page lists registers as they are in the VRC2b variant.  For VRC2a registers, reverse A0 and A1 lines.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="PRG_Select_0_.28.248000.2C_.248001.2C_.248002.2C_.248003.29">PRG Select 0 ($8000, $8001, $8002, $8003)</span></h3>
+<pre>7  bit  0
+---------
+...P PPPP
+   | ||||
+   + ++++- Select 8 KB PRG bank at $8000
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_1_.28.24A000.2C_.24A001.2C_.24A002.2C_.24A003.29">PRG Select 1 ($A000, $A001, $A002, $A003)</span></h3>
+<pre>7  bit  0
+---------
+...P PPPP
+   | ||||
+   + ++++- Select 8 KB PRG bank at $A000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Mirroring_Control_.28.249000.2C_.249001.2C_.249002.2C_.249003.29">Mirroring Control ($9000, $9001, $9002, $9003)</span></h3>
+<pre>7  bit  0
+---------
+.... ...M
+        |
+        +- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> (0: vertical (A10); 1: horizontal (A11))
+</pre>
+<p>Note that the <a href="VRC4.xhtml" title="VRC4">VRC4</a> also uses bit 1. VRC2-using games are usually well-behaved and only write 0 or 1 to this register, but <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=2274" rel="nofollow">Wai Wai World</a> in one instance writes $FF instead<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>. This would be invisible if not for the historical conflation of the VRC2 and VRC4.
+</p>
+<h3><span class="mw-headline" id="CHR_Select_0_low.28.24B000.29.2C_high.28.24B001.29">CHR Select 0 low($B000), high($B001)</span></h3>
+<pre>  $B000        $B001
+7  bit  0    7  bit  0
+---------    ---------
+.... LLLL    .... HHHH
+     ||||         ||||
+     ||||         ++++- High 4-bits of 1 KB CHR bank at PPU $0000
+     ++++-------------- Low 4-bits
+</pre>
+<p>Note:  On VRC2a, the low bit is ignored (right shift value by 1)
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="CHR_Select_1_low.28.24B002.29.2C_high.28.24B003.29">CHR Select 1 low($B002), high($B003)</span></h3>
+<pre>  $B002        $B003
+7  bit  0    7  bit  0
+---------    ---------
+.... LLLL    .... HHHH
+     ||||         ||||
+     ||||         ++++- High 4-bits of 1 KB CHR bank at PPU $0400
+     ++++-------------- Low 4-bits
+</pre>
+<p>Note:  On VRC2a, the low bit is ignored (right shift value by 1)
+</p>
+<h3><span class="mw-headline" id="CHR_Select_2.E2.80.A67_.28.24C000-.24EFFF.29">CHR Select 2…7 ($C000-$EFFF)</span></h3>
+<p>The other six CHR bank selects continue the pattern:
+</p>
+<table class="wikitable">
+<tr>
+<th colspan="2">Write to CPU address
+</th></tr>
+<tr>
+<th> (low 3 or 4 bits) </th>
+<th> (high 4 bits) </th>
+<th> 1KB CHR bank affected
+</th></tr>
+<tr>
+<td> $C000 </td>
+<td> $C001 </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> $C002 </td>
+<td> $C003 </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> $D000 </td>
+<td> $D001 </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> $D002 </td>
+<td> $D003 </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> $E000 </td>
+<td> $E001 </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> $E002 </td>
+<td> $E003 </td>
+<td> $1C00-$1FFF
+</td></tr></table>
+<h3><span class="mw-headline" id="Microwire_interface_.28.246000-.246FFF.29">Microwire interface ($6000-$6FFF)</span></h3>
+<p>How it was supposed to work:
+</p>
+<pre>7  bit  0
+---------
+.... .SCD
+      |||
+      ||+- Data to EEPROM (write) or from EEPROM (read)
+      |+-- Clock to EEPROM (write only)
+      +--- Chip Select (write only)
+</pre>
+<p>How it works in practice:
+</p>
+<pre>7  bit  0
+---------
+.... ...L
+        |
+        +- 1-bit latch value (r/w)
+</pre>
+<p>Reads from $6000-6FFF return open bus for the top 7 bits. Reads from $7000-7FFF only ever return open bus.
+</p><p>The VRC2 was supposed to have shipped with a <a class="extiw" href="https://en.wikipedia.org/wiki/Microwire" title="wikipedia:Microwire">Microwire</a> interface for save games. However, Konami never used it, seemingly due to a defect in the VRC2.
+</p><p>Across all the VRC2-using boards, the <i>Data from EEPROM</i> pin has been connected to many different things. On <b>351618</b> (<a href="INES_Mapper_022.xhtml" title="INES Mapper 022">22</a>) it's connected to ground. On <b>350603</b>, <b>350636</b>, and <b>351179</b> it floats. On <b>350926</b> it's connected to <i>Data to EEPROM</i>. On <b>351948</b> (<a href="INES_Mapper_025.xhtml" title="INES Mapper 025">25</a>) it's connected to ground but extra hardware keeps the VRC2 some seeing reads from $6000 so as to not conflict with PRG RAM.
+</p><p>Several games, including Contra (J) and Ganbare Goemon 2 (J), rely on the two <i>Data</i> pins being connected to each other, and so expect to be able to read the written value back. In these cases, the LSB agrees with the last value written and the upper seven bits are open bus, e.g. both LDA $6100 and LDA $6000 will return $60|latch. Returning neither open bus nor 0x00 will work, and these games will lock almost immediately after execution begins. Fortunately, no games ever rely on any other behavior.
+</p><p>Emulators that use the same VRC4 core (and its PRG RAM) for VRC2 emulation will have the effect simulated for them. However, only <b>351948</b> contains any RAM.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/konami-e.txt" rel="nofollow">Konami Mapper</a> by goroh, translated by Sgt. Bowhack</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=13473" rel="nofollow">Forum thread</a>: incorrect mirroring in Wai Wai World, and VRC2 testing.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.086 seconds
+Real time usage: 0.091 seconds
+Preprocessor visited node count: 71/1000000
+Preprocessor generated node count: 142/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:95-1!*!0!!en!*!* and timestamp 20160728174725 and revision id 12759
+ -->
+<p class="categories">Categories: <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a></p></div></body></html>

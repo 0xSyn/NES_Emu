@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 188</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 188</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 188</strong> describes the board used for Bandai's Karaoke Studio. This game, like <a href="INES_Mapper_068.xhtml#.24F000-.24FFFF:_PRG_bank_at_.248000" title="INES Mapper 068">Nantettatte!! Baseball</a> additionally supports an external ROM that allows augmenting the original game.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.246000-.247FFF:_Microphone_input"><span class="tocnumber">2.1</span> <span class="toctext">$6000-$7FFF: Microphone input</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.248000-.24FFFF:_Banking_control"><span class="tocnumber">2.2</span> <span class="toctext">$8000-$FFFF: Banking control</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Warning"><span class="tocnumber">3</span> <span class="toctext">Warning</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM: Up to 256 KiB + Up to 256 KiB expansion cartridge</li>
+<li> PRG ROM bank size: 16 KiB </li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 8 KiB RAM</li>
+<li> CHR bank size: Not bankswitched</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: Yes</li></ul>
+<p>The <a href="Bandai_M60001_0115P_pinout.xhtml" title="Bandai M60001-0115P pinout">mapper IC</a> used here has Mitsubishi's part number for custom orders: M60001.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id=".246000-.247FFF:_Microphone_input">$6000-$7FFF: Microphone input</span></h3>
+<p>The microphone for this game is permanently tethered to the cartridge, and contains two buttons labeled &quot;A&quot; (closer to the microphone itself) and &quot;B&quot; (closer to the cord).
+</p><p>Reads from this address provide the status of the microphone and its buttons:
+</p>
+<pre>7  bit  0
+.... .MBA
+---- ----
+|||| ||||
+|||| |||+- 0: A button is pressed
+|||| ||+-- 0: B button is pressed
+|||| |+--- 1-bit ADC microphone input
+++++-+---- open bus
+</pre>
+<h3><span class="mw-headline" id=".248000-.24FFFF:_Banking_control">$8000-$FFFF: Banking control</span></h3>
+<pre>7  bit  0
+.LXR BBBB
+---- ----
+ ||| ||||
+ ||| ++++- Select ROM bank mapped from $8000-$BFFF.
+ ||+------ 0: Select external ROM, 1: Select internal ROM
+ |+------- CIRAM A10 is connected to  0: PPU A10 (&quot;vertical mirroring&quot;), 1: PPU A11 (&quot;horizontal mirroring&quot;)
+ +-------- 1 bit latch, present but unused
+</pre>
+<p>The bank from $C000-$FFFF is fixed to the last bank of the internal ROM.
+</p>
+<h2><span class="mw-headline" id="Warning">Warning</span></h2>
+<p>The 256 KiB iNES dumps under this mapper are actually the 128KiB internal ROM followed by a 128KiB expansion ROM.
+</p><p>For the 128 KiB iNES dump (solely the internal ROM), several emulators implement logic that selects the last bank of the internal ROM when the game tries to select the first of the external ROM. There may be a fingerprint the game requires on being absent. Properly implementing open bus is more accurate.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> Enri's schematic: <a class="external free" href="http://www43.tok2.com/home/cmpslv/Famic/Famic.htm" rel="nofollow">http://www43.tok2.com/home/cmpslv/Famic/Famic.htm</a> (scroll down to &quot; カラオケスタジオの回路図 &quot;)</li>
+<li> Naruko's wiki: <a class="external text" href="http://seesaawiki.jp/famicomcartridge/d/%a5%ab%a5%e9%a5%aa%a5%b1%a5%b9%a5%bf%a5%b8%a5%aa" rel="nofollow">カラオケスタジオ</a></li>
+<li> Nestopia and FCEUX source</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1325-1!*!0!!en!*!* and timestamp 20160208225351 and revision id 8363
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a></p></div></body></html>

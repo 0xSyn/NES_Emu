@@ -1,0 +1,1318 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Family Computer Disk System</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Family Computer Disk System</h1><div class="article">
+<p>The <b>Famicom Disk System</b> was a Japan-exclusive storage device for the Famicom, designed to reduce Nintendo's cost of making copies of games by switching from mask <a href="ROM.xhtml" title="ROM">ROM</a> chips to a storage medium based on Mitsumi's Quick Disk.
+Unfortunately for Nintendo, it also reduced the pirates' cost of making copies of games.
+</p><p>The iNES mapper #20 is assigned to FDS.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.FDS_format"><span class="tocnumber">1</span> <span class="toctext">.FDS format</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Overview"><span class="tocnumber">2</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#FDS_Disk_Side_format"><span class="tocnumber">4</span> <span class="toctext">FDS Disk Side format</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Data_not_stored_in_the_FDS_image"><span class="tocnumber">5</span> <span class="toctext">Data not stored in the FDS image</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Gaps"><span class="tocnumber">5.1</span> <span class="toctext">Gaps</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#CRCs"><span class="tocnumber">5.2</span> <span class="toctext">CRCs</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#True_disc_capacity"><span class="tocnumber">5.3</span> <span class="toctext">True disc capacity</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Block_format"><span class="tocnumber">6</span> <span class="toctext">Block format</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Disk_info_block_.28block_1.29"><span class="tocnumber">6.1</span> <span class="toctext">Disk info block (block 1)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Date_format"><span class="tocnumber">6.1.1</span> <span class="toctext">Date format</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Price"><span class="tocnumber">6.1.2</span> <span class="toctext">Price</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Manufacturer_codes"><span class="tocnumber">6.1.3</span> <span class="toctext">Manufacturer codes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#File_amount_block_.28block_2.29"><span class="tocnumber">6.2</span> <span class="toctext">File amount block (block 2)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#File_header_block_.28block_3.29"><span class="tocnumber">6.3</span> <span class="toctext">File header block  (block 3)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#File_data_block_.28block_4.29"><span class="tocnumber">6.4</span> <span class="toctext">File data block (block 4)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Registers"><span class="tocnumber">7</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#IRQ_timer_low_.28.244020.29"><span class="tocnumber">7.1</span> <span class="toctext">IRQ timer low ($4020)</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#IRQ_timer_high_.28.244021.29"><span class="tocnumber">7.2</span> <span class="toctext">IRQ timer high ($4021)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#IRQ_timer_enable_.28.244022.29"><span class="tocnumber">7.3</span> <span class="toctext">IRQ timer enable ($4022)</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Master_I.2FO_enable_.28.244023.29"><span class="tocnumber">7.4</span> <span class="toctext">Master I/O enable ($4023)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Write_data_register_.28.244024.29"><span class="tocnumber">7.5</span> <span class="toctext">Write data register ($4024)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#FDS_Control_.28.244025.29"><span class="tocnumber">7.6</span> <span class="toctext">FDS Control ($4025)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#External_connector_.28.244026.29"><span class="tocnumber">7.7</span> <span class="toctext">External connector ($4026)</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Disk_Status_Register_0_.28.244030.29"><span class="tocnumber">7.8</span> <span class="toctext">Disk Status Register 0 ($4030)</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Read_data_register_.28.244031.29"><span class="tocnumber">7.9</span> <span class="toctext">Read data register ($4031)</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Disk_drive_status_register_.28.244032.29"><span class="tocnumber">7.10</span> <span class="toctext">Disk drive status register ($4032)</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#External_connector_read_.28.244033.29"><span class="tocnumber">7.11</span> <span class="toctext">External connector read ($4033)</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Sound_.28.244040-.244092.29"><span class="tocnumber">7.12</span> <span class="toctext">Sound ($4040-$4092)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-30"><a href="#Pseudo-registers"><span class="tocnumber">8</span> <span class="toctext">Pseudo-registers</span></a></li>
+<li class="toclevel-1 tocsection-31"><a href="#BIOS_calls"><span class="tocnumber">9</span> <span class="toctext">BIOS calls</span></a>
+<ul>
+<li class="toclevel-2 tocsection-32"><a href="#Disk_access_routines"><span class="tocnumber">9.1</span> <span class="toctext">Disk access routines</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Low-Level_Disk_access_routines"><span class="tocnumber">9.2</span> <span class="toctext">Low-Level Disk access routines</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Example_code_how_to_load_files"><span class="tocnumber">9.3</span> <span class="toctext">Example code how to load files</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Error_list"><span class="tocnumber">9.4</span> <span class="toctext">Error list</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Disk_ID_structure"><span class="tocnumber">9.5</span> <span class="toctext">Disk ID structure</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#File_list_structure"><span class="tocnumber">9.6</span> <span class="toctext">File list structure</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#File_header_structure"><span class="tocnumber">9.7</span> <span class="toctext">File header structure</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#Disk_information_structure"><span class="tocnumber">9.8</span> <span class="toctext">Disk information structure</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-40"><a href="#Other_BIOS_calls"><span class="tocnumber">10</span> <span class="toctext">Other BIOS calls</span></a>
+<ul>
+<li class="toclevel-2 tocsection-41"><a href="#VRAM_write_transfer_structure"><span class="tocnumber">10.1</span> <span class="toctext">VRAM write transfer structure</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#VRAM_Buffer_notes"><span class="tocnumber">10.2</span> <span class="toctext">VRAM Buffer notes</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#Read_routines_and_VRAM_buffer"><span class="tocnumber">10.3</span> <span class="toctext">Read routines and VRAM buffer</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#Load_Tileset_notes"><span class="tocnumber">10.4</span> <span class="toctext">Load Tileset notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-45"><a href="#References"><span class="tocnumber">11</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".FDS_format">.FDS format</span></h2>
+<p><b>fwNES</b> was an <a class="mw-redirect" href="Emulators.xhtml" title="NES emulator">NES emulator</a> developed by Fan Wan Yang.  Its most lasting contribution to the NES scene was its disk image file format, an image of the Quick Disk media.
+</p><p>The FDS format (file name suffix <code>.fds</code>) is a way to store Famicom Disk System disk data. It consists of the following sections, in order:
+</p>
+<ol><li> Header (16 bytes)</li>
+<li> Disk data (65500 * <i>x</i> bytes)</li></ol>
+<p>The format of the header is as follows:
+</p>
+<ul><li> 0-3: Constant $46 $44 $53 $1A (&quot;FDS&quot; followed by MS-DOS end-of-file)</li>
+<li> 4: Number of disk sides</li>
+<li> 5-15: Zero filled</li></ul>
+<p>Note: Most games are an even number of sides. Ports from NROM were one side. No commercial FDS game had an odd number of sides greater than 1.
+Disk sides comes in the following order :
+</p>
+<ul><li> Disc 1 Side A</li>
+<li> Disc 1 Side B</li>
+<li> Disc 2 Side A</li>
+<li> Disc 2 Side B</li>
+<li> etc...</li></ul>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM : 8 KB BIOS at $E000-$FFFF</li>
+<li> PRG RAM: 32 KB at $6000-$DFFF</li>
+<li> CHR capacity: 8 KB RAM</li>
+<li> Storage capacity : ~64 KB per disk side</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>Games are stored on one or multiple disk sides. The FDS BIOS is used to load data from disks to PRG RAM or VRAM, and games can execute from there.
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The Famicom disk system comes in two parts : The disk drive and the RAM adapter.
+</p><p>The RAM adapter is a special shaped cartridge that contains the RAM chips, IRQ hardware, sound generation hardware, a serial interface for the disk drive and another (rarely used) serial port.
+</p><p>The Disk Drive has to be powered separately and is only connected to the Famicom/NES through the serial cable to the RAM adapter.
+</p><p>Most disk drives contains two motors: a rotation motor that spins the disk at a constant rate, and a tracking motor. However, the FDS only contains a single motor that does both at once. There is some mechanism that detects when the head reaches the end of the disc and make it return to the start, which makes a click sound.
+</p><p>Because of this limitation, random access to the disc is not possible, you can only spin the disc and wait until you detect the head is at the start of the disc, then wait until it reaches the desired access place. A complete cycle through the entire disc takes about 7 seconds.
+</p><p>The disc drives only contains basic electronics, there is no &quot;intelligence&quot; in it; therefore, the serial interface almost directly represents what is stored on the disc.
+</p>
+<h2><span class="mw-headline" id="FDS_Disk_Side_format">FDS Disk Side format</span></h2>
+<p>Each disk side must be structured into block as follows :
+</p><p>1, 2, 3, 4, 3, 4, ...., 3, 4
+</p><p>The 3, 4 pattern should be repeated once per file present on the disk.
+</p><p>From the last file, fill the side with all 0 so that the side has exactly 65500 is reached.
+</p>
+<h2><span class="mw-headline" id="Data_not_stored_in_the_FDS_image">Data not stored in the FDS image</span></h2>
+<p>In addition to data stored in the FDS image, there is other data stored on the disc, but removed when the disc is dumped because such data wasn't meaningful for emulation.
+</p>
+<h3><span class="mw-headline" id="Gaps">Gaps</span></h3>
+<p>Physically on the disc, there are &quot;gaps&quot; of 0 recorded between blocks and before the start of the disc.
+Length of the gaps are as follows:
+</p>
+<ul><li> Before the start of the disc : At least 26150 bits, 28300 typical.</li>
+<li> Gap between blocks : At least 480 bits, 976 bits typical.</li></ul>
+<p>Gaps are teminated by a single '1' bit. In terms of bytes, it would be $80, as the data is stored in little endian format.
+</p>
+<h3><span class="mw-headline" id="CRCs">CRCs</span></h3>
+<p>At the end of each block, a 16-bit CRC is stored. On loading, the CRC is *not* calculated by the 6502 in the BIOS, but by the RAM adapter, which monitors disc transfers and calculates the CRC. It will automatically send an error code if both CRCs doesn't match.
+</p>
+<h3><span class="mw-headline" id="True_disc_capacity">True disc capacity</span></h3>
+<p>Even if the FDS disc side image is always 65500 bytes, one WILL have to subtract all the bits taken by the gaps and CRCs to find the actual disc capacity. In this regard, the way the FDS image is made is not smart because all the bits that were saved by not dumping useless data should be wasted in zeroes at the end of the disc side. In addition to this, the programmer should be very careful for not using the whole disc side in FDS format, otherwise, the data might not fit the disc.
+</p><p>The actual disc capacity in bytes is (N = number of files):
+</p><p>65500 - 28300/8 - (2*N + 1)*(16 + 976)/8
+</p><p>For example, if you use 8 files, there's room for only 59854 bytes instead of the supposed 65500.
+</p>
+<h2><span class="mw-headline" id="Block_format">Block format</span></h2>
+<h3><span class="mw-headline" id="Disk_info_block_.28block_1.29">Disk info block (block 1)</span></h3>
+<table class="wikitable">
+
+<tr>
+<th> Offset </th>
+<th> Length (bytes) </th>
+<th> Description </th>
+<th> Details
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 1 </td>
+<td> Block code </td>
+<td> Raw byte: $01
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 14 </td>
+<td> Disk verification </td>
+<td> Literal ASCII string: <tt>*NINTENDO-HVC*</tt><br/>Used by BIOS to verify legitimate disk image
+</td></tr>
+<tr>
+<td> 15 </td>
+<td> 1 </td>
+<td> Manufacturer code </td>
+<td> See <a href="#Manufacturer_codes">Manufacturer codes</a>
+</td></tr>
+<tr>
+<td> 16 </td>
+<td> 3 </td>
+<td> Game name </td>
+<td> 3-letter ASCII code per game (e.g. LNK for The Legend of Zelda)
+</td></tr>
+<tr>
+<td> 19 </td>
+<td> 1 </td>
+<td> Game type </td>
+<td> $20 = <tt>&quot; &quot;</tt> — Normal disk<br/>$45 = <tt>&quot;E&quot;</tt> — Event (e.g. Japanese national <a class="external text" href="http://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A1%E3%83%9F%E3%83%AA%E3%83%BC%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF_%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0#.E3.83.87.E3.82.A3.E3.82.B9.E3.82.AF.E3.83.95.E3.82.A1.E3.82.AF.E3.82.B9" rel="nofollow">DiskFax</a> tournaments)<br/>$52 = <tt>&quot;R&quot;</tt> — Reduction in price via advertising
+</td></tr>
+<tr>
+<td> 20 </td>
+<td> 1 </td>
+<td> Game version/revision number </td>
+<td> Starts at $00, increments per revision
+</td></tr>
+<tr>
+<td> 21 </td>
+<td> 1 </td>
+<td> Side number </td>
+<td> $00 = Side A, $01 = Side B.  Single-sided disks use $00
+</td></tr>
+<tr>
+<td> 22 </td>
+<td> 1 </td>
+<td> Disk number </td>
+<td> First disk is $00, second is $01, etc.
+</td></tr>
+<tr>
+<td> 23 </td>
+<td> 1 </td>
+<td> Disk type </td>
+<td> $00 = FMC (&quot;normal card&quot;), $01 = FSC (&quot;card with shutter&quot;).  May correlate with <a class="external text" href="http://famicomworld.com/workshop/articles/product-codes-fmc-and-fsc/" rel="nofollow">FMC and FSC product codes</a>
+</td></tr>
+<tr>
+<td> 24 </td>
+<td> 1 </td>
+<td> Unknown </td>
+<td> Speculative: (Err.10) Possibly indicates disk #; usually $00<br/>Speculative: $00 = yellow disk, $01 = blue or gold disk, $FE = white disk, $FF = blue disk
+</td></tr>
+<tr>
+<td> 25 </td>
+<td> 1 </td>
+<td> Boot read file code </td>
+<td> Refers to the file code/file number to load upon boot/start-up
+</td></tr>
+<tr>
+<td> 26 </td>
+<td> 5 </td>
+<td> Unknown </td>
+<td> Raw bytes: $FF $FF $FF $FF $FF
+</td></tr>
+<tr>
+<td> 31 </td>
+<td> 3 </td>
+<td> Manufacturing date </td>
+<td> See <a href="#Date_format">Date format</a>
+</td></tr>
+<tr>
+<td> 34 </td>
+<td> 1 </td>
+<td> Country code </td>
+<td> $49 = Japan
+</td></tr>
+<tr>
+<td> 35 </td>
+<td> 1 </td>
+<td> Unknown </td>
+<td> Raw byte: $61.  Speculative: Region code?
+</td></tr>
+<tr>
+<td> 36 </td>
+<td> 1 </td>
+<td> Unknown </td>
+<td> Raw byte: $00.  Speculative: Location/site?
+</td></tr>
+<tr>
+<td> 37 </td>
+<td> 2 </td>
+<td> Unknown </td>
+<td> Raw bytes: $00 $02
+</td></tr>
+<tr>
+<td> 39 </td>
+<td> 5 </td>
+<td> Unknown </td>
+<td> Speculative: some kind of game information representation?
+</td></tr>
+<tr>
+<td> 44 </td>
+<td> 3 </td>
+<td> &quot;Rewritten disk&quot; date </td>
+<td> See <a href="#Date_format">Date format</a>.  It's speculated this refers to the date the disk was formatted and rewritten by something like a <a class="external text" href="http://www.nintendolife.com/news/2014/03/weirdness_this_footage_of_the_famicom_disk_writer_kiosk_is_a_bit_awesome" rel="nofollow">Disk Writer kiosk</a>.  In the case of an original (non-copied) disk, this should be the same as <a href="#Manufacturing_date">Manufacturing date</a>
+</td></tr>
+<tr>
+<td> 47 </td>
+<td> 1 </td>
+<td> Unknown
+</td></tr>
+<tr>
+<td> 48 </td>
+<td> 1 </td>
+<td> Unknown </td>
+<td> Raw byte: $80
+</td></tr>
+<tr>
+<td> 49 </td>
+<td> 2 </td>
+<td> Disk Writer serial number
+</td></tr>
+<tr>
+<td> 51 </td>
+<td> 1 </td>
+<td> Unknown </td>
+<td> Raw byte: $07
+</td></tr>
+<tr>
+<td> 52 </td>
+<td> 1 </td>
+<td> Disk rewrite count </td>
+<td> Value stored in <a class="extiw" href="http://en.wikipedia.org/wiki/Binary-coded_decimal" title="wikipedia:Binary-coded decimal">BCD</a> format.  $00 = Original (no copies).  Also see <a href="#Price">Price</a>
+</td></tr>
+<tr>
+<td> 53 </td>
+<td> 1 </td>
+<td> Actual disk side </td>
+<td> $00 = Side A, $01 = Side B
+</td></tr>
+<tr>
+<td> 54 </td>
+<td> 1 </td>
+<td> Unknown
+</td></tr>
+<tr>
+<td> 55 </td>
+<td> 1 </td>
+<td> Price </td>
+<td> See <a href="#Price">Price</a>
+</td></tr>
+<tr>
+<td> 56 </td>
+<td> 2 </td>
+<td> CRC
+</td></tr>
+</table>
+<p>The <tt>*NINTENDO-HVC*</tt> string, stored in ASCII, proves that this is a FDS disk. If the string doesn't match, the BIOS will refuse to read the disk further.
+</p><p>If the FDS is started with a disk whose side number and disk number aren't both $00, it will be prompted to insert the first disk side. However, some games make this number $00, even for the second disk to make it bootable too.
+</p><p>All files with IDs smaller or equals to the <i>boot read file code</i> will be loaded when the game is booting.
+</p><p>The FDS also has a trademark security system similar to <a class="external text" href="http://segaretro.org/TradeMark_Security_System" rel="nofollow">what Sega used on some of its consoles</a>.
+</p><p>The 224-byte text at PPU $2800-$28DF must match the data in the BIOS, starting at $ED37.
+This data roughly translates into &quot;produced by or under license from Nintendo&quot; in the SMB1/Zelda character encoding.
+Traditionally, the first file on a disk is a nametable type file loaded into $2800, which is named <code>KYODAKU-</code> (きょだく or <a class="extiw" href="http://en.wiktionary.org/wiki/%E8%A8%B1" title="wiktionary:許">許</a><a class="extiw" href="http://en.wiktionary.org/wiki/%E8%AB%BE" title="wiktionary:諾">諾</a> means approval).
+</p>
+<h4><span class="mw-headline" id="Date_format">Date format</span></h4>
+<p>All bytes are stored in BCD format, in order of year, month, and day.  To accurately calculate they year, add 1925 to the BCD value.  For example, values of $63 $11 $28 would represent November ($11) 28th ($28), 1988 ($63 + 1925).  The &quot;magic year&quot; of 1925 comes from the Japanese <a class="extiw" href="http://en.wikipedia.org/wiki/Sh%C5%8Dwa_period" title="wikipedia:Shōwa period">Shōwa period</a>, despite the era only lasting from 1925 until 1989.  Titles manufactured or updated later than 1989 are considered legitimate (e.g. $83 + 1925 = 2008).
+</p>
+<h4><span class="mw-headline" id="Price">Price</span></h4>
+<p>When the <b>Disk rewrite count</b> field is $00, the <b>Price</b> field represents the cost of a &quot;new/original&quot; disk.  In this situation, a value of $01 means 3400円 (3400 yen), and a value of $03 also means 3400円 but includes peripherals.  The example given by Enri in his Famicom Disk System documentation mentions the game <a class="external text" href="http://ja.wikipedia.org/wiki/%E3%81%A8%E3%81%B3%E3%81%A0%E3%81%9B%E5%A4%A7%E4%BD%9C%E6%88%A6" rel="nofollow">とびだせ大作戦 (Tobidase Daisakusen/3D Worldrunner)</a>, where both sales of the game with and without the <a class="external text" href="http://homepage3.nifty.com/poco-pen/s-te.htm" rel="nofollow">とびだせメガネ (Tobidase 3D glasses)</a> cost 3400円.  The reason for the delineation within the actual <b>Price</b> field is unknown.
+</p><p>When the <b>Disk rewrite count</b> field is $01, the <b>Price</b> field represents incurred costs of disk rewriting (such as that done by a Disk Writer kiosk).  A value of $00 means 500円 (which appears to be specific to Mario Brothers via an in-box advertisement promising that all disk rewrites would only cost 500円), while a value of $01 means 600円.
+</p>
+<h4><span class="mw-headline" id="Manufacturer_codes">Manufacturer codes</span></h4>
+<p>The manufacturer codes are similar (quite possibly identical) to that known on the GameBoy.  There are some differences, however (for example, $A6).
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Value </th>
+<th> Company (English) </th>
+<th> Company (Japanese)
+</th></tr>
+<tr>
+<td> $00 </td>
+<td> &lt;unlicensed&gt; </td>
+<td> &lt;非公認&gt;
+</td></tr>
+<tr>
+<td> $01 </td>
+<td> Nintendo </td>
+<td> 任天堂
+</td></tr>
+<tr>
+<td> $08 </td>
+<td> Capcom </td>
+<td> カプコン
+</td></tr>
+<tr>
+<td> $0A </td>
+<td> Jaleco </td>
+<td> ジャレコ
+</td></tr>
+<tr>
+<td> $18 </td>
+<td> Hudson Soft </td>
+<td> ハドソン
+</td></tr>
+<tr>
+<td> $49 </td>
+<td> Irem </td>
+<td> アイレム
+</td></tr>
+<tr>
+<td> $4A </td>
+<td> Gakken </td>
+<td> 学習研究社
+</td></tr>
+<tr>
+<td> $8B </td>
+<td> BulletProof Software (BPS) </td>
+<td> BPS
+</td></tr>
+<tr>
+<td> $99 </td>
+<td> Pack-In-Video </td>
+<td> パックインビデオ
+</td></tr>
+<tr>
+<td> $9B </td>
+<td> Tecmo </td>
+<td> テクモ
+</td></tr>
+<tr>
+<td> $9C </td>
+<td> Imagineer </td>
+<td> イマジニア
+</td></tr>
+<tr>
+<td> $A2 </td>
+<td> Scorpion Soft </td>
+<td> スコーピオンソフト
+</td></tr>
+<tr>
+<td> $A4 </td>
+<td> Konami </td>
+<td> コナミ
+</td></tr>
+<tr>
+<td> $A6 </td>
+<td> Kawada Co., Ltd. </td>
+<td> 河田
+</td></tr>
+<tr>
+<td> $A7 </td>
+<td> Takara </td>
+<td> タカラ
+</td></tr>
+<tr>
+<td> $A8 </td>
+<td> Royal Industries </td>
+<td> ロイヤル工業
+</td></tr>
+<tr>
+<td> $AC </td>
+<td> Toei Animation </td>
+<td> 東映動画
+</td></tr>
+<tr>
+<td> $AF </td>
+<td> Namco </td>
+<td> ナムコ
+</td></tr>
+<tr>
+<td> $B1 </td>
+<td> ASCII Corporation </td>
+<td> アスキー
+</td></tr>
+<tr>
+<td> $B2 </td>
+<td> Bandai </td>
+<td> バンダイ
+</td></tr>
+<tr>
+<td> $B3 </td>
+<td> Soft Pro Inc. </td>
+<td> ソフトプロ
+</td></tr>
+<tr>
+<td> $B6 </td>
+<td> HAL Laboratory </td>
+<td> HAL研究所
+</td></tr>
+<tr>
+<td> $BB </td>
+<td> Sunsoft </td>
+<td> サンソフト
+</td></tr>
+<tr>
+<td> $BC </td>
+<td> Toshiba EMI </td>
+<td> 東芝EMI
+</td></tr>
+<tr>
+<td> $C0 </td>
+<td> Taito </td>
+<td> タイトー
+</td></tr>
+<tr>
+<td> $C1 </td>
+<td> Sunsoft / Ask Co., Ltd. </td>
+<td> サンソフト アスク講談社
+</td></tr>
+<tr>
+<td> $C2 </td>
+<td> Kemco </td>
+<td> ケムコ
+</td></tr>
+<tr>
+<td> $C3 </td>
+<td> Square </td>
+<td> スクウェア
+</td></tr>
+<tr>
+<td> $C4 </td>
+<td> Tokuma Shoten </td>
+<td> 徳間書店
+</td></tr>
+<tr>
+<td> $C5 </td>
+<td> Data East </td>
+<td> データイースト
+</td></tr>
+<tr>
+<td> $C6 </td>
+<td> Tonkin House/Tokyo Shoseki </td>
+<td> トンキンハウス
+</td></tr>
+<tr>
+<td> $C7 </td>
+<td> East Cube </td>
+<td> イーストキューブ
+</td></tr>
+<tr>
+<td> $CA </td>
+<td> Konami / Ultra / Palcom </td>
+<td> コナミ
+</td></tr>
+<tr>
+<td> $CB </td>
+<td> NTVIC / VAP </td>
+<td> バップ
+</td></tr>
+<tr>
+<td> $CC </td>
+<td> Use Co., Ltd. </td>
+<td> ユース
+</td></tr>
+<tr>
+<td> $CE </td>
+<td> Pony Canyon / FCI </td>
+<td> ポニーキャニオン
+</td></tr>
+<tr>
+<td> $D1 </td>
+<td> Sofel </td>
+<td> ソフエル
+</td></tr>
+<tr>
+<td> $D2 </td>
+<td> Bothtec, Inc. </td>
+<td> ボーステック
+</td></tr>
+<tr>
+<td> $DB </td>
+<td> Hiro Co., Ltd. </td>
+<td> ヒロ
+</td></tr>
+<tr>
+<td> $E7 </td>
+<td> Athena </td>
+<td> アテナ
+</td></tr>
+<tr>
+<td> $EB </td>
+<td> Atlus </td>
+<td> アトラス
+</td></tr>
+</table>
+<h3><span class="mw-headline" id="File_amount_block_.28block_2.29">File amount block (block 2)</span></h3>
+<p>This block contains the total number of files recorded on disk.
+</p>
+<pre>SIZE   CONTENTS
+1        $02
+1       File Amount
+</pre>
+<p>More files might exist on the disk, but the BIOS load routine will ignore them, those files are called &quot;hidden&quot; files.
+Some games have a simple copy protection this way : They have their own loading routine similar to the one from the BIOS but hard-code the file amount to a higher number, which will allow for loading hidden files. This also allows the game to load faster because the BIOS will stop reading the disc after the last non-hidden file.
+</p>
+<h3><span class="mw-headline" id="File_header_block_.28block_3.29">File header block  (block 3)</span></h3>
+<pre>SIZE     CONTENTS
+1        $03
+1        File Number  
+1        File Indicate Code (file identification code)  
+         ID specified at disk-read function call
+8        File Name
+2        File Address (16-bit little endian)
+         the destination address when loading
+2        File Size (16-bit little endian)
+1        Kind of File  
+         0:Program (PRAM)  
+         1:Character (CRAM)  
+         2:Name table (VRAM)
+</pre>
+<p>The file Number must go in increasing order, first file is 0.
+File IDs can be freely assigned, and this is the number which will decide which file is loaded from the disk (instead of the file number). An ID smaller than the boot number means the file is a boot file, and will be loaded on first start up.
+</p><p>File names are uppercase ASCII.
+</p>
+<h3><span class="mw-headline" id="File_data_block_.28block_4.29">File data block (block 4)</span></h3>
+<pre>SIZE      CONTENTS
+1         $04
+--        disk data
+</pre>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>$402x registers are write-only
+$403x registers are read-only
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="IRQ_timer_low_.28.244020.29">IRQ timer low ($4020)</span></h3>
+<pre>7  bit  0
+---------
+LLLL LLLL
+|||| ||||
+++++-++++- 8 LSB of IRQ timer
+</pre>
+<h3><span class="mw-headline" id="IRQ_timer_high_.28.244021.29">IRQ timer high ($4021)</span></h3>
+<pre>7  bit  0
+---------
+LLLL LLLL
+|||| ||||
+++++-++++- 8 MSB of IRQ timer
+</pre>
+<h3><span class="mw-headline" id="IRQ_timer_enable_.28.244022.29">IRQ timer enable ($4022)</span></h3>
+<pre>7  bit  0
+---------
+xxxx xxEx
+       |
+       +-- Enable IRQ timer
+</pre>
+<p>Each CPU clock cycle the timer is decremented by one if the enable flag is set.
+When the counter reach 0, an IRQ is generated. Read $4030 to acknowledge the IRQ.
+</p><p>Note : Since the disk transfer routine also uses IRQs, it's very important to disable timer IRQs before doing any access to the disk.
+</p>
+<h3><span class="mw-headline" id="Master_I.2FO_enable_.28.244023.29">Master I/O enable ($4023)</span></h3>
+<pre>7  bit  0
+---------
+xxxx xxSD
+       ||
+       |+- Enable disk I/O registers
+       +-- Enable sound I/O registers
+</pre>
+<p>This register sounds obscure. FDS bios just writes $00 then $83 to it.
+</p>
+<h3><span class="mw-headline" id="Write_data_register_.28.244024.29">Write data register ($4024)</span></h3>
+<p>The data that this register is programmed with will be the next 8-bit quantity to load into the shift register (next time the byte transfer flag raises), and to be shifted out and appear on pin 5 of the RAM adapter cable (2C33 pin 52).
+</p>
+<h3><span class="mw-headline" id="FDS_Control_.28.244025.29">FDS Control ($4025)</span></h3>
+<pre>7  bit  0
+---------
+IS1B MRTD
+|||| ||||
+|||| |||+- Drive Motor Control  
+|||| |||     0: Stop motor
+|||| |||     1: Turn on motor
+|||| ||+-- Transfer Reset
+|||| ||        Set 1 to reset transfer timing to the initial state.
+|||| |+--- Read / Write mode
+|||| |     (0: write; 1: read)
+|||| +---- Mirroring (0: horizontal; 1: vertical)
+|||+------ CRC control (set during CRC calculation of transfer)
+||+------- Always set to '1'
+|+-------- Read/Write Start  
+|            Turn on motor.  Set to 1 when the drive becomes ready for read/write
++--------- Interrupt Transfer  
+             0: Transfer without using IRQ
+             1: Enable IRQ when the drive becomes ready for 
+</pre>
+<p>A FDS game that wants to change mirroring probably don't want to touch motor related bits, so it should do a read-modify-write from the pseudo registers (see below).
+</p>
+<h3><span class="mw-headline" id="External_connector_.28.244026.29">External connector ($4026)</span></h3>
+<p>Output of expansion terminal where there's a shutter on the back of the ram card. The outputs of $4026 (open-collector with 4.7K ohm pull-ups (except on bit 7)), are shared with the inputs on $4033.
+</p>
+<h3><span class="mw-headline" id="Disk_Status_Register_0_.28.244030.29">Disk Status Register 0 ($4030)</span></h3>
+<pre>7  bit  0
+---------
+IExB xxTD
+||||   ||
+||||   |+- Timer Interrupt (1: an IRQ occurred)
+||||   +-- Byte transfer flag. Set every time 8 bits have been transfered between the RAM adaptor &amp; disk drive (service $4024/$4031). 
+||||       Reset when $4024, $4031, or $4030 has been serviced.
+|||+------ CRC control (0: CRC passed; 1: CRC error)
+|+-------- End of Head (1 when disk head is on the most inner track)
++--------- Disk Data Read/Write Enable (1 when disk is readable/writable)
+
+</pre>
+<h3><span class="mw-headline" id="Read_data_register_.28.244031.29">Read data register ($4031)</span></h3>
+<p>This register is loaded with the contents of an internal shift register every time the byte transfer flag raises. The shift register receives it's serial data via pin 9 of the RAM adapter cable (2C33 pin 51).
+</p>
+<h3><span class="mw-headline" id="Disk_drive_status_register_.28.244032.29">Disk drive status register ($4032)</span></h3>
+<pre>7  bit  0
+---------
+xxxx xPRS
+      |||
+      ||+- Disk flag  (0: Disk inserted; 1: Disk not inserted)
+      |+-- Ready flag (0: Disk read; 1: Disk not ready)
+      +--- Protect flag (0: Not write protected; 1: Write protected or disk ejected)
+</pre>
+<h3><span class="mw-headline" id="External_connector_read_.28.244033.29">External connector read ($4033)</span></h3>
+<pre>7  bit  0
+---------
+BIII IIII
+|||| ||||
+|+++-++++- Input from expansion terminal where there's a shutter on the back of the ram card.
++--------- Battery status (0: Good; 1: Voltage is low).
+</pre>
+<p>When a bit is clear in $4026 port it will read back as '0' here (including battery bit) because of how open collector input works.
+</p>
+<h3><span class="mw-headline" id="Sound_.28.244040-.244092.29">Sound ($4040-$4092)</span></h3>
+<p>For details on sound information, see <a href="FDS_audio.xhtml" title="FDS audio">FDS audio</a>.
+</p>
+<h2><span class="mw-headline" id="Pseudo-registers">Pseudo-registers</span></h2>
+<p>Those registers are used by the FDS bios and FDS programs. They are used to overcome the problem that NES/FDS registers are write only, so it is effectively possible to modify only one bit of them without affecting other bits.
+</p>
+<pre>[$FF]:  value last written to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>   $80 on reset.
+[$FE]:  value last written to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a>   $06 on reset
+[$FD]:  value last written to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>#1 0'd on reset.
+[$FC]:  value last written to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a>#2 0'd on reset.
+[$FB]:  value last written to <a href="Controller_port_registers.xhtml" title="Controller port registers">$4016</a>   0'd on reset.
+[$FA]:  value last written to $4025   $2E on reset.
+[$F9]:  value last written to $4026   $FF on reset.
+$F5..$F8 : Used by controller read routines
+$00..$0F is used as temporary memory for the BIOS. The main program can use it as temporary memory too.
+</pre>
+<p>Those values are used by the BIOS to determine action on interrupt.
+</p>
+<pre>($0102):	PC action on reset
+[$0101]:	PC action on IRQ. set to $80 on reset
+[$0100]:	PC action on NMI. set to $C0 on reset
+($DFFE):	disk game IRQ vector    (if [$0101] = 11xxxxxxB)
+($DFFC):	disk game reset vector  (if ($0102) = $5335, or $AC35)
+($DFFA):	disk game NMI vector #3 (if [$0100] = 11xxxxxxB)
+($DFF8):	disk game NMI vector #2 (if [$0100] = 10xxxxxxB)
+($DFF6):	disk game NMI vector #1 (if [$0100] = 01xxxxxxB)
+</pre>
+<p>A few important notes :
+</p>
+<ul><li> After loading the boot files, $102 is set to $35 so that the ($DFFC) vector is used and the BIOS is skipped.</li>
+<li> $103 indicate reset type : $AC = first boot of the game, $53 = the game was soft-reseted by the user</li>
+<li> To use your own IRQ routine, you must manually write $c0 to $101</li>
+<li> There is 3 possible NMI vectors, #3 is used by default.</li>
+<li> On first start, the mirroring is set to horizontal, the stack pointer is $ff, and the I flag is <i>clear</i>. System RAM is filled with values used by the BIOS, and PRG RAM is uninitialized, except for parts of it which has files loaded in.</li></ul>
+<h2><span class="mw-headline" id="BIOS_calls">BIOS calls</span></h2>
+<h3><span class="mw-headline" id="Disk_access_routines">Disk access routines</span></h3>
+<ul><li> Routines takes one or two pointers as arguments. Those are placed directly after the JSR instruction: the subroutines uses the return address in stack to fetch the pointers and fix the return address.</li>
+<li> Memory at $00-$0f will be affected by those routines</li>
+<li> Unlike the vast majority of disk drives, the FDS lacks any kind of intelligent tracking system. All BIOS load and save functions will do access to the whole disk, no matter which data they load/save. A simple way to overcome this problem is to have your own loading routine, similar to the BIOS one but forcing the # of files to a smaller number than it actually is. That way the later files are not accessed at all and the earlier files load faster. Of course the maximal time is still taken when you have to load the files that are late on the disk.</li>
+<li> All non-disk IRQ sources (timer, DMC and APU frame) should be properly disabled before calling any of these routines. The value at [$0101] however, is preserved on entry, and restored on exit.</li>
+<li> On return of those routines, A = $00 means no error occurred, other number is error #. Main program should test if an error occurred with the BEQ or BNE instruction, BEQ will branch if no error, and BNE will branch if there is an error.</li>
+<li> The structures defined below are used to identify files &amp; disks in the access routines. The argument pointers should point to these structures in the program.</li></ul>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr>
+<td> Address </td>
+<td> Name </td>
+<td> Input parameters </td>
+<td> Output parameters </td>
+<td> Description
+</td></tr>
+<tr>
+<td> $e1f8 </td>
+<td> LoadFiles </td>
+<td> Pointer to Disk ID, Pointer to File List </td>
+<td> A = error #, Y = # of files loaded </td>
+<td> Loads files specified by DiskID into memory from disk. Load addresses are decided by the file's header.
+</td></tr>
+<tr>
+<td> $e237 </td>
+<td> AppendFile </td>
+<td> Pointer to Disk ID, Pointer to File Header </td>
+<td> A = error # </td>
+<td> Appends the file data given by DiskID to the disk. This means that the file is tacked onto the end of the disk, and the disk file count is incremented. The file is then read back to verify the write. If an error occurs during verification, the disk's file count is decremented (logically hiding the written file).
+</td></tr>
+<tr>
+<td> $e239 </td>
+<td> WriteFile </td>
+<td> Pointer to Disk ID, Pointer to File Header, A = file # </td>
+<td> A = error # </td>
+<td> Same as &quot;Append File&quot;, but instead of writing the file to the  end of the disk, A specifies the sequential position on the disk to write the file (0 is the first). This also has the effect of setting the disk's file count to the A value, therefore logically hiding any other files that may reside after the written one.
+</td></tr>
+<tr>
+<td> $e2b7 </td>
+<td> CheckFileCount </td>
+<td> Pointer to Disk ID, A = # to set file count to </td>
+<td> A = error # </td>
+<td> Reads in disk's file count, compares it to A, then sets the disk's file count to A.
+</td></tr>
+<tr>
+<td> $e2bb </td>
+<td> AdjustFileCount </td>
+<td> Pointer to Disk ID, A = number to reduce current file count by </td>
+<td> A = error # </td>
+<td> Reads in disk's file count, decrements it by A, then writes the new value back.
+</td></tr>
+<tr>
+<td> $e301 </td>
+<td> SetFileCount1 </td>
+<td> Pointer to Disk ID, A = file count minus one = # of the last file </td>
+<td> A = error # </td>
+<td> Set the file count to A + 1
+</td></tr>
+<tr>
+<td> $e305 </td>
+<td> SetFileCount </td>
+<td> Pointer to Disk ID, A = file count </td>
+<td> A = error # </td>
+<td> Set the file count to A
+</td></tr>
+<tr>
+<td> $e32a </td>
+<td> GetDiskInfo </td>
+<td> Pointer to Disk Info </td>
+<td> A = error # </td>
+<td> Fills DiskInfo up with data read off the current disk.
+</td></tr>
+</table>
+<h3><span class="mw-headline" id="Low-Level_Disk_access_routines">Low-Level Disk access routines</span></h3>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr>
+<td> Address </td>
+<td> Name </td>
+<td> Input parameters </td>
+<td> Output parameters </td>
+<td> Description
+</td></tr>
+<tr>
+<td> $e445 </td>
+<td> CheckDiskHeader </td>
+<td> Pointer to 10 byte string at $00 </td>
+<td>  </td>
+<td> Compares the first 10 bytes on the disk coming after the FDS string, to 10 bytes pointed to by Ptr($00). To bypass the checking of any byte, a -1 can be placed in the equivelant place in the compare string.  Otherwise, if the comparison fails, an appropriate error will be generated.
+</td></tr>
+<tr>
+<td> $e484 </td>
+<td> GetNumFiles </td>
+<td>  </td>
+<td>  </td>
+<td> Reads number of files stored on disk, stores the result in $06
+</td></tr>
+<tr>
+<td> $e492 </td>
+<td> SetNumFiles </td>
+<td>  </td>
+<td> A = number of files </td>
+<td> Writes new number of files to disk header.
+</td></tr>
+<tr>
+<td> $e4a0 </td>
+<td> FileMatchTest </td>
+<td> Pointer to FileID list at $02 </td>
+<td>   </td>
+<td> Uses a byte string pointed at by Ptr($02) to tell the disk system which files to load.  The file ID's number is searched for in the string.  If an exact match is found, [$09] is 0'd, and [$0E] is incremented.  If no matches are found after 20 bytes, or a -1 entry is encountered, [$09] is set to -1.  If the first byte in the string is -1, the BootID number is used for matching files (any FileID that is not greater than the BootID qualifies as a match).
+</td></tr>
+<tr>
+<td> $e4da </td>
+<td> SkipFiles </td>
+<td> Number of files to skip in $06 </td>
+<td>  </td>
+<td> Skips over specified number of files.
+</td></tr>
+</table>
+<h3><span class="mw-headline" id="Example_code_how_to_load_files">Example code how to load files</span></h3>
+<pre>
+Load
+   jsr LoadFiles
+   .dw DiskID
+   .dw LoadList
+   bne _Error        ;Check if there is an error
+   rts
+_Error
+   jsr PrintError      ;If so print the error number and message to screen (include side/disk changing prompts)
+_sideError
+   lda $4032
+   and #$01
+   beq _sideError     ;Wait until disk is ejected
+_insert
+   lda $4032
+   and #$01
+   bne _instert      ;Wait until disk is inserted
+   jmp Load
+
+DiskID
+   .db $01        ;Manufacturer code
+   .db &quot;NAME&quot;     ;4-letter code of game
+   .db $00        ;Version
+   .db $01        ;Disk side
+   .db $00        ;Disk number
+   .db $00, $00   ;Extra disk IDs
+
+LoadList          ;In this example the files with IDs equal to $02, $03 or $04 will be loaded into memory
+   .db $02, $03, $04, $ff
+</pre>
+<h3><span class="mw-headline" id="Error_list">Error list</span></h3>
+<p>Message in bold is the official BIOS message (if there is one) followed by an explanation
+</p>
+<ul><li>$00:	no error</li>
+<li>$01:	<b>disk set</b>, ($4032.0) disk not set</li>
+<li>$02:	<b>battery</b>, ($4033.7) power supply failure</li>
+<li>$03:	($4032.2) disk is write protected</li>
+<li>$04:   Wrong maker ID</li>
+<li>$05:   Wrong game</li>
+<li>$06:   Wrong game version</li>
+<li>$07:   <b>a,b side</b>, wrong side number</li>
+<li>$08:   <b>disk no.</b>, wrong disk number</li>
+<li>$09:   wrong additional disk ID 1</li>
+<li>$0a:   wrong additional disk ID 2</li>
+<li>$20:   <b>disk trouble</b>, approval check failed</li>
+<li>$21:	<b>disk trouble</b>, '*NINTENDO-HVC*' string in block 1 doesn't match</li>
+<li>$22:	<b>disk trouble</b>, block type 1 expected</li>
+<li>$23:	<b>disk trouble</b>, block type 2 expected</li>
+<li>$24:	<b>disk trouble</b>, block type 3 expected</li>
+<li>$25:	<b>disk trouble</b>, block type 4 expected</li>
+<li>$27:	<b>disk trouble</b>, ($4030.4) block failed CRC</li>
+<li>$28:	<b>disk trouble</b>, ($4030.6) file ends prematurely during read</li>
+<li>$29:	<b>disk trouble</b>, ($4030.6) file ends prematurely during write</li>
+<li>$30:	<b>disk trouble</b>, ($4032.1) disk is full</li></ul>
+<h3><span class="mw-headline" id="Disk_ID_structure">Disk ID structure</span></h3>
+<p>This is a commonly used string. It consists of 10 bytes which are all compared directly against bytes 15..24 (right after the '*NINTENDO-HVC*' string) of the disk's header block (block type 1; always the first one on the disk). If any of the bytes fail the comparison, an appropriate error # is generated. Comparisons of immaterial data can be skipped by placing an $FF byte in the appropriate place in the DiskID string (for example, when the ROM BIOS boots a disk, it sets all the fields in the DiskID string to -1, except disk side #, and disk #, which are set to 0 (so these fields have to match 0)). The following chart describes the DiskID structure, and the error #'s returned when a comparison fails.
+</p>
+<pre>offset	size	error#	description
+------	----	------	-----------
+0	1	$04	game manufacturer code
+1	4	$05	game ASCII name string
+5	1	$06	game version
+6	1	$07	disk side #
+7	1	$08	disk #
+8	1	$09	extra disk # data
+9	1	$10	extra disk # data
+A			-
+</pre>
+<h3><span class="mw-headline" id="File_list_structure">File list structure</span></h3>
+<p>This is a list of 1-byte IDs of files to load. All files that matches any ID in the list are loaded. A list of up to 20 IDs is possible at a time, smaller lists should be terminated by a $ff byte (this implies a file ID can never be $ff).
+</p><p>Multiple files are loaded in the order as they exist on the disk, not in the order of the list.
+</p>
+<h3><span class="mw-headline" id="File_header_structure">File header structure</span></h3>
+<p>This structure is specified when a file is to be written to the disk. The first 14 bytes of this structure directly specify the data to use for generating a file header block (type 3, bytes [2..15]) to write to disk. The last 2 entries concern the file data to be written to disk (block type 4). The following is a table describing the FileHeader structure.
+</p>
+<pre>offset	size	description
+------	----	-----------
+00	1	file ID code
+01	8	file name
+09	2	load address
+0B	2	file data size
+0D	1	file type ($00 : Program; $01 : Character; $02 : Nametable)
+0E	2	source address of file data (NOT written to disk)
+10	1	source address type ($00 : RAM, $01 : VRAM)
+11		-
+</pre>
+<h3><span class="mw-headline" id="Disk_information_structure">Disk information structure</span></h3>
+<p>This is a data structure returned by a subroutine, of collected information 
+from the disk (list of files on disk, disk size, etc.). The following table 
+is a description of that structure.
+</p>
+<pre>offset	size
+------  ----
+0	1	game manufacturer code
+1	4	game ASCII name string
+5	1	game version
+6	1	disk side #
+7	1	disk #
+8	1	extra disk # data
+9	1	extra disk # data
+A	1	# of files on disk
+</pre>
+<p>(the following block will appear for as many files as the &quot;# of files on 
+disk&quot; byte indicates)
+</p>
+<pre>B	1	file ID code
+C	8	file name (ASCII)
+</pre>
+<p>(the following is present after the last file info block. Disk size is equal 
+to the sum of each file's size entry, plus an extra 261 per file.)
+</p>
+<pre>x	1	disk size high byte
+x+1	1	disk size low  byte
+x+2		-
+</pre>
+<h2><span class="mw-headline" id="Other_BIOS_calls">Other BIOS calls</span></h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr>
+<td> Address </td>
+<td> Name </td>
+<td> Input parameters </td>
+<td> Output parameters </td>
+<td> Affected RAM/Registers </td>
+<td> Description
+</td></tr>
+<tr>
+<td> $e149 </td>
+<td> Delay132 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> 132 clock cycle delay
+</td></tr>
+<tr>
+<td> $e153 </td>
+<td> Delayms </td>
+<td> </td>
+<td> </td>
+<td> X, Y </td>
+<td> Delay routine, Y = delay in ms (approximate)
+</td></tr>
+<tr>
+<td> $e161 </td>
+<td> DisPFObj </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Disable sprites and background
+</td></tr>
+<tr>
+<td> $e16b </td>
+<td> EnPFObj </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Enable sprites and background
+</td></tr>
+<tr>
+<td> $e171 </td>
+<td> DisObj </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Disable sprites
+</td></tr>
+<tr>
+<td> $e178 </td>
+<td> EnObj </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Enable sprites
+</td></tr>
+<tr>
+<td> $e17e </td>
+<td> DisPF </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Disable background
+</td></tr>
+<tr>
+<td> $e185 </td>
+<td> EnPF </td>
+<td> </td>
+<td> </td>
+<td> A, $fe </td>
+<td> Enable background
+</td></tr>
+<tr>
+<td> $e1b2 </td>
+<td> VINTWait </td>
+<td> </td>
+<td> </td>
+<td> $ff </td>
+<td> Wait until next VBlank NMI fires, and return (for programs that does it the &quot;everything in main&quot; way). NMI vector selection at $100 is preserved, but further VBlanks are disabled.
+</td></tr>
+<tr>
+<td> $e7bb </td>
+<td> VRAMStructWrite </td>
+<td> Pointer to VRAM buffer to be written </td>
+<td> </td>
+<td> A, X, Y, $00, $01, $ff </td>
+<td> Set VRAM increment to 1 (clear <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>/$ff bit 2), and write a VRAM buffer to VRAM. Read below for information on the structure.
+</td></tr>
+<tr>
+<td> $e844 </td>
+<td> FetchDirectPtr </td>
+<td> </td>
+<td> $00, $01 = pointer fetched </td>
+<td> A, X, Y, $05, $06 </td>
+<td> Fetch a direct pointer from the stack (the pointer should be placed after the return address of the routine that calls this one (see &quot;important notes&quot; above)), save the pointer at ($00) and fix the return address.
+</td></tr>
+<tr>
+<td> $e86a </td>
+<td> WriteVRAMBuffer </td>
+<td> </td>
+<td> </td>
+<td> A, X, Y, $301, $302 </td>
+<td> Write the VRAM Buffer at $302 to VRAM. Read below for information on the structure.
+</td></tr>
+<tr>
+<td> $e8b3 </td>
+<td> ReadVRAMBuffer </td>
+<td> X = start address of read buffer, Y = # of bytes to read </td>
+<td> </td>
+<td> A, X, Y </td>
+<td> Read individual bytes from VRAM to the VRAMBuffer. (see notes below)
+</td></tr>
+<tr>
+<td> $e8d2 </td>
+<td> PrepareVRAMString </td>
+<td> A = High VRAM address, X = Low VRAM address, Y = string length, Direct Pointer = data to be written to VRAM </td>
+<td> A = $ff : no error, A = $01 : string didn't fit in buffer </td>
+<td> A, X, Y, $00, $01, $02, $03, $04, $05, $06 </td>
+<td> This routine copies pointed data into the VRAM buffer.
+</td></tr>
+<tr>
+<td> $e8e1 </td>
+<td> PrepareVRAMStrings </td>
+<td> A = High VRAM address, X = Low VRAM address, Direct pointer = data to be written to VRAM </td>
+<td> A = $ff : no error, A = $01 : data didn't fit in buffer </td>
+<td> A, X, Y, $00, $01, $02, $03, $04, $05, $06 </td>
+<td> This routine copies a 2D string into the VRAM buffer. The first byte of the data determines the width and height of the following string (in tiles): Upper nybble = height, lower nybble = width.
+</td></tr>
+<tr>
+<td> $e94f </td>
+<td> GetVRAMBufferByte </td>
+<td> X = starting index of read buffer, Y = # of address to compare (starting at 1), $00, $01 = address to read from </td>
+<td> carry clear : a previously read byte was returned, carry set : no byte was read, should wait next call to ReadVRAMBuffer </td>
+<td> A, X, Y </td>
+<td> This routine was likely planned to be used in order to avoid useless latency on a VRAM reads (see notes below). It compares the VRAM address in ($00) with the Yth (starting at 1) address of the read buffer. If both addresses match, the corresponding data byte is returned exit with c clear. If the addresses are different, the buffer address is overwritten by the address in ($00) and the routine exit with c set.
+</td></tr>
+<tr>
+<td> $e97d </td>
+<td> Pixel2NamConv </td>
+<td> $02 = Pixel X cord, $03 = Pixel Y cord </td>
+<td> $00 = High nametable address, $01 = Low nametable address </td>
+<td> A </td>
+<td> This routine convert pixel screen coordinates to corresponding nametable address (assumes no scrolling, and points to first nametable at $2000-$23ff).
+</td></tr>
+<tr>
+<td> $e997 </td>
+<td> Nam2PixelConv </td>
+<td> $00 = High nametable address, $01 = low nametable address </td>
+<td> $02 = Pixel X cord, $03 = Pixel Y cord </td>
+<td> A </td>
+<td> This routine convert a nametable address to corresponding pixel coordinates (assume no scrolling).
+</td></tr>
+<tr>
+<td> $e9b1 </td>
+<td> Random </td>
+<td> X = Zero Page address where the random bytes are placed, Y = # of shift register bytes (normally $02) </td>
+<td> </td>
+<td> A, X, Y, $00 </td>
+<td> This is a shift-register based random number generator, normally takes 2 bytes (using more won't affect random sequence). On reset you are supposed to write some non-zero values here (BIOS uses writes $d0, $d0), and call this routine several times before the data is actually random. Each call of this routine will shift the bytes <i>right</i>.
+</td></tr>
+<tr>
+<td> $e9c8 </td>
+<td> SpriteDMA </td>
+<td> </td>
+<td> </td>
+<td> A </td>
+<td> This routine does sprite DMA from RAM $200-$2ff
+</td></tr>
+<tr>
+<td> $e9d3 </td>
+<td> CounterLogic </td>
+<td> A, Y = end Zeropage address of counters, X = start zeropage address of counters </td>
+<td> </td>
+<td> A, X, $00 </td>
+<td> This decrements several counters in Zeropage. The first counter is a decimal counter 9 -&gt; 8 -&gt; 7 -&gt; ... -&gt; 1 -&gt; 0 -&gt; 9 -&gt; ... Counters 1...A are simply decremented and stays at 0. Counters A+1...Y are decremented when the first counter does a 0 -&gt; 9 transition, and stays at 0.
+</td></tr>
+<tr>
+<td> $e9eb </td>
+<td> ReadPads </td>
+<td> </td>
+<td> $f5 = Joypad #1 data, $f6 = Joypad #2 data </td>
+<td> A, X, $00, $01, </td>
+<td> This read hardwired famicom joypads.
+</td></tr>
+<tr>
+<td> $ea1a </td>
+<td> ReadDownPads </td>
+<td> </td>
+<td> $f5 = Joypad #1 up-&gt;down transitions, $f6 = Joypad #2 up-&gt;down transitions $f7 = Joypad #1 data, $f8 = Joypad #2 data </td>
+<td> A, X, $00, $01 </td>
+<td> This reads hardwired famicom joypads, and detect up-&gt;down button transitions
+</td></tr>
+<tr>
+<td> $ea1f </td>
+<td> ReadOrDownPads </td>
+<td> </td>
+<td> $f5 = Joypad #1 up-&gt;down transitions, $f6 = Joypad #2 up-&gt;down transitions $f7 = Joypad #1 data, $f8 = Joypad #2 data </td>
+<td> A, X, $00, $01 </td>
+<td> This read both hardwired famicom and expansion port joypads and detect up-&gt;down button transitions.
+</td></tr>
+<tr>
+<td> $ea36 </td>
+<td> ReadDownVerifyPads </td>
+<td> </td>
+<td> $f5 = Joypad #1 up-&gt;down transitions, $f6 = Joypad #2 up-&gt;down transitions $f7 = Joypad #1 data, $f8 = Joypad #2 data </td>
+<td> A, X, $00, $01 </td>
+<td> This reads hardwired Famicom joypads, and detect up-&gt;down button transitions. Data is read until two consecutive read matches to work around the DMC reading glitches.
+</td></tr>
+<tr>
+<td> $ea4c </td>
+<td> ReadOrDownVerifyPads </td>
+<td> </td>
+<td> $f5 = Joypad #1 up-&gt;down transitions, $f6 = Joypad #2 up-&gt;down transitions $f7 = Joypad #1 data, $f8 = Joypad #2 data </td>
+<td> A, X, $00, $01 </td>
+<td> This read both hardwired famicom and expansion port joypads and detect up-&gt;down button transitions. Data is read until two consecutive read matches to work around the DMC reading glitches.
+</td></tr>
+<tr>
+<td> $ea68 </td>
+<td> ReadDownExpPads </td>
+<td> $f1-$f4 = up-&gt;down transitions, $f5-$f8 = Joypad data in the order : Pad1, Pad2, Expansion1, Expansion2 </td>
+<td> </td>
+<td> A, X, $00, $01 </td>
+<td> This read both hardwired famicom and expansion port joypad, but stores their data separately instead of ORing them together like the other routines does. This routine is NOT DMC fortified.
+</td></tr>
+<tr>
+<td> $ea84 </td>
+<td> VRAMFill </td>
+<td> A = High VRAM Address (aka tile row #), X = Fill value, Y = # of tile rows OR attribute fill data </td>
+<td> </td>
+<td> A, X, Y, $00, $01, $02 </td>
+<td> This routine does 2 things : If A &lt; $20, it fills pattern table data with the value in X for 16 * Y tiles. If A &gt;= $20, it fills the corresponding nametable with the value in X and attribute table with the value in Y.
+</td></tr>
+<tr>
+<td> $ead2 </td>
+<td> MemFill </td>
+<td> A = fill value, X = first page #, Y = last page # </td>
+<td> </td>
+<td> A, X, Y, $00, $01 </td>
+<td> This routines fills RAM pages with specified value.
+</td></tr>
+<tr>
+<td> $eaea </td>
+<td> SetScroll </td>
+<td> </td>
+<td> </td>
+<td> A </td>
+<td> This routine set scroll registers according to values in $fc, $fd and $ff. Should typically be called in VBlank after VRAM updates
+</td></tr>
+<tr>
+<td> $eafd </td>
+<td> JumpEngine </td>
+<td> A = Jump table entry </td>
+<td> </td>
+<td> A, X, Y, $00, $01 </td>
+<td> The instruction calling this is supposed to be followed by a jump table (16-bit pointers little endian, up to 128 pointers). A is the entry # to jump to, return address on stack is used to get jump table entries.
+</td></tr>
+<tr>
+<td> $eb13 </td>
+<td> ReadKeyboard </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Read Family Basic Keyboard expansion (detail is under analysis)
+</td></tr>
+<tr>
+<td> $eb66 </td>
+<td> LoadTileset </td>
+<td> A = Low VRAM Address &amp; Flags, Y = Hi VRAM Address, X = # of tiles to transfer to/from VRAM </td>
+<td> </td>
+<td> A, X, Y, $00, $01, $02, $03, $04 </td>
+<td> This routine can read and write 2BP and 1BP tilesets to/from VRAM. See appendix below about the flags.
+</td></tr>
+<tr>
+<td> $ec22 </td>
+<td> unk_EC22</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Some kind of logic that some games use. (detail is under analysis)
+</td></tr></table>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="VRAM_write_transfer_structure">VRAM write transfer structure</span></h3>
+<p>The structure of VRAM buffers are as follows:
+</p>
+<pre>SIZE   CONTENTS
+2      VRAM Address (big endian)
+1      bit 0-5 length of data ($0 means a length of 64)
+       bit 6 : 0 = copy, 1 = fill
+       bit 7 : 0 = increment by 1, 1 = increment by 32
+n      Data to copy to VRAM
+.....  repeated as many times as needed
+1      $ff
+</pre>
+<ul><li> The main structure is terminated by a $ff byte (High address is always supposed to be in $00..$3f range)</li>
+<li> $4c is a &quot;call&quot; command. The 2 bytes that follow is the address of a sub-VRAM structure. The sub-structure can call another sub-structure and so on.</li>
+<li> $60 is a &quot;return&quot; command. It will terminate a sub-structure.</li>
+<li> If Fill mode is used, the routine takes only 1 byte of data which is repeated.</li></ul>
+<h3><span class="mw-headline" id="VRAM_Buffer_notes">VRAM Buffer notes</span></h3>
+<p>The VRAM buffer is located at $300-$3xx. $300 holds the size of the buffer (maximum), and $301 holds the end index of the buffer. The actual buffer lies at $302-$3xx, and is of variable length.
+</p>
+<ul><li> $300 is initialized to the value $7d, effectively making the buffer lie at $300-$37f. It's possible to change the value here to make it bigger or smaller, but the biggest possible value is $fd, making the buffer lie at $300-$3ff.</li>
+<li> Format of the buffer is equivalent to the VRAM structure above, except that there are no sub-structures, no increment by 32 flag and no fill flag.</li>
+<li> For this reason, the VRAM buffer at $302 can be used as a sub-structure.</li>
+<li> A call to WriteVRAMBuffer will execute faster than a call to VRAMStructWrite with $302 as an argument, but both will have the same effect.</li></ul>
+<h3><span class="mw-headline" id="Read_routines_and_VRAM_buffer">Read routines and VRAM buffer</span></h3>
+<p>Unlike the write routines which are very complete, the read routines are somewhat incomplete and their functionality have to be completed by the user (which limits their usefulness). Most of what follows is some sort of speculation about the usefulness of the incomplete read routines of the BIOS.
+</p><p>The read buffer is a part of the VRAM buffer at $300-$3xx, but the same location can't be used to transfer read and writes on the same frame (for example a RMW operation). Instead the user must manually split the buffer in two parts, the &quot;read&quot; buffer and the &quot;write&quot; buffer. The read buffer is probably supposed to always lies after the write buffer, so that when the read buffer is in use, the value in $300 (size of the write buffer) should be adjusted accordingly. The user should manually keep track of how many bytes are used for the read buffer, as well as the starting point of the read buffer (they are argument to the ReadVRAMBuffer function).
+</p><p>The structure of the read buffer itself is trivial - only single bytes are read (there's no runs of data). Very likely the purpose is to read one or a few individual attribute table data, in order to change the color mapping of individual 2x2 squares instead of whole 4x4 square (read-modify-write operation).
+All reads are mapped to a structure of 3 bytes in the read buffer :
+</p>
+<pre>SIZE   CONTENTS
+2      VRAM Address (big endian)
+1      data
+</pre>
+<p>Therfore, for each byte which is read from VRAM, 3 bytes have to be reserved in the read buffer.
+Once data from VRAM has been read, if it must be written back after a modification, the user need to copy it to the write buffer manually.
+</p><p>The GetVRAMBufferByte was probably designed to prevent reading attribute tables when it has already been read in the past by a call to ReadVRAMBuffer, for example if you don't know if you're modifying another area of the same 4x4 attribute byte as previously (no need to read again), or if you're modifying part of another 4x4 attribute byte (need to read from VRAM). If the routine return with C=0, the accumulator contains the attribute byte that was already read, but if C=1, it means we should first call ReadVRAMBuffer before getting the data we want.
+</p><p>Since reading VRAM for nothing is not a harmful operation, the user can call ReadVRAMBuffer every frame even if nobody has to be read (no need for check flags) which is probably why these routines are less complete than the write buffer related routines.
+</p>
+<h3><span class="mw-headline" id="Load_Tileset_notes">Load Tileset notes</span></h3>
+<p>The <i>flags</i> parameters are as follows:
+</p>
+<pre>7  bit  0
+---------
+AAAA MMIT
+|||| ||||
+|||| |||+- Fill bit
+|||| ||+-- Transfer direction (0 = Write tiles, 1 = Read tiles)
+|||| ++--- Bitplane type (see below)
+++++------ Low VRAM Address (aka tile # within a row)
+
+        1st bitplane	2nd bitplane     Description
+        -----------	-----------      -----------
+    0:  data	        data+8           Normal 2-bitplane graphics
+    1:  data	        fill bit         Single bitplane graphics. Fill bit clear : Use colors 0&amp;1  Fill bit set : Use colors 2&amp;3
+    2:  fill bit       data             Single bitplane graphics. Fill bit clear : Use color 0&amp;2   Fill bit set : Use colors 1&amp;3
+    3:  data^fill bit	data             Single bitplane graphics. Fill bit clear : Use colors 0&amp;3  Fill bit set : Use colors 1&amp;2
+</pre>
+<p>This makes it possible for single bitplane tiles to take all possible color schemes when they end up in VRAM.
+However, it is not possible to (natively) load single bitplane graphics directly from the disk into VRAM; you have to load them into RAM before transferring the data into VRAM.
+In read mode, all non &quot;data&quot; bitplanes are replaced by dummy reads.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www43.tok2.com/home/cmpslv/Famic/Famdis.htm" rel="nofollow">Enri's Famicom Disk System page</a> (Japanese)</li>
+<li> <a class="external text" href="https://web.archive.org/web/20091023182159/http://www2.odn.ne.jp/~haf09260/Famic/Famdis.htm" rel="nofollow">Enri's Famicom Disk System page</a> (Japanese) (old/outdated)</li>
+<li> <a class="external free" href="http://nesdev.com/fds-nori.txt" rel="nofollow">http://nesdev.com/fds-nori.txt</a></li>
+<li> <a class="external free" href="http://nesdev.com/FDS%20technical%20reference.txt" rel="nofollow">http://nesdev.com/FDS%20technical%20reference.txt</a></li>
+<li> <a class="external text" href="http://nesdev.com/FDSListWIN.zip" rel="nofollow">FDS Lister by ccovell</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.272 seconds
+Real time usage: 0.275 seconds
+Preprocessor visited node count: 192/1000000
+Preprocessor generated node count: 212/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:407-1!*!0!!en!*!* and timestamp 20160208222530 and revision id 10728
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

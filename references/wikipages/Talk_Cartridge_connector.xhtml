@@ -1,0 +1,43 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Cartridge connector</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Cartridge connector</h1><div class="article">
+<h2><span class="mw-headline" id="Orientation">Orientation</span></h2>
+<p>I'm a little confused about this. Why does the pin orientation for the NES appear to be viewed from underneath the connector? Wouldn't it make more sense if it was a top-down view like on the famicom diagram? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 20:45, 26 August 2012 (MDT)
+</p>
+<dl><dd> Probably to be consistent with standard pinout numbering, which always goes counterclockwise and has pin 1 as top-left. It's also consistent with the edge on the mainboard. Not the best of reasons... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 20:53, 26 August 2012 (MDT)</dd></dl>
+<dl><dd><dl><dd> It make it very counter-intuitive if you're trying to do something related to Famicom&lt;-&gt;NES conversion. I could see it being more useful if you're soldering something to the back of a toploader board, but other than that case I find it really confusing. Would you mind if I reversed it to be consistent with the Famicom version? I could reverse the numbers alongside it, if it's important that they stay the same. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 21:12, 26 August 2012 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd> Ahh, I see that many Nintendo NES carts are numbered in this way, but I still think it'd be better just to have the numbering proceed upside down. As it is right now you would have to be looking at the card-edge upside down to see the same orientation as this diagram (and the numbers on the board would be upside down as well). - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 21:37, 26 August 2012 (MDT)</dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd> The hesitations I have to reordering it is 1- that the parallelism between the Famicom and NES header isn't as obvious and 2- the presented pin order isn't consistent with the industry convention. But these aren't good enough reasons for me to stop you. (But they're good enough for me to not do the edit myself)—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 23:21, 26 August 2012 (MDT)</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd> Okay, I have reversed the NES diagram. The numbering in both diagrams is consistent with the numbering on Nintendo PCBs, so I made no changes to that. I don't know what industry convention is for numbering pins of a card-edge connector, but I don't think it's relevant here, since Nintendo provided their own numbering on their PCBs (and if one of them meets the industry standard, the other is backwards). I added some notes about the orientation and how the two systems relate to each other. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 10:47, 27 August 2012 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd> What is the industry convention for card edges? I'm used to pin orders being counter-clockwise around a chip from the top. Is it different for a card edge? The Nintendo boards are numbered left to right on one side, right to left on the other, rather than clockwise or counterclockwise around the board. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> 12:41, 27 August 2012 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd> I meant &quot;same as IC convention&quot;, but I think industry convention for card edges is (letter)(pin number) in line, without any rotation. e.g. ISA has A01-A31, B01-B31, C01-C18, D01-D18, arranged as</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<pre>B01 B02 … B30 B31   D01 … D18
+A01 A02 … A30 A31   C01 … C18
+</pre>
+<dl><dd><dl><dd><dl><dd><dl><dd><dl><dd> —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 12:52, 27 August 2012 (MDT)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="CIRAM_A10">CIRAM A10</span></h2>
+<p>If you connect CIRAM A10 to PA6 (the adjacent pin), will this work for a fixed single page mirroring (it won't actually be contiguous in RAM but as far as I can tell it could work)? If so, do any known cartridges do this? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 14:44, 23 September 2012 (MDT)
+</p>
+<h2><span class="mw-headline" id="Audio_In_vs_Out">Audio In vs Out</span></h2>
+<p>Just curious about this change: <s>http://wiki.nesdev.com/w/index.php?title=Cartridge_connector&amp;diff=5344&amp;oldid=4339</s>
+</p><p>The descriptions on this page of Audio Out and Audio In are relative to the Famicom, not the cartridge, so &quot;Audio Out&quot; means out from the 2A03, and &quot;Audio In&quot; means audio in from the cart. Is that in line with the change you made, Lidnariq? (And if not, perhaps we should revise the descriptions, and/or use a more descriptive naming than In/Out to avoid future confusion.) - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 21:46, 19 January 2013 (MST)
+</p>
+<dl><dd> Good point. I changed it because I'd noticed I'd RE'd the SS5B schematic incorrectly due to misunderstanding the names, but I agree that &quot;in&quot; and &quot;out&quot; are insufficiently unambiguous. So now this should be plenty clear.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 23:34, 19 January 2013 (MST)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.067 seconds
+Real time usage: 0.209 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:836-1!*!0!!*!*!* and timestamp 20160603204756 and revision id 12560
+ -->
+</div></body></html>

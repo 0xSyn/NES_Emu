@@ -1,0 +1,45 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 095</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 095</h1><div class="article">
+<p>Mapper 95 represents <b>NAMCOT-3425</b>, a board that is to the ordinary Namco 108 family boards (<a href="INES_Mapper_206.xhtml" title="INES Mapper 206">mapper 206</a>) as TKSROM and TLSROM (<a href="INES_Mapper_118.xhtml" title="INES Mapper 118">mapper 118</a>) is to ordinary MMC3 boards (<a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 4</a>).
+Instead of having hardwired mirroring like mapper 206, it has CHR A15 directly controlling CIRAM A10, just as CHR A17 controls CIRAM A10 on TxSROM.
+Only horizontal mirroring and 1-screen mirroring are possible because the Namco 108 lacks the C bit of MMC3.
+It is used for <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1806" rel="nofollow">Dragon Buster (J)</a>, which has 32 KiB of CHR ROM.
+The mapper could be extended to 64 KiB through careful arrangement of CHR ROM to put game background tiles in one half (which would always use one nametable) and status bar and menu tiles in the other half (which would always use the other nametable).
+</p><p>Disch's older notes described an extended and mistaken version of this mapper with a full MMC3, so some emulators may be doing it that way. That extended version is identical to mapper 118, except CHR A15 (bank bit 5) controls CIRAM A10 instead of CHR A17 (bank bit 7).
+</p><p>Here's a terse pseudocode:
+</p>
+<pre>chr_rom_addr = namco108_chrmap(ppu_addr&amp;0x1FFF) &amp; 0xFFFF;
+ciram_addr = ((namco108_chrmap(ppu_addr&amp;0x1FFF)&gt;&gt;15)&lt;&lt;10) | (ppu_addr&amp;0x03FF);
+</pre>
+<h3><span class="mw-headline" id="Bank_data_.28.248001-.24FFFF.2C_odd.29">Bank data ($8001-$FFFF, odd)</span></h3>
+<pre>7  bit  0
+---- ----
+..ND DDDD
+  || ||||
+  |+-++++- New bank value, based on last value written to Bank select register
+  |          All registers as standard <a href="INES_Mapper_206.xhtml" title="INES Mapper 206">Namco 108</a>
+  |
+  +------- Nametable select, based on last value written to Bank select register
+             0: Select Nametable A
+             1: Select Nametable B
+             The nametable at PPU $2000-$27FF (top left/right) are controlled with register 0
+             The nametable at PPU $2800-$2FFF (bottom left/right) are controlled with register 1
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:681-1!*!0!*!*!*!* and timestamp 20160208225217 and revision id 5030
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

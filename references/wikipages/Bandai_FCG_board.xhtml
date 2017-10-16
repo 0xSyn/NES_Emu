@@ -1,0 +1,572 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bandai FCG board</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bandai FCG board</h1><div class="article">
+<p>Bandai FCG boards are used largely by Bandai for <i>Dragon Ball</i> and <i>Gundam</i> games, as well as a few others. One IREM title uses it as well.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Hardware_Types"><span class="tocnumber">2</span> <span class="toctext">Hardware Types</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Banks"><span class="tocnumber">3</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#CHR_bank_select_.28BASE.2B0_.E2.80.A6_BASE.2B7.29"><span class="tocnumber">4.1</span> <span class="toctext">CHR bank select (BASE+0 … BASE+7)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Mappers_16_and_159:"><span class="tocnumber">4.1.1</span> <span class="toctext">Mappers 16 and 159:</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Mapper_153_.28.248000-.248003_only.29:"><span class="tocnumber">4.1.2</span> <span class="toctext">Mapper 153 ($8000-$8003 only):</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#External_Serial_EEPROM_Clock_.28.248000_.E2.80.A6_.248003.29"><span class="tocnumber">4.1.3</span> <span class="toctext">External Serial EEPROM Clock ($8000 … $8003)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#PRG_Bank_select_.28BASE.2B8.29"><span class="tocnumber">4.2</span> <span class="toctext">PRG Bank select (BASE+8)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Mirroring_Control_.28BASE.2B9.29"><span class="tocnumber">4.3</span> <span class="toctext">Mirroring Control (BASE+9)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#IRQ_Control_.28BASE.2B.24A.29"><span class="tocnumber">4.4</span> <span class="toctext">IRQ Control (BASE+$A)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#IRQ_Counter_.28BASE.2B.24B_.E2.80.A6_BASE.2B.24C.29"><span class="tocnumber">4.5</span> <span class="toctext">IRQ Counter (BASE+$B … BASE+$C)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#EEPROM_Control_.28.24800D.29"><span class="tocnumber">4.6</span> <span class="toctext">EEPROM Control ($800D)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#PRG_RAM_Enable_.28.24800D.29"><span class="tocnumber">4.7</span> <span class="toctext">PRG RAM Enable ($800D)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Serial_EEPROM_.28.246000-.247FFF.29"><span class="tocnumber">4.8</span> <span class="toctext">Serial EEPROM ($6000-$7FFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Extra_comments"><span class="tocnumber">5</span> <span class="toctext">Extra comments</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Disch.27s_notes"><span class="tocnumber">6</span> <span class="toctext">Disch's notes</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#See_Also"><span class="tocnumber">7</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 256 KiB normally; 512KiB in one variant</li>
+<li> PRG ROM bank size: 16 KiB</li>
+<li> Nonvolatile memory: 0, 128, 256, or 8192 bytes</li>
+<li> CHR capacity: Up to 256 KiB ROM or 8 KiB RAM</li>
+<li> CHR bank size: 1 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<h2><span class="mw-headline" id="Hardware_Types">Hardware Types</span></h2>
+<p>There are at least 6 different varieties of FCG board:
+</p>
+<ol><li> <a href="Bandai_FCG_pinout.xhtml" title="Bandai FCG pinout">FCG-1 and FCG-2</a>: Registers are at $6000-$7FFF.  No persistent writable storage.</li>
+<li> <a href="Bandai_LZ93D50_pinout.xhtml" title="Bandai LZ93D50 pinout">LZ93D50</a>, sometimes erroneously known as FCG-3: Registers are at $8000-$FFFF.  No persistent writable storage.</li>
+<li> LZ93D50 with 24C01: Registers are at $8000-$FFFF.  24C01 128-byte serial <a href="ROM.xhtml#Solid_state_ROM" title="ROM">EEPROM</a> is attached to $6000-$7FFF.</li>
+<li> LZ93D50 with 24C02: Registers are at $8000-$FFFF.  24C02 256-byte serial <a href="ROM.xhtml#Solid_state_ROM" title="ROM">EEPROM</a> is attached to $6000-$7FFF.</li>
+<li> LZ93D50 with SRAM: Registers are at $8000-$FFFF.  Conventional battery backed SRAM is at $6000-$7FFF.  This board also exceeds the 256KiB PRG ROM limit by repurposing CHR select lines.</li>
+<li> <a class="extiw" href="http://en.wikipedia.org/wiki/Datach" title="wikipedia:Datach">Datach Joint ROM System</a> boards, which have a 24C02 serial <a href="ROM.xhtml#Solid_state_ROM" title="ROM">EEPROM</a> on the main board and the game itself on a daughterboard, possibly with another 24C01 serial <a href="ROM.xhtml#Solid_state_ROM" title="ROM">EEPROM</a>.</li></ol>
+<p>Mappers describe these boards as follow:
+</p><p>Four mappers are used to describe these boards:
+</p>
+<ul><li> <a href="INES_Mapper_016.xhtml" title="INES Mapper 016">iNES Mapper 016</a> is used for 1, 2, and 4.</li>
+<li> <a href="INES_Mapper_153.xhtml" title="INES Mapper 153">iNES Mapper 153</a> is a rarely used assignment for 5.</li>
+<li> <a href="INES_Mapper_157.xhtml" title="INES Mapper 157">iNES Mapper 157</a> is used for 6.</li>
+<li> <a href="INES_Mapper_159.xhtml" title="INES Mapper 159">iNES Mapper 159</a> is used for 3.</li></ul>
+<p>You may encounter ROMs with the mapper assignments mixed up. There used to be no distinction when 016 was first assigned. The distinction was introduced later to distinguish the 128-byte boards from the 256-byte or no-EEPROM boards. In <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> format, only 157 differs, because the &quot;battery backed PRG RAM size&quot; field disambiguates these boards enough to run all known games that used them, though emulators MAY display a warning when the RAM size field is abnormal for a given mapper.
+</p><p>FCEUX does not emulate the EEPROM. It seems that returning 0x00 from EEPROM registers suffices to get most games booting.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: varies, see below</li>
+<li> CPU $8000-$BFFF: 16 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$03FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0400-$07FF: 1 KiB switchable CHR bank</li>
+<li> PPU $0800-$0BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $0C00-$0FFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1000-$13FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1400-$17FF: 1 KiB switchable CHR bank</li>
+<li> PPU $1800-$1BFF: 1 KiB switchable CHR bank</li>
+<li> PPU $1C00-$1FFF: 1 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>See the notes about hardware above.  Because <a href="INES_Mapper_016.xhtml" title="INES Mapper 016">iNES Mapper 016</a> covers the capabilities of multiple differing boards, it must be emulated with the mapper's writable ports across all off $6000-$FFFF, and a 24C02 present at $6000-$7FFF.  This configuration will run all known games that used one of these boards.
+</p><p>For <a href="INES_Mapper_153.xhtml" title="INES Mapper 153">iNES Mapper 153</a> (with SRAM), the writeable ports must only be mirrored across $8000-$FFFF.
+</p><p>Mappers <a href="INES_Mapper_157.xhtml" title="INES Mapper 157">157</a> and <a href="INES_Mapper_159.xhtml" title="INES Mapper 159">159</a> do not need to support the FCG-1 and -2 and so should only mirror the ports across $8000-$FFFF.
+</p><p>The registers are mirrored every 16 bytes, regardless of where they start.
+</p>
+<h3><span class="mw-headline" id="CHR_bank_select_.28BASE.2B0_.E2.80.A6_BASE.2B7.29">CHR bank select (BASE+0 … BASE+7)</span></h3>
+<h4><span class="mw-headline" id="Mappers_16_and_159:">Mappers <a href="INES_Mapper_016.xhtml" title="INES Mapper 016">16</a> and <a href="INES_Mapper_159.xhtml" title="INES Mapper 159">159</a>:</span></h4>
+<pre>7  bit  0
+---- ----
+CCCC CCCC
+|||| ||||
+++++-++++-- Select 8KiB CHR ROM bank at appropriate PPU address.
+</pre>
+<table class="wikitable">
+<tr>
+<th> Write to register offset </th>
+<th> 1KiB CHR bank affected
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> $0000-$03FF
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> $0400-$07FF
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> $0800-$0BFF
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> $0C00-$0FFF
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> $1000-$13FF
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> $1400-$17FF
+</td></tr>
+<tr>
+<td> 6 </td>
+<td> $1800-$1BFF
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> $1C00-$1FFF
+</td></tr></table>
+<h4><span class="mw-headline" id="Mapper_153_.28.248000-.248003_only.29:">Mapper <a href="INES_Mapper_153.xhtml" title="INES Mapper 153">153</a> ($8000-$8003 only):</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx xxxP
+        |
+        +-- Select 256KiB PRG ROM outer bank
+</pre>
+<p>As this mapper has no CHR ROM and only 8KiB fixed CHR RAM, the CHR ROM selection lines are repurposed similarly to <a class="mw-redirect" href="SxROM.xhtml" title="SUROM">SUROM</a>.  So CHR A10 OUT is connected to PRG A18 out on the mapper IC.  The mapper's PPU A12 and PPU A13 inputs are tied to ground, but the PPU A11 and PPU A10 inputs are still connected, so the first 4 CHR bank 'P' bits should be set to the same value, or the game will flip between 256KiB PRG outer banks while rendering.
+</p>
+<h4><span class="mw-headline" id="External_Serial_EEPROM_Clock_.28.248000_.E2.80.A6_.248003.29">External Serial EEPROM Clock ($8000 … $8003)</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx Cxxx
+     |   
+     +----- External I²C Clock
+</pre>
+<p>As with mapper 153, <a href="INES_Mapper_157.xhtml" title="INES Mapper 157">iNES Mapper 157</a> grounds the PPU A12 and A13 inputs. CHR A13 OUT is provided on the subcartridge header, and is used in one game as an external I²C clock.
+PPU rendering must either be disabled during traffic to the external EEPROM, or the same value must be written to all four registers.
+No CHR banking is available.
+</p><p>It's conceivable that a game could have used this extra signal to provide 512 KiB of PRG instead of a serial EEPROM, but none have been found.
+</p>
+<h3><span class="mw-headline" id="PRG_Bank_select_.28BASE.2B8.29">PRG Bank select (BASE+8)</span></h3>
+<pre>7  bit  0
+---- ----
+.... PPPP
+     ||||
+     ++++-- Select 16KiB PRG ROM bank mapped to CPU $8000-$BFFF
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Mirroring_Control_.28BASE.2B9.29">Mirroring Control (BASE+9)</span></h3>
+<pre>7  bit  0
+---- ----
+.... ..MM
+       ||
+       ++-- 0: Vertical (A10), 1: Horizontal (A11), 2: Single screen 1 (ground), 3: Single screen 2 (VCC)
+</pre>
+<h3><span class="mw-headline" id="IRQ_Control_.28BASE.2B.24A.29">IRQ Control (BASE+$A)</span></h3>
+<pre>7  bit  0
+---- ----
+.... ...C
+        |
+        +-- 1: Count down, 0: pause
+</pre>
+<p>Writes also acknowledge a currently-asserted interrupt.
+</p>
+<h3><span class="mw-headline" id="IRQ_Counter_.28BASE.2B.24B_.E2.80.A6_BASE.2B.24C.29">IRQ Counter (BASE+$B … BASE+$C)</span></h3>
+<pre>   $C         $B
+7  bit  0  7  bit  0
+---- ----  ---- ----
+CCCC CCCC  CCCC CCCC
+|||| ||||  |||| ||||
+++++-++++--++++-++++-- The 16 bits of the current value of the counter (little-endian)
+</pre>
+<p>The IRQ counter is clocked by M2.
+There is no reload value, nor does it stop: after it becomes 0, it becomes 65535.
+Writes are not shadowed, so you either need to be careful about timing or pause the counter while you manually reload.
+</p><p>It is not known precisely which of the following are true:
+</p>
+<ul><li> Is /IRQ asserted while the timer is 0 ?</li>
+<li> Is /IRQ asserted when the counter goes from 1 to 0 ?</li>
+<li> Is /IRQ asserted when it changes from anything to 0 ?</li></ul>
+<h3><span class="mw-headline" id="EEPROM_Control_.28.24800D.29">EEPROM Control ($800D)</span></h3>
+<p>For games with serial EEPROMs:
+</p>
+<pre>7  bit  0
+---- ----
+RDC. ....
+|||
+||+-------- I²C SCL (Datach: internal EEPROM only)
+|+--------- I²C SDA
++---------- Enable Read
+</pre>
+<h3><span class="mw-headline" id="PRG_RAM_Enable_.28.24800D.29">PRG RAM Enable ($800D)</span></h3>
+<p>For games with PRG RAM:
+</p>
+<pre>7  bit  0
+---- ----
+RxE. ....
+|||
+||+-------- PRG RAM +CE
+|+--------- don't care
++---------- probably should always be 0
+</pre>
+<h3><span class="mw-headline" id="Serial_EEPROM_.28.246000-.247FFF.29">Serial EEPROM ($6000-$7FFF)</span></h3>
+<p>Read-only; for games using the LZ93D50 but without PRG RAM.
+</p>
+<pre>7  bit  0
+---- ----
+xxxE Bxxx
+|||| ||||
++++|-|+++- Open bus
+   | +---- Data out from Barcode reader (or open bus)
+   +------ Data out from I²C EEPROM
+</pre>
+<h2><span class="mw-headline" id="Extra_comments">Extra comments</span></h2>
+<p>Some patterns observed in the games' save code:
+</p>
+<ul><li> Start I/O: $00 $40 $60 $20 $00</li>
+<li> Write 0 bit: $00 $20 $00</li>
+<li> Write 1 bit: $00 $40 $60 $40 $00</li>
+<li> Acknowledge: $00 $20 $A0 Read $00</li>
+<li> Read bit: $60 $E0 Read $40</li>
+<li> Stop I/O: $00 $20 $60 $40 $C0</li></ul>
+<p>When implementing the EEPROM, use the datasheets for the 24C01 and 24C02 used by Bandai:
+</p>
+<ul><li> 24C01, has no device address/uses device address as memory address: <a class="external text" href="http://pdf.datasheetcatalog.com/datasheet/Xicor/mXyyzyrx.pdf" rel="nofollow">Xicor</a>, <a class="external text" href="http://www.alldatasheet.com/datasheet-pdf/pdf/56094/ATMEL/24C01.html" rel="nofollow">Atmel</a>
+<ul><li> The 24C01 is NOT little endian, despite what Disch wrote below. This is due to a mistake at Bandai, not a deviation from the datasheet.</li></ul></li>
+<li> 24C02, with device address: <a class="external text" href="http://pdf.datasheetcatalog.com/datasheets/70/289981_DS.pdf" rel="nofollow">Xicor</a>, <a class="external text" href="http://www.atmel.com/Images/doc0180.pdf" rel="nofollow">Atmel</a></li></ul>
+<h2><span class="mw-headline" id="Disch.27s_notes">Disch's notes</span></h2>
+<p>Below, Disch was unfamiliar with I²C, so a number of his comments are solely from the point of view of someone unfamiliar with it.
+</p>
+<pre> Here is a lightly-edited version of Disch's original notes:
+ ========================
+ =  Mapper 016          =
+ =       + 153          =
+ =       + 159          =
+ ========================
+ 
+ aka
+ --------------------------
+ Bandai (something or other)
+ 
+ 
+ Example Games:
+ --------------------------
+ Dragon Ball - Dai Maou Jukkatsu      (016)
+ Dragon Ball Z Gaiden                 (016)
+ Dragon Ball Z 2                      (016)
+ Rokudenashi Blues                    (016)
+ Akuma-kun - Makai no Wana            (016)
+ Famicom Jump II: Saikyou no 7 Nin    (153)
+ Dragon Ball Z - Kyoushuu! Saiya Jin  (159)
+ SD Gundam Gaiden                     (159)
+ Magical Taruruuto Kun 1, 2           (159)
+ 
+ 
+ Three Mappers:
+ ---------------------------
+ 016 and 159 are mapped the exact same way.  Registers are all the same and whatnot.  And in fact, for a
+ while, both mappers were assigned the same mapper number (016).  Therefore, you may come across mapper 159
+ games that are still marked as mapper 016.
+ 
+ The difference between the two is in the EEPROM.  These mappers don't have traditional SRAM (I couldn't tell
+ you why).  Instead, they have an I²C EEPROM that has to be written to one bit at a time, resulting in very 
+ strange-seeming register writes.
+ 
+ Mapper 016 has 256 bytes of EEPROM, and is accessed high bit first
+ Mapper 159 has 128 bytes of EEPROM, and is accessed low bit first
+ Mapper 153 (as far as we know used exclusively for Famicom Jump II: Saikyou no 7 Nin) has SRAM instead of an EEPROM.
+ 
+ For further details, see the section at the bottom.
+ 
+ Apart from save mechanism, the mappers are 100% identical in function.
+ 
+ 
+ Notes:
+ ---------------------------
+ Since there's EEPROM, there's no SRAM (EEPROM is used to save games).
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range,Mask:   $6000-FFFF, $000F
+ 
+ Note:  below regs are listed as $800x, but note they also exist at $6000-7FFF
+ 
+ 
+   $8000-8007:   CHR Regs
+   $8008:        PRG Reg (16k @ $8000)
+ 
+   $8009:  [.... ..MM]   Mirroring:
+     %00 = Vert
+     %01 = Horz
+     %10 = 1ScA
+     %11 = 1ScB
+ 
+   $800A:  [.... ...E]   IRQ Enable (0=disabled)
+   $800B:                Low 8 bits of IRQ Counter
+   $800C:                High 8 bits of IRQ Counter
+ 
+   $800D:  EEPROM I/O
+ 
+ another note:   since PRG is mapped to $8000-FFFF, EEPROM I/O reg can only be read via $6xxx or $7xxx.  To my
+ knowledge no other registers are readable.  It also appears that reading from *ANY* address in $6xxx-7xxx
+ will read the EEPROM I/O reg.  Rokudenashi Blues will poll $7F00 and will wait for bit 4 to be 0 before
+ continuing (so if you're giving open bus @ 7F00, the game will deadlock)
+ 
+ CHR Setup:
+ ---------------------------
+ 
+       $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+     | $8000 | $8001 | $8002 | $8003 | $8004 | $8005 | $8006 | $8007 | 
+     +-------+-------+-------+-------+-------+-------+-------+-------+
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+       $8000   $A000   $C000   $E000  
+     +---------------+---------------+
+     |     $8008     |     { -1}     |
+     +---------------+---------------+
+ 
+ 
+ 
+ IRQs:
+ ---------------------------
+ IRQs are nice and simple.
+ 
+ When enabled, the 16-bit IRQ counter counts down every CPU cycle, wrapping from $0000-&gt;FFFF.  When the
+ counter makes the transition from $0001-&gt;$0000, an IRQ is generated.
+ 
+ When disabled, the IRQ counter does not count.
+ 
+ Any write to $800A will acknowledge the IRQ
+ 
+ $800B and $800C change the IRQ counter directly -- not a reload value.
+ 
+ 
+ EEPROM:
+ ---------------------------
+ EEPROM is a real nightmare.  Nobody knew exactly how it worked -- but by examining the game code,
+ patterns surface.  Games do a series of extremely cryptic writes to $800D, and occasionally read a single
+ bit from $800D.  By examining some logs I made of the games I've noticed a small bit of patterns which I
+ list below, along with my guess as to what the game is attempting to do by performing that pattern:
+ 
+ 
+   write $00
+   write $40
+   write $60     Start I/O
+   write $20
+   write $00
+ 
+   write $00
+   write $20     Output '0' bit
+   write $00
+ 
+   write $00
+   write $40
+   write $60     Output '1' bit
+   write $40
+   write $00
+ 
+   write $00
+   write $20
+   write $A0    I have absolutly no clue
+   Read
+   write $00
+ 
+   write $60
+   write $E0    Read a single bit
+   Read
+   write $40
+ 
+   write $00
+   write $20
+   write $60    Stop I/O
+   write $40
+   write $C0
+ 
+ 
+ These likely aren't the only patterns that games perform.  I recall seeing occasional writes of $80 and
+ other stuff thrown in there in some games.  Also -- not all games follow this pattern, so looking for these
+ specific writes will not work for at least one other game.
+ 
+ It seems that only bits 5-7 of the written value are relevent (hereon, they will be referred to as D5 - D7).
+ Bit 4 ($10) is the only significant bit when read.  Other bits are most likely open bus.
+ 
+ 
+ When writing bytes to EEPROM, games will generally perform 8 &quot;output&quot; patterns (either output 0 or output 1,
+ depending on the bits it wants to write), followed by a 9th output pattern, which I would assume finalizes
+ the write and/or possibly moves the 8 bits from a latch to EEPROM.
+ 
+ When reading bytes, games will generally perform 8 &quot;read&quot; patterns, followed by a single output pattern
+ (which I would assume finalizes the read).
+ 
+ Sometimes when the game is writing bits, it's writing data to be stored on EEPROM, and other times it's
+ setting the desired EEPROM address and/or read/write mode.  Knowing which it's doing involves keeping track
+ of the state it's currently it and what it has done last, etc, etc.
+ 
+ But again -- nobody *really* knows how it works.  The method I've employed in my emu is outlined below -- and
+ it appears to work for every game I've tried, but I *KNOW* it's not accurate.  But, short of some hardware
+ guru acquiring a handful of these carts and doing a thorough RE job, that's about the best anyone can do.
+ 
+ 
+ Emulating EEPROM:
+ -----------------------
+ 
+ SUPER FAT IMPORTANT NOTE:  This is just the method of EEPROM emulation I employ in my emu.
+ 
+      ***THIS IS NOT HOW THE ACTUAL HARDWARE WORKS***
+ 
+ Do not use this as a final word or anything -- this is simply the product of lots of guesswork, speculation,
+ and trial and error.
+ 
+ 
+ D5 appears to be the &quot;trigger&quot; bit, and D6 appears to be the &quot;signal&quot; bit.  I have no clue what D7 does, and
+ ignoring it completely has worked for me (though I'm sure it does have some purpose).  &quot;Commands&quot; are sent
+ by toggling D5 (0-&gt;1-&gt;0).  Two states of D6 are observed -- one when D5 rises (0-&gt;1), and one when it falls
+ (1-&gt;0).  Using these two observed states, you get 4 possible commands.  The command is sent when D5 falls.
+ 
+ Example:
+ 
+          byte  D6 D5 
+   write: $00    0 0
+   write: $40    1 0
+   write: $60    1 1  &lt;--  D5 rise:    D6=1
+   write: $40    1 0  &lt;--  D5 fall:    D6=1, command &quot;1,1&quot; sent here
+   write: $00    0 0
+ 
+ The above sequence would issue a &quot;1,1&quot; command.
+ 
+ Commands:
+ 
+   Name     rise,fall       example write sequence
+   ------------------------------------------------
+   Write 0     0,0          $00, $20, $00
+   Write 1     1,1          $00, $40, $60, $40, $00
+   Open        1,0          $00, $40, $60, $20, $00
+   Close       0,1          $00, $20, $60, $40, $C0
+ 
+ 
+ The unit can be in one of several modes:
+ 
+   - Closed
+   - Select
+   - Address
+   - Write
+   - Read
+ 
+ I also use an 8-bit temporary value, an 8-bit address (or 7-bit address, if 128 byte EEPROM) and 9-step bit
+ counter.
+ 
+ I would assume the unit is Closed on startup (and possibly reset).
+ 
+ 
+ Basic Concept overview:
+ 
+ 
+   &quot;Write 0&quot; and &quot;Write 1&quot; commands advance the 9-step bit counter.  The first 8 writes fill the appropriate
+ bit in the temporary value.  The 9th write will take the temp value and move it to either the address (if in
+ Address mode), or to the desired area in EEPROM (if in Write mode), and the mode will update accordingly.
+ Basically the first 8 writes fill the temp value and the 9th moves it to where it needs to go.
+ 
+   Reads operate similarly... but the temp buffer isn't affected by the writes, and the 9th step doesn't copy
+ the temp value anywhere.  Note however that games will perform a write between each bit read (presumably to
+ advance it to the next bit) -- so you should do nothing but return the appropriate bit when the game reads
+ the EEPROM I/O Reg (do not advance it to the next bit on read).
+ 
+   &quot;Select&quot; mode exists on 256 byte EEPROM only (mapper 016).  It is used to select between read/write mode.
+ Bit 0 of the 8-bit value written when in Select mode determines read/write mode.  On 128 byte EEPROM (mapper
+ 159), the high bit of the address selects read/write mode.  In both cases, 1=read mode, 0=write mode.
+ 
+   Remember that on 128 byte, values are written low bit first... but on 256 byte, they're written high bit
+ first.  Bits are read the same order they're written.
+ 
+   Doing anything but opening when the unit is closed has no effect.
+ 
+ 
+ Logic Flow Details (256-byte ... mapper 016)
+ --------------------------------------------
+ 
+ Opening from Closed Mode:
+   a) Enter Select Mode
+ 
+ Opening from non-Closed Mode:
+   a) if in Select Mode, increment address by 1
+   b) enter Select Mode.
+   c) Reset bit counter (next write is the first write in the 9-write sequence)
+ 
+ Writing in Select Mode:
+   a) If low bit of written value = 1
+      -) Enter Read Mode
+   b) otherwise...
+      -) Enter Address Mode
+ 
+ Writing in Address Mode:
+   a) written value becomes address
+   b) Enter Write mode
+ 
+ Writing in Write Mode:
+   a) written value moves to current address of EEPROM
+   b) mode is not changed
+ 
+ Writing in Read Mode:
+   a) Enter Select Mode
+ 
+ 
+ 
+ Logic Flow Details (128-byte ... mapper 159)
+ --------------------------------------------
+ 
+ Opening from Closed Mode:
+   a) Enter Address Mode
+ 
+ Opening from non-Closed Mode:
+   a) increment address by 1 (wrap $7F-&gt;00)
+   b) do not change mode
+   c) Reset bit counter (next write is the first write in the 9-write sequence)
+ 
+ Writing in Address Mode:
+   a) written value becomes address (low 7 bits only)
+   b) if high bit of written value is set...
+      -) Enter Read Mode
+   c) otherwise...
+      -) Enter Write Mode
+ 
+ Writing in Write Mode:
+   a) written value moves to current address of EEPROM
+   b) Enter Address mode
+ 
+ Writing in Read Mode:
+   a) Enter Address Mode
+</pre>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/bandai-e.txt" rel="nofollow">Bandai Mapper</a> By goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES mapper list</a> by Disch</li></ul>
+<p>Japanese only :
+</p>
+<ul><li> <a class="external text" href="http://nesdev.com/16.txt" rel="nofollow">Bandai Mapper</a> by goroh.</li>
+<li> Naruko's notes:
+<ul><li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG%20series" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG%20series</a></li>
+<li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG-1" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG-1</a></li>
+<li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG-2" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20FCG-2</a></li>
+<li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20LZ93D50%20standard" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20LZ93D50%20standard</a></li>
+<li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20BA-JUMP2" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20BA-JUMP2</a> (<a href="INES_Mapper_153.xhtml" title="INES Mapper 153">iNES Mapper 153</a>)</li>
+<li> <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Bandai%20Datach" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Bandai%20Datach</a> (<a href="INES_Mapper_157.xhtml" title="INES Mapper 157">iNES Mapper 157</a>)</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.200 seconds
+Real time usage: 0.216 seconds
+Preprocessor visited node count: 71/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:727-1!*!0!!en!*!* and timestamp 20160208220040 and revision id 10731
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

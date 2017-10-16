@@ -1,0 +1,126 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Multibyte constant</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Multibyte constant</h1><div class="article">
+<p>This macro allows including long hexadecimal constants on one line, like an arbitrary extension of the .dbyt (2 byte big endian constant).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#asm6"><span class="tocnumber">1</span> <span class="toctext">asm6</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#ca65"><span class="tocnumber">2</span> <span class="toctext">ca65</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Unofficial_MagicKit"><span class="tocnumber">3</span> <span class="toctext">Unofficial MagicKit</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#External_links"><span class="tocnumber">4</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="asm6">asm6</span></h2>
+<pre>
+; ASM6 uses HEX, Use a Macro to convert it to use MBYT!
+; Macro by Hamtaro126, under no licence.
+ macro mbyt string
+ hex string
+ endm
+</pre>
+<h2><span class="mw-headline" id="ca65">ca65</span></h2>
+<pre>
+; mbyt.s
+; Multibyte constant macro for ca65
+;
+; Copyright 2013 Damian Yerrick
+; Copying and distribution of this file, with or without
+; modification, are permitted in any medium without royalty provided
+; the copyright notice and this notice are preserved in any source
+; code copies.  This file is offered as-is, without any warranty.
+;
+.macro mbyt_hex2nibs highnib, lownib
+.local highdig, lowdig
+  ; &quot;dec0de&quot; the hex nibbles
+  .if highnib &gt;= 'A' &amp;&amp; highnib &lt;= 'F'
+    highdig = highnib - 'A' + 10
+  .elseif highnib &gt;= 'a' &amp;&amp; highnib &lt;= 'f'
+    highdig = highnib - 'a' + 10
+  .elseif highnib &gt;= '0' &amp;&amp; highnib &lt;= '9'
+    highdig = highnib - '0'
+  .endif
+  .if lownib &gt;= 'A' &amp;&amp; lownib &lt;= 'F'
+    lowdig = lownib - 'A' + 10
+  .elseif lownib &gt;= 'a' &amp;&amp; lownib &lt;= 'f'
+    lowdig = lownib - 'a' + 10
+  .elseif lownib &gt;= '0' &amp;&amp; lownib &lt;= '9'
+    lowdig = lownib - '0'
+  .endif
+  .byte highdig * $10 + lowdig
+  ;.out .sprintf(&quot;.byte %02x&quot;, highdig * $10 + lowdig)
+.endmacro
+
+.macro mbyt inbytes
+  ; thanks to thefox who recommended .set
+  .local pos
+  pos .set 0
+  .out .sprintf(&quot;%s&quot;, inbytes)
+  .repeat .strlen(inbytes)
+    .if pos &lt; .strlen(inbytes)
+      nib .set .strat(inbytes, pos)
+      ; these characters can be used as separators
+      .if (nib = ' ' || nib = ',' || nib = '$' || nib = '_')
+        pos .set pos + 1
+      .else
+        mbyt_hex2nibs nib, {.strat(inbytes, pos + 1)}
+        pos .set pos + 2
+      .endif
+    .endif
+  .endrepeat
+.endmacro
+
+; use it like this:
+; mbyt &quot;09F91102 9D74E35B D84156C5 635688C0&quot;
+</pre>
+<p>Movax12 has a <a class="external text" href="http://pastebin.com/jiWdS68E" rel="nofollow">another implementation</a>.
+</p>
+<h2><span class="mw-headline" id="Unofficial_MagicKit">Unofficial MagicKit</span></h2>
+<pre>
+; Implementation of multibyte constants for Unofficial-MagicKit.
+; By zzo38, Creative Commons Zero
+
+	macro mbyt
+	macset 2,4,\$1&gt;1
+	macgoto mbyt_\2
+	endm
+
+	macro mbyt_0
+	endm
+
+	macro mbyt_1
+	macset 2,2,1
+	macset 2,5,2
+	db $\2
+	mbyt_0 \&gt;1
+	macset 1,1,1
+	mbyt_0 \&gt;1
+	macset 1,1,1
+	macgoto mbyt
+	endm
+
+; Example:
+;	mbyt 09F91102 9D74E35B D84156C5 635688C0
+</pre>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li> <a class="external text" href="http://nedbatchelder.com/text/hexwords.html" rel="nofollow">Ned Batchelder: Hex words</a> has test cases</li>
+<li> <a class="external text" href="http://pastebin.com/0xkpKgCh" rel="nofollow">Alternate implementation by thefox</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 42/1000000
+Preprocessor generated node count: 80/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1247-1!*!*!!en!*!* and timestamp 20160208222619 and revision id 11290
+ -->
+</div></body></html>

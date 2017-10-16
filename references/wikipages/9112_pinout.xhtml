@@ -1,0 +1,52 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>9112 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>9112 pinout</h1><div class="article">
+<p>MMC3 clone, model 9112
+</p>
+<pre>                  .--\/--.             
+   (r) CHR A10 &lt;- |01  40| -- VCC
+   (f) PPU A12 -&gt; |02  39| -&gt; CHR A16 (r)
+   (f) PPU A11 -&gt; |03  38| -&gt; CHR A11 (r)
+   (f) PPU A10 -&gt; |04  37| -&gt; PRG RAM /WE (w) ?
+   (r) CHR A13 &lt;- |05  36| -&gt; PRG RAM +CE (w) ?
+   (r) CHR A14 &lt;- |06  35| &lt;- CPU D3 (fr)
+   (r) CHR A12 &lt;- |07  34| &lt;- CPU D2 (fr)
+ (f) CIRAM A10 &lt;- |08  33| &lt;- CPU D4 (fr)
+   (r) CHR A15 &lt;- |09  32| &lt;- CPU D1 (fr)
+   (r) CHR A17 &lt;- |10  31| &lt;- CPU D5 (fr)
+      (f) /IRQ -&gt; |11  30| &lt;- CPU D0 (fr)
+   (f) /ROMSEL &lt;- |12  29| &lt;- CPU D6 (fr)
+       (f) R/W -&gt; |13  28| &lt;- CPU A0 (fr)
+   (r) PRG A15 &lt;- |14  27| &lt;- CPU D7 (fr)
+   (r) PRG A13 &lt;- |15  26| -&gt; PRG RAM /CE (w) ?
+   (f) CPU A14 -&gt; |16  25| &lt;- M2 (f)
+   (r) PRG A16 &lt;- |17  24| -&gt; PRG /CE (r)
+   (r) PRG A14 &lt;- |18  23| ??
+   (r) PRG A18 &lt;- |19  22| -&gt; PRG A17 (r)
+           GND -- |20  21| &lt;- CPU A13 (f)
+                  '------'             
+</pre>
+<p>Notice:
+</p>
+<ul><li>Pinout VERY similar to OEM MMC3.</li>
+<li>PRG RAM pins needs confirmation.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=156990#p156990" rel="nofollow">BBS</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1620-1!*!*!*!*!*!* and timestamp 20160224224113 and revision id 11970
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

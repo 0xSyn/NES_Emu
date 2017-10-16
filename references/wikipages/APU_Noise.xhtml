@@ -1,0 +1,82 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Noise</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Noise</h1><div class="article">
+<p>The <a href="APU.xhtml" title="APU">NES APU</a> noise channel generates pseudo-random 1-bit noise at 16 different frequencies.
+</p><p>The noise channel contains the following: <a href="APU_Envelope.xhtml" title="APU Envelope">envelope generator</a>, <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a>, <a class="extiw" href="http://en.wikipedia.org/wiki/Linear_feedback_shift_register" title="wikipedia:Linear feedback shift register">Linear Feedback Shift Register</a>, <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter</a>.
+</p>
+<pre>
+   Timer --&gt; Shift Register   Length Counter
+                   |                |
+                   v                v
+Envelope -------&gt; Gate ----------&gt; Gate --&gt; (to mixer)
+</pre>
+<table border="1">
+<tr>
+<td> <b>$400C</b> </td>
+<td> <tt>--lc.vvvv</tt> </td>
+<td> <b><a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter halt</a></b>, constant volume/envelope flag, and volume/<b><a href="APU_Envelope.xhtml" title="APU Envelope">envelope</a></b> divider period (write)
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$400E</b> </td>
+<td> <tt>M---.PPPP</tt> </td>
+<td> <b>Mode and period</b> (write)
+</td></tr>
+<tr>
+<td> bit 7 </td>
+<td> <tt>M--- ----</tt> </td>
+<td> Mode flag
+</td></tr>
+<tr>
+<td> bits 3-0 </td>
+<td> <tt>---- PPPP</tt> </td>
+<td> The timer period is set to entry P of the following:<br/>
+<pre>
+Rate  $0 $1  $2  $3  $4  $5   $6   $7   $8   $9   $A   $B   $C    $D    $E    $F
+      --------------------------------------------------------------------------
+NTSC   4, 8, 16, 32, 64, 96, 128, 160, 202, 254, 380, 508, 762, 1016, 2034, 4068
+PAL    4, 8, 14, 30, 60, 88, 118, 148, 188, 236, 354, 472, 708,  944, 1890, 3778
+</pre>
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$400F</b> </td>
+<td> <tt>llll.l---</tt> </td>
+<td> <b><a href="APU_Length_Counter.xhtml" title="APU Length Counter">Length counter load</a></b> and <b><a href="APU_Envelope.xhtml" title="APU Envelope">envelope restart</a></b> (write)
+</td></tr></table>
+<p>The shift register is 15 bits wide, with bits numbered<br/>
+14 - 13 - 12 - 11 - 10 - 9 - 8 - 7 - 6 - 5 - 4 - 3 - 2 - 1 - 0
+</p><p>When the timer clocks the shift register, the following actions occur in order:
+</p>
+<ol><li> Feedback is calculated as the exclusive-OR of bit 0 and one other bit: bit 6 if Mode flag is set, otherwise bit 1.</li>
+<li> The shift register is shifted right by one bit.</li>
+<li> Bit 14, the leftmost bit, is set to the feedback calculated earlier.</li></ol>
+<p>This results in a pseudo-random bit sequence, 32767 steps long when Mode flag is clear, and randomly 93 or 31 steps long otherwise. (The particular 31- or 93-step sequence depends on where in the 32767-step sequence the shift register was when Mode flag was set).
+</p><p>The <a href="APU_Mixer.xhtml" title="APU Mixer">mixer</a> receives the current <a href="APU_Envelope.xhtml" title="APU Envelope">envelope volume</a> except when
+</p>
+<ul><li> Bit 0 of the shift register is set, or</li>
+<li> The <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter</a> is zero</li></ul>
+<p>On power-up, the shift register is loaded with the value 1.
+</p><p>The earliest revisions of the 2A03 CPU ignored the Mode flag, treating it as always 0. These CPUs were used in the first batch of Famicom consoles that were recalled, in Vs. System boards, and in the arcade games that used the 2A03 as a sound coprocessor.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=58046#p58046" rel="nofollow">[1]</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:178-1!*!0!*!*!*!* and timestamp 20160208224725 and revision id 8953
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

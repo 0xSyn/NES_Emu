@@ -1,0 +1,89 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Controller port registers</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Controller port registers</h1><div class="article">
+<h3><span class="mw-headline" id="NES">NES</span></h3>
+<table border="1">
+<tr>
+<th> Addr </th>
+<th> <tt>7654.3210</tt> </th>
+<th> Function
+</th></tr>
+<tr>
+<td rowspan="2"> $4016 (W) </td>
+<td> <tt>----.---A</tt> </td>
+<td> Output data (strobe) to both controllers.
+</td></tr>
+<tr>
+<td> <tt>----.-CBA</tt> </td>
+<td> Output data to the expansion port.
+</td></tr>
+<tr>
+<td rowspan="2"> $4016 (R) </td>
+<td> <tt>---4.3--0</tt> </td>
+<td> Read data from controller port #1.
+</td></tr>
+<tr>
+<td> <tt>---4.3210</tt> </td>
+<td> Read data from expansion port.
+</td></tr>
+<tr>
+<td rowspan="2"> $4017 (R) </td>
+<td> <tt>---4.3--0</tt> </td>
+<td> Read data from controller port #2.
+</td></tr>
+<tr>
+<td> <tt>---4.3210</tt> </td>
+<td> Read data from expansion port.
+</td></tr></table>
+<h3><span class="mw-headline" id="Famicom">Famicom</span></h3>
+<table border="1">
+<tr>
+<th> Addr </th>
+<th> <tt>7654.3210</tt> </th>
+<th> Function
+</th></tr>
+<tr>
+<td rowspan="2"> $4016 (W) </td>
+<td> <tt>----.---A</tt> </td>
+<td> Output strobe to both controllers.
+</td></tr>
+<tr>
+<td> <tt>----.-CBA</tt> </td>
+<td> Output data to the expansion port.
+</td></tr>
+<tr>
+<td rowspan="2"> $4016 (R) </td>
+<td> <tt>----.-M-0</tt> </td>
+<td> Read data from controller #1 and microphone state from controller #2
+</td></tr>
+<tr>
+<td> <tt>----.--1-</tt> </td>
+<td> Read data from expansion port.
+</td></tr>
+<tr>
+<td rowspan="2"> $4017 (R) </td>
+<td> <tt>----.---0</tt> </td>
+<td> Read data from controller #2.
+</td></tr>
+<tr>
+<td> <tt>---4.3210</tt> </td>
+<td> Read data from expansion port.
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:65-1!*!*!!*!*!* and timestamp 20160208224912 and revision id 262
+ -->
+</div></body></html>

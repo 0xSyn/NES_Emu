@@ -1,0 +1,82 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming UNROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming UNROM</h1><div class="article">
+<p><b>UNROM</b> is the common name for a discrete mapper found on the UNROM board as well as the less common <b>UOROM</b> board. UNROM has 64 KB or 128 KB PRG-ROM (divided into 8 16k banks) and CHR-RAM. The UOROM board works the same way and can take PRG-ROM up to 256 KB (16 banks). It is very easy to use once you know how to load CHR RAM.
+</p>
+<h2><span class="mw-headline" id="iNES_header">iNES header</span></h2>
+<p>Here is an <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header for mapper 2 on the UNROM and UOROM boards.
+It should be backward-compatible with emulators supporting only the older <a href="INES.xhtml" title="INES">iNES</a> header format, but they may emulate <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">extra RAM at $6000-$7FFF</a>, where official boards have open bus.
+</p>
+<pre>
+.segment &quot;HEADER&quot;
+  .byte &quot;NES&quot;, $1A
+  .byte 8         ;UNROM has 8 16k banks; change this to 4 or 16 as needed
+  .byte 0         ;No CHR ROM
+  .byte $20, $08  ;Mapper 2, horizontal mirroring, NES 2.0
+  .byte $00       ;No submapper
+  .byte $00       ;PRG ROM not 4 MiB or larger
+  .byte $00       ;No PRG RAM
+  .byte $07       ;8192 (64 * 2^7) bytes CHR RAM, no battery
+  .byte $00       ;NTSC; use $01 for PAL
+  .byte $00       ;No special PPU
+</pre>
+<p>To use vertical <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> instead of horizontal mirroring, change the <code>.byte $20, $08</code> to <code>.byte $21, $08</code>
+</p>
+<h2><span class="mw-headline" id="Bankswitching">Bankswitching</span></h2>
+<p>UNROM has four or eight banks 16 KB in size; UOROM has 16 banks.  The last of these banks is fixed at $C000-$FFFF.  The rest (numbered 0-2, 0-6, or 0-14) are switchable at $8000-$BFFF.
+</p><p>Switching banks requires a write to $8000-$FFFF.  In UNROM, bits 0-2 of the byte written to $8000-$FFFF will select the bank; UOROM uses bits 0-3.  When writing to $8000-$FFFF, the value you are writing must match the value located at the destination address in ROM (see <a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflict</a>).  One way to ensure this is to have a bankswitch lookup table.  You can read from this table and then immediately write that value back to the table.
+</p>
+<pre>
+.segment &quot;RODATA&quot;
+banktable:              ; Write to this table to switch banks.
+  .byte $00, $01, $02, $03, $04, $05, $06
+  .byte $07, $08, $09, $0A, $0B, $0C, $0D, $0E
+  ; UNROM needs only the first line of this table (0-6)
+  ; but UOROM needs both lines (0-14).
+
+.segment &quot;ZEROPAGE&quot;:    ; The mapper is read-only; need to track its state separately
+current_bank: .res 1
+
+.segment &quot;CODE&quot;
+bankswitch_y:
+  sty current_bank      ; save the current bank in RAM so the NMI handler can restore it
+bankswitch_nosave:
+  lda banktable, y      ; read a byte from the banktable
+  sta banktable, y      ; and write it back, switching banks
+  rts
+</pre>
+<p>The lookup table and the bankswitching subroutine are normally located in the fixed bank ($C000-$FFFF).
+</p><p>To save 12 cycles per bankswitch at a cost of 5 bytes of ROM, the <code>bankswitch_y</code> subroutine can be made into a macro.
+</p><p>With the lookup table and bankswitching subroutine in place, switching banks is as easy as this:
+</p>
+<pre>
+  ldy #$02
+  jsr bankswitch_y     ;switch to bank 2
+</pre>
+<p>If you switch banks in the NMI handler, such as to run a sound engine, do not write to <code>current_bank</code>. Instead, do this at the end of the NMI handler just before pulling registers:
+</p>
+<pre>
+  ldy current_bank
+  jsr bankswitch_nosave
+</pre>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="UxROM.xhtml" title="UxROM">UxROM</a> technical reference</li>
+<li> <a class="mw-redirect" href="CHR_ROM_vs__CHR_RAM.xhtml#Switching_to_CHR_RAM" title="CHR-ROM vs CHR-RAM">How to load CHR RAM</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.047 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 96/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:260-1!*!0!!*!*!* and timestamp 20160225135008 and revision id 11982
+ -->
+</div></body></html>

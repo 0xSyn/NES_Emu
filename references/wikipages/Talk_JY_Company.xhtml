@@ -1,0 +1,25 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:JY Company</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:JY Company</h1><div class="article">
+<h2><span class="mw-headline" id="PPU_read_IRQ_mode">PPU read IRQ mode</span></h2>
+<p>I don't see why the PPU read mode of the interval timer should be labeled &quot;wtf&quot;. Wouldn't an IRQ mode based on PPU reads just clock 170 times per scanline? It'd be sort of like CPU mode, except not dependent on the <a href="Clock_rate.xhtml" title="Clock rate">CPU to PPU clock ratio</a>. And it'd be unaffected by &quot;borrowing&quot; 8x16 sprites from the other pattern table, which trips up PA12-rise PITs such as MMC3's. With the /256 prescaler, it would appear fairly straightforward to work with: as the last thing in vblank, load 170/256 (very close to two-thirds) times the number of scanlines to wait. Apart from &quot;CPU writes&quot; and &quot;funky mode&quot;, I see nothing particularly strange about 90's PIT. Or is there something harsh that I'm missing? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 23:04, 10 May 2014 (MDT)
+</p>
+<dl><dd> When Disch wrote these, he had Strong Opinions about anything that wasn't MMC3-shaped. See also his original writeup of Bandai LZ93D50 EEPROM traffic<s>[1]</s>. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 00:19, 11 May 2014 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1365-1!*!0!*!*!*!* and timestamp 20160208220048 and revision id 9213
+ -->
+</div></body></html>

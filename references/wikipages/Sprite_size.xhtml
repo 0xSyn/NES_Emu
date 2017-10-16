@@ -1,0 +1,64 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sprite size</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sprite size</h1><div class="article">
+<p>The NES PPU offers the choice of 8x8 pixel or 8x16 pixel sprites.
+Each size has its advantages.
+</p>
+<h2><span class="mw-headline" id="Advantages_of_8x8">Advantages of 8x8</span></h2>
+<p>If the majority of your objects fit in an 8x8 pixel sprite, choose 8x8.
+These might include tiny bullets, puffs of smoke, or puzzle pieces.
+Drawing, say, a 4x4 pixel bullet with an 8x16 pixel sprite would waste pattern table space and increase potential for dropout or flicker on adjacent scanlines.
+</p><p>If your game's characters are 21-24 pixels tall, 8x8 pixel sprites may be the best choice.
+For example, this is true of <i>Mario Bros.</i> (1983), <i>Balloon Fight</i>, the enemies in the original <i>Super Mario Bros.</i>, and the hero in the <i>Mega Man</i> series.
+And in <i><a href="Thwaite.xhtml" title="Thwaite">Thwaite</a></i>, everything is either 8x8 (missiles, smoke, crosshair) or 24x24 (explosions) by nature, so 8x8 is a natural fit.
+</p><p>Some very detailed sprite animations are easier to do in 8x8.
+For example, 8x8 is more amenable to animating just the legs in an RPG character's walk cycle while reusing the head tiles.
+An overlay to add more colors to a small area, as in <i>Mega Man</i> series, causes flicker on fewer lines.
+And it's possible to simulate small amounts of rotation by shearing the sprite, moving individual 8-pixel chunks 1 pixel at a time.
+</p><p>The NES has no way to put a sprite half off the top of the screen, other than by using a top status bar and hiding sprites in <a href="PPU_registers.xhtml" title="PPU registers">$2001</a> while the status bar is being displayed.
+Sprites entering or leaving have to enter or leave all at once, and this is especially visible on a PAL NES.
+So 8x8 sprites help diminish this pop-on effect.
+</p><p><i>Super Mario Bros. 3</i> uses 8x16 sprites, and some of the enemies inherited from the original <i>Super Mario Bros.</i> had to be modified to fit this.
+Blooper (the squid), for example, is 24 pixels tall in the original but had to be redrawn smaller for <i>SMB3</i>.
+</p>
+<h2><span class="mw-headline" id="Advantages_of_8x16">Advantages of 8x16</span></h2>
+<p>The NES supports 64 8x8 sprites or 64 8x16 sprites.
+This means 8x16 sprites can cover a larger area of the screen.
+So games without many objects that are smaller than 12 pixels or 17-24 pixels in height can benefit from 8x16 sprites.
+These include fighting games, vertical shooters, or platformers without guns.
+</p><p>Using 8x16 pixel sprites can sometimes save CPU time.
+Say a game has four characters, each 32x16 pixels in size.
+It takes more time to write 32 entries to a display list than to write 16.
+</p><p>Some games, such as <i>Crystal Mines</i> (and its retreads <i>Exodus</i> and <i>Joshua</i>), repeatedly switch game objects from being part of the background to being sprites and back so that they can temporarily leave the tile grid.
+<i>Super Mario Bros. 2</i> likewise does this for the mushroom blocks, keys, and the like.
+Because 8x16 sprites can use both pattern tables, an object can use the same tiles whether it is rendered as background or as sprites.
+This causes a problem, however, for games using a scanline counter clocked by PA12 like that of the <a href="MMC3.xhtml" title="MMC3">MMC3</a> because fetching from both pattern tables causes extra rises in PA12, which confuses the counter circuit.
+</p><p>The NES supports 4 KiB for the background and 4 KiB for sprites.
+MMC5, however, has a 12K CHR mode that replaces background patterns with a third pattern table during <a href="PPU_rendering.xhtml" title="PPU rendering">sprite fetch time in horizontal blanking</a>.
+This mode works only with 8x16 sprites because 8x8 sprites can use only one pattern table at a time.
+</p><p><i>Alfred Chicken</i> uses a trick to completely hide attribute glitches when scrolling horizontally with <a href="Mirroring.xhtml" title="Mirroring">horizontally mirrored nametables</a>.
+It involves placing a column of blank sprites at x=248.
+But this is practical only with 8x16 sprites, as it needs 15 8x16 sprites or 30 8x8 sprites to cover the entire screen height.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li> BBS discussion:
+<ul><li> Topics <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=10&amp;t=1473" rel="nofollow">1473</a>, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=10&amp;t=3649" rel="nofollow">3649</a>, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=40787#p40787" rel="nofollow">4622</a>, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=10&amp;t=6194" rel="nofollow">6194</a>, <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6223" rel="nofollow">6223</a>, and <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=115918#p115918" rel="nofollow">10324</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=21&amp;t=9678" rel="nofollow">Sprite shearing</a></li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1136-1!*!0!!*!*!* and timestamp 20160208225842 and revision id 7491
+ -->
+</div></body></html>

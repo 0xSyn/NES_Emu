@@ -1,0 +1,188 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Myask/Universal Mapper Description Language</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Myask/Universal Mapper Description Language</h1><div class="article">
+<p><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=14542" rel="nofollow">Discussion thread.</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Needed_features"><span class="tocnumber">1</span> <span class="toctext">Needed features</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Specification"><span class="tocnumber">2</span> <span class="toctext">Specification</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Comments"><span class="tocnumber">2.1</span> <span class="toctext">Comments</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Declarations:"><span class="tocnumber">2.2</span> <span class="toctext">Declarations:</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Statements:"><span class="tocnumber">2.3</span> <span class="toctext">Statements:</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Operators"><span class="tocnumber">2.4</span> <span class="toctext">Operators</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Execution_blocks"><span class="tocnumber">2.5</span> <span class="toctext">Execution blocks</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Handy_Shorthand_Defines"><span class="tocnumber">2.6</span> <span class="toctext">Handy Shorthand Defines</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#NROM-256_example"><span class="tocnumber">3</span> <span class="toctext">NROM-256 example</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Needed_features">Needed features</span></h1>
+<p>Been thinking about making some better way to talk about mappers, as described <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=74174#p74174" rel="nofollow">in this post</a> among several other places on our boards.
+Parts/functions
+</p>
+<ul><li> Define state bits
+<ul><li> include easy ROM/RAM chip(/internal) declaration; don't want to exclude MagicFloor nor MMC5/6 from &quot;correct&quot; description</li></ul></li>
+<li> Logic</li>
+<li> Arbitrary address bus size for chips?</li></ul>
+<p>Convenience addtions
+</p>
+<ul><li> Conditional operations (optional but helps user-side…but makes it harder program-side)
+<ul><li> some header fields as parameters might be desirable (mirroring, chip sizes)</li>
+<li> on the other hand, they are different boards in some manner. Perhaps only as solder-pad options?</li></ul></li>
+<li> <a href="Cartridge_connector.xhtml" title="Cartridge connector">Cartridge connector</a> pins as predefined signal names, or a module (to allow picking 60 or 72-pin)</li>
+<li> Option to autoconnect power, ground, address lines that are not in file 
+<ul><li> like connecting PPU_A[0:7] to CHR_ROM_A[0:7] if CHR_ROM_A[0:7] do not appear in the description)</li>
+<li> Also autoconnect CIC</li></ul></li></ul>
+<p>Extra function thoughts
+</p>
+<ul><li> Outputs (e.g. LED)</li>
+<li> Inputs (e.g. DIPswitch, solder pads)</li>
+<li> Describing expansion port devices in similar manner</li>
+<li> Describing controller port devices in similar manner</li></ul>
+<p>Hard Part
+</p>
+<ul><li> Expansion audio (analog, can involve extra oscillators as <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a> does)</li></ul>
+<h1><span class="mw-headline" id="Specification">Specification</span></h1>
+<h3><span class="mw-headline" id="Comments">Comments</span></h3>
+<pre>//c-style
+/*and c-style*/
+//Let's also treat all whitespace the same (except newlines terminating //, blocks)
+//and &quot;to&quot; should be ignored in whitespace
+</pre>
+<h3><span class="mw-headline" id="Declarations:">Declarations:</span></h3>
+<pre>mapper name begin
+//contents
+end name;
+</pre>
+<p>The outer part. Technically a block started with begin/end. Name optional.
+</p>
+<pre>mem name (address lines, data lines, writable, class);
+</pre>
+<ul><li>writable can be RAM or ROM.</li>
+<li>Class can be PRG, CHR, VRAM, [audio?] and MISC. Class controls default connections, and helps make obvious to readers what a thing is.</li></ul>
+<p>(see NROM example for default connections. Any prg gets CPU_A, CPU_D, /ROMSEL (&quot;ROMSEL_n&quot;), and optionally the R/W signal if it's a RAM. chr/vram gets PPU_A, PPU_D, read/writes, and enable depending on PPU_A[13] (or /A13 if VRAM)
+</p>
+<pre>solder name to /*contents*/; //can block if desired
+jumper name to /*contents*/; //can block if desired
+dip name to /*contents*/; //can block if desired: same as solder for emulator
+</pre>
+<ul><li>dipswitch</li></ul>
+<p>Just different name, really both just a state-based if statement, and these state bits are not settable except hardware(emulator)-side, unlike…
+</p>
+<pre>register name; 
+reg name;//short form
+</pre>
+<pre>init name to value; //can refer to iNES header fields like mirroring
+</pre>
+<p>Not that iNES is something we want much of, but it'll cut down on file redundancy.
+</p>
+<h3><span class="mw-headline" id="Statements:">Statements:</span></h3>
+<pre>connect x to y to z; //any size netlist, whitespace-separated
+= x y z; //shortform
+set name to value; //set a state bit
+&lt;= x y; //shortform
+</pre>
+<h3><span class="mw-headline" id="Operators">Operators</span></h3>
+<pre>bitwise &amp; AND | OR ^ XOR ~ invert
+logical &amp;&amp;AND ||OR ^^XOR !not
+mathematical + - * binary operations, -negation
+{concatenate, concatenatee} [bus-index:range] {3 duplicate} //as in verilog
+</pre>
+<h3><span class="mw-headline" id="Execution_blocks">Execution blocks</span></h3>
+<pre>on CPU_WRITE /*do stuff*/;
+on PPU_WRITE
+on CPU_READ
+on PPU_READ
+on CLOCK
+</pre>
+<h3><span class="mw-headline" id="Handy_Shorthand_Defines">Handy Shorthand Defines</span></h3>
+<pre>bankreg name (which bus, width, address lines replaced, address mask selecting=equals what, which bus to write [inc A or D to write], mask to write=equals what,, written bits);
+fixedbank (which bus, width, address lines replaced=with what, address mask selecting=equals what);
+</pre>
+<p>e.g.
+</p>
+<pre>bankreg bnrom (CPU, 2, 16:15, 16'h8000=16'h8000, CPU_D, 16'h8000=16'h8000, CPU_D[1:0]);
+</pre>
+<pre>bankreg bxrom (CPU, 8, 22:15, 16'h8000=16'h8000, CPU_D, 16'h8000=16'h8000, CPU_D[7:0]);
+</pre>
+<pre>bankreg gnrom_cpu (CPU, 2, 16:15, 16'h8000=16'h8000, CPU_D, 16'h8000=16'h8000, CPU_D[5:4]);
+bankreg gnrom_ppu (PPU, 2, 14:13, 16'h2000=16'h0000, CPU_D, 16'h8000=16'h8000, CPU_D[1:0]);
+</pre>
+<pre>bankreg magic_series_cpu (CPU, 7, 21:15, 16'h8000=16'h8000, CPU_D, 16'h8000=16'h8000, CPU_D[7:1]);
+bankreg magic_series_ppu (PPU, 8, 20:13, 16'h2000=16'h0000, CPU_D, 16'h8000=16'h8000, CPU_D[7:0]);
+
+bankreg unrom (CPU, 3, 16:14, 16'hC000=16'h8000, CPU_D, 16'h8000=16'h8000, CPU_D[2:0]);
+fixedbank unrom_hi (CPU, 3, 16:14=3'b111, 16hC000=16'hC000);
+</pre>
+<p>The idea here is that it autogenerates a register of appropriate width, and statements in ON_x_WRITE to write that register when its write mask equality is met, and sets the appropriate address lines when its select mask is met. fixedbank does not need a register, obviously. So, for bnrom, it would expand to
+</p>
+<pre>reg bnrom_bank[1:0];
+on CPU_WRITE begin
+	if (CPU_A &amp; 16'h8000 == 16'h8000) bnrom_bank &lt;= CPU_D[1:0];
+	if (CPU_A &amp; 16'h8000 == 16'h8000) prg.a[16:15] = bnrom_bank;
+end CPU_WRITE;
+on CPU_READ if (CPU_A &amp; 16'h8000=16'h8000) prg.a[16:15] = bnrom_bank;
+</pre>
+<h1><span class="mw-headline" id="NROM-256_example"><a href="NROM.xhtml" title="NROM">NROM</a>-256 example</span></h1>
+<pre>mapper NROM_256V begin
+ //without autofills
+ //aside from the mirroring, strikes me as the same as &quot;default connections&quot;?
+//component section
+ prgrom prg(32KiB); 
+ //could also write 256Kib..but seems like a source of many typo problems
+ //perhaps go by address line, data line counts?
+ chrrom chr(8KiB);
+ //only difference between PRG and CHR def'ns are its default connections
+ //and outputs
+ CIC cic(NES);//allow other chips I guess?
+
+//dynamic components section
+ solder h to connect CIRAM_A10 to PPU_A[10];
+ solder v to connect CIRAM_A10 to PPU_A[11]; 
+ init h iNES.6[0];
+ init v ~iNES.6[0];
+  //technically redundant per wiki as only V-using boards had solder pads?
+  //make &quot;to&quot; as whitespace, allowing nice codelook but not requiring 
+ connect CIRAM_CE_n to PPU_A13_n;
+
+//connections: power
+ connect VCC prg.vcc cic.vcc chr.vcc;
+ connect GND prg.gnd cic.gnd chr.gnd;
+  //allow multiple connections per statement
+  //considering a shortform lke &quot;=&quot; for connect
+//connections: CIC 
+ //[omitted]
+//connections: PRG
+ connect prg.a[14:0] CPU_A[14:0];
+ //NROM_128: connect prg.a[13:0] CPU_A[13:0];
+ //and connect prg.a[14] VCC; //several ways to do it, really.
+ connect prg.d[7:0] CPU_D[7:0];
+ connect prg.oe_n prg.ce_n ROMSEL_n; //I suspect I've got these mildly wrong
+//connections: CHR
+ connect chr.a[12:0] PPU_A[12:0];
+ connect chr.d[7:0] PPU_D[7:0];
+ connect chr.oe_n chr.ce_n PPU_A[13];
+
+end NROM_256V;
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.051 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 53/1000000
+Preprocessor generated node count: 80/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1682-1!*!0!!en!*!* and timestamp 20160716102005 and revision id 12746
+ -->
+</div></body></html>

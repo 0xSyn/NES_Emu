@@ -1,0 +1,119 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Errata</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Errata</h1><div class="article">
+<p>This page describes aspects of the NES hardware that may be considered an error in the implementation (<b>errata</b>), or just otherwise unintuitive or unexpected behaviour.
+</p><p>Many of these issues are poorly emulated, and can cause <a href="Program_compatibility.xhtml" title="Program compatibility">program compatibility</a> problems, especially for homebrew games not tested on hardware.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Video"><span class="tocnumber">1</span> <span class="toctext">Video</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#OAM_and_Sprites"><span class="tocnumber">1.1</span> <span class="toctext">OAM and Sprites</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Input"><span class="tocnumber">2</span> <span class="toctext">Input</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Audio"><span class="tocnumber">3</span> <span class="toctext">Audio</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#APU_Pulse"><span class="tocnumber">3.1</span> <span class="toctext">APU Pulse</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#APU_DMC"><span class="tocnumber">3.2</span> <span class="toctext">APU DMC</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#CPU"><span class="tocnumber">4</span> <span class="toctext">CPU</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Video">Video</span></h2>
+<ul><li> Setting the VRAM address using <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> ($2006) corrupts the <a href="PPU_scrolling.xhtml" title="PPU scrolling">scroll position</a>. (Workaround: Reset the scroll position using <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> ($2005) and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000) after finishing all background updates.)</li></ul>
+<ul><li> Reading <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> ($2002) at the exact same time that <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> bit 7 goes high at the start of vertical blanking <a href="NMI.xhtml#Race_condition" title="NMI">keeps $2002.D7 from going high at all</a> that frame. (Workaround: Use NMI to wait for vertical blanking.)</li></ul>
+<ul><li> If one enables NMIs (<a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> bit 7) while <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSTATUS">PPUSTATUS</a> bit 7 is set, it will immediately trigger a new NMI in the NES CPU. This can only happen during vertical blanking if the code has not yet read PPUSTATUS. (Workaround: Read PPUSTATUS immediately before enabling NMIs.)</li></ul>
+<ul><li> When writing to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000) at the exact start of horizontal blanking may cause the PPU to start reading from the left name table instead of the right. Workarounds:
+<ol><li> Use horizontal or one-screen mirroring.</li>
+<li> Don't write to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> outside vertical or forced blanking except as part of a properly timed raster effect. If you are writing to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> as a way of temporarily preventing the NMI handler from being called while it is already running, don't disable NMI through <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>. Instead, use a variable to lock out reentrant NMI, and check this variable at the beginning of your NMI handler.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup></li></ol></li></ul>
+<ul><li> After reset ends (by CIC or reset button), the <a href="PPU_power_up_state.xhtml" title="PPU power up state">PPU refuses to accept data</a> written to the registers at <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a>, <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> ($2005), and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> ($2006) for about the length of one frame. NES startup code should wait at least this long after reset before using the PPU (see: <a href="Init_code.xhtml" title="Init code">Init code</a>).</li></ul>
+<ul><li> The VBlank flag in $2002.D7 is not cleared on reset, only power-up.</li></ul>
+<ul><li> Some 6502 write instructions produce an extra read or write as part of their operation, which produces unexpected results when used with PPU registers <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004) and <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUDATA">PPUDATA</a> ($2007). This includes all read-modify-write instructions (ASL, LSR, ROL, ROR, DEC, INC) as well as indexed addressing instructions (e.g. STA $2000, X). Spurious reads or writes that operate on these PPU registers are a problem, because they have the side effect of incrementing its internal write address.</li></ul>
+<ul><li> [2C07 and Dendy only] The PAL red and green emphasis bits are swapped with respect to the 2C02 (NTSC).</li></ul>
+<ul><li> [2A03] DMC DMA during reads from $2007 can cause an extra read signal, causing a lost byte. This issue can also affect $2002 vblank polling (though this is already unreliable, see above). Workaround: disable DMC while reading from PPU.</li></ul>
+<ul><li> Setting bit 6 of PPUCTRL (EXTBG direction) on a stock NES to 1 (output) causes a bus conflict that can potentially damage the PPU. See <i><a href="PPU_registers.xhtml#Master.2Fslave_mode_and_the_EXT_pins" title="PPU registers">master/slave_mode_and_the_EXT_pins</a></i>.</li></ul>
+<ul><li> A Y scroll position in 240-255 is <a href="PPU_scrolling.xhtml#Y_increment" title="PPU scrolling">treated as &quot;negative&quot;</a>, rendering the attribute table as two rows of garbage tiles.</li></ul>
+<ul><li> Setting PPUADDR to a palette address while rendering is disabled will cause the PPU to render the color at that address. This means updating palettes outside of vblank can cause a flash even if rendering is disabled.</li></ul>
+<ul><li> Color $0D in the palette is &quot;blacker than black&quot; and causes image stability problems on some TVs.  Do not use this color.</li></ul>
+<h3><span class="mw-headline" id="OAM_and_Sprites">OAM and Sprites</span></h3>
+<ul><li> Sprite 0 hit does not trigger at x=255.</li></ul>
+<ul><li> Sprite overflow is unreliable due to errors in its implementation. The internal copy to secondary OAM causes a <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">diagonal fetch pattern</a>, causing both false positives and false negatives in the sprite overflow bit. (Workaround: Make sure the ninth sprite immediately follows the eighth, and use sprite overflow only to time the top of the screen, not the bottom.) See: <a href="PPU_sprite_evaluation.xhtml#Sprite_overflow_bug" title="PPU sprite evaluation">Sprite overflow bug</a>.</li></ul>
+<ul><li> Because OAM is DRAM, which needs to be refreshed frequently, the contents of OAM begin to decay quickly when rendering is turned off via <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> ($2001). During rendering, sprite evaluation will continually refresh the OAM data. Caveats and workarounds:
+<ul><li> The data remains reliably intact for about the length of NTSC's vblank, but longer than this and it will begin to corrupt itself.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup></li>
+<li> Using OAM DMA ($4014) during vblank is usually the best way to fill the entire OAM buffer during vblank.</li>
+<li> Writes to OAMDATA ($2004) are usually too slow to fill the entire OAM buffer before it begins to decay. It can be used during vblank to update a few bytes of OAM.</li>
+<li> PAL systems must execute OAM DMA early within vblank, because sprite evaluation begins partway through vblank to keep it refreshed during its extended duration.<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup></li></ul></li></ul>
+<ul><li> Reading from OAM is inconsistent or unusable depending on the hardware revision. This is due to differences in its DRAM controller, and its lack of reliability in edge cases:
+<ul><li> [2C02 through 2C02E (early Famicoms and very early NESes)] OAM is simply never readable.</li>
+<li> [2C02 only] Writes to <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003) corrupt OAM. (Workaround: Rewrite entire OAM before rendering starts, possibly using DMA initiated by writes to $4014, or rely on <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> being 0 at end of rendering.)</li>
+<li> [2C07 only] OAM can only be accessed for the 20 scanlines after the NMI would have happened. (To compensate for PAL's longer vblank period, the 2C07 always enables the OAM refresh logic, regardless of whether rendering is enabled.)</li></ul></li></ul>
+<ul><li> Leaving the value in <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> (either written or by autoincrement) at a value of eight or greater before rendering starts causes minor OAM corruption, copying the eight bytes at <i>OAMADDR&amp;~7</i> to the beginning of OAM.</li></ul>
+<ul><li> Turning rendering off in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUMASK">PPUMASK</a> ($2001) before the PPU has finished <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">evaluating sprites for that line</a> (x=192 for lines with no sprites, x=240 for lines with at least one sprite) can corrupt OAM, leading to sprite flicker.</li></ul>
+<h2><span class="mw-headline" id="Input">Input</span></h2>
+<ul><li> DMC DMA during a controller read ($4016/$4017) causes double clocking, which causes bits of the report to be skipped. A common symptom is spurious presses of Right. Workarounds:
+<ul><li> <a href="Standard_controller.xhtml" title="Standard controller">Standard controller</a> / <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a>: read the controller multiple times to make sure valid input is read.</li>
+<li> <a href="Four_Score.xhtml" title="Four Score">Four Score</a>: check for signature.</li>
+<li> <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a>: prevent a sudden single frame acceleration.</li>
+<li> If already using DMC IRQ: read the controller in the DMC IRQ handler.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Audio">Audio</span></h2>
+<h3><span class="mw-headline" id="APU_Pulse"><a href="APU_Pulse.xhtml" title="APU Pulse">APU Pulse</a></span></h3>
+<ul><li> In sweep decrease mode, the carry input differs between the two channels, causing a slightly different sweep rate.</li></ul>
+<ul><li> Channels set to low frequencies can get silenced by the sweep unit if it is left in increase mode, even if the sweep is otherwise disabled. Workaround:
+<ul><li> Write $08 to $4001 and $4005 to use decrease mode while disabling sweep.)</li></ul></li></ul>
+<ul><li> Writing to $4003 or $4007 to change the high byte of the period while a note is playing causes a click as the phase resets. Workarounds:
+<ol><li> Write $4003 and $4007 only when they have changed.</li>
+<li> The hardware sweep can be used to change the high period bits by clocking it immediately with a write to $4017.<sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup> (Advanced technique.)</li></ol></li></ul>
+<h3><span class="mw-headline" id="APU_DMC"><a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a></span></h3>
+<ul><li> The length counter for DPCM samples ends up reading 1 byte past the end of an otherwise 16 byte aligned sample. This creates a need for 15 bytes of padding between samples.</li>
+<li> The sample playback frequency table contains a set of 16 pitches tuned to a standard A-440 scale. These appear to have been designed for a limited wavetable synthesis using looped samples, but because of the +1 modifier on sample length, the wavelength is detuned.</li>
+<li> The frequency table on PAL systems contains 2 slight tuning errors ($4 and $C).<sup class="reference" id="cite_ref-5"><a href="#cite_note-5">[5]</a></sup></li>
+<li> Playback of samples generates occasional conflicts with controller reads through $4016/4017 (see above: <a href="#Input">Input</a>), as well as PPU reads through $2007 (see above: <a href="#Video">Video</a>). When using DPCM samples, the code must work around these conflicts.</li></ul>
+<h2><span class="mw-headline" id="CPU">CPU</span></h2>
+<p>The NES CPU has several hardware gotchas, most of which are inherited from the MOS 6502 it is derived from:<sup class="reference" id="cite_ref-6"><a href="#cite_note-6">[6]</a></sup><sup class="reference" id="cite_ref-7"><a href="#cite_note-7">[7]</a></sup>
+</p>
+<ul><li> <i>JMP ($xxyy)</i>, or JMP indirect, does not advance pages if the lower eight bits of the specified address is $FF; the upper eight bits are fetched from <i>$xx00</i>, 255 bytes earlier, instead of the expected following byte.</li>
+<li> All of the zero page addressing modes wrap within the zero page. The <i>$xx,x</i> , <i>$xx,y</i>, and <i>($xx,x)</i> addressing modes all count 254,255,0,1…; none advance 254,255,256,257…</li>
+<li> The <i>($xx),y</i> addressing mode wraps when fetching the indirect address if the lower eight bits are stored at $FF (the upper eight bits are fetched from $0000, not $0100).</li>
+<li> BRK, IRQ, or NMI can mask each other under certain conditions. (see Visual6502 wiki <a class="external autonumber" href="http://visual6502.org/wiki/index.php?title=6502_BRK_and_B_bit" rel="nofollow">[1]</a> and <a class="external autonumber" href="http://visual6502.org/wiki/index.php?title=6502_Timing_of_Interrupt_Handling" rel="nofollow">[2]</a> ) Not all can happen on the NES.</li>
+<li> Decimal mode was disconnected from the ALU in the NES's second-source 6502 to save on patent royalties. Some famiclones, however, use an authentic 6502 with a working decimal mode. (Workaround: Don't SED, and convert binary numbers to decimal when displaying them.)</li>
+<li> The 6502 has several <a href="CPU_unofficial_opcodes.xhtml" title="CPU unofficial opcodes">unofficial opcodes</a> that were not part of its specification, but do reliably exist on the Famicom and NES. Code using these opcodes may not be portable to other variants of the 6502 CPU (e.g. SNES). Some games rely on the operation of these unofficial opcodes.</li>
+<li> Page wrapping behavior is reliable on the Famicom/NES but may not be portable to other variants of the 6502 CPU.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=10104" rel="nofollow">Forum</a>: Random glitchy line in Super Mario Bros. on real hardware?</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=9912" rel="nofollow">Forum</a>: Just how cranky is the PPU OAM?</span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=11041" rel="nofollow">Forum</a>: PAL OAM reliability during vblank.</span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=231" rel="nofollow">Forum</a>: Vibrato on square without phase reset.</span>
+</li>
+<li id="cite_note-5"><span class="mw-cite-backlink"><a href="#cite_ref-5">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=94079#p94079" rel="nofollow">Forum</a>: PAL DPCM frequency table contains 2 errors.</span>
+</li>
+<li id="cite_note-6"><span class="mw-cite-backlink"><a href="#cite_ref-6">↑</a></span> <span class="reference-text"><a class="external text" href="http://forum.6502.org/viewtopic.php?t=770" rel="nofollow">6502.org forum</a>: 6502 hardware gotchas.</span>
+</li>
+<li id="cite_note-7"><span class="mw-cite-backlink"><a href="#cite_ref-7">↑</a></span> <span class="reference-text"><a class="extiw" href="http://en.wikipedia.org/wiki/MOS_Technology_6502#Bugs_and_quirks" title="wikipedia:MOS Technology 6502">Wikipedia's article on the 6502</a>.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.258 seconds
+Real time usage: 0.331 seconds
+Preprocessor visited node count: 175/1000000
+Preprocessor generated node count: 562/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1224-1!*!0!!en!*!* and timestamp 20160208222516 and revision id 11842
+ -->
+</div></body></html>

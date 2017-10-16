@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 041</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 041</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 041</strong> represents Caltron 6-in-1, a discrete logic multicart. It appears to have been designed to hold up to four each unmodified <a href="CNROM.xhtml" title="CNROM">CNROM</a> and <a href="NROM.xhtml" title="NROM">NROM</a> games (with NROMs' CHR in unused portions of the CNROM games).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Outer_Bank_Select_.28.246000-.2467FF.29"><span class="tocnumber">2.1</span> <span class="toctext">Outer Bank Select ($6000-$67FF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Inner_CHR_Bank_Select_.28.248000-.24FFFF.29.2C_bus_conflicts"><span class="tocnumber">2.2</span> <span class="toctext">Inner CHR Bank Select ($8000-$FFFF), bus conflicts</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: 256 KiB</li>
+<li> PRG ROM bank size: 32 KiB</li>
+<li> PRG RAM: Impossible</li>
+<li> CHR capacity: 128 KiB ROM</li>
+<li> CHR bank size: 8 KiB inner / 32 KiB outer</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Mapper-controlled H or V</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: partly</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Both registers are cleared on powerup, or while the reset button is pressed.
+</p>
+<h3><span class="mw-headline" id="Outer_Bank_Select_.28.246000-.2467FF.29">Outer Bank Select ($6000-$67FF)</span></h3>
+<pre>15   11   7  bit  0 (address lines)
+---- ---- ---- ----
+0110 0xxx xxMC CEPP
+            ││ ││││
+            ││ │├┴┴── Select 32KiB PRG ROM bank for CPU $8000─$FFFF
+            ││ ││
+            ││ │└──── If high, enable Inner Bank Select
+            │└─┴───── Select 32KiB outer CHR ROM bank
+            └──────── Mirroring (0=Vertical, 1=Horizontal)
+</pre>
+<h3><span class="mw-headline" id="Inner_CHR_Bank_Select_.28.248000-.24FFFF.29.2C_bus_conflicts">Inner CHR Bank Select ($8000-$FFFF), bus conflicts</span></h3>
+<pre>7  bit  0
+---- ----
+xxZZ xxcc
+  ││   ││
+  ││   └┴── Select 8KiB inner bank of outer 32KiB CHR bank chosen above
+  └┴─────── Extant but unused
+</pre>
+<p>Note that the Inner CHR Bank Select only can be written while the PRG ROM bank is 4, 5, 6, or 7. This means that execution must pass through one of the upper four PRG banks to choose the inner CHR bank before playing any games in the lower four PRG banks.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.023 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:807-1!*!0!!en!*!* and timestamp 20160208225057 and revision id 4015
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

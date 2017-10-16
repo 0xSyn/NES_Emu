@@ -1,0 +1,28 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:The frame and NMIs</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:The frame and NMIs</h1><div class="article">
+<p>quote &quot;You can't keep the music updated during slowdown, or during bulk drawing transitions, because NMIs will be disabled&quot;
+</p><p>Sure you can (while keeping NMIs enabled, I mean).  I'm not sure if I should edit it in, I don't want to turning a newbie-friendly article into a technical dorkfest, but I was thinking of this:
+first instruction in the NMI would be 'inc nmi_nest_level', and last NMI instruction (before RTI) would be 'dec nmi_nest_level'
+the NMI routine would check the nest_level variable, if it is higher than 1, then you could could the play music, then exit.  To avoid corrupting temporary variables in the music play routine, you would need to guarantee that the music routine can never be interrupted. <s>Memblers</s> (<s>talk</s>) 23:17, 6 October 2014 (MDT)
+</p>
+<ul><li> <i>Pokémon Red and Blue</i> for Game Boy Color appear to do exactly this. You can hear the music lag and then catch up. If that effect is desirable, you could edit it into the article. (<i>Klax</i> for NES and <i>Tetris</i> for Game Boy lag and don't catch up.) --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 08:03, 8 October 2014 (MDT)</li></ul>
+<p>I think I mis-explained, I mean the point is the music wouldn't need to lag at all - during a frame overflow, the 'nested' NMI would do nothing but play the music.  Similarly, during a bulk VRAM transfer, NMI can be left enabled as long the NMI routine is following a path/mode that doesn't touch the PPU registers.  But yeah I'm still not too eager to add it to the article, I think it's better to encourage people to use the mainloop and NMI together, though I suppose the bulk VRAM transfer would still apply to that case. <s>Memblers</s> (<s>talk</s>) 21:23, 26 October 2014 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.040 seconds
+Real time usage: 0.084 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1410-1!*!0!*!*!*!* and timestamp 20160603204829 and revision id 12571
+ -->
+</div></body></html>

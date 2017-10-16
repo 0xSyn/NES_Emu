@@ -1,0 +1,76 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 237</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 237</h1><div class="article">
+<p><strong class="selflink">iNES Mapper 237</strong> represents the Teletubbies 420-in-1 multicart.
+</p><p>No bus conflicts on writes:
+</p>
+<pre>       address           data
+ 15 12   8    4    0  7  bit  0
+ ---- ---- ---- ----  ---- ----
+ 1... .... .... .BLT  mtMB Bbbb
+                 |||  |||| ||||
+                 |||  |||| |+++-- inner 16 KiB bank
+                 +-------+-+----- outer 128 KiB bank
+                  ||  ||+-------- mirroring (0:horizontal/A11  1:vertical/A10)
+                  ||  |+--------- transparency (0:PRG A14 is connected to lsb of latch  1:PRG A14 is connected to CPU A14 )
+                  ||  +---------- mode (0:UNROM-PRG A14..A16 is bbb ORed with CPU A14  1:NROM-PRG A14..A16 is bbb )
+                  |+------------- type (0:normal execution  1:PRG A1 is always 1 so CPU must execute from RAM)
+                  +-------------- lock (0:allow further writes  1:only writes to bbb are allowed
+</pre>
+<p>The <tt>mt</tt> bits interact, so it might be more convenient to think of them together:
+</p>
+<table class="wikitable">
+<tr>
+<th> mt </th>
+<th> $8000 </th>
+<th> $C000 </th>
+<th> in words
+</th></tr>
+<tr>
+<td> 00 </td>
+<td> &lt;BBBbbb&gt; </td>
+<td> &lt;BBB111&gt; </td>
+<td> 128 KiB UNROM
+</td></tr>
+<tr>
+<td> 40 </td>
+<td> &lt;BBBbb0&gt; </td>
+<td> &lt;BBB111&gt; </td>
+<td> defective interaction; UNROM but the lsb of the latch is ignored and treated as 0
+</td></tr>
+<tr>
+<td> 80 </td>
+<td> &lt;BBBbbb&gt; </td>
+<td> &lt;BBBbbb&gt; </td>
+<td> 16 KiB NROM (PRG A14 is connected to lsb of latch)
+</td></tr>
+<tr>
+<td> C0 </td>
+<td> &lt;BBBbb0&gt; </td>
+<td> &lt;BBBbb1&gt; </td>
+<td> 32 KiB NROM (PRG A14 is connected to CPU A14)
+</td></tr></table>
+<p>Note: the &quot;type&quot; bit probably depends on the specific cartridge. Implementing this differently will produce a different-seeming multicart. The software pretends that setting the Type bit replaces the entire ROM with a byte that specifies the kind of multicart present.
+</p><p>The L, T, m, and B bits are cleared on all resets. The others (t, M, and b) may be also.
+</p><p>See also: 
+</p>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=5977" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=3&amp;t=5977</a></li>
+<li> <a class="external free" href="http://bootgod.dyndns.org:7777/downloads/420IN1.TXT" rel="nofollow">http://bootgod.dyndns.org:7777/downloads/420IN1.TXT</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1361-1!*!*!*!*!*!* and timestamp 20160208225501 and revision id 8740
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

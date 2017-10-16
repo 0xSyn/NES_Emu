@@ -1,0 +1,129 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC3</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC3</h1><div class="article">
+<p>The Konami VRC3 is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> apparently used only for the game <i>Salamander</i>. The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>mapper 73</b> to VRC3.
+</p><p><br/>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#PRG_Select_.28.24F000-.24FFFF.29"><span class="tocnumber">3.1</span> <span class="toctext">PRG Select ($F000-$FFFF)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#IRQ_Latch_0_.28.248000-.248FFF.29"><span class="tocnumber">3.2</span> <span class="toctext">IRQ Latch 0 ($8000-$8FFF)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#IRQ_Latch_1_.28.249000-.249FFF.29"><span class="tocnumber">3.3</span> <span class="toctext">IRQ Latch 1 ($9000-$9FFF)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#IRQ_Latch_2_.28.24A000-.24AFFF.29"><span class="tocnumber">3.4</span> <span class="toctext">IRQ Latch 2 ($A000-$AFFF)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#IRQ_Latch_3_.28.24B000-.24BFFF.29"><span class="tocnumber">3.5</span> <span class="toctext">IRQ Latch 3 ($B000-$BFFF)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#IRQ_Control_.28.24C000-.24CFFF.29"><span class="tocnumber">3.6</span> <span class="toctext">IRQ Control ($C000-$CFFF)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#IRQ_Acknowledge_.28.24D000-.24DFFF.29"><span class="tocnumber">3.7</span> <span class="toctext">IRQ Acknowledge ($D000-$DFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#IRQ_Counter_Operation"><span class="tocnumber">4</span> <span class="toctext">IRQ Counter Operation</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 128 KiB</li>
+<li> PRG ROM bank size: 16 KiB</li>
+<li> PRG RAM: 8 KiB at $6000</li>
+<li> CHR:  8 KiB RAM, not swappable</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Solder pads select vertical or horizontal mirroring</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>See <a href="VRC3_pinout.xhtml" title="VRC3 pinout">VRC3 pinout</a> for chip pinout.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: optional 8 KiB PRG RAM bank </li>
+<li> CPU $8000-$BFFF: 16 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$FFFF: 16 KiB PRG ROM bank, fixed to the last bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="PRG_Select_.28.24F000-.24FFFF.29">PRG Select ($F000-$FFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... .PPP
+      |||
+      +++- Select 16 KB PRG ROM at $8000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="IRQ_Latch_0_.28.248000-.248FFF.29">IRQ Latch 0 ($8000-$8FFF)</span></h3>
+<pre>7  bit  0
+---------
+.... LLLL
+     ||||
+     ++++- Bits 0-3 of IRQ latch.
+</pre>
+<h3><span class="mw-headline" id="IRQ_Latch_1_.28.249000-.249FFF.29">IRQ Latch 1 ($9000-$9FFF)</span></h3>
+<pre>7  bit  0
+---------
+.... LLLL
+     ||||
+     ++++- Bits 4-7 of IRQ latch.
+</pre>
+<h3><span class="mw-headline" id="IRQ_Latch_2_.28.24A000-.24AFFF.29">IRQ Latch 2 ($A000-$AFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... LLLL
+     ||||
+     ++++- Bits 8-11 of IRQ latch.
+</pre>
+<h3><span class="mw-headline" id="IRQ_Latch_3_.28.24B000-.24BFFF.29">IRQ Latch 3 ($B000-$BFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... LLLL
+     ||||
+     ++++- Bits 12-15 of IRQ latch.
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="IRQ_Control_.28.24C000-.24CFFF.29">IRQ Control ($C000-$CFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... .MEA
+      |||
+      ||+- IRQ Enable on Acknowledgement (see $D000)
+      |+-- IRQ Enable (1=enabled)
+      +--- IRQ Mode (1=8-bit counter, 0=16-bit counter)
+</pre>
+<p>Any write to this register will acknowledge the pending IRQ.  If this register is written to with the <b>E</b> bit set, the 16-bit IRQ counter is reloaded with the 16-bit Latch value (set by writes to $8000-$BFFF).
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="IRQ_Acknowledge_.28.24D000-.24DFFF.29">IRQ Acknowledge ($D000-$DFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... ....
+</pre>
+<p>Any write to this register will acknowledge the pending IRQ.  In addition, the <b>A</b> control bit moves to the <b>E</b> control bit, enabling or disabling IRQs. Writes to this register do not affect the current state of the IRQ counter.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="IRQ_Counter_Operation">IRQ Counter Operation</span></h2>
+<p>VRC3 IRQs operate differently from other VRCs.  The counter is 16 bits instead of 8 bits, and there is no
+scanline mode, only CPU cycle mode. Other aspects, however, are very similar.
+</p><p>IRQs on this mapper are generated through a 16-bit counter, which is incremented each CPU cycle (if enabled). When it overflows from $FFFF, an IRQ is generated, and the counter is reloaded with the 16-bit latch value.
+</p><p>When the IRQ mode bit (<b>M</b>) is set, the upper 8 bits of the counter are ignored (and never incremented) and IRQs are generated when the lower 8 bits overflow from $FF. When the IRQ is triggered, only the low 8 bits are reloaded from the latch value. Reloading with a write to $C000 with <b>E</b> set will always reload all 16 bits, regardless of mode.
+</p><p>When IRQs are disabled (<b>E</b> control bit clear), the IRQ counter does not increment.
+</p><p>Writing to the acknowledge register at $D000 automatically moves control bit <b>A</b> into control bit <b>E</b>, allowing the IRQ to be easily re-enabled while acknowledging.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">Disch's Mapper Notes</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.038 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 52/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:96-1!*!0!!en!*!* and timestamp 20160208222538 and revision id 10742
+ -->
+<p class="categories">Categories: <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

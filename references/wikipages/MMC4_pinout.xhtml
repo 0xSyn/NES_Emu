@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC4 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC4 pinout</h1><div class="article">
+<p>Nintendo <a href="MMC4.xhtml" title="MMC4">MMC4</a>: 44-pin TQFP
+</p>
+<pre>                      / \
+                     / O \
+               ?  - /01 44\ &lt;- CPU R/W
+        /ROMSEL -&gt; /02   43\ &lt;- CPU D0
+       PPU /RD -&gt; /03     42\ &lt;- CPU D1
+       PPU A3 -&gt; /04       41\ &lt;- CPU D2
+           ?  - /05         40\ &lt;- CPU D3
+        GND  - /06         \ 39\ &lt;- CPU D4
+    PPU A4 -&gt; /07           \ 38\ -&gt; PRG /CE
+   PPU A5 -&gt; /08         \  _\ 37\ -&gt; PRG A17
+  PPU A6 -&gt; /09         \ \|    36\ -&gt; PRG A16
+ PPU A7 -&gt; /10           \ \     35\ -&gt; PRG A15
+     ?  - /11         \  _\       34\ -&gt; PRG A14
+PPU A8 -&gt; \12       /\ \|         33/ - tied to pin 32
+ PPU A9 -&gt; \13        \ \        32/ &lt;- CPU A12
+ PPU A10 -&gt; \14        \        31/ &lt;- CPU A13
+  PPU A11 -&gt; \15  \/\  /       30/ &lt;- CPU A14
+   PPU A12 -&gt; \16  \ \        29/ &lt;- M2
+    PPU A13 -&gt; \17  \        28/ -  GND
+         GND  - \18         27/ -  VCC
+      CHR A12 &lt;- \19       26/ -&gt; VRAM A10
+       CHR A13 &lt;- \20     25/ -&gt; PRG RAM +CE
+        CHR A14 &lt;- \21   24/ -&gt; CHR A16
+         CHR A15 &lt;- \22 23/ -&gt; PRG RAM /CE
+                     \   /	 
+                      \ /
+</pre>
+<ul><li> Source: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=100951#p100951" rel="nofollow">INL on the forum</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.011 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:905-1!*!0!*!*!*!* and timestamp 20160208225601 and revision id 9255
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

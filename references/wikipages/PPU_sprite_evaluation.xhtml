@@ -1,0 +1,88 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>PPU sprite evaluation</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>PPU sprite evaluation</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Details"><span class="tocnumber">2</span> <span class="toctext">Details</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Sprite_overflow_bug"><span class="tocnumber">3</span> <span class="toctext">Sprite overflow bug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Cause_of_the_sprite_overflow_bug"><span class="tocnumber">3.1</span> <span class="toctext">Cause of the sprite overflow bug</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Examples_of_usage"><span class="tocnumber">3.2</span> <span class="toctext">Examples of usage</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#External_links"><span class="tocnumber">5</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>Each scanline, the PPU reads the spritelist (that is, Object Attribute Memory) to see which to draw:
+</p>
+<ol><li> First, it clears the list of sprites to draw.</li>
+<li> Second, it reads through OAM, checking which sprites will be on this scanline. It chooses the first eight it finds that do.</li>
+<li> Third, if eight sprites were found, it checks (in a wrongly-implemented fashion) for further sprites on the scanline to see if the sprite overflow flag should be set.</li>
+<li> Fourth, using the details for the eight (or fewer) sprites chosen, it determines which pixels each has on the scanline and where to draw them.</li></ol>
+<h2><span class="mw-headline" id="Details">Details</span></h2>
+<p>During all visible scanlines, the PPU scans through OAM to determine which sprites to render on the next scanline. Sprites found to be within range are copied into the secondary OAM, which is then used to initialize eight internal sprite output units.
+</p><p><i>OAM[n][m]</i> below refers to the byte at offset <i>4*n + m</i> within OAM, i.e. OAM byte <i>m</i> (0-3) of sprite <i>n</i> (0-63).
+</p><p>During each pixel clock (341 total per scanline), the PPU accesses OAM in the following pattern:
+</p>
+<ol><li> Cycles 1-64: Secondary OAM (32-byte buffer for current sprites on scanline) is initialized to $FF - attempting to read $2004 will return $FF. Internally, the clear operation is implemented by reading from the OAM and writing into the secondary OAM as usual, only a signal is active that makes the read always return $FF.</li>
+<li> Cycles 65-256: Sprite evaluation
+<ul><li> <i>On odd cycles, data is read from (primary) OAM</i></li>
+<li> <i>On even cycles, data is written to secondary OAM (unless secondary OAM is full, in which case it will read the value in secondary OAM instead)</i></li>
+<li>1. Starting at n = 0, read a sprite's Y-coordinate (OAM[n][0], copying it to the next open slot in secondary OAM (unless 8 sprites have been found, in which case the write is ignored).
+<ul><li>1a. If Y-coordinate is in range, copy remaining bytes of sprite data (OAM[n][1] thru OAM[n][3]) into secondary OAM.</li></ul></li>
+<li>2. Increment n
+<ul><li>2a. If n has overflowed back to zero (all 64 sprites evaluated), go to 4</li>
+<li>2b. If less than 8 sprites have been found, go to 1</li>
+<li>2c. If exactly 8 sprites have been found, disable writes to secondary OAM because it is full. This causes sprites in back to drop out.</li></ul></li>
+<li>3. Starting at m = 0, evaluate OAM[n][m] as a Y-coordinate.
+<ul><li>3a. If the value is in range, set the sprite overflow flag in $2002 and read the next 3 entries of OAM (incrementing 'm' after each byte and incrementing 'n' when 'm' overflows); if m = 3, increment n</li>
+<li>3b. If the value is not in range, increment n <b>and</b> m (without carry). If n overflows to 0, go to 4; otherwise go to 3
+<ul><li><i>The m increment is a hardware bug - if only n was incremented, the overflow flag would be set whenever more than 8 sprites were present on the same scanline, as expected.</i></li></ul></li></ul></li>
+<li>4. Attempt (and fail) to copy OAM[n][0] into the next free slot in secondary OAM, and increment n (repeat until HBLANK is reached)</li></ul></li>
+<li> Cycles 257-320: Sprite fetches (8 sprites total, 8 cycles per sprite)
+<ul><li>1-4: Read the Y-coordinate, tile number, attributes, and X-coordinate of the selected sprite from secondary OAM</li>
+<li>5-8: Read the X-coordinate of the selected sprite from secondary OAM 4 times (while the PPU fetches the sprite tile data)</li>
+<li> For the first empty sprite slot, this will consist of sprite #63's Y-coordinate followed by 3 $FF bytes; for subsequent empty sprite slots, this will be four $FF bytes</li></ul></li>
+<li>Cycles 321-340+0: Background render pipeline initialization
+<ul><li> Read the first byte in secondary OAM (while the PPU fetches the first two background tiles for the next scanline)</li></ul></li></ol>
+<p>This pattern was determined by doing carefully timed reads from $2004 using various sets of sprites, and simulation in Visual 2C02 has subsequently confirmed this behavior.
+</p>
+<h2><span class="mw-headline" id="Sprite_overflow_bug">Sprite overflow bug</span></h2>
+<p>During sprite evaluation, if eight in-range sprites have been found so far, the sprite evaluation logic continues to scan the primary OAM looking for one more in-range sprite to determine whether to set the sprite overflow flag. The first such check correctly checks the y coordinate of the next OAM entry, but after that the logic breaks and starts scanning OAM &quot;diagonally&quot;, evaluating the tile number/attributes/X-coordinates of subsequent OAM entries as Y-coordinates (due to incorrectly incrementing m when moving to the next sprite). This results in inconsistent sprite overflow behavior showing both false positives and false negatives.
+</p>
+<h3><span class="mw-headline" id="Cause_of_the_sprite_overflow_bug">Cause of the sprite overflow bug</span></h3>
+<p>After investigation in <a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a>, the culprit of the sprite overflow bug appears to be the write disable signal that goes high after eight in-range sprites have been found (to prevent further updates to the secondary OAM), along with an error in the sprite evaluation logic.
+</p><p>As seen above, a side effect of the OAM write disable signal is to turn writes to the secondary OAM into reads from it. Once eight in-range sprites have been found, the value being read during write cycles from that point on is the y coordinate of the first sprite copied into the secondary OAM. Due to a logic error, the result of comparing this y coordinate to the current scanline number (which will always yield &quot;in range&quot;, since the sprite would have had to be in range to get copied into the secondary OAM) is allowed to influence the sprite address incrementation logic, causing the glitchy updates to the sprite address seen above (due to how the timing works out). Once one more sprite has been found, another signal prevents the comparison from influencing the sprite address incrementation logic, and the bug is no longer in effect.
+</p>
+<h3><span class="mw-headline" id="Examples_of_usage">Examples of usage</span></h3>
+<p>For some examples of games using this bug/quirk, refer to the <a href="Sprite_overflow_games.xhtml" title="Sprite overflow games">Sprite overflow games</a> page.
+</p>
+<h2><span class="mw-headline" id="Notes">Notes</span></h2>
+<ul><li><a href="Visual_2C02.xhtml" title="Visual 2C02">Visual 2C02</a> might be helpful when trying to understand how the algorithm operates and what the precise timings are.</li>
+<li>The <a href="PPU_sprite_priority.xhtml" title="PPU sprite priority">sprite priority</a> system has a quirk when the background, a front-priority sprite, and a back-priority sprite are in the same area. Games such as Super Mario Bros. 3 take advantage of this.</li>
+<li>If the sprite address ($2003) is not zero (usually, $2003 AND $F8) at the beginning of the pre-render scanline, then copy the contents of its 8-byte page into the first 8 bytes.</li>
+<li>According to the blargg's sprite zero hit tests, sprites are NOT evaluated in the pre-render scanline. Plus, the evaluation occurs if sprites OR background are enabled.</li></ul>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="https://gist.github.com/beannaich/7a7ba066d909318debea" rel="nofollow">Visual 2C02 logs of the PPU evaluating 1, 8, and 9 sprites</a> by beannaich</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.056 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:56-1!*!0!!en!*!* and timestamp 20160520134319 and revision id 12382
+ -->
+</div></body></html>

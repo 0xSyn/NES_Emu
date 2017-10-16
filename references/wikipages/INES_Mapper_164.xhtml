@@ -1,0 +1,72 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 164</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 164</h1><div class="article">
+<p>These notes are not very good. There is more information to be got. Check some emulator sources and please elaborate here.
+</p>
+<pre> Those are **not** Disch's original notes:  
+ ========================
+ =  Mapper 164          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ Final Fantasy V
+ Pokémon Red [宠物红](Waixing)
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range,Mask:   $5000-FFFF, $F300
+ 
+    $5000, $D000:  PRG reg (32k @ $8000)
+ 
+ $6000-7FFF may have SRAM (not sure)
+ 
+ 
+ On Reset
+ ---------------------------
+ Reg seems to contain $FF on powerup/reset
+ 
+ 
+ Notes:
+ ---------------------------
+ 
+ Swapping is really simple -- the thing that is funky is the register range/mask.  $5000 and $D000 will access
+ the register, however $5100, $5200, etc will not.
+
+ FCEUX implements mapper 164 as:
+ $5000: [.... LLLL]
+ $5100: [.... HHHH]
+ $5300: 8-bit latch
+ Writing to either $5000 or $5100 immediately switches a 32kB or 512kB chunk.
+ Reading from $5100 or $5900 returns the value of the latch, but not $5500 or $5D00
+
+ Nestopia implements mapper 164 as:
+ $5000: [.ABC DLLL]
+ $5100: [.... ...H]
+ Writing to either immediately switches banks. The interpretation of the address depends on ABC:
+ C=0: Switch 16kB at $8000, address specified by HBDLLL; 16kB at $C000 switched to H11111.
+ A=0 C=1: undefined (noop)
+ ABC=5: Switch 32kB at $8000, address specified by HDLLL
+ ABC=7: Switch 16kB at $8000, address specified by HDDLLL; 16kB at $C000 switched to H11111. (Yes, D appears twice)
+
+ Note that the copy of Final Fantasy V in GoodNES does not work correctly in Nestopia. This should <i>not</i> be taken as an indication that Nestopia's implementation is necessarily wrong.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.009 seconds
+Real time usage: 0.009 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:691-1!*!*!*!*!*!* and timestamp 20160208225323 and revision id 10421
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

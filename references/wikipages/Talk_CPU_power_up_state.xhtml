@@ -1,0 +1,69 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:CPU power up state</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:CPU power up state</h1><div class="article">
+<p>Parts of the APU which appear to be affected by reset (determined by tracing the reset signal throughout the chip):
+</p>
+<ul><li> Square channel volume/envelope timer (<b>not</b> the reload value at $4000/$4004 bits 0-3) and counter (the actual volume output)</li>
+<li> Noise channel volume/envelope timer (<b>not</b> the reload value at $4008 bits 0-3) and counter (the actual volume output)</li>
+<li> Square channel frequency counter, including the 3 duty cycle bits</li>
+<li> Triangle channel frequency counter</li>
+<li> Noise channel frequency counter, sort of - it forces the LFSR input to 0, so a <b>very</b> short reset pulse might only partially clear it</li>
+<li> DPCM channel frequency counter, sort of - it forces the LFSR input to 0, so a <b>very</b> short reset pulse might only partially clear it</li>
+<li> Noise channel frequency ($400E bits 0-3)</li>
+<li> Square channel sweep counter</li>
+<li> All 4 length counters</li>
+<li> All 5 channel enables ($4015)</li>
+<li> Triangle channel linear counter (<b>not</b> the reload value at $4008)</li>
+<li> Triangle channel Position</li>
+<li> DPCM channel Sample Length counter (<b>not</b> the reload value)</li>
+<li> DPCM channel Position ($4011)</li>
+<li> DPCM channel Sample Buffer and Bit Counter</li>
+<li> DPCM channel Sample Address counter (<b>not</b> the reload value)</li>
+<li> DPCM channel state machine</li>
+<li> Sprite DMA address counter and state machine</li>
+<li> Part of the Frame Counter (notably, <b>not</b> the two writable bits of $4017)</li>
+<li> Debug register $401A bit 7</li></ul>
+<p>--<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 16:40, 8 June 2011 (UTC)
+</p>
+<h2><span class="mw-headline" id="Detecting_User_Reset">Detecting User Reset</span></h2>
+<p>Is there way using common mappers to check if power on or reset button pushed? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 18:35, 10 September 2012 (MDT)
+</p>
+<dl><dd> Common practice seems to be &quot;put a canary in memory, if it's still there assume warm (re)boot instead of cold boot. e.g., Galaxian puts the programmer's name in $0100-$010F, and if it's there on boot, it doesn't clear high scores or the easter egg counter.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> 19:47, 10 September 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Consistent_RAM_power-up_state.3F">Consistent RAM power-up state?</span></h2>
+<p>I tested my NES and Famicom today with a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=13334" rel="nofollow">simple ROM that just displays the contents of RAM</a>. I get widely varying results at power-on. I tried leaving the system off for varying amounts of time between powerings, but I don't see much consistency at all. Here's some examples of what I've seen:
+</p>
+<ol><li> Mostly $FF.</li>
+<li> Mostly some specific byte, e.g. $E7.</li>
+<li> Repeating patterns like $00 $FF $00 FF, often in consistent lines of 16 or 32 bytes.</li>
+<li> Often I get groups with a specific byte value, especially in columns (using rows of 16).</li></ol>
+<p>All of these patterns are heavily subject to noise. Sometimes a lot of noise, sometimes only a little. Really I don't see much consistent behaviour at all on my NES.
+</p><p>My Famicom usually powers up with mostly a repeating 16 byte pattern of 00FF00FF00FF00FFFF00FF00FF00FF00, often with one or many columns of bytes (using rows of 16) that look completely random in contrast to that pattern. Occasionally the Famicom powers up with different patterns than this too.
+</p>
+<dl><dd> I finally got an opportunity to test this myself. My Front loading NES powers on with a 32 byte base pattern that's briefly described as &quot;data = ((addr&gt;&gt;0 ^ addr&gt;&gt;2 ^ addr&gt;&gt;4 ^ addr&gt;&gt;5) &amp; 1) * 0xff&quot; with some pattern of toggled bits I have not discerned yet. <s>Ns43110</s> (<s>talk</s>) 11:58, 21 January 2016 (MST)</dd></dl>
+<p>The recommendation for specific values at $0008/9/A/F seems bizarre to me. Why is this in the article at all? These bytes are not particularly consistent on either of my machines, and <i>certainly</i> don't match these magic values. A few quick power cycles sometimes seems to leave some bytes alone, but I don't see anything special about 8/9/A/F?
+</p>
+<dl><dd> Nowhere does it say that it's a recommendation. Those are simply results from a test (I believe from blargg). --<a href="User_Thefox.xhtml" title="User:Thefox">Thefox</a> (<s>talk</s>) 16:24, 5 October 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Two emulator authors seemed to have taken it as some kind of recommendation (NEStopia and puNES), so I think at the very least I think we need a better description of what should be expected. I don't see any value at all in describing these 4 magic values here, personally. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 18:25, 5 October 2015 (MDT)</dd></dl></dd></dl>
+<p>I'm not certain the idea that it should be &quot;mostly FF&quot; is particularly good either. On my Famicom, it looks like 50/50 for a randomly selected bit (though with a high probability of fitting the pattern listed for any specific bit). On my NES, I'd guess there's might be a slight bias toward 1 bits, but I really don't think that's a very useful piece of information given how random it is, and how often there are repetitive (and different) patterns in the bits.
+</p><p>I'm curious what other people might see on their machines.
+</p><p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 16:07, 5 October 2015 (MDT)
+</p>
+<dl><dd> My NES (RAM is a LH5116) is mostly $FF, although random bits are randomly clear. It's often patterned with a stride of 32 bytes. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 18:39, 5 October 2015 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.035 seconds
+Real time usage: 0.037 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:589-1!*!0!!*!*!* and timestamp 20160208223946 and revision id 11919
+ -->
+</div></body></html>

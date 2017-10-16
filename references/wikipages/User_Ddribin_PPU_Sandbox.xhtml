@@ -1,0 +1,392 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Ddribin/PPU Sandbox</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Ddribin/PPU Sandbox</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#PPU_Register_Overview"><span class="tocnumber">1</span> <span class="toctext">PPU Register Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#PPUCR1:_PPU_Control_Register_1"><span class="tocnumber">2</span> <span class="toctext"><span>PPUCR1</span>: PPU Control Register 1</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bit_7_-_NMIE:_NMI_Enable"><span class="tocnumber">2.1</span> <span class="toctext">Bit 7 - NMIE: NMI Enable</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Bit_6_-_MSE:_Master.2FSlave_Enable"><span class="tocnumber">2.2</span> <span class="toctext">Bit 6 - MSE: Master/Slave Enable</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Bit_5_-_SSZ:_Sprite_Size"><span class="tocnumber">2.3</span> <span class="toctext">Bit 5 - SSZ: Sprite Size</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Bit_4_-_BPT:_Background_Pattern_Table"><span class="tocnumber">2.4</span> <span class="toctext">Bit 4 - BPT: Background Pattern Table</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Bit_3_-_SPT:_Sprite_Pattern_Table"><span class="tocnumber">2.5</span> <span class="toctext">Bit 3 - SPT: Sprite Pattern Table</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Bit_2_-_VDN:_VRAM_Increment_Down"><span class="tocnumber">2.6</span> <span class="toctext">Bit 2 - VDN: VRAM Increment Down</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Bits_1.2C_0_-_NTA1_and_NTA0:_Base_Nametable_Address_1_and_0"><span class="tocnumber">2.7</span> <span class="toctext">Bits 1, 0 - NTA1 and NTA0: Base Nametable Address 1 and 0</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#PPUCR2:_PPU_Control_Register_2"><span class="tocnumber">3</span> <span class="toctext"><span>PPUCR2</span>: PPU Control Register 2</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Bit_7_-_INB:_Intensify_Blues"><span class="tocnumber">3.1</span> <span class="toctext">Bit 7 - INB: Intensify Blues</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Bit_6_-_ING:_Intensify_Greens"><span class="tocnumber">3.2</span> <span class="toctext">Bit 6 - ING: Intensify Greens</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Bit_5_-_INR:_Intensify_Reds"><span class="tocnumber">3.3</span> <span class="toctext">Bit 5 - INR: Intensify Reds</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Bit_4_-_SRE:_Sprite_Render_Enable"><span class="tocnumber">3.4</span> <span class="toctext">Bit 4 - SRE: Sprite Render Enable</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Bit_3_-_BRE:_Background_Render_Enable"><span class="tocnumber">3.5</span> <span class="toctext">Bit 3 - BRE: Background Render Enable</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Bit_2_-_SCD:_Sprite_Clip_Disable"><span class="tocnumber">3.6</span> <span class="toctext">Bit 2 - SCD: Sprite Clip Disable</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Bit_1_-_BCD:_Background_Clip_Disable"><span class="tocnumber">3.7</span> <span class="toctext">Bit 1 - BCD: Background Clip Disable</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Bit_0_-_GSE:_Grayscale_Enable"><span class="tocnumber">3.8</span> <span class="toctext">Bit 0 - GSE: Grayscale Enable</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#PPUSR:_PPU_Status_Register"><span class="tocnumber">4</span> <span class="toctext"><span>PPUSR</span>: PPU Status Register</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#Bit_7_-_VBL:_Vertical_Blank"><span class="tocnumber">4.1</span> <span class="toctext">Bit 7 - VBL: Vertical Blank</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Bit_6_-_S0H:_Sprite_0_Hit"><span class="tocnumber">4.2</span> <span class="toctext">Bit 6 - S0H: Sprite 0 Hit</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Bit_5_-_SOV:_Sprite_Overflow"><span class="tocnumber">4.3</span> <span class="toctext">Bit 5 - SOV: Sprite Overflow</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Bits_4..0_-_Res:_Reserved"><span class="tocnumber">4.4</span> <span class="toctext">Bits 4..0 - Res: Reserved</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-24"><a href="#CA65_Definitions"><span class="tocnumber">5</span> <span class="toctext">CA65 Definitions</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="PPU_Register_Overview">PPU Register Overview</span></h2>
+<p>The PPU exposes only eight memory-mapped registers to the CPU. These nominally sit at $2000 through $2007 in the CPU's address space, but because they're incompletely decoded, they're mirrored in every 8 bytes from $2008 through $3FFF, so a write to $3456 is the same as a write to $2006.
+</p>
+<table border="1" cellpadding="3" cellspacing="0" class="wikitable">
+<caption> PPU Registers
+</caption>
+<tr>
+<th> Address </th>
+<th> Name </th>
+<th> (Alt. Names?) </th>
+<th> Function
+</th></tr>
+<tr>
+<td> $2000 </td>
+<td> <a href="#PPUCR1">PPUCR1</a> </td>
+<td> PPUCTRL PCR </td>
+<td>  PPU Control Register 1
+</td></tr>
+<tr>
+<td> $2001 </td>
+<td> <a href="#PPUCR1">PPUCR2</a> </td>
+<td> PPUMASK PPUMR  PMR </td>
+<td> PPU Control Register 2
+</td></tr>
+<tr>
+<td> $2002 </td>
+<td> <a href="#PPUSR">PPUSR</a> </td>
+<td> PPUSTATUS PSR </td>
+<td> PPU Status Register
+</td></tr>
+<tr>
+<td> $2003 </td>
+<td> OAMAR </td>
+<td> OAMADDR OAR </td>
+<td> OAM Address Register
+</td></tr>
+<tr>
+<td> $2004 </td>
+<td> OAMDR </td>
+<td> OAMDATA ODR </td>
+<td> OAM Data Register
+</td></tr>
+<tr>
+<td> $2005 </td>
+<td> PPUSCR </td>
+<td> PPUSCROLL PSCR </td>
+<td> PPU Scroll Register
+</td></tr>
+<tr>
+<td> $2006 </td>
+<td> PPUAR </td>
+<td> PPUADDR PAR </td>
+<td> PPU Address Register
+</td></tr>
+<tr>
+<td> $2007 </td>
+<td> PPUDR </td>
+<td> PPUDATA PDR </td>
+<td> PPU Data Register
+</td></tr>
+<tr>
+<td> $4014 </td>
+<td> OAMDMA </td>
+<td> ODMA </td>
+<td> OAM DMA
+</td></tr></table>
+<h2><span class="mw-headline" id="PPUCR1:_PPU_Control_Register_1"><span id="PPUCR1">PPUCR1</span>: PPU Control Register 1</span></h2>
+<table border="1" cellpadding="3" cellspacing="0" class="wikitable" style="text-align:center;">
+
+<tr>
+<th> Bit </th>
+<th> 7 </th>
+<th> 6 </th>
+<th> 5 </th>
+<th> 4 </th>
+<th> 3 </th>
+<th> 2 </th>
+<th> 1 </th>
+<th> 0
+</th></tr>
+<tr>
+<th> $2000
+</th>
+<td> NMIE </td>
+<td> MSE </td>
+<td> SSZ </td>
+<td> BPT </td>
+<td> SPT </td>
+<td> VDN </td>
+<td> NTA1 </td>
+<td> NTA0
+</td></tr>
+<tr>
+<th> Read/Write
+</th>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W
+</td></tr>
+<tr>
+<th> Initial Value
+</th>
+<td> 0 </td>
+<td> X </td>
+<td> 0 </td>
+<td> 0  </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="Bit_7_-_NMIE:_NMI_Enable">Bit 7 - NMIE: NMI Enable</span></h3>
+<p>Setting NMIE to one causes an NMI to be generated at the start of the  vertical blanking interval.
+</p>
+<h3><span class="mw-headline" id="Bit_6_-_MSE:_Master.2FSlave_Enable">Bit 6 - MSE: Master/Slave Enable</span></h3>
+<p>Has no effect on the NES.
+</p>
+<h3><span class="mw-headline" id="Bit_5_-_SSZ:_Sprite_Size">Bit 5 - SSZ: Sprite Size</span></h3>
+<p>0: 8x8; 1: 8x16
+</p>
+<h3><span class="mw-headline" id="Bit_4_-_BPT:_Background_Pattern_Table">Bit 4 - BPT: Background Pattern Table</span></h3>
+<p>Background pattern table address (0: $0000; 1: $1000)
+</p>
+<h3><span class="mw-headline" id="Bit_3_-_SPT:_Sprite_Pattern_Table">Bit 3 - SPT: Sprite Pattern Table</span></h3>
+<p>Sprite pattern table address for 8x8 sprites (0: $0000; 1: $1000)
+</p>
+<h3><span class="mw-headline" id="Bit_2_-_VDN:_VRAM_Increment_Down">Bit 2 - VDN: VRAM Increment Down</span></h3>
+<p>VRAM address increment per CPU read/write of PPUDATA (0: increment by 1, going across; 1: increment by 32, going down)
+</p>
+<h3><span class="mw-headline" id="Bits_1.2C_0_-_NTA1_and_NTA0:_Base_Nametable_Address_1_and_0">Bits 1, 0 - NTA1 and NTA0: Base Nametable Address 1 and 0</span></h3>
+<table border="1" cellpadding="3" cellspacing="0" class="wikitable" style="text-align:center;">
+
+<tr>
+<th> NTA1 </th>
+<th> NTA0 </th>
+<th> Base VRAM Address
+</th></tr>
+<tr>
+<td> 0 </td>
+<td> 0 </td>
+<td> $2000 (Nametable 0)
+</td></tr>
+<tr>
+<td> 0 </td>
+<td> 1 </td>
+<td> $2400 (Nametable 1)
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 0 </td>
+<td> $2800 (Nametable 2)
+</td></tr>
+<tr>
+<td> 1 </td>
+<td> 1 </td>
+<td> $2C00 (Nametable 3)
+</td></tr></table>
+<h2><span class="mw-headline" id="PPUCR2:_PPU_Control_Register_2"><span id="PPUCR2">PPUCR2</span>: PPU Control Register 2</span></h2>
+<table border="1" cellpadding="3" cellspacing="0" class="wikitable" style="text-align:center;">
+
+<tr>
+<th> Bit </th>
+<th> 7 </th>
+<th> 6 </th>
+<th> 5 </th>
+<th> 4 </th>
+<th> 3 </th>
+<th> 2 </th>
+<th> 1 </th>
+<th> 0
+</th></tr>
+<tr>
+<th> $2001
+</th>
+<td> INB </td>
+<td> ING </td>
+<td> INR </td>
+<td> SRE </td>
+<td> BRE </td>
+<td> SCD </td>
+<td> BCD </td>
+<td> GSE
+</td></tr>
+<tr>
+<th> Read/Write
+</th>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W </td>
+<td> W
+</td></tr>
+<tr>
+<th> Initial Value
+</th>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0</td>
+<td> 0 </td>
+<td> 0 </td>
+<td> X </td>
+<td> X </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="Bit_7_-_INB:_Intensify_Blues">Bit 7 - INB: Intensify Blues</span></h3>
+<p>Intensify blues and darken other colors.
+</p>
+<h3><span class="mw-headline" id="Bit_6_-_ING:_Intensify_Greens">Bit 6 - ING: Intensify Greens</span></h3>
+<p>Intensify greens and darken other colors.
+</p>
+<h3><span class="mw-headline" id="Bit_5_-_INR:_Intensify_Reds">Bit 5 - INR: Intensify Reds</span></h3>
+<p>Intensify reds and darken other colors.
+</p>
+<h3><span class="mw-headline" id="Bit_4_-_SRE:_Sprite_Render_Enable">Bit 4 - SRE: Sprite Render Enable</span></h3>
+<p>Enable sprite rendering.
+</p>
+<h3><span class="mw-headline" id="Bit_3_-_BRE:_Background_Render_Enable">Bit 3 - BRE: Background Render Enable</span></h3>
+<p>Enable background rendering.
+</p>
+<h3><span class="mw-headline" id="Bit_2_-_SCD:_Sprite_Clip_Disable">Bit 2 - SCD: Sprite Clip Disable</span></h3>
+<p>Control sprite clipping in leftmost 8 pixels of screen (0: clip; 1: display).
+</p>
+<h3><span class="mw-headline" id="Bit_1_-_BCD:_Background_Clip_Disable">Bit 1 - BCD: Background Clip Disable</span></h3>
+<p>Control background clipping in leftmost 8 pixels of screen (0: clip; 1: display).
+</p>
+<h3><span class="mw-headline" id="Bit_0_-_GSE:_Grayscale_Enable">Bit 0 - GSE: Grayscale Enable</span></h3>
+<p>0: normal color; 1: AND all palette entries with 0x30, effectively producing a monochrome display; note that colour emphasis STILL works when this is on!
+</p>
+<h2><span class="mw-headline" id="PPUSR:_PPU_Status_Register"><span id="PPUSR">PPUSR</span>: PPU Status Register</span></h2>
+<table border="1" cellpadding="3" cellspacing="0" class="wikitable" style="text-align:center;">
+
+<tr>
+<th> Bit </th>
+<th> 7 </th>
+<th> 6 </th>
+<th> 5 </th>
+<th> 4 </th>
+<th> 3 </th>
+<th> 2 </th>
+<th> 1 </th>
+<th> 0
+</th></tr>
+<tr>
+<th> $2002
+</th>
+<td> VBL </td>
+<td> S0H </td>
+<td> SOV </td>
+<td> --- </td>
+<td> --- </td>
+<td> --- </td>
+<td> --- </td>
+<td> ---
+</td></tr>
+<tr>
+<th> Read/Write
+</th>
+<td> R </td>
+<td> R </td>
+<td> R </td>
+<td> R </td>
+<td> R </td>
+<td> R </td>
+<td> R </td>
+<td> R
+</td></tr>
+<tr>
+<th> Initial Value
+</th>
+<td> X </td>
+<td> 0 </td>
+<td> X </td>
+<td> X  </td>
+<td> X </td>
+<td> X </td>
+<td> X </td>
+<td> X
+</td></tr></table>
+<h3><span class="mw-headline" id="Bit_7_-_VBL:_Vertical_Blank">Bit 7 - VBL: Vertical Blank</span></h3>
+<h3><span class="mw-headline" id="Bit_6_-_S0H:_Sprite_0_Hit">Bit 6 - S0H: Sprite 0 Hit</span></h3>
+<h3><span class="mw-headline" id="Bit_5_-_SOV:_Sprite_Overflow">Bit 5 - SOV: Sprite Overflow</span></h3>
+<h3><span class="mw-headline" id="Bits_4..0_-_Res:_Reserved">Bits 4..0 - Res: Reserved</span></h3>
+<h2><span class="mw-headline" id="CA65_Definitions">CA65 Definitions</span></h2>
+<pre>
+.define bit2mask(bitnum) (1 &lt;&lt; bitnum)
+.define bits2mask(bits, bitnum) (bits &lt;&lt; bitnum)
+
+        ;; PPU Registers
+        ppucr1 := $2000
+        nmie = bit2mask(7)
+        mse  = bit2mask(6)
+        ssz  = bit2mask(5)
+        bpt  = bit2mask(4)
+        spt  = bit2mask(3)
+        vdn  = bit2mask(2)
+        nta1 = bit2mask(1)
+        nta0 = bit2mask(0)
+
+        nta_2000 = bits2mask(%00, nta0)
+        nta_2400 = bits2mask(%01, nta0)
+        nta_2800 = bits2mask(%10, nta0)
+        nta_2c00 = bits2mask(%11, nta0)
+
+        ppucr2 := $2001
+        inb = bit2mask(7)
+        ing = bit2mask(6)
+        inr = bit2mask(5)
+        sre = bit2mask(4)
+        bre = bit2mask(3)
+        scd = bit2mask(2)
+        bcd = bit2mask(1)
+        gse= bit2mask(0)
+
+        ppusr := $2002
+        vbl = bit2mask(7)
+        s0h = bit2mask(6)
+        sov = bit2mask(5)
+
+        oamaddr := $2003
+        oamdata := $2004
+        ppuscroll := $2005
+        ppuaddr := $2006
+        ppuaddr := $2007
+        oamdma := $4014
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.130 seconds
+Real time usage: 0.133 seconds
+Preprocessor visited node count: 205/1000000
+Preprocessor generated node count: 426/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:378-1!*!*!!en!*!* and timestamp 20160208222807 and revision id 2147
+ -->
+</div></body></html>

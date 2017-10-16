@@ -1,0 +1,36 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU Sweep</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU Sweep</h1><div class="article">
+<p>Interesting fact: the 2 square channels are almost perfect mirror images of each other on the silicon, with one single difference: where one part of the 2nd channel's sweep unit takes as an input the (inverted) state of the Negate flag, the equivalent input in the 1st channel's sweep unit is hardwired to +5V. Said input is almost definitely the Carry Input flag, and it explains the difference in behavior. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 00:45, 10 May 2011 (UTC)
+</p><p>The RP2A03 may have originally been planned to permit periods as low as 4 - the current &quot;silence on period &lt; 8&quot; behavior is accomplished by feeding bits 3-10 into a large NOR gate (if they're all 0, the channel is silenced), but there's another <b>unconnected</b> input for bit 2. It might be enlightening to test earlier versions of the chip. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 17:16, 14 May 2011 (UTC)
+</p><p>Does the sweep unit disable the channel when the target period is greater than 3FF or greater than 7FF? --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 04:00, 17 May 2011 (UTC)
+</p>
+<dl><dd>When the target is greater than $7FF. If a sweep unit's value is $00, and the sweep value is in $400-$7FF, then as I understand it, the target period is in $400 + ($400 &gt;&gt; 0) through $7FF + ($7FF &gt;&gt; 0), which equals $800-$FFE, and the channel is silenced.
+<dl><dd>So the next target period is generated right after the channel's period gets updated? --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 02:00, 18 May 2011 (UTC)
+<dl><dd>There's something you should understand about silicon. As soon as a value is clocked into a hardware latch, all the combinational logic feeding off that latch begins to update immediately. So yes, the next target period starts to be generated right after the previous one gets written back, and this new target period is available by the next CPU cycle. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 02:13, 18 May 2011 (UTC)
+<dl><dd>In this case, though, almost everything in the APU (with the sole exception of the Triangle channel) is synchronized to a pair of clock signals which seem to be <i>half</i> the CPU clock (I haven't traced out the entire circuit - if you want to try, take a look at <a class="external text" href="http://www.qmtpro.com/~nes/misc/apu_clocks.png" rel="nofollow">this</a>), which actually explains a few other observations. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 03:49, 18 May 2011 (UTC)
+<dl><dd>An attempt at simulating that circuit (by pulsing M1 and M2 the way a real 6502 does, which is &quot;both low -&gt; M1 high -&gt; both low -&gt; M2 high -&gt; both low -&gt; ...&quot;) yielded the following result: the signal labeled &quot;OUT2&quot; is only high during <b>odd</b> CPU M1 pulses (and is low otherwise), and the signal labeled &quot;OUT1&quot; is only low during <i>even</i> CPU M1 pulses (and is high otherwise - most parts of the APU that use this clock invert it beforehand, effectively making it a 2nd clock phase). I'm not certain that I was simulating it correctly, though. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 17:15, 18 May 2011 (UTC)</dd></dl></dd></dl></dd></dl></dd></dl></dd></dl>
+<hr/>
+<p>Just to make sure that I'm getting this right: Is the behavior described by &quot;when clocked by the frame counter, the divider is first clocked and then if the reload flag is set, it is cleared and the divider is reloaded&quot; only visible if the divider's counter happens to be zero, in which case you would get a clock to the sweep unit before the counter is reloaded? -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 21:40, 29 April 2013 (MDT)
+</p>
+<h2><span class="mw-headline" id="Clocking_behavior">Clocking behavior</span></h2>
+<p>If I'm reading the clocking logic right, the 'enabled' flag controls whether the divider reloads its counter? This means that the divider counts down even if sweep is disabled, and when it gets to 0, only if sweep is enabled it gets reloaded?
+--<s>Daroou</s> (<s>talk</s>) 22:23, 20 February 2015 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:583-1!*!0!*!*!*!* and timestamp 20160208223914 and revision id 9541
+ -->
+</div></body></html>

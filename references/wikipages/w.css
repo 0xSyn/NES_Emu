@@ -1,0 +1,39 @@
+html { background: #000; font-family: sans-serif }
+body { background: #FFF; color: #000; padding: 0.5em 1.5em; margin: 0 auto; max-width: 32em }
+h1,h2,h3,h4,h5,h6,p,ul,ol,dl { margin: 0.5em auto }
+h2,h3,h4,h5,h6 { margin-top: 0.7em }
+h1,h2 { border-bottom: 1px solid #999; font-weight: normal; line-height: 1.2em }
+.article { line-height: 1.4em }
+ul, ol { padding-left: 1.5em }
+li ul, li ol, li dl { margin: 0.1em auto }
+ul>li, ol>li { margin: 0.1em 0 }
+dt { margin-top: 0.2em }
+a:link, a:visited { text-decoration: none}
+a:hover, a:focus { text-decoration: underline }
+pre { font-size: 87.5%; line-height: 1.143em; white-space: pre-wrap }
+
+.toc, .categories { background: #f9f9f9; border: 1px solid #999; padding: 0.5em 1em; margin: 1em 0 0.5em; font-size: 87.5% }
+#toctitle h2 { font-size: 133%; margin-top: 0; }
+.toc ul, .toc ol { padding-left: 1em }
+
+table.tabular, table.wikitable {
+  margin: 1em 1em 1em 0; background: #f9f9f9; border: 1px solid #aaa; border-collapse: collapse
+}
+table.tabular th, table.tabular td, table.wikitable th, table.wikitable td {
+  border: 1px solid #aaaaaa; padding: 0.2em
+}
+table.tabular th, table.wikitable th {
+  background: #f2f2f2; text-align: center
+}
+table.tabular caption, table.wikitable caption {
+  margin-left: inherit; margin-right: inherit
+}
+
+div.thumb { width: auto; line-height: 1.3em }
+.tright { margin: 0.5em 0 1em 1em; clear: right; float: right }
+.tleft { margin: 0.5em 1em 1em 0; clear: left; float: left }
+.thumbinner { padding: 3px; background: #f9f9f9; font-size: 94%; text-align: center }
+.thumbinner, .thumbimage { border: 1px solid #CCC }
+img.thumbimage { display: block }
+.thumbcaption { text-align: left; padding: 3px }
+

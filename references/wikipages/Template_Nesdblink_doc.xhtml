@@ -1,0 +1,41 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Template:Nesdblink/doc</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Template:Nesdblink/doc</h1><div class="article">
+<h2><span class="mw-headline" id="Template:Nesdblink_Documentation"><a href="Template_Nesdblink.xhtml" title="Template:Nesdblink">Template:Nesdblink</a> Documentation</span></h2>
+<p>A simple template for creating links to Bootgod's NES Cart Database.
+</p><p>Usage:
+</p>
+<pre>{{nesdblink
+ | search type (ines/unif/unif_wild)
+ | search parameter (number/board)
+ | link text
+}}</pre>
+<p>Examples:
+</p>
+<pre>1. {{nesdblink|ines|1|iNES 001}}
+2. {{nesdblink|unif|NES-CNROM|NES-CNROM}}
+3. {{nesdblink|unif_wild|CNROM|CNROM}}
+4. {{nesdblink|unif_wild|-A%ROM|AxROM}}
+</pre>
+<ol><li> Search by iNES mapper.</li>
+<li> Search by specific PCB name.</li>
+<li> Search for PCB name containing term.</li>
+<li> Use % as a wildcard to include multiple variations. (Here the - prefix is to match NES<b>-A</b>O<b>ROM</b> and HVC<b>-A</b>O<b>ROM</b> but exclude T<b>A</b>ITO-CN<b>ROM</b>.)</li></ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.012 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 8/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1527-1!*!0!*!*!*!* and timestamp 20160208223741 and revision id 10417
+ -->
+</div></body></html>

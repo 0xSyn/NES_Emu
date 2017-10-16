@@ -1,0 +1,40 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Famicom Hangman</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Famicom Hangman</h1><div class="article">
+<h2><span class="mw-headline" id="Fixing_the_excuses">Fixing the excuses</span></h2>
+<p>I looked at what you thought was keeping the game out of the multicart project.
+</p>
+<ul><li>&quot;Too large ROM, wrong mapper&quot;: I can add BNROM games to A53 by modifying the values in the table you called <code>buscon</code>. I can also help you convert this game to BNROM if you want. <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1383" rel="nofollow">A commercial Hangman-like game for NES</a> uses <a href="AxROM.xhtml" title="AxROM">a mapper identical to BNROM except for scrolling</a>, and Hangman doesn't really scroll.</li>
+<li>&quot;Requires keyboard&quot;: You could add an on-screen keyboard.</li>
+<li>&quot;Trademark&quot;: If you were calling it &quot;Wheel of Fortune&quot;, that'd be one thing. But I don't see any issues with the name &quot;Hangman&quot; at least on <a class="extiw" href="http://en.wikipedia.org/wiki/Hangman_(game)" title="wikipedia:Hangman (game)">Wikipedia:Hangman (game)</a>. Who has a trademark on &quot;Hangman&quot; where you live?</li></ul>
+<p>--<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 19:06, 30 September 2012 (MDT)
+</p>
+<dl><dd>Some of the included phrases (&quot;Nintendo Family Computer&quot;, &quot;Dungeons &amp; Dragons&quot;, &quot;Wheel of Fortune&quot;) might have trademark issues, is what I meant; not the title. Still, if I get enough of other good phrases I may be able to remove the trademark issues. (Even if I did call it &quot;Wheel of Fortune&quot;, the trademark issue is not the only thing; it also does not have the wheel and that stuff!) I may add an on-screen keyboard later on too, to make it work with standard controller (although I intend to keep the support for the Famicom keyboard as well). --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 20:42, 30 September 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="trydata">trydata</span></h2>
+<p>Where did you get the values used for <code>trydata</code>?
+</p>
+<pre>
+	; Number of tries by number of letters
+trydata	.db 0,11,10,9,8,7,6,6,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3
+</pre>
+<p>--<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 19:06, 30 September 2012 (MDT)
+</p>
+<dl><dd>They are based on a BBS door game (&quot;StarTrek Guess&quot; on X-BIT), with some changes made for shorter phrases. But these values may still not be very good so if you have any better ideas then please tell me. (Even if you don't, I may change them myself if I have my own better ideas.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 20:42, 30 September 2012 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 9/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:858-1!*!0!!*!*!* and timestamp 20160208224022 and revision id 4712
+ -->
+</div></body></html>

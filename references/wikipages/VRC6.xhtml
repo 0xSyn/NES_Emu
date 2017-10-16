@@ -1,0 +1,325 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC6</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC6</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>VRC6</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Konami
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=24&amp;group=groupid" rel="nofollow">3 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> 351951, 351949A
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 16K + 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 1K
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H, V, or 1, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> <a href="VRC6_audio.xhtml" title="VRC6 audio">Yes</a>
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 024">024</a>, <a class="mw-redirect" href="VRC6.xhtml" title="INES Mapper 026">026</a>
+</td></tr></table>
+</div>
+<p>The Konami's <b>VRC6</b> <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> comes in two variants:
+</p>
+<ul><li> <b>VRC6a</b> - <b>iNES Mapper 024</b> used for <i>Akumajou Densetsu</i> (Konami PCB 351951).</li>
+<li> <b>VRC6b</b> - <b>iNES Mapper 026</b> used for <i>Madara</i> and <i>Esper Dream 2</i> (Konami PCB 351949A).</li></ul>
+<p>The difference between the two variants switches the A0 and A1 lines. The registers described on this page are for mapper 24, but for mapper 26 the register addresses must be adjusted ($x001 becomes $x002 and vice versa).
+</p><p>See <a href="VRC6_pinout.xhtml" title="VRC6 pinout">VRC6 pinout</a> for chip pinout.
+</p><p><br/>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#16k_PRG_Select_.28.248000-.248003.29"><span class="tocnumber">2.1</span> <span class="toctext">16k PRG Select ($8000-$8003)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#8k_PRG_Select_.28.24C000-.24C003.29"><span class="tocnumber">2.2</span> <span class="toctext">8k PRG Select ($C000-$C003)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#PPU_Banking_Style_.28.24B003.29"><span class="tocnumber">2.3</span> <span class="toctext">PPU Banking Style ($B003)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_Select_0.E2.80.A67_.28.24Dxxx.2C_.24Exxx.29"><span class="tocnumber">2.4</span> <span class="toctext">CHR Select 0…7 ($Dxxx, $Exxx)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#IRQ_control_.28.24F00x.29"><span class="tocnumber">2.5</span> <span class="toctext">IRQ control ($F00x)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Sound_.28.24900x.2C_.24A00x.2C_.24B000-.24B002.29"><span class="tocnumber">2.6</span> <span class="toctext">Sound ($900x, $A00x, $B000-$B002)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$BFFF: 16 KB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $E000-$FFFF: 8 KB PRG ROM bank, fixed to the last bank</li></ul>
+<ul><li> CHR $0000-$03FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0400-$07FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0800-$0BFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $0C00-$0FFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1000-$13FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1400-$17FF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1800-$1BFF: 1 KB switchable CHR ROM bank</li>
+<li> CHR $1C00-$1FFF: 1 KB switchable CHR ROM bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Only address lines 0, 1, and 12-15 are used for registers, therefore mirrors can be found by ANDing the address with $F003 ($DE6A mirrors $D002)
+</p><p>The addresses described here are for mapper 24. The registers for mapper 26 can be found by swapping bits 0 and 1 of the address.
+</p>
+<pre>    variant   lines     registers                       Mapper Number
+    =================================================================
+    VRC6a:    A0, A1    $x000, $x001, $x002, $x003      024
+    VRC6b:    A1, A0    $x000, $x002, $x001, $x003      026
+</pre>
+<h3><span class="mw-headline" id="16k_PRG_Select_.28.248000-.248003.29">16k PRG Select ($8000-$8003)</span></h3>
+<pre>7  bit  0
+---------
+.... PPPP
+     ||||
+     ++++- Select 16 KB PRG ROM at $8000
+</pre>
+<h3><span class="mw-headline" id="8k_PRG_Select_.28.24C000-.24C003.29">8k PRG Select ($C000-$C003)</span></h3>
+<pre>7  bit  0
+---------
+...P PPPP
+   | ||||
+   +-++++- Select 8 KB PRG ROM at $C000
+</pre>
+<h3><span class="mw-headline" id="PPU_Banking_Style_.28.24B003.29">PPU Banking Style ($B003)</span></h3>
+<pre>7  bit  0
+---------
+W.PN MMDD
+| || ||||
+| || ||++- PPU banking mode; see below
+| || ++--- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> varies by banking mode, see below
+| |+------ 1: Nametables come from CHRROM, 0: Nametables come from CIRAM
+| +------- CHR A10 is 1: subject to further rules 0: according to the latched value
++--------- PRG RAM enable
+</pre>
+<p>The VRC6 supports the use of a larger RAM to provide more nametables. However, the three commercial VRC6 games neither provided extra nametable RAM, nor used ROM nametables. As a result these games only ever write the values $20, $24, $28, $2C, $A0, $A4, $A8, and $AC to this register.
+</p>
+<h3><span class="mw-headline" id="CHR_Select_0.E2.80.A67_.28.24Dxxx.2C_.24Exxx.29">CHR Select 0…7 ($Dxxx, $Exxx)</span></h3>
+<p>For brevity, we refer to the registers at $D000 through $D003 and $E000 through $E003 as R0 through R7.
+</p><p>The lower 3 bits of the $B003 register affect where the registers are used:
+</p>
+<table class="wikitable">
+<tr>
+<th> [$B003] &amp; $03 → </th>
+<th style="width:2em;">0 </th>
+<th style="width:2em;">1 </th>
+<th> 2 or 3
+</th></tr>
+<tr>
+<th> CHR bank </th>
+<th colspan="3">Register used
+</th></tr>
+<tr>
+<td> $0000-$03FF </td>
+<td> R0 </td>
+<td rowspan="2">R0 </td>
+<td> R0
+</td></tr>
+<tr>
+<td> $0400-$07FF </td>
+<td> R1 </td>
+<td> R1
+</td></tr>
+<tr>
+<td> $0800-$0BFF </td>
+<td> R2 </td>
+<td rowspan="2">R1 </td>
+<td> R2
+</td></tr>
+<tr>
+<td> $0C00-$0FFF </td>
+<td> R3 </td>
+<td> R3
+</td></tr>
+<tr>
+<td> $1000-$13FF </td>
+<td> R4 </td>
+<td rowspan="2">R2 </td>
+<td rowspan="2">R4
+</td></tr>
+<tr>
+<td> $1400-$17FF </td>
+<td> R5
+</td></tr>
+<tr>
+<td> $1800-$1BFF </td>
+<td> R6 </td>
+<td rowspan="2">R3 </td>
+<td rowspan="2">R5
+</td></tr>
+<tr>
+<td> $1C00-$1FFF </td>
+<td> R7
+</td></tr></table>
+<table class="wikitable">
+<tr>
+<th> [$B003] &amp; $07 → </th>
+<th> 0, 6, or 7 </th>
+<th style="width:4em;">1 or 5 </th>
+<th> 2, 3, or 4
+</th></tr>
+<tr>
+<th> Nametable bank </th>
+<th colspan="3">Register used
+</th></tr>
+<tr>
+<td> $2000-$23FF </td>
+<td> R6 </td>
+<td> R4 </td>
+<td> R6
+</td></tr>
+<tr>
+<td> $2400-$27FF </td>
+<td> R6 </td>
+<td> R5 </td>
+<td> R7
+</td></tr>
+<tr>
+<td> $2800-$2BFF </td>
+<td> R7 </td>
+<td> R6 </td>
+<td> R6
+</td></tr>
+<tr>
+<td> $2C00-$2FFF </td>
+<td> R7 </td>
+<td> R7 </td>
+<td> R7
+</td></tr></table>
+<p>For the pattern tables, when the $20s bit of $B003 is set, 2 KiB banks pass
+PPU A10 through (limiting the register to seven bits wide by ignoring the LSB).
+</p><p>For the nametables, if the $20s bit of $B003 is set and the
+lower 4 bits of $B003 have one of the following values, CHR A10 is replaced:
+</p>
+<table class="wikitable">
+<tr>
+<th> [$B003] &amp; $0F </th>
+<th> CHR A10
+</th></tr>
+<tr>
+<td> 0 or 7 </td>
+<td> PPU A10 (&quot;vertical mirroring&quot;)
+</td></tr>
+<tr>
+<td> 4 or 3 </td>
+<td> PPU A11 (&quot;horizontal mirroring&quot;)
+</td></tr>
+<tr>
+<td> 8 or F </td>
+<td> Ground (&quot;one screen A&quot;)
+</td></tr>
+<tr>
+<td> C or B </td>
+<td> Vcc (&quot;one screen B&quot;)
+</td></tr>
+<tr>
+<td> all other values </td>
+<td> not replaced
+</td></tr></table>
+<p>If the $20s bit is clear, in both the pattern and name tables, the full
+eight-bit value from the register is used, even if this causes duplication. If these modes had ever been used, we assume Konami would have connected PPU A10 to the CHR ROM manually.
+</p>
+<h3><span class="mw-headline" id="IRQ_control_.28.24F00x.29">IRQ control ($F00x)</span></h3>
+<p>For details on IRQ operation, see <a href="VRC_IRQ.xhtml" title="VRC IRQ">VRC IRQs</a>. Many VRC mappers use the same IRQ system.
+</p><p>The VRC6 IRQ can be used to count either CPU cycles, or scanlines as a multiple of CPU cycles.
+</p>
+<pre>       7  bit  0
+       ---------
+$F000: LLLL LLLL - IRQ Latch
+$F001: .... .MEA - IRQ Control
+$F002: .... .... - IRQ Acknowledge
+</pre>
+<ul><li>L - reload value for latch</li>
+<li>M - mode (1=cycle, 0=scanline)</li>
+<li>E - enable IRQ</li>
+<li>A - acknowledge bit</li></ul>
+<h3><span class="mw-headline" id="Sound_.28.24900x.2C_.24A00x.2C_.24B000-.24B002.29">Sound ($900x, $A00x, $B000-$B002)</span></h3>
+<p>For details on sound information, see <a href="VRC6_audio.xhtml" title="VRC6 audio">VRC6 audio</a>.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> Official VRC6 documentation: <a class="external free" href="http://www.assemblergames.com/forums/showthread.php?48390-Several-Famicom%28NES%29-misc-dev-documents-from-Nintendo-and-Konami" rel="nofollow">http://www.assemblergames.com/forums/showthread.php?48390-Several-Famicom%28NES%29-misc-dev-documents-from-Nintendo-and-Konami</a></li>
+<li> Naruko's explanation of the $B003 register according to the VRC6 documentation: <a class="external free" href="http://forums.nesdev.com/viewtopic.php?f=11&amp;t=10628" rel="nofollow">http://forums.nesdev.com/viewtopic.php?f=11&amp;t=10628</a></li>
+<li><a class="external text" href="http://nesdev.com/vrcvi.txt" rel="nofollow">VRCVI Chip Info</a> by Kevin Horton</li>
+<li><a class="external text" href="http://nesdev.com/vrc6-j.txt" rel="nofollow">VRCVI</a> by goroh (sound info is inaccurate)</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.113 seconds
+Real time usage: 0.116 seconds
+Preprocessor visited node count: 143/1000000
+Preprocessor generated node count: 683/1000000
+Post‐expand include size: 1111/2097152 bytes
+Template argument size: 180/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:98-1!*!0!!en!*!* and timestamp 20160730152129 and revision id 12768
+ -->
+<p class="categories">Categories: <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_ROM_nametables.xhtml">Mappers with ROM nametables</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

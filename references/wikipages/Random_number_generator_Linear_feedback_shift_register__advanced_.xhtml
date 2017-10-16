@@ -1,0 +1,123 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Random number generator/Linear feedback shift register (advanced)</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Random number generator/Linear feedback shift register (advanced)</h1><div class="article">
+<p>Further commentary on the <a href="Random_number_generator.xhtml#Linear_feedback_shift_register" title="Random number generator">linear feedback shift register</a> example at <a href="Random_number_generator.xhtml" title="Random number generator">random number generator</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Basic_version"><span class="tocnumber">1</span> <span class="toctext">Basic version</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Sacrifice_entropy_for_speed"><span class="tocnumber">2</span> <span class="toctext">Sacrifice entropy for speed</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#24_and_32_bit_LFSR"><span class="tocnumber">3</span> <span class="toctext">24 and 32 bit LFSR</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Additional_Resource"><span class="tocnumber">4</span> <span class="toctext">Additional Resource</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Basic_version">Basic version</span></h2>
+<pre>
+prng:
+	ldx #8     ; iteration count
+	lda seed+0
+:
+	asl        ; shift the register
+	rol seed+1
+	bcc :+
+	eor #$2D   ; apply XOR feedback whenever a 1 bit is shifted out
+:
+	dex
+	bne :--
+	sta seed+0
+	cmp #0     ; reload flags
+	rts
+</pre>
+<h2><span class="mw-headline" id="Sacrifice_entropy_for_speed">Sacrifice entropy for speed</span></h2>
+<p>The iteration count stored in X can be reduced to speed up the generator, at the expense of quality of randomness. Each iteration effectively generators one more bit of entropy, so 8 iterations are needed for an 8-bit random number. If you intend to use fewer bits of the result (e.g. use AND to mask the result), or if you are satisfied with less randomness, you can reduce X, or even parameterize it:
+</p>
+<pre>
+; X as a parameter specifies number of random bits to generate (1 to 8)
+prng:
+	lda seed+0
+@bitloop:
+	asl
+	rol seed+1
+	bcc :+
+	eor #$2D
+:
+	dex
+	bne @bitloop
+	sta seed+0
+	cmp #0
+	rts
+</pre>
+<p>Alternatively this loop could be unrolled with 8 entry points, saving the need to use X or load it as a parameter.
+</p><p>Because the 16-bit LFSR has a repeating cycle of 65535 values, groups of 6, 5, or 3 bits will reduce the length of its output sequence. This should be avoided, if possible.
+</p>
+<h2><span class="mw-headline" id="24_and_32_bit_LFSR">24 and 32 bit LFSR</span></h2>
+<p>By adding an extra byte or two to the seed variable, and choosing an appropriate polynomial to XOR with, we can extend the sequence length significantly with only one additonal ROL per byte (+40 cycles).
+</p><p>This 24-bit version has a sequence length of 16777215:
+</p>
+<pre>.zeropage
+seed: .res 3 ; 24-bit
+
+.code
+prng:
+	ldx #8
+	lda seed+0
+:
+	asl
+	rol seed+1
+	rol seed+2
+	bcc :+
+	eor #$1B
+:
+	dex
+	bne :--
+	sta seed+0
+	cmp #0
+	rts
+</pre>
+<p>This 32-bit version has a sequence length of 4294967295:
+</p>
+<pre>.zeropage
+seed: .res 4 ; 32-bit
+
+.code
+prng:
+	ldx #8
+	lda seed+0
+:
+	asl
+	rol seed+1
+	rol seed+2
+	rol seed+3
+	bcc :+
+	eor #$C5
+:
+	dex
+	bne :--
+	sta seed+0
+	cmp #0
+	rts
+</pre>
+<p>Even longer sequences are possible, but it's not likely to be practical, as it would already take approximately 7 days for an NTSC NES to complete this 32 bit LFSR cycle.
+</p><p>A note about the chosen polynomials, $2D, and $1B are the lowest 1-byte polynomials that give a maximal sequence for 16 and 24-bit generators. $AF is the lowest for a 32-bit generator, but $C5 was preferred because it has less crowded taps (i.e. &quot;better&quot; behaviour if you're lowering the iteration count). There are other maximal sequence polynomials that can be used for all of these, the choice is somewhat arbitrary.
+</p>
+<h2><span class="mw-headline" id="Additional_Resource">Additional Resource</span></h2>
+<p><a class="external free" href="http://users.ece.cmu.edu/~koopman/lfsr/index.html" rel="nofollow">http://users.ece.cmu.edu/~koopman/lfsr/index.html</a> - a source for maximal polynomials for LFSRs of many lengths.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.039 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 100/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1679-1!*!0!!en!*!* and timestamp 20160715211355 and revision id 12724
+ -->
+</div></body></html>

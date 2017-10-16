@@ -1,0 +1,101 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Detect TV system</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Detect TV system</h1><div class="article">
+<p>The following code detects the TV system.
+A game can use it to compensate for differences in <a href="Clock_rate.xhtml" title="Clock rate">clock rate</a> among various NES models.
+It has been tested on NTSC NES and Famicom, PAL NES, and PAL famiclones using the Dendy chipset, as well as emulators in NTSC, PAL, and Dendy modes.
+</p>
+<pre>
+;
+; NES TV system detection code
+; Copyright 2011 Damian Yerrick
+;
+; Copying and distribution of this file, with or without
+; modification, are permitted in any medium without royalty provided
+; the copyright notice and this notice are preserved in all source
+; code copies.  This file is offered as-is, without any warranty.
+;
+.export getTVSystem
+.importzp nmis
+
+.align 32  ; ensure that branches do not cross a page boundary
+
+;;
+; Detects which of NTSC, PAL, or Dendy is in use by counting cycles
+; between NMIs.
+;
+; NTSC NES produces 262 scanlines, with 341/3 CPU cycles per line.
+; PAL NES produces 312 scanlines, with 341/3.2 CPU cycles per line.
+; Its vblank is longer than NTSC, and its CPU is slower.
+; Dendy is a Russian famiclone distributed by Steepler that uses the
+; PAL signal with a CPU as fast as the NTSC CPU.  Its vblank is as
+; long as PAL's, but its NMI occurs toward the end of vblank (line
+; 291 instead of 241) so that cycle offsets from NMI remain the same
+; as NTSC, keeping Balloon Fight and any game using a CPU cycle-
+; counting mapper (e.g. FDS, Konami VRC) working.
+;
+; nmis is a variable that the NMI handler modifies every frame.
+; Make sure your NMI handler finishes within 1500 or so cycles (not
+; taking the whole NMI or waiting for sprite 0) while calling this,
+; or the result in A will be wrong.
+;
+; @return A: TV system (0: NTSC, 1: PAL, 2: Dendy; 3: unknown
+;         Y: high byte of iterations used (1 iteration = 11 cycles)
+;         X: low byte of iterations used
+.proc getTVSystem
+  ldx #0
+  ldy #0
+  lda nmis
+nmiwait1:
+  cmp nmis
+  beq nmiwait1
+  lda nmis
+
+nmiwait2:
+  ; Each iteration takes 11 cycles.
+  ; NTSC NES: 29780 cycles or 2707 = $A93 iterations
+  ; PAL NES:  33247 cycles or 3022 = $BCE iterations
+  ; Dendy:    35464 cycles or 3224 = $C98 iterations
+  ; so we can divide by $100 (rounding down), subtract ten,
+  ; and end up with 0=ntsc, 1=pal, 2=dendy, 3=unknown
+  inx
+  bne :+
+  iny
+:
+  cmp nmis
+  beq nmiwait2
+  tya
+  sec
+  sbc #10
+  cmp #3
+  bcc notAbove3
+  lda #3
+notAbove3:
+  rts
+.endproc
+</pre>
+<h2><span class="mw-headline" id="What_to_change">What to change</span></h2>
+<ul><li> PAL NES needs different music pitch from NTSC and Dendy.</li>
+<li> NTSC needs different music speed from PAL NES and Dendy.</li>
+<li> PAL NES needs different raster effects from NTSC and Dendy.</li>
+<li> NTSC needs different scrolling and sprite movement speeds from PAL and Dendy.</li>
+<li> PAL NES needs OAM DMA done first in vblank, while NTSC benefits from doing it last if <a href="Controller_Reading.xhtml#DPCM_Safety_using_OAM_DMA" title="Controller Reading">using timed code to work around the DMC DMA glitch</a>.</li>
+<li> If you want to take advantage of PAL's longer vertical blank to load more tiles into CHR RAM, Dendy needs different detection of the end of rendering.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.026 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 12/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:552-1!*!0!*!*!*!* and timestamp 20160628132227 and revision id 12674
+ -->
+</div></body></html>

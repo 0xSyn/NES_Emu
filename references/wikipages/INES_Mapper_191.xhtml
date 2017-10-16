@@ -1,0 +1,49 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 191</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 191</h1><div class="article">
+<p><b>iNES Mapper 191</b> designates a board containing an MMC3 clone. It operates identically to <a href="INES_Mapper_119.xhtml" title="INES Mapper 119">iNES Mapper 119</a> with two differences:
+</p>
+<ul><li> CHR RAM is 2 KiB, instead of 8 KiB like on 119. (This can be overridden with <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a>.)</li>
+<li> Bit 7 of the CHR bank number (A17) switches between CHR ROM and CHR RAM, instead of bit 6 (A16) like on 119.</li></ul>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 191          =
+ ========================
+ 
+ 
+ aka:
+ --------------------------
+ Pirate MMC3 variant
+ 
+ 
+ Example Game:
+ --------------------------
+ Sugoro Quest - Dice no Senshitachi (As)
+ 
+ 
+ Notes:
+ --------------------------
+ This mapper is a modified <a href="MMC3.xhtml" title="MMC3">MMC3</a> (or is based on MMC3?).
+ 
+ In addition to any CHR-ROM present, there is also an additional 2k of CHR-RAM which is selectable.  Bit 7 of
+ each CHR reg selects RAM or ROM (1=RAM, 0=ROM)
+ 
+ Apart from that, this mapper behaves exactly like your typical MMC3.  See <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 004</a> for details.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:697-1!*!0!*!*!*!* and timestamp 20160208225355 and revision id 10790
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_MMC3_with_CHR_ROM_and_CHR_RAM.xhtml">MMC3 with CHR ROM and CHR RAM</a></p></div></body></html>

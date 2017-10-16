@@ -1,0 +1,311 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NSF</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NSF</h1><div class="article">
+<p>The NES Sound Format (.nsf) is used for storing and playing music from the NES and related systems. It is similar to the PSID file format for C64 music/sound, where one rips the music/sound code from an NES game and prepends a small header to the data. An NSF player puts the music code into memory at the proper place, based on the header, prepares sound hardware, then runs it to make music. An NSF can be played on NES/Famicom hardware or in an emulator (NSF player or NES emulator).
+</p><p>There are two extensions of the NSF format:
+</p>
+<ul><li> <a href="NSFe.xhtml" title="NSFe">NSFe</a> - Allows a playlist with track titles and times, as well as other metadata.</li>
+<li> <a href="NSF2.xhtml" title="NSF2">NSF2</a> - A proposed extension to the NSF format. Not yet finalized.</li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Header_Overview"><span class="tocnumber">1</span> <span class="toctext">Header Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Loading_a_tune_into_RAM"><span class="tocnumber">2</span> <span class="toctext">Loading a tune into RAM</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bank_Switching"><span class="tocnumber">2.1</span> <span class="toctext">Bank Switching</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#FDS_Bankswitching"><span class="tocnumber">2.1.1</span> <span class="toctext">FDS Bankswitching</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Example"><span class="tocnumber">2.1.2</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Initializing_a_tune"><span class="tocnumber">3</span> <span class="toctext">Initializing a tune</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Playing_a_tune"><span class="tocnumber">4</span> <span class="toctext">Playing a tune</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Sound_Chip_Support"><span class="tocnumber">5</span> <span class="toctext">Sound Chip Support</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#APU"><span class="tocnumber">5.1</span> <span class="toctext">APU</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#VRCVI"><span class="tocnumber">5.2</span> <span class="toctext">VRCVI</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#VRCVII"><span class="tocnumber">5.3</span> <span class="toctext">VRCVII</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#FDS_Sound"><span class="tocnumber">5.4</span> <span class="toctext">FDS Sound</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#MMC5_Sound"><span class="tocnumber">5.5</span> <span class="toctext">MMC5 Sound</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Namco_163_Sound"><span class="tocnumber">5.6</span> <span class="toctext">Namco 163 Sound</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Sunsoft_5B_Sound"><span class="tocnumber">5.7</span> <span class="toctext">Sunsoft 5B Sound</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Multi-chip_tunes"><span class="tocnumber">5.8</span> <span class="toctext">Multi-chip tunes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Caveats"><span class="tocnumber">6</span> <span class="toctext">Caveats</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Summary_of_Addresses"><span class="tocnumber">7</span> <span class="toctext">Summary of Addresses</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Pseudo-IRQ_Technique"><span class="tocnumber">8</span> <span class="toctext">Pseudo-IRQ Technique</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#See_also"><span class="tocnumber">9</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#References"><span class="tocnumber">10</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Header_Overview">Header Overview</span></h2>
+<pre>offset  # of bytes   Function
+----------------------------
+$000    5   STRING  'N','E','S','M',$1A (denotes an NES sound format file)
+$005    1   BYTE    Version number (currently $01)
+$006    1   BYTE    Total songs   (1=1 song, 2=2 songs, etc)
+$007    1   BYTE    Starting song (1=1st song, 2=2nd song, etc)
+$008    2   WORD    (lo, hi) load address of data ($8000-FFFF)
+$00A    2   WORD    (lo, hi) init address of data ($8000-FFFF)
+$00C    2   WORD    (lo, hi) play address of data ($8000-FFFF)
+$00E    32  STRING  The name of the song, null terminated
+$02E    32  STRING  The artist, if known, null terminated
+$04E    32  STRING  The copyright holder, null terminated
+$06E    2   WORD    (lo, hi) Play speed, in 1/1000000th sec ticks, NTSC (see text)
+$070    8   BYTE    Bankswitch init values (see text, and FDS section)
+$078    2   WORD    (lo, hi) Play speed, in 1/1000000th sec ticks, PAL (see text)
+$07A    1   BYTE    PAL/NTSC bits
+                bit 0: if clear, this is an NTSC tune
+                bit 0: if set, this is a PAL tune
+                bit 1: if set, this is a dual PAL/NTSC tune
+                bits 2-7: not used. they *must* be 0
+$07B    1   BYTE    Extra Sound Chip Support
+                bit 0: if set, this song uses <a href="VRC6_audio.xhtml" title="VRC6 audio">VRC6 audio</a>
+                bit 1: if set, this song uses <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a>
+                bit 2: if set, this song uses <a href="FDS_audio.xhtml" title="FDS audio">FDS audio</a>
+                bit 3: if set, this song uses <a href="MMC5_audio.xhtml" title="MMC5 audio">MMC5 audio</a>
+                bit 4: if set, this song uses <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Namco 163 audio</a>
+                bit 5: if set, this song uses <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a>
+                bits 6,7: future expansion: they *must* be 0
+$07C    4   ----    4 extra bytes for expansion (must be $00)
+$080    nnn ----    The music program/data follows until end of file
+</pre>
+<h2><span class="mw-headline" id="Loading_a_tune_into_RAM">Loading a tune into RAM</span></h2>
+<p>If file offsets $070 to $077 have $00 in them, then bank switching is <i>not</i>
+used. Data should be read from the file beginning at $080 and loaded contiguously
+into the 6502 address space beginning at the load address until the end of file is reached.
+</p><p>Some FDS NSFs use a load address below $8000 to fill in the $6000-7FFF range. It is recommended to use bankswitching to accomplish this instead, because it is not universally supported.
+</p>
+<h3><span class="mw-headline" id="Bank_Switching">Bank Switching</span></h3>
+<p>If any of the bytes from $070 to $077 in the file header are nonzero then bank switching
+is used. In this case, take the logical AND of the load address with $0FFF, and the result
+specifies the number of bytes of padding at the start of the ROM image. The ROM image should
+consist of a contiguous set of 4k banks, read directly from the NSF file beginning at $080 after
+inserting the requested number of pad bytes. If the file does not have enough data to fill the
+last bank completely, it may be padded out.
+</p><p>The 6502's address space is divided into 8 4k bank switchable blocks.
+For each block the current bank is controlled by writing the bank number to
+at corresponding register at $5FF8 through $5FFF. The initial bank assignment
+is determined by bytes $070 through $077 in the file.
+</p>
+<pre>NSF    Address      Register
+====   ==========   ========
+$070   $8000-8FFF   $5FF8
+$071   $9000-9FFF   $5FF9
+$072   $A000-AFFF   $5FFA
+$073   $B000-BFFF   $5FFB
+$074   $C000-CFFF   $5FFC
+$075   $D000-DFFF   $5FFD
+$076   $E000-EFFF   $5FFE
+$077   $F000-FFFF   $5FFF
+</pre>
+<p>The initial bank assignment should be done before any call to the <i>INIT</i> routine.
+Once the ROM image has been built from the NSF file, this can be set up simply
+by writing the 8 values from the file header $070-077 to the corresponding
+registers $5FF8-$5FFF.
+</p><p>If the <i>INIT</i> routine needs to change the bank assignments based on the
+selected song, it may do so by writing the bank control registers.
+</p>
+<h4><span class="mw-headline" id="FDS_Bankswitching">FDS Bankswitching</span></h4>
+<p>If the FDS expansion is enabled, bank switching operates slightly differently. Two additional registers at $5FF6 and $5FF7 control the banks $6000-6FFF and $7000-7FFF respectively, and the initial load values at $076 and $077 now specify the banks used for $6000-7FFF as well as $E000-FFFF (these regions will both be set up to use the same banks before <i>INIT</i> is called).
+</p><p>Because the FDS has a RAM area at $8000-DFFF for the disk image to be loaded to, that means this area is writable when the FDS expansion is enabled. Some NSF player implementations will treat this like bankswitched RAM, and some players will treat an FDS bank switch operation as a copy into RAM. Hardware players are more likely to use bankswitched RAM.
+</p><p>This has a number of caveats:
+</p>
+<ul><li> Writes may be mirrored if the same bank is used in multiple places. Care should be taken to avoid accidental overwrites when the same bank appears more than once in the bankswitch table. In particular, unique banks should be used for memory regions that must be written to.</li></ul>
+<ul><li> Since the FDS itself was incapable of mirrored writes like this and many players will not have them, mirrored writes should not intentionally be used to store the same data in two memory locations. It is a side effect, not a supported feature.</li></ul>
+<ul><li> Writes to the area may or may not persist in the bank written to if it is switched out and then switched back in. This is another side effect that should be accounted for, but not relied upon.</li></ul>
+<ul><li> Writes may or may not persist between songs, depending on whether the NSF player reloads the NSF image when the song is changed. Hardware players are not likely to reload, but software players may.</li></ul>
+<p>See also the notes on <a href="#Multi-chip_tunes">multi-chip tunes</a> below.
+</p>
+<h4><span class="mw-headline" id="Example">Example</span></h4>
+<p>METROID.NSF will be used for the following explanation.
+</p>
+<pre>The file is set up like so:  (starting at $070 in the file)
+
+$070: 05 05 05 05 05 05 05 05
+$078: 00 00 00 00 00 00 00 00
+$080: ... music data goes here...
+</pre>
+<p>Since $070-$077 are something other than $00, this NSF is using bank switching.
+The load address given is $8000. The load address AND $0FFF specifies 0 bytes of padding,
+so we set up our ROM image with contiguous data starting from $080 in the file.
+</p><p>This NSF has 6 4k banks in it, numbered 0 through 5. It specifies that each of the 8 memory regions should be switched
+to bank 5, which begins at $05 * $1000 bytes in the ROM image.
+</p>
+<h2><span class="mw-headline" id="Initializing_a_tune">Initializing a tune</span></h2>
+<p>The desired song number is loaded into the accumulator register A,
+and the X register is set to specify specify PAL (X=1) or NTSC (X=0).
+</p><p>Valid song numbers are 0 to one less than the number of songs (specified at $006 in the header).
+The first selected song is in the header at $007. The NSF player should display
+to the user song numbers from 1 up to and including the number of songs, and these should
+correspond to the same number - 1 loaded into register A. Note that when choosing the first song
+from the value in $007, subtract 1 from it before loading that value into register A.
+</p>
+<ol><li> Write $00 to all RAM at $0000-$07FF and $6000-$7FFF.</li>
+<li> Initialize the sound registers by writing $00 to $4000-$4013, $0F to $4015.</li>
+<li> Initialize the <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame counter</a> to 4-step mode ($40 to $4017).</li>
+<li> If the tune is bank switched, load the bank values from $070-$077 into $5FF8-$5FFF.</li>
+<li> Set the A register for the desired song.</li>
+<li> Set the X register for PAL or NTSC.</li>
+<li> Call the music <i>INIT</i> routine.</li></ol>
+<p>The <i>INIT</i> routine MUST finish with an RTS instruction before music playback will begin.
+At this point, the NSF player will begin executing the <i>PLAY</i> routine at the specified interval.
+</p><p>If this is a single standard tune (PAL or NTSC but not both) the <i>INIT</i> routine MAY ignore the X register.
+Otherwise, it SHOULD use this value to determine how to set pitches and tempo for the appropriate platform.
+</p><p>The use of the $4017 register is not well supported by existing NSF players. The NSF should not normally clear bit 6 (the IRQ disable bit), though there are <a href="#Pseudo-IRQ_Technique">exceptions</a> to this rule.
+</p>
+<h2><span class="mw-headline" id="Playing_a_tune">Playing a tune</span></h2>
+<p>Once the tune has been initialized, it can now be played.
+To do this, simply call the routine at the <i>PLAY</i> address at the rate 
+determined by the file header at $06E-06F (NTSC) or $078-079 (PAL).
+</p><p>The playback rate is determined by this formula:
+</p>
+<pre>        1000000                  1000000
+rate = ---------       period = ---------
+        period                    speed
+</pre>
+<p>Where period is the value you place at $06E-$06F in the file, and
+rate is how often the <i>PLAY</i> routine should be called in Hz.
+</p><p>The following playback rates are common:
+</p>
+<ul><li> 60.002 Hz (recommended by the original NSF specification, close to APU timer IRQ rate): 16666 ($411A)</li>
+<li> 60.099 Hz (actual NTSC NES <a href="Clock_rate.xhtml" title="Clock rate">frame rate</a>): 16639 ($40FF)</li>
+<li> 50.007 Hz (suggested PAL NES frame rate): 19997 ($4E1D)</li></ul>
+<p>Nonstandard rates may be difficult for hardware players. If the rate is much faster the <i>PLAY</i> routine may not be short enough to execute in the specified amount of time. Additionally, an NES player will usually require mapper hardware to create an IRQ to execute the <i>PLAY</i> routine at the required rate.
+</p><p>The <i>PLAY</i> routine will be called at the specified interval. If the X register passed to <i>INIT</i> was 1 (PAL), it will be called at the rate specified by $078-079, and if 0 (NTSC), it will  use the rate at $06E-06F.
+</p><p>A <i>PLAY</i> routine should normally finish with an RTS instruction, but is not required to do so.
+A non-returning <i>PLAY</i> will cause problems for NSF players that use the same CPU to control the user interface and to run the NSF, such as NSF players that run on an NES.
+It is strongly recommended to return every few frames if at all possible, such as when no PCM is playing.
+If <i>PLAY</i> takes longer to finish than the specified interval, that interval may be skipped and <i>PLAY</i> may not be called again until the next one.
+</p><p>Some popular modern NSF engines use a non-returning <i>PLAY</i> to implement an output stream of PCM sound (e.g. SuperNSF, MUSE, Deflemask), and this can also be combined with a <a href="#Pseudo-IRQ_Technique">Pseudo-IRQ technique</a>.
+</p>
+<h2><span class="mw-headline" id="Sound_Chip_Support">Sound Chip Support</span></h2>
+<p>Byte $07B of the file stores the sound chip flags.  If a particular flag is set, those sound registers should be enabled.  If the flag is clear, then those registers should be disabled. All I/O registers within $8000-FFFF are <i>write only</i> and must not disrupt music code that happens to be stored there. Some audio register addresses have mirrors in their original hardware mappers, but NSF code should use only the lowest address for each register, listed here.
+</p>
+<h3><span class="mw-headline" id="APU">APU</span></h3>
+<ul><li> Uses registers $4000-4013, and $4015. See <a href="APU.xhtml" title="APU">APU</a> for more information.</li>
+<li> $4015 is set to 0F on reset by most players. It is better if the NSF does not assume this and initializes this register itself, but there are several existing NSF files that require it (Battletoads, Castlevania and Gremlins 2 are examples).</li>
+<li> The APU interrupts that can be generated via $4015 and $4017 are not supported by the NSF format, which reserves IRQ for the player's internal use.</li>
+<li> $4017 is not consistently supported across NSF players.</li></ul>
+<h3><span class="mw-headline" id="VRCVI">VRCVI</span></h3>
+<ul><li> Uses registers $9000-9003, $A000-A002, and $B000-B002, write only. See <a href="VRC6_audio.xhtml" title="VRC6 audio">VRC6 Audio</a> for more information.</li>
+<li> The A0 and A1 lines are flipped on a few games. If you rip the music and it sounds all funny, flip around  the xxx1 and xxx2 register pairs. (i.e. 9001 and 9002) Esper2 and Madara will need this change, while Castlevania 3j will not.</li></ul>
+<h3><span class="mw-headline" id="VRCVII">VRCVII</span></h3>
+<ul><li> Uses registers $9010 and $9030, write only. See <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 Audio</a> for more information.</li></ul>
+<h3><span class="mw-headline" id="FDS_Sound">FDS Sound</span></h3>
+<ul><li> Uses registers from $4040 through $4092. See <a href="FDS_audio.xhtml" title="FDS audio">FDS Audio</a> for more information.</li></ul>
+<p>Notes:
+</p>
+<ul><li> $6000-DFFF is assumed to be RAM, since $6000-DFFF is RAM on the FDS.  $E000-FFFF is usually not included in FDS games because it is the BIOS ROM. However, it can be used on FDS rips to help the ripper (for modified <i>PLAY</i>/<i>INIT</i> addresses).</li>
+<li> Bank switching is different if FDS is enabled. $5FF6 and $5FF7 control banks at $6000-6FFF and $7000-7FFF, and the NSF header $076-$077 initialized both $6000-7FFF and $E000-FFFF. See above.</li></ul>
+<h3><span class="mw-headline" id="MMC5_Sound">MMC5 Sound</span></h3>
+<ul><li> Uses registers $5000-5015, write only as well as $5205 and $5206, and $5C00-5FF5. see <a href="MMC5_audio.xhtml" title="MMC5 audio">MMC5 Audio</a> for more information.</li></ul>
+<p>Notes:
+</p>
+<ul><li> $5205 and $5206 are a hardware 8 * 8 multiplier.  The idea being you write your two bytes to be multiplied into 5205 and 5206 and after doing so, you read the result back out.</li>
+<li> $5C00-5FF5 should be RAM to emulate EXRAM while in MMC5 mode.</li></ul>
+<h3><span class="mw-headline" id="Namco_163_Sound">Namco 163 Sound</span></h3>
+<ul><li> Uses registers $4800 and $F800. See <a href="Namco_163_audio.xhtml" title="Namco 163 audio">Namco 163 audio</a> for more information.</li></ul>
+<h3><span class="mw-headline" id="Sunsoft_5B_Sound">Sunsoft 5B Sound</span></h3>
+<ul><li> Audio in the Sunsoft 5B mapper, a variant of the <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="FME-7">FME-7</a>, uses registers $C000 and $E000. See <a class="mw-redirect" href="Sunsoft_5B_audio.xhtml" title="Sunsoft audio">Sunsoft audio</a>.</li>
+<li> Many players do not implement the noise or envelope capabilities of the 5B, as they were not used in the only 5B game, Gimmick.</li></ul>
+<h3><span class="mw-headline" id="Multi-chip_tunes">Multi-chip tunes</span></h3>
+<p>Multiple expansion chips can be used at the same time, but because this was not something that was ever supported by an original Famicom games, actual practice with multi-expansion NSF varies.
+</p><p>Some mappers mirror their audio registers at addresses that would conflict. Many NSF players only support the lowest address, which avoids these conflicts, but the following conflicts may need resolution in an attempted hardware multi-chip implementation:
+</p>
+<ul><li> N163's address port $F800 overlaps a mirror of Sunsoft 5B's data port $E000. This can be avoided by setting Sunsoft 5B's address port $C000 to $0E or $0F (unused internal registers) before writing to the N163.</li>
+<li> VRC6 and VRC7 have a conflict at ports $9010 and $9030, where the VRC6's pulse 1 control port is mirrored.</li></ul>
+<p>Additionally, NSFs using FDS sound make the normally read-only area from $8000-$DFFF writable. This may cause corruption of these areas when writing to VRC6, VRC7, or 5B audio registers. The safest way to avoid this is to make sure your code and data do not fall within these addresses, so that you may safely write to them. NSF player implementations may wish to disable memory writes at these addresses to avoid the conflict.
+</p>
+<h2><span class="mw-headline" id="Caveats">Caveats</span></h2>
+<ul><li> The starting song number and maximum song numbers start counting at 1, while the <i>INIT</i> address of the tune starts counting at 0.  Remember to pass the desired song number <i>minus 1</i> to the <i>INIT</i> routine.</li>
+<li> The NTSC speed word is used <i>only</i> for NTSC tunes and dual PAL/NTSC tunes. The PAL speed word is used <i>only</i> for PAL tunes and dual PAL/NTSC tunes.</li>
+<li> If bit 1 of the PAL/NTSC is set, indicating a dual PAL/NTSC NSF, bit 0 may be interpreted as a preference for PAL or NTSC. Most players do not support this, however, and some older players may have problems if bit 0 is set.</li>
+<li> The length of the text in the name, artist, and copyright fields must be 31 characters or less. There has to be at least a single NULL byte ($00) after the text, between fields.</li>
+<li> If a field is not known (name, artist, copyright) then the field must contain the string &quot;&lt;?&gt;&quot; (without quotes).  </li>
+<li> There should be 8K of RAM present at $6000-7FFF. MMC5 tunes need RAM at $5C00-5FF7 to emulate its $EXRAM. $8000-FFFF should be read-only (not writable) after a tune has loaded.  The only time this area should be writable is if an FDS tune is being played.</li>
+<li> Do not assume the state of <i>anything</i> on entry to the <i>INIT</i> routine except A and X. Y can be anything, as can the flags.</li>
+<li> Do not assume the state of <i>anything</i> on entry to the <i>PLAY</i> routine. Flags, X, A, and Y could be at any state.</li>
+<li> The stack sits at $01FF and grows down. The precise position of the stack on <i>INIT</i> or <i>PLAY</i> is not guaranteed, as the NSF player may need to use the top area of the stack for its own internal purpose. Make sure the tune does not attempt to modify $01F0-01FF directly. (Armed Dragon Villigust did, and was relocated to 2xx for its NSF.)</li>
+<li> The NSF should not initialize the stack pointer in <i>INIT</i> or <i>PLAY</i>. These subroutines are called from the player; some software emulators may not have a problem with this, but it will almost certainly cause an error on a hardware player. It is the player's job to initialize the stack pointer, and some hardware players (e.g. <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a>) will place their own variables on the stack.</li>
+<li> RAM should be addressed from $0000-07FF, and should not expect mirror addresses to work. If the tune writes outside this range, e.g. $1400 it should be relocated. (Terminator 3 did this and was relocated to 04xx for NSF.)</li>
+<li> The vector table at $FFFA-FFFF should not be filled with code or data by the NSF. These can be overridden by hardware NSF players.</li>
+<li> Instructions which modify the stack, PLP, PHP, and TXS must be used with great care, as a player may need to rely on being able to store data at the end of the stack. An NSF should use the stack pointer given; the stack past this pointer should remain intact, as it may be needed by the player.</li>
+<li> Instructions CLI, SEI, and BRK are problematic, and should usually be avoided. The NSF itself should generally not attempt to interfere with IRQs, as the player implementation may use them to control its playback rate. One notable exception is using SEI in a non-returning <i>PLAY</i> routine for a <a href="#Pseudo-IRQ_Technique">pseudo-IRQ technique</a>. BRK should generally not be used, as it reads the IRQ routine address from the vector table which is reserved for the player's use.</li></ul>
+<h2><span class="mw-headline" id="Summary_of_Addresses">Summary of Addresses</span></h2>
+<p>These lists all the addresses which should be readable by the code in the NSF; no other addresses should ever be accessed for reading:
+</p>
+<ul><li> $0000-$01EF</li>
+<li> $01F0-$01FF (may be used internally by NSF player)</li>
+<li> $0200-$07FF</li>
+<li> $4015</li>
+<li> $4040-$407F (if FDS is enabled)</li>
+<li> $4090 (if FDS is enabled)</li>
+<li> $4092 (if FDS is enabled)</li>
+<li> $4800 (if Namco 163 is enabled)</li>
+<li> $5205-$5206 (if MMC5 is enabled)</li>
+<li> $5C00-$5FF5 (if MMC5 is enabled)</li>
+<li> $6000-$FFF9</li></ul>
+<p>These lists all the addresses which should be writable by the code in the NSF; no other addresses should ever be accessed for writing:
+</p>
+<ul><li> $0000-$01EF</li>
+<li> $01F0-$01FF (may be used internally by NSF player; do not use for non-stack variables)</li>
+<li> $0200-$07FF</li>
+<li> $4000-$4013 (always clear bit7 of $4010)</li>
+<li> $4015</li>
+<li> $4040-$4080 (if FDS is enabled)</li>
+<li> $4082-$408A (if FDS is enabled)</li>
+<li> $4800 (if Namco 163 is enabled)</li>
+<li> $5205-$5206 (if MMC5 is enabled)</li>
+<li> $5C00-$5FF5 (if MMC5 is enabled)</li>
+<li> $5FF6-$5FF7 (if bankswitching and FDS is enabled)</li>
+<li> $5FF8-$5FFF (if bankswitching is enabled)</li>
+<li> $6000-$7FFF</li>
+<li> $8000-$DFFF (if FDS is enabled)</li>
+<li> $9000-$9003 (if VRC6 is enabled)</li>
+<li> $9010 (if VRC7 is enabled)</li>
+<li> $9030 (if VRC7 is enabled)</li>
+<li> $A000-$A002 (if VRC6 is enabled)</li>
+<li> $B000-$B002 (if VRC6 is enabled)</li>
+<li> $F800 (if Namco 163 is enabled)</li></ul>
+<p>Reading/writing anything other than specified here results in undefined behaviour.
+</p>
+<h2><span class="mw-headline" id="Pseudo-IRQ_Technique">Pseudo-IRQ Technique</span></h2>
+<p>Some modern NSFs use a trick<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> first made popular by <a class="external text" href="http://www.delek.com.ar/deflemask" rel="nofollow">Deflemask</a>, primarily intended to support PCM sample playback. This technique is not universally supported, because it may rely on a lack of conflict with the player's implementation. Some hardware implementations do support it correctly (e.g. <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a>), and it also works with several software NSF players.
+</p><p>The technique uses a non-returning <i>PLAY</i> in the following way:
+</p>
+<ol><li> Use SEI to mask interrupts.</li>
+<li> Enable the APU interrupt by writing to $4017.</li>
+<li> Enter a sample playback loop, polling $4015 to see if an APU IRQ is pending.</li>
+<li> When the poll registers the APU IRQ flag (occurring at 60 hz on NTSC), temporarily exit the sample playback loop to do other tasks.</li>
+<li> Return to step 3, never returning from <i>PLAY</i>.</li></ol>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="List_of_NES_music_composers.xhtml" title="List of NES music composers">List of NES music composers</a></li>
+<li><a class="mw-redirect" href="Emulation_libraries.xhtml#NSF_Players" title="Emulation Libraries">Emulation Libraries: NSF Players</a></li>
+<li><a href="INES_Mapper_031.xhtml" title="INES Mapper 031">iNES Mapper 031</a>: Cart mapper with NSF-inspired bankswitching</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=6&amp;t=9296" rel="nofollow">NSF PCM technique (via Deflemask)</a> forum post</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.122 seconds
+Real time usage: 0.132 seconds
+Preprocessor visited node count: 107/1000000
+Preprocessor generated node count: 178/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:190-1!*!0!!en!*!* and timestamp 20160517134609 and revision id 12378
+ -->
+<p class="categories">Categories: <a href="Category_File_formats.xhtml">File formats</a>, <a href="Category_Audio.xhtml">Audio</a></p></div></body></html>

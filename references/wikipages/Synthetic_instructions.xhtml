@@ -1,0 +1,213 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Synthetic instructions</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Synthetic instructions</h1><div class="article">
+<p>There are several additional instructions that would be nice to have on the NES. Even though not present, they can be synthesized using existing instructions, resulting in <b>synthetic instructions</b> or <b>pseudoinstructions</b>. If turned into assembler macros, they can be used almost as if they were natively supported. Being able to think of them as native instructions lightens the mental load when programming, because instructions are an important tool for abstraction. Even without making the following into macros, after reading them you will be more likely to think of one of these while coding, saying &quot;I need a subtract-from instruction here&quot;.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Negate_A"><span class="tocnumber">1</span> <span class="toctext">Negate A</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Reverse_subtraction"><span class="tocnumber">2</span> <span class="toctext">Reverse subtraction</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Sign-extend"><span class="tocnumber">3</span> <span class="toctext">Sign-extend</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Arithmetic_shift_right"><span class="tocnumber">4</span> <span class="toctext">Arithmetic shift right</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#8-bit_rotate"><span class="tocnumber">5</span> <span class="toctext">8-bit rotate</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#16-bit_increment_and_decrement"><span class="tocnumber">6</span> <span class="toctext">16-bit increment and decrement</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#X.2FY_as_Operand"><span class="tocnumber">7</span> <span class="toctext">X/Y as Operand</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#JMP_.28addr.2CX.29"><span class="tocnumber">8</span> <span class="toctext">JMP (addr,X)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#External_links"><span class="tocnumber">9</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Negate_A">Negate A</span></h2>
+<p>Many processors have a native negate instruction, which subtracts the value from zero. Here we must manually calculate the two's complement of A, which involves a one's complement and increment:
+</p>
+<pre>; A = -A
+eor #$FF
+sec
+adc #0
+</pre>
+<p>Or if we know carry is clear coming in:
+</p>
+<pre>; A = -A
+eor #$FF
+adc #1
+</pre>
+<h2><span class="mw-headline" id="Reverse_subtraction">Reverse subtraction</span></h2>
+<p>Using SBC, a value can be subtracted from A, but there's no direct way to subtract A from some value.
+The ARM instruction set includes instructions RSB (reverse subtract) and RSC (reverse subtract with carry) that negate the register and add the value.
+The 6502 can do this too:
+</p>
+<pre>; A = Value - A
+eor #$FF
+sec
+adc Value
+</pre>
+<p>As a special case, if we want to subtract A from 255, we can just do
+</p>
+<pre>; A = 255 - A
+eor #$FF
+</pre>
+<p>This also shows another way of understanding the general subtract from; we first subtract A from 255, then add one, so it's as if we subtracted from 256, which is the same as subtracting from zero, since A is only 8 bits.
+</p>
+<h2><span class="mw-headline" id="Sign-extend">Sign-extend</span></h2>
+<p>When increasing the number of bits in a signed value, the new high bits are filled with copies of the sign bit. This is called sign extension. For example, sign-extending the 8-bit value $80 (-128) to 16 bits sets the new bits, resulting in $FF80; sign-extending $7F (+127) to 16 bits results in $007F. The following sequences calculate the upper byte of the sign-extended value.
+</p>
+<pre>        ; calculates upper byte of sign-extension of A
+        ora #$7F
+        bmi neg
+        lda #0
+neg:
+</pre>
+<p>This constant-time version (7 bytes, 8 cycles) destroys the carry, so don't try using it in the middle of a multi-byte addition:
+</p>
+<pre>  asl a     ;  cpx #$80 or cpy #$80 is also possible
+  lda #$00
+  adc #$FF  ; C is unchanged and A = $00 if C was set or $FF if C was clear
+  eor #$FF  ; now all bits of A are set to what bit 7 was
+</pre>
+<p>If you're just trying to add an 8-bit delta to a 16-bit value, you could try subtracting 256 from the value by decrementing the high byte if the value is negative and then adding as if it were unsigned.
+</p>
+<pre>  lda delta_value
+  bpl notneg
+  dec value_hi
+notneg:
+  clc
+  adc value_lo
+  sta value_lo
+  lda #0
+  adc value_hi
+  sta value_hi
+</pre>
+<p><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=124949#p124949" rel="nofollow">This forum thread</a> describes addition of signed deltas with clamping.
+</p>
+<h2><span class="mw-headline" id="Arithmetic_shift_right">Arithmetic shift right</span></h2>
+<p>The ARM instruction set has an arithmetic right shift, which doesn't alter the sign (top) bit.
+This shift is used to divide a signed value by two.
+But the 6502 lacks this instruction; LSR doesn't work because it shifts the sign bit to the right, then clears it.
+</p><p>To implement this, we need carry set to the sign bit, then we can use ROR.
+CMP #$80 performs this task; if the value is less than $80, carry is cleared, otherwise it's set:
+</p>
+<pre>; Arithmetic shift right A
+cmp #$80
+ror a
+</pre>
+<p>If the operand is in memory, we just use ASL to move the sign bit into carry:
+</p>
+<pre>; Arithmetic shift right Value
+lda Value
+asl a
+ror Value
+</pre>
+<h2><span class="mw-headline" id="8-bit_rotate">8-bit rotate</span></h2>
+<p>The 65xx series rotate instructions are all 9-bit, not 8-bit as often imagined. If they really were 8-bit, then eight ROR or ROL instructions in a row would leave A with its original value. In actuality, <i>nine</i> are required to do so, since the carry acts as a ninth bit of A.
+</p><p>Similar to arithmetic right shift, we must set carry to the top or bottom bit in advance of the rotate. For 8-bit rotate left, it's simple:
+</p>
+<pre>; 8-bit rotate left A
+cmp #$80
+rol a
+
+; alternate method
+asl a
+adc #0
+</pre>
+<p>For 8-bit rotate right, we must save and restore A:
+</p>
+<pre>; 8-bit rotate right A
+pha
+lsr a
+pla
+ror a
+</pre>
+<p>A could be saved and restored using other methods, like TAX and TXA, etc.
+</p><p>Branching can also be used:
+</p>
+<pre>    ; 8-bit rotate right A
+    lsr a
+    bcc skip
+    adc #$80-1 ; carry is set, so will add extra 1
+skip:
+</pre>
+<p>If the operand is in memory:
+</p>
+<pre>; 8-bit rotate left Value
+lda Value
+asl a
+rol Value
+
+; 8-bit rotate right Value
+lda Value
+lsr a
+ror Value
+</pre>
+<h2><span class="mw-headline" id="16-bit_increment_and_decrement">16-bit increment and decrement</span></h2>
+<p>Incrementing/decrementing a 16-bit value involves first adjusting the low byte, then adjusting the high byte if necessary. Increment is simpler, since the high byte is adjusted when the low byte wraps around to zero; for decrement, the high byte is adjusted when the low byte wraps around to $FF.
+</p>
+<pre>        ; 16-bit increment Word
+        inc Word
+        bne noinc
+        inc Word+1
+noinc:
+
+        ; 16-bit decrement Word
+        lda Word
+        bne nodec
+        dec Word+1
+nodec:  dec Word
+</pre>
+<p>16-bit increment shows even more advantage when used to control a loop, because the 16-bit increment conveniently leaves the zero flag set at the end <i>only</i> if the entire 16-bit value is zero.
+</p>
+<h2><span class="mw-headline" id="X.2FY_as_Operand">X/Y as Operand</span></h2>
+<p>Normally X and Y cannot be used as an operand to an instruction operating on A. For example, CMP X isn't possible. Where X or Y needs to be used in such a way, they are usually saved to a temporary variable:
+</p>
+<pre>; Compare A with X
+stx temp
+cmp temp
+</pre>
+<p>By putting a 256-byte table in memory with each entry simply having the value of its index, X and Y can be used as operands:
+</p>
+<pre>table:  .byte $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0A,$0B,$0C,$0D,$0E,$0F
+        .byte $10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1A,$1B,$1C,$1D,$1E,$1F
+        ...
+        .byte $F0,$F1,$F2,$F3,$F4,$F5,$F6,$F7,$F8,$F9,$FA,$FB,$FC,$FD,$FE,$FF
+</pre>
+<pre>cmp table,x      ; CMP X
+
+eor table,x      ; EOR X
+
+clc
+adc table,y      ; ADC Y
+</pre>
+<h2><span class="mw-headline" id="JMP_.28addr.2CX.29">JMP (addr,X)</span></h2>
+<p>The JMP (addr,X) instruction is present in later 65xx processors.
+It behaves like JMP (addr), except it fetches the 16-bit value from addr+X.
+The least-problematic way to implement this is using RTI:
+</p>
+<pre>; Jump to address stored at addr+X
+lda addr+1,x
+pha
+lda addr,x
+pha
+php
+rti
+</pre>
+<p>See <a href="Jump_table.xhtml" title="Jump table">Jump table</a> for further explanation and alternate approaches.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://www.cs.umd.edu/class/spring2003/cmsc311/Notes/Mips/pseudo.html" rel="nofollow">Pseudoinstructions in MIPS</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.039 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:449-1!*!0!!en!*!* and timestamp 20160208222645 and revision id 8441
+ -->
+</div></body></html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU memory map</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU memory map</h1><div class="article">
+<table class="tabular">
+<tr>
+<th> Address range </th>
+<th> Size </th>
+<th> Device
+</th></tr>
+<tr>
+<td> $0000-$07FF </td>
+<td> $0800 </td>
+<td> 2KB internal RAM
+</td></tr>
+<tr>
+<td> $0800-$0FFF </td>
+<td> $0800 </td>
+<td rowspan="3"> <a href="Mirroring.xhtml" title="Mirroring">Mirrors</a> of $0000-$07FF
+</td></tr>
+<tr>
+<td> $1000-$17FF </td>
+<td> $0800
+</td></tr>
+<tr>
+<td> $1800-$1FFF </td>
+<td> $0800
+</td></tr>
+<tr>
+<td> $2000-$2007 </td>
+<td> $0008 </td>
+<td> <a href="PPU_registers.xhtml" title="PPU registers">NES PPU</a> registers
+</td></tr>
+<tr>
+<td> $2008-$3FFF </td>
+<td> $1FF8 </td>
+<td> Mirrors of $2000-2007 (repeats every 8 bytes)
+</td></tr>
+<tr>
+<td> $4000-$4017 </td>
+<td> $0018 </td>
+<td> <a href="APU.xhtml" title="APU">NES APU</a> and <a href="2A03.xhtml" title="2A03">I/O registers</a>
+</td></tr>
+<tr>
+<td> $4018-$401F </td>
+<td> $0008 </td>
+<td> APU and I/O functionality that is normally disabled. See <a href="CPU_Test_Mode.xhtml" title="CPU Test Mode">CPU Test Mode</a>.
+</td></tr>
+<tr>
+<td> $4020-$FFFF </td>
+<td> $BFE0 </td>
+<td> Cartridge space: PRG ROM, PRG RAM, and <a href="Mapper.xhtml" title="Mapper">mapper</a> registers (See Note)
+</td></tr></table>
+<p>See <a href="Sample_RAM_map.xhtml" title="Sample RAM map">Sample RAM map</a> for an example allocation strategy for the 2KB of internal RAM at $0000-$0800.
+</p><p>Note: Most common boards and iNES mappers address ROM and Save/Work RAM in this format:
+</p>
+<ul><li>$6000-$7FFF = Battery Backed Save or Work RAM</li>
+<li>$8000-$FFFF = Usual ROM, commonly with Mapper Registers (see <a href="MMC1.xhtml" title="MMC1">MMC1</a> and <a href="UxROM.xhtml" title="UxROM">UxROM</a> for example)</li></ul>
+<p>The CPU expects interrupt vectors in a fixed place at the end of the cartridge space:
+</p>
+<ul><li>$FFFA-$FFFB = NMI vector</li>
+<li>$FFFC-$FFFD = Reset vector</li>
+<li>$FFFE-$FFFF = IRQ/BRK vector</li></ul>
+<p>If a mapper doesn't fix $FFFA-$FFFF to some known bank (typically, along with the rest of the bank containing them, e.g. $C000-$FFFF for a 16KiB banking mapper) or use some sort of reset detection, the vectors need to be stored in all banks.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.030 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:40-1!*!0!*!*!*!* and timestamp 20160709004541 and revision id 12696
+ -->
+</div></body></html>

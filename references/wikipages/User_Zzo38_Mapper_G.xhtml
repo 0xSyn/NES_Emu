@@ -1,0 +1,42 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper G</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper G</h1><div class="article">
+<p><br/>
+This is a generic <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM</a>-like mapper. The NES 2.0 header is required for its use.
+</p><p>There must be at most one of CHR-ROM, CHR-non-battery-RAM, CHR-battery-RAM. There also must be at most one of PRG-non-battery-RAM and PRG-battery-RAM. If no CHR ROM/RAM is present, then CIRAM is used, similar to <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">iNES Mapper 218</a>, but without the one-screen modes.
+</p><p>PRG RAM can be mapped at $6000-$7FFF if it exists. If there is more than 8K, the CHR bank numbers are used to select PRG RAM banks (in addition to CHR banks, if applicable; it doesn't matter if one is more than the other or less or equal).
+</p><p>The high bit of the submapper number (bit3) is used to designate whether PRG or CHR is shifted (PRG if set, CHR if cleared); the other is starting the low bit on the right side.
+</p><p>The low three bits of a submapper number tells how much it is shifted by, from zero to seven. It is possible to overlap. If it overflows on the left then it wraps around.
+</p><p>If PRG or CHR has no bankswitching but is shifted anyways, then that bit position instead sets nametable mirroring mode: If horizontal mirroring is specified in header then it selects CIRAM A10 directly; if vertical mirroring is specified in the header then it specifies if connected to PPU A10 (if clear) or PPU A11 (if set).
+</p><p>It is not allowed to shift unbankswitched registers if both four-screen mirroring and CHR ROM/RAM exists, since it would not do anything in such a case.
+</p><p>Submapper 0 is reserved and should not be used.
+</p><p>A second &quot;G'&quot; mapper is defined which uses 16K PRG bankswitching, with $C000-$FFFF fixed to the last bank. Everything else is the same as above.
+</p><p>Example:
+</p>
+<ul><li> <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM</a> = G.12</li>
+<li> <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a> = G.4</li>
+<li> <a href="INES_Mapper_107.xhtml" title="INES Mapper 107">iNES Mapper 107</a> = G.9</li>
+<li> <a href="BNROM.xhtml" title="BNROM">BNROM</a> = G.8</li>
+<li> <a href="AxROM.xhtml" title="AxROM">AxROM</a> = G.4</li>
+<li> <a href="CNROM.xhtml" title="CNROM">CNROM</a> (no security diodes and audio) = G.8</li>
+<li> <a href="UxROM.xhtml" title="UxROM">UxROM</a> = G'.8</li>
+<li> <a href="INES_Mapper_070.xhtml" title="INES Mapper 070">iNES Mapper 070</a> = G'.12</li>
+<li> <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">iNES Mapper 094</a> = G'.10</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1299-1!*!0!*!*!*!* and timestamp 20160606132018 and revision id 8084
+ -->
+<p class="categories">Categories: <a href="Category_GNROM_like_mappers.xhtml">GNROM-like mappers</a></p></div></body></html>

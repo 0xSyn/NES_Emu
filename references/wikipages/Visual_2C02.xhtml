@@ -1,0 +1,107 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Visual 2C02</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Visual 2C02</h1><div class="article">
+<p><b>Note: Visual 2A03 and Visual 2C02 are hosted on a limited uplink, so please avoid e.g. shift-reloading them frequently. Normal reloading should work fine and should properly catch any updates to the data files.</b>
+</p><p><a class="external text" href="http://www.qmtpro.com/~nes/chipimages/visual2c02/" rel="nofollow">Visual 2C02</a> is a hardware-level simulator of the NTSC PPU by Quietust, using the same core as the <a class="external text" href="http://visual6502.org/" rel="nofollow">Visual 6502</a> project. It can be used to figure out exactly how the PPU operates under various circumstances.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Manual"><span class="tocnumber">1</span> <span class="toctext">Manual</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Section_overview"><span class="tocnumber">1.1</span> <span class="toctext">Section overview</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Running_.28section_1.29"><span class="tocnumber">1.1.1</span> <span class="toctext">Running (section 1)</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Register_access_.28section_2.29"><span class="tocnumber">1.1.2</span> <span class="toctext">Register access (section 2)</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Memory_.28section_3.29"><span class="tocnumber">1.1.3</span> <span class="toctext">Memory (section 3)</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Video_waveform_display_.28section_4.29"><span class="tocnumber">1.1.4</span> <span class="toctext">Video waveform display (section 4)</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Navigation_.28section_5.29"><span class="tocnumber">1.1.5</span> <span class="toctext">Navigation (section 5)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Tracing_.28section_6.29"><span class="tocnumber">1.1.6</span> <span class="toctext">Tracing (section 6)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-9"><a href="#Finding_nodes_to_trace"><span class="tocnumber">1.1.6.1</span> <span class="toctext">Finding nodes to trace</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Improving_performance"><span class="tocnumber">1.2</span> <span class="toctext">Improving performance</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Tutorial:_Outputting_some_pixels"><span class="tocnumber">1.3</span> <span class="toctext">Tutorial: Outputting some pixels</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Some_things_to_look_out_for"><span class="tocnumber">1.4</span> <span class="toctext">Some things to look out for</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Manual">Manual</span></h1>
+<p><i>This page covers the basic user interface and tracing functionality. For making sense of the circuit display, see <a href="Visual_circuit_tutorial.xhtml" title="Visual circuit tutorial">this tutorial</a>.</i>
+</p>
+<h2><span class="mw-headline" id="Section_overview">Section overview</span></h2>
+<div class="floatnone"><a class="image" href="File_Visual_2C02_sections_jpeg.xhtml" title="caption"><img alt="caption" height="531" src="../wiki-images/Visual_2C02_sections.jpeg" width="906"/></a></div>
+<h3><span class="mw-headline" id="Running_.28section_1.29">Running (section 1)</span></h3>
+<p>The controls in this section start, stop, and reset the simulation. The <i>Scanline:</i> and <i>Pixel:</i> status displays are based on internal PPU counters and should be self-explanatory (see <a class="internal" href="/w/images/d/d1/Ntsc_timing.png" title="Ntsc timing.png">this timing diagram</a> for what operation is carried out at each dot). The starting state to use when resetting the simulation can be selected with the radio buttons in section 5.
+</p><p>Currently supported reset states:
+</p>
+<dl><dt>Power-on</dt>
+<dd>Immediately after pulsing the PPU's RESET input (otherwise labeled the /SYNC pin). Note that chip operation will be <a href="PPU_power_up_state.xhtml" title="PPU power up state">severely limited</a> in this state, and sprite RAM will be in an indeterminate state (neither 0 nor 1) until it is properly initialized.</dd>
+<dt>Pre-render scanline, even frame</dt>
+<dd>The chip is powered on, all sprite and palette RAM has been initialized, and the chip has been simulated for 260 complete scanlines, leaving it at the very beginning of the pre-render scanline.</dd>
+<dt>Pre-render scanline, odd frame</dt>
+<dd>Same as the above, but the pre-render scanline will end one cycle early.</dd>
+<dt>Post-render scanline, odd frame</dt>
+<dd>The above state after 241 scanlines of simulation, leaving it 1 scanline before VBLANK begins.</dd></dl>
+<h3><span class="mw-headline" id="Register_access_.28section_2.29">Register access (section 2)</span></h3>
+<p>This is a list of register accesses to be carried out, going in sequence from top to bottom. (The simulated 2C02 isn't attached to any other simulated devices.)
+</p><p>For example, <i>W 1 1e</i> decodes as <i>write $1E to $2001</i>. Reads are included as they can be significant for some registers - in this case, the &quot;value&quot; column will be filled in with whatever was read from the register.
+</p><p>Register accesses can be removed by clicking on the '-' and added by clicking on the '+'. A '-' in the R/W colum means a delay (use the numpad to input the '-'), where e.g. 1 23 as the numeric values means 0x123 master half-cycles. The '*' shows the current access, and can be clicked to jump to that point in the sequence.
+</p>
+<h3><span class="mw-headline" id="Memory_.28section_3.29">Memory (section 3)</span></h3>
+<p>Memory display. Can also be used to modify memory.
+</p>
+<ul><li> 3F00-3F1F — Palettes. Some of the cells are mirrors.</li>
+<li> S000-S11F — OAM. For example, S000 holds the y position for sprite 0.
+<ul><li> S000-S0FF — Primary OAM.</li>
+<li> S100-S11F — Secondary OAM (normally not directly accessible).</li></ul></li>
+<li> 0000-03FF — Pattern tables. This 1KB segment is mirrored eight times to fill out the entire CHR space.</li>
+<li> 2000-23FF — Nametables. The simulation uses a kind of &quot;one-screen low&quot; mirroring, and the data here is mirrored to fill out the entire nametable space.
+<ul><li> This layout for pattern and name tables happens to be the same as the PPU A13 variant of <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">iNES Mapper 218</a>.</li></ul></li></ul>
+<h3><span class="mw-headline" id="Video_waveform_display_.28section_4.29">Video waveform display (section 4)</span></h3>
+<p>Video output waveform display, based on the <i>vid_</i> node. You will at least see some level changes and squiggly stuff here near the end of each scanline, which is the NTSC hsync and colorburst.
+</p>
+<h3><span class="mw-headline" id="Navigation_.28section_5.29">Navigation (section 5)</span></h3>
+<p>Pretty self-explanatory. Node numbers or node names (e.g. &quot;spr0_hit&quot;) can be entered in the <i>Find:</i> edit box to locate them in the diagram.
+</p>
+<h3><span class="mw-headline" id="Tracing_.28section_6.29">Tracing (section 6)</span></h3>
+<p>Tracing of node values. Additional nodes to trace can be added in the <i>Trace these too:</i> edit box, separated by either spaces or commas (e.g. &quot;spr0_hit tile_l vid_&quot; or &quot;spr0_hit,tile_l,vid_&quot;).
+</p><p>The cycle column is based on the master clock, which the PPU divides by four. Each line in the trace corresponds to a half-cycle, so there are 4*2 = 8 lines per PPU tick.
+</p>
+<h4><span class="mw-headline" id="Finding_nodes_to_trace">Finding nodes to trace</span></h4>
+<p>A list of nodes can be found in <a class="external free" href="http://www.qmtpro.com/~nes/chipimages/visual2c02/nodenames.js" rel="nofollow">http://www.qmtpro.com/~nes/chipimages/visual2c02/nodenames.js</a> . For nodes that have many bits, e.g. <i>finex0</i>, <i>finex1</i>, <i>finex2</i>, you can trace all of them at once by using &quot;finex&quot; as the node name.
+</p>
+<h2><span class="mw-headline" id="Improving_performance">Improving performance</span></h2>
+<p>Turning off tracing and unticking <i>Animate during simulation</i> and <i>Show sprite RAM contents</i> can massively speed up the simulation.
+</p>
+<h2><span class="mw-headline" id="Tutorial:_Outputting_some_pixels">Tutorial: Outputting some pixels</span></h2>
+<p>1. Put 81 at pattern table address 0000. This will make the palette index for each pixel of the first row of the first tile, in order, '10000001'. (Putting 81 at 0008 as well would make it '30000003', etc.)
+</p><p>(Since the nametables are initialized to 0 by default, this is the tile that will be used for all the background tiles by default.)
+</p><p>2. Change the value at 3F01, which is the BG palette entry that will be used. 20 seems to work fine.
+</p><p>3. Run the simulation (and note the Performance section). The first line is the pre-render line, so nothing will be seen here. At scanline 1, you should see some pixels being output in the waveform display corresponding to the 81 pattern.
+</p>
+<h2><span class="mw-headline" id="Some_things_to_look_out_for">Some things to look out for</span></h2>
+<ul><li> Note that the default register writes might move around sprite 0 and do other stuff, so you might have to remove some of them or manually modify memory later to get the state you want.</li></ul>
+<ul><li> There's a bunch of sprites sitting at (0,0). If sprites are enabled and all use a black tile, this means you will see black for the first 8 pixels of scanlines 1-8. (Sprites don't start drawing until scanline 1 at the earliest since the y OAM coordinate is one less than the actual position.)</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.114 seconds
+Real time usage: 0.117 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 52/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1016-1!*!0!!en!5!* and timestamp 20160208225955 and revision id 6436
+ -->
+</div></body></html>

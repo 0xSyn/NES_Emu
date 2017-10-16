@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Sachen 8259</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Sachen 8259</h1><div class="article">
+<h2><span class="mw-headline" id="Pins">Pins</span></h2>
+<p>Whatever this IC looked like, if it was ever not just an epoxy blob, it probably existed in a 24-pin package.
+</p><p>For the behavior described here, the following 22 signals must be attached to it:
+Vcc Gnd /ROMSEL CPU_A14 CPU_A8 CPU_A0 CPU_M2 CPU_D0 CPU_D1 CPU_D2 PRG_A15 PRG_A16 PRG_A17 PPU_A10 PPU_A11 PPU_A12 CHR_A11 CHR_A12 CHR_A13 CHR_A14 CHR_A15 CHR_A16
+</p><p>Plus at least one of the following two:
+CIRAM_A10 or PPU_A13
+</p><p>The behavior described on <a href="INES_Mapper_137.xhtml" title="INES Mapper 137">iNES Mapper 137</a> is satisfied by the addition of one 74'153 as well as specifying one extra digital output for the contents of register 6.
+—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:33, 31 January 2014 (MST)
+</p>
+<dl><dd>Unfortunately, I don't know much about the chip(s); just what I've seen other emulators implement.  But what you say does make sense.  <a href="User_Natt.xhtml" title="User:Natt">Natt</a> (<s>talk</s>) 13:39, 31 January 2014 (MST)</dd></dl>
+<dl><dd><dl><dd> Evidently I'm wrong! The Pirated (Pirates') Games Forum had a thread ( s4.zetaboards.com/PGC_Forums/topic/9974526/1/ ) with a picture of Rockball's PCB. It was on the PCB <b>TC-A003-72P</b> and had two mask ROMs, a place for PRGRAM, a CIC stunner, and a 28-pin 0.6&quot; DIP labelled SA8259A. ( img31.imageshack.us/img31/8521/r93f.jpg ). Cah4e3 has a <a class="external text" href="http://cah4e3.shedevr.org.ru/%5Blst%5D-sachen-mappers.txt" rel="nofollow">writeup</a>, including a pinout, which I'll incorporate into the wiki here shortly. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 16:00, 31 January 2014 (MST)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Indirect_addressing">Indirect addressing</span></h2>
+<p>It'd be nice to be consistent across the wiki about how we refer to indirectly addressed mapper registers:
+</p>
+<ul><li> Yamaha synthesizer IC datasheets call it address/data</li>
+<li> The AY-3-8910 datasheet calls it 'latch address'/'write to psg'</li>
+<li> The TI SN7649x datasheet calls it register address/data</li>
+<li> <a href="MMC3.xhtml" title="MMC3">MMC3</a> calls it bank/bank data</li>
+<li> <a href="Sachen_8259.xhtml" title="Sachen 8259">Sachen 8259</a> calls it select/(data/internal)</li>
+<li> <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="FME-7">FME-7</a> calls it command/parameter</li>
+<li> <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a> calls it audio register select/write</li>
+<li> <a href="VRC7_audio.xhtml" title="VRC7 audio">VRC7 audio</a> calls it register select/write</li></ul>
+<p>—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:33, 31 January 2014 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.028 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1318-1!*!0!!*!*!* and timestamp 20160208224424 and revision id 8210
+ -->
+</div></body></html>

@@ -1,0 +1,288 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sunsoft FME-7</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sunsoft FME-7</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>FME-7</b>
+<br/><b>Sunsoft 5A/5B</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Sunsoft
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=69&amp;group=groupid" rel="nofollow">9 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> JLROM, JSROM,<br/>NES-BTR, others
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 512K (FME-7)<br/>256K (5A/5B)
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 8K×4 + 8K fixed
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 512K (FME-7)
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 1Kx8
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H, V, or 1, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> CPU cycle counter
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">5B only</a>
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="Sunsoft_FME_7.xhtml" title="INES Mapper 069">069</a>
+</td></tr></table>
+</div>
+<p>The <strong class="selflink">Sunsoft FME-7</strong> is a mapper IC used by Sunsoft in several of its games. It is nearly identical to the <b>Sunsoft 5A</b> and <b>Sunsoft 5B</b> mapper chips used only in Famicom games, with the 5B notably having expansion audio (see <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a>).
+</p><p>The FME-7, 5A and 5B are grouped together as <b>iNES Mapper 69</b>.
+</p><p>Both the Sunsoft 5B and FME-7 exist as a 44 pin TQFP chip: <a href="Sunsoft_5_pinout.xhtml" title="Sunsoft 5 pinout">diagram</a> 
+</p><p>In Europe, boards using the FME-7 were labeled as <a href="JxROM.xhtml" title="JxROM">JSROM and JLROM</a>. The FME-7 mapper was used in only one game released in the US, <i>Batman: Return of the Joker</i>. Many Japanese releases by Sunsoft used the FME-7: <i>Gimmick!</i>, <i>Hebereke</i>, <i>Gremlins 2</i> (but not in the US version), <i>Barcode World</i>, and others.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Command_Register_.28.248000-.249FFF.29"><span class="tocnumber">2.1</span> <span class="toctext">Command Register ($8000-$9FFF)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Parameter_Register_.28.24A000-.24BFFF.29"><span class="tocnumber">2.2</span> <span class="toctext">Parameter Register ($A000-$BFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Commands"><span class="tocnumber">3</span> <span class="toctext">Commands</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_Bank_0-7_.28.240-7.29"><span class="tocnumber">3.1</span> <span class="toctext">CHR Bank 0-7 ($0-7)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#PRG_Bank_0_.28.248.29"><span class="tocnumber">3.2</span> <span class="toctext">PRG Bank 0 ($8)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#PRG_Bank_1-3_.28.249-B.29"><span class="tocnumber">3.3</span> <span class="toctext">PRG Bank 1-3 ($9-B)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Name_Table_Mirroring_.28.24C.29"><span class="tocnumber">3.4</span> <span class="toctext">Name Table Mirroring ($C)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#IRQ_Control_.28.24D.29"><span class="tocnumber">3.5</span> <span class="toctext">IRQ Control ($D)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#IRQ_Counter_Low_Byte_.28.24E.29"><span class="tocnumber">3.6</span> <span class="toctext">IRQ Counter Low Byte ($E)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#IRQ_Counter_High_Byte_.28.24F.29"><span class="tocnumber">3.7</span> <span class="toctext">IRQ Counter High Byte ($F)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#IRQ_Operation"><span class="tocnumber">4</span> <span class="toctext">IRQ Operation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#How_to_Use_the_IRQ_Generator"><span class="tocnumber">4.1</span> <span class="toctext">How to Use the IRQ Generator</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#See_also"><span class="tocnumber">6</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $6000-$7FFF: 8 KB Bankable PRG ROM or PRG RAM</li>
+<li> CPU $8000-$9FFF: 8 KB Bankable PRG ROM</li>
+<li> CPU $A000-$BFFF: 8 KB Bankable PRG ROM</li>
+<li> CPU $C000-$DFFF: 8 KB Bankable PRG ROM</li>
+<li> CPU $E000-$FFFF: 8 KB PRG ROM, fixed to the last bank of ROM</li>
+<li> PPU $0000-$03FF: 1 KB Bankable CHR ROM</li>
+<li> PPU $0400-$07FF: 1 KB Bankable CHR ROM</li>
+<li> PPU $0800-$0BFF: 1 KB Bankable CHR ROM</li>
+<li> PPU $0C00-$0FFF: 1 KB Bankable CHR ROM</li>
+<li> PPU $1000-$13FF: 1 KB Bankable CHR ROM</li>
+<li> PPU $1400-$17FF: 1 KB Bankable CHR ROM</li>
+<li> PPU $1800-$1BFF: 1 KB Bankable CHR ROM</li>
+<li> PPU $1C00-$1FFF: 1 KB Bankable CHR ROM</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Configuration of the FME-7 is accomplished by first writing the command number to the Command Register at $8000-9FFF, then writing the command's parameter byte to the Parameter Register at $A000-BFFF.
+</p><p>There are 16 commands:
+</p>
+<ul><li> <b>$0-7</b> control CHR banking</li>
+<li> <b>$8-B</b> control PRG banking</li>
+<li> <b>$C</b> controls nametable mirroring</li>
+<li> <b>$D-F</b> controls IRQ</li></ul>
+<p>On the 5B variant, there are two additional registers at $C000-DFFF and $E000-FFFF that control the audio expansion. See: <a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">Sunsoft 5B audio</a>
+</p>
+<h3><span class="mw-headline" id="Command_Register_.28.248000-.249FFF.29">Command Register ($8000-$9FFF)</span></h3>
+<pre>7  bit  0
+---- ----
+.... CCCC
+     ||||
+     ++++- The command number to invoke when writing to the Parameter Register
+</pre>
+<h3><span class="mw-headline" id="Parameter_Register_.28.24A000-.24BFFF.29">Parameter Register ($A000-$BFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+PPPP PPPP
+|||| ||||
+++++-++++- The parameter to use for this command. Writing to this register invokes the command in the Command Register.
+</pre>
+<h2><span class="mw-headline" id="Commands">Commands</span></h2>
+<h3><span class="mw-headline" id="CHR_Bank_0-7_.28.240-7.29">CHR Bank 0-7 ($0-7)</span></h3>
+<pre>7  bit  0
+---- ----
+BBBB BBBB
+|||| ||||
+++++-++++- The bank number to select for the specified bank.
+</pre>
+<pre>Bank $0 - PPU $0000-$03FF
+Bank $1 - PPU $0400-$07FF
+Bank $2 - PPU $0800-$0BFF
+Bank $3 - PPU $0C00-$0FFF
+Bank $4 - PPU $1000-$13FF
+Bank $5 - PPU $1400-$17FF
+Bank $6 - PPU $1800-$1BFF
+Bank $7 - PPU $1C00-$1FFF
+</pre>
+<h3><span class="mw-headline" id="PRG_Bank_0_.28.248.29">PRG Bank 0 ($8)</span></h3>
+<pre>7  bit  0
+---- ----
+ERbB BBBB
+|||| ||||
+||++-++++- The bank number to select at CPU $6000 - $7FFF
+|+------- RAM / ROM Select Bit
+|         0 = PRG ROM
+|         1 = PRG RAM
++-------- RAM Enable Bit (<a class="mw-redirect" href="6264_static_RAM.xhtml" title="6264">6264</a> +CE line)
+          0 = PRG RAM Disabled
+          1 = PRG RAM Enabled
+</pre>
+<p>The FME-7 has up to 6 bits for PRG banking (512 KiB), though this was never used in a game. The 5A and 5B, however, support only 5 (256 KiB). The extra address line is instead an audio expansion line, or unused.
+</p><p>It is <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=12467" rel="nofollow">confirmed</a> that the FME-7 outputs the bank number during accesses to $6000-$7FFF even if RAM is enabled.
+Though Sunsoft never took advantage of this, it would allow making a cartridge that bank switches up to 256 KiB of PRG RAM.
+The FME-7 mapper in Loopy's <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a> mappers, for example, supports 32 KiB.
+</p><p>Open bus occurs if the RAM / ROM Select Bit is 1 (RAM selected), but the RAM Enable Bit is 0 (disabled), i.e. any value in the range $40-$7F. This is a limited form of WRAM write protection on power-up.
+</p><p>NOTE: the enable bit is NOT functional with 2048×8, 32768×8, and 524288×8 RAMs, because those RAMs don't have a +CE input.
+</p><p>There is a <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=105129#p105129" rel="nofollow">tentative report</a> that <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=105193#p105193" rel="nofollow">not all games honor some or any of the bits in this register</a>. Corroboration is needed before any action is taken.
+</p>
+<h3><span class="mw-headline" id="PRG_Bank_1-3_.28.249-B.29">PRG Bank 1-3 ($9-B)</span></h3>
+<pre>7  bit  0
+---- ----
+..bB BBBB
+  || ||||
+  ++-++++- The bank number to select for the specified bank.
+</pre>
+<pre>Bank $9 - CPU $8000-$9FFF
+Bank $A - CPU $A000-$BFFF
+Bank $B - CPU $C000-$DFFF
+</pre>
+<p>The FME-7 has up to 6 bits for PRG banking, but the 5A and 5B support only 5.
+</p>
+<h3><span class="mw-headline" id="Name_Table_Mirroring_.28.24C.29">Name Table Mirroring ($C)</span></h3>
+<p>These values are the same as <a href="MMC1.xhtml" title="MMC1">MMC1</a> mirroring modes with the MSB inverted.
+</p>
+<pre>7  bit  0
+---- ----
+.... ..MM
+       ||
+       ++- Mirroring Mode
+            0 = Vertical
+            1 = Horizontal
+            2 = One Screen Mirroring from $2000 (&quot;1ScA&quot;)
+            3 = One Screen Mirroring from $2400 (&quot;1ScB&quot;)
+</pre>
+<h3><span class="mw-headline" id="IRQ_Control_.28.24D.29">IRQ Control ($D)</span></h3>
+<pre>7  bit  0
+---- ----
+C... ...T
+|       |
+|       +- IRQ Enable
+|           0 = Do not generate IRQs
+|           1 = Do generate IRQs
++-------- IRQ Counter Enable
+            0 = Disable Counter Decrement
+            1 = Enable Counter Decrement
+</pre>
+<p>All writes to this register acknowledge an active IRQ.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> It is not yet known what will happen if this register is written to at the same time as an IRQ would have been generated.
+</p>
+<h3><span class="mw-headline" id="IRQ_Counter_Low_Byte_.28.24E.29">IRQ Counter Low Byte ($E)</span></h3>
+<pre>7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- The low eight bits of the IRQ counter
+</pre>
+<h3><span class="mw-headline" id="IRQ_Counter_High_Byte_.28.24F.29">IRQ Counter High Byte ($F)</span></h3>
+<pre>7  bit  0
+---- ----
+HHHH HHHH
+|||| ||||
+++++-++++- The high eight bits of the IRQ counter
+</pre>
+<p>Writes to the IRQ counter registers directly set the lower or upper eight bits of the counter. Unlike on MMC3, there is no separate reload latch.
+</p>
+<h2><span class="mw-headline" id="IRQ_Operation">IRQ Operation</span></h2>
+<p>The IRQ feature of FME-7 is a CPU cycle counting IRQ generator. When enabled the 16-bit IRQ counter is decremented once per CPU cycle. When the IRQ counter is decremented from $0000 to $FFFF an IRQ is generated. The IRQ line is held low until it is acknowledged.
+</p>
+<h3><span class="mw-headline" id="How_to_Use_the_IRQ_Generator">How to Use the IRQ Generator</span></h3>
+<ol><li> Set the counter to the desired number of cycles minus one.</li>
+<li> Enable the IRQ generator by turning on both the IRQ Enable and IRQ Counter Enable flags of the IRQ Control command.</li>
+<li> Within the IRQ handler, write to the IRQ Control command to acknowledge the IRQ.</li>
+<li> Optional: Go back to Step 1 for the next IRQ.</li></ol>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text">Test performed in 2015 by Oliveira using <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=142243#p142243" rel="nofollow">IRQ acknowledge test ROM on NESdev BBS</a></span>
+</li>
+</ol>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/sunsoft.txt" rel="nofollow">Sunsoft Mapper</a> by goroh, translated by Sgt. Bowhack.</li>
+<li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.201 seconds
+Real time usage: 0.208 seconds
+Preprocessor visited node count: 200/1000000
+Preprocessor generated node count: 803/1000000
+Post‐expand include size: 1208/2097152 bytes
+Template argument size: 303/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:576-1!*!0!!en!*!* and timestamp 20160208222542 and revision id 11390
+ -->
+<p class="categories">Categories: <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_large_PRG_RAM.xhtml">Mappers with large PRG RAM</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

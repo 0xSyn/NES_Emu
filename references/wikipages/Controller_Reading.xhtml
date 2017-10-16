@@ -1,0 +1,251 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Controller Reading</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Controller Reading</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Basic_Example"><span class="tocnumber">1</span> <span class="toctext">Basic Example</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#DPCM_Safety_using_Repeated_Reads"><span class="tocnumber">2</span> <span class="toctext">DPCM Safety using Repeated Reads</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#DPCM_Safety_using_OAM_DMA"><span class="tocnumber">3</span> <span class="toctext">DPCM Safety using OAM DMA</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Directional_Safety"><span class="tocnumber">4</span> <span class="toctext">Directional Safety</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Calculating_Presses_and_Releases"><span class="tocnumber">5</span> <span class="toctext">Calculating Presses and Releases</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Button_Flags"><span class="tocnumber">6</span> <span class="toctext">Button Flags</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#External_Examples"><span class="tocnumber">7</span> <span class="toctext">External Examples</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">8</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Basic_Example">Basic Example</span></h3>
+<p>This describes an efficient method of reading the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> using <s>ca65</s> syntax.
+</p><p>The result byte <i>buttons</i> should be placed in zero page to save a cycle each time through the loop.
+</p>
+<pre>
+; we reserve one byte for storing the data that is read from controller
+.zeropage
+buttons .res 1
+</pre>
+<p>When reading from <i>JOYPAD*</i> what is read might be different from $01/$00 for various reasons. (See <a href="Controller_port_registers.xhtml" title="Controller port registers">Controller port registers</a>.) In this code the only concern is bit 0 read from <i>JOYPAD*.</i>.
+</p>
+<pre>
+JOYPAD1 = $4016
+JOYPAD2 = $4017
+</pre>
+<p>This is the end result that will be stored in <i>buttons</i>. <b>1</b> if the button was pressed, <b>0</b> otherwise.
+</p>
+<pre>
+bit:   	 7     6     5     4     3     2     1     0
+button:	 A     B  Select Start  Up   Down  Left  Right
+</pre>
+<p>This subroutine takes 132 cycles to execute but ignores the Famicom expansion controller.
+Many controller reading subroutines use the X or Y register to count 8 times through the loop.
+But this one uses a more clever <a class="extiw" href="https://en.wikipedia.org/wiki/Ring_counter" title="wikipedia:Ring counter">ring counter</a> technique: $01 is loaded into the result first, and once eight bits are shifted in, the 1 bit will be shifted out, terminating the loop.
+</p>
+<pre>
+; At the same time that we strobe bit 0, we initialize the ring counter
+; so we're hitting two birds with one stone here
+readjoy:
+  lda #$01
+  ; While the strobe bit is set, buttons will be continuously reloaded.
+  ; This means that reading from JOYPAD1 will only return the state of the
+  ; first button: button A.
+  sta JOYPAD1
+  sta buttons
+  lsr a        ; now A is 0
+  ; By storing 0 into JOYPAD1, the strobe bit is cleared and the reloading stops.
+  ; This allows all 8 buttons (newly reloaded) to be read from JOYPAD1.
+  sta JOYPAD1
+loop:
+  lda JOYPAD1
+  lsr a	       ; bit0 -&gt; Carry
+  rol buttons  ; Carry -&gt; bit0; bit 7 -&gt; Carry
+  bcc loop
+  rts
+</pre>
+<p>Adding support for controllers on the Famicom's DA15 expansion port and for player 2's controller is straightforward.
+</p>
+<pre>
+.zeropage
+buttons1: .res 1
+buttons2: .res 1
+
+.code
+readjoy:
+  lda #$01
+  sta JOYPAD1
+  sta buttons2  ; player 2's buttons double as a ring counter
+  lsr a         ; now A is 0
+  sta JOYPAD1
+loop:
+  lda JOYPAD1
+  and #$03      ; ignore bits other than controller
+  cmp #$01      ; Set carry if and only if nonzero
+  rol buttons1  ; Carry -&gt; bit0; bit 7 -&gt; Carry
+  lda JOYPAD2   ; Repeat 
+  and #$03
+  cmp #$01
+  rol buttons2  ; Carry -&gt; bit0; bit 7 -&gt; Carry
+  bcc loop
+  rts
+</pre>
+<h3><span class="mw-headline" id="DPCM_Safety_using_Repeated_Reads">DPCM Safety using Repeated Reads</span></h3>
+<p>If your code is intended to be used with <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a> playback, this code will need to be altered. The NES occasionally glitches the controller port twice in a row if sample playback is enabled, and games using samples need to work around this. For example, <i>Super Mario Bros. 3</i> reads each controller's data at least two times each frame. First it reads it as normal, then it reads it again. If the two results differ, it does the procedure all over. Because repeated rereads can take a long time, another way is to just use the previous frame's button press data if the results differ:
+</p>
+<pre>
+last_frame_buttons1 = $00
+last_frame_buttons2 = $01
+first_read_buttons1 = $02
+first_read_buttons2 = $03
+
+readjoy_safe:
+  lda buttons2
+  sta last_frame_buttons2
+  lda buttons1
+  sta last_frame_buttons1
+
+  ; Read the controllers once and stash the result
+  jsr readjoy
+  lda buttons2
+  sta first_read_buttons2
+  lda buttons1
+  sta first_read_buttons1
+
+  ; Read the controllers again and compare
+  jsr readjoy
+  ldx #1
+cleanup_loop:
+  ; Ignore read values if a bit deletion occurred
+  lda buttons1,x
+  cmp first_read_buttons1,x
+  beq not_glitched
+    lda last_frame_buttons,x
+    sta buttons1,x
+  not_glitched:
+
+  dex
+  bpl cleanup_loop
+
+  rts
+</pre>
+<p>Note that if the player presses or releases a button between the two reads, this will interpret that as a corrupt read. Unfortunately, there's no way for it to tell the difference.
+</p>
+<h3><span class="mw-headline" id="DPCM_Safety_using_OAM_DMA">DPCM Safety using OAM DMA</span></h3>
+<p>Because DPCM reads may only occur on an odd cycle, it is possible to get glitch-free controller reads by timing all <b>$4016</b>/<b>$4017</b> reads to fall on even cycles. This is made possible by the behavior of OAM DMA: the first cycle after an OAM DMA is guaranteed to be an even cycle.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p><p>This is a relatively new technique, and is not entirely supported by emulators.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+<pre>
+   lda #OAM
+   sta $4014          ; ------ DMA ------
+   ldx #1             ; even odd          &lt;- strobe code must take an odd number of cycles total
+   stx controller1    ; even odd even
+   stx $4016          ; odd even odd even
+   dex                ; odd even
+   stx $4016          ; odd even odd even
+ read_loop:
+   lda $4017          ; odd even odd EVEN &lt;- loop code must take an even number of cycles total
+   and #3             ; odd even
+   cmp #1             ; odd even
+   rol controller2, x ; odd even odd even odd even (X = 0; waste 1 cycle and 0 bytes for alignment)
+   lda $4016          ; odd even odd EVEN
+   and #3             ; odd even
+   cmp #1             ; odd even
+   rol controller1    ; odd even odd even odd
+   bcc read_loop      ; even odd [even]
+</pre>
+<h3><span class="mw-headline" id="Directional_Safety">Directional Safety</span></h3>
+<p>To reject opposing presses (Up+Down and Left+Right), which are possible on a worn Control Pad:
+</p>
+<pre>
+  lda buttons1,x
+  and #$0A          ; Compare Up and Left...
+  lsr a
+  and buttons1,x    ; to Down and Right
+  beq not_updown
+    ; Use previous frame's directions
+    lda buttons1,x
+    eor last_frame_buttons1,x
+    and #$F0
+    eor last_frame_buttons1,x
+    sta buttons1,x
+  not_updown:
+</pre>
+<p>To instead reject all diagonal presses, simulating a 4-way joystick:
+</p>
+<pre>
+  lda buttons1,x
+  and #$0F  ; If A &amp; (A - 1) is nonzero, A has more than one bit set
+  beq not_diagonal
+  sec
+  sbc #1
+  and buttons1,x  ; to Down and Right
+  beq not_updown1
+    ; Use previous frame's directions
+    lda buttons1,x
+    eor last_frame_buttons1,x
+    and #$F0
+    eor last_frame_buttons1,x
+    sta buttons1,x
+  not_diagonal:
+</pre>
+<h3><span class="mw-headline" id="Calculating_Presses_and_Releases">Calculating Presses and Releases</span></h3>
+<p>To calculate newly pressed and newly released buttons:
+</p>
+<pre>
+  lda buttons1,x
+  eor #$FF
+  and last_frame_buttons1,x
+  sta released_buttons1,x
+  lda last_frame_buttons1,x
+  eor #$FF
+  and buttons1,x
+  sta pressed_buttons1,x
+</pre>
+<h3><span class="mw-headline" id="Button_Flags">Button Flags</span></h3>
+<p>It is helpful to define the buttons as a series of bit flags:
+</p>
+<pre>
+BUTTON_A        = 1 &lt;&lt; 7
+BUTTON_B        = 1 &lt;&lt; 6
+BUTTON_SELECT   = 1 &lt;&lt; 5
+BUTTON_START    = 1 &lt;&lt; 4
+BUTTON_UP       = 1 &lt;&lt; 3
+BUTTON_DOWN     = 1 &lt;&lt; 2
+BUTTON_LEFT     = 1 &lt;&lt; 1
+BUTTON_RIGHT    = 1 &lt;&lt; 0
+</pre>
+<p>And then buttons can be checked as follows:
+</p>
+<pre>
+  lda buttons
+  and #BUTTON_A | BUTTON_B
+  beq notPressingAorB
+  ; Handle presses.
+notPressingAorB:
+</pre>
+<h2><span class="mw-headline" id="External_Examples">External Examples</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=4124" rel="nofollow">Forum post:</a> Blargg's DMC-fortified controller read routine</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=171971" rel="nofollow">Forum post:</a> Rahsennor's OAM-synchronized controller read</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=14197" rel="nofollow">Forum post:</a> Drag's bitwise DMC-safe controller reading</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=171971" rel="nofollow">Forum post:</a> Rahsennor's OAM-synchronized controller read</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=14319&amp;start=15#p172099" rel="nofollow">Forum post:</a> as of May 2016, Nintendulator and Nestopia do not accurately emulate OAM-synchronized controller reading.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.080 seconds
+Real time usage: 0.085 seconds
+Preprocessor visited node count: 182/1000000
+Preprocessor generated node count: 438/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:442-1!*!0!!en!*!* and timestamp 20160602214537 and revision id 12487
+ -->
+</div></body></html>

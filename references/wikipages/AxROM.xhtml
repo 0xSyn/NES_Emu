@@ -1,0 +1,226 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>AxROM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>AxROM</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>AxROM</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Nintendo, Rare, others
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=7&amp;group=groupid" rel="nofollow">34 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> Discrete logic
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> AMROM, ANROM, <br/>AN1ROM, AOROM, others
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 32K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> n/a
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> n/a
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> 1 page switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> AMROM/AOROM only
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="AxROM.xhtml" title="INES Mapper 007">007</a>
+</td></tr></table>
+</div>
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=7" rel="nofollow">iNES 007</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=-A%25ROM" rel="nofollow">AxROM</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=AMROM" rel="nofollow">AMROM</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=ANROM" rel="nofollow">ANROM</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=AN1ROM" rel="nofollow">AN1ROM</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif_op=LIKE+`%25%40%25`&amp;unif=AOROM" rel="nofollow">AOROM</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<p><br/>
+The generic designation <b>AxROM</b> refers to Nintendo cartridge boards <b>NES-AMROM</b>, <b>NES-ANROM</b>, <b>NES-AN1ROM</b>, <b>NES-AOROM</b>, their <a href="Famicom.xhtml" title="Famicom">HVC</a> counterparts, and clone boards. AxROM and compatible boards are implemented in <a href="INES.xhtml" title="INES">iNES</a> format with <b>iNES Mapper 7</b>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Board_types"><span class="tocnumber">1</span> <span class="toctext">Board types</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Overview"><span class="tocnumber">2</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Banks"><span class="tocnumber">3</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Solder_pad_config"><span class="tocnumber">4</span> <span class="toctext">Solder pad config</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Registers"><span class="tocnumber">5</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Bank_select_.28.248000-.24FFFF.29"><span class="tocnumber">5.1</span> <span class="toctext">Bank select ($8000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Hardware"><span class="tocnumber">6</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Various_notes"><span class="tocnumber">7</span> <span class="toctext">Various notes</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Variants"><span class="tocnumber">8</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#See_also"><span class="tocnumber">9</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Board_types">Board types</span></h2>
+<p>The following AxROM boards are known to exist:
+</p>
+<table class="tabular">
+<tr>
+<th> Board </th>
+<th> PRG ROM </th>
+<th> Bus conflicts
+</th></tr>
+<tr>
+<td>AMROM </td>
+<td> 128 KB </td>
+<td> Yes
+</td></tr>
+<tr>
+<td>ANROM </td>
+<td> 128 KB </td>
+<td> No
+</td></tr>
+<tr>
+<td>AN1ROM </td>
+<td> 64 KB </td>
+<td> No
+</td></tr>
+<tr>
+<td>AOROM </td>
+<td> 128 / 256 KB </td>
+<td> Depends on +CE wiring
+</td></tr></table>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: up to 256 KB</li>
+<li> PRG ROM bank size: 32 KB</li>
+<li> PRG RAM: None</li>
+<li> CHR capacity: 8 KB RAM </li>
+<li> CHR bank size: Not bankswitched</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Single-screen, mapper-selectable</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: AMROM/AOROM only </li></ul>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$FFFF: 32 KB switchable PRG ROM bank</li></ul>
+<h2><span class="mw-headline" id="Solder_pad_config">Solder pad config</span></h2>
+<p>No solder pad config is needed on the AxROM board family.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.24FFFF.29">Bank select ($8000-$FFFF)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxM xPPP
+   |  |||
+   |  +++- Select 32 KB PRG ROM bank for CPU $8000-$FFFF
+   +------ Select 1 KB VRAM page for all 4 nametables
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The AxROM boards contain a <a href="74161.xhtml" title="74161">74HC161</a> binary counter used as a quad D latch (4-bit register). The ANROM and AN1ROM boards also contains a <a href="7402.xhtml" title="7402">74HC02</a> which is used to disable the PRG ROM during writes, thus avoiding <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>.
+</p>
+<h2><span class="mw-headline" id="Various_notes">Various notes</span></h2>
+<p>On the AOROM board, special mask ROMs with an additional positive CE on pin 31 (which is connected to PRG R/W) can be used to prevent bus conflicts without an additional chip. Some 128 KB games were made with AOROM to save the cost of a 74HC02. It seems that only <i>Double Dare</i> and <i>Wheel of Fortune</i> employ this trick noticeably--that is, if emulated with bus conflicts enabled, the games will glitch.  <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=7&amp;kwtype=pcb" rel="nofollow">The list of AxROM games in NesCartDB</a> lacks quality coverage of the PCB backs for the AOROM games, so it is hard to determine yet which games may be wired this way.
+</p><p>It is likely that every retail AOROM game could be emulated correctly without emulating bus conflicts.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p><a href="BNROM.xhtml" title="BNROM">BNROM</a> is the same as AMROM except it uses a fixed horizontal or vertical mirroring.
+</p><p>Some emulators allow bit 3 to be used to select up to 512 KB of PRG ROM for an oversized AxROM. In hardware this could be implemented by using an octal latch in place of the quad latch (<a href="74377.xhtml" title="74377">74HC377</a>).
+</p><p>The pirate multicart and unlicensed music game <i>Hot Dance 2000</i> uses a 512 KB AxROM variant.
+</p><p>A ROM Hack of Battletoads expanded the ROM size to 512 KB.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.204 seconds
+Real time usage: 0.210 seconds
+Preprocessor visited node count: 447/1000000
+Preprocessor generated node count: 2023/1000000
+Post‐expand include size: 3446/2097152 bytes
+Template argument size: 608/2097152 bytes
+Highest expansion depth: 11/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:107-1!*!0!!en!*!* and timestamp 20160820235912 and revision id 12795
+ -->
+<p class="categories">Categories: <a href="Category_Discrete_logic_mappers.xhtml">Discrete logic mappers</a>, <a href="Category_Mappers_with_CHR_RAM.xhtml">Mappers with CHR RAM</a>, <a href="Category_Mappers_with_bus_conflicts.xhtml">Mappers with bus conflicts</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a></p></div></body></html>

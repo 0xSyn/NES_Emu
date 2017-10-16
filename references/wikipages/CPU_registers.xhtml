@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU registers</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU registers</h1><div class="article">
+<p>The registers on the NES CPU are just like on the 6502.  There is the accumulator, 2 indexes, a program counter, the stack pointer, and the status register.  Unlike many CPU families, members do not have generic groups of registers like say, R0 through R7.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Accumulator"><span class="tocnumber">1</span> <span class="toctext">Accumulator</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Indexes"><span class="tocnumber">2</span> <span class="toctext">Indexes</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Program_Counter"><span class="tocnumber">3</span> <span class="toctext">Program Counter</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Stack_Pointer"><span class="tocnumber">4</span> <span class="toctext">Stack Pointer</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Status_Register"><span class="tocnumber">5</span> <span class="toctext">Status Register</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Accumulator">Accumulator</span></h3>
+<p><b>A</b> is byte-wide and along with the <a class="extiw" href="http://en.wikipedia.org/wiki/arithmetic_logic_unit" title="wikipedia:arithmetic logic unit">arithmetic logic unit</a> (ALU), supports using the status register for carrying, overflow detection, and so on.
+</p>
+<h3><span class="mw-headline" id="Indexes">Indexes</span></h3>
+<p><b>X</b> and <b>Y</b> are byte-wide and used for several addressing modes.  They can be used as loop counters easily, using INC/DEC and branch instructions.  Not being the accumulator, they have limited addressing modes themselves when loading and saving.
+</p>
+<h3><span class="mw-headline" id="Program_Counter">Program Counter</span></h3>
+<p>The 2-byte program counter <b>PC</b> supports 65536 direct (unbanked) memory locations, however not all values are sent to the cartridge.  It can be accessed either by allowing CPU's internal fetch logic increment the address bus, an interrupt (NMI, Reset, IRQ/BRQ), and using the RTS/JMP/JSR/Branch instructions.
+</p>
+<h3><span class="mw-headline" id="Stack_Pointer">Stack Pointer</span></h3>
+<p><b>S</b> is byte-wide and can be accessed using interrupts, pulls, pushes, and transfers.
+</p>
+<h3><span class="mw-headline" id="Status_Register">Status Register</span></h3>
+<p><b>P</b> has 6 bits used by the ALU but is byte-wide.  PHP, PLP, arithmetic, testing, and branch instructions can access this register.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.020 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1460-1!*!*!!en!*!* and timestamp 20160208224837 and revision id 9536
+ -->
+</div></body></html>

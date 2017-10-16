@@ -1,0 +1,114 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC5 audio</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC5 audio</h1><div class="article">
+<p>Nintendo's <a href="MMC5.xhtml" title="MMC5">MMC5</a> mapper provides extra sound output, consisting of two pulse wave channels and a PCM channel.  The pulse wave channels behave almost identically to the native pulse channels in the <a href="APU.xhtml" title="APU">NES APU</a>.
+</p><p>The sound output of the square channels are equivalent in volume to the corresponding APU channels, but the polarity of all MMC5 channels is reversed compared to the APU.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Pulse_1_.28.245000-.245003.29"><span class="tocnumber">1</span> <span class="toctext">Pulse 1 ($5000-$5003)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Pulse_2_.28.245004-.245007.29"><span class="tocnumber">2</span> <span class="toctext">Pulse 2 ($5004-$5007)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#PCM_Mode.2FIRQ_.28.245010.29"><span class="tocnumber">3</span> <span class="toctext">PCM Mode/IRQ ($5010)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Write"><span class="tocnumber">3.1</span> <span class="toctext">Write</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Read"><span class="tocnumber">3.2</span> <span class="toctext">Read</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Raw_PCM_.28.245011.29"><span class="tocnumber">4</span> <span class="toctext">Raw PCM ($5011)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Write_2"><span class="tocnumber">4.1</span> <span class="toctext">Write</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#PCM_description"><span class="tocnumber">5</span> <span class="toctext">PCM description</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#IRQ_operation"><span class="tocnumber">5.1</span> <span class="toctext">IRQ operation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Status_.28.245015.2C_read.2Fwrite.29"><span class="tocnumber">6</span> <span class="toctext">Status ($5015, read/write)</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Pulse_1_.28.245000-.245003.29">Pulse 1 ($5000-$5003)</span></h2>
+<p>These registers manipulate the MMC5's first <a href="APU_Pulse.xhtml" title="APU Pulse">pulse wave</a> channel, which functions the same as to those found in the <a href="APU.xhtml" title="APU">NES APU</a> except for the following differences:
+</p>
+<ul><li> $5001 has no effect. The MMC5 pulse channels will not sweep, as they have no <a href="APU_Sweep.xhtml" title="APU Sweep">sweep unit</a>.</li>
+<li> Frequency values less than 8 do not silence the MMC5 pulse channels; they can output ultrasonic frequencies.</li>
+<li> Length counter operates twice as fast as the APU length counter (might be clocked at the envelope rate).</li>
+<li> MMC5 does not have an equivalent frame sequencer (APU $4017); envelope and length counter are fixed to a 240hz update rate.</li></ul>
+<p>Other features such as the envelope and phase reset are the same as their APU counterparts.
+</p>
+<h2><span class="mw-headline" id="Pulse_2_.28.245004-.245007.29">Pulse 2 ($5004-$5007)</span></h2>
+<p>These registers manipulate the MMC5's second pulse channel.
+</p>
+<h2><span class="mw-headline" id="PCM_Mode.2FIRQ_.28.245010.29">PCM Mode/IRQ ($5010)</span></h2>
+<h3><span class="mw-headline" id="Write">Write</span></h3>
+<pre>7  bit  0
+---- ----
+Ixxx xxxM
+|       |
+|       +- Mode select (0 = write mode. 1 = read mode.)
++--------- PCM IRQ enable (1 = enabled.)
+</pre>
+<h3><span class="mw-headline" id="Read">Read</span></h3>
+<pre>7  bit  0
+---- ----
+Ixxx xxxx
+|
++-------- IRQ (0 = No IRQ triggered. 1 = IRQ was triggered.) Reading $5010 acknowledges the IRQ and clears this flag.
+</pre>
+<h2><span class="mw-headline" id="Raw_PCM_.28.245011.29">Raw PCM ($5011)</span></h2>
+<p>This functions similarly to the <a href="APU.xhtml" title="APU">NES APU</a>'s register $4011, except that all 8 bits are used.
+</p><p><i>Shin 4 Nin Uchi Mahjong</i> is the only game to uses the extra PCM channel ($5011).
+</p>
+<h3><span class="mw-headline" id="Write_2">Write</span></h3>
+<p>Writes are ignored in PCM read-mode.
+</p>
+<pre>7  bit  0
+---- ----
+WWWW WWWW
+|||| ||||
+++++-++++- 8-bit PCM data
+</pre>
+<p>Writing $00 to this register will have no effect on the output sound, and does not change the PCM counter.
+</p>
+<h2><span class="mw-headline" id="PCM_description">PCM description</span></h2>
+<p>MMC5's DAC is changed either by writing a value to $5011 (in write mode) or reading a value from $8000-BFFF (in read mode).  If you try to assign a value of $00, the DAC is not changed; an IRQ is generated instead. This could be used to read stream 8-bit PCM from ROM and terminate at $00.
+</p>
+<h3><span class="mw-headline" id="IRQ_operation">IRQ operation</span></h3>
+<p>(pseudocode)
+</p>
+<pre>(On DAC write)
+    if(value=0)
+        irqTrip=1
+    else
+        irqTrip=0
+
+(On $5010 write)
+    irqEnable=value.bit7
+
+(On $5010 read)
+    value.bit7=(irqTrip AND irqEnable)
+    irqTrip=0
+
+Cart IRQ line=(irqTrip AND irqEnable)
+</pre>
+<h2><span class="mw-headline" id="Status_.28.245015.2C_read.2Fwrite.29">Status ($5015, read/write)</span></h2>
+<p>This register is analogous to the <a class="mw-redirect" href="APU.xhtml" title="APU Status">APU Status</a> register found within the NES at $4015, except that only the bottom 2 bits are used; being for the MMC5's two pulse channels.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:104-1!*!0!!en!*!* and timestamp 20160208225603 and revision id 10581
+ -->
+<p class="categories">Categories: <a href="Category_Expansion_audio.xhtml">Expansion audio</a></p></div></body></html>

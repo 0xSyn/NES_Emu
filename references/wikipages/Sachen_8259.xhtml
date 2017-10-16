@@ -1,0 +1,154 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sachen 8259</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sachen 8259</h1><div class="article">
+<p>Sachen 8259 describes a series of boards by Sachen.  The following information was gathered primarily from FCEU-mm and while it appears to be a good enough behavioral description to run many ROMs, it is likely incomplete.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Variants"><span class="tocnumber">2</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Banks"><span class="tocnumber">3</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Registers"><span class="tocnumber">4</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Reg_Select_.28.244100.29"><span class="tocnumber">4.1</span> <span class="toctext">Reg Select ($4100)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Reg_Data_.28.244101.29"><span class="tocnumber">4.2</span> <span class="toctext">Reg Data ($4101)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Chr_Select_.28Internal_0-3.29"><span class="tocnumber">4.3</span> <span class="toctext">Chr Select (Internal 0-3)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Chr_Outer_Bank_.28Internal_4.29"><span class="tocnumber">4.4</span> <span class="toctext">Chr Outer Bank (Internal 4)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Prg_Bank_.28Internal_5.29"><span class="tocnumber">4.5</span> <span class="toctext">Prg Bank (Internal 5)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Mode_and_Mirroring_Select_.28Internal_7.29"><span class="tocnumber">4.6</span> <span class="toctext">Mode and Mirroring Select (Internal 7)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#CHR_Rewiring_.28A_and_C_variants.29"><span class="tocnumber">5</span> <span class="toctext">CHR Rewiring (A and C variants)</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: up to 128 KiB</li>
+<li> PRG ROM bank size: 32 KiB</li>
+<li> PRG RAM: No</li>
+<li> CHR capacity: up to 512KiB ROM, depending on variant</li>
+<li> CHR bank size: 2 KiB</li>
+<li> Nametable mirroring: Mapper controlled</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>Also see <a href="Sachen_SA8259A_pinout.xhtml" title="Sachen SA8259A pinout">Sachen SA8259A pinout</a>.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p>There are four known variants of the board.  The B variant is described below, as well as the A and C variants which alter behavior by rewiring CHR banks.  The D variant behaves much differently and is described in <a href="INES_Mapper_137.xhtml" title="INES Mapper 137">iNES Mapper 137</a>.
+</p>
+<table class="wikitable">
+<tr>
+<th> iNES Mapper </th>
+<th> PCB Label </th>
+<th> UNIF Name </th>
+<th> CHR Shift
+</th></tr>
+<tr>
+<td> 138 </td>
+<td> <i>unknown</i> </td>
+<td> UNL-Sachen-8259B </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 141 </td>
+<td> TC-A003-72 </td>
+<td> UNL-Sachen-8259A </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 139 </td>
+<td> <i>unknown</i> </td>
+<td> UNL-Sachen-8259C </td>
+<td> 2
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_137.xhtml" title="INES Mapper 137">137</a> </td>
+<td> <i>unknown</i> </td>
+<td> UNL-Sachen-8259D </td>
+<td> -1 (approximately)
+</td></tr></table>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$FFFF: 32KiB switchable PRG ROM bank</li>
+<li> PPU $0000-$07FF: 2KiB switchable CHR ROM bank</li>
+<li> PPU $0800-$0FFF: 2KiB switchable CHR ROM bank</li>
+<li> PPU $1000-$17FF: 2KiB switchable CHR ROM bank</li>
+<li> PPU $1800-$1FFF: 2KiB switchable CHR ROM bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>Registers should be masked with $C101.
+</p>
+<h3><span class="mw-headline" id="Reg_Select_.28.244100.29">Reg Select ($4100)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .rrr
+      |||
+      +++- Select register number for next data write
+</pre>
+<h3><span class="mw-headline" id="Reg_Data_.28.244101.29">Reg Data ($4101)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .ddd
+      |||
+      +++- Output data to register selected by $4100.
+</pre>
+<h3><span class="mw-headline" id="Chr_Select_.28Internal_0-3.29">Chr Select (Internal 0-3)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .ccc
+      |||
+      +++- Select lower 3 bits of 2KiB CHR block for PPU $0000/$0800/$1000/$1800
+</pre>
+<h3><span class="mw-headline" id="Chr_Outer_Bank_.28Internal_4.29">Chr Outer Bank (Internal 4)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .bbb
+      |||
+      +++- Select upper 3 bits of all four 2KiB CHR blocks
+</pre>
+<h3><span class="mw-headline" id="Prg_Bank_.28Internal_5.29">Prg Bank (Internal 5)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .ppp
+      |||
+      +++- Select 32KiB PRG bank for CPU $8000
+</pre>
+<h3><span class="mw-headline" id="Mode_and_Mirroring_Select_.28Internal_7.29">Mode and Mirroring Select (Internal 7)</span></h3>
+<pre>7  bit  0
+---- ----
+.... .mms
+      |||
+      ||+- Enable &quot;simple&quot; mode.
+      ++-- Select mirroring (0 = V, 1 = H, 2 = (0,1,1,1), 3 = 1scA)
+</pre>
+<p>When simple mode is enabled, mirroring is fixed to V, ignoring the m bits, and all 4 CHR banks use the CHR bank 0 register.
+</p>
+<h2><span class="mw-headline" id="CHR_Rewiring_.28A_and_C_variants.29">CHR Rewiring (A and C variants)</span></h2>
+<p>The B variant described above has 6 bit CHR regs covering 2KiB blocks, giving a CHR ROM total of up to 128KiB.  The A and C variants rewire the board to increase this limit to 256KiB and 512KiB respectively.  This is done by shifting up the CHR ROM address outputs on the mapper and connecting the lower lines directly to the PPU.  To be specific:
+</p>
+<pre>B: Passes PPU A[10:0] through to CHR ROM A[10:0]
+   Uses PPU A[12:11] to choose chr reg
+   Passes 6 bits of chr reg to CHR ROM A[16:11]
+A: Passes PPU A[11:0] through to CHR ROM A[11:0]
+   Uses PPU A[12:11] to choose chr reg
+   Passes 6 bits of chr reg to CHR ROM A[17:12]
+C: Passes PPU A[12:0] through to CHR ROM A[12:0]
+   Uses PPU A[12:11] to choose chr reg
+   Passes 6 bits of chr reg to CHR ROM A[18:13]
+</pre>
+<p>This can be emulated by shifting the CHR regs left 1 or 2 bits, and inserting the appropriate 1 or 2 bits of PPU address in the low bits.  Note that when s = 1, CHR reg 0 is used for all banks, but the extra address line(s) still leak through on the A and C boards.  This means that on a C board, when s = 1, the board can be considered to have a single 8KiB CHR ROM bank for pattern tables.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1313-1!*!0!!en!*!* and timestamp 20160208222611 and revision id 8635
+ -->
+</div></body></html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:6264 static RAM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:6264 static RAM</h1><div class="article">
+<h2><span class="mw-headline" id="More_pinouts_for_different_sizes_of_62.2A_SRAM.27s">More pinouts for different sizes of 62* SRAM's</span></h2>
+<p>Some extra pinouts for SRAMs:
+62256 is identical except for the !CS2 input and NC becoming address lines.  This is to make address expansion of a board design almost trivial using inverters as half of an address decoder (other half is !CS input).<br/><br/>
+CY62256 SRAM (28 pins, 1-14,28-15) Note that the Ax and Dx line order doesn't really matter.<br/>
+A5        +5V<br/>
+A6        !WE<br/>
+A7        A4<br/>
+A8        A3<br/>
+A9        A2<br/>
+A10       A1<br/>
+A11       !OE<br/>
+A12       A0<br/>
+A13       !CS<br/>
+A14       D7<br/>
+D0        D6<br/>
+D1        D5<br/>
+D2        D4<br/>
+Gnd       D3<br/>
+<br/>
+62512 SRAM (32 pins, 1-16, 32-17)<br/>
+A18       +5V<br/>
+A16       A15<br/>
+A14       A17<br/>
+A12       /WE<br/>
+A7        A13<br/>
+A6        A8<br/>
+A5        A9<br/>
+A4        A11<br/>
+A3        /OE<br/>
+A2        A10<br/>
+A1        /CS<br/>
+A0        D7<br/>
+D0        D6<br/>
+D1        D5<br/>
+D2        D4<br/>
+Gnd       D3<br/>
+<br/>
+621024 SRAM (32 pins, 1-16, 32-17)<br/>
+NC       +5V<br/>
+A16       A15<br/>
+A14       CS2<br/>
+A12       /WE<br/>
+A7        A13<br/>
+A6        A8<br/>
+A5        A9<br/>
+A4        A11<br/>
+A3        /OE<br/>
+A2        A10<br/>
+A1        /CS1<br/>
+A0        D7<br/>
+D0        D6<br/>
+D1        D5<br/>
+D2        D4<br/>
+Gnd       D3<br/>
+<br/>
+LY6220488 TSOP-package SRAM (44 pins, 1-22, 23-44)<br/>
+A4        A5<br/>
+A3        A6<br/>
+A2        A7<br/>
+A1        !OE<br/>
+A0        CS2<br/>
+!CS       A8<br/>
+NC        NC<br/>
+NC        NC<br/>
+D0        D7<br/>
+D1        D6<br/>
++5V       Gnd<br/>
+Gnd       +5V<br/>
+D2        D5<br/>
+D3        D4<br/>
+NC        NC<br/>
+A20       NC<br/>
+!WE       A9<br/>
+A19       A10<br/>
+A18       A11<br/>
+A17       A12<br/>
+A16       A13<br/>
+A15       A14<br/>
+<br/>
+DS1249Y/AB SRAM (32 pins, 1-16, 32-17) Note that this is equivalent to 622048 but AFAICT, no one makes those.<br/>
+NC        +5V<br/>
+A16       A15<br/>
+A14       A17<br/>
+A12       !WE<br/>
+A7        A13<br/>
+A6        A8<br/>
+A5        A9<br/>
+A4        A11<br/>
+A3        !OE<br/>
+A2        A10<br/>
+A1        !CS<br/>
+A0        D7<br/>
+D0        D6<br/>
+D1        D5<br/>
+D2        D4<br/>
+Gnd       D3<br/>
+<br/>
+DS1250Y/AB SRAM (32 pins, 1-16, 32-17) Note that this is equivalent to 624096 but AFAICT, no one makes those. These are $47 at Maxim's site as of time I last checked!  The 1251 is also a 4Mb part, BTW.<br/>
+A18       +5V<br/>
+A16       A15<br/>
+A14       A17<br/>
+A12       !WE<br/>
+A7        A13<br/>
+A6        A8<br/>
+A5        A9<br/>
+A4        A11<br/>
+A3        !OE<br/>
+A2        A10<br/>
+A1        !CS<br/>
+A0        D7<br/>
+D0        D6<br/>
+D1        D5<br/>
+D2        D4<br/>
+Gnd       D3<br/>
+<br/>
+These would need to be edited to match formatting of the existing Wiki article.<br/>
+</p>
+<dl><dd>Forgot to sign, and it seems I may have made some mistakes?  Pretty sure I got those off of the original datasheets, but maybe a typo snuck in.  Can someone please check these?  It doesn't make sense that a 512Kb device has more pins than a 1024.  I think that's what the article means by &quot;breaking the pattern&quot; since it's apparently 512K<b>B</b> which is 4096 K<b>b</b>.  Maybe I didn't make a mistake at all!  <i>Nope, I did.  One of my PDFs was mislabeled.  UM62512 is definitely only 64KB.</i></dd></dl>
+<p><a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 13:42, 28 January 2015 (MST)
+I found this site which has a nice explanation of the various differences on the bigger chips.  <a class="external free" href="http://sblive.narod.ru/ZX-Spectrum/ZX-SEGA/ZX-SEGA.htm" rel="nofollow">http://sblive.narod.ru/ZX-Spectrum/ZX-SEGA/ZX-SEGA.htm</a>  Seems also that JEDEC has references.  Search for &quot;3_07_05R12.pdf&quot; and you'll find it pn page 3.7.5-11.  <a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 13:52, 28 January 2015 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.074 seconds
+Real time usage: 0.153 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1395-1!*!0!*!*!*!* and timestamp 20160603204810 and revision id 12564
+ -->
+</div></body></html>

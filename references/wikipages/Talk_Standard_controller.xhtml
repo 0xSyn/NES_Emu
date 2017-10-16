@@ -1,0 +1,96 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Standard controller</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Standard controller</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Microphone"><span class="tocnumber">1</span> <span class="toctext">Microphone</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#SNES-in-NES_reads"><span class="tocnumber">2</span> <span class="toctext">SNES-in-NES reads</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Bit_deletion_detection.3F"><span class="tocnumber">3</span> <span class="toctext">Bit deletion detection?</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Open_bus"><span class="tocnumber">4</span> <span class="toctext">Open bus</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Famicom_2nd_controller_missing_Select_and_Start"><span class="tocnumber">5</span> <span class="toctext">Famicom 2nd controller missing Select and Start</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Bit_deletion_in_other_input_devices"><span class="tocnumber">6</span> <span class="toctext">Bit deletion in other input devices</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Distinguishing_hardware_variant"><span class="tocnumber">7</span> <span class="toctext">Distinguishing hardware variant</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#A_controller_MUST_NOT_toggle_the_button_states_on_each_strobe_pulse.3B_that.27ll_break_any_game_that_rereads_the_controller."><span class="tocnumber">8</span> <span class="toctext">A controller MUST NOT toggle the button states on each strobe pulse; that'll break any game that rereads the controller.</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#74165_compatibility"><span class="tocnumber">9</span> <span class="toctext">74165 compatibility</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Microphone">Microphone</span></h2>
+<p>How to do microphone? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 19:18, 16 September 2012 (MDT)
+</p>
+<dl><dd>Nevermind I found it on the other page it says $4016 bit2 is microphone. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 19:19, 16 September 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="SNES-in-NES_reads">SNES-in-NES reads</span></h2>
+<p>It says &quot;all subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers&quot;, and what happen on Super Nintendo controllers? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 17:50, 27 September 2012 (MDT)
+</p>
+<dl><dd>After the first eight bits, the Super NES controller returns A, X, L, R, four zero bits, then all 1. --<s>98.226.71.46</s> 18:22, 27 September 2012 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Bit_deletion_detection.3F">Bit deletion detection?</span></h2>
+<p>Official controllers have the correct 8 bits, then all 1s. Couldn't you detect the absence of a bit deletion by seeing if the 8th bit is 0 and the 9th bit is 1? This only works while right is not pressed, but ... —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:12, 8 February 2013 (MST)
+</p>
+<dl><dd>Reading 9 bits to skip rereading if Right is not held could work provided that you're sure that the user isn't using a <a href="Four_Score.xhtml" title="Four Score">Four Score</a>, an official Super NES controller, or an unlicensed controller that has all 0s after its report. The Four Score and Super NES controller have longer reports (24-bit and 16-bit respectively), but these reports likewise end with a transition from 0 to 1. In any case, in games that don't use players 3 and 4, it'd be quicker just to re-read than to look for the Four Score signature. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 13:34, 8 February 2013 (MST)</dd></dl>
+<h2><span class="mw-headline" id="Open_bus">Open bus</span></h2>
+<p>Lidnariq: Some more details on the difference between 'x' and '0' in the $4016/$4017 diagrams would be nice, and on what M/F read as on NES. -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 01:22, 19 March 2013 (MDT)
+</p>
+<dl><dd> Done, but my presentation is lousy. I'm not certain if it's even possible to reunify the diagrams anymore.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 02:05, 19 March 2013 (MDT)
+<dl><dd> Much clearer now at least - thanks! -<a href="User_Ulfalizer.xhtml" title="User:Ulfalizer">Ulfalizer</a> (<s>talk</s>) 02:13, 19 March 2013 (MDT)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Famicom_2nd_controller_missing_Select_and_Start">Famicom 2nd controller missing Select and Start</span></h2>
+<p>The article says
+</p>
+<blockquote>Button status for each controller is returned as an 8-bit report in the following order: A, B, Select, Start, Up, Down, Left, Right. The Select and Start buttons are completely missing on the second controller of the plain Famicom.</blockquote>
+<p>So reading $4017 bit 0 on a Famicom returns which one of the following?:
+</p>
+<ul><li> a 6-bit report: A, B, Up, Down, Left, Right</li>
+<li> an 8-bit report: A, B, 0, 0, Up, Down, Left, Right</li>
+<li> an 8-bit report: A, B, 1, 1, Up, Down, Left, Right</li>
+<li> something else?</li></ul>
+<p>--<a href="User_Bavi_H.xhtml" title="User:Bavi H">Bavi H</a> (<a href="User_talk_Bavi_H.xhtml" title="User talk:Bavi H">talk</a>) 17:23, 19 March 2013 (MDT)
+</p>
+<dl><dd> The 2nd of those three. I've updated the article to state this explicitly.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 17:58, 19 March 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Bit_deletion_in_other_input_devices">Bit deletion in other input devices</span></h2>
+<p>Does bit deletion still do in controllers that don't use the shift registers (such as the light gun and keyboard)? From the instructions, it seems to me it is safe to use DPCM if using the light gun or keyboard, but I am unable to test this, and the article should probably be made clear. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:35, 25 August 2013 (MDT)
+</p>
+<dl><dd> The article does say that the CLK line is what causes bit deletions; devices that don't use it (such as the <a href="Zapper.xhtml" title="Zapper">zapper</a>, <a href="Family_BASIC_Keyboard.xhtml" title="Family BASIC Keyboard">keyboard</a>, <a href="Family_BASIC_Data_Recorder.xhtml" title="Family BASIC Data Recorder">data recorder</a>, <a href="Oeka_Kids_tablet.xhtml" title="Oeka Kids tablet">Oeka Kids tablet</a>, &amp;c) won't be affected. I'm uncertain how to edit this to make that more explicit. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:53, 25 August 2013 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="Distinguishing_hardware_variant">Distinguishing hardware variant</span></h2>
+<p>It says bit3 and bit4 of $4016 is &quot;Open bus on traditional Famicom, all 0s on AV Famicom&quot;. Does this mean that a code like this might be able to distinguish the traditional Famicom from other hardware?
+</p>
+<pre>   LDX #$17
+   LDA $3FFF,X
+   AND #$18
+</pre>
+<p>I don't know exactly know how open bus works though, but maybe someone is able to test this. --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:54, 7 January 2014 (MST)
+</p>
+<dl><dd> Yes, that is what it means. Well, not exactly that, because the page wrapping of the LDA abs,X should cause a read from $3F16 before the useful read, which will pre-seed open bus to whatever the PPU's internal open bus is. So I think something like</dd></dl>
+<pre>   LDX #$FF
+   STX $2002
+   LDA $3F17,X
+   AND #$18
+</pre>
+<dl><dd> should DTRT.—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:33, 7 January 2014 (MST)
+<dl><dd>OK, thanks. I forgot about that. (I don't know what &quot;DTRT&quot; means, but I think I can mainly understand your message nevertheless.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 18:07, 7 January 2014 (MST)
+<dl><dd>Google says &quot;Do the right thing&quot;. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 16:36, 8 January 2014 (MST)</dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="A_controller_MUST_NOT_toggle_the_button_states_on_each_strobe_pulse.3B_that.27ll_break_any_game_that_rereads_the_controller.">A controller MUST NOT toggle the button states on each strobe pulse; that'll break any game that rereads the controller.</span></h2>
+<p>Is this wiki targeted at controller manufacturers? Or is it for emulators that simulate turbo controllers? In all cases this sentence comes out weird in this context, especially with the strong emphasis on the all caps 'must not'.
+</p>
+<dl><dd>I agree, and have revised it. &quot;MUST NOT&quot; seems to imply enforcement of policy, of which there is none here. NesDev users can do what they like, the Wiki's job is just to keep them aware of the problems. I added an explanation of exactly why it can cause a problem, which is probably a lot more helpful than telling people IT IS FORBIDDEN. It's probably a perfectly sensible approach if you're building a turbo controller circuit for specific games. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 10:37, 26 May 2015 (MDT)</dd></dl>
+<dl><dd>It's for controller manufacturers. I have seen hobbyist controller manufacturers in both NESdev BBS and #nesdev on EFnet. As used in documents that cite <a class="external mw-magiclink-rfc" href="http://tools.ietf.org/html/rfc2119" rel="nofollow">RFC 2119</a>, these strong words are &quot;used where it is actually required for interoperation&quot;, and a homemade controller that toggles buttons every strobe will not interoperate with games that misbehave when the controller toggles buttons every strobe. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 16:57, 26 May 2015 (MDT)</dd></dl>
+<h2><span class="mw-headline" id="74165_compatibility">74165 compatibility</span></h2>
+<p><a class="external free" href="http://www.raphnet.net/electronique/arcade_control/arcade_control_en.php" rel="nofollow">http://www.raphnet.net/electronique/arcade_control/arcade_control_en.php</a> &quot;74hc165 wont work because they dont appreciate the clock being high when the latch is low.&quot;  <br/><br/>
+I'd have to look closely at datasheets and test actual hardware to be sure, but it seems that the HC/HCT versions don't work for NES.  Anyone actually tested this with custom hardware?  If it indeed works on the 74HC(T)165 variants, we can revert this edit and put a note on compatibility.  <a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 01:28, 15 August 2015 (MDT)<br/><br/>
+<a class="external free" href="http://privatewww.essex.ac.uk/~nbb/snes-technical.html" rel="nofollow">http://privatewww.essex.ac.uk/~nbb/snes-technical.html</a>  Seems the 74HC works fine?  &quot;I have used two 74HC165 Shift registers to make a joypad adaptation, although I had to buy a cheap joypad to get the connector. &quot; <a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 02:13, 15 August 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.160 seconds
+Real time usage: 0.255 seconds
+Preprocessor visited node count: 34/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:849-1!*!0!!en!*!* and timestamp 20160603204847 and revision id 12577
+ -->
+</div></body></html>

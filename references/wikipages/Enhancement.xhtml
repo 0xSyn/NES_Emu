@@ -1,0 +1,89 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Enhancement</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Enhancement</h1><div class="article">
+<p>Some <a href="Emulators.xhtml" title="Emulators">emulators</a> intentionally deviate from perfect <a href="Accuracy.xhtml" title="Accuracy">accuracy</a> in the interest of improving a game's appearance.
+Some of these can be realized in hardware; others cannot.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overdraw"><span class="tocnumber">1</span> <span class="toctext">Overdraw</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Control"><span class="tocnumber">2</span> <span class="toctext">Control</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Resolution"><span class="tocnumber">3</span> <span class="toctext">Resolution</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Map_logging"><span class="tocnumber">4</span> <span class="toctext">Map logging</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Sound"><span class="tocnumber">5</span> <span class="toctext">Sound</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Pop_reduction"><span class="tocnumber">5.1</span> <span class="toctext">Pop reduction</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Recorded_music_playback_through_the_mapper"><span class="tocnumber">5.2</span> <span class="toctext">Recorded music playback through the mapper</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overdraw">Overdraw</span></h2>
+<p>Some emulators have an option to ignore the 8 sprites per line limit.
+There are two ways that this can interact with <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">sprite evaluation</a>.
+One is to turn off the mapper side effects of sprite data fetching past the eighth sprite, which can't be realized with actual carts.
+</p><p>The other way involves rearranging the fetch sequence of the sprite unit to allow 15 sprites on a line.
+This requires rearranging both in-range search and pattern fetch.
+Cycles 1-64 are normally spent clearing secondary OAM.
+Doubling the sprite count would make it take twice as long, but clearing only the Y coordinate would make it four times as fast, for a net result of cycles 1-30.
+This would allow the actual evaluation, which takes 2 cycles per sprite and 6 more per in-range sprite, to be expanded from 176 cycles to 218 cycles.
+For pattern fetch, skipping seven of the dummy nametable fetches at x=265, 273, 281, 289, 297, 305, and 313 would allow a total of 15 sprites' patterns to be fetched in one horizontal blank.
+The first dummy fetch at x=257 lets the timer of <a href="MMC3.xhtml" title="MMC3">MMC3</a>-family mappers trigger at the correct horizontal position, but it wouldn't work with the timer of <a href="JY_Company.xhtml" title="JY Company">JY Company</a> mapper in PA12/8 mode.
+</p><p>A video of the RetroUSB AVS famiclone <a class="external text" href="https://www.youtube.com/watch?v=1XrjgZhG7q4" rel="nofollow">demonstrates its 15-sprite mode</a> using <i>Teenage Mutant Ninja Turtles</i>.
+</p>
+<h2><span class="mw-headline" id="Control">Control</span></h2>
+<p>An emulator designed for point-and-click games such as <a href="Videomation.xhtml" title="Videomation">Videomation</a> and <a href="Thwaite.xhtml" title="Thwaite">Thwaite</a> may support using a PC mouse, a touch screen, a Wii Remote, or a Kinect sensor to move a game object.
+This can take one of three forms:
+</p>
+<ul><li>The emulator can directly manipulate coordinates in RAM, as if a Pro Action Replay had a controller plugged into it.</li>
+<li>The emulator can patch the game to read absolute coordinates from mapper ports or from the <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a> (if only one dimension is needed), <a href="Oeka_Kids_tablet.xhtml" title="Oeka Kids tablet">Oeka Kids tablet</a>, or <s>Power Glove</s>.</li>
+<li>The emulator can patch the game to read mickeys (coordinate differences over time) from mapper ports or from the <a href="Mouse.xhtml" title="Mouse">Super NES Mouse</a>.</li></ul>
+<h2><span class="mw-headline" id="Resolution">Resolution</span></h2>
+<p>The cheap way to upgrade a game's graphics from the NES's native 240p to something bigger is to apply pixel art resampling algorithms such as Super 2xSaI, Scale2x, or hq2x.
+A more powerful way involves creating a large graphic for each small graphic used by the game, as seen in high-resolution texture packs for HDNes, HiSMS, and several Nintendo 64 emulators.
+For CHR ROM games, this could be a CHR ROM with more pixels and more bit depth than the game's existing CHR ROM.
+Rendering would use the bigger one, while $2007 readback and sprite 0 detection would still use the smaller one.
+Many CHR RAM games could use a hash table from 16-byte original tiles to larger tiles, though this would fail in games relying heavily on <a href="CHR_ROM_vs__CHR_RAM.xhtml#CHR_RAM" title="CHR ROM vs. CHR RAM">dynamic drawing to CHR RAM</a> (e.g. <i>Hatris</i>, <i>Qix</i>, <i>Videomation</i>, <i>Solstice</i>, <i>Elite</i>, the <i>Blockout</i> prototype and its clone <i>3D Block</i>, the second level of <i>Battletoads</i>, dialogue in <i><a href="Super_Bat_Puncher.xhtml" title="Super Bat Puncher">Super Bat Puncher</a></i>, menus in <i><a href="RHDE.xhtml" title="RHDE">RHDE</a></i>, the <a href="Action_53.xhtml" title="Action 53">Action 53</a> menu, and a forthcoming Z-machine interpreter).
+</p>
+<h2><span class="mw-headline" id="Map_logging">Map logging</span></h2>
+<p>A game incrementally updates the nametables and then writes the new <a href="PPU_scrolling.xhtml" title="PPU scrolling">scroll position</a> to the PPU to make them visible.
+This means an emulator can't see the entire level.
+But an emulator could watch the <a href="PPU_registers.xhtml" title="PPU registers">scroll registers</a> and assemble newly visible areas into a map of the level.
+And then it could save the map for the next playthrough in order to provide a widescreen view of upcoming areas, automatic creation of an atlas for a game guide, or even a view of a full map on a high-definition screen.<a class="external autonumber" href="http://gaming.stackexchange.com/a/254791/69014" rel="nofollow">[1]</a>
+</p>
+<h2><span class="mw-headline" id="Sound">Sound</span></h2>
+<h3><span class="mw-headline" id="Pop_reduction">Pop reduction</span></h3>
+<p>Some games make harsh popping noises when they begin to play sampled sound on <a href="APU_DMC.xhtml" title="APU DMC">APU DMC</a>.
+This is caused by a write to $4011 to set the center line of the sample instead of relying on saturation to push the sample toward the center.
+A few emulators support &quot;pop reduction&quot;, which ignores all writes to $4011, but this fails when games intentionally cause pops by using timed writes to $4011, such as the speech in <i>Big Bird's Hide and Speak</i> and <i>Joshua</i> and a few games that use $4011 pops as a crude kick drum.
+</p><p>One way to accommodate both of these cases without using CRC to detect game-specific settings involves a sixth audio channel and a heuristic to distinguish sample start pops from intentional changes.
+If $4011 is written, and it is a sample start pop, add the old $4011 value to the sixth channel and subtract the new $4011 value.
+This way, the pop is exactly canceled out by the sixth channel, which <a class="extiw" href="http://en.wikipedia.org/wiki/Leaky_integrator" title="wikipedia:Leaky integrator">decays over the course of a few frames</a> to avoid <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=115276#p115276" rel="nofollow">overflow</a>.
+The most reliable heuristic to distinguish a sample start pop from other uses of $4011, such as kick pops and the DMC sawtooth wave trick, is that a sample start pop occurs in the same frame as a rising edge on $4015 bit 4 and at least 3 frames after the previous $4011 write.
+</p>
+<h3><span class="mw-headline" id="Recorded_music_playback_through_the_mapper">Recorded music playback through the mapper</span></h3>
+<p>The Japanese version of <i>Bases Loaded</i> uses the <a class="mw-redirect" href="INES_Mapper_086.xhtml" title="JF-13">JF-13</a> board, which has a sampled audio playback chip.
+Write a value, and a sound begins to play through the mapper sound channel of the authentic Famicom console.
+Likewise, the TurboGrafx-16 and Sega Genesis consoles supported CD peripherals allowing playback of Red Book audio during game play.
+Emulators could support adding a virtual chip that plays higher quality sound.
+Each such game would come with .mp3 or .ogg files and a cue sheet to tell what sounds to play when what values are written.
+Games could be patched to allow the use of, say, OCRemix versions of songs.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.052 seconds
+Real time usage: 0.055 seconds
+Preprocessor visited node count: 27/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:644-1!*!0!!en!*!* and timestamp 20160410004839 and revision id 11984
+ -->
+</div></body></html>

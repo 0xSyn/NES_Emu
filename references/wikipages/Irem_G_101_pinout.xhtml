@@ -1,0 +1,56 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Irem G-101 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Irem G-101 pinout</h1><div class="article">
+<p>Irem G-101: 52-pin 0.6&quot; high-density PDIP (canonically <a href="INES_Mapper_032.xhtml" title="INES Mapper 032">iNES Mapper 032</a>)
+</p>
+<pre>                 .--\/--.
+          GND -- | 1  52| -- +5V
+       (f) M2 -&gt; | 2  51| -&gt; CIRAM A10 (f)
+      (f) R/W -&gt; | 3  50| ??
+  (f) /ROMSEL -&gt; | 4  49| -&gt; PRG /CE (r)
+  (f) PPU A13 -&gt; | 5  48| ??
+  (f) PPU RD# -&gt; | 6  47| ??
+  (f) CPU A14 -&gt; | 7  46| ??
+  (f) CPU A13 -&gt; | 8  45| -&gt; CHR /OE (r)
+ (fr) CPU A12 -&gt; | 9  44| ??
+  (fr) CPU A2 -&gt; |10  43| -&gt; (always high)
+  (fr) CPU A1 -&gt; |11  42| -&gt; (always high)
+  (fr) CPU A0 -&gt; |12  41| -&gt; PRG A17 (r)
+  (f) PPU A12 -&gt; |13  40| -&gt; PRG A16 (r)
+  (f) PPU A11 -&gt; |14  39| -&gt; PRG A15 (r)
+  (f) PPU A10 -&gt; |15  38| -&gt; PRG A14 (r)
+  (fr) CPU D7 -&gt; |16  37| -&gt; PRG A13 (r)
+  (fr) CPU D6 -&gt; |17  36| ??
+  (fr) CPU D5 -&gt; |18  35| -&gt; CHR A17 (f)
+  (fr) CPU D4 -&gt; |19  34| -&gt; CHR A16 (f)
+  (fr) CPU D3 -&gt; |20  33| -&gt; CHR A15 (f)
+  (fr) CPU D2 -&gt; |21  32| -&gt; CHR A14 (f)
+  (fr) CPU D1 -&gt; |22  31| -&gt; CHR A13 (f)
+  (fr) CPU D0 -&gt; |23  30| -&gt; CHR A12 (f)
+            ? ?? |24  29| -&gt; CHR A11 (f)
+         mode -&gt; |25  28| -&gt; CHR A10 (f)
+          GND -- |26  27| -- +5V
+                 '------'
+</pre>
+<ul><li> mode tied to +5V: PRG banking mode selectable by software</li>
+<li> mode tied to gnd: PRG banking mode fixed to 8+8+16F (as in <i>Major League</i>)</li>
+<li> For the game <i>Major League</i>, CIRAM A10 is not connected to the G-101, and is instead simply tied to +5V</li></ul>
+<p>Reference: <a class="external free" href="http://w.livedoor.jp/famicomcartridge/d/Irem%20G-101" rel="nofollow">http://w.livedoor.jp/famicomcartridge/d/Irem%20G-101</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1215-1!*!0!*!*!*!* and timestamp 20160208225537 and revision id 7600
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

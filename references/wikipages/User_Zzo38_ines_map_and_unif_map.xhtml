@@ -1,0 +1,141 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/ines.map and unif.map</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/ines.map and unif.map</h1><div class="article">
+<p>This file describes the format of <tt>ines.map</tt> and <tt>unif.map</tt> files used with <a href="User_Zzo38_DotFami.xhtml" title="User:Zzo38/DotFami">DotFami</a>.
+</p><p>The file is a plain ASCII file which is preprocessed with the C preprocessor and uses a C-like syntax. All constant operators (other than <tt>sizeof</tt>) are the same as in C, including the same precedence.
+</p><p>All data is signed 64-bit integers. ASCII character constants can be used, and you can use decimal, hexadecimal, and octal constants, same as in C.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Keywords"><span class="tocnumber">1</span> <span class="toctext">Keywords</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Outer_Codes"><span class="tocnumber">2</span> <span class="toctext">Outer Codes</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Inner_Codes"><span class="tocnumber">3</span> <span class="toctext">Inner Codes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Cases"><span class="tocnumber">4</span> <span class="toctext">Cases</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Variables"><span class="tocnumber">5</span> <span class="toctext">Variables</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Procedures"><span class="tocnumber">6</span> <span class="toctext">Procedures</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Functions"><span class="tocnumber">7</span> <span class="toctext">Functions</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Expressions"><span class="tocnumber">8</span> <span class="toctext">Expressions</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#iNES_Flags"><span class="tocnumber">9</span> <span class="toctext">iNES Flags</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#UNIF_Flags"><span class="tocnumber">10</span> <span class="toctext">UNIF Flags</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Miscellaneous"><span class="tocnumber">11</span> <span class="toctext">Miscellaneous</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Errors"><span class="tocnumber">12</span> <span class="toctext">Errors</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Keywords">Keywords</span></h2>
+<pre>crc
+default
+export
+flags
+function
+if
+import
+local
+mapper
+parameter
+procedure
+rom
+romsize
+submapper
+switch
+use
+</pre>
+<h2><span class="mw-headline" id="Outer_Codes">Outer Codes</span></h2>
+<p>At the top (outer) level of the file, the following statements are allowed:
+</p>
+<ul><li> variable <tt>=</tt> expression <tt>;</tt></li>
+<li> <tt>parameter</tt> expression <tt>=</tt> expression <tt>;</tt></li>
+<li> <tt>use</tt> string <tt>;</tt></li>
+<li> <tt>if(</tt> condition <tt>)</tt> statement</li>
+<li> <tt>if(</tt> condition <tt>)</tt> statement <tt>else</tt> statement</li>
+<li> <tt>{</tt> statements <tt>}</tt></li>
+<li> <tt>switch(</tt> expression <tt>) {</tt> cases <tt>}</tt></li>
+<li> <tt>import</tt> string <tt>(</tt> parameters <tt>);</tt></li>
+<li> <tt>function</tt> name <tt>(</tt> parameters <tt>) {</tt> statements <tt>}</tt></li>
+<li> <tt>procedure</tt> name <tt>(</tt> parameters <tt>) {</tt> statements <tt>}</tt></li>
+<li> procedurename <tt>(</tt> parameters <tt>);</tt></li>
+<li> export <tt>(</tt> names <tt>);</tt></li></ul>
+<h2><span class="mw-headline" id="Inner_Codes">Inner Codes</span></h2>
+<p>Where statement(s) are expected at inner level, the following is acceptable:
+</p>
+<ul><li> variable <tt>=</tt> expression <tt>;</tt></li>
+<li> <tt>parameter</tt> expression <tt>=</tt> expression <tt>;</tt></li>
+<li> <tt>use</tt> string <tt>;</tt></li>
+<li> <tt>if(</tt> condition <tt>)</tt> statement</li>
+<li> <tt>if(</tt> condition <tt>)</tt> statement <tt>else</tt> statement</li>
+<li> <tt>{</tt> statements <tt>}</tt></li>
+<li> <tt>switch(</tt> expression <tt>) {</tt> cases <tt>}</tt></li>
+<li> <tt>import</tt> string <tt>(</tt> parameters <tt>);</tt></li>
+<li> <tt>local</tt> variables (only inside a <tt>{}</tt> block)</li>
+<li> procedurename <tt>(</tt> parameters <tt>);</tt></li></ul>
+<h2><span class="mw-headline" id="Cases">Cases</span></h2>
+<p>A case in a switch is formatted as either a string literal or a constant expression, followed by <tt>{</tt> statements <tt>}</tt>
+</p><p>The last case must be <tt>default</tt> instead of an expression and contains statements if none of the other cases match.
+</p>
+<h2><span class="mw-headline" id="Variables">Variables</span></h2>
+<ul><li> Each variable may only be assigned once and must be assigned before used.</li>
+<li> Some variables can be local to a block, which case they are accessible only within that block.</li>
+<li> If a condition or switch statement contains blocks which assign variables not local to those blocks, then all cases must assign the same set of variables (not counting variables local to those blocks).</li>
+<li> A procedure may also assign global variables.</li>
+<li> Variables store 64-bit values.</li>
+<li> Parameters to procedures and functions are also acting like local variables which are already assigned.</li>
+<li> Strings can also be assigned to variables although they cannot be used as a number if they do.</li></ul>
+<h2><span class="mw-headline" id="Procedures">Procedures</span></h2>
+<ul><li> Procedures must be declared before used.</li>
+<li> Recursive calls are not allowed.</li>
+<li> Same rules for variables, <tt>use</tt> statements, and <tt>parameter</tt> statements apply to procedures, just as if its contents are placed where the procedure is called from.</li></ul>
+<h2><span class="mw-headline" id="Functions">Functions</span></h2>
+<ul><li> Functions must be declared before used.</li>
+<li> Recursive calls are not allowed.</li>
+<li> A function call is made inside of an expression.</li>
+<li> Only local variables may be assigned in a function.</li>
+<li> Procedure calls are not allowed in a function.</li>
+<li> The <tt>use</tt> and <tt>parameter</tt> statements are not allowed in a function.</li>
+<li> The last statement (even inside a <tt>if</tt> or <tt>switch</tt>) should be an expression by itself which is the return value of this function.</li></ul>
+<h2><span class="mw-headline" id="Expressions">Expressions</span></h2>
+<ul><li> <tt>mapper</tt>: For iNES, the mapper number. For UNIF, the mapper name (as a string). Negative one for NSF.</li>
+<li> <tt>submapper</tt>: NES 2.0 submapper number (0 for old iNES files and for UNIF). For NSF, the contents of the extra sound chip support byte (address $07B in the .NSF header).</li>
+<li> <tt>flags</tt>: Used in both iNES and UNIF; includes flags such as battery RAM, mirroring, and so on. (For NSF, always zero.)</li>
+<li> <tt>romsize</tt> expression: The expression a number 0 to 15 for PRG ROM, or 16 to 31 for CHR ROM. This indicates the size in bytes. (iNES uses only 0 and 16 and all other ROM sizes will be zero; NSF uses only 0.)</li>
+<li> <tt>rom</tt> expression: The expression is address (starting at PRG ROM 0, ..., CHR ROM 15) and returns the data byte at that address. (For NSF, negative values allow access to the header, where -128 accesses the first byte of the header (the value will always be 78).)</li>
+<li> <tt>crc</tt> expression: Expression is same as for <tt>romsize</tt> but result in CRC32 of ROM.</li>
+<li> Strings can be compared using <tt>==</tt> and <tt>!=</tt> only, and arithmetic may not be performed on strings.</li>
+<li> name <tt>(</tt> parameters <tt>)</tt>: Make a function call.</li></ul>
+<h2><span class="mw-headline" id="iNES_Flags">iNES Flags</span></h2>
+<ul><li> bit3-bit0: Low four bits of iNES Flags 6.</li>
+<li> bit7-bit4: Low four bits of iNES Flags 7. If the two unused bits of iNES are 10 then use NES 2.0 format; if 01 or 11 then treat this entire byte and all following as zero (so, also the remaining iNES flags in ines.map); if 00 then use old iNES format, using Flags 7 but ignoring the rest of the header.</li>
+<li> bit11-bit8: Non-battery PRG RAM size (NES 2.0 RAM size lookup table).</li>
+<li> bit15-bit12: Battery PRG RAM size (NES 2.0 RAM size lookup table).</li>
+<li> bit19-bit16: Non-battery CHR RAM size (NES 2.0 RAM size lookup table).</li>
+<li> bit23-bit20: Battery CHR RAM size (NES 2.0 RAM size lookup table).</li></ul>
+<h2><span class="mw-headline" id="UNIF_Flags">UNIF Flags</span></h2>
+<ul><li> bit7-bit0: Mirroring setting.</li>
+<li> bit8: Presence of UNIF &quot;<tt>BATR</tt>&quot; chunk.</li>
+<li> bit9: Presence of UNIF &quot;<tt>VROR</tt>&quot; chunk.</li>
+<li> bit10: Presence of UNIF &quot;<tt>MIRR</tt>&quot; chunk.</li></ul>
+<h2><span class="mw-headline" id="Miscellaneous">Miscellaneous</span></h2>
+<p>The <tt>parameter</tt> statement is optional and the first expression is the parameter number (0 to 255 only); each parameter can be assigned a maximum of one time, but it is not necessary that if it is assigned in one case that it must be assigned in the other cases as well.
+</p><p>The <tt>use</tt> statement must occur exactly once, using the same restrictions as assignment to variables. The string parameter can be a variable storing a string, or a string literal, which specifies the filename for a <tt>.cart</tt> file.
+</p><p>The <tt>import</tt> statement is considered to be a <tt>use</tt> statement for the purpose of where it can occur. The string parameter can be a variable storing a string, or a string literal, which specifies the filename for another file having the same format as <tt>ines.map</tt> or <tt>unif.map</tt> files. The contents of the file is executed, but in its own namespace. The parameters are assigned to the variables in the imported file which are specified using the <tt>export</tt> statement.
+</p><p>The <tt>export</tt> statement declares variables, and must occur exactly once in a imported file, and none in the <tt>ines.map</tt> and <tt>unif.map</tt> file itself. The number of variables declared must match the ones specified in the <tt>import</tt> statement.
+</p>
+<h2><span class="mw-headline" id="Errors">Errors</span></h2>
+<p>In case of division by zero or anything that violates the specifications here, there is no guarantee of what it will do, including it might crash. However, it might just display an error message instead.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.049 seconds
+Real time usage: 0.051 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 52/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:828-1!*!0!!en!*!* and timestamp 20160208230624 and revision id 4587
+ -->
+</div></body></html>

@@ -1,0 +1,2506 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Karatorian/6502 Instruction Set</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Karatorian/6502 Instruction Set</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#6502_Microprocessor"><span class="tocnumber">1</span> <span class="toctext">6502 Microprocessor</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_Registers_Inside_The_6502_Microprocessor"><span class="tocnumber">2</span> <span class="toctext">The Registers Inside The 6502 Microprocessor</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#The_Accumulator"><span class="tocnumber">2.1</span> <span class="toctext">The Accumulator</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#The_X_Index_Register"><span class="tocnumber">2.2</span> <span class="toctext">The X Index Register</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#The_Y_Index_Register"><span class="tocnumber">2.3</span> <span class="toctext">The Y Index Register</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#The_Status_Register"><span class="tocnumber">2.4</span> <span class="toctext">The Status Register</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_Program_Counter"><span class="tocnumber">2.5</span> <span class="toctext">The Program Counter</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#The_Stack_Pointer"><span class="tocnumber">2.6</span> <span class="toctext">The Stack Pointer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Addressing_Modes"><span class="tocnumber">3</span> <span class="toctext">Addressing Modes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Immediate"><span class="tocnumber">3.1</span> <span class="toctext">Immediate</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Absolute_and_Zero-page_Absolute"><span class="tocnumber">3.2</span> <span class="toctext">Absolute and Zero-page Absolute</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Implied"><span class="tocnumber">3.3</span> <span class="toctext">Implied</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Accumulator"><span class="tocnumber">3.4</span> <span class="toctext">Accumulator</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Indexed_and_Zero-page_Indexed"><span class="tocnumber">3.5</span> <span class="toctext">Indexed and Zero-page Indexed</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Indirect"><span class="tocnumber">3.6</span> <span class="toctext">Indirect</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Pre-Indexed_Indirect"><span class="tocnumber">3.7</span> <span class="toctext">Pre-Indexed Indirect</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Post-Indexed_Indirect"><span class="tocnumber">3.8</span> <span class="toctext">Post-Indexed Indirect</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Relative"><span class="tocnumber">3.9</span> <span class="toctext">Relative</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#MCS6502_Microprocessor_Instruction_Set"><span class="tocnumber">4</span> <span class="toctext">MCS6502 Microprocessor Instruction Set</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#ADC_.E2.80.94_Add_memory_to_accumulator_with_carry"><span class="tocnumber">4.1</span> <span class="toctext">ADC — Add memory to accumulator with carry</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#AND_.E2.80.94_Boolean_and_memory_with_accumulator"><span class="tocnumber">4.2</span> <span class="toctext">AND — Boolean and memory with accumulator</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#ASL_.E2.80.94_Shift_left_one_bit_.28memory_or_accumulator.29"><span class="tocnumber">4.3</span> <span class="toctext">ASL — Shift left one bit (memory or accumulator)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#BCC_.E2.80.94_Branch_on_carry_clear"><span class="tocnumber">4.4</span> <span class="toctext">BCC — Branch on carry clear</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#BCS_.E2.80.94_Branch_on_carry_set"><span class="tocnumber">4.5</span> <span class="toctext">BCS — Branch on carry set</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#BEQ_.E2.80.94_Branch_on_result_zero"><span class="tocnumber">4.6</span> <span class="toctext">BEQ — Branch on result zero</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#BIT_.E2.80.94_Test_bits_in_memory_with_accumulator"><span class="tocnumber">4.7</span> <span class="toctext">BIT — Test bits in memory with accumulator</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#BMI_.E2.80.94_Branch_on_result_minus"><span class="tocnumber">4.8</span> <span class="toctext">BMI — Branch on result minus</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#BNE_.E2.80.94_Branch_on_result_not_zero"><span class="tocnumber">4.9</span> <span class="toctext">BNE — Branch on result not zero</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#BPL_.E2.80.94_Branch_on_result_plus"><span class="tocnumber">4.10</span> <span class="toctext">BPL — Branch on result plus</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#BRK_.E2.80.94_Force_break"><span class="tocnumber">4.11</span> <span class="toctext">BRK — Force break</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#BVC_.E2.80.94_Branch_on_overflow_clear"><span class="tocnumber">4.12</span> <span class="toctext">BVC — Branch on overflow clear</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#BVS_.E2.80.94_Branch_on_overflow_set"><span class="tocnumber">4.13</span> <span class="toctext">BVS — Branch on overflow set</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#CLC_.E2.80.94_Clear_carry_flag"><span class="tocnumber">4.14</span> <span class="toctext">CLC — Clear carry flag</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#CLD_.E2.80.94_Clear_decimal_mode"><span class="tocnumber">4.15</span> <span class="toctext">CLD — Clear decimal mode</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#CLI_.E2.80.94_Clear_interrupt_disable_bit"><span class="tocnumber">4.16</span> <span class="toctext">CLI — Clear interrupt disable bit</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#CLV_.E2.80.94_Clear_overflow_flag"><span class="tocnumber">4.17</span> <span class="toctext">CLV — Clear overflow flag</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#CMP_.E2.80.94_Compare_memory_and_accumulator"><span class="tocnumber">4.18</span> <span class="toctext">CMP — Compare memory and accumulator</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#CPX_.E2.80.94_Compare_Memory_and_Index_X"><span class="tocnumber">4.19</span> <span class="toctext">CPX — Compare Memory and Index X</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#CPY_.E2.80.94_Compare_memory_and_index_Y"><span class="tocnumber">4.20</span> <span class="toctext">CPY — Compare memory and index Y</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#DEC_.E2.80.94_Decrement_memory_by_one"><span class="tocnumber">4.21</span> <span class="toctext">DEC — Decrement memory by one</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#DEX_.E2.80.94_Decrement_index_X_by_one"><span class="tocnumber">4.22</span> <span class="toctext">DEX — Decrement index X by one</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#DEY_.E2.80.94_Decrement_index_Y_by_one"><span class="tocnumber">4.23</span> <span class="toctext">DEY — Decrement index Y by one</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#EOR_.E2.80.94_Boolean_exclusive_or_memory_with_accumulator"><span class="tocnumber">4.24</span> <span class="toctext">EOR — Boolean exclusive or memory with accumulator</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#INC_.E2.80.94_Increment_memory_by_one"><span class="tocnumber">4.25</span> <span class="toctext">INC — Increment memory by one</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#INX_.E2.80.94_Increment_Index_X_by_one"><span class="tocnumber">4.26</span> <span class="toctext">INX — Increment Index X by one</span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="#INY_.E2.80.94_Increment_Index_Y_by_one"><span class="tocnumber">4.27</span> <span class="toctext">INY — Increment Index Y by one</span></a></li>
+<li class="toclevel-2 tocsection-47"><a href="#JMP_.E2.80.94_Jump_to_new_location"><span class="tocnumber">4.28</span> <span class="toctext">JMP — Jump to new location</span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#JSR_.E2.80.94_Jump_to_new_location_saving_return_address"><span class="tocnumber">4.29</span> <span class="toctext">JSR — Jump to new location saving return address</span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#LDA_.E2.80.94_Load_accumulator_with_memory"><span class="tocnumber">4.30</span> <span class="toctext">LDA — Load accumulator with memory</span></a></li>
+<li class="toclevel-2 tocsection-50"><a href="#LDX_.E2.80.94_Load_index_X_with_memory"><span class="tocnumber">4.31</span> <span class="toctext">LDX — Load index X with memory</span></a></li>
+<li class="toclevel-2 tocsection-51"><a href="#LDY_.E2.80.94_Load_index_Y_with_memory"><span class="tocnumber">4.32</span> <span class="toctext">LDY — Load index Y with memory</span></a></li>
+<li class="toclevel-2 tocsection-52"><a href="#LSR_.E2.80.94_Shift_right_one_bit_.28memory_or_accumulator.29"><span class="tocnumber">4.33</span> <span class="toctext">LSR — Shift right one bit (memory or accumulator)</span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#NOP_.E2.80.94_No_operation"><span class="tocnumber">4.34</span> <span class="toctext">NOP — No operation</span></a></li>
+<li class="toclevel-2 tocsection-54"><a href="#ORA_.E2.80.94_Boolean_or_memory_with_accumulator"><span class="tocnumber">4.35</span> <span class="toctext">ORA — Boolean or memory with accumulator</span></a></li>
+<li class="toclevel-2 tocsection-55"><a href="#PHA_.E2.80.94_Push_accumulator_on_stack"><span class="tocnumber">4.36</span> <span class="toctext">PHA — Push accumulator on stack</span></a></li>
+<li class="toclevel-2 tocsection-56"><a href="#PHP_.E2.80.94_Push_processor_status_on_stack"><span class="tocnumber">4.37</span> <span class="toctext">PHP — Push processor status on stack</span></a></li>
+<li class="toclevel-2 tocsection-57"><a href="#PLA_.E2.80.94_Pull_accumulator_from_stack"><span class="tocnumber">4.38</span> <span class="toctext">PLA — Pull accumulator from stack</span></a></li>
+<li class="toclevel-2 tocsection-58"><a href="#PLP_.E2.80.94_Pull_processor_status_from_stack"><span class="tocnumber">4.39</span> <span class="toctext">PLP — Pull processor status from stack</span></a></li>
+<li class="toclevel-2 tocsection-59"><a href="#ROL_.E2.80.94_Rotate_one_bit_left_.28memory_or_accumulator.29"><span class="tocnumber">4.40</span> <span class="toctext">ROL — Rotate one bit left (memory or accumulator)</span></a></li>
+<li class="toclevel-2 tocsection-60"><a href="#ROR_.E2.80.94_Rotate_one_bit_right_.28memory_or_accumulator.29"><span class="tocnumber">4.41</span> <span class="toctext">ROR — Rotate one bit right (memory or accumulator)</span></a></li>
+<li class="toclevel-2 tocsection-61"><a href="#RTI_.E2.80.94_Return_from_interrupt"><span class="tocnumber">4.42</span> <span class="toctext">RTI — Return from interrupt</span></a></li>
+<li class="toclevel-2 tocsection-62"><a href="#RTS_.E2.80.94_Return_from_subroutine"><span class="tocnumber">4.43</span> <span class="toctext">RTS — Return from subroutine</span></a></li>
+<li class="toclevel-2 tocsection-63"><a href="#SBC_.E2.80.94_Subtract_memory_from_accumulator_with_borrow"><span class="tocnumber">4.44</span> <span class="toctext">SBC — Subtract memory from accumulator with borrow</span></a></li>
+<li class="toclevel-2 tocsection-64"><a href="#SEC_.E2.80.94_Set_carry_flag"><span class="tocnumber">4.45</span> <span class="toctext">SEC — Set carry flag</span></a></li>
+<li class="toclevel-2 tocsection-65"><a href="#SED_.E2.80.94_Set_decimal_mode"><span class="tocnumber">4.46</span> <span class="toctext">SED — Set decimal mode</span></a></li>
+<li class="toclevel-2 tocsection-66"><a href="#SEI_.E2.80.94_Set_interrupt_disable_status"><span class="tocnumber">4.47</span> <span class="toctext">SEI — Set interrupt disable status</span></a></li>
+<li class="toclevel-2 tocsection-67"><a href="#STA_.E2.80.94_Store_accumulator_in_memory"><span class="tocnumber">4.48</span> <span class="toctext">STA — Store accumulator in memory</span></a></li>
+<li class="toclevel-2 tocsection-68"><a href="#STX_.E2.80.94_Store_index_X_in_memory"><span class="tocnumber">4.49</span> <span class="toctext">STX — Store index X in memory</span></a></li>
+<li class="toclevel-2 tocsection-69"><a href="#STY_.E2.80.94_Store_index_Y_in_memory"><span class="tocnumber">4.50</span> <span class="toctext">STY — Store index Y in memory</span></a></li>
+<li class="toclevel-2 tocsection-70"><a href="#TAX_.E2.80.94_Transfer_accumulator_to_index_X"><span class="tocnumber">4.51</span> <span class="toctext">TAX — Transfer accumulator to index X</span></a></li>
+<li class="toclevel-2 tocsection-71"><a href="#TAY_.E2.80.94_Transfer_accumulator_to_index_Y"><span class="tocnumber">4.52</span> <span class="toctext">TAY — Transfer accumulator to index Y</span></a></li>
+<li class="toclevel-2 tocsection-72"><a href="#TSX_.E2.80.94_Transfer_stack_pointer_to_index_X"><span class="tocnumber">4.53</span> <span class="toctext">TSX — Transfer stack pointer to index X</span></a></li>
+<li class="toclevel-2 tocsection-73"><a href="#TXA_.E2.80.94_Transfer_index_X_to_accumulator"><span class="tocnumber">4.54</span> <span class="toctext">TXA — Transfer index X to accumulator</span></a></li>
+<li class="toclevel-2 tocsection-74"><a href="#TXS_.E2.80.94_Transfer_index_X_to_stack_pointer"><span class="tocnumber">4.55</span> <span class="toctext">TXS — Transfer index X to stack pointer</span></a></li>
+<li class="toclevel-2 tocsection-75"><a href="#TYA_.E2.80.94_Transfer_index_Y_to_accumulator"><span class="tocnumber">4.56</span> <span class="toctext">TYA — Transfer index Y to accumulator</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-76"><a href="#Instruction_Addressing_Modes_and_Related_Execution_Times"><span class="tocnumber">5</span> <span class="toctext">Instruction Addressing Modes and Related Execution Times</span></a></li>
+<li class="toclevel-1 tocsection-77"><a href="#Opcode_Table"><span class="tocnumber">6</span> <span class="toctext">Opcode Table</span></a></li>
+<li class="toclevel-1 tocsection-78"><a href="#Instruction_Operation"><span class="tocnumber">7</span> <span class="toctext">Instruction Operation</span></a></li>
+<li class="toclevel-1 tocsection-79"><a href="#Summary_of_6502_Opcodes"><span class="tocnumber">8</span> <span class="toctext">Summary of 6502 Opcodes</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="6502_Microprocessor">6502 Microprocessor</span></h2>
+<ul><li> Revision 1.02 by _Bnu.</li>
+<li> Revision 1.03 by _Gist.</li>
+<li> Wikification by Karatorian.</li></ul>
+<p>Most of the following information has been taking out of the
+<i>Commodore 64 Programmers Reference Manual</i>
+simply because it was available in electronic
+form and there appears to be no difference between this documentation and
+the 6502 documentation, they are both from the 6500 family after all. I've
+made changes and additions where appropriate.
+</p><p>In theory you should be able to use any code you can find for emulating
+the 6510 (the C64 processor).
+</p>
+<h2><span class="mw-headline" id="The_Registers_Inside_The_6502_Microprocessor">The Registers Inside The 6502 Microprocessor</span></h2>
+<p>Almost all calculations are done in the microprocessor. Registers are
+special pieces of memory in the processor which are used to carry out, and
+store information about calculations. The 6502 has the following registers:
+</p>
+<h3><span class="mw-headline" id="The_Accumulator">The Accumulator</span></h3>
+<p>This is <i>the</i> most important register in the microprocessor. Various
+machine language instructions allow you to copy the contents of a memory
+location into the accumulator, copy the contents of the accumulator into
+a memory location, modify the contents of the accumulator or some other
+register directly, without affecting any memory. And the accumulator is
+the only register that has instructions for performing math.
+</p>
+<h3><span class="mw-headline" id="The_X_Index_Register">The X Index Register</span></h3>
+<p>This is a very important register. There are instructions for nearly
+all of the transformations you can make to the accumulator. But there are
+other instructions for things that only the X register can do. Various
+machine language instructions allow you to copy the contents of a memory
+location into the X register, copy the contents of the X register into a
+memory location, and modify the contents of the X, or some other register
+directly.
+</p>
+<h3><span class="mw-headline" id="The_Y_Index_Register">The Y Index Register</span></h3>
+<p>This is a very important register. There are instructions for nearly
+all of the transformations you can make to the accumulator, and the X
+register. But there are other instructions for things that only the Y
+register can do. Various machine language instructions allow you to copy
+the contents of a memory location into the Y register, copy the contents
+of the Y register into a memory location, and modify the contents of the
+Y, or some other register directly.
+</p>
+<h3><span class="mw-headline" id="The_Status_Register">The Status Register</span></h3>
+<p>This register consists of eight &quot;flags&quot; (a flag = something that indicates whether something has, or has not occurred).
+Bits of this register are altered depending on the result of arithmetic and logical operations.
+These bits are described below:
+</p>
+<pre>    Bit No.       7   6   5   4   3   2   1   0
+                  S   V   R   B   D   I   Z   C
+</pre>
+<dl><dt> C – Carry Flag</dt>
+<dd>  This holds the carry out of the most significant bit in any arithmetic operation. In subtraction operations however, this flag is cleared—set to 0—if a borrow is required, set to 1—if no borrow is required. The carry flag is also used in shift and rotate logical operations.</dd>
+<dt> Z — Zero Flag</dt>
+<dd>  This is set to 1 when any arithmetic or logical operation produces a zero result, and is set to 0 if the result is non-zero.</dd>
+<dt> I — Interrupt Disable Flag</dt>
+<dd>  This is an interrupt enable/disable flag. If it is set, interrupts are disabled. If it is cleared, interrupts are enabled.</dd>
+<dt> D — Decimal Mode Flag</dt>
+<dd>  This is the decimal mode status flag. When set, and an Add with Carry or Subtract with Carry instruction is executed, the source values are treated as valid BCD (Binary Coded Decimal, eg. 0x00–0x99 = 0–99) numbers. The result generated is also a BCD number.</dd>
+<dt>B — Break Flag</dt>
+<dd>  Used only in the flags pushed to the stack. If an instruction (BRK or PHP) caused the push, bit 4 is true (1) in the pushed flags. If a hardware interrupt (/NMI or /IRQ) pushed the flags, bit 4 is false (0).</dd>
+<dt> R — Reserved</dt>
+<dd>  Not used. Always pushed to the stack as true (logical 1).</dd>
+<dt> V — Overflow Flag</dt>
+<dd>  When an arithmetic operation produces a result too large to be represented in a byte, V is set.</dd>
+<dt> S — Sign Flag</dt>
+<dd>  This is set if the result of an operation is negative, cleared if positive. Called &quot;N&quot; in official 6502 data sheets.</dd></dl>
+<p>The most commonly used flags are Z, C, S, V.
+</p>
+<h3><span class="mw-headline" id="The_Program_Counter">The Program Counter</span></h3>
+<p>This contains the address of the current machine language instruction
+being executed. Since the operating system is always &quot;RUN&quot;ning in the
+Commodore VIC-20 (or, for that matter, any computer), the program counter
+is always changing. It could only be stopped by halting the microprocessor
+in some way.
+</p>
+<h3><span class="mw-headline" id="The_Stack_Pointer">The Stack Pointer</span></h3>
+<p>This register contains the location of the first empty place on the
+stack. The stack is used for temporary storage by machine language
+programs, and by the computer.
+</p>
+<h2><span class="mw-headline" id="Addressing_Modes">Addressing Modes</span></h2>
+<p>Instructions need operands to work on. There are various ways of
+indicating where the processor is to get these operands. The different
+methods used to do this are called addressing modes. The 6502 offers 11
+modes, as described below.
+</p>
+<h3><span class="mw-headline" id="Immediate">Immediate</span></h3>
+<p>In this mode the operand's value is given in the instruction itself. In
+assembly language this is indicated by &quot;#&quot; before the operand.
+</p>
+<pre> eg.  LDA #$0A - means &quot;load the accumulator with the hex value 0A&quot;
+</pre>
+<p>In machine code different modes are indicated by different codes. So LDA
+would be translated into different codes depending on the addressing mode.
+</p>
+<pre> In this mode, it is: $A9 $0A
+</pre>
+<h3><span class="mw-headline" id="Absolute_and_Zero-page_Absolute">Absolute and Zero-page Absolute</span></h3>
+<p>In these modes the operands address is given.
+</p>
+<pre> eg.  LDA $31F6 - (assembler)
+      $AD $31F6 - (machine code)
+</pre>
+<p>If the address is on zero page—i.e. any address where the high byte is
+00—only 1 byte is needed for the address. The processor automatically
+fills the 00 high byte.
+</p>
+<pre> eg.  LDA $F4
+      $A5 $F4
+</pre>
+<p>Note the different instruction codes for the different modes.
+Note also that for 2 byte addresses, the low byte is store first,
+</p>
+<pre> eg. LDA $31F6 is stored as three bytes in memory, $AD $F6 $31.
+</pre>
+<p>Zero-page absolute is usually just called zero-page.
+</p>
+<h3><span class="mw-headline" id="Implied">Implied</span></h3>
+<p>No operand addresses are required for this mode. They are implied by the
+instruction.
+</p>
+<pre> eg.  TAX - (transfer accumulator contents to X-register)
+      $AA
+</pre>
+<h3><span class="mw-headline" id="Accumulator">Accumulator</span></h3>
+<p>In this mode the instruction operates on data in the accumulator, so no
+operands are needed.
+</p>
+<pre> eg.  LSR - logical bit shift right
+      $4A
+</pre>
+<h3><span class="mw-headline" id="Indexed_and_Zero-page_Indexed">Indexed and Zero-page Indexed</span></h3>
+<p>In these modes the address given is added to the value in either the X or
+Y index register to give the actual address of the operand.
+</p>
+<pre> eg.  LDA $31F6, Y
+      $D9 $31F6
+      LDA $31F6, X
+      $DD $31F6
+</pre>
+<p>Note that the different operation codes determine the index register used.
+In the zero-page version, you should note that the X and Y registers are
+not interchangeable. Most instructions which can be used with zero-page
+indexing do so with X only.
+</p>
+<pre> eg.  LDA $20, X
+      $B5 $20
+</pre>
+<h3><span class="mw-headline" id="Indirect">Indirect</span></h3>
+<p>This mode applies only to the JMP instruction - JuMP to new location. It is
+indicated by parenthesis around the operand. The operand is the address of
+the bytes whose value is the new location.
+</p>
+<pre> eg.  JMP ($215F)
+ Assume the following -        byte      value
+                               $215F     $76
+                               $2160     $30
+</pre>
+<p>This instruction takes the value of bytes $215F, $2160 and uses that as the
+address to jump to - i.e. $3076 (remember that addresses are stored with
+low byte first).
+</p>
+<h3><span class="mw-headline" id="Pre-Indexed_Indirect">Pre-Indexed Indirect</span></h3>
+<p>In this mode a zer0-page address is added to the contents of the X-register
+to give the address of the bytes holding the address of the operand. The
+indirection is indicated by parenthesis in assembly language.
+</p>
+<pre> eg.  LDA ($3E, X)
+      $A1 $3E
+ Assume the following -        byte      value
+                               X-reg.    $05
+                               $0043     $15
+                               $0044     $24
+                               $2415     $6E
+</pre>
+<p>Then the instruction is executed by:
+</p>
+<pre> (i)   adding $3E and $05 = $0043
+ (ii)  getting address contained in bytes $0043, $0044 = $2415
+ (iii) loading contents of $2415 - i.e. $6E - into accumulator
+</pre>
+<pre> Note a) When adding the 1-byte address and the X-register, wrap around
+         addition is used - i.e. the sum is always a zero-page address.
+         eg. FF + 2 = 0001 not 0101 as you might expect.
+         DON'T FORGET THIS WHEN EMULATING THIS MODE.
+      b) Only the X register is used in this mode.
+</pre>
+<h3><span class="mw-headline" id="Post-Indexed_Indirect">Post-Indexed Indirect</span></h3>
+<p>In this mode the contents of a zero-page address (and the following byte)
+give the indirect addressm which is added to the contents of the Y-register
+to yield the actual address of the operand. Again, inassembly language,
+the instruction is indicated by parenthesis.
+</p>
+<pre> eg.  LDA ($4C), Y
+</pre>
+<p>Note that the parenthesis are only around the 2nd byte of the instruction
+since it is the part that does the indirection.
+</p>
+<pre> Assume the following -        byte       value
+                               $004C      $00
+                               $004D      $21
+                               Y-reg.     $05
+                               $2105      $6D
+</pre>
+<p>Then the instruction above executes by:
+</p>
+<pre> (i)   getting the address in bytes $4C, $4D = $2100
+ (ii)  adding the contents of the Y-register = $2105
+ (111) loading the contents of the byte $2105 - i.e. $6D into the
+       accumulator.
+ Note: only the Y-register is used in this mode.
+</pre>
+<h3><span class="mw-headline" id="Relative">Relative</span></h3>
+<p>This mode is used with Branch-on-Condition instructions. It is probably
+the mode you will use most often. A 1 byte value is added to the program
+counter, and the program continues execution from that address. The 1
+byte number is treated as a signed number - i.e. if bit 7 is 1, the number
+given byt bits 0-6 is negative; if bit 7 is 0, the number is positive. This
+enables a branch displacement of up to 127 bytes in either direction.
+</p>
+<pre> eg  bit no.  7 6 5 4 3 2 1 0    signed value          unsigned value
+     value    1 0 1 0 0 1 1 1    -39                   $A7
+     value    0 0 1 0 0 1 1 1    +39                   $27
+</pre>
+<p>Instruction example:
+</p>
+<pre>   BEQ $A7
+   $F0 $A7
+</pre>
+<p>This instruction will check the zero status bit. If it is set, 39 decimal
+will be subtracted from the program counter and execution continues from
+that address. If the zero status bit is not set, execution continues from
+the following instruction.
+</p>
+<pre> Notes:  a) The program counter points to the start of the instruction
+ after the branch instruction before the branch displacement is added.
+ Remember to take this into account when calculating displacements.
+         b) Branch-on-condition instructions work by checking the relevant
+ status bits in the status register. Make sure that they have been set or
+ unset as you want them. This is often done using a CMP instruction.
+         c) If you find you need to branch further than 127 bytes, use the
+ opposite branch-on-condition and a JMP.
+</pre>
+<h2><span class="mw-headline" id="MCS6502_Microprocessor_Instruction_Set">MCS6502 Microprocessor Instruction Set</span></h2>
+<pre>               The following notation applies to this summary:
+
+    A       Accumulator                  EOR     Logical Exclusive Or
+
+    X, Y    Index Registers              fromS   Transfer from Stack
+
+    M       Memory                       toS     Transfer to Stack
+
+    P       Processor Status Register    -&gt;      Transfer to
+
+    S       Stack Pointer                &lt;-      Transfer from
+
+    /       Change                       V       Logical OR
+
+    _       No Change                    PC      Program Counter
+
+    +       Add                          PCH     Program Counter High
+
+    /\      Logical AND                  PCL     Program Counter Low
+
+    -       Subtract                     OPER    OPERAND
+
+                                         #       IMMEDIATE ADDRESSING MODE
+
+ Note: At the top of each table is located in parentheses a reference
+       number (Ref: XX) which directs the user to that Section in the
+       MCS6500 Microcomputer Family Programming Manual in which the
+       instruction is defined and discussed.
+</pre>
+<h3><span class="mw-headline" id="ADC_.E2.80.94_Add_memory_to_accumulator_with_carry">ADC — Add memory to accumulator with carry</span></h3>
+<ul><li>Operation: A + M + C → A, C</li>
+<li>Changed: N Z C V</li>
+<li>Unmodified: I D</li></ul>
+<table class="tabular">
+<tr>
+<th> Addressing Mode </th>
+<th> Assembly Language Form </th>
+<th> OP CODE </th>
+<th> # Bytes </th>
+<th> # Cycles
+</th></tr>
+<tr>
+<td> Immediate </td>
+<td> ADC #Oper </td>
+<td> 69 </td>
+<td> 2 </td>
+<td> 2
+</td></tr>
+<tr>
+<td> Zero Page </td>
+<td> ADC Oper </td>
+<td> 65 </td>
+<td> 2 </td>
+<td> 3
+</td></tr>
+<tr>
+<td> Zero Page,X </td>
+<td> ADC Oper,X </td>
+<td> 75 </td>
+<td> 2 </td>
+<td> 4
+</td></tr>
+<tr>
+<td> Absolute </td>
+<td> ADC Oper </td>
+<td> 60 </td>
+<td> 3 </td>
+<td> 4
+</td></tr>
+<tr>
+<td> Absolute,X </td>
+<td> ADC Oper,X </td>
+<td> 7D </td>
+<td> 3 </td>
+<td> 4*
+</td></tr>
+<tr>
+<td> Absolute,Y </td>
+<td> ADC Oper,Y </td>
+<td> 79 </td>
+<td> 3 </td>
+<td> 4*
+</td></tr>
+<tr>
+<td> (Indirect,X) </td>
+<td> ADC (Oper,X) </td>
+<td> 61 </td>
+<td> 2 </td>
+<td> 6
+</td></tr>
+<tr>
+<td> (Indirect),Y </td>
+<td> ADC (Oper),Y </td>
+<td> 71 </td>
+<td> 2 </td>
+<td> 5*
+</td></tr></table>
+<p>* Add 1 if page boundary is crossed.
+</p>
+<h3><span class="mw-headline" id="AND_.E2.80.94_Boolean_and_memory_with_accumulator">AND — Boolean and memory with accumulator</span></h3>
+<pre> Operation:  A /\ M -&gt; A                               N Z C I D V
+                                                       / / _ _ _ _
+                              (Ref: 2.2.3.0)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   AND #Oper           |    29   |    2    |    2     |
+ |  Zero Page     |   AND Oper            |    25   |    2    |    3     |
+ |  Zero Page,X   |   AND Oper,X          |    35   |    2    |    4     |
+ |  Absolute      |   AND Oper            |    2D   |    3    |    4     |
+ |  Absolute,X    |   AND Oper,X          |    3D   |    3    |    4*    |
+ |  Absolute,Y    |   AND Oper,Y          |    39   |    3    |    4*    |
+ |  (Indirect,X)  |   AND (Oper,X)        |    21   |    2    |    6     |
+ |  (Indirect,Y)  |   AND (Oper),Y        |    31   |    2    |    5     |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="ASL_.E2.80.94_Shift_left_one_bit_.28memory_or_accumulator.29">ASL — Shift left one bit (memory or accumulator)</span></h3>
+<pre>                  +-+-+-+-+-+-+-+-+
+ Operation:  C &lt;- |7|6|5|4|3|2|1|0| &lt;- 0
+                  +-+-+-+-+-+-+-+-+                    N Z C I D V
+                                                       / / / _ _ _
+                                (Ref: 10.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Accumulator   |   ASL A               |    0A   |    1    |    2     |
+ |  Zero Page     |   ASL Oper            |    06   |    2    |    5     |
+ |  Zero Page,X   |   ASL Oper,X          |    16   |    2    |    6     |
+ |  Absolute      |   ASL Oper            |    0E   |    3    |    6     |
+ |  Absolute, X   |   ASL Oper,X          |    1E   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="BCC_.E2.80.94_Branch_on_carry_clear">BCC — Branch on carry clear</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  Branch on C = 0                           _ _ _ _ _ _
+                              (Ref: 4.1.1.3)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BCC Oper            |    90   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 2 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="BCS_.E2.80.94_Branch_on_carry_set">BCS — Branch on carry set</span></h3>
+<pre> Operation:  Branch on C = 1                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.4)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BCS Oper            |    B0   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same  page.
+ * Add 2 if branch occurs to next  page.
+</pre>
+<h3><span class="mw-headline" id="BEQ_.E2.80.94_Branch_on_result_zero">BEQ — Branch on result zero</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  Branch on Z = 1                           _ _ _ _ _ _
+                              (Ref: 4.1.1.5)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BEQ Oper            |    F0   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same  page.
+ * Add 2 if branch occurs to next  page.
+</pre>
+<h3><span class="mw-headline" id="BIT_.E2.80.94_Test_bits_in_memory_with_accumulator">BIT — Test bits in memory with accumulator</span></h3>
+<pre> Operation:  A /\ M, M7 -&gt; N, M6 -&gt; V
+
+ Bit 6 and 7 are transferred to the status register.   N Z C I D V
+ If the result of A /\ M is zero then Z = 1, otherwise M7/ _ _ _ M6
+ Z = 0
+                              (Ref: 4.2.1.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   BIT Oper            |    24   |    2    |    3     |
+ |  Absolute      |   BIT Oper            |    2C   |    3    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="BMI_.E2.80.94_Branch_on_result_minus">BMI — Branch on result minus</span></h3>
+<pre> Operation:  Branch on N = 1                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BMI Oper            |    30   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 1 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="BNE_.E2.80.94_Branch_on_result_not_zero">BNE — Branch on result not zero</span></h3>
+<pre> Operation:  Branch on Z = 0                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.6)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BMI Oper            |    D0   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 2 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="BPL_.E2.80.94_Branch_on_result_plus">BPL — Branch on result plus</span></h3>
+<pre> Operation:  Branch on N = 0                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BPL Oper            |    10   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 2 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="BRK_.E2.80.94_Force_break">BRK — Force break</span></h3>
+<pre> Operation:  Forced Interrupt PC + 2 toS P toS         N Z C I D V
+                                                       _ _ _ 1 _ _
+                                (Ref: 9.11)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   BRK                 |    00   |    1    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+ 1. A BRK command cannot be masked by setting I.
+</pre>
+<h3><span class="mw-headline" id="BVC_.E2.80.94_Branch_on_overflow_clear">BVC — Branch on overflow clear</span></h3>
+<pre> Operation:  Branch on V = 0                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.8)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BVC Oper            |    50   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 2 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="BVS_.E2.80.94_Branch_on_overflow_set">BVS — Branch on overflow set</span></h3>
+<pre> Operation:  Branch on V = 1                           N Z C I D V
+                                                       _ _ _ _ _ _
+                              (Ref: 4.1.1.7)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Relative      |   BVS Oper            |    70   |    2    |    2*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if branch occurs to same page.
+ * Add 2 if branch occurs to different page.
+</pre>
+<h3><span class="mw-headline" id="CLC_.E2.80.94_Clear_carry_flag">CLC — Clear carry flag</span></h3>
+<pre> Operation:  0 -&gt; C                                    N Z C I D V
+                                                       _ _ 0 _ _ _
+                               (Ref: 3.0.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   CLC                 |    18   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="CLD_.E2.80.94_Clear_decimal_mode">CLD — Clear decimal mode</span></h3>
+<pre> Operation:  0 -&gt; D                                    N A C I D V
+                                                       _ _ _ _ 0 _
+                               (Ref: 3.3.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   CLD                 |    D8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="CLI_.E2.80.94_Clear_interrupt_disable_bit">CLI — Clear interrupt disable bit</span></h3>
+<pre> Operation: 0 -&gt; I                                     N Z C I D V
+                                                       _ _ _ 0 _ _
+                               (Ref: 3.2.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   CLI                 |    58   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="CLV_.E2.80.94_Clear_overflow_flag">CLV — Clear overflow flag</span></h3>
+<pre> Operation: 0 -&gt; V                                     N Z C I D V
+                                                       _ _ _ _ _ 0
+                               (Ref: 3.6.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   CLV                 |    B8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="CMP_.E2.80.94_Compare_memory_and_accumulator">CMP — Compare memory and accumulator</span></h3>
+<pre> Operation:  A - M                                     N Z C I D V
+                                                       / / / _ _ _
+                               (Ref: 4.2.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   CMP #Oper           |    C9   |    2    |    2     |
+ |  Zero Page     |   CMP Oper            |    C5   |    2    |    3     |
+ |  Zero Page,X   |   CMP Oper,X          |    D5   |    2    |    4     |
+ |  Absolute      |   CMP Oper            |    CD   |    3    |    4     |
+ |  Absolute,X    |   CMP Oper,X          |    DD   |    3    |    4*    |
+ |  Absolute,Y    |   CMP Oper,Y          |    D9   |    3    |    4*    |
+ |  (Indirect,X)  |   CMP (Oper,X)        |    C1   |    2    |    6     |
+ |  (Indirect),Y  |   CMP (Oper),Y        |    D1   |    2    |    5*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="CPX_.E2.80.94_Compare_Memory_and_Index_X">CPX — Compare Memory and Index X</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  X - M                                     / / / _ _ _
+                                (Ref: 7.8)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   CPX *Oper           |    E0   |    2    |    2     |
+ |  Zero Page     |   CPX Oper            |    E4   |    2    |    3     |
+ |  Absolute      |   CPX Oper            |    EC   |    3    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="CPY_.E2.80.94_Compare_memory_and_index_Y">CPY — Compare memory and index Y</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  Y - M                                     / / / _ _ _
+                                (Ref: 7.9)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   CPY *Oper           |    C0   |    2    |    2     |
+ |  Zero Page     |   CPY Oper            |    C4   |    2    |    3     |
+ |  Absolute      |   CPY Oper            |    CC   |    3    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="DEC_.E2.80.94_Decrement_memory_by_one">DEC — Decrement memory by one</span></h3>
+<pre> Operation:  M - 1 -&gt; M                                N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 10.7)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   DEC Oper            |    C6   |    2    |    5     |
+ |  Zero Page,X   |   DEC Oper,X          |    D6   |    2    |    6     |
+ |  Absolute      |   DEC Oper            |    CE   |    3    |    6     |
+ |  Absolute,X    |   DEC Oper,X          |    DE   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="DEX_.E2.80.94_Decrement_index_X_by_one">DEX — Decrement index X by one</span></h3>
+<pre> Operation:  X - 1 -&gt; X                                N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.6)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   DEX                 |    CA   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="DEY_.E2.80.94_Decrement_index_Y_by_one">DEY — Decrement index Y by one</span></h3>
+<pre> Operation:  Y - 1 -&gt; Y                                N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.7)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   DEY                 |    88   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="EOR_.E2.80.94_Boolean_exclusive_or_memory_with_accumulator">EOR — Boolean exclusive or memory with accumulator</span></h3>
+<pre> Operation:  A EOR M -&gt; A                              N Z C I D V
+                                                       / / _ _ _ _
+                              (Ref: 2.2.3.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   EOR #Oper           |    49   |    2    |    2     |
+ |  Zero Page     |   EOR Oper            |    45   |    2    |    3     |
+ |  Zero Page,X   |   EOR Oper,X          |    55   |    2    |    4     |
+ |  Absolute      |   EOR Oper            |    40   |    3    |    4     |
+ |  Absolute,X    |   EOR Oper,X          |    5D   |    3    |    4*    |
+ |  Absolute,Y    |   EOR Oper,Y          |    59   |    3    |    4*    |
+ |  (Indirect,X)  |   EOR (Oper,X)        |    41   |    2    |    6     |
+ |  (Indirect),Y  |   EOR (Oper),Y        |    51   |    2    |    5*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="INC_.E2.80.94_Increment_memory_by_one">INC — Increment memory by one</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  M + 1 -&gt; M                                / / _ _ _ _
+                                (Ref: 10.6)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   INC Oper            |    E6   |    2    |    5     |
+ |  Zero Page,X   |   INC Oper,X          |    F6   |    2    |    6     |
+ |  Absolute      |   INC Oper            |    EE   |    3    |    6     |
+ |  Absolute,X    |   INC Oper,X          |    FE   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="INX_.E2.80.94_Increment_Index_X_by_one">INX — Increment Index X by one</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  X + 1 -&gt; X                                / / _ _ _ _
+                                (Ref: 7.4)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   INX                 |    E8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="INY_.E2.80.94_Increment_Index_Y_by_one">INY — Increment Index Y by one</span></h3>
+<pre> Operation:  Y + 1 -&gt; Y                                N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.5)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   INY                 |    C8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="JMP_.E2.80.94_Jump_to_new_location">JMP — Jump to new location</span></h3>
+<pre> Operation:  (PC + 1) -&gt; PCL                           N Z C I D V
+             (PC + 2) -&gt; PCH   (Ref: 4.0.2)            _ _ _ _ _ _
+                               (Ref: 9.8.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Absolute      |   JMP Oper            |    4C   |    3    |    3     |
+ |  Indirect      |   JMP (Oper)          |    6C   |    3    |    5     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="JSR_.E2.80.94_Jump_to_new_location_saving_return_address">JSR — Jump to new location saving return address</span></h3>
+<pre> Operation:  PC + 2 toS, (PC + 1) -&gt; PCL               N Z C I D V
+                         (PC + 2) -&gt; PCH               _ _ _ _ _ _
+                                (Ref: 8.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Absolute      |   JSR Oper            |    20   |    3    |    6     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="LDA_.E2.80.94_Load_accumulator_with_memory">LDA — Load accumulator with memory</span></h3>
+<pre> Operation:  M -&gt; A                                    N Z C I D V
+                                                       / / _ _ _ _
+                               (Ref: 2.1.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   LDA #Oper           |    A9   |    2    |    2     |
+ |  Zero Page     |   LDA Oper            |    A5   |    2    |    3     |
+ |  Zero Page,X   |   LDA Oper,X          |    B5   |    2    |    4     |
+ |  Absolute      |   LDA Oper            |    AD   |    3    |    4     |
+ |  Absolute,X    |   LDA Oper,X          |    BD   |    3    |    4*    |
+ |  Absolute,Y    |   LDA Oper,Y          |    B9   |    3    |    4*    |
+ |  (Indirect,X)  |   LDA (Oper,X)        |    A1   |    2    |    6     |
+ |  (Indirect),Y  |   LDA (Oper),Y        |    B1   |    2    |    5*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 if page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="LDX_.E2.80.94_Load_index_X_with_memory">LDX — Load index X with memory</span></h3>
+<pre> Operation:  M -&gt; X                                    N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.0)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   LDX #Oper           |    A2   |    2    |    2     |
+ |  Zero Page     |   LDX Oper            |    A6   |    2    |    3     |
+ |  Zero Page,Y   |   LDX Oper,Y          |    B6   |    2    |    4     |
+ |  Absolute      |   LDX Oper            |    AE   |    3    |    4     |
+ |  Absolute,Y    |   LDX Oper,Y          |    BE   |    3    |    4*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 when page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="LDY_.E2.80.94_Load_index_Y_with_memory">LDY — Load index Y with memory</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  M -&gt; Y                                    / / _ _ _ _
+                                (Ref: 7.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   LDY #Oper           |    A0   |    2    |    2     |
+ |  Zero Page     |   LDY Oper            |    A4   |    2    |    3     |
+ |  Zero Page,X   |   LDY Oper,X          |    B4   |    2    |    4     |
+ |  Absolute      |   LDY Oper            |    AC   |    3    |    4     |
+ |  Absolute,X    |   LDY Oper,X          |    BC   |    3    |    4*    |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 when page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="LSR_.E2.80.94_Shift_right_one_bit_.28memory_or_accumulator.29">LSR — Shift right one bit (memory or accumulator)</span></h3>
+<pre>                  +-+-+-+-+-+-+-+-+
+ Operation:  0 -&gt; |7|6|5|4|3|2|1|0| -&gt; C               N Z C I D V
+                  +-+-+-+-+-+-+-+-+                    0 / / _ _ _
+                                (Ref: 10.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Accumulator   |   LSR A               |    4A   |    1    |    2     |
+ |  Zero Page     |   LSR Oper            |    46   |    2    |    5     |
+ |  Zero Page,X   |   LSR Oper,X          |    56   |    2    |    6     |
+ |  Absolute      |   LSR Oper            |    4E   |    3    |    6     |
+ |  Absolute,X    |   LSR Oper,X          |    5E   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="NOP_.E2.80.94_No_operation">NOP — No operation</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  No Operation (2 cycles)                   _ _ _ _ _ _
+
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   NOP                 |    EA   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="ORA_.E2.80.94_Boolean_or_memory_with_accumulator">ORA — Boolean or memory with accumulator</span></h3>
+<pre> Operation: A V M -&gt; A                                 N Z C I D V
+                                                       / / _ _ _ _
+                              (Ref: 2.2.3.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   ORA #Oper           |    09   |    2    |    2     |
+ |  Zero Page     |   ORA Oper            |    05   |    2    |    3     |
+ |  Zero Page,X   |   ORA Oper,X          |    15   |    2    |    4     |
+ |  Absolute      |   ORA Oper            |    0D   |    3    |    4     |
+ |  Absolute,X    |   ORA Oper,X          |    10   |    3    |    4*    |
+ |  Absolute,Y    |   ORA Oper,Y          |    19   |    3    |    4*    |
+ |  (Indirect,X)  |   ORA (Oper,X)        |    01   |    2    |    6     |
+ |  (Indirect),Y  |   ORA (Oper),Y        |    11   |    2    |    5     |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 on page crossing
+</pre>
+<h3><span class="mw-headline" id="PHA_.E2.80.94_Push_accumulator_on_stack">PHA — Push accumulator on stack</span></h3>
+<pre> Operation:  A toS                                     N Z C I D V
+                                                       _ _ _ _ _ _
+                                (Ref: 8.5)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   PHA                 |    48   |    1    |    3     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="PHP_.E2.80.94_Push_processor_status_on_stack">PHP — Push processor status on stack</span></h3>
+<pre> Operation:  P toS                                     N Z C I D V
+                                                       _ _ _ _ _ _
+                                (Ref: 8.11)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   PHP                 |    08   |    1    |    3     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="PLA_.E2.80.94_Pull_accumulator_from_stack">PLA — Pull accumulator from stack</span></h3>
+<pre> Operation:  A fromS                                   N Z C I D V
+                                                       _ _ _ _ _ _
+                                (Ref: 8.6)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   PLA                 |    68   |    1    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="PLP_.E2.80.94_Pull_processor_status_from_stack">PLP — Pull processor status from stack</span></h3>
+<pre> Operation:  P fromS                                   N Z C I D V
+                                                        From Stack
+                                (Ref: 8.12)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   PLP                 |    28   |    1    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="ROL_.E2.80.94_Rotate_one_bit_left_.28memory_or_accumulator.29">ROL — Rotate one bit left (memory or accumulator)</span></h3>
+<pre>              +------------------------------+
+              |         M or A               |
+              |   +-+-+-+-+-+-+-+-+    +-+   |
+ Operation:   +-&lt; |7|6|5|4|3|2|1|0| &lt;- |C| &lt;-+         N Z C I D V
+                  +-+-+-+-+-+-+-+-+    +-+             / / / _ _ _
+                                (Ref: 10.3)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Accumulator   |   ROL A               |    2A   |    1    |    2     |
+ |  Zero Page     |   ROL Oper            |    26   |    2    |    5     |
+ |  Zero Page,X   |   ROL Oper,X          |    36   |    2    |    6     |
+ |  Absolute      |   ROL Oper            |    2E   |    3    |    6     |
+ |  Absolute,X    |   ROL Oper,X          |    3E   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="ROR_.E2.80.94_Rotate_one_bit_right_.28memory_or_accumulator.29">ROR — Rotate one bit right (memory or accumulator)</span></h3>
+<pre>              +------------------------------+
+              |                              |
+              |   +-+    +-+-+-+-+-+-+-+-+   |
+ Operation:   +-&gt; |C| -&gt; |7|6|5|4|3|2|1|0| &gt;-+         N Z C I D V
+                  +-+    +-+-+-+-+-+-+-+-+             / / / _ _ _
+                                (Ref: 10.4)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Accumulator   |   ROR A               |    6A   |    1    |    2     |
+ |  Zero Page     |   ROR Oper            |    66   |    2    |    5     |
+ |  Zero Page,X   |   ROR Oper,X          |    76   |    2    |    6     |
+ |  Absolute      |   ROR Oper            |    6E   |    3    |    6     |
+ |  Absolute,X    |   ROR Oper,X          |    7E   |    3    |    7     |
+ +----------------+-----------------------+---------+---------+----------+
+
+   Note: ROR instruction is available on MCS650X microprocessors after
+         June, 1976.
+</pre>
+<h3><span class="mw-headline" id="RTI_.E2.80.94_Return_from_interrupt">RTI — Return from interrupt</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  P fromS PC fromS                           From Stack
+                                (Ref: 9.6)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   RTI                 |    4D   |    1    |    6     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="RTS_.E2.80.94_Return_from_subroutine">RTS — Return from subroutine</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  PC fromS, PC + 1 -&gt; PC                    _ _ _ _ _ _
+                                (Ref: 8.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   RTS                 |    60   |    1    |    6     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="SBC_.E2.80.94_Subtract_memory_from_accumulator_with_borrow">SBC — Subtract memory from accumulator with borrow</span></h3>
+<pre>                     -
+ Operation:  A - M - C -&gt; A                            N Z C I D V
+        -                                              / / / _ _ /
+   Note:C = Borrow             (Ref: 2.2.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Immediate     |   SBC #Oper           |    E9   |    2    |    2     |
+ |  Zero Page     |   SBC Oper            |    E5   |    2    |    3     |
+ |  Zero Page,X   |   SBC Oper,X          |    F5   |    2    |    4     |
+ |  Absolute      |   SBC Oper            |    ED   |    3    |    4     |
+ |  Absolute,X    |   SBC Oper,X          |    FD   |    3    |    4*    |
+ |  Absolute,Y    |   SBC Oper,Y          |    F9   |    3    |    4*    |
+ |  (Indirect,X)  |   SBC (Oper,X)        |    E1   |    2    |    6     |
+ |  (Indirect),Y  |   SBC (Oper),Y        |    F1   |    2    |    5     |
+ +----------------+-----------------------+---------+---------+----------+
+ * Add 1 when page boundary is crossed.
+</pre>
+<h3><span class="mw-headline" id="SEC_.E2.80.94_Set_carry_flag">SEC — Set carry flag</span></h3>
+<pre> Operation:  1 -&gt; C                                    N Z C I D V
+                                                       _ _ 1 _ _ _
+                               (Ref: 3.0.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   SEC                 |    38   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="SED_.E2.80.94_Set_decimal_mode">SED — Set decimal mode</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  1 -&gt; D                                    _ _ _ _ 1 _
+                               (Ref: 3.3.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   SED                 |    F8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="SEI_.E2.80.94_Set_interrupt_disable_status">SEI — Set interrupt disable status</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  1 -&gt; I                                    _ _ _ 1 _ _
+                               (Ref: 3.2.1)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   SEI                 |    78   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="STA_.E2.80.94_Store_accumulator_in_memory">STA — Store accumulator in memory</span></h3>
+<pre> Operation:  A -&gt; M                                    N Z C I D V
+                                                       _ _ _ _ _ _
+                               (Ref: 2.1.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   STA Oper            |    85   |    2    |    3     |
+ |  Zero Page,X   |   STA Oper,X          |    95   |    2    |    4     |
+ |  Absolute      |   STA Oper            |    8D   |    3    |    4     |
+ |  Absolute,X    |   STA Oper,X          |    9D   |    3    |    5     |
+ |  Absolute,Y    |   STA Oper, Y         |    99   |    3    |    5     |
+ |  (Indirect,X)  |   STA (Oper,X)        |    81   |    2    |    6     |
+ |  (Indirect),Y  |   STA (Oper),Y        |    91   |    2    |    6     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="STX_.E2.80.94_Store_index_X_in_memory">STX — Store index X in memory</span></h3>
+<pre> Operation: X -&gt; M                                     N Z C I D V
+                                                       _ _ _ _ _ _
+                                (Ref: 7.2)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   STX Oper            |    86   |    2    |    3     |
+ |  Zero Page,Y   |   STX Oper,Y          |    96   |    2    |    4     |
+ |  Absolute      |   STX Oper            |    8E   |    3    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="STY_.E2.80.94_Store_index_Y_in_memory">STY — Store index Y in memory</span></h3>
+<pre> Operation: Y -&gt; M                                     N Z C I D V
+                                                       _ _ _ _ _ _
+                                (Ref: 7.3)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Zero Page     |   STY Oper            |    84   |    2    |    3     |
+ |  Zero Page,X   |   STY Oper,X          |    94   |    2    |    4     |
+ |  Absolute      |   STY Oper            |    8C   |    3    |    4     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TAX_.E2.80.94_Transfer_accumulator_to_index_X">TAX — Transfer accumulator to index X</span></h3>
+<pre> Operation:  A -&gt; X                                    N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.11)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TAX                 |    AA   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TAY_.E2.80.94_Transfer_accumulator_to_index_Y">TAY — Transfer accumulator to index Y</span></h3>
+<pre> Operation:  A -&gt; Y                                    N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.13)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TAY                 |    A8   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TSX_.E2.80.94_Transfer_stack_pointer_to_index_X">TSX — Transfer stack pointer to index X</span></h3>
+<pre> Operation:  S -&gt; X                                    N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 8.9)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TSX                 |    BA   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TXA_.E2.80.94_Transfer_index_X_to_accumulator">TXA — Transfer index X to accumulator</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  X -&gt; A                                    / / _ _ _ _
+                                (Ref: 7.12)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TXA                 |    8A   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TXS_.E2.80.94_Transfer_index_X_to_stack_pointer">TXS — Transfer index X to stack pointer</span></h3>
+<pre>                                                       N Z C I D V
+ Operation:  X -&gt; S                                    _ _ _ _ _ _
+                                (Ref: 8.8)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TXS                 |    9A   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h3><span class="mw-headline" id="TYA_.E2.80.94_Transfer_index_Y_to_accumulator">TYA — Transfer index Y to accumulator</span></h3>
+<pre> Operation:  Y -&gt; A                                    N Z C I D V
+                                                       / / _ _ _ _
+                                (Ref: 7.14)
+ +----------------+-----------------------+---------+---------+----------+
+ | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
+ +----------------+-----------------------+---------+---------+----------+
+ |  Implied       |   TYA                 |    98   |    1    |    2     |
+ +----------------+-----------------------+---------+---------+----------+
+</pre>
+<h2><span class="mw-headline" id="Instruction_Addressing_Modes_and_Related_Execution_Times">Instruction Addressing Modes and Related Execution Times</span></h2>
+<pre> +------------------------------------------------------------------------
+ | INSTRUCTION ADDRESSING MODES AND RELATED EXECUTION TIMES
+ | (in clock cycles)
+ +------------------------------------------------------------------------
+</pre>
+<pre>                 A   A   A   B   B   B   B   B   B   B   B   B   B   C
+                 D   N   S   C   C   E   I   M   N   P   R   V   V   L
+                 C   D   L   C   S   Q   T   I   E   L   K   C   S   C
+ Accumulator  |  .   .   2   .   .   .   .   .   .   .   .   .   .   .
+ Immediate    |  2   2       .   .   .   .   .   .   .   .   .   .   .
+ Zero Page    |  3   3   5   .   .   .   3   .   .   .   .   .   .   .
+ Zero Page,X  |  4   4   6   .   .   .   .   .   .   .   .   .   .   .
+ Zero Page,Y  |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ Absolute     |  4   4   6   .   .   .   4   .   .   .   .   .   .   .
+ Absolute,X   |  4*  4*  7   .   .   .   .   .   .   .   .   .   .   .
+ Absolute,Y   |  4*  4*  .   .   .   .   .   .   .   .   .   .   .   .
+ Implied      |  .   .   .   .   .   .   .   .   .   .   .   .   .   2
+ Relative     |  .   .   .   2** 2** 2** .   2** 2** 2** 7   2** 2** .
+ (Indirect,X) |  6   6   .   .   .   .   .   .   .   .   .   .   .   .
+ (Indirect),Y |  5*  5*  .   .   .   .   .   .   .   .   .   .   .   .
+ Abs. Indirect|  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+              +-----------------------------------------------------------
+                 C   C   C   C   C   C   D   D   D   E   I   I   I   J
+                 L   L   L   M   P   P   E   E   E   O   N   N   N   M
+                 D   I   V   P   X   Y   C   X   Y   R   C   X   Y   P
+ Accumulator  |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ Immediate    |  .   .   .   2   2   2   .   .   .   2   .   .   .   .
+ Zero Page    |  .   .   .   3   3   3   5   .   .   3   5   .   .   .
+ Zero Page,X  |  .   .   .   4   .   .   6   .   .   4   6   .   .   .
+ Zero Page,Y  |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ Absolute     |  .   .   .   4   4   4   6   .   .   4   6   .   .   3
+ Absolute,X   |  .   .   .   4*  .   .   7   .   .   4*  7   .   .   .
+ Absolute,Y   |  .   .   .   4*  .   .   .   .   .   4*  .   .   .   .
+ Implied      |  2   2   2   .   .   .   .   2   2   .   .   2   2   .
+ Relative     |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ (Indirect,X) |  .   .   .   6   .   .   .   .   .   6   .   .   .   .
+ (Indirect),Y |  .   .   .   5*  .   .   .   .   .   5*  .   .   .   .
+ Abs. Indirect|  .   .   .   .   .   .   .   .   .   .   .   .   .   5
+              +-----------------------------------------------------------
+    *  Add one cycle if indexing across page boundary
+    ** Add one cycle if branch is taken, Add one additional if branching
+       operation crosses page boundary
+</pre>
+<pre> ------------------------------------------------------------------------+
+   INSTRUCTION ADDRESSING MODES AND RELATED EXECUTION TIMES              |
+   (in clock cycles)                                                     |
+ ------------------------------------------------------------------------+
+</pre>
+<pre>                 J   L   L   L   L   N   O   P   P   P   P   R   R   R
+                 S   D   D   D   S   O   R   H   H   L   L   O   O   T
+                 R   A   X   Y   R   P   A   A   P   A   P   L   R   I
+ Accumulator  |  .   .   .   .   2   .   .   .   .   .   .   2   2   .
+ Immediate    |  .   2   2   2   .   .   2   .   .   .   .   .   .   .
+ Zero Page    |  .   3   3   3   5   .   3   .   .   .   .   5   5   .
+ Zero Page,X  |  .   4   .   4   6   .   4   .   .   .   .   6   6   .
+ Zero Page,Y  |  .   .   4   .   .   .   .   .   .   .   .   .   .   .
+ Absolute     |  6   4   4   4   6   .   4   .   .   .   .   6   6   .
+ Absolute,X   |  .   4*  .   4*  7   .   4*  .   .   .   .   7   7   .
+ Absolute,Y   |  .   4*  4*  .   .   .   4*  .   .   .   .   .   .   .
+ Implied      |  .   .   .   .   .   2   .   3   3   4   4   .   .   6
+ Relative     |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ (Indirect,X) |  .   6   .   .   .   .   6   .   .   .   .   .   .   .
+ (Indirect),Y |  .   5*  .   .   .   .   5*  .   .   .   .   .   .   .
+ Abs. Indirect|  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+              +-----------------------------------------------------------
+                 R   S   S   S   S   S   S   S   T   T   T   T   T   T
+                 T   B   E   E   E   T   T   T   A   A   S   X   X   Y
+                 S   C   C   D   I   A   X   Y   X   Y   X   A   S   A
+ Accumulator  |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ Immediate    |  .   2   .   .   .   .   .   .   .   .   .   .   .   .
+ Zero Page    |  .   3   .   .   .   3   3   3   .   .   .   .   .   .
+ Zero Page,X  |  .   4   .   .   .   4   .   4   .   .   .   .   .   .
+ Zero Page,Y  |  .   .   .   .   .   .   4   .   .   .   .   .   .   .
+ Absolute     |  .   4   .   .   .   4   4   4   .   .   .   .   .   .
+ Absolute,X   |  .   4*  .   .   .   5   .   .   .   .   .   .   .   .
+ Absolute,Y   |  .   4*  .   .   .   5   .   .   .   .   .   .   .   .
+ Implied      |  6   .   2   2   2   .   .   .   2   2   2   2   2   2
+ Relative     |  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+ (Indirect,X) |  .   6   .   .   .   6   .   .   .   .   .   .   .   .
+ (Indirect),Y |  .   5*  .   .   .   6   .   .   .   .   .   .   .   .
+ Abs. Indirect|  .   .   .   .   .   .   .   .   .   .   .   .   .   .
+              +-----------------------------------------------------------
+    *  Add one cycle if indexing across page boundary
+    ** Add one cycle if branch is taken, Add one additional if branching
+       operation crosses page boundary
+</pre>
+<h2><span class="mw-headline" id="Opcode_Table">Opcode Table</span></h2>
+<table class="wikitable">
+<tr>
+<td> 00 </td>
+<td> BRK </td>
+<td>              </td>
+<td> 20 </td>
+<td> JSR </td>
+<td>              </td>
+<td> 40 </td>
+<td> RTI </td>
+<td>              </td>
+<td> 60 </td>
+<td> RTS </td>
+<td>              </td>
+<td> 80 </td>
+<td>     </td>
+<td>              </td>
+<td> A0 </td>
+<td> LDY </td>
+<td> Immediate    </td>
+<td> C0 </td>
+<td> CPY </td>
+<td> Immediate    </td>
+<td> E0 </td>
+<td> CPX </td>
+<td> Immediate
+</td></tr>
+<tr>
+<td> 01 </td>
+<td> ORA </td>
+<td> (Indirect,X) </td>
+<td> 21 </td>
+<td> AND </td>
+<td> (Indirect,X) </td>
+<td> 41 </td>
+<td> EOR </td>
+<td> (Indirect,X) </td>
+<td> 61 </td>
+<td> ADC </td>
+<td> (Indirect,X) </td>
+<td> 81 </td>
+<td> STA </td>
+<td> (Indirect,X) </td>
+<td> A1 </td>
+<td> LDA </td>
+<td> (Indirect,X) </td>
+<td> C1 </td>
+<td> CMP </td>
+<td> (Indirect,X) </td>
+<td> E1 </td>
+<td> SBC </td>
+<td> (Indirect,X)
+</td></tr>
+<tr>
+<td> 02 </td>
+<td>     </td>
+<td>              </td>
+<td> 22 </td>
+<td>     </td>
+<td>              </td>
+<td> 42 </td>
+<td>     </td>
+<td>              </td>
+<td> 62 </td>
+<td>     </td>
+<td>              </td>
+<td> 82 </td>
+<td>     </td>
+<td>              </td>
+<td> A2 </td>
+<td> LDX </td>
+<td> Immediate    </td>
+<td> C2 </td>
+<td>     </td>
+<td>              </td>
+<td> E2 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 03 </td>
+<td>     </td>
+<td>              </td>
+<td> 23 </td>
+<td>     </td>
+<td>              </td>
+<td> 43 </td>
+<td>     </td>
+<td>              </td>
+<td> 63 </td>
+<td>     </td>
+<td>              </td>
+<td> 83 </td>
+<td>     </td>
+<td>              </td>
+<td> A3 </td>
+<td>     </td>
+<td>              </td>
+<td> C3 </td>
+<td>     </td>
+<td>              </td>
+<td> E3 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 04 </td>
+<td>     </td>
+<td>              </td>
+<td> 24 </td>
+<td> BIT </td>
+<td> Zero Page    </td>
+<td> 44 </td>
+<td>     </td>
+<td>              </td>
+<td> 64 </td>
+<td>     </td>
+<td>              </td>
+<td> 84 </td>
+<td> STY </td>
+<td> Zero Page    </td>
+<td> A4 </td>
+<td> LDY </td>
+<td> Zero Page    </td>
+<td> C4 </td>
+<td> CPY </td>
+<td> Zero Page    </td>
+<td> E4 </td>
+<td> CPX </td>
+<td> Zero Page
+</td></tr>
+<tr>
+<td> 05 </td>
+<td> ORA </td>
+<td> Zero Page    </td>
+<td> 25 </td>
+<td> AND </td>
+<td> Zero Page    </td>
+<td> 45 </td>
+<td> EOR </td>
+<td> Zero Page    </td>
+<td> 65 </td>
+<td> ADC </td>
+<td> Zero Page    </td>
+<td> 85 </td>
+<td> STA </td>
+<td> Zero Page    </td>
+<td> A5 </td>
+<td> LDA </td>
+<td> Zero Page    </td>
+<td> C5 </td>
+<td> CMP </td>
+<td> Zero Page    </td>
+<td> E5 </td>
+<td> SBC </td>
+<td> Zero Page
+</td></tr>
+<tr>
+<td> 06 </td>
+<td> ASL </td>
+<td> Zero Page    </td>
+<td> 26 </td>
+<td> ROL </td>
+<td> Zero Page    </td>
+<td> 46 </td>
+<td> LSR </td>
+<td> Zero Page    </td>
+<td> 66 </td>
+<td> ROR </td>
+<td> Zero Page    </td>
+<td> 86 </td>
+<td> STX </td>
+<td> Zero Page    </td>
+<td> A6 </td>
+<td> LDX </td>
+<td> Zero Page    </td>
+<td> C6 </td>
+<td> DEC </td>
+<td> Zero Page    </td>
+<td> E6 </td>
+<td> INC </td>
+<td> Zero Page
+</td></tr>
+<tr>
+<td> 07 </td>
+<td>     </td>
+<td>              </td>
+<td> 27 </td>
+<td>     </td>
+<td>              </td>
+<td> 47 </td>
+<td>     </td>
+<td>              </td>
+<td> 67 </td>
+<td>     </td>
+<td>              </td>
+<td> 87 </td>
+<td>     </td>
+<td>              </td>
+<td> A7 </td>
+<td>     </td>
+<td>              </td>
+<td> C7 </td>
+<td>     </td>
+<td>              </td>
+<td> E7 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 08 </td>
+<td> PHP </td>
+<td>              </td>
+<td> 28 </td>
+<td> PLP </td>
+<td>              </td>
+<td> 48 </td>
+<td> PHA </td>
+<td>              </td>
+<td> 68 </td>
+<td> PLA </td>
+<td>              </td>
+<td> 88 </td>
+<td> DEY </td>
+<td>              </td>
+<td> A8 </td>
+<td> TAY </td>
+<td>              </td>
+<td> C8 </td>
+<td> INY </td>
+<td>              </td>
+<td> E8 </td>
+<td> INX </td>
+<td>
+</td></tr>
+<tr>
+<td> 09 </td>
+<td> ORA </td>
+<td> Immediate    </td>
+<td> 29 </td>
+<td> AND </td>
+<td> Immediate    </td>
+<td> 49 </td>
+<td> EOR </td>
+<td> Immediate    </td>
+<td> 69 </td>
+<td> ADC </td>
+<td> Immediate    </td>
+<td> 89 </td>
+<td>     </td>
+<td>              </td>
+<td> A9 </td>
+<td> LDA </td>
+<td> Immediate    </td>
+<td> C9 </td>
+<td> CMP </td>
+<td> Immediate    </td>
+<td> E9 </td>
+<td> SBC </td>
+<td> Immediate
+</td></tr>
+<tr>
+<td> 0A </td>
+<td> ASL </td>
+<td> Accumulator  </td>
+<td> 2A </td>
+<td> ROL </td>
+<td> Accumulator  </td>
+<td> 4A </td>
+<td> LSR </td>
+<td> Accumulator  </td>
+<td> 6A </td>
+<td> ROR </td>
+<td> Accumulator  </td>
+<td> 8A </td>
+<td> TXA </td>
+<td>              </td>
+<td> AA </td>
+<td> TAX </td>
+<td>              </td>
+<td> CA </td>
+<td> DEX </td>
+<td>              </td>
+<td> EA </td>
+<td> NOP </td>
+<td>
+</td></tr>
+<tr>
+<td> 0B </td>
+<td>     </td>
+<td>              </td>
+<td> 2B </td>
+<td>     </td>
+<td>              </td>
+<td> 4B </td>
+<td>     </td>
+<td>              </td>
+<td> 6B </td>
+<td>     </td>
+<td>              </td>
+<td> 8B </td>
+<td>     </td>
+<td>              </td>
+<td> AB </td>
+<td>     </td>
+<td>              </td>
+<td> CB </td>
+<td>     </td>
+<td>              </td>
+<td> EB </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 0C </td>
+<td>     </td>
+<td>              </td>
+<td> 2C </td>
+<td> BIT </td>
+<td> Absolute     </td>
+<td> 4C </td>
+<td> JMP </td>
+<td> Absolute     </td>
+<td> 6C </td>
+<td> JMP </td>
+<td> Indirect     </td>
+<td> 8C </td>
+<td> STY </td>
+<td> Absolute     </td>
+<td> AC </td>
+<td> LDY </td>
+<td> Absolute     </td>
+<td> CC </td>
+<td> CPY </td>
+<td> Absolute     </td>
+<td> EC </td>
+<td> CPX </td>
+<td> Absolute
+</td></tr>
+<tr>
+<td> 0D </td>
+<td> ORA </td>
+<td> Absolute     </td>
+<td> 2D </td>
+<td> AND </td>
+<td> Absolute     </td>
+<td> 4D </td>
+<td> EOR </td>
+<td> Absolute     </td>
+<td> 6D </td>
+<td> ADC </td>
+<td> Absolute     </td>
+<td> 8D </td>
+<td> STA </td>
+<td> Absolute     </td>
+<td> AD </td>
+<td> LDA </td>
+<td> Absolute     </td>
+<td> CD </td>
+<td> CMP </td>
+<td> Absolute     </td>
+<td> ED </td>
+<td> SBC </td>
+<td> Absolute
+</td></tr>
+<tr>
+<td> 0E </td>
+<td> ASL </td>
+<td> Absolute     </td>
+<td> 2E </td>
+<td> ROL </td>
+<td> Absolute     </td>
+<td> 4E </td>
+<td> LSR </td>
+<td> Absolute     </td>
+<td> 6E </td>
+<td> ROR </td>
+<td> Absolute     </td>
+<td> 8E </td>
+<td> STX </td>
+<td> Absolute     </td>
+<td> AE </td>
+<td> LDX </td>
+<td> Absolute     </td>
+<td> CE </td>
+<td> DEC </td>
+<td> Absolute     </td>
+<td> EE </td>
+<td> INC </td>
+<td> Absolute
+</td></tr>
+<tr>
+<td> 0F </td>
+<td>     </td>
+<td>              </td>
+<td> 2F </td>
+<td>     </td>
+<td>              </td>
+<td> 4F </td>
+<td>     </td>
+<td>              </td>
+<td> 6F </td>
+<td>     </td>
+<td>              </td>
+<td> 8F </td>
+<td>     </td>
+<td>              </td>
+<td> AF </td>
+<td>     </td>
+<td>              </td>
+<td> CF </td>
+<td>     </td>
+<td>              </td>
+<td> EF </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 10 </td>
+<td> BPL </td>
+<td>              </td>
+<td> 30 </td>
+<td> BMI </td>
+<td>              </td>
+<td> 50 </td>
+<td> BVC </td>
+<td>              </td>
+<td> 70 </td>
+<td> BVS </td>
+<td>              </td>
+<td> 90 </td>
+<td> BCC </td>
+<td>              </td>
+<td> B0 </td>
+<td> BCS </td>
+<td>              </td>
+<td> D0 </td>
+<td> BNE </td>
+<td>              </td>
+<td> F0 </td>
+<td> BEQ </td>
+<td>
+</td></tr>
+<tr>
+<td> 11 </td>
+<td> ORA </td>
+<td> (Indirect),Y </td>
+<td> 31 </td>
+<td> AND </td>
+<td> (Indirect),Y </td>
+<td> 51 </td>
+<td> EOR </td>
+<td> (Indirect),Y </td>
+<td> 71 </td>
+<td> ADC </td>
+<td> (Indirect),Y </td>
+<td> 91 </td>
+<td> STA </td>
+<td> (Indirect),Y </td>
+<td> B1 </td>
+<td> LDA </td>
+<td> (Indirect),Y </td>
+<td> D1 </td>
+<td> CMP </td>
+<td> (Indirect),Y </td>
+<td> F1 </td>
+<td> SBC </td>
+<td> (Indirect),Y
+</td></tr>
+<tr>
+<td> 12 </td>
+<td>     </td>
+<td>              </td>
+<td> 32 </td>
+<td>     </td>
+<td>              </td>
+<td> 52 </td>
+<td>     </td>
+<td>              </td>
+<td> 72 </td>
+<td>     </td>
+<td>              </td>
+<td> 92 </td>
+<td>     </td>
+<td>              </td>
+<td> B2 </td>
+<td>     </td>
+<td>              </td>
+<td> D2 </td>
+<td>     </td>
+<td>              </td>
+<td> F2 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 13 </td>
+<td>     </td>
+<td>              </td>
+<td> 33 </td>
+<td>     </td>
+<td>              </td>
+<td> 53 </td>
+<td>     </td>
+<td>              </td>
+<td> 73 </td>
+<td>     </td>
+<td>              </td>
+<td> 93 </td>
+<td>     </td>
+<td>              </td>
+<td> B3 </td>
+<td>     </td>
+<td>              </td>
+<td> D3 </td>
+<td>     </td>
+<td>              </td>
+<td> F3 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 14 </td>
+<td>     </td>
+<td>              </td>
+<td> 34 </td>
+<td>     </td>
+<td>              </td>
+<td> 54 </td>
+<td>     </td>
+<td>              </td>
+<td> 74 </td>
+<td>     </td>
+<td>              </td>
+<td> 94 </td>
+<td> STY </td>
+<td> Zero Page,X  </td>
+<td> B4 </td>
+<td> LDY </td>
+<td> Zero Page,X  </td>
+<td> D4 </td>
+<td>     </td>
+<td>              </td>
+<td> F4 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 15 </td>
+<td> ORA </td>
+<td> Zero Page,X  </td>
+<td> 35 </td>
+<td> AND </td>
+<td> Zero Page,X  </td>
+<td> 55 </td>
+<td> EOR </td>
+<td> Zero Page,X  </td>
+<td> 75 </td>
+<td> ADC </td>
+<td> Zero Page,X  </td>
+<td> 95 </td>
+<td> STA </td>
+<td> Zero Page,X  </td>
+<td> B5 </td>
+<td> LDA </td>
+<td> Zero Page,X  </td>
+<td> D5 </td>
+<td> CMP </td>
+<td> Zero Page,X  </td>
+<td> F5 </td>
+<td> SBC </td>
+<td> Zero Page,X
+</td></tr>
+<tr>
+<td> 16 </td>
+<td> ASL </td>
+<td> Zero Page,X  </td>
+<td> 36 </td>
+<td> ROL </td>
+<td> Zero Page,X  </td>
+<td> 56 </td>
+<td> LSR </td>
+<td> Zero Page,X  </td>
+<td> 76 </td>
+<td> ROR </td>
+<td> Zero Page,X  </td>
+<td> 96 </td>
+<td> STX </td>
+<td> Zero Page,Y  </td>
+<td> B6 </td>
+<td> LDX </td>
+<td> Zero Page,Y  </td>
+<td> D6 </td>
+<td> DEC </td>
+<td> Zero Page,X  </td>
+<td> F6 </td>
+<td> INC </td>
+<td> Zero Page,X
+</td></tr>
+<tr>
+<td> 17 </td>
+<td>     </td>
+<td>              </td>
+<td> 37 </td>
+<td>     </td>
+<td>              </td>
+<td> 57 </td>
+<td>     </td>
+<td>              </td>
+<td> 77 </td>
+<td>     </td>
+<td>              </td>
+<td> 97 </td>
+<td>     </td>
+<td>              </td>
+<td> B7 </td>
+<td>     </td>
+<td>              </td>
+<td> D7 </td>
+<td>     </td>
+<td>              </td>
+<td> F7 </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 18 </td>
+<td> CLC </td>
+<td>              </td>
+<td> 38 </td>
+<td> SEC </td>
+<td>              </td>
+<td> 58 </td>
+<td> CLI </td>
+<td>              </td>
+<td> 78 </td>
+<td> SEI </td>
+<td>              </td>
+<td> 98 </td>
+<td> TYA </td>
+<td>              </td>
+<td> B8 </td>
+<td> CLV </td>
+<td>              </td>
+<td> D8 </td>
+<td> CLD </td>
+<td>              </td>
+<td> F8 </td>
+<td> SED </td>
+<td>
+</td></tr>
+<tr>
+<td> 19 </td>
+<td> ORA </td>
+<td> Absolute,Y   </td>
+<td> 39 </td>
+<td> AND </td>
+<td> Absolute,Y   </td>
+<td> 59 </td>
+<td> EOR </td>
+<td> Absolute,Y   </td>
+<td> 79 </td>
+<td> ADC </td>
+<td> Absolute,Y   </td>
+<td> 99 </td>
+<td> STA </td>
+<td> Absolute,Y   </td>
+<td> B9 </td>
+<td> LDA </td>
+<td> Absolute,Y   </td>
+<td> D9 </td>
+<td> CMP </td>
+<td> Absolute,Y   </td>
+<td> F9 </td>
+<td> SBC </td>
+<td> Absolute,Y
+</td></tr>
+<tr>
+<td> 1A </td>
+<td>     </td>
+<td>              </td>
+<td> 3A </td>
+<td>     </td>
+<td>              </td>
+<td> 5A </td>
+<td>     </td>
+<td>              </td>
+<td> 7A </td>
+<td>     </td>
+<td>              </td>
+<td> 9A </td>
+<td> TXS </td>
+<td>              </td>
+<td> BA </td>
+<td> TSX </td>
+<td>              </td>
+<td> DA </td>
+<td>     </td>
+<td>              </td>
+<td> FA </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 1B </td>
+<td>     </td>
+<td>              </td>
+<td> 3B </td>
+<td>     </td>
+<td>              </td>
+<td> 5B </td>
+<td>     </td>
+<td>              </td>
+<td> 7B </td>
+<td>     </td>
+<td>              </td>
+<td> 9B </td>
+<td>     </td>
+<td>              </td>
+<td> BB </td>
+<td>     </td>
+<td>              </td>
+<td> DB </td>
+<td>     </td>
+<td>              </td>
+<td> FB </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 1C </td>
+<td>     </td>
+<td>              </td>
+<td> 3C </td>
+<td>     </td>
+<td>              </td>
+<td> 5C </td>
+<td>     </td>
+<td>              </td>
+<td> 7C </td>
+<td>     </td>
+<td>              </td>
+<td> 9C </td>
+<td>     </td>
+<td>              </td>
+<td> BC </td>
+<td> LDY </td>
+<td> Absolute,X   </td>
+<td> DC </td>
+<td>     </td>
+<td>              </td>
+<td> FC </td>
+<td>     </td>
+<td>
+</td></tr>
+<tr>
+<td> 1D </td>
+<td> ORA </td>
+<td> Absolute,X   </td>
+<td> 3D </td>
+<td> AND </td>
+<td> Absolute,X   </td>
+<td> 5D </td>
+<td> EOR </td>
+<td> Absolute,X   </td>
+<td> 7D </td>
+<td> ADC </td>
+<td> Absolute,X   </td>
+<td> 9D </td>
+<td> STA </td>
+<td> Absolute,X   </td>
+<td> BD </td>
+<td> LDA </td>
+<td> Absolute,X   </td>
+<td> DD </td>
+<td> CMP </td>
+<td> Absolute,X   </td>
+<td> FD </td>
+<td> SBC </td>
+<td> Absolute,X
+</td></tr>
+<tr>
+<td> 1E </td>
+<td> ASL </td>
+<td> Absolute,X   </td>
+<td> 3E </td>
+<td> ROL </td>
+<td> Absolute,X   </td>
+<td> 5E </td>
+<td> LSR </td>
+<td> Absolute,X   </td>
+<td> 7E </td>
+<td> ROR </td>
+<td> Absolute,X   </td>
+<td> 9E </td>
+<td>     </td>
+<td>              </td>
+<td> BE </td>
+<td> LDX </td>
+<td> Absolute,Y   </td>
+<td> DE </td>
+<td> DEC </td>
+<td> Absolute,X   </td>
+<td> FE </td>
+<td> INC </td>
+<td> Absolute,X
+</td></tr>
+<tr>
+<td> 1F </td>
+<td>     </td>
+<td>              </td>
+<td> 3F </td>
+<td>     </td>
+<td>              </td>
+<td> 5F </td>
+<td>     </td>
+<td>              </td>
+<td> 7F </td>
+<td>     </td>
+<td>              </td>
+<td> 9F </td>
+<td>     </td>
+<td>              </td>
+<td> BF </td>
+<td>     </td>
+<td>              </td>
+<td> DF </td>
+<td>     </td>
+<td>              </td>
+<td> FF </td>
+<td>     </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Instruction_Operation">Instruction Operation</span></h2>
+<p>The following code has been taken from VICE for the purposes of showing
+how each instruction operates. No particular addressing mode is used since
+we only wish to see the operation of the instruction itself. 
+</p>
+<pre>    src : the byte of data that is being addressed.
+    SET_SIGN : sets\resets the sign flag depending on bit 7.
+    SET_ZERO : sets\resets the zero flag depending on whether the result
+               is zero or not.
+    SET_CARRY(condition) : if the condition has a non-zero value then the
+               carry flag is set, else it is reset.
+    SET_OVERFLOW(condition) : if the condition is true then the overflow
+               flag is set, else it is reset.
+    SET_INTERRUPT :  }
+    SET_BREAK :      }  As for SET_CARRY and SET_OVERFLOW.
+    SET_DECIMAL :    }
+    REL_ADDR(PC, src) : returns the relative address obtained by adding
+               the displacement src to the PC.
+    SET_SR : set the Program Status Register to the value given.
+    GET_SR : get the value of the Program Status Register.
+    PULL : Pull a byte off the stack.
+    PUSH : Push a byte onto the stack.
+    LOAD : Get a byte from the memory address.
+    STORE : Store a byte in a memory address.
+    IF_CARRY, IF_OVERFLOW, IF_SIGN, IF_ZERO etc : Returns true if the
+               relevant flag is set, otherwise returns false.
+    clk : the number of cycles an instruction takes. This is shown below
+               in situations where the number of cycles changes depending
+               on the result of the instruction (eg. Branching instructions).
+</pre>
+<pre>    AC = Accumulator
+    XR = X register
+    YR = Y register
+    PC = Program Counter
+    SP = Stack Pointer
+</pre>
+<code><pre>
+/* ADC */
+    unsigned int temp = src + AC + (IF_CARRY() ? 1 : 0);
+    SET_ZERO(temp &amp; 0xff);	/* This is not valid in decimal mode */
+    if (IF_DECIMAL()) {
+        if (((AC &amp; 0xf) + (src &amp; 0xf) + (IF_CARRY() ? 1 : 0)) &gt; 9) temp += 6;
+	SET_SIGN(temp);
+	SET_OVERFLOW(!((AC ^ src) &amp; 0x80) &amp;&amp; ((AC ^ temp) &amp; 0x80));
+	if (temp &gt; 0x99) temp += 96;
+	SET_CARRY(temp &gt; 0x99);
+    } else {
+	SET_SIGN(temp);
+	SET_OVERFLOW(!((AC ^ src) &amp; 0x80) &amp;&amp; ((AC ^ temp) &amp; 0x80));
+	SET_CARRY(temp &gt; 0xff);
+    }
+    AC = ((BYTE) temp);
+
+/* AND */
+    src &amp;= AC;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = src;
+
+/* ASL */
+    SET_CARRY(src &amp; 0x80);
+    src &lt;&lt;= 1;
+    src &amp;= 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE src in memory or accumulator depending on addressing mode.
+
+/* BCC */
+    if (!IF_CARRY()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BCS */
+    if (IF_CARRY()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BEQ */
+    if (IF_ZERO()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BIT */
+    SET_SIGN(src);
+    SET_OVERFLOW(0x40 &amp; src);	/* Copy bit 6 to OVERFLOW flag. */
+    SET_ZERO(src &amp; AC);
+
+/* BMI */
+    if (IF_SIGN()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BNE */
+    if (!IF_ZERO()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BPL */
+    if (!IF_SIGN()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BRK */
+    PC++;
+    PUSH((PC &gt;&gt; 8) &amp; 0xff);	/* Push return address onto the stack. */
+    PUSH(PC &amp; 0xff);
+    SET_BREAK((1));             /* Set BFlag before pushing */
+    PUSH(SR);
+    SET_INTERRUPT((1));
+    PC = (LOAD(0xFFFE) | (LOAD(0xFFFF) &lt;&lt; 8));
+
+/* BVC */
+    if (!IF_OVERFLOW()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* BVS */
+    if (IF_OVERFLOW()) {
+	clk += ((PC &amp; 0xFF00) != (REL_ADDR(PC, src) &amp; 0xFF00) ? 2 : 1);
+	PC = REL_ADDR(PC, src);
+    }
+
+/* CLC */
+    SET_CARRY((0));
+
+/* CLD */
+    SET_DECIMAL((0));
+
+/* CLI */
+    SET_INTERRUPT((0));
+
+/* CLV */
+    SET_OVERFLOW((0));
+
+/* CMP */
+    src = AC - src;
+    SET_CARRY(src &lt; 0x100);
+    SET_SIGN(src);
+    SET_ZERO(src &amp;= 0xff);
+
+/* CPX */
+    src = XR - src;
+    SET_CARRY(src &lt; 0x100);
+    SET_SIGN(src);
+    SET_ZERO(src &amp;= 0xff);
+
+/* CPY */
+    src = YR - src;
+    SET_CARRY(src &lt; 0x100);
+    SET_SIGN(src);
+    SET_ZERO(src &amp;= 0xff);
+
+/* DEC */
+    src = (src - 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE(address, (src));
+
+/* DEX */
+    unsigned src = XR;
+    src = (src - 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    XR = (src);
+
+/* DEY */
+    unsigned src = YR;
+    src = (src - 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    YR = (src);
+
+/* EOR */
+    src ^= AC;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = src;
+
+/* INC */
+    src = (src + 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE(address, (src));
+
+/* INX */
+    unsigned src = XR;
+    src = (src + 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src); 
+    XR = (src);
+
+/* INY */
+    unsigned src = YR;
+    src = (src + 1) &amp; 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    YR = (src);
+
+/* JMP */
+    PC = (src);
+
+/* JSR */
+    PC--;
+    PUSH((PC &gt;&gt; 8) &amp; 0xff);	/* Push return address onto the stack. */
+    PUSH(PC &amp; 0xff);
+    PC = (src);
+
+/* LDA */
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = (src);
+
+/* LDX */
+    SET_SIGN(src);
+    SET_ZERO(src);
+    XR = (src);
+
+/* LDY */
+    SET_SIGN(src);
+    SET_ZERO(src);
+    YR = (src);
+
+/* LSR */
+    SET_CARRY(src &amp; 0x01);
+    src &gt;&gt;= 1;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE src in memory or accumulator depending on addressing mode.
+
+/* NOP */
+    Nothing.
+
+/* ORA */
+    src |= AC;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = src;
+
+/* PHA */
+    src = AC;
+    PUSH(src);
+
+/* PHP */
+    src = GET_SR;
+    PUSH(src);
+
+/* PLA */
+    src = PULL();
+    SET_SIGN(src);	/* Change sign and zero flag accordingly. */
+    SET_ZERO(src);
+
+/* PLP */
+    src = PULL();
+    SET_SR((src));
+
+/* ROL */
+    src &lt;&lt;= 1;
+    if (IF_CARRY()) src |= 0x1;
+    SET_CARRY(src &gt; 0xff);
+    src &amp;= 0xff;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE src in memory or accumulator depending on addressing mode.
+
+/* ROR */
+    if (IF_CARRY()) src |= 0x100;
+    SET_CARRY(src &amp; 0x01);
+    src &gt;&gt;= 1;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    STORE src in memory or accumulator depending on addressing mode.
+
+/* RTI */
+    src = PULL();
+    SET_SR(src);
+    src = PULL();
+    src |= (PULL() &lt;&lt; 8);	/* Load return address from stack. */
+    PC = (src);
+
+/* RTS */
+    src = PULL();
+    src += ((PULL()) &lt;&lt; 8) + 1;	/* Load return address from stack and add 1. */
+    PC = (src);
+
+/* SBC */
+    unsigned int temp = AC - src - (IF_CARRY() ? 0 : 1);
+    SET_SIGN(temp);
+    SET_ZERO(temp &amp; 0xff);	/* Sign and Zero are invalid in decimal mode */
+    SET_OVERFLOW(((AC ^ temp) &amp; 0x80) &amp;&amp; ((AC ^ src) &amp; 0x80));
+    if (IF_DECIMAL()) {
+	if ( ((AC &amp; 0xf) - (IF_CARRY() ? 0 : 1)) &lt; (src &amp; 0xf)) /* EP */ temp -= 6;
+	if (temp &gt; 0x99) temp -= 0x60;
+    }
+    SET_CARRY(temp &lt; 0x100);
+    AC = (temp &amp; 0xff);
+
+/* SEC */
+    SET_CARRY((1));
+
+/* SED */
+    SET_DECIMAL((1));
+
+/* SEI */
+    SET_INTERRUPT((1));
+
+/* STA */
+    STORE(address, (src));
+
+/* STX */
+    STORE(address, (src));
+
+/* STY */
+    STORE(address, (src));
+
+/* TAX */
+    unsigned src = AC;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    XR = (src);
+
+/* TAY */
+    unsigned src = AC;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    YR = (src);
+
+/* TSX */
+    unsigned src = SP;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    XR = (src);
+
+/* TXA */
+    unsigned src = XR;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = (src);
+
+/* TXS */
+    unsigned src = XR;
+    SP = (src);
+
+/* TYA */
+    unsigned src = YR;
+    SET_SIGN(src);
+    SET_ZERO(src);
+    AC = (src);
+</pre></code>
+<h2><span class="mw-headline" id="Summary_of_6502_Opcodes">Summary of 6502 Opcodes</span></h2>
+<pre>
+ADC   Add to accumulator with carry.
+AND   &quot;AND&quot; with accumulator.
+ASL   Arithmetic Shift Left. Bit0=0 C=Bit7.
+BCC   Branch on Carry Clear.
+BCS   Branch on Carry Set.
+BEQ   Branch on result Equal (zero).
+BIT   Test bits in memory with accumulator.
+BMI   Branch on result Minus.
+BNE   Branch on result Not Equal (not zero).
+BPL   Branch on result Plus.
+BRK   Forced BREAK.
+BVC   Branch on overflow Clear.
+BVS   Branch on overflow Set.
+CLC   Clear Carry flag.
+CLD   Clear Decimal mode.
+CLI   Clear Interrupt disable bit.
+CLV   Clear overflow flag.
+CMP   Compare with accumulator.
+CPX   Compare with X register.
+CPY   Compare with Y register.
+DEC   Decrement memory by one.
+DEX   Decrement X register by one.
+DEY   Decrement Y register by one.
+EOR   &quot;Exclusive-OR&quot; with accumulator.
+INC   Increment memory by one.
+INX   Increment X register by one.
+INY   Increment Y register by one.
+JMP   Unconditional Jump to new address.
+JSR   Unconditional Jump, saving return address.
+LDA   Load accumulator.
+LDX   Load X register.
+LDY   Load Y register.
+LSR   Logical Shift Right. Bit7=0 C=Bit0.
+NOP   No Operation.
+ORA   &quot;OR&quot; with accumulator.
+PHA   Push Accumulator on stack.
+PHP   Push Processor status register on stack.
+PLA   Pull Accumulator from stack.
+PLP   Pull Processor status register from stack.
+ROL   Rotate one bit Left (mem. or acc.).  C=Bit7 Bit0=C.
+ROR   Rotate one bit Right (mem. or acc.).  C=Bit0 Bit7=C.
+RTI   Return from Interrupt.
+RTS   Return from Subroutine.
+SBC   Subtract from accumulator with borrow.
+SEC   Set Carry flag.
+SED   Set Decimal mode.
+SEI   Set Interrupt disable status.
+STA   Store Accumulator in memory.
+STX   Store X register in memory.
+STY   Store Y register in memory.
+TAX   Transfer Accumulator to X register.
+TAY   Transfer Accumulator to Y register.
+TSX   Transfer Stack pointer to X register.
+TXA   Transfer X register to Accumulator.
+TXS   Transfer X register to Stack pointer.
+TYA   Transfer Y register to Accumulator.
+
+The Processor Status Register, &quot;P&quot;
+--- --------- ------ --------- ---
+
+7 6 5 4 3 2 1 0
+N V   B D I Z C
+
+7   N    Negative
+6   V    Overflow
+5        &lt;..Future expansion..&gt;
+4   B    BRK command
+3   D    Decimal mode
+2   I    IRQ disable
+1   Z    Zero
+0   C    Carry
+
+Addressing Modes of 6502 Assembly Code
+---------- ----- -- ---- -------- ----
+
+LDA  #$07       Immediate mode
+LDA  $1F        Zero page absolute
+LDA  $0800      Absolute
+CLC             Implied
+JMP  ($0036)    Indirect absolute
+LDA  $FE90,X    Absolute indexed (by X)
+LDA  $FE90,Y    Absolute indexed (by Y)
+LDA  $2A,X      Zero page indexed
+LDA  ($2A,X)    Indexed indirect
+LDA  ($2A),Y    Indirect indexed
+BCC  $03        Relative
+BCC  $0803      Relative (alternate form)
+LSR  A          Accumulator
+LSR             Accumulator (alternate form)
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.666 seconds
+Real time usage: 0.739 seconds
+Preprocessor visited node count: 337/1000000
+Preprocessor generated node count: 384/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1218-1!*!*!!en!*!* and timestamp 20160208230359 and revision id 7621
+ -->
+</div></body></html>

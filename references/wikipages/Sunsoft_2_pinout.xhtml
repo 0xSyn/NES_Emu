@@ -1,0 +1,76 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Sunsoft 2 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Sunsoft 2 pinout</h1><div class="article">
+<p>Sunsoft-2: 24 pin shrink PDIP (mappers <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">89</a> and <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">93</a>)
+</p>
+<pre>                .---\/---.       
+ (r) PRG A15 &lt;- | 01  24 | -- +5V
+ (r) PRG A14 &lt;- | 02  23 | &lt;- CPU A14 (f)
+ (r) PRG A16 &lt;- | 03  22 | -&gt; OR Y (CHR nCS) (r)
+ (fr) CPU D7 -&gt; | 04  21 | -&gt; CHR A16 (r)
+ (fr) CPU D6 -&gt; | 05  20 | &lt;- OR B (PPU nRD) (f, r?)
+ (fr) CPU D5 -&gt; | 06  19 | -&gt; CHR A13 (r)
+ (fr) CPU D4 -&gt; | 07  18 | -&gt; CHR A14 (r)
+ (fr) CPU D3 -&gt; | 08  17 | -&gt; CHR A15 (r)
+ (fr) CPU D2 -&gt; | 09  16 | &lt;- /ROMSEL (fr)
+ (fr) CPU D1 -&gt; | 10  15 | &lt;- CPU RnW (f)
+ (fr) CPU D0 -&gt; | 11  14 | &lt;- OR A (PPU A13) (f)
+         GND -- | 12  13 | -&gt; CIRAM A10 (f)
+                `--------'
+
+22 CHR nCS is the logical OR of PPU nRD and PPU A13, allowing them to use a 28-pin 128kB ROM
+19 CHR A13 is connected to CHR RAM's positive chip enable, so games that use CHR RAM must write 1 to it
+</pre>
+<p>The Sunsoft-2 mapper was found on the <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">Sunsoft-3</a> and <a href="INES_Mapper_093.xhtml" title="INES Mapper 093">Sunsoft-3R</a> boards,
+which are identical besides the default setting for the 9 configuration jumpers.
+</p><p>The Sunsoft-3R board was by default jumpered for 8kB of CHR RAM; the
+Sunsoft-3 board for 128kB of CHR ROM.
+</p>
+<ul><li> J1, J2  -  CHR's nWR/A14 input: J1=PPU nWR (support CHR-RAM), J2=SS2 A14 (CHR bank bits are contiguous)</li>
+<li> J3, J4  -  SS2's pin 20 input: J3=PPU nRD (support 28 pin 128KiB CHR ROM), J4=ground (support CHR-RAM)</li>
+<li> J5, J6  -  CHR's nOE/A16 input: J5=SS2 A16 (support 28 pin 128KiB CHR ROM), J6=PPU nRD (support CHR-RAM)</li>
+<li> J7, J8, J9  -  mirroring: J7=horizontal, J8=vertical, J9=mapper-controlled one-screen</li></ul>
+<p>This IC could be replaced with a 74377 and a 7432:
+</p>
+<pre>                       74-377
+                  .------\/------.       
+  (fr) /ROMSEL -&gt; | /E 01  24 +5 | -- +5V
+   (r) CHR A13 &lt;- | Q0 02  23 Q7 | -&gt; CHR A16 (r)
+   (fr) CPU D0 -&gt; | D0 03  22 D7 | &lt;- CPU D7 (fr)
+   (fr) CPU D1 -&gt; | D1 04  21 D6 | &lt;- CPU D6 (fr)
+   (r) CHR A14 &lt;- | Q1 05  20 Q6 | -&gt; Q6
+   (r) CHR A15 &lt;- | Q2 06  19 Q5 | -&gt; Q5
+   (fr) CPU D2 -&gt; | D2 07  18 D5 | &lt;- CPU D5 (fr)
+   (fr) CPU D3 -&gt; | D3 08  17 D4 | &lt;- CPU D4 (fr)
+ (f) CIRAM A10 &lt;- | Q3 09  16 Q4 | -&gt; Q4
+           GND -- | gn 10  15 CP | &lt;- CPU RnW (f)
+                  `--------------'
+ 
+                       74--32
+                  .------\/------.       
+            Q4 -&gt; | A1 01  24 +5 | -- +5V
+   (f) CPU A14 -&gt; | B1 02  23 A4 | &lt;- PPU nRD (f)
+   (r) PRG A14 &lt;- | Y1 03  22 B4 | &lt;- PPU A13 (f)
+            Q5 -&gt; | A2 04  21 Y4 | -&gt; CHR nCS (r)
+   (f) CPU A14 -&gt; | B2 05  20 A3 | &lt;- Q6
+   (r) PRG A15 &lt;- | Y2 06  19 B3 | &lt;- CPU A14 (f)
+           GND -- | gn 07  18 Y3 | -&gt; PRG A16 (r)
+                  `--------------'
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:784-1!*!0!*!*!*!* and timestamp 20160208225852 and revision id 6279
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

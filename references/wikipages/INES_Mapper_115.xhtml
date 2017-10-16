@@ -1,0 +1,75 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 115</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 115</h1><div class="article">
+<p><b>iNES Mapper 115</b> is an <a href="MMC3.xhtml" title="MMC3">MMC3</a> clone used by <a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:NT" title="wikia:c:bootleggames:NT">Carson</a> (卡聖), which uses &quot;NT&quot; model numbers for its games.
+Some games formerly assigned as mapper 248 (such as Bao Qing Tian/Justice Pao) should be emulated with this mapper 115.
+</p>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 115          =
+ ========================
+ 
+ Example Game:
+ --------------------------
+ Yuu Yuu Hakusho Final - Makai Saikyou Retsuden
+ 
+ 
+ Notes:
+ ---------------------------
+ <a href="MMC3.xhtml" title="MMC3">MMC3</a> variant.  For info on MMC3, see <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 004</a>.
+ 
+ Regs at $6000-7FFF means no PRG-RAM
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Range,Mask:   $6000-7FFF, $6001
+ 
+   $6000:  [O... PPPP]
+     O = PRG Mode
+     P = 16k PRG Page
+ 
+   $6001:  [.... ...C]
+     C = CHR Block select
+ 
+   $8000-FFFF:  Same as MMC3
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+  'C' selects a 256k CHR block for all the CHR selected by the MMC3.  You can think of this as a CHR-OR of
+ $000 or $100 depending on 'C'.
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+        $8000   $A000   $C000   $E000  
+       +-------------------------------+
+ O=0:  |              MMC3             |
+       +-------------------------------+
+ O=1:  |     $6000     |     MMC3      |
+       +---------------+---------------+
+ 
+ Normal MMC3 PRG setup applies.  If the O mode bit is set, then $8000-BFFF no longer reflects the typical MMC3
+ setup, and instead has a 16k page selected by $6000.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:687-1!*!0!*!*!*!* and timestamp 20160208225237 and revision id 6087
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

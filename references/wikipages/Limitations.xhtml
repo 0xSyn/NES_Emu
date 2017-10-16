@@ -1,0 +1,149 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Limitations</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Limitations</h1><div class="article">
+<p>Some of the limitations of NES hardware and common mapper hardware severely limit the system's capability to perform well in some genres.
+This could be part of why these genres took off after 1991 when more powerful hardware became more readily available.
+</p><p>To clarify something: Some of these limitations don't mean &quot;can't&quot; as much as &quot;too expensive&quot;.
+In a commercial game project, managers have to balance the cost of solving technical problems like those listed below with the cost of exploring, implementing, refining, and balancing the game rules.
+A game for a powerful system will often be programmed inefficiently because it gets the game out the door faster. Building your own clone (or emulation device) of mappers and other external devices is also possible, although this may also be expensive and/or time consuming.
+</p><p><a class="external text" href="https://allthetropes.orain.org/wiki/Videogame_Demake" rel="nofollow">A clone or a port to a less powerful system</a> keeps most of the game design, which is already paid for, and cuts down the design in ways that the porting team thinks the players won't care about.
+A team of amateurs with no deadline can eventually squeeze more capability out of a system than can a commercial game developer bound by opportunity cost and return on investment.
+Even commercial developers in a <a class="extiw" href="http://en.wikipedia.org/wiki/Penn_effect" title="wikipedia:Penn effect">country with a low cost of living</a>, such as China or Brazil compared to Japan or the United States, have a time-money tradeoff biased toward time: witness the &quot;Hong Kong Original&quot; Famicom reductions of 16-bit fighting games, platformers, and RPGs, and the Brazilian ports of games to Sega Master System and Sega Genesis.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Simulation"><span class="tocnumber">1</span> <span class="toctext">Simulation</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Creation"><span class="tocnumber">2</span> <span class="toctext">Creation</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Driving"><span class="tocnumber">3</span> <span class="toctext">Driving</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Puzzle"><span class="tocnumber">4</span> <span class="toctext">Puzzle</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Fighting"><span class="tocnumber">5</span> <span class="toctext">Fighting</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Bullet_hell_shooter"><span class="tocnumber">6</span> <span class="toctext">Bullet hell shooter</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Party_multiplayer"><span class="tocnumber">7</span> <span class="toctext">Party multiplayer</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Music"><span class="tocnumber">8</span> <span class="toctext">Music</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#External_links"><span class="tocnumber">9</span> <span class="toctext">External links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Simulation">Simulation</span></h2>
+<p>Limitations: 8 KiB PRG RAM; no 3D graphics hardware
+</p><p>Some kinds of simulator games, like <i>SimCity</i>, <i>The Sims</i>, <i>Harvest Moon</i>, and <i>Animal Crossing</i>, have large grid-based world maps and tend to need 8 KiB just to store this map, let alone the rest of the world's state.
+Very few NES cartridge boards (such as <a class="mw-redirect" href="SxROM.xhtml" title="SXROM">SXROM</a> and <a class="mw-redirect" href="ExROM.xhtml" title="EWROM">EWROM</a>) provided more than 8 KiB, and most of them were rare and/or Japan-only.
+Nintendo has been known to cancel finished products such as the NES port of <i>SimCity</i> and the English version of <i>Mother</i> because replication cost would kill the return on investment.
+Games would have to be planned carefully to fit their state into a cheap chip.
+Nowadays, it's possible to make a custom mapper on a CPLD that bankswitches a large work RAM and saves to an unused area of the PRG flash.
+</p><p>Games that allow the player to customize his appearance extensively, as in <i>Animal Crossing</i> and <i>The Sims</i>, typically rely on 3D texture mapping so that the changes to the appearance can be seen from all angles.
+<i>Tony Hawk</i> series for Game Boy Advance soft-rendered a 3D player character in real time, but the GBA CPU is also fast enough to <i>emulate</i> the NES CPU.
+An NES game with customizable characters, such as <i>Cocoron</i>, has to store each animation of each body part seen from each angle and composite them at runtime, either drawing them into CHR RAM or overlaying numerous sprites (and risking flicker).
+</p><p><b>By the Super NES era:</b> Several games were 32 KiB or larger battery RAM, and a game using the GSU might barely be able to soft-render a 3D player character, though at a reduced frame rate.
+</p>
+<h2><span class="mw-headline" id="Creation">Creation</span></h2>
+<p>Limitations: Input devices, mostly
+</p><p>Games that allow for modification, such as modified game graphics, maps, and scripts, tend to be extremely limited.
+Part of this has to do with input limits: the NES never had an official alphabetic keyboard or precise pointing device.
+In Japan, <i>Family BASIC</i> shipped with <a href="Family_BASIC_Keyboard.xhtml" title="Family BASIC Keyboard">a keyboard</a>, and the <i>Oeka Kids</i> paint program shipped with a graphics tablet, but these use the Famicom's DA15 expansion port, which the NES doesn't have.
+<i>Videomation</i>, a paint program for the NES with a <a href="CPROM.xhtml" title="CPROM">unique cartridge board</a>, has to use a clunky control scheme similar to the speed control in <i>Image Fight</i>.
+(Its animation is also severely limited compared to <i>Mario Paint</i> for Super NES, and it can't save.)
+In 2011, some NES software was written to use the <a href="Mouse.xhtml" title="Mouse">Super NES Mouse</a> through a Super NES controller to NES adapter.
+</p><p>There are some external devices which can be used for extended save data: the <a class="mw-redirect" href="Family_Computer_Disk_System.xhtml" title="Famicom Disk System">Famicom Disk System</a>, the <a href="Family_BASIC_Data_Recorder.xhtml" title="Family BASIC Data Recorder">Family BASIC Data Recorder</a>, the <s>Battle Box</s>, and the <s>Turbo File</s>. However, all are Japan-only, exceptionally rare, and the latter two only hold 8KiB of data anyway.
+</p><p><b>By the Super NES era:</b> Support for the Super NES Mouse was common, and <i>Mario Paint</i> and the Japan-only <i>Dezaemon</i> led the way.
+</p>
+<h2><span class="mw-headline" id="Driving">Driving</span></h2>
+<p>Limitations: No 3D graphics
+</p><p>There are two ways to do a driving game: behind-the-car with a <i>Pole Position</i> style track (as seen in <i>F-1 Race</i> and <i>Rad Racer</i>) and overhead/isometric style (as seen in <i>RC Pro-Am</i> and <i>Micro Machines</i>).
+In a behind-the-car view, the car can't turn all the way around.
+The &quot;morphmation&quot; technique used to bend the racetrack limits the variety of scenery and track layout: for example, the track can't have hairpin turns or narrow segments without using an obscenely large multi-bank CHR ROM like that seen in <i>Cosmic Epsilon</i>.
+Overhead view severely limits how far ahead one player can see, resulting in usually slower movement, and the camera generally has to follow one player or the other.
+(<i>Micro Machines</i> uses the screen edge as a game mechanic.)
+</p><p><b>By the Super NES era:</b> Limit broken using mode 7 and later the GSU.
+</p>
+<h2><span class="mw-headline" id="Puzzle">Puzzle</span></h2>
+<p>Limitations: 16x16 pixel attribute tiles
+</p><p>A lot of tile-matching games, such as <i>Columns</i> (ported to NES as <i>Magic Jewelry</i> and <i>Mystic Pillars</i>), <i>Yoshi's Cookie</i>, <i>Puyo Puyo</i>, <i>Wario's Woods</i>, and <i>Palamedes</i>, have 16x16 pixel tiles.
+This limits each player's playfield to about 6x12 cells.
+Games with smaller tiles typically can't go over three unique colors, as seen in <i>Dr. Mario</i> and <i>Tetris 2</i>.
+One compromise involves drawing tiles in both players' playfields as a dithered combination of orange, green, and blue, much as CGA graphics were limited to three colors plus the backdrop.
+It's not as clean as a Sega Master System game, but it gets the job done without having to destroy one of <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines_op=%3D%60%40%60&amp;ines=5&amp;group=groupid&amp;field=2&amp;order=asc&amp;rfa=1+2+11+3+9+20+41+53" rel="nofollow">13 donor games</a> to use the 8x8 pixel color areas of <a href="MMC5.xhtml" title="MMC5">MMC5</a> ExGrafix.
+Another workaround would be to make a custom mapper on a CPLD that simulates some subset of ExGrafix.
+<i>Klax</i> uses a mapper with a scanline counter to change the scroll position in mid-frame, making its 16-pixel-wide attribute areas less than 8 scanlines tall.
+</p><p>Yet another thing that can be done is to make the single-player playfield wider than the 2-player playfield.
+This was tried in things like <i>Magical Drop 2</i>, <i>Wario's Woods</i>, and the 4-player &quot;Familiss&quot; mode of BPS's <i>Super Tetris 3</i>.
+<i>Lumines</i> for PSP borrows the mechanic of two players fighting over space in a single playfield from <i>FantaVision</i> for PS2, and at least one fan-made clone of the single-player game <i>Zoop</i> makes the game cooperative with two shooters on one big field.
+</p><p><b>By the Super NES era:</b> Limit suffered comminuted fracture. Super NES has 8x8 pixel color areas, HDMA to change the vertical scroll position, lots of sprites with lots of overdraw, the 12x12 trick in mode 1, and a 256-color playfield in mode 3.
+</p>
+<h2><span class="mw-headline" id="Fighting">Fighting</span></h2>
+<p>Limitations: <a href="PPU_sprite_evaluation.xhtml" title="PPU sprite evaluation">Overdraw</a>
+</p><p>If both players' graphics are drawn as sprites, characters will have to be no wider than 32 pixels.
+Otherwise, they'll flicker like crazy when you cross the 8-sprite limit.
+You can get away with wider jumping poses because it's less likely that both characters will be in the air at once.
+<i>Shaq-Fu</i> was poor in execution, but its core idea of smaller characters could be made to work well on an NES.
+You could aim for something like <i>Super Smash Bros.</i>, using platforms in the playfield as an additional source of tactics.
+</p><p>The other way to do this, allowing big characters like in <i>Street Fighter</i>, is to draw one character as 8x16 pixel sprites and the other as background tiles.
+This allows up to 64-pixel-wide characters, or slightly smaller counting projectile attacks.
+But you have to design the game such that only one player faces either direction, so that you can draw the other player with mirrored sprites.
+That means you can't easily jump behind or roll past the other player and attack from behind unless the frames for facing the other player's back have dedicated cels.
+In addition, backgrounds will be plain, and you'll probably need an advanced mapper with a scanline timer to perform multiple scroll splits at the status bar, play area, and ground.
+</p><p><b>By the Super NES era:</b> Limit scarred across the chest with a Shoryuken. A competent port of <i>Street Fighter II</i> was a system seller. However, by <i>Street Fighter Alpha 2</i>, the Super NES was showing its age. Games like <i>Killer Instinct</i> and <i>Samurai Shodown</i> also had to have camera zooming cut out because of limits of mode 7.
+</p>
+<h2><span class="mw-headline" id="Bullet_hell_shooter">Bullet hell shooter</span></h2>
+<p>Limitations: Overdraw, CPU speed, 5-line OAM DMA delay
+</p><p>Shoot-em-ups can be hard, like <i>Recca</i>, but they can't have more than 64 things in the air at once.
+Some platforms (like GBA and Neo Geo) can rewrite part of the sprite table during rendering to expand the sprite capability, but the NES can't.
+And even then, more than 8 on a line will flicker so bad that bullets will be invisible half the time.
+</p><p><b>By the Super NES era:</b> Boss and bullet patterns became more complex, but the need for constant access to OAM outside of vertical or forced blanking meant shmups still couldn't overcome the 128-sprite capacity of OAM.
+</p>
+<h2><span class="mw-headline" id="Party_multiplayer">Party multiplayer</span></h2>
+<p>Limitations: Sprite palettes; overdraw
+</p><p>An NES <a href="Four_Score.xhtml" title="Four Score">Four Score</a> hub provides four controller ports, one for each of the four palettes.
+If each player's car, uniform, etc. has the same graphics with a palette swap, there are no palettes left for anything else.
+If each player uses one palette, other things like projectiles and enemies would need to use the same palette as a player, or they would have to be background objects.
+It might be easier if the player sprites leave one color unused or if the game splits the players into two teams whose characters aren't palette swaps.
+Four 16x16 or 16x32 pixel sprites will also hit the 8-sprite limit with no room for projectiles unless the game is designed not to encourage them to be at the same vertical position.
+</p><p>Memory accesses during sample playback occasionally cause a bit from the controllers to be skipped.
+It takes longer to read 16 bits than 8, making rereading less practical, but the <a href="Four_Score.xhtml" title="Four Score">Four Score</a>'s signature bits help detect bit deletions.
+</p><p><b>By the Super NES era:</b> Limit blown to bits by <i>Super Bomberman</i>. Overdraw increased to 32 sprites with 34 tiles and sprite palettes increased to eight, leaving plenty of room for players and their projectiles. And no more sample playback glitch.
+</p>
+<h2><span class="mw-headline" id="Music">Music</span></h2>
+<p>Limitations: Audio hardware, storage
+</p><p>A music game for the Famicom could put a digital audio player on the PCB.
+In fact, the <a class="mw-redirect" href="INES_Mapper_086.xhtml" title="JF-13">JF-13</a> board in the Japanese version of <i>Bases Loaded</i> does just this for the umpire's voiceover.
+But unlike the 60-pin Famicom cart edge, the 72-pin NES cart edge lacks a pair of pins for an audio signal.
+Instead it has ten pins connected directly to the NES-001 Control Deck's <a class="mw-redirect" href="NES_expansion_port_pinout.xhtml" title="Expansion port">expansion port</a>.
+A 47 kΩ resistor from one of the cart pins to an audio pin on the expansion port enables audio out of the expansion port as on a Famicom, but Nintendo never released an accessory with this resistor, and top-loading NES-101 consoles don't even have this port.
+So NES games usually have to use the 2A03's internal <a href="APU.xhtml" title="APU">APU</a> channels.
+A mapper could trigger an IRQ when each sample is ready and offer a digital output on $4011 so that <code>dec $4011</code> to read a sample from the mapper and write it back to the APU, but it was determined that OAM DMA would audibly interfere with that approach.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=101429#p101429" rel="nofollow">[1]</a>
+</p><p>Music games such as <i>Beatmania</i>, <i>Dance Dance Revolution</i>, and <i>Amplitude</i> use CD-quality audio played from a disc.
+Though the NES APU is capable of competent covers of popular music, as seen in <i>D-Pad Hero</i>, a lot of players demand the original studio recordings, or at least an electric guitar that sounds like an electric guitar and chords that don't sound <a href="Arpeggio.xhtml" title="Arpeggio">warbly</a>.
+Witness poor sales of the Game Boy Color versions of <i>Beatmania</i> and <i>DDR</i>.
+</p><p>Apart from <i>DDR: Disney Dancing Museum</i> for the Japanese N64 and games on Nintendo handhelds, most music games have come out on platforms with hundreds of megabytes of cheap storage: PCs and disc-based consoles.
+A lot of music games especially for consoles use a custom controller, shaped like a musical instrument or like the <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a>.
+Because cartridges were much more expensive to replicate, bundling a controller with your game cartridge was cost prohibitive.
+Did anyone actually <i>buy</i> the Miracle Piano Teaching System?
+</p><p>Disc-based games using a standard controller, like <i>Parappa the Rapper</i> and <i>Frequency</i>, came on discs 600 MB to 4 GB in size and thus could afford to store the music tracks as two long samples: one for background music and one for the foreground instrument.
+(This pattern is called &quot;keysound&quot; in the <i>Beatmania</i> simulation community.)
+<i>Guitar Hero On Tour</i> games for Nintendo DS are 128 MB each after several Moore's law doublings of ROM density.
+But with a typical NES ROM size of 128 to 512 KiB, a big fat sample like that is out of the question.
+</p><p><b>By the Super NES era:</b> The audio subsystem supports streaming vocals from ROM through HDMA, but ROM was still limited to 4096 KiB with a handful of largely Japan-only exceptions.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=26438#p26438" rel="nofollow">Forum: Easier and harder game genre to code/developp</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=44710#p44710" rel="nofollow">Forum: The essence of great games on the NES</a></li>
+<li><a class="external text" href="http://pineight.com/mw/index.php?title=Animal_Crossing_(NES_game)" rel="nofollow">Preliminary analysis of what would have to be cut to put <i>Animal Crossing</i> on the NES</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=53873#p53873" rel="nofollow">Forum: Proposed SRAM layout for port of <i>The Sims</i> to NES</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.072 seconds
+Real time usage: 0.075 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:371-1!*!0!!en!*!* and timestamp 20160208225543 and revision id 11664
+ -->
+</div></body></html>

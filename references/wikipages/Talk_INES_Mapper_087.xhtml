@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 087</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 087</h1><div class="article">
+<h2><span class="mw-headline" id="Mapper_87_vs_101">Mapper 87 vs 101</span></h2>
+<p>Just for the sake of argument, I'd like to outline my reasoning. Only one of the following three things can be true:
+</p>
+<ol><li> Mapper 87 describes only the 16 KiB CHR games, with the 2s bit controlling bank, and mapper 101 describes the 32 KiB CHR games, with the bits in order.</li>
+<li> Mapper 87 describes both, where the 32 KiB configuration has the bits out of order, and mapper 101 was erroneously assigned.</li>
+<li> There are two different 100% correct dumps of the exact same cartridge.</li></ol>
+<p>I object to #3. GoodNES and other sources have decided on #2. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 01:35, 25 April 2014 (MDT)
+</p>
+<dl><dd>Any CNROM image will run when changed to GNROM, and any NROM image will work when changed to CNROM or GNROM. Heck, the only existing commercial BNROM game will work on Color Dreams. Whether to go with #1 or #2 depends on whether the community wants to deprecate 87/101 for new development in favor of CNROM (#2) or not (#1). --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 08:58, 25 April 2014 (MDT)</dd></dl>
+<dl><dd><dl><dd> But conceptually, a copy of (e.g.) SMB marked as GNROM isn't correct. Perhaps I should have said &quot;canonical&quot; instead of &quot;100% correct&quot;. Anyway, as for the last point, there's no reason to pick either m87 or m101 anymore: they're inferior to CNROM because a bus-conflict prevention table is cheaper; or as INL pointed out, just connecting R/W to /WE (while tying /OE low) on most Flash will prevent bus conflicts; or even if it doesn't, a transistor or 74'1g04 is cheaper than a 74'20 or 74'138. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 13:59, 25 April 2014 (MDT)</dd></dl></dd></dl>
+<p>I also don't get the difference between 87 and 101, because who cares if the bits are in order or not - that's equivalent to exchange banks 1 and 2 in the CHR-dump (or exchange A13 and A14 when dumping the CHR-ROM). But how relevant is it that the banks in the iNES (or whathever other format) dump is in the same order as in the CHR-ROM itself physically ? If this is relevant then the 87 and 101 difference makes sense, but I don't think it's relevant, and therefore I don't think the difference makes sense.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 02:43, 15 May 2014 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.021 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1354-1!*!0!*!*!*!* and timestamp 20160208224123 and revision id 8766
+ -->
+</div></body></html>

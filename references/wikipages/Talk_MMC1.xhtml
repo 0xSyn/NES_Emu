@@ -1,0 +1,51 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:MMC1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:MMC1</h1><div class="article">
+<h2><span class="mw-headline" id="SOROM.2C_SUROM.2C_and_SXROM">SOROM, SUROM, and SXROM</span></h2>
+<p>I'm a little fuzzy about why these are considered different <a href="NES_2_0_submappers.xhtml" title="NES 2.0 submappers">NES 2.0 submappers</a>. The functionality of all three of these looks the same to me if the extra banking bits become useless/mirror when the ROM/RAM addressed is a smaller size (just like in any other mapper supporting various sizes).
+</p>
+<pre>43210
++---+
+PSSxC
+</pre>
+<pre>4:P - A18 of 512k PRG ROM, disconnected if smaller
+3:S - A13 of 16k PRG RAM, disconnected if smaller
+2:S - A14 of 32k PRG RAM, disconnected if smaller
+1:x - unused
+0:C - 4k CHR banking control
+</pre>
+<p>What am I missing? I can't spot the incompatibility that necessitated three submappers. Isn't this just one mapper together? - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 00:58, 8 August 2015 (MDT)
+</p><p>Just my $2, but I fully agree with Rainwarrior.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 02:28, 9 August 2015 (MDT)
+</p>
+<dl><dd>Yeah, tepples confirmed it in a discussion elsewhere (and lidnariq seemed to confirm it in an oblique way?). I've already put this information to use in the description at <a href="NES_2_0_submappers.xhtml#001:_MMC1" title="NES 2.0 submappers">NES 2.0 submappers#001: MMC1</a> anyway. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 11:58, 9 August 2015 (MDT)</dd></dl>
+<dl><dd> The only issue I see is that people seem to like thinking of the two PRG-RAM banking bits in order, which would pose a problem if exchanging SXROM save RAM images is desired. On the other hand, this is a much more elegant way to handle it, so it sgtm. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 00:09, 10 August 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Actually, thinking about this for a moment, this is a far better explanation of why I think we don't need a submapper for SUROM/SXROM/SOROM, by parsing the bits as follows:</dd></dl></dd></dl>
+<pre>43210
++---+
+EDCBA
+
+4:E - CHR A16, if extant; PRG ROM A18, if extant
+3:D - CHR A15, if extant; PRG RAM A13, if extant
+2:C - CHR A14, if extant; PRG RAM A14, if extant
+1:B - CHR A13, if extant
+0:A - CHR A12
+</pre>
+<p>—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:39, 11 August 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.057 seconds
+Real time usage: 0.117 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1579-1!*!0!*!*!*!* and timestamp 20160603204839 and revision id 12574
+ -->
+</div></body></html>

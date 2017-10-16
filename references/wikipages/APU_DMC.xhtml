@@ -1,0 +1,454 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU DMC</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU DMC</h1><div class="article">
+<p><br/>
+The <a href="APU.xhtml" title="APU">NES APU's</a> delta modulation channel (DMC) can output 1-bit <a class="extiw" href="http://en.wikipedia.org/wiki/Delta_modulation" title="wikipedia:Delta modulation">delta-encoded samples</a> or can have its 7-bit counter directly loaded, allowing flexible manual sample playback.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Pitch_table"><span class="tocnumber">1.1</span> <span class="toctext">Pitch table</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Memory_reader"><span class="tocnumber">1.2</span> <span class="toctext">Memory reader</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Output_unit"><span class="tocnumber">1.3</span> <span class="toctext">Output unit</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Conflict_with_controller_and_PPU_read"><span class="tocnumber">2</span> <span class="toctext">Conflict with controller and PPU read</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Likely_internal_implementation_of_the_read"><span class="tocnumber">2.1</span> <span class="toctext">Likely internal implementation of the read</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Usage_of_DMC_for_syncing_to_video"><span class="tocnumber">3</span> <span class="toctext">Usage of DMC for syncing to video</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Concept"><span class="tocnumber">3.1</span> <span class="toctext">Concept</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Timing_table"><span class="tocnumber">3.2</span> <span class="toctext">Timing table</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Number_of_scanlines_to_wait_table"><span class="tocnumber">3.3</span> <span class="toctext">Number of scanlines to wait table</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>The DMC channel contains the following: memory reader, interrupt flag, sample buffer, <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a>, output unit, 7-bit output level with up and down counter.
+</p>
+<pre>
+                         Timer
+                           |
+                           v
+Reader ---&gt; Buffer ---&gt; Shifter ---&gt; Output level ---&gt; (to the mixer)
+</pre>
+<table class="wikitable">
+<tr>
+<td> <b>$4010</b> </td>
+<td> <tt>IL--.RRRR</tt> </td>
+<td> <b>Flags and Rate</b> (write)
+</td></tr>
+<tr>
+<td> bit 7 </td>
+<td> <tt>I---.----</tt> </td>
+<td> IRQ enabled flag. If clear, the interrupt flag is cleared.
+</td></tr>
+<tr>
+<td> bit 6 </td>
+<td> <tt>-L--.----</tt> </td>
+<td> Loop flag
+</td></tr>
+<tr>
+<td> bits 3-0 </td>
+<td> <tt>----.RRRR</tt> </td>
+<td> Rate index<br/>
+<pre>
+Rate   $0   $1   $2   $3   $4   $5   $6   $7   $8   $9   $A   $B   $C   $D   $E   $F
+      ------------------------------------------------------------------------------
+NTSC  428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54
+PAL   398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118,  98,  78,  66,  50
+</pre>
+<p>The rate determines for how many CPU cycles happen between changes in the output level during automatic delta-encoded sample playback. For example, on NTSC (1.789773 MHz), a rate of 428 gives a frequency of 1789773/428 Hz = 4181.71 Hz. These periods are all even numbers because there are 2 APU cycles in a CPU cycle. A rate of 428 means the output level changes every 214 APU cycles.
+</p>
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4011</b> </td>
+<td> <tt>-DDD.DDDD</tt> </td>
+<td> <b>Direct load</b> (write)
+</td></tr>
+<tr>
+<td> bits 6-0 </td>
+<td> <tt>-DDD.DDDD</tt> </td>
+<td> The DMC output level is set to D, an unsigned value. If the timer is outputting a clock at the same time, the output level is occasionally not changed properly.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=104491#p104491" rel="nofollow">[1]</a>
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4012</b> </td>
+<td> <tt>AAAA.AAAA</tt> </td>
+<td> <b>Sample address</b> (write)
+</td></tr>
+<tr>
+<td> bits 7-0 </td>
+<td> <tt>AAAA.AAAA</tt> </td>
+<td> Sample address = <tt>%11AAAAAA.AA000000</tt> = <tt>$C000 + (A * 64)</tt>
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4013</b> </td>
+<td> <tt>LLLL.LLLL</tt> </td>
+<td> <b>Sample length</b> (write)
+</td></tr>
+<tr>
+<td> bits 7-0 </td>
+<td> <tt>LLLL.LLLL</tt> </td>
+<td> Sample length = <tt>%LLLL.LLLL0001</tt> = <tt>(L * 16) + 1</tt>
+</td></tr></table>
+<p>The output level is sent to the <a href="APU_Mixer.xhtml" title="APU Mixer">mixer</a> whether the channel is enabled or not. It is loaded with 0 on power-up, and can be updated by $4011 writes and delta-encoded sample playback.
+</p><p>Automatic 1-bit <a class="extiw" href="http://en.wikipedia.org/wiki/Delta_modulation" title="wikipedia:Delta modulation">delta-encoded sample</a> playback is carried out by a combination of three units. The <i>memory reader</i> fills the 8-bit <i>sample buffer</i> whenever it is emptied by the sample <i>output unit</i>. The <a class="mw-redirect" href="APU.xhtml" title="APU Status">status register</a> is used to start and stop automatic sample playback.
+</p><p>The <b>sample buffer</b> either holds a single 8-bit sample byte or is empty. It is filled by the reader and can only be emptied by the output unit; once loaded with a sample byte it will be played back.
+</p>
+<h3><span class="mw-headline" id="Pitch_table">Pitch table</span></h3>
+<table class="wikitable">
+
+<tr>
+<td>
+</td>
+<td bgcolor="FFDDDD" colspan="3"> NTSC
+</td>
+<td bgcolor="DDDDFF" colspan="3"> PAL
+</td></tr>
+<tr>
+<th> $4010 </th>
+<th> Period </th>
+<th> Frequency </th>
+<th> Note </th>
+<th> Period </th>
+<th> Frequency </th>
+<th> Note
+</th></tr>
+<tr>
+<td>  $0
+</td>
+<td bgcolor="FFDDDD"> $1AC  </td>
+<td>  4181.71 Hz  </td>
+<td> C-8  -1.78c
+</td>
+<td bgcolor="DDDDFF"> $18E  </td>
+<td>  4177.40 Hz  </td>
+<td> C-8  -3.56c
+</td></tr>
+<tr>
+<td>  $1
+</td>
+<td bgcolor="FFDDDD"> $17C  </td>
+<td>  4709.93 Hz  </td>
+<td> D-8  +4.16c
+</td>
+<td bgcolor="DDDDFF"> $162  </td>
+<td>  4696.63 Hz  </td>
+<td> D-8  -.739c
+</td></tr>
+<tr>
+<td>  $2
+</td>
+<td bgcolor="FFDDDD"> $154  </td>
+<td>  5264.04 Hz  </td>
+<td> E-8  -3.29c
+</td>
+<td bgcolor="DDDDFF"> $13C  </td>
+<td>  5261.41 Hz  </td>
+<td> E-8  -4.15c
+</td></tr>
+<tr>
+<td>  $3
+</td>
+<td bgcolor="FFDDDD"> $140  </td>
+<td>  5593.04 Hz  </td>
+<td> F-8  +1.67c
+</td>
+<td bgcolor="DDDDFF"> $12A  </td>
+<td>  5579.22 Hz  </td>
+<td> F-8  -2.61c
+</td></tr>
+<tr>
+<td>  $4
+</td>
+<td bgcolor="FFDDDD"> $11E  </td>
+<td>  6257.95 Hz  </td>
+<td> G-8  -3.86c
+</td>
+<td bgcolor="DDDDFF"> $114  </td>
+<td>  6023.94 Hz  </td>
+<td> F#8  +30.2c
+</td></tr>
+<tr>
+<td>  $5
+</td>
+<td bgcolor="FFDDDD"> $0FE  </td>
+<td>  7046.35 Hz  </td>
+<td> A-8  +1.56c
+</td>
+<td bgcolor="DDDDFF"> $0EC  </td>
+<td>  7044.94 Hz  </td>
+<td> A-8  +1.22c
+</td></tr>
+<tr>
+<td>  $6
+</td>
+<td bgcolor="FFDDDD"> $0E2  </td>
+<td>  7919.35 Hz  </td>
+<td> B-8  +3.77c
+</td>
+<td bgcolor="DDDDFF"> $0D2  </td>
+<td>  7917.18 Hz  </td>
+<td> B-8  +3.29c
+</td></tr>
+<tr>
+<td>  $7
+</td>
+<td bgcolor="FFDDDD"> $0D6  </td>
+<td>  8363.42 Hz  </td>
+<td> C-9  -1.78c
+</td>
+<td bgcolor="DDDDFF"> $0C6  </td>
+<td>  8397.01 Hz  </td>
+<td> C-9  +5.16c
+</td></tr>
+<tr>
+<td>  $8
+</td>
+<td bgcolor="FFDDDD"> $0BE  </td>
+<td>  9419.86 Hz  </td>
+<td> D-9  +4.16c
+</td>
+<td bgcolor="DDDDFF"> $0B0  </td>
+<td>  9446.63 Hz  </td>
+<td> D-9  +9.07c
+</td></tr>
+<tr>
+<td>  $9
+</td>
+<td bgcolor="FFDDDD"> $0A0  </td>
+<td>  11186.1 Hz  </td>
+<td> F-9  +1.67c
+</td>
+<td bgcolor="DDDDFF"> $094  </td>
+<td>  11233.8 Hz  </td>
+<td> F-9  +9.04c
+</td></tr>
+<tr>
+<td>  $A
+</td>
+<td bgcolor="FFDDDD"> $08E  </td>
+<td>  12604.0 Hz  </td>
+<td> G-9  +8.29c
+</td>
+<td bgcolor="DDDDFF"> $084  </td>
+<td>  12595.5 Hz  </td>
+<td> G-9  +7.11c
+</td></tr>
+<tr>
+<td>  $B
+</td>
+<td bgcolor="FFDDDD"> $080  </td>
+<td>  13982.6 Hz  </td>
+<td> A-9  -12.0c
+</td>
+<td bgcolor="DDDDFF"> $076  </td>
+<td>  14089.9 Hz  </td>
+<td> A-9  +1.22c
+</td></tr>
+<tr>
+<td>  $C
+</td>
+<td bgcolor="FFDDDD"> $06A  </td>
+<td>  16884.6 Hz  </td>
+<td> C-10 +14.5c
+</td>
+<td bgcolor="DDDDFF"> $062  </td>
+<td>  16965.4 Hz  </td>
+<td> C-10 +22.7c
+</td></tr>
+<tr>
+<td>  $D
+</td>
+<td bgcolor="FFDDDD"> $054  </td>
+<td>  21306.8 Hz  </td>
+<td> E-10 +17.2c
+</td>
+<td bgcolor="DDDDFF"> $04E  </td>
+<td>  21315.5 Hz  </td>
+<td> E-10 +17.9c
+</td></tr>
+<tr>
+<td>  $E
+</td>
+<td bgcolor="FFDDDD"> $048  </td>
+<td>  24858.0 Hz  </td>
+<td> G-10 -15.9c
+</td>
+<td bgcolor="DDDDFF"> $042  </td>
+<td>  25191.0 Hz  </td>
+<td> G-10 +7.11c
+</td></tr>
+<tr>
+<td>  $F
+</td>
+<td bgcolor="FFDDDD"> $036  </td>
+<td>  33143.9 Hz  </td>
+<td> C-11 -17.9c
+</td>
+<td bgcolor="DDDDFF"> $032  </td>
+<td>  33252.1 Hz  </td>
+<td> C-11 -12.2c
+</td></tr></table>
+<p>(Deviation from note is given in cents, which are defined as 1/100 of a semitone.)
+</p><p>Note that on PAL systems, the pitches at $4 and $C appear to be slightly incorrect with respect to their intended A-440 tuning scheme<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>.
+</p>
+<h3><span class="mw-headline" id="Memory_reader">Memory reader</span></h3>
+<p>When the sample buffer is emptied, the memory reader fills the sample buffer with the next byte from the currently playing sample. It has an address counter and a bytes remaining counter.
+</p><p>When a sample is (re)started, the current address is set to the sample address, and bytes remaining is set to the sample length.
+</p><p>Any time the sample buffer is in an empty state and bytes remaining is not zero (including just after a write to $4015 that enables the channel, regardless of where that write occurs relative to the bit counter mentioned below), the following occur:
+</p>
+<ul><li> The <a href="CPU.xhtml" title="CPU">CPU</a> is stalled for <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=62690#p62690" rel="nofollow">up to 4 CPU cycles</a> to allow the longest possible write (the return address and write after an IRQ) to finish. If <a href="PPU_OAM.xhtml#DMA" title="PPU OAM">OAM DMA</a> is in progress, it is paused for two cycles.<a class="external autonumber" href="http://forums.nesdev.com/viewtopic.php?p=95703#95703" rel="nofollow">[2]</a></li>
+<li> The sample buffer is filled with the next sample byte read from the current address, subject to whatever <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapping hardware</a> is present.</li>
+<li> The address is incremented; if it exceeds $FFFF, it is wrapped around to $8000.</li>
+<li> The bytes remaining counter is decremented; if it becomes zero and the loop flag is set, the sample is restarted (see above); otherwise, if the bytes remaining counter becomes zero and the IRQ enabled flag is set, the interrupt flag is set.</li></ul>
+<p>At any time, if the interrupt flag is set, the <a href="CPU.xhtml" title="CPU">CPU's IRQ line</a> is <i>continuously</i> asserted until the interrupt flag is cleared.
+The processor will continue on from where it was stalled.
+</p>
+<h3><span class="mw-headline" id="Output_unit">Output unit</span></h3>
+<p>The output unit continuously outputs a 7-bit value to the <a href="APU_Mixer.xhtml" title="APU Mixer">mixer</a>. It contains an 8-bit right shift register, a bits-remaining counter, a 7-bit output level (the same one that can be loaded directly via $4011), and a silence flag.
+</p><p>The bits-remaining counter is updated whenever the <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a> outputs a clock, regardless of whether a sample is currently playing. When this counter reaches zero, we say that the output cycle ends. The DPCM unit can only transition from silent to playing at the end of an output cycle.
+</p><p>When an output cycle ends, a new cycle is started as follows:
+</p>
+<ul><li> The bits-remaining counter is loaded with 8.</li>
+<li> If the sample buffer is empty, then the silence flag is set; otherwise, the silence flag is cleared and the sample buffer is emptied into the shift register.</li></ul>
+<p>When the timer outputs a clock, the following actions occur in order:
+</p>
+<ol><li> If the silence flag is clear, the output level changes based on bit 0 of the shift register. If the bit is 1, add 2; otherwise, subtract 2. But if adding or subtracting 2 would cause the output level to leave the 0-127 range, leave the output level unchanged. This means subtract 2 only if the current level is at least 2, or add 2 only if the current level is at most 125.</li>
+<li> The right shift register is clocked.</li>
+<li> As stated above, the bits-remaining counter is decremented. If it becomes zero, a new output cycle is started.</li></ol>
+<p><i>Nothing can interrupt a cycle; every cycle runs to completion before a new cycle is started.</i>
+</p>
+<h2><span class="mw-headline" id="Conflict_with_controller_and_PPU_read">Conflict with controller and PPU read</span></h2>
+<p>On the NTSC NES and Famicom, if a new sample byte is fetched from memory at the same time the program is reading the <a href="Standard_controller.xhtml" title="Standard controller">controller</a> through $4016/4017, a conflict occurs corrupting the data read from the controller. Programs which use DPCM sample playback will normally use a redundant <a href="Controller_Reading.xhtml" title="Controller Reading">controller read</a> routine to work around this defect.
+</p><p>A similar problem occurs when reading data from the PPU through $2007, or polling $2002 for vblank.
+</p>
+<h3><span class="mw-headline" id="Likely_internal_implementation_of_the_read">Likely internal implementation of the read</span></h3>
+<p>The following is speculation, and thus not necessarily 100% accurate. It does accurately predict observed behavior.
+</p><p>The 6502 cannot be pulled off of the bus normally. The 2A03 DMC gets around this by pulling RDY low internally. This causes the CPU to pause during the next read cycle, until RDY goes high again. The DMC unit holds RDY low for 4 cycles. The first three cycles it idles, as the CPU could have just started an interrupt cycle, and thus be writing for 3 consecutive cycles (and thus ignoring RDY). On the fourth cycle, the DMC unit drives the next sample address onto the address lines, and reads that byte from memory. It then drives RDY high again, and the CPU picks up where it left off.
+</p><p>This matters because on NTSC NES and Famicom, it can interfere with the expected operation of any register where reads have a side effect: the controller registers ($4016 and $4017), reads of the PPU status register ($2002), and reads of VRAM/VROM data ($2007) if they happen to occur in the same cycle that the DMC unit pulls RDY low.
+</p><p>For the controller registers, this can cause an extra rising clock edge to occur, and thus shift an extra bit out. For the others, the PPU will see multiple reads, which will cause extra increments of the address latches, or clear the vblank flag.
+</p><p>This problem has been fixed on the 2A07 and PAL NES is exempt of this bug.
+</p>
+<h2><span class="mw-headline" id="Usage_of_DMC_for_syncing_to_video">Usage of DMC for syncing to video</span></h2>
+<p>DMC IRQs can be used for timed video operations. The following method was discussed on the forum in 2010.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+<h3><span class="mw-headline" id="Concept">Concept</span></h3>
+<p>The NES hardware only has limited tools for syncing the code with video rendering. The VBlank NMI and sprite zero hit are the only two reasonably reliable flags that can be used, so only 2 synchronizations per frame are doable easily. In addition, only the VBlank NMI can trigger an interrupt, the sprite zero flag has to be polled, potentially wasting a lot of CPU cycles.
+</p><p>However, the DMC channel can hypothetically be used for syncing with video instead of using it for sound. Unfortunately it's a bit complicated, but used correctly, it can function as a crude scanline counter, eliminating the need for an advanced mapper.
+</p><p>The DMC's timing is completely separate from the video (obviously, it being an audio component). The DMC's timer is always running, and samples can only start every 8 clocks. However, because the DMC's timer isn't synchronized to the PPU in any way, these 8-clock boundaries occur on different scanlines each frame.
+</p><p>To achieve stable timing, this is what you do:
+</p>
+<ul><li> At a fixed time in rendering (we'll use the start of vblank as an example), start a dummy single-byte sample at rate $F. Due to a hardware quirk†, the sample needs to be started three times in a row like this:</li></ul>
+<pre>
+sei
+lda #$10 
+sta $4015 
+sta $4015 
+sta $4015 
+cli
+</pre>
+<ul><li> Use any method to count how many cycles pass before the DMC IRQ happens (you can use an actual IRQ, or poll $4015).
+<ul><li> At rate $F, there are 54 CPU cycles between clocks, so there are 432 CPU cycles (432 × 3 ÷ 341 = about 3.8 scanlines) between boundaries. In order to synchronize with vblank, after a DMC IRQ you should wait 432 CPU cycles minus the time you measured, </li></ul></li>
+<li> Start the actual sample that will be used for the timing.</li>
+<li> When the IRQ happens, use your measurement from before to delay your program, and you'll synchronize the interrupt to vblank.</li></ul>
+<p>†<b>Note:</b> The hardware quirk mentioned above deals with how DMC IRQs are generated. Basically, the IRQ is generated when the last <b>byte</b> of the sample is <b>read</b>, <b>not</b> when the last <i>sample</i> of the sample <i>plays</i>. The sample buffer sometimes has enough time to empty itself between your writes to $4015, meaning your next write to $4015 will trigger an immediate IRQ. Fortunately, writing to $4015 three times will avoid this issue.
+</p><p>Still using vblank as an example, the measurement you take will tell you how far into the 8-clock boundary vblank occured, and by delaying after a DMC IRQ, you can perform a raster effect at the same point within the 8-clock boundary, aligning it with vblank. If you perform this same method each frame, your raster effect will have a reasonably stable timing to it. As a bonus, since you're mostly using IRQs, the CPU is free to do something else, instead of waiting in a timed loop.
+</p><p>It's possible to use more than one IRQ per frame - but you need to do the <i>measurement</i> part at the <i>same time</i> within each frame, before you use any of the IRQs.
+</p><p>You can only have one split-point per IRQ, with the shortest IRQ being 3.8 scanlines. If you want them closer together, you must use timed code.
+</p><p>You should also make sure your samples are made up of all $00 bytes, and that you've written $00 to $4011 at some point. Otherwise, you might unintentionally create audio. This <i>is</i> a sound channel, after all.
+</p>
+<h3><span class="mw-headline" id="Timing_table">Timing table</span></h3>
+<p>This table converts sample length in scanline length (all values are rounded to the higher integer).
+</p>
+<pre>
+NTSC               Rate 
+Length              $0    $1   $2   $3   $4   $5   $6   $7   $8   $9   $a   $b   $c   $d   $e   $f 
+---------------------------------------------------------------------------------------------------- 
+1-byte (8 bits)     31    27   24   23   21   18   16   16   14   12   10   10   8    6    6    4 
+17-byte (136 bits)  **    **   **   **   **   **   **   **   228  192  170  154  127  101  87   65 
+33-byte (264 bits)  **    **   **   **   **   **   **   **   **   **   **   **   **   196  168  126 
+49-byte (392 bits)  **    **   **   **   **   **   **   **   **   **   **   **   **   **   **   187 
+
+PAL                Rate 
+Length              $0    $1   $2   $3   $4   $5   $6   $7   $8   $9   $a   $b   $c   $d   $e   $f 
+---------------------------------------------------------------------------------------------------- 
+1-byte (8 bits)     30    27   24   23   21   18   16   15   14   12   10   9    8    6    5    4 
+17-byte (136 bits)  **    **   **   **   **   **   **   **   225  189  169  151  126  100  85   64 
+33-byte (264 bits)  **    **   **   **   **   **   **   **   **   **   **   **   **   194  164  124 
+49-byte (392 bits)  **    **   **   **   **   **   **   **   **   **   **   **   **   **   **   184
+</pre>
+<h3><span class="mw-headline" id="Number_of_scanlines_to_wait_table">Number of scanlines to wait table</span></h3>
+<p>This table gives the best sample length and frequency combinations for all possible scanlines interval to wait. They are best because they are where the CPU will have to kill the less time. However it's still possible to use options to wait for fewer lines and kill more time during the interrupt before the video effect.
+</p><p>Because a PAL interrupt will always happen about the same time or a bit sooner than a NTSC interrupt, the NTSC table will be used to set the &quot;best&quot; setting here :
+</p>
+<pre>
+Scanlines  Best opt. for IRQ 
+ 
+1-3        Timed code 
+4-5        Length $0, rate $f 
+6-7        Length $0, rate $d 
+8-9        Length $0, rate $c 
+10-11      Length $0, rate $a 
+12-13      Length $0, rate $9 
+14-15      Length $0, rate $8 
+16-17      Length $0, rate $6 
+18-20      Length $0, rate $5 
+21-22      Length $0, rate $4 
+23         Length $0, rate $3 
+24-26      Length $0, rate $2 
+27-30      Length $0, rate $1 
+31-64      Length $0, rate $0 
+65-86      Length $1, rate $f 
+87-100     Length $1, rate $e 
+101-125    Length $1, rate $d 
+126        Length $2, rate $f 
+127-153    Length $1, rate $c 
+154-167    Length $1, rate $b 
+168-169    Length $2, rate $e 
+170-186    Length $1, rate $a 
+187-191    Length $3, rate $f 
+192-195    Length $1, rate $9 
+196-227    Length $2, rate $d 
+228-239    Length $1, rate $8
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=94079#p94079" rel="nofollow">Forum post</a>: PAL DPCM frequency table contains 2 errors.</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=6521" rel="nofollow">Forum thread</a>: DMC IRQ as a video timer.</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.131 seconds
+Real time usage: 0.136 seconds
+Preprocessor visited node count: 133/1000000
+Preprocessor generated node count: 314/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:179-1!*!0!!en!*!* and timestamp 20160208215432 and revision id 11777
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

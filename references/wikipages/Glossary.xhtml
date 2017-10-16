@@ -1,0 +1,251 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Glossary</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Glossary</h1><div class="article">
+<p>These terms are commonly used in technical discussions about the Nintendo Entertainment System and Nintendo Family Computer.
+Additional well-known computer science terms are listed at <a href="Before_the_basics.xhtml" title="Before the basics">Before the basics</a>, and terms specific to integrated circuits are at <a href="Visual_circuit_tutorial.xhtml#Terms" title="Visual circuit tutorial">Visual circuit tutorial#Terms</a>.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#0_2"><span class="tocnumber">1</span> <span class="toctext">0</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#A"><span class="tocnumber">2</span> <span class="toctext">A</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#B"><span class="tocnumber">3</span> <span class="toctext">B</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#C"><span class="tocnumber">4</span> <span class="toctext">C</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#D"><span class="tocnumber">5</span> <span class="toctext">D</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#E"><span class="tocnumber">6</span> <span class="toctext">E</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#F"><span class="tocnumber">7</span> <span class="toctext">F</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#G"><span class="tocnumber">8</span> <span class="toctext">G</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#I"><span class="tocnumber">9</span> <span class="toctext">I</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#L"><span class="tocnumber">10</span> <span class="toctext">L</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#M"><span class="tocnumber">11</span> <span class="toctext">M</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#N"><span class="tocnumber">12</span> <span class="toctext">N</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#O"><span class="tocnumber">13</span> <span class="toctext">O</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#P"><span class="tocnumber">14</span> <span class="toctext">P</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#R"><span class="tocnumber">15</span> <span class="toctext">R</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#S"><span class="tocnumber">16</span> <span class="toctext">S</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#T"><span class="tocnumber">17</span> <span class="toctext">T</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#U"><span class="tocnumber">18</span> <span class="toctext">U</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#V"><span class="tocnumber">19</span> <span class="toctext">V</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#W"><span class="tocnumber">20</span> <span class="toctext">W</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Z"><span class="tocnumber">21</span> <span class="toctext">Z</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="0_2">0</span></h2>
+<dl><dt>10NES</dt>
+<dd>The program running on the <a href="CIC_lockout_chip.xhtml" title="CIC lockout chip">CIC</a>.</dd>
+<dt>60-pin</dt>
+<dd>Referring to Famicom cassettes. The Famicom and most famiclones for the Asian market use 60-pin cassettes, which have audio passthrough and no lockout chip.</dd>
+<dt>72-pin</dt>
+<dd>Referring to NES Game Paks. The NES and most famiclones for the North American and European markets use 72-pin Game Paks, which have expansion port passthrough and a different lockout chip for each market.</dd></dl>
+<h2><span class="mw-headline" id="A">A</span></h2>
+<dl><dt>Address decoding</dt>
+<dd>Translation of addresses on the console's address buses into chip enables and addresses for the various ROMs and RAMs in the cartridge. In most cartridges, this involves some form of bank switching.</dd>
+<dt>ASIC</dt>
+<dd>Application specific integrated circuit. Used with mappers involving complicated logic that the IC chip is made specific to this purpose.</dd>
+<dt>Attribute</dt>
+<dd>A part of video memory that selects which part of the palette is used for a given sprite or area of the background.</dd>
+<dt>Attribute table</dt>
+<dd>The 64-byte table of background tile attributes at the end of each of the four nametables.</dd>
+<dt>Audio Processing Unit (<a href="APU.xhtml" title="APU">APU</a>)</dt>
+<dd>The hardware on the NES/Famicom that generates audio output.</dd></dl>
+<h2><span class="mw-headline" id="B">B</span></h2>
+<dl><dt>Background</dt>
+<dd>A grid of tiles (programmed using <a class="mw-redirect" href="PPU_nametables.xhtml" title="Nametable">nametables</a>).</dd>
+<dt>Bank switching</dt>
+<dd>The primary function of a mapper. Because the CPU and PPU don't have enough address space to see the entire ROM at once, the ROM is conceptually divided into &quot;pages&quot; or &quot;banks&quot;, where the most significant bits of the ROM address are treated as a page number. The CPU writes a page number to the mapper's port, and the mapper puts this number on the most significant bits of the ROM address to make the selected page visible to the rest of the system. More advanced mappers have &quot;fine-grained bank switching&quot;, which makes separate banks available in separate windows of the address space.</dd>
+<dt>Battery RAM</dt>
+<dd>RAM made nonvolatile by the addition of a battery backup circuit. This is used to let the player save progress in games with more than one chapter. Almost all battery RAM in NES games is PRG RAM; a couple games on very uncommon mappers have battery-backed CHR RAM.</dd>
+<dt>BFT</dt>
+<dd>&quot;BFT&quot; in <a class="mw-redirect" href="NESdev_IRC_channel.xhtml" title="IRC">#nesdev</a> does not stand for Big Fake/Fat/Freaking anyThing, Blunt Force Trauma, or aBout Freaking Time. It originated from what amounted to a <a class="extiw" href="https://en.wikipedia.org/wiki/Drinking_game#Arts" title="wikipedia:Drinking game">drinking game</a> around the Broken Film Transition commonly used in the TV series <i><a class="extiw" href="https://en.wikipedia.org/wiki/MythBusters" title="wikipedia:MythBusters">MythBusters</a></i>. Its use might be politely explained as Break For subsTance.</dd></dl>
+<h2><span class="mw-headline" id="C">C</span></h2>
+<dl><dt>Camera</dt>
+<dd>Abstraction for the part of a world that is displayed on the screen. The illusion of a moving camera is created by scrolling the background and moving all the sprites at once.</dd>
+<dt>Cassette</dt>
+<dd>
+<ol><li>Japanese term corresponding to the term &quot;Game Pak&quot; used in other markets.</li>
+<li>Philips <a class="extiw" href="https://en.wikipedia.org/wiki/Compact_Cassette" title="wikipedia:Compact Cassette">Compact Cassette</a>, the magnetic tape storage medium for the <a class="extiw" href="https://en.wikipedia.org/wiki/Famicom_Data_Recorder" title="wikipedia:Famicom Data Recorder">Famicom Data Recorder</a> and for homemade mix tapes of NES game background music.</li></ol></dd></dl>
+<dl><dt>CHR</dt>
+<dd>Another word for pattern tables, after the traditional name <a class="extiw" href="https://en.wikipedia.org/wiki/character_generator" title="wikipedia:character generator">character generator</a> for a tiled background plane.</dd>
+<dt>CHR RAM</dt>
+<dd>An SRAM on the cartridge, usually 8192 bytes, normally mapped at $0000-$1FFF and holding pattern tables.</dd>
+<dt>CHR ROM</dt>
+<dd>ROM in the cartridge which is connected to the PPU, normally mapped at $0000-$1FFF and holding pattern tables.</dd>
+<dt>Checking Integrated Circuit (CIC)</dt>
+<dd>Nintendo's term for what the public knows better as the lockout chip.</dd>
+<dt>CIC clone</dt>
+<dd>A microcontroller generating the same pseudorandom stream as the authentic CIC. Examples include Tengen's Rabbit and Kevin Horton's CIClone.</dd>
+<dt>CIC stun</dt>
+<dd>Freezing the CIC by using a charge pump to pulse negative voltage on the data pins.</dd>
+<dt>CIRAM (Console-Internal RAM)</dt>
+<dd>A 2048-byte SRAM in the NES, normally mapped at $2000-$2FFF on the PPU bus (subject to mirroring controlled by the Game Pak). Holds nametables and attribute tables.</dd>
+<dt>Collision</dt>
+<dd>The coincidence or overlapping of two &quot;objects&quot; which may be made of background tiles, one or more sprites, or a combination of these.  Collision detection is done by the software since the Famicom/NES hardware has no collision detection circuitry.</dd>
+<dt>Color Generator RAM (CGRAM)</dt>
+<dd>A 28-entry RAM inside the PPU, holding the palette.</dd>
+<dt>Control Deck</dt>
+<dd>The console itself, into which the Game Pak is inserted and to which the controllers and outputs are connected.</dd></dl>
+<h2><span class="mw-headline" id="D">D</span></h2>
+<dl><dt>Dendy</dt>
+<dd>Russian clone of Famicom using PAL signals but using timings to allow NTSC games to run.</dd>
+<dt>Discrete logic</dt>
+<dd>Mapper logic involving standard digital logic ICs such as 74xx series.</dd>
+<dt>Display list</dt>
+<dd>A set of data to be copied to video memory. On the NES, it is usual to prepare display lists for sprites and the background during draw time and copy them to video memory during vertical blank.</dd>
+<dt>DRAM</dt>
+<dd>Dynamic random access memory, or memory that needs to be periodically refreshed.</dd>
+<dt>Draw time</dt>
+<dd>Time outside vertical blanking, when the PPU is busy drawing the picture.</dd>
+<dt>Duty cycle</dt>
+<dd>The fraction of a cycle a signal stays high. For example, most input clock signals have a duty cycle of 50%. The <a href="APU_Pulse.xhtml" title="APU Pulse">pulse channels</a> in the APU have a variable duty cycle.</dd></dl>
+<h2><span class="mw-headline" id="E">E</span></h2>
+<dl><dt>Expansion audio</dt>
+<dd>Extra audio in the cartridge in a few games, used in Famicom only, not in NES.</dd></dl>
+<h2><span class="mw-headline" id="F">F</span></h2>
+<dl><dt>Famiclone</dt>
+<dd>A third-party clone of the NES or Famicom hardware. A few units have swapped <a href="APU_Pulse.xhtml" title="APU Pulse">APU duty cycles</a>, as 12.5, 50, 25 and 25 negated instead.</dd>
+<dt>Family Computer, Famicom, FC</dt>
+<dd>The Japanese version of the NTSC NES, with a few minor hardware differences.</dd>
+<dt>Fixed bank</dt>
+<dd>A window of address space that always points to the same bank, or the bank that appears in this window. Because a fixed bank is unaffected by bank switching. Often used to store interrupt handlers, code that accesses large amounts of data spread across several banks, or anything else that must always be available. Several mappers fix the last bank of the PRG ROM at $C000-$FFFF or $E000-$FFFF. Mappers that use outer bank switching will have a separate fixed bank for each outer bank.</dd>
+<dt>Flip</dt>
+<dd>Reflection of an image. For example, a &quot;vertical flip&quot; turns an M into a W as the pixels move vertically across a horizontal axis.</dd>
+<dt>Forced blanking</dt>
+<dd>Turning off the rendering circuitry by writing zero to <a href="PPU_registers.xhtml" title="PPU registers">$2001</a>, giving the CPU the same access to VRAM through the PPU ports that the CPU normally has during vertical blanking.</dd>
+<dt>Front-loader</dt>
+<dd>NES-001, the original version of the 72-pin NES. It uses a pseudo-ZIF socket for Game Paks.</dd>
+<dt>Four screen</dt>
+<dd>A mapping of cartridge memory to the PPU bus that expands the memory available for nametables to 4K, thus allowing four distinct nametables.</dd></dl>
+<h2><span class="mw-headline" id="G">G</span></h2>
+<dl><dt><a href="Game_Genie.xhtml" title="Game Genie">Game Genie</a></dt>
+<dd>A lock-on unit developed by Codemasters and distributed by Galoob that patches NES games with user-entered single-byte changes.</dd>
+<dt>Game Pak</dt>
+<dd>A cartridge for a Nintendo console. It contains ROMs, mappers, and possibly other circuitry.</dd>
+<dt><a class="extiw" href="https://en.wikipedia.org/wiki/Code_golf" title="wikipedia:Code golf">Golf</a></dt>
+<dd>Aggressive micro-optimization of a program for speed or size, often as a friendly competition to produce the fastest or smallest version of a particular routine. Compare the concept of &quot;frame wars&quot; in the tool-assisted speedrun community. In practice, <a class="extiw" href="https://en.wikipedia.org/wiki/Premature_optimization" title="wikipedia:Premature optimization">golf is far less necessary</a> on the NES than on the Atari 2600 except in a few cases. These include squeezing 17K of code into 16K for an <a href="NROM.xhtml" title="NROM">NROM</a>-128 release, squeezing a routine into a ROM hack of an already tightly packed game such as <i>Super Mario Bros.</i>, getting a routine to finish in one frame or one vertical blank, or producing a code library used by other programs that have a similar reason to be space or time efficient.</dd></dl>
+<h2><span class="mw-headline" id="I">I</span></h2>
+<dl><dt>IRQ</dt>
+<dd>Interrupt request, a maskable hardware interrupt.  Used most often by external hardware to do split-screen scrolling or to trigger events (like disk-loading on the Famicom Disk System or ending a game on the NES-EVENT boards).</dd></dl>
+<h2><span class="mw-headline" id="L">L</span></h2>
+<dl><dt>Left pattern table</dt>
+<dd>The pattern table at PPU $0000-$0FFF. So-called due to display conventions in debugging emulators.</dd>
+<dt>Lock-on</dt>
+<dd>Referring to a cartridge with two connectors: one to connect to the console and another to connect to another cartridge to use its CIC and/or to modify its program.</dd>
+<dt>Lockout chip</dt>
+<dd>Nintendo's scheme used in the front-loading NES to block the use of infringing copies of its games and to reassure retailers that the NES wouldn't have the flood of low-quality games seen on second-generation consoles. Nintendo was successfully sued in antitrust court over this and other practices. It consists of two 4-bit CIC microcontrollers, one in the Control Deck and one in each Game Pak, passing a stream of pseudorandom numbers back and forth.</dd>
+<dt>Lockout defeat</dt>
+<dd>Various ways of getting a program to run without an authentic CIC. These include CIC clone and CIC stun.</dd></dl>
+<h2><span class="mw-headline" id="M">M</span></h2>
+<dl><dt><a href="Mapper.xhtml" title="Mapper">Mapper</a></dt>
+<dd>Circuitry on the Game Pak to perform address decoding and counting.</dd>
+<dt>Mapper hack</dt>
+<dd>A patch to a ROM that uses one mapper to make it work with a different kind of mapper.</dd>
+<dt>Memory Management Controller (MMC)</dt>
+<dd>Name for ASIC mappers made by Nintendo.</dd>
+<dt>Metatile</dt>
+<dd>A block of tile numbers written to the background as a unit. These blocks, often 2x2 tiles (16x16 pixels) in size, are common building blocks for area maps in NES games.</dd>
+<dt><a href="Mirroring.xhtml" title="Mirroring">Mirroring</a></dt>
+<dd>Presence of one memory area at more than one place in the memory map.  In the PPU memory, mirroring is used in the nametables to repeat the screen horizontally or vertically, thus the distinguishing terms &quot;horizontal mirroring&quot; and &quot;vertical mirroring&quot; are used.</dd>
+<dt><a href="Multicart.xhtml" title="Multicart">Multicart</a></dt>
+<dd>A cartridge containing several otherwise unrelated programs.</dd></dl>
+<h2><span class="mw-headline" id="N">N</span></h2>
+<dl><dt><a class="mw-redirect" href="PPU_nametables.xhtml" title="Nametable">Nametable</a></dt>
+<dd>Any of four areas in VRAM (PPU addresses $2000-$23FF, $2400-$27FF, $2800-$2BFF, $2C00-$2FFF) specifying which tiles to display at which places in the background. Each is 32 by 30 tiles and ends with an attribute table.</dd>
+<dt>NMI</dt>
+<dd>Non-maskable interrupt. Used in NES/Famicom for vertical blank.</dd></dl>
+<h2><span class="mw-headline" id="O">O</span></h2>
+<dl><dt>Object Attribute Memory (OAM)</dt>
+<dd>A 256-byte DRAM inside the PPU holding the sprite display list.</dd>
+<dt>Outer bank</dt>
+<dd>A large bank that encompasses a complete set of smaller banks. A mapper supporting an outer bank has one set of ports for &quot;normal&quot; bank switching and a second set of ports that switches higher address lines to make completely separate programs appear. It usually even switches otherwise fixed banks. Used most commonly in multicarts.</dd></dl>
+<h2><span class="mw-headline" id="P">P</span></h2>
+<dl><dt>Palette</dt>
+<dd>A color lookup table.</dd>
+<dt>Pattern table</dt>
+<dd>Two 4096 byte areas of video memory, mapped at PPU $0000-$0FFF and $1000-$1FFF. Each contains 256 tiles.</dd>
+<dt>Picture Processing Unit (<a href="PPU.xhtml" title="PPU">PPU</a>)</dt>
+<dd>It generates the video signal.</dd>
+<dt>Piggyback</dt>
+<dd>Synonym for lock-on used by <a class="external text" href="http://www.consoledatabase.com/companies-organisations/hes/" rel="nofollow">Home Entertainment Suppliers (HES)</a>.</dd>
+<dt>Port</dt>
+<dd>An address mapped to input or output instead of ROM or RAM.</dd>
+<dt>PRG</dt>
+<dd>Memory in the cartridge on the CPU's bus. Short for &quot;program&quot;.</dd>
+<dt>PRG RAM</dt>
+<dd>RAM in the cartridge on the CPU bus, in contrast to the internal RAM at $0000-$07FF which is usually called main RAM, system RAM, or just RAM. With few exceptions, PRG RAM is located at $6000-$7FFF and decoded with the equivalent of <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">a circuit like this</a> inside the mapper.</dd>
+<dt>PRG ROM</dt>
+<dd>ROM on the CPU's bus, containing a program to be executed and data for the program to use. In games using CHR RAM, it may also contain data to be copied to CHR RAM.</dd>
+<dt>Priority</dt>
+<dd>Which graphics appear in front of other graphics. In general, sprites earlier in OAM appear in front of later sprites, and a sprite may appear in front of or behind the background.</dd>
+<dt>Proportional font</dt>
+<dd>A font whose glyphs (character pictures) have different widths. These can fit more text onto the screen than the more common monospace (fixed-width) fonts but are rarely used on NES because of the processing overhead involved with drawing each line of text.</dd></dl>
+<h2><span class="mw-headline" id="R">R</span></h2>
+<dl><dt>Ratchet scrolling</dt>
+<dd>Scrolling that is only allowed by the game engine to occur in one direction. <i>Super Mario Bros.</i> is a famous example of this.</dd>
+<dt>Right pattern table</dt>
+<dd>The pattern table at PPU $1000-$1FFF. So-called due to display conventions in debugging emulators.</dd></dl>
+<h2><span class="mw-headline" id="S">S</span></h2>
+<dl><dt><a href="PPU_scrolling.xhtml" title="PPU scrolling">Scrolling</a></dt>
+<dd>Movement of the visible portion of a background.</dd>
+<dt>Sliver</dt>
+<dd>An 8x1-pixel section of a tile. The PPU operates by fetching 2-byte slivers from pattern tables and passing them through shift registers.</dd>
+<dt><a class="extiw" href="https://en.wikipedia.org/wiki/Busy_waiting" title="wikipedia:Busy waiting">Spin</a></dt>
+<dd>To repeatedly read a particular address in a loop until its value changes. A program can spin on an input port or on a RAM address that is modified by an interrupt handler.</dd>
+<dt>Sprite</dt>
+<dd>An entry of 4 bytes in OAM, controlling a small block of 8x8 pixels that can be moved around on the screen. It has X and Y coordinates, a tile index into one of the pattern tables, vertical and horizontal flip switches, and priority.</dd>
+<dt>Sprite limit</dt>
+<dd>The PPU cannot render more than eight sprite slivers on one scanline. Sprites beyond the eighth will drop out.</dd>
+<dt>Sprite zero hit</dt>
+<dd>A non-transparent sprite (pixel) at OAM[0] overlaps a non-transparent background pixel, setting bit $40 of PPU register $2002 to true.</dd>
+<dt>SRAM</dt>
+<dd><a class="extiw" href="https://en.wikipedia.org/wiki/Static_random_access_memory" title="wikipedia:Static random access memory">Static random access memory</a> is memory made with latches, which does not need to be refreshed but takes four to six times as much die space as DRAM. PRG RAM and CHR RAM are generally SRAM. Occasionally, it stands for &quot;save RAM&quot;, which means the same as battery RAM.</dd>
+<dt><a href="Stack.xhtml" title="Stack">Stack</a></dt>
+<dd>An area of memory used to store values in last-in, first-out (LIFO) manner, especially the area at $0100-$01FF used to store return addresses when a subroutine is called.</dd>
+<dt>Strobe</dt>
+<dd>A signal that defines sampling points for another signal. Think of a strobe light that captures the state of whatever it's shining on when it's on to get the analogy.</dd></dl>
+<h2><span class="mw-headline" id="T">T</span></h2>
+<dl><dt>Tile</dt>
+<dd>An 8x8 pixel piece of graphics. Tile data on the NES has 2 bits per pixel, and each pixel in a tile can have one of three colors or transparency.</dd>
+<dt>Top-loader</dt>
+<dd>NES-101, a 72-pin console released during the end of the NES's commercial era that takes cartridges in the top, like most other consoles. It has no lockout chip.</dd>
+<dt>Trainer</dt>
+<dd>In video games, a <a class="extiw" href="https://en.wikipedia.org/wiki/Trainer_(games)" title="wikipedia:Trainer (games)">trainer</a> is a patch to add a cheat menu. In <a href="INES.xhtml" title="INES">iNES</a>, a &quot;trainer&quot; is an extra 512-byte segment of PRG ROM that can be used by a ROM image that has had a trainer added but is more commonly used by support routines used by mapper hacks for obsolete floppy-disk-based copiers.</dd>
+<dt>Transparent</dt>
+<dd>In the case of overlapping graphics, a transparent pixel means that pixels from the graphics behind this graphic show through.</dd></dl>
+<h2><span class="mw-headline" id="U">U</span></h2>
+<dl><dt>Unlicensed</dt>
+<dd>Referring to video games for the NES published outside of a contract with Nintendo. Most of these use a lockout defeat; a few use lock-on.</dd></dl>
+<h2><span class="mw-headline" id="V">V</span></h2>
+<dl><dt>Variable-width font (VWF)</dt>
+<dd>Synonym for proportional font.</dd>
+<dt>Vector</dt>
+<dd>One of three addresses at the end of the <a href="CPU_memory_map.xhtml" title="CPU memory map">CPU memory map</a>, telling the CPU where to start executing instructions after an <a href="CPU_interrupts.xhtml" title="CPU interrupts">interrupt</a> is asserted.</dd>
+<dt>Vertical blank</dt>
+<dd>The interval between video frames.</dd>
+<dt>VRAM</dt>
+<dd>Video RAM. This is a generic term which encompasses CHR-RAM and memory for Name Table and Palettes.</dd></dl>
+<h2><span class="mw-headline" id="W">W</span></h2>
+<dl><dt>Window</dt>
+<dd>A set of contiguous CPU or PPU addresses mapped to a particular bank of memory.</dd>
+<dt>Work RAM, WRAM</dt>
+<dd>See PRG RAM.</dd></dl>
+<h2><span class="mw-headline" id="Z">Z</span></h2>
+<dl><dt><a href="Zapper.xhtml" title="Zapper">Zapper</a></dt>
+<dd>The <a class="extiw" href="https://en.wikipedia.org/wiki/light_gun" title="wikipedia:light gun">light gun</a> for NES.</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.114 seconds
+Real time usage: 0.117 seconds
+Preprocessor visited node count: 83/1000000
+Preprocessor generated node count: 88/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:508-1!*!0!!en!*!* and timestamp 20160728174729 and revision id 12761
+ -->
+</div></body></html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Nintendo header</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Nintendo header</h1><div class="article">
+<p>About 33% of licensed Nintendo NES games have an header present at their last bank, at addresses $ffe0-$fff9, right before the interrupt vectors.
+</p><p>The info in them is frequently incomplete and/or inaccurate. When info on a particular filed is not present, a byte $00 or $ff is used for padding
+</p>
+<ul><li> <b>$ffe0-$ffef</b> : Name of the game, in ASCII, zero terminated (sometimes the name is abbreviated or replaced by Nintendo's code). ASCII codes 20h-5Ah allowed. Supposed to be right-justified.</li>
+<li> <b>$fff0-$fff1</b> : PRG checksum (either the last 16k bank, or the whole PRG-ROM). Clamped sum of all bytes, excluding the two checksum bytes.</li>
+<li> <b>$fff2-$fff3</b> : CHR checksum. 0x00 if RAM</li>
+<li> <b>$fff4</b> : Data sizes. Values: 0 = 8 KiB or 64 KiB based on board type, 1 = 16 KiB, 2 = 32 KiB, 3 = 128 KiB, 4 = 256 KiB, 5 = 512 KiB
+<ul><li>D7-D4: PRG size</li>
+<li>D3: 0 = CHR ROM, 1 = CHR RAM</li>
+<li>D2-D0: CHR size</li></ul></li>
+<li> <b>$fff5</b> : Board Type.
+<ul><li>D7: 0 = Horizontal <a href="Mirroring.xhtml" title="Mirroring">nametable arrangement</a>, 1 = Vertical arrangement (inverse of <a href="INES.xhtml#Flags_6" title="INES">iNES mirroring bit</a>)</li>
+<li>D6-D0:   0 = NROM, 1 = CNROM, 2 = UNROM/AOROM, 3 = GNROM, 4 = MMC (any).</li></ul></li>
+<li> <b>$fff6</b> : Title encoding : 0 = No title entered, 1 = ASCII, 2 = Another encoding</li>
+<li> <b>$fff7</b> : Valid Title Length - 1. 0 if no title entered.</li>
+<li> <b>$fff8</b> : Maker's code, the same used for the FDS, GB, GBC and SNES headers : 1 = Nintendo, 2-254 = everyone else. 255 must be reserved.</li>
+<li> <b>$fff9</b> : Header Validation Byte. 8-bit checksum of FFF2-FFF9h should = 0</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.010 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:531-1!*!0!*!*!*!* and timestamp 20160208222629 and revision id 11915
+ -->
+</div></body></html>

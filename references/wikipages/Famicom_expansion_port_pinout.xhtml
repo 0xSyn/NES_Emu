@@ -1,0 +1,55 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Famicom expansion port pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Famicom expansion port pinout</h1><div class="article">
+<h2><span class="mw-headline" id="Pinout_of_15-pin_Famicom_expansion_port">Pinout of 15-pin Famicom expansion port</span></h2>
+<p>( Female DA-15 on peripheral )
+</p>
+<pre>             /\
+            |   \
+        GND | 01  \
+            |   09 | /OE for joypad 2
+      SOUND | 02   |
+            |   10 | Out 2 ($4016.2)
+        IRQ | 03   |
+            |   11 | Out 1 ($4016.1)
+Joypad 2 D4 | 04   |
+            |   12 | Out 0 ($4016.0, Strobe)
+Joypad 2 D3 | 05   |
+            |   13 | Joypad 1 D1
+Joypad 2 D2 | 06   |
+            |   14 | /OE for Joypad 1
+Joypad 2 D1 | 07   |
+            |   15 | +5V
+Joypad 2 D0 | 08  /
+            |   /
+             \/
+</pre>
+<h3><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h3>
+<dl><dt>Digital inputs to the Famicom</dt>
+<dd>Joypad 1 D1, Joypad 2 D1…D4</dd>
+<dt>Digital outputs from the Famicom</dt>
+<dd>Out 0, 1, 2; /OE for both joypads</dd>
+<dt>Open-collector bidirectional</dt>
+<dd> IRQ</dd>
+<dt>Analog outputs</dt>
+<dd> SOUND (before expansion audio is mixed in)</dd>
+<dt>Depends on context</dt>
+<dd> Joypad 2 D0 (In the original famicom, permanently connected to player 2 controller, so an output. On the AV famicom, the player 2 controller could be removed, and allow for this to be an input)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.010 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:754-1!*!*!!*!*!* and timestamp 20160208224934 and revision id 9587
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/6502 programming tricks</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/6502 programming tricks</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Toggle_the_zero_flag"><span class="tocnumber">1</span> <span class="toctext">Toggle the zero flag</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Rotate_accumulator_left_8-bits"><span class="tocnumber">2</span> <span class="toctext">Rotate accumulator left 8-bits</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Signed_compare"><span class="tocnumber">3</span> <span class="toctext">Signed compare</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Tail_recursion"><span class="tocnumber">4</span> <span class="toctext">Tail recursion</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Fall-through_tail_recursion"><span class="tocnumber">5</span> <span class="toctext">Fall-through tail recursion</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Compressed_data_in_CHR_ROM"><span class="tocnumber">6</span> <span class="toctext">Compressed data in CHR ROM</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Storing_high_byte_and_low_byte_of_an_address_in_separate_tables"><span class="tocnumber">7</span> <span class="toctext">Storing high byte and low byte of an address in separate tables</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Dealing_with_carry_flag"><span class="tocnumber">8</span> <span class="toctext">Dealing with carry flag</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Clear_accumulator_and_carry_flag_and_reset_bank"><span class="tocnumber">9</span> <span class="toctext">Clear accumulator and carry flag and reset bank</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Self-modifying_codes"><span class="tocnumber">10</span> <span class="toctext">Self-modifying codes</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#See_also"><span class="tocnumber">11</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Toggle_the_zero_flag">Toggle the zero flag</span></h2>
+<pre>PHP
+PLA
+AND #2
+</pre>
+<ul><li> Bytes: 4</li>
+<li> Cycles: 9</li></ul>
+<p>Main-effect:
+</p>
+<ul><li> Zero flag: toggled.</li></ul>
+<p>Side-effect:
+</p>
+<ul><li> Accumulator: set to 0 or 2.</li>
+<li> Negative flag: cleared.</li></ul>
+<h2><span class="mw-headline" id="Rotate_accumulator_left_8-bits">Rotate accumulator left 8-bits</span></h2>
+<pre>ASL A
+ADC #0
+</pre>
+<ul><li> Bytes: 3</li>
+<li> Cycles: 4</li></ul>
+<p>Main-effect:
+</p>
+<ul><li> Accumulator: shifted left, with shifted-out bit shifted-in.</li></ul>
+<p>Side-effect:
+</p>
+<ul><li> Carry flag: cleared.</li></ul>
+<h2><span class="mw-headline" id="Signed_compare">Signed compare</span></h2>
+<p>One way to do this is by toggling the high bit of both numbers before comparison. For example, if 8-bit numbers:
+</p>
+<pre>EOR #$80
+</pre>
+<h2><span class="mw-headline" id="Tail_recursion">Tail recursion</span></h2>
+<ul><li> Bytes: -1</li>
+<li> Cycles: -9</li></ul>
+<p>This can be done by replacing a JSR/RTS with just a JMP, since the subroutine it jumps to will have its own RTS.
+</p>
+<h2><span class="mw-headline" id="Fall-through_tail_recursion">Fall-through tail recursion</span></h2>
+<ul><li> Bytes: -4</li>
+<li> Cycles: -12</li></ul>
+<p>Instead of jumping to another subroutine, you can just fall-through into it. In fact you can even JSR to it and then fall through to it (possibly doing something else in between if wanted), if you want to run it twice; <i>Super Mario Bros.</i> uses this pattern.
+</p><p>Note: This should be done itself inside of a subroutine which finally does the same effect as another, so it still needs to be called.
+</p>
+<h2><span class="mw-headline" id="Compressed_data_in_CHR_ROM">Compressed data in CHR ROM</span></h2>
+<p>Compressed level data may be stored in CHR ROM, rather than PRG ROM, if it helps. One thing that can help is the automatic address increment in the PPU, and faster addressing modes. The data can start at an arbitrary address without much difficulty.
+</p>
+<h2><span class="mw-headline" id="Storing_high_byte_and_low_byte_of_an_address_in_separate_tables">Storing high byte and low byte of an address in separate tables</span></h2>
+<p>For the RTS trick and other things, you can use separate 256 byte pages for different pieces of a record, such as low and high half of an address.
+</p><p>Here is an example of a macro for use with <s>Unofficial MagicKit</s> which will automatically do this for you (here, it is called <tt>player_tile</tt>, and uses the tables <tt>pmrttl</tt> and <tt>pmrtth</tt>; you can, in fact, use exactly this macro and just change the names around):
+</p>
+<pre>	macro player_tile
+	if ?X=1
+	macset 2,4,*
+	macset 3,4,?B
+	bank 3
+	org pmrttl+(\1)
+	db low((\2)-1)
+	org pmrtth+(\1)
+	db high((\2)-1)
+	bank \3
+	org \2
+	endif
+	endm
+</pre>
+<h2><span class="mw-headline" id="Dealing_with_carry_flag">Dealing with carry flag</span></h2>
+<p>Several things can be done with the carry flag, such as:
+</p>
+<ul><li> If you want to use a AND instruction and clear the carry flag at the same time, you can use the unofficial ANC instruction, if the high bit of the operand is cleared.</li>
+<li> Often you can tell that the carry flag will have a specific state (such as after a conditional branch), which can help when using a ADC or SBC instruction.</li></ul>
+<h2><span class="mw-headline" id="Clear_accumulator_and_carry_flag_and_reset_bank">Clear accumulator and carry flag and reset bank</span></h2>
+<pre>CLC
+RLA ident
+</pre>
+<ul><li> Bytes: 4</li>
+<li> Cycles: 8</li></ul>
+<p>In this program, &quot;<tt>ident</tt>&quot; should point to a zero byte in ROM. The &quot;official&quot; way would be:
+</p>
+<pre>CLC
+LDA #0
+STA ident
+</pre>
+<ul><li> Bytes: 6</li>
+<li> Cycles: 8</li></ul>
+<h2><span class="mw-headline" id="Self-modifying_codes">Self-modifying codes</span></h2>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="RTS_Trick.xhtml" title="RTS Trick">RTS Trick</a></li>
+<li> <a href="Synthetic_instructions.xhtml" title="Synthetic instructions">Synthetic instructions</a></li>
+<li> <a href="Programming_with_unofficial_opcodes.xhtml" title="Programming with unofficial opcodes">Programming with unofficial opcodes</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.034 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 42/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1254-1!*!0!!en!*!* and timestamp 20160208230542 and revision id 8264
+ -->
+</div></body></html>

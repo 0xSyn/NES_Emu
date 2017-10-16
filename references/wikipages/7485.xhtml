@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>7485</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>7485</h1><div class="article">
+<p>The <strong class="selflink">7485</strong> (74LS85, 74HC85) is a digital magnitude comparator IC.
+</p>
+<h2><span class="mw-headline" id="7485_Pinout">7485 Pinout</span></h2>
+<pre>       .--\/--.
+  B3 --+      +-- Vcc
+IA&lt;B --+      +-- A3
+IA=B --+      +-- B2
+IA&gt;B --+  85  +-- A2
+QA&gt;B --+      +-- A1
+QA=B --+      +-- B1
+QA&lt;B --+      +-- A0
+ GND --+      +-- B0
+       `------'
+</pre>
+<h2><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h2>
+<ul><li> A3-A0: 4-bit number A</li>
+<li> B3-B0: 4-bit number B</li>
+<li> IA&lt;B: Cascade from next lower nibble (use false for lowest)</li>
+<li> IA=B: Cascade from next lower nibble (use true for lowest)</li>
+<li> IA&gt;B: Cascade from next lower nibble (use false for lowest)</li>
+<li> QA&lt;B: True if A &lt; B, false if A &gt; B</li>
+<li> QA=B: False if A &lt; B or A &gt; B</li>
+<li> QA&gt;B: False if A &lt; B, true if A &gt; B</li></ul>
+<p>If A = B, then Q = I.
+</p><p>This IC has been proposed as the PRG ROM decoder for <a href="NROM_368.xhtml" title="NROM-368">NROM-368</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:969-1!*!0!!*!*!* and timestamp 20160606132040 and revision id 5439
+ -->
+<p class="categories">Categories: <a href="Category_7400_series.xhtml">7400 series</a></p></div></body></html>

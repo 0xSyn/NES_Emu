@@ -1,0 +1,228 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Apex</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Apex</h1><div class="article">
+<p>Apex is a side-scrolling adventure/exploration game. It serves as a testament to the &quot;golden age&quot; of console gaming (circa early '90's)- a celebration of what was, what is and what might have been. 
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Story"><span class="tocnumber">2</span> <span class="toctext">Story</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Gameplay"><span class="tocnumber">3</span> <span class="toctext">Gameplay</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#RAM_Map"><span class="tocnumber">4</span> <span class="toctext">RAM Map</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#ROM_Map"><span class="tocnumber">5</span> <span class="toctext">ROM Map</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li><u>Project Owner</u>: Retrometheus</li>
+<li><u>Developer</u>: Retrometheus</li>
+<li><u>Compiler</u>: None (hex coding)</li>
+<li><u>Sound Driver</u>: Retrodriver™</li>
+<li><u>Soundtrack by</u>: Retrometheus</li>
+<li><u>Started on</u>: 5/2011</li>
+<li><u>Status</u>: Preproduction </li>
+<li><u>Mapper</u>: MMC5 (unique submapper, tentatively dubbed &quot;EJROM&quot;)</li>
+<li><u>PRG-ROM</u>: 1024 KB</li>
+<li><u>CHR-ROM</u>: 1024 KB</li>
+<li><u>PRG-RAM</u>: 64 KB</li></ul>
+<h2><span class="mw-headline" id="Story">Story</span></h2>
+<p>Bioterrorists are cultivating superviruses in labs hidden at the bottom of the ocean. 
+</p>
+<h2><span class="mw-headline" id="Gameplay">Gameplay</span></h2>
+<p>Apex is a rather nondescript purple angelfish with two basic attacks: a stationary somersault and high-velocity bubble projectiles.
+</p>
+<h2><span class="mw-headline" id="RAM_Map">RAM Map</span></h2>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>RAM</b>  </td>
+<td> <b>Function</b> </td>
+<td> <b>Details</b>
+</td></tr>
+<tr>
+<td> 0x0000-0D </td>
+<td> Music Channel pointers </td>
+<td> P2-P1-T-N-D-P3-P5
+</td></tr>
+<tr>
+<td> 0x000E-0F </td>
+<td> Rhythm Array pointer </td>
+<td>
+</td></tr>
+<tr>
+<td> 0x0010-1D </td>
+<td> Repeat Coda pointers </td>
+<td> P2-P1-T-N-D-P3-P5
+</td></tr>
+<tr>
+<td> 0x001E </td>
+<td> Song Data bank#
+</td></tr>
+<tr>
+<td> 0x001F </td>
+<td> DPCM sample data Bank#
+</td></tr>
+<tr>
+<td> 0x0020-2C </td>
+<td> Rhythmic countdowns (even slots only) </td>
+<td> P2-P1-T-N-D-P3-P5
+</td></tr>
+<tr>
+<td> 0x0021-2D </td>
+<td> Selective repeats # remaining (odd slots only) </td>
+<td> P2-P1-T-N-D-P3-P5
+</td></tr>
+<tr>
+<td> 0x002E-2F </td>
+<td> Header pointer
+</td></tr>
+<tr>
+<td> 0x0030-32 </td>
+<td> Timbre/volume data </td>
+<td> P2-P1-T
+</td></tr>
+<tr>
+<td> 0x0033 </td>
+<td> Song ID# jukebox </td>
+<td> Writing a value here triggers a new song to play.
+</td></tr>
+<tr>
+<td> 0x0034 </td>
+<td> Current song ID#
+</td></tr>
+<tr>
+<td> 0x0035-36 </td>
+<td> Timbre/volume data </td>
+<td> P3-P5
+</td></tr>
+<tr>
+<td> 0x0037 </td>
+<td> Reserved for SFX.
+</td></tr>
+<tr>
+<td> 0x0038-3E </td>
+<td> Most recent rhythmic countdown value </td>
+<td> Used to reload even-numbered slots in the $20-2C range.
+</td></tr>
+<tr>
+<td> 0x003F </td>
+<td> Reserved for SFX.
+</td></tr>
+<tr>
+<td> 0x0040-5B </td>
+<td> Unused
+</td></tr>
+<tr>
+<td> 0x005C </td>
+<td> Current macromode
+</td></tr>
+<tr>
+<td> 0x005D </td>
+<td> Macromode transition destination
+</td></tr>
+<tr>
+<td> 0x005E </td>
+<td> Reserved
+</td></tr>
+<tr>
+<td> 0x005F </td>
+<td> Transition status </td>
+<td> #00 = Null; #01 = Activate; #FF = Transitioning
+</td></tr>
+<tr>
+<td> 0x0060-AF </td>
+<td> Unused
+</td></tr>
+<tr>
+<td> 0x00B0-B2 </td>
+<td> Controller 1 buttons </td>
+<td> old-regular-new
+</td></tr>
+<tr>
+<td> 0x00B3-B7 </td>
+<td> Reserved
+</td></tr>
+<tr>
+<td> 0x00B8-BA </td>
+<td> Controller 2 buttons </td>
+<td> old-regular-new
+</td></tr>
+<tr>
+<td> 0x00BB-BF </td>
+<td> Reserved
+</td></tr>
+<tr>
+<td> 0x00C0 </td>
+<td> Current spritesheet
+</td></tr>
+<tr>
+<td> 0x00C1 </td>
+<td> Current BG tilesheet
+</td></tr>
+<tr>
+<td> 0x00C2-DF </td>
+<td> Unused?
+</td></tr>
+<tr>
+<td> 0x00E0 </td>
+<td> Game Paused? </td>
+<td> #00 = No; #01 = Yes
+</td></tr>
+<tr>
+<td> 0x00E1-F7 </td>
+<td> Unused?
+</td></tr>
+<tr>
+<td> 0x00F8 </td>
+<td> SPR-OAM transfer on next NMI? </td>
+<td> #00 = yes
+</td></tr>
+<tr>
+<td> 0x00FC </td>
+<td> Frame counter </td>
+<td> See what we did there?
+</td></tr>
+<tr>
+<td> 0x00FF </td>
+<td> Used in terminal MPL loop
+</td></tr>
+<tr>
+<td> 0x0100-1FF </td>
+<td> Stack
+</td></tr>
+<tr>
+<td> 0x0200-2FF </td>
+<td> Sprites
+</td></tr>
+</table>
+<h2><span class="mw-headline" id="ROM_Map">ROM Map</span></h2>
+<p>$00010-0400F: Default music data bank<br/>
+$04010-1000F: Alternate music data banks<br/>
+$E0010-F000F: PRG-RAM banks (8 x 8 kB)<br/>
+$F0010-FE00F: Seven 8kB DPCM banks<br/>
+$FE010: NMI Routine<br/>
+$FF010: Init. Routine<br/>
+$FF090: Title Screen draw routine<br/>
+$FF0F0-FF10F: Title Screen palettes<br/>
+$FF210: Main Program Loop<br/>
+$FFC10: Music frequency table<br/>
+$FFD10: Tempo Offsets<br/>
+$FFF10: Music/Tempo/DPCM Bank index<br/>
+$100000: Waiting for NMI<br/>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.039 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 32/1000000
+Preprocessor generated node count: 50/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:738-1!*!*!!en!*!* and timestamp 20160208224746 and revision id 7641
+ -->
+<p class="categories">Categories: <a href="Category_Homebrew_games.xhtml">Homebrew games</a></p></div></body></html>

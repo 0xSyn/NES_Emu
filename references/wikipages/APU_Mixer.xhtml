@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Mixer</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Mixer</h1><div class="article">
+<p>The <a href="APU.xhtml" title="APU">NES APU</a> mixer takes the channel outputs and converts them to an analog audio signal. Each channel has its own internal digital-to-analog convertor (DAC), implemented in a way that causes non-linearity and interaction between channels, so calculation of the resulting amplitude is somewhat involved.
+</p><p>The following formula calculates the audio output level within the range of 0.0 to 1.0. It is the sum of two sub-groupings of the channels:
+</p>
+<pre>output = pulse_out + tnd_out
+
+                            95.88
+pulse_out = ------------------------------------
+             (8128 / (pulse1 + pulse2)) + 100
+
+                                       159.79
+tnd_out = -------------------------------------------------------------
+                                    1
+           ----------------------------------------------------- + 100
+            (triangle / 8227) + (noise / 12241) + (dmc / 22638)
+</pre>
+<p>The values for <a href="APU_Pulse.xhtml" title="APU Pulse">pulse1</a>, <a href="APU_Pulse.xhtml" title="APU Pulse">pulse2</a>, <a href="APU_Triangle.xhtml" title="APU Triangle">triangle</a>, <a href="APU_Noise.xhtml" title="APU Noise">noise</a>, and <a href="APU_DMC.xhtml" title="APU DMC">dmc</a> are the output values for the corresponding channel. The dmc value ranges from 0 to 127 and the others range from 0 to 15. When the values for one of the groups are all zero, the result for that group should be treated as zero rather than undefined due to the division by 0 that otherwise results.
+</p><p>This formula can be closely approximated using an efficient <a href="#Lookup_Table">lookup table</a>, or roughly approximated with a <a href="#Linear_Approximation">linear formula</a>.
+</p><p><br/>
+The NES hardware follows the DACs with a <a class="external text" href="http://nesdev.com/NESAudio.gif" rel="nofollow">surprisingly involved circuit</a> that adds several low-pass and high-pass filters:
+</p>
+<ul><li> A first-order high-pass filter at 90 Hz</li>
+<li> Another first-order high-pass filter at 440 Hz</li>
+<li> A first-order low-pass filter at 14 kHz</li></ul>
+<p>See also:
+</p>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=44255#p44255" rel="nofollow">blargg's data and analysis, and lidnariq's matching analog components to filters</a></li></ul>
+<p>The Famicom hardware instead ONLY specifies a first-order high-pass filter at 8 Hz, followed by the unknown (and varying) properties of the RF modulator and demodulator.
+</p>
+<h2><span class="mw-headline" id="Emulation">Emulation</span></h2>
+<p>The <strong class="selflink">NES APU Mixer</strong> can be efficiently emulated using a lookup table or a less-accurate linear approximation.
+</p>
+<h3><span class="mw-headline" id="Lookup_Table">Lookup Table</span></h3>
+<p>The APU mixer formulas can be efficiently implemented using two lookup tables: a 31-entry table for the two <a href="APU_Pulse.xhtml" title="APU Pulse">pulse channels</a> and a 203-entry table for the remaining channels (due to the approximation of tnd_out, the numerators are adjusted slightly to preserve the normalized output range).
+</p>
+<pre>
+    output = pulse_out + tnd_out
+
+    pulse_table [n] = 95.52 / (8128.0 / n + 100)
+
+    pulse_out = pulse_table [pulse1 + pulse2]
+</pre>
+<p>The tnd_out table is approximated (within 4%) by using a base unit close to the <a href="APU_DMC.xhtml" title="APU DMC">DMC's</a> DAC.
+</p>
+<pre>
+    tnd_table [n] = 163.67 / (24329.0 / n + 100)
+
+    tnd_out = tnd_table [3 * triangle + 2 * noise + dmc]
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Linear_Approximation">Linear Approximation</span></h3>
+<p>A linear approximation can also be used, which results in slightly louder DMC samples, but otherwise fairly accurate operation since the wave channels use a small portion of the transfer curve. The overall volume will be reduced due to the headroom required by the DMC approximation.
+</p>
+<pre>
+    output = pulse_out + tnd_out
+    
+    pulse_out = 0.00752 * (pulse1 + pulse2)
+    
+    tnd_out = 0.00851 * triangle + 0.00494 * noise + 0.00335 * dmc
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.031 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 32/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:185-1!*!0!!*!*!* and timestamp 20160208220019 and revision id 9072
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

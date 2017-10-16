@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:RAMBO-1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:RAMBO-1</h1><div class="article">
+<p>As for the 2mb PRG, I'm not sure if the cart actually supports that much ROM, but the PRG registers apparently are 8 bits, and 8kb * $100 = 2048kb = 2mb. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 03:05, 9 November 2011 (UTC)
+</p>
+<h2><span class="mw-headline" id="IRQ_related_-_Hard_Drivin.27">IRQ related - Hard Drivin'</span></h2>
+<p>Suggested changes for the Mapper64 IRQ. It makes Hard Drivin' to work fine. No other games are affected with this change.
+Every cycle on 6502 is either a read or a write cycle. So, you update the IRQ counter in the next CPU cycle:
+</p>
+<ul><li> <b>IF</b> $C001 was written to after previous clock
+<ul><li> reload IRQ counter with IRQ Reload value <b>PLUS ONE</b></li></ul></li>
+<li> <b>ELSE IF</b> IRQ counter is 0
+<ul><li> reload IRQ counter with IRQ Reload value</li></ul></li></ul>
+<p>When the IRQ is clocked by the mapper (in scanline or cycle mode):
+</p>
+<ul><li><ul><li> Decrement IRQ counter by 1</li>
+<li> <b>IF</b> IRQ counter is now 0 <b>AND</b> IRQs are enabled
+<ul><li> wait one M2 cycle, then trigger IRQ</li></ul></li></ul></li></ul>
+<p>Hard Drivin' works. --<a href="User_Zepper.xhtml" title="User:Zepper">Zepper</a> (<s>talk</s>) 17:57, 14 January 2014 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.015 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:635-1!*!0!*!*!*!* and timestamp 20160208224418 and revision id 8021
+ -->
+</div></body></html>

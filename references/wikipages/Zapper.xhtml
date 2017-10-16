@@ -1,0 +1,78 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Zapper</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Zapper</h1><div class="article">
+<p>The <b>Zapper</b> is a light gun, often associated with the game <i>Duck Hunt</i>.
+It reads light from a CRT SDTV and sends the brightness of the area where it is pointed on the controller port.
+</p><p>The Zapper can be used in either <a href="Input_devices.xhtml" title="Input devices">controller port</a>, though most games will only allow you to use it in controller port #2, leaving port #1 for a standard controller used for navigating through options, moving the view, changing weapons, etc.
+</p><p>The Famicom Zapper is logically compatible, but can only be plugged into the <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">Famicom expansion port</a> and so only read from $4017. The Vs. System Zapper is not compatible<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> (see below).
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Output_.28.244016.2F.244017_read.29"><span class="tocnumber">1</span> <span class="toctext">Output ($4016/$4017 read)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Sequence_of_operations"><span class="tocnumber">2</span> <span class="toctext">Sequence of operations</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#External_Links"><span class="tocnumber">3</span> <span class="toctext">External Links</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Output_.28.244016.2F.244017_read.29">Output ($4016/$4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxT WxxS
+   | |  |
+   | |  +- Serial data (Vs.)
+   | +---- Light sense (0: detected; 1: not detected) (NES/FC)
+   +------ Trigger (0: released; 1: pulled) (NES/FC)
+</pre>
+<p>There are three hardware variants:
+</p>
+<dl><dt>NES</dt>
+<dd> Light sense and trigger are output on bit 3 and 4 of $4016 or $4017, depending on the port.</dd>
+<dt>Famicom</dt>
+<dd> Light sense and trigger are output on bit 3 and 4 of $4017, as if the Zapper were plugged into port 2 of the NES. The pins for bits 3 and 4 in an AV Famicom's controller ports are normally not connected, but there is a published hardware modification to use an NES Zapper.</dd>
+<dt>Vs. System</dt>
+<dd> This Zapper communicates with the same protocol as the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a>, returning an 8-bit report after being strobed:
+<dl><dd> 0, 0, 0, 0, 1, 0, Light sense (inverted), Trigger</dd></dl></dd>
+<dd>The &quot;light sense&quot; status corresponds to Left and the &quot;trigger&quot; to Right, and Up is always pressed.</dd>
+<dd>Unlike the NES/Famicom Zapper, the Vs. Zapper's &quot;light sense&quot; is 1 when detecting and 0 when not detecting.</dd></dl>
+<p>Tests in the Zap Ruder test ROM show that the photodiode stays on for about 26 scanlines with pure white, 24 scanlines with light gray, or 19 lines with dark gray.
+For an emulator developer, one useful model of the light sensor's behavior is that luminance is collected as voltage into a capacitor, whose voltage drains out exponentially over the course of several scanlines, and the light bit is active while the voltage is above a threshold.
+</p><p>The official Zapper's trigger returns &quot;pulled&quot; while it is halfway in, and &quot;not pulled&quot; once it has been pulled all the way to where it goes clunk.
+The large capacitor (10µF) inside the Zapper when combined with the 10kΩ pullup inside the console means that it will take approximately 100ms to change to &quot;released&quot; after the trigger has been fully pulled.
+</p>
+<h3><span class="mw-headline" id="Sequence_of_operations">Sequence of operations</span></h3>
+<p>The proper way to implement Zapper support in a game is as follows:
+</p>
+<ol><li> Each frame, check if the player has pulled the trigger. Keep running the game loop and remain in this step until the trigger is pulled.</li>
+<li> During vertical blanking, verify that the light gun is <i>not</i> detecting light, to ensure that the player is actually pointing the gun at the screen. If bit 3 is false during vblank, a <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> is probably plugged in. Do this near the end of your vertical blank code to let the light &quot;drain out&quot; if the gun happens to be pointed near the bottom of the screen. If you are using sprite 0 hit, a good time to read it is right after the sprite 0 hit flag turns off.</li>
+<li> Optional: Turn the entire screen white or display white boxes on all targets, and use timed code or a scanline IRQ handler to wait for the Zapper to start detecting light in order to see how far down the screen the Zapper is pointed. This can narrow the set of targets that must be checked in the next step.</li>
+<li> For each target the player may hit, display a black screen with a single white ($20) or light colored ($31-$3C) box at the target's location. Wait the entire frame to check if the light sense bit goes low. The sensor may turn on and off in 10 to 25 scanlines, so continue to check throughout a whole frame. If any of the targets is hit, register a 'hit' within the game; if not, move on to the next target or, if there are no additional targets, register a 'miss'.</li>
+<li> Restore the screen to its original state.</li></ol>
+<h2><span class="mw-headline" id="External_Links">External Links</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=13021" rel="nofollow">Forum post:</a> Zapper test ROMs</li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8108" rel="nofollow">Forum post:</a> Zap Ruder: The Zapper test ROM project</li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=11169" rel="nofollow">Forum post:</a> Zapruder calibration</li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=10138" rel="nofollow">Forum post:</a> Detecting screen (X,Y) location for the NES Zapper</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=3&amp;t=9917" rel="nofollow">Forum post:</a> VS zapper info?</span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.090 seconds
+Real time usage: 0.187 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 110/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:71-1!*!0!!en!*!* and timestamp 20160603204738 and revision id 12494
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

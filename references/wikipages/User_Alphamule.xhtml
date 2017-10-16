@@ -1,0 +1,84 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Alphamule</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Alphamule</h1><div class="article">
+<p>The <b>6264</b> is an 8kB static RAM, available in 70 to 200 nanosecond access time variants. It can function on both the NES PPU's 8080 style bus (separate /WE and /OE strobes) or on the CPU's 6500 style bus (by grounding /OE and connecting the R/W signal to /WE). The <b>62256</b> is similar but has 32kB of RAM instead.
+</p>
+<h2><span class="mw-headline" id="6264_Pinout_.2862256_in_parentheses.29">6264 Pinout (62256 in parentheses)</span></h2>
+<p>The 6264 has been used for work RAM and save RAM in numerous NES games, commonly <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">decoded at $6000-$7FFF</a>.
+The 62256 is used in <i>RacerMate Challenge II</i>, <i>Romance of the Three Kingdoms II</i>, and a few Famicom games.
+</p>
+<ul><li> 6264: 8Kx8-bit SRAM</li>
+<li> 62256: 32Kx8-bit SRAM</li></ul>
+<pre>           .----\/----.
+(A14) nc - |01      28| - +5V
+     A12 - |02      27| - /WE
+      A7 - |03      26| - CS2 (A13) 
+      A6 - |04      25| - A8      
+      A5 - |05      24| - A9      
+      A4 - |06      23| - A11       
+      A3 - |07      22| - /OE       
+      A2 - |08      21| - A10       
+      A1 - |09      20| - /CS1    
+      A0 - |10      19| - D7      
+      D0 - |11      18| - D6      
+      D1 - |12      17| - D5      
+      D2 - |13      16| - D4      
+     GND - |14      15| - D3      
+           `----------'
+</pre>
+<h2><span class="mw-headline" id="32-pin_62xxxx_Pinout">32-pin 62xxxx Pinout</span></h2>
+<pre>(62512 in parentheses, 2048 in bold, 8) ==
+</pre>
+<p>In the NES, these chips might be used in &quot;EPROM emulators&quot;, or devices into which a game is loaded from an external source (such as a connected personal computer or a NAND Flash drive) before it runs.
+</p>
+<ul><li> 621024: 128Kx8-bit SRAM</li>
+<li> 62512: 512Kx8-bit SRAM (breaks name pattern as this is a 4096Kb device)</li></ul>
+<pre>           .----\/----.
+(A18) nc - |01      32| - +5V
+     A16 - |02      31| - A15
+     A14 - |03      30| - CS2 (A17)
+     A12 - |04      29| - /WE
+      A7 - |05      28| - A13
+      A6 - |06      27| - A8      
+      A5 - |07      26| - A9      
+      A4 - |08      25| - A11       
+      A3 - |09      24| - /OE       
+      A2 - |10      23| - A10       
+      A1 - |11      22| - /CS1    
+      A0 - |12      21| - D7      
+      D0 - |13      20| - D6      
+      D1 - |14      19| - D5      
+      D2 - |15      18| - D4      
+     GND - |16      17| - D3      
+           `----------'
+</pre>
+<h2><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h2>
+<dl><dt>A0-A12(-A14) </dt>
+<dd> address</dd>
+<dt>D0-D7 </dt>
+<dd> data</dd>
+<dt>/CS1 and (when present) CS2 (chip selects 1 and 2) </dt>
+<dd> when /CS1 is low and CS2 is high, the chip is selected and will accept input or provide output to the data bus.</dd>
+<dt>/WE (write enable) </dt>
+<dd> When the chip is selected, if this pin is low, the eight-bit data D will be written to the address inside the RAM specified by A</dd>
+<dt>/OE (output enable) </dt>
+<dd> When the chip is selected, if this pin is low and /WE is high, the eight bit data in the RAM at address A will be output onto the pins D.</dd></dl>
+<p>The difference between /OE and the chip selects is that the 6264 responds much faster to /OE, but it draws less power when the chip selects are deasserted.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1456-1!*!0!!*!*!* and timestamp 20160208230310 and revision id 9468
+ -->
+<p class="categories">Categories: <a href="Category_Integrated_circuits.xhtml">Integrated circuits</a></p></div></body></html>

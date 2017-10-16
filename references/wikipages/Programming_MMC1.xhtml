@@ -1,0 +1,71 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming MMC1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming MMC1</h1><div class="article">
+<p><b>MMC1</b> was Nintendo's first ASIC mapper for the NES.
+</p>
+<h2><span class="mw-headline" id="Quick_setup_for_UNROM_style">Quick setup for UNROM style</span></h2>
+<p>If you are using the <a class="mw-redirect" href="SxROM.xhtml" title="SGROM">SGROM</a> or <a class="mw-redirect" href="SxROM.xhtml" title="SNROM">SNROM</a> board to provide an environment similar to <a href="Programming_UNROM.xhtml" title="Programming UNROM">UNROM</a>, with 8 KB of CHR RAM, a fixed PRG ROM bank at $C000, and a 16 KB switchable PRG ROM bank at $8000, do this in your init code after the mapper has been reset:
+</p>
+<pre>
+  lda #$0E   ; vertical mirroring, fixed $C000, 8 KB CHR pages
+  sta $8000  ; (use $0F instead for horizontal mirroring)
+  lsr a
+  sta $8000
+  lsr a
+  sta $8000
+  lsr a
+  sta $8000
+  lsr a
+  sta $8000
+</pre>
+<p>Games that use CHR RAM switch to another PRG bank before they <a class="mw-redirect" href="CHR_ROM_vs__CHR_RAM.xhtml#Switching_to_CHR_RAM" title="CHR-ROM vs CHR-RAM">copy tile data into CHR RAM</a>.
+</p>
+<h2><span class="mw-headline" id="PRG_banks">PRG banks</span></h2>
+<p>Some revisions of the MMC1 IC might power up in a mode other than fixed-$C000, requiring that the vectors and the start of the <a href="Init_code.xhtml" title="Init code">init code</a> be placed in all banks, much as in <a class="mw-redirect" href="BNROM.xhtml" title="BxROM">BxROM</a> or <a href="AxROM.xhtml" title="AxROM">AxROM</a> or <a href="GxROM.xhtml" title="GxROM">GxROM</a>.
+Other revisions guarantee that the fixed bank is loaded at power on.
+To make sure your code works on all MMC1 revisions, put the following code in the last 16 bytes of each 16384 byte bank. (<i>Barbie</i> uses almost identical code.)
+</p>
+<pre>
+reset_stub:
+  sei
+  ldx #$FF
+  txs        ; set the stack pointer
+  stx $8000  ; reset the mapper
+  jmp reset  ; must be in $C000-$FFED
+  .addr nmiHandler, reset_stub, irqHandler
+</pre>
+<p>Then to switch PRG ROM banks, load the bank number (0-15) into A and call this subroutine:
+</p>
+<pre>
+mmc1_load_prg_bank:
+  sta $E000
+  lsr a
+  sta $E000
+  lsr a
+  sta $E000
+  lsr a
+  sta $E000
+  lsr a
+  sta $E000
+  rts
+</pre>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="MMC1.xhtml" title="MMC1">MMC1</a> technical reference</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.038 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 38/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:444-1!*!0!!*!*!* and timestamp 20160208225753 and revision id 9019
+ -->
+</div></body></html>

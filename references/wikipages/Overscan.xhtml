@@ -1,0 +1,148 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Overscan</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Overscan</h1><div class="article">
+<p>The <a href="PPU.xhtml" title="PPU">NES PPU</a> always generates a 256x240 pixel picture.
+But there is a recurring misconception that the picture is 256x224 pixels on NTSC.
+This article explains how both are true.
+</p><p>Consumer TV monitors draw the picture slightly larger than the screen, with some of the picture hidden by the border. This is called &quot;overscan&quot;.<a class="external autonumber" href="http://www.mastersofcinema.org/reviews/03lookingbeyond.htm" rel="nofollow">[1]</a><a class="external autonumber" href="http://en.wikipedia.org/wiki/Overscan" rel="nofollow">[2]</a>
+The BBC recommends keeping a 5 percent margin inside the screen and putting all important information, such as text, within the center 90 percent of the width and height of the screen.<a class="external autonumber" href="http://www.bbc.co.uk/guidelines/dq/pdf/tv/tv_standards_london.pdf" rel="nofollow">[3]</a>
+Most TVs show slightly more than 90 percent, so make sure to keep any glitch pixels well outside this margin.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#NTSC"><span class="tocnumber">1</span> <span class="toctext">NTSC</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#For_game_developers"><span class="tocnumber">1.1</span> <span class="toctext">For game developers</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#For_emulator_developers"><span class="tocnumber">1.2</span> <span class="toctext">For emulator developers</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Statistics"><span class="tocnumber">1.3</span> <span class="toctext">Statistics</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#PAL"><span class="tocnumber">2</span> <span class="toctext">PAL</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#References"><span class="tocnumber">3</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="NTSC">NTSC</span></h2>
+<p><a class="extiw" href="https://en.wikipedia.org/wiki/Rec._601" title="wikipedia:Rec. 601">BT.601</a> (formerly CCIR 601) is a standard for digital processing of component video signals.
+It describes a way to sample <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> at exactly 13.5 MHz to produce 704x480 non-square pixels or 135/11 MHz to produce 640x480 square pixels in the &quot;clean aperture&quot;.<sup class="reference" id="cite_ref-lurkertech_1-0"><a href="#cite_note-lurkertech-1">[1]</a></sup>
+(The commonly quoted 720x480 is slightly wider to capture signals slightly before and after the clean aperture in case of a sync shift, allowing the signal to be recentered before broadcast. There are still only 704 pixels on a scanline.)
+This means the signal associated with one scanline is 640/(135,000,000/11) s = 704/13.5 s = 52.148 microseconds long.
+</p><p>The NTSC color subcarrier is at 39,375,000/11 Hz = 3.5795 MHz.
+The NES master clock is always 6 times the color subcarrier frequency because there are 12 hues on the NES PPU, and the <a href="NTSC_video.xhtml" title="NTSC video">color generator</a> uses a double-pumped counter to generate the hue signal.
+So the PPU's pixel rate is 1/4 of the master clock, or 6/4 of the color subcarrier, or 39,375,000*6/4/11 = 5.3693 million pixels per second.
+(This pixel rate appears to have originated in the TMS9918 VDP used in the ColecoVision.
+The NTSC Sega Master System VDP and Super NES PPU use this same rate, as does the Sega Genesis VDP in the 256-pixel mode that several multiplatform titles used.)
+</p><p>Multiplying the pixel rate by the scanline length gives 39,375,000*6/4/11*640/(135,000,000/11) = 280 pixels per scanline.
+The PPU puts signal in 256 of these and a border at the left and right sides.
+The color of this border is the same as the backdrop color (usually the value in <a href="PPU_palettes.xhtml" title="PPU palettes">$3F00</a>).
+This makes the <a class="extiw" href="https://en.wikipedia.org/wiki/pixel_aspect_ratio" title="wikipedia:pixel aspect ratio">pixel aspect ratio</a> on a 4:3 TV to be 240/280*4/3 = exactly 8:7, or about 1.143:1.
+</p><p>In NTSC video sampled at 13.5 MHz, there are 481.5 non-square pixels from the start of the horizontal sync pulse to the center of the picture.
+This equals 191.5 NES pixels.
+But there are 65 pixels from the start of hsync to the left side of the active picture, or 193 to the center.
+So the NES picture is in theory a pixel and a half to the right of center.
+</p>
+<h3><span class="mw-headline" id="For_game_developers">For game developers</span></h3>
+<p>For a 280x240 pixel picture, the 90 percent safe area is 252x216 pixels.
+Because of the off-center horizontal timing, these 252 pixels are actually the leftmost ones.
+Some CRT TVs have rounded corners; it's a good idea to keep text away from the corners if possible.
+</p><p>This, however, doesn't give developers a free pass to ignore glitches caused by background mirroring.
+Actual TVs show about 224 lines of the signal, hence the commonly reported 256x224 resolution.
+But the vertical position may be slightly off center.
+Emulators and LCD HDTVs tend to use lines 8 to 231, but some TVs have been seen to show lines 12 to 235.
+In fact, even some CRT SDTVs made in the 2000s show more of the bottom than the top; this may be so that tickers on cable news channels aren't cut off.
+</p><p>As seen in <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=5991" rel="nofollow">an interview with the <i>Zelda</i> team</a>, Nintendo's official background planning sheets had a conservative 224x192 pixel <a class="extiw" href="https://en.wikipedia.org/wiki/Safe_area#Title_safe_area" title="wikipedia:Safe area">title safe area</a>.
+It reserved 24 lines at the top and bottom and 16 pixels at the left and right as potential overscan.
+Later in the NES's commercial life, as TVs became manufactured to tighter tolerances, some developers pushed this out farther.
+The scaled mode of <a class="extiw" href="https://en.wikipedia.org/wiki/PocketNES" title="wikipedia:PocketNES">PocketNES</a>, an NES emulator for Game Boy Advance, has 8 pixels of overscan on the left and right, 16 on the top, and 11 on the bottom.
+If all your graphics are visible in PocketNES, they should be visible on a TV.
+</p><p>Since 2007, most new TVs have been 16:9.
+To prepare your game for zoomed-in mode, assume a 160-line safe area surrounded by an overscan of 40 lines on the top and bottom.
+</p>
+<h3><span class="mw-headline" id="For_emulator_developers">For emulator developers</span></h3>
+<p>There are two ways to emulate the pixel aspect ratio of the NES: scale before padding and pad before scaling.
+The NES PPU hardware performs the padding first, adding 24 pixels of border to form a 280x240 pixel picture that can be resized to 320x240, 640x480, or 960x720 square pixels, or to 352x240 or 704x480 if your SDTV output circuit produces non-square pixels at 13.5 MHz (Rec. 601/DVD dot clock, 132/35*colorburst) or 13.423 MHz (PlayStation dot clock, 15/4*colorburst).
+But as a slight optimization, you can scale first (256 * 8/7 = 292) and then pad: stretch the 256x240 pixels to 292x240, 584x480, 876x720, or 1168x960 square pixels or 320x240 or 640x480 non-square pixels.
+Then you can emulate the overscan by drawing a TV bezel on top of the edges of the emulated picture.
+</p>
+<h3><span class="mw-headline" id="Statistics">Statistics</span></h3>
+<p>Here are some numbers of overscan lines from actual TVs, determined using a homebrew paint program on an NTSC NES + <a href="PowerPak.xhtml" title="PowerPak">PowerPak</a>.
+Ranges denote fewer hidden lines at top and bottom center (x = 120-135) than at the corners (x = 16-31 and 223-239) due to CRT curvature.
+</p>
+<table class="tabular">
+<tr>
+<th> TV </th>
+<th> Description </th>
+<th> Mode </th>
+<th> Top lines </th>
+<th> Bottom lines
+</th></tr>
+<tr>
+<td> Vizio VX32L </td>
+<td> LCD HDTV </td>
+<td> Normal </td>
+<td> 8 </td>
+<td> 6
+</td></tr>
+<tr>
+<td> Vizio VX32L </td>
+<td> LCD HDTV </td>
+<td> Zoom </td>
+<td> 36 </td>
+<td> 35
+</td></tr>
+<tr>
+<td> Magnavox MS2530 C225 </td>
+<td> CRT SDTV </td>
+<td> </td>
+<td> 12-14 </td>
+<td> 8-10
+</td></tr>
+<tr>
+<td> Sylvania 6420FF </td>
+<td> CRT SDTV </td>
+<td> </td>
+<td> 13-15 </td>
+<td> 8-11
+</td></tr></table>
+<h2><span class="mw-headline" id="PAL">PAL</span></h2>
+<p>When sampled at 14.75 MHz (768x576) or 7.375 MHz (384x288), PAL video has square pixels.
+The width of a scanline is 768 pixels, or 768/14750000 seconds, or 52.068 microseconds.<sup class="reference" id="cite_ref-lurkertech_1-1"><a href="#cite_note-lurkertech-1">[1]</a></sup>
+</p><p>The PAL color subcarrier is defined as 4,433,618.75 Hz. The PAL NES master clock is six times that, and the PPU generates one pixel for every 5 master clock cycles, or 5320342.5 Hz.  This makes the width of a scanline 5320342.5*768/14750000 = 277 pixels, and the pixel aspect ratio 7375000/5320342.5 = (59*125000)/(165*64489/2) ≈ 1.3862:1.
+</p><p>The width of the picture is nearly the same as on NTSC, so we need not reconsider horizontal placement.
+The border is always black, and it extends into the leftmost and rightmost 2 pixels<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+and the top scanline, the one that never shows sprites.<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup>
+However, the total picture is 288 lines tall, making the safe area roughly 260 lines tall.
+This means every TV shows blank bars at the top and bottom of the 240-line active area that the NES generates.
+So for a PAL-only title, the developer need not concern himself with TVs cutting off the status bar, but minimizing artifacts caused by nametable mirroring and sprite pop-on at the top becomes paramount.
+Both the PAL NES and PAL famiclones (such as Dendy) behave this way.<sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup>
+</p><p>Emulator developers can simulate this system's pixel aspect ratio by stretching the picture to a multiple of 355×240, such as 1065×720 or 1420×960.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-lurkertech-1"><span class="mw-cite-backlink">↑ <sup><a href="#cite_ref-lurkertech_1-0">1.0</a></sup> <sup><a href="#cite_ref-lurkertech_1-1">1.1</a></sup></span> <span class="reference-text">Chris Pirazzi. &quot;<a class="external text" href="http://lurkertech.com/lg/video-systems/" rel="nofollow">Programmer's Guide to Video Systems</a>&quot;. <i>Lurkertech</i>. Accessed 2015-11-17.</span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text">BBS topic: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=2&amp;t=6132" rel="nofollow">Looking for PAL display that displays ALL pixels</a></span>
+</li>
+<li id="cite_note-3"><span class="mw-cite-backlink"><a href="#cite_ref-3">↑</a></span> <span class="reference-text">BBS topic: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=159304#p159304" rel="nofollow">240p test suite</a></span>
+</li>
+<li id="cite_note-4"><span class="mw-cite-backlink"><a href="#cite_ref-4">↑</a></span> <span class="reference-text">BBS topic: <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=173764#p173764" rel="nofollow">240p test suite</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.182 seconds
+Real time usage: 0.374 seconds
+Preprocessor visited node count: 123/1000000
+Preprocessor generated node count: 396/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:188-1!*!0!!en!*!* and timestamp 20160618151908 and revision id 12650
+ -->
+</div></body></html>

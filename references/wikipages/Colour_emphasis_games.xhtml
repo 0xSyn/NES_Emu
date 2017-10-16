@@ -1,0 +1,68 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Colour-emphasis games</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Colour-emphasis games</h1><div class="article">
+<p>The following is a list of games which make use of <a href="PPU_registers.xhtml#Mask_.28.242001.29_.3E_write" title="PPU registers">PPU register $2001</a>'s colour emphasis bits (D7 to D5):
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Commercial"><span class="tocnumber">1</span> <span class="toctext">Commercial</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Homebrew"><span class="tocnumber">2</span> <span class="toctext">Homebrew</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Romhacks"><span class="tocnumber">3</span> <span class="toctext">Romhacks</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Commercial">Commercial</span></h2>
+<ul><li> <i>Bubble Bobble</i> for the Famicom Disk System uses red emphasis to tint the screen throughout the game, which is absent in the cartridge releases.</li>
+<li> <i> The Fantastic Adventures of Dizzy</i> uses it in the beginning when the scroll is unfurled. </li>
+<li> <i>Final Fantasy</i> and <i>Final Fantasy II</i> rapidly sets and clears all 3 emphasis bits to flash the screen when going into a battle screen</li>
+<li> <i>Noah's Ark (E)</i> uses blue emphasis combined with grayscale mode to put part of the level underwater.</li>
+<li> <i><a class="extiw" href="http://www.wikia.com/wiki/c:bootleggames:Aladdin_(Super_Game)" title="wikia:c:bootleggames:Aladdin (Super Game)">Super Game's Aladdin</a></i> uses red emphasis to tint the screen during gameplay, and all 3 emphasis bits to dim when paused.  The official version of <i>Aladdin</i>, released only in Europe, also supports red emphasis to tint the screen during gameplay, but does not dim the screen when paused.</li></ul>
+<p>The following games set all 3 emphasis bits at once to dim the screen:
+</p>
+<ul><li> <i>Felix the Cat</i></li>
+<li> <i>The Immortal</i></li>
+<li> <i>Indiana Jones and the Last Crusade (Taito)</i>, story scenes and some action scenes.</li>
+<li> <i>James Bond Jr</i></li>
+<li> <i>The Jungle Book</i></li>
+<li> <i>Just Breed</i></li>
+<li> <i>Lagrange Point</i> uses colour emphasis, in some frames combined with grayscale bit to do a very cheap fade-out effect when switching to and from the menu on the playfield, and also when entering into battle</li>
+<li> <i>The Lion King (E)</i></li>
+<li> <i>Magician</i></li>
+<li> <i>Mickey's Adventures in Numberland</i></li>
+<li> <i>Rampart</i> uses color emphasis on the player select screen, the options screen and some of the scrolling text.  Blue emphasis is used for the score tally bar.</li>
+<li> <i>R.B.I. Baseball 3</i></li>
+<li> <i>Super Spy Hunter</i>, when paused. The Japanese version <i>Battle Formula</i> doesn't do this.</li>
+<li> <i>Lethal Weapon</i></li>
+<li> <i>Dragon's Lair</i></li>
+<li> <i>Cybernoid - The Fighting Machine</i> before game starts</li>
+<li> <i>Qix</i></li></ul>
+<h2><span class="mw-headline" id="Homebrew">Homebrew</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/wall.zip" rel="nofollow">Wall</a> by Chris Covell uses a blue emphasis to simulate the water flooding the wall.</li>
+<li> <a class="external text" href="http://pineight.com/nes/#editor" rel="nofollow">Graphics editor</a> by Damian Yerrick allows applying a <samp>SCREEN TINT</samp> to the picture.</li>
+<li> <a class="external text" href="http://nesdev.com/Munchie_Attack.zip" rel="nofollow">Munchie Attack</a> by Memblers dims the screen upon Game Over.</li>
+<li> <a class="external text" href="http://morphcat.de/superbatpuncher/" rel="nofollow">Super Bat Puncher Demo</a> dims the screen during pause.</li></ul>
+<h2><span class="mw-headline" id="Romhacks">Romhacks</span></h2>
+<ul><li> <i><a class="external text" href="https://sites.google.com/site/rockman4mi/" rel="nofollow">Rockman 4 Minus Infinity</a></i> (during Brightman's stage) darkens areas farther away from Mega Man.</li>
+<li> <i><a class="external text" href="http://bisqwit.iki.fi/cv2fin/" rel="nofollow">Bisqwit's Castlevania II retranslation</a></i> uses the de-emphasis bits to highlight a section of a screen when scrolling the list of savegame slots.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=8623" rel="nofollow">BBS topic</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=16&amp;t=11995" rel="nofollow">BBS topic #2</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.036 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1102-1!*!0!!en!*!* and timestamp 20160827112337 and revision id 12841
+ -->
+</div></body></html>

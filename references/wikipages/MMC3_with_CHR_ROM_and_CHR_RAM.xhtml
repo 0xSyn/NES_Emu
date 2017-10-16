@@ -1,0 +1,88 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC3 with CHR ROM and CHR RAM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC3 with CHR ROM and CHR RAM</h1><div class="article">
+<p><b>MMC3 with CHR ROM and CHR RAM</b> is an uncommon combination.
+</p><p>Apart from <i>Pinbot</i> and <i>High Speed</i>, which use the <a class="mw-redirect" href="INES_Mapper_119.xhtml" title="TQROM">TQROM</a> board, this combination is used for games in the Chinese language using an <a href="MMC3.xhtml" title="MMC3">MMC3</a>-clone mapper, which need to mix <a class="extiw" href="http://en.wikipedia.org/wiki/Chinese_characters" title="wikipedia:Chinese characters">logographic characters</a> arbitrarily.
+They are thought to follow a similar strategy to <i>Faxanadu</i> and <i><a href="Super_Bat_Puncher.xhtml" title="Super Bat Puncher">Super Bat Puncher</a></i>, reserving some CHR RAM for software-rendered text boxes.
+No mapper other than <a href="MMC5.xhtml" title="MMC5">MMC5</a> has CHR ROM banks fine-grained enough to allow showing dialogue using Chinese characters with only CHR ROM without prerendering each sentence, and unlike Japanese, Chinese cannot use the common shortcut of using only <a class="extiw" href="http://en.wikipedia.org/wiki/kana" title="wikipedia:kana">phonetic characters</a>.
+Some of these mappers differ only in the amount of CHR RAM that replaces CHR ROM.
+</p><p>All MMC3-like iNES mappers known to be used with CHR RAM are listed below:
+</p>
+<table class="tabular">
+<tr>
+<th> Mapper </th>
+<th> First RAM bank </th>
+<th> Size of RAM<br/>(1024-byte banks) </th>
+<th> RAM mirrored?
+</th></tr>
+<tr>
+<td> <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">004</a> </td>
+<td> 0 </td>
+<td> 0 or 8* </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_074.xhtml" title="INES Mapper 074">074</a> </td>
+<td> 8 </td>
+<td> 2 </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_119.xhtml" title="INES Mapper 119">119</a> </td>
+<td> 64, 192 </td>
+<td> 8 </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_191.xhtml" title="INES Mapper 191">191</a> </td>
+<td> 128 </td>
+<td> 2 </td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_192.xhtml" title="INES Mapper 192">192</a> </td>
+<td> 8 </td>
+<td> 4 </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_194.xhtml" title="INES Mapper 194">194</a> </td>
+<td> 0 </td>
+<td> 2 </td>
+<td> No
+</td></tr>
+<tr>
+<td> <a href="INES_Mapper_195.xhtml" title="INES Mapper 195">195</a> </td>
+<td> 0 </td>
+<td> 4 </td>
+<td> No
+</td></tr></table>
+<p>* In iNES format, mapper 4 has CHR RAM only if CHR ROM is not present.
+</p><p>ROMs with the <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header specify the size of CHR RAM separately. Because the default size is ignored, the seven mappers collapse into four distinct behaviors:
+</p>
+<dl><dt> 004, 194, 195</dt>
+<dd> CHR RAM starts at bank 0 and is mirrored only if there is no CHR ROM</dd>
+<dt> 074, 192</dt>
+<dd> CHR RAM starts at bank 8 and is not mirrored</dd>
+<dt> 119</dt>
+<dd> CHR A16 switches between CHR ROM and CHR RAM</dd>
+<dt> 191</dt>
+<dd> CHR A17 switches between CHR ROM and CHR RAM</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.032 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:833-1!*!0!*!*!*!* and timestamp 20160208225559 and revision id 8908
+ -->
+<p class="categories">Categories: <a href="Category_MMC3_with_CHR_ROM_and_CHR_RAM.xhtml">MMC3 with CHR ROM and CHR RAM</a></p></div></body></html>

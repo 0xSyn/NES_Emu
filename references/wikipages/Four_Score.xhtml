@@ -1,0 +1,91 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Four Score</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Four Score</h1><div class="article">
+<p>The <b>NES Four Score</b> and <b>NES Satellite</b> accessories allow four NES controllers to be connected to the NES's two controller ports.
+Controllers connected to this accessory are read using the same process as the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a>.
+After the normal 8 reads from one port to get one controller data, 8 more are done to get another controller.
+</p><p>Note that the NES Four Score is not compatible with the Famicom 4-Players adapter, which connects the 3rd and 4th players to the 2s bit instead of the 1s bit; that functionality is described in greater detail on the <a href="Standard_controller.xhtml" title="Standard controller">standard controller</a> article.
+</p><p>D3 and D4 are not connected on the Four Score, so accessories like the <a href="Zapper.xhtml" title="Zapper">Zapper</a> and <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a> will not work.
+</p>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxS
+        |
+        +- Controller shift register strobe
+</pre>
+<p>Writing 1 to this bit will record the state of each button on the controller.
+Writing 0 afterwards will allow the buttons to be read back, one at a time.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="Output_.28.244016.2F.244017_read.29">Output ($4016/$4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxD
+        |
+        +- Serial controller data
+</pre>
+<ol><li>Read $4016 8 times to get the 8 buttons for controller #1.</li>
+<li>Read $4016 8 more times to get the buttons for controller #3.</li>
+<li>Read $4016 8 more times to get the signature, $10.</li>
+<li>Read $4017 8 times to get the 8 buttons for controller #2.</li>
+<li>Read $4017 8 more times to get the buttons for controller #4.</li>
+<li>Read $4017 8 more times to get the signature, $20.</li></ol>
+<p>Button status for each controller is returned in the following order, as on the standard controller: A, B, Select, Start, Up, Down, Left, Right.  1 if pressed, 0 if not pressed.
+</p><p>The $10 and $20 signatures are sent most significant bit first. They can be used to detect 1. whether the Four Score switch is in the 4 player position and 2. whether a DMC sample fetch caused a <a href="Standard_controller.xhtml#Evil_Details" title="Standard controller">bit deletion</a>.
+</p><p>Controllers #3, #4, and the two signatures are only sent when the Four Score switch is in the 4 player position.  When the switch is in the 2 player position those reads get the same result as a normal controller, either $00 or $FF depending on the controller.
+</p>
+<h3><span class="mw-headline" id="Building_new_hardware_from_scratch">Building new hardware from scratch</span></h3>
+<p>If you find yourself in the situation where you want to use the Four Score electrical interface for a project, but don't want to use up a four score, you can simply use six shift registers instead. Daisy-chain three shift registers together:
+</p><p>If using 4021s:
+</p>
+<pre>           IC1                 IC2                 IC3
+          .-\/-.              .-\/-.              .-\/-.
+       1A |1 16| Vcc       3A |1 16| Vcc      Vcc |1 16| Vcc
+       nc |2 15| 1B        nc |2 15| 3B        nc |2 15| Vcc
+NES P1 D0 |3 14| 1Sl       ZZ |3 14| 3Sl       YY |3 14| Vcc¹
+      1Up |4 13| 1St      3Up |4 13| 3St      Vcc |4 13| Gnd²
+      1Dn |5 12| nc       3Dn |5 12| nc       Vcc |5 12| nc
+      1Lt |6 11| from ZZ  3Lt |6 11| from YY  Vcc |6 11| Gnd
+      1Rt |7 10| NES CLK  3Rt |7 10| NES CLK  Vcc |7 10| NES CLK
+      Gnd |8  9| NES OUT  Gnd |8  9| NES OUT  Gnd |8  9| NES OUT
+          '----'              '----'              '----'
+</pre>
+<p>If using 74'165s:
+</p>
+<pre>         IC1                   IC2                 IC3
+        .-\/-.                .-\/-.              .-\/-.
+NES OUT |1 16| Vcc    NES OUT |1 16| Vcc  NES OUT |1 16| Vcc
+NES CLK |2 15| Gnd    NES CLK |2 15| Gnd  NES CLK |2 15| Gnd
+    1St |3 14| 1Up        3St |3 14| 3Up     ²Gnd |3 14| Vcc
+    1Sl |4 13| 1Dn        3Sl |4 13| 3Dn     ¹Vcc |4 13| Vcc
+     1B |5 12| 1Lt         3B |5 12| 3Lt      Vcc |5 12| Vcc
+     1A |6 11| 1Rt         3A |6 11| 3Rt      Vcc |6 11| Vcc
+     nc |7 10| from ZZ     nc |7 10| from YY   nc |7 10| Gnd
+    Gnd |8  9| NES P1 D0  Gnd |8  9| ZZ       Gnd |8  9| YY
+        '----'                '----'              '----'
+</pre>
+<p>For players 2 and 4, repeat the above, but change:
+</p>
+<ul><li> NES P1 D0 becomes NES P2 D0</li>
+<li> 1xx becomes 2xx</li>
+<li> 3xx becomes 4xx</li>
+<li> IC3 pins denoted with ¹ and ² are swapped</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:68-1!*!0!!*!*!* and timestamp 20160208222106 and revision id 9137
+ -->
+</div></body></html>

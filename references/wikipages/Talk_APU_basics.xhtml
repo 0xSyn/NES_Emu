@@ -1,0 +1,41 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:APU basics</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:APU basics</h1><div class="article">
+<p>I removed some of the comments you added to the initial register values, because the aim of this article is to present a simplified model of the APU, and not require the programmer to bother with anything more. You can add them back if you want, but I'm thinking this should focus on simplicity and getting results, not understanding the APU.
+</p><p>I also removed the use of the round() function, as I didn't feel it would be clear to the intended audience (I put a comment explaining to round the result).
+</p><p>Again, I'm fairly new to Wikis so feel free to explain better ways of handling these than I have. :)
+</p><p><s>Blargg</s> 15:28, 29 July 2010 (UTC)
+</p>
+<dl><dd>Some comments are helpful so that advanced programmers can understand why it's written the way it's written. For instance, the init code that's been on the page the last couple years until now had a nasty side effect where $4014 (OAMDMA) was written during APU init. When I fixed this issue, I made a note explaining why $4014 has to be skipped. While that comment will probably mean nothing to a total newbie, it will prevent other people from trying the same simplification that led to this bug in the first place. - <a href="User_Furrykef.xhtml" title="User:Furrykef">Furrykef</a> (<s>talk</s>) 11:35, 21 August 2016 (MDT)</dd></dl>
+<p>As I said in the forum, in my personal opinion, this page should be removeed completely from the wiki and any significant about the APU should go to the APU page. I do not see the purpose of this page, and most information is either wrong, incorrect or incomplete. The coding exemples are bad exemples and extremely unrealistic of how a NES game actually uses the APU. I say this as someone who wrote multiple sound engines, and deeply analyzed multiple kinds of sound engines written by other people.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 13:34, 22 August 2016 (MDT)
+</p>
+<dl><dd>This page doesn't offer <i>any</i> new information about the APU, there's nothing here that would be appropriate to fold back into <a href="APU.xhtml" title="APU">APU</a>. That's not what this page is for, though, it's a tutorial. Towards the quality of the tutorial, I might make some suggestions:
+<ol><li> The init code loop obfuscates what it's doing. I suggested an <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=177903#p177903" rel="nofollow">unrolled version</a> so that details can be explained.</li>
+<li> The init code writes $40 to $4017, but then the triangle code writes $C0 to it, which is inconsistent. Should just initialize to $C0?</li>
+<li> I would suggest <i>not</i> using $4017 with the triangle code; yes there's a slight delay otherwise, but I think messing with $4017 is an advanced topic. It will still mute during the correct frame without it.</li>
+<li> The playing a musical note example should write LO before HI. Not terribly significant to the example, but good practice esp. if you eventually want to use the envelopes, etc.</li>
+<li> I think this deserves a note somewhere that is disabling a lot of APU features (envelope, length counter, etc.), doesn't need to describe exactly what, just that the examples are taking a simplified subset approach.</li>
+<li> The example code linked at the bottom still has the &quot;unpleasant&quot; $4016 write that <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=177864#p177864" rel="nofollow">started this discussion</a>. A new version should be written and hosted on the wiki.</li></ol></dd></dl>
+<dl><dd>Aside from these nitpicks, I think it's actually a good tutorial example program. It works, and it seems like a useful simple way to demonstrate how to use the APU channels. What exactly do you find unrealistic about it, bregalad? I mean, obviously most games are going to be loading data from a music/sound engine and not immediate values to feed to the APU registers, but I think all that's separate from just learning to use the APU, i.e. do one first, then the other. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:18, 22 August 2016 (MDT)</dd></dl>
+<dl><dd><dl><dd>The wiki is not just a reference, but a place for tutorials as well, even if we <a class="mw-redirect" href="Programming_guide.xhtml" title="Getting started">haven't got all that many at he moment.</a> Hmm…we don't have a Tutorial category yet. <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 00:24, 23 August 2016 (MDT)</dd></dl></dd></dl>
+<dl><dd>Then, after renaming the page as &quot;tutorial&quot;, and applying all the numerous changes that Rainwarrior suggested in order to make this tutorial stop being so horrible, then yet I do no have anything against keeping the page anymore. But you have to admit, before those changes, this page sucked hard. I still think it's weird to load registers from direct data, but if the intent is just &quot;trying&quot; the APU then this make sense. I'll also suggest adding a link to SNDTEST.NES, which is what I always used to &quot;play with&quot; the APU registers, personally.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 12:53, 23 August 2016 (MDT)</dd></dl>
+<p>So, why is this horrible initialisation loop <i>still</i> there ?<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 14:02, 25 August 2016 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.042 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:494-1!*!0!*!*!*!* and timestamp 20160827112335 and revision id 12840
+ -->
+</div></body></html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC6</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC6</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>MMC6</b>
+<br/><b>HxROM</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Nintendo
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=4&amp;group=groupid" rel="nofollow">2 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> HKROM
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 512K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 8K
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> 1K
+</td></tr>
+<tr>
+<td> <b>PRG RAM window</b>
+</td>
+<td> 1K
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 1K + 2K
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H or V, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">004</a>
+</td></tr></table>
+</div>
+<p>The <b>Nintendo MMC6</b> is a <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> used in Nintendo's NES-HKROM Game Pak board. This board, along with most common <a href="TxROM.xhtml" title="TxROM">TxROM</a> boards (which use the <a href="MMC3.xhtml" title="MMC3">Nintendo MMC3</a>) are assigned to <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">iNES Mapper 004</a>. The MMC3C and the MMC6 are alike, except the MMC6 has 1 KB of internal PRG RAM with different write/enable controls. This page only explains the differences, see <a href="MMC3.xhtml" title="MMC3">MMC3</a> for full details on the rest of the mapper.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bank_select_.28.248000-.249FFE.2C_even.29"><span class="tocnumber">2.1</span> <span class="toctext">Bank select ($8000-$9FFE, even)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#PRG_RAM_protect_.28.24A001-.24BFFF.2C_odd.29"><span class="tocnumber">2.2</span> <span class="toctext">PRG RAM protect ($A001-$BFFF, odd)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Hardware"><span class="tocnumber">3</span> <span class="toctext">Hardware</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $7000-$7FFF: 1 KB PRG RAM, <a href="Mirroring.xhtml" title="Mirroring">mirrored</a></li>
+<li> CPU $8000-$9FFF (or $C000-$DFFF): 8 KB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF (or $8000-$9FFF): 8 KB PRG ROM bank, fixed to the second-last bank</li>
+<li> CPU $E000-$FFFF: 8 KB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$07FF (or $1000-$17FF): 2 KB switchable CHR bank</li>
+<li> PPU $0800-$0FFF (or $1800-$1FFF): 2 KB switchable CHR bank</li>
+<li> PPU $1000-$13FF (or $0000-$03FF): 1 KB switchable CHR bank</li>
+<li> PPU $1400-$17FF (or $0400-$07FF): 1 KB switchable CHR bank</li>
+<li> PPU $1800-$1BFF (or $0800-$0BFF): 1 KB switchable CHR bank</li>
+<li> PPU $1C00-$1FFF (or $0C00-$0FFF): 1 KB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>The MMC6 has 4 pairs of registers at $8000-$9FFF, $A000-$BFFF, $C000-$DFFF, and $E000-$FFFF - even addresses ($8000, $8002, etc.) select the low register and odd addresses ($8001, $8003, etc.) select the high register in each pair. Only $8000 and $A001 are covered here. For the rest of the registers, see <a href="MMC3.xhtml" title="MMC3">MMC3</a>.
+</p>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.249FFE.2C_even.29">Bank select ($8000-$9FFE, even)</span></h3>
+<pre>7  bit  0
+---- ----
+CPMx xRRR
+|||   |||
+|||   +++- Specify which bank register to update on next write to Bank Data register
+||+------- PRG RAM enable
+|+-------- PRG ROM bank configuration (0: $8000-$9FFF swappable, $C000-$DFFF fixed to second-last bank;
+|                                      1: $C000-$DFFF swappable, $8000-$9FFF fixed to second-last bank)
++--------- CHR ROM bank configuration (0: two 2 KB banks at $0000-$0FFF, four 1 KB banks at $1000-$1FFF;
+                                       1: four 1 KB banks at $0000-$0FFF, two 2 KB banks at $1000-$1FFF)
+</pre>
+<h3><span class="mw-headline" id="PRG_RAM_protect_.28.24A001-.24BFFF.2C_odd.29">PRG RAM protect ($A001-$BFFF, odd)</span></h3>
+<pre>7  bit  0
+---- ----
+HhLl xxxx
+||||
+|||+------ Enable writing to RAM at $7000-$71FF
+||+------- Enable reading RAM at $7000-$71FF
+|+-------- Enable writing to RAM at $7200-$73FF
++--------- Enable reading RAM at $7200-$73FF
+</pre>
+<h2><span class="mw-headline" id="Hardware">Hardware</span></h2>
+<p>The MMC6 exists in a <a href="MMC6_pinout.xhtml" title="MMC6 pinout">64-pin TQFP package</a>.
+At least two revisions exist, though only MMC6B has been observed.
+</p><p>The PRG RAM protect bits control mapping of two 512B banks of RAM. If neither bank is enabled for reading, the $7000-$7FFF area is open-bus. If only one bank is enabled for reading, the other reads back as zero. The write-enable bits only have effect if that bank is enabled for reading, otherwise the bank is not writable. Both banks may be enabled for reading (and optionally writing) at the same time.
+</p><p>When PRG RAM is disabled via $8000, the mapper continuously sets $A001 to $00, and so all writes to $A001 are ignored.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.119 seconds
+Real time usage: 0.136 seconds
+Preprocessor visited node count: 125/1000000
+Preprocessor generated node count: 655/1000000
+Post‐expand include size: 1061/2097152 bytes
+Template argument size: 109/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:92-1!*!0!!en!*!* and timestamp 20160208222204 and revision id 11440
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_Nintendo_licensed_mappers.xhtml">Nintendo licensed mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

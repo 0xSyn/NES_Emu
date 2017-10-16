@@ -1,0 +1,55 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Oeka Kids tablet</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Oeka Kids tablet</h1><div class="article">
+<p>The Oeka Kids tablet is a Famicom accessory from Bandai that resembles a drawing tablet, and plugs into the expansion port. There are two known games that use this peripheral, using <a href="INES_Mapper_096.xhtml" title="INES Mapper 096">iNES Mapper 096</a>, both of which contain a variety of activities, such as painting, drawing lessons, hiragana lessons, and a variety of minigames such as mazes and sliding puzzles.
+</p><p>Very little information about this accessory is available, and only <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=19454#19454" rel="nofollow">basic reverse engineering</a> has been performed so far. As such, this information <b>may be incorrect</b>, but it seems to be acceptable for the two commercial games that use it.
+</p>
+<h3><span class="mw-headline" id="Input_.28.244016_write.29">Input ($4016 write)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxAS
+       ||
+       |+- Strobe (0 = Latch, 1 = Read mode)
+       +-- Advance to next bit
+</pre>
+<p>Bits can be read only while S is 1. It advances to the next bit when S is 1 and A transitions from 0 to 1. 
+</p>
+<h3><span class="mw-headline" id="Output_.28.244017_read.29">Output ($4017 read)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx DSxx
+     ||
+     |+-- 0 if strobe is 1, 1 otherwise.
+     +--- (Inverted) Serial data if strobe is 1, 0 if strobe is 0.
+</pre>
+<p>The serial data is returned <i>most significant bit first</i>, and inverted (including the touch and click bits).
+</p>
+<pre>$4017.2
+   ^
+   |  &lt;-- &lt;-- &lt;-- &lt;--
+   XXXXXXXXYYYYYYYYBA
+   ||||||||||||||||||
+   |||||||||||||||||+- Click
+   ||||||||||||||||+-- Stylus is touching tablet
+   ||||||||++++++++--- Stylus Y, scaled to 0-255
+   ++++++++----------- Stylus X, scaled to 0-239
+</pre>
+<p>The fact that X and Y are scaled backwards is <i>not</i> an error - the games which use this mapper rescale the coordinates by multiplying X by 256/240 and multiplying Y by 240/256.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.024 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:769-1!*!0!!*!*!* and timestamp 20160717151520 and revision id 12748
+ -->
+<p class="categories">Categories: <a href="Category_Controllers.xhtml">Controllers</a></p></div></body></html>

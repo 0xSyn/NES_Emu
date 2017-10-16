@@ -1,0 +1,99 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Mapper</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Mapper</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Allocations"><span class="tocnumber">1</span> <span class="toctext">Allocations</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#unicode_joke_terms"><span class="tocnumber">2</span> <span class="toctext">unicode joke terms</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#n.5CT_icon"><span class="tocnumber">3</span> <span class="toctext">n\T icon</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Why_some_mappers_are_assigned_to_.22Rare.2C_Ltd..22.27s_logo"><span class="tocnumber">4</span> <span class="toctext">Why some mappers are assigned to &quot;Rare, Ltd.&quot;'s logo</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#32x32_upscaling"><span class="tocnumber">5</span> <span class="toctext">32x32 upscaling</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#A_newbie-friendly_page_introduction"><span class="tocnumber">6</span> <span class="toctext">A newbie-friendly page introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Mapper"><span class="tocnumber">6.1</span> <span class="toctext">Mapper</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Allocations">Allocations</span></h2>
+<p>By FCEUX 2.2.1, they allocated mapper 160 to describe an undersize <a href="NINA_003_006.xhtml" title="NINA-003-006">NINA-003-006</a> board (32k PRG, 16k CHR). This seems superfluous.
+They also allocated mapper 181 to describe another board like <a href="INES_Mapper_185.xhtml" title="INES Mapper 185">iNES Mapper 185</a> that didn't fit with the existing heuristic. It would be nice to take the opportunity to promote <a href="NES_2_0_submappers.xhtml#iNES_Mapper_185" title="NES 2.0 submappers">NES 2.0 submappers#iNES Mapper 185</a>. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 21:41, 23 June 2013 (MDT)
+</p>
+<dl><dd>Also, wasn't 256-511 supposed to be for developers or debugging use?  I need to request a reserved number for future hardware designs.  I'll probably go find the IRC channel for that.  ;)  BTW:  The documentation for <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> header format has different allocation planes.  It's best to fix this BEFORE someone goes and tries to update/make any mapper code libraries.  Again, going to bring this to attention of mods in chat.  <a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 13:51, 29 August 2014 (MDT)
+<dl><dd>Rule of thumb: once you have final hardware, then you can get a mapper #. Before then, pick something arbitrary and otherwise unusable such as m100, or use UNIF. There's more theoretical possible mappers than there will ever be space for. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 14:40, 29 August 2014 (MDT)</dd>
+<dd>In the plan as described by KH in the original NES 2.0 doc, 256-511 were to be filled after 0-255 had been filled. Because of the continuing pace of new Chinese discoveries since then, a revised, Unicode-inspired plan splits this into 256-511 for western games and 512-767 for eastern games. Presently, 3840-4095 are reserved for private use, as well as <a href="INES_Mapper_100.xhtml" title="INES Mapper 100">100</a> and <a href="INES_Mapper_248.xhtml" title="INES Mapper 248">248</a>. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 15:34, 29 August 2014 (MDT)
+<dl><dd>Cool, thanks for the info!  This should be helpful to future readers, as well.  I found out that blargg is working on a similar project so I'm waiting for a PM response.  I also need to get a working NES to test the hardware out on.  <a href="User_Alphamule.xhtml" title="User:Alphamule">alphamule</a> (<s>talk</s>) 07:42, 30 August 2014 (MDT)</dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="unicode_joke_terms">unicode joke terms</span></h2>
+<p>Might we rename &quot;Supplementary Multilingual Plane&quot; and &quot;Supplementary Ideographic Plane&quot;? Jokes about the unicode standard are rather obscure, and don't help anyone understand what these categories are for. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 16:33, 16 April 2015 (MDT)
+</p>
+<dl><dd>Jokes about unicode ?! I would never have guessed that was some. Anyways, jokes do not belong to here.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 04:12, 17 April 2015 (MDT)</dd>
+<dd>I found them funny, but it was a laugh and an eye-roll. <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 23:55, 20 April 2015 (MDT)</dd></dl>
+<p><br/>
+So, the second question to ask is what to name them. From what I can tell, the two planes are meant to distinguish mappers for new games (plane 1) from mappers that are used for illegal compilations/reproductions/modifications (plane 2). Presumably the idea is that emulator authors may wish to de-prioritize pirate mappers that don't contribute new games to the library. There's a bit about &quot;east asia&quot; in the current description which seems unnecessary to me; shouldn't pirate carts from any region be included here? (Russian? Brazilian?) China probably has the most prolific market for it, sure, but I don't think that needs to be part of the plane's definition. My suggestion:
+</p><p>Plane 0: iNES 1
+</p>
+<ul><li> Still has a few slots open for new homebrew?</li>
+<li> Put new pirate mappers in plane 2, not here.</li></ul>
+<p>Plane 1: Homebrew
+</p>
+<ul><li> New games developed for newly created mappers</li>
+<li> Undiscovered commercial-era mappers (if any exist)</li></ul>
+<p>Plane 2: Pirate
+</p>
+<ul><li> Multicarts used to illegally compile existing games</li>
+<li> Modifications and hacks of existing games</li></ul>
+<p>- <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 10:06, 17 April 2015 (MDT)
+</p>
+<dl><dd>True, title hacks, graphics hacks, pure mapper hacks, and multicarts &quot;that don't contribute new games to the library.&quot; But not all games made for the East Asian market fall into these categories. Some are ports from a more powerful system, such as <i>Final Fantasy VII</i>, <i>Pokemon</i>, and <i>Somari</i>. Some are original games (ab)using others' characters, such as <i>Kart Fighter</i> and various <i>Pokemon</i> and <i>Harry Potter</i>-themed games. But what makes East Asian games stand out from games for other markets is provision in the mapper for writing systems with more than a hundred characters, which needs either CHR RAM, ExGrafix, or precomposed phrases. (See <a href="CHR_ROM_vs__CHR_RAM.xhtml" title="CHR ROM vs. CHR RAM">CHR ROM vs. CHR RAM</a>.) Games for Russian and Brazilian markets can get away with assuming a 1:1 relationship among tiles, glyphs, and characters. Besides, with the deprecation of <a href="UNIF.xhtml" title="UNIF">UNIF</a>, we need to allocate mappers for a bunch of CaH4e3 dumps, and separating out the Chinese stuff will help keep that effort from colliding with homebrew too much. So I've renamed the planes to &quot;Plane 1&quot; and &quot;Plane 2&quot; but left the East Asian wording. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 17:45, 19 April 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd>Okay, so you're not trying to separate pirate/multicart from homebrew/legitimate? Your goal is just to separate them by language/region? The language in place right now doesn't seem to mention an appropriate place for new pirate stuff, unless it already falls in the East-Asian category. You should probably write a description that designates that material to one plane or another, so that it's clear where to allocate. Of course, nobody has wanted to allocate anything yet, except zzo38 who appears to have pre-allocated <a class="mw-redirect" href="Mapper.xhtml" title="NES 2.0 Mapper 380">380</a>, despite not having released any ROMs for it? I'm never going to be the maintainer of pirate mapper allocation, so I don't feel very strongly about how they are specifically organized. I just found the names borrowed from unicode the opposite of helpful when trying to figure out what the planes were being designated for. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 21:09, 20 April 2015 (MDT)</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="n.5CT_icon">n\T icon</span></h2>
+<p>The n\T icon (<a href="File_Mfr_icon_Namco_Tengen_png.xhtml" title="File:Mfr icon Namco Tengen.png">File:Mfr icon Namco Tengen.png</a>) is a bit harder to read than the ir\AVE icon because both have the same (transparent) background and similar (reddish) colors, so the strokes of the twosort of blend into each other. <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?keywords=206&amp;kwtype=pcb" rel="nofollow">NesCartDB</a> lists 20 games developed or published by Namco and only three (Fantasy Zone, Gauntlet, and Indy 2) that Namco did not develop or publish. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 08:00, 11 June 2015 (MDT)
+</p>
+<dl><dd>Not sure how you're getting only three non-Namco <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?publisher_op=!%3D%60%40%60&amp;publisher=Namco&amp;ines_op=%3D%60%40%60&amp;ines=206&amp;group=groupid&amp;field=2&amp;order=asc&amp;rfa=1+2+11+10" rel="nofollow">for mapper 206</a>; plus Tengen Gauntlet is a pretty high-profile game. I see some Data East games in there, too! (Perhaps you missed the pagination?) <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 19:32, 11 June 2015 (MDT)
+<dl><dd> Most of the rest were renamed and/or ported by Tengen for the US Market, but are originally made by Namco. (AFAICT, the entire reason that Tengen used the MIMIC-1 is because they were importing Namco games to the US market to get around Nintendo's limitation on a maximum of 6 (or was it lower?) games per publisher per year. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:57, 11 June 2015 (MDT)
+<dl><dd>Okay, that knocks out RBI and Ring King. And Pac-Mania is so obviously a Namco-<i>developed</i> game it hurts, but doesn't seem to have had a Famicom release? Super Sprint and Toobin', though... Still, the icons are for manufacturers (that is, publishers), and the Tengen boards <i>are</i> different, so does it really matter for our &quot;whose-mapper-is-this&quot; if someone was pulling an ljn trick? <a href="User_Myask.xhtml" title="User:Myask">Myask</a> (<a href="User_talk_Myask.xhtml" title="User talk:Myask">talk</a>) 21:14, 11 June 2015 (MDT)</dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Why_some_mappers_are_assigned_to_.22Rare.2C_Ltd..22.27s_logo">Why some mappers are assigned to &quot;Rare, Ltd.&quot;'s logo</span></h2>
+<p>TQROM board's mapper was only used by Rare, Ltd. but uses a chip from Nintendo, the MMC3. It could be labelled Nintendo.
+</p><p>Mapper #7 was used most often by Rare, Ltd., but not exclusively. Solstice was not developed by Rare, Ltd. but uses mapper #7. Also, the PCB and carts were made by Nintendo, and contains no chip developed by Rare, Ltd, not even the PCB. Other discrete logic mappers which were used by various 3rd party developers but licenced by Nintendo are tagged Nintendo, there is no real reason mapper #7 would escape that rule.
+</p><p>It's true there is no mapper #7 games that was developed by Nintendo, however, this is true for many other mappers as well, such as the MMC5.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 03:38, 12 June 2015 (MDT)
+</p>
+<dl><dd> I don't think it's reasonable to expect perfect accuracy when you reduce a mapper to a single 16x16 image. There's no good scheme for choosing that will be entirely consistent. It's always going to be subjective. The point of the images is just to make it easy to spot which mapper is which, so we're not just looking at some monolithic block of buttons. For that reason, I'd rather see a &quot;mostly Rare&quot; mapper with a Rare icon than have yet another Nintendo icon in there, but that's just my subjective opinion. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:08, 12 June 2015 (MDT)</dd></dl>
+<dl><dd> For the same reasons, I think <a href="File_Mfr_icon_Namco_Tengen_png.xhtml" title="File:Mfr icon Namco Tengen.png">Image:Mfr icon Namco Tengen.png</a> is pushing the limits of utility for these icons, and I'd really hate to see someone try to stuff 3 companies into an icon. Don't try to cram too much information into these things. It's supposed to be easy to read at a glance, not tell you 20 years of game development history. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 14:15, 12 June 2015 (MDT)</dd></dl>
+<dl><dd> Also, the saturated green of the current icon really stands out from the others in an ugly way (it's very harsh against the white background). Personally I'd go with the 16/32-bit era logo with the gold rimmed blue badge, but again this is a rather subjective suggestion. (I don't think they had a consistent logo before then?) - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 15:30, 12 June 2015 (MDT)</dd></dl>
+<dl><dd><dl><dd> Agreed. I intended the Nintendo icon to be used where no third party developer or publisher has a majority. Of the 34 unique games on mapper 7, 26 were either developed or ported by Rare, and an additional four were developed or ported by Zippo Games, which appears to also be Rare in the sense that Ultra is Konami. Hence Ꝛ on 7.  Namco likewise has a stake in a supermajority of 206, which is why I think 206 deserves the Namco n. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 19:04, 12 June 2015 (MDT)</dd></dl></dd></dl>
+<p>It's no problem as long as the way icons are chooses was never meant to be consistent. I was just pointing to an inconsistency.<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 12:51, 14 June 2015 (MDT)
+</p>
+<h2><span class="mw-headline" id="32x32_upscaling">32x32 upscaling</span></h2>
+<p>I'd like to offer a guideline for upscaling mapper images 32x32. The vast majority display resolution is 16x16, and for that reason all of these images should be optimized for 16x16 first. What this means is that pixel art should be 16x16 and nearest-neighbour rescaled, creating the optimal image at 16x16 and defeating unpleasant linear resampling at 32x32. Do not upscale pixel art by adding smoother edges, etc, as this reduces legibility when downscaled to 16x16. For things that are vector art, text that is already anti-aliased, etc. feel free to take advantage of the full detail level at 32x32. Just remember the most important thing is legibility at 16x16. After doing a quick pass over it, I think everything we've got now is OK. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 22:17, 12 June 2015 (MDT)
+</p>
+<h2><span class="mw-headline" id="A_newbie-friendly_page_introduction">A newbie-friendly page introduction</span></h2>
+<p>As a beginner I found this page to be confusing and unhelpful. The opening paragraphs are overly technical and contain too many details and acronyms for a beginner to grok. The information contained may be factually true and helpful to some, but I'd really like to see a plain-English introduction added in addition to what's already on the page. Something like:
+</p>
+<h3><span class="mw-headline" id="Mapper">Mapper</span></h3>
+<p>NES games come in cartridges, and inside of those cartridges are various circuits and hardware. Different games use different circuits and hardware, and the configuration and capabilities of such cartridges is called their mapper. Mappers were used to extend the system and bypass its limitations, such as by adding RAM to the cartridge or even extra sound channels. More commonly though, mappers were used to allow games larger than 32K to be made.
+</p><p>Example games and their mappers:
+</p>
+<ul><li> Contra uses a mapper called UNROM, providing it with 128K of PRG ROM space.</li>
+<li> Castlevania 3 uses a mapper called MMC5 offering additional sound channels (on Famicom systems only).</li>
+<li> Bible Adventures uses the &quot;Color Dreams&quot; mapper which contains CIC-defeating circuitry.</li>
+<li> Super Mario Bros. uses the simplest mapper: NROM, which contains 32K of PRG ROM and 8K of CHR ROM. Many early NES games and modern homebrew games use the NROM mapper.</li></ul>
+<p><s>Pubby</s> (<s>talk</s>) 11:21, 11 May 2016 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.103 seconds
+Real time usage: 0.107 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1105-1!*!0!!en!*!* and timestamp 20160606132046 and revision id 12364
+ -->
+</div></body></html>

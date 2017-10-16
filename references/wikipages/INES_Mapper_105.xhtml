@@ -1,0 +1,126 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 105</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 105</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 105          =
+ ========================
+ 
+ aka
+ --------------------------
+ <a href="NES_EVENT.xhtml" title="NES-EVENT">NES-EVENT</a>
+ 
+ 
+ Example Game:
+ --------------------------
+ Nintendo World Championships 1990
+ 
+ 
+ Notes:
+ ---------------------------
+ This mapper is an <a href="MMC1.xhtml" title="MMC1">MMC1</a> with crazy wiring and a huge 30-bit CPU cycle driven IRQ counter.  Registers are all
+ internal and not directly accessable -- and the latch must be written to 1 bit at a time -- just like on a
+ normal MMC1.  For details on how regs are written to, see <a href="MMC1.xhtml" title="INES Mapper 001">mapper 001</a>.
+ 
+ This mapper has 8k CHR-RAM, and it is not swappable.
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ Note that like a normal MMC1, registers are internal and not accessed directly.
+ 
+ 
+   $8000-9FFF:   [.... PSMM]  Same as MMC1 (but CHR mode bit isn't used)
+ 
+   $A000-BFFF:   [...I OAA.]
+        I = IRQ control / initialization toggle
+        O = PRG Mode/Chip select
+        A = PRG Reg 'A'
+ 
+   $C000-DFFF:   [.... ....]  Unused
+ 
+   $E000-FFFF:   [...W BBBB]
+        W = WRAM disable (same as MMC1)
+        B = PRG Reg 'B'
+ 
+ 
+ 
+ Powerup / Reset / Initialization:
+ ---------------------------
+ 
+   On powerup and reset, the first 32k of PRG (from the first PRG chip) is selected at $8000 *no matter what*.
+ PRG cannot be swapped until the mapper has been &quot;initialized&quot; by setting the 'I' bit to 0, then to '1'.  This
+ toggling will &quot;unlock&quot; PRG swapping on the mapper.
+ 
+   Note 'I' also controls the IRQ counter (see below)
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+   There are 2 PRG chips, each 128k.  The 'O' bit selects between the chips, and also determines which PRG Reg
+ is used to select the page.
+ 
+   O=0:  Use first PRG chip (first 128k), use 'A' PRG Reg, 32k swap
+   O=1:  Use second PRG chip (second 128k), use 'B' PRG Reg, MMC1 style swap
+ 
+   In addition, if the mapper has not been &quot;unlocked&quot;, the first 32k of the first chip is always selected
+ regardless (as if $A000 contained $00).
+ 
+   Modes as listed below:
+ 
+                   $8000   $A000   $C000   $E000
+                 +-------------------------------+
+ Uninitialized:  |             { 0 }             |  &lt;-- use first 128k
+                 +-------------------------------+
+ O=0:            |             $A000             |  &lt;-- use first 128k
+                 +-------------------------------+
+ O=1, P=0:       |            &lt;$E000&gt;            |  &lt;-- use second 128k
+                 +-------------------------------+
+ O=1, P=1, S=0:  |     { 0 }     |     $E000     |  &lt;-- use second 128k
+                 +---------------+---------------+
+ O=1, P=1, S=1:  |     $E000     |     {$07}     |  &lt;-- use second 128k
+                 +---------------+---------------+
+ 
+ 
+ 
+ 
+ IRQ Counter:
+ ---------------------------
+ 
+   The 'I' bit in $A000 controls the IRQ counter.  When cleared, the IRQ counter counts up every cycle.  When
+ set, the IRQ counter is reset to 0 and stays there (does not count), and the pending IRQ is acknowledged.
+ 
+   The cart has 4 dipswitches which control how high the counter must reach for an IRQ to be generated.
+ 
+   The IRQ counter is 30 bits wide.. when it reaches the following value, an IRQ is fired:
+ 
+   [1D CBAx xxxx xxxx xxxx xxxx xxxx xxxx]
+     ^ ^^^
+     | |||
+     either 0 or 1, depending on the corresponding dipswitch.
+ 
+ So if all dipswitches are open (use '0' above), the counter must reach $20000000.
+ If all dipswitches are closed (use '1' above), the counter must reach $3E000000.
+ etc
+ 
+   In the official tournament, 'C' was closed, and the others were open, so the counter had to reach $2800000.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.020 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:684-1!*!0!*!*!*!* and timestamp 20160208225229 and revision id 4049
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

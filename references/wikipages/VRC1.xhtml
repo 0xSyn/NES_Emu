@@ -1,0 +1,125 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC1</h1><div class="article">
+<p>The Konami VRC1 is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>. The <a href="INES.xhtml" title="INES">iNES</a> format assigns <b>mapper 75</b> to VRC1.
+</p><p>The VRC1 was used in several Famicom games released by Konami and Jaleco:
+</p>
+<ul><li> <i>Exciting Boxing</i></li>
+<li> <i>Ganbare Goemon! Karakuri Douchuu</i></li>
+<li> <i>Jajamaru Ninpouchou</i></li>
+<li> <i>King Kong 2: Ikari no Megaton Punch</i></li>
+<li> <i>Moero!! Junior Basket: Two on Two</i></li>
+<li> <i>Tetsuwan Atom</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Banks"><span class="tocnumber">2</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Registers"><span class="tocnumber">3</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#PRG_Select_0_.28.248000-.248FFF.29"><span class="tocnumber">3.1</span> <span class="toctext">PRG Select 0 ($8000-$8FFF)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#PRG_Select_1_.28.24A000-.24AFFF.29"><span class="tocnumber">3.2</span> <span class="toctext">PRG Select 1 ($A000-$AFFF)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#PRG_Select_2_.28.24C000-.24CFFF.29"><span class="tocnumber">3.3</span> <span class="toctext">PRG Select 2 ($C000-$CFFF)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Mirroring_Control.2C_CHR_bits_.28.249000-.249FFF.29"><span class="tocnumber">3.4</span> <span class="toctext">Mirroring Control, CHR bits ($9000-$9FFF)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#CHR_Select_0_.28.24E000-.24EFFF.29"><span class="tocnumber">3.5</span> <span class="toctext">CHR Select 0 ($E000-$EFFF)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#CHR_Select_1_.28.24F000-.24FFFF.29"><span class="tocnumber">3.6</span> <span class="toctext">CHR Select 1 ($F000-$FFFF)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<p><br/>
+</p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<ul><li> PRG ROM size: Up to 128 KiB</li>
+<li> PRG ROM bank size: 8 KiB</li>
+<li> PRG RAM: None</li>
+<li> CHR bank size: 4 KiB</li>
+<li> CHR ROM size: Up to 128 KiB</li>
+<li> Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a>: Controlled by mapper</li>
+<li> Subject to <a href="Bus_conflict.xhtml" title="Bus conflict">bus conflicts</a>: No</li></ul>
+<p>See <a href="VRC1_pinout.xhtml" title="VRC1 pinout">VRC1 pinout</a> for chip pinout.
+</p>
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$9FFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $E000-$FFFF: 8 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU $0000-$0FFF: 4 KiB switchable CHR bank</li>
+<li> PPU $1000-$1FFF: 4 KiB switchable CHR bank</li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="PRG_Select_0_.28.248000-.248FFF.29">PRG Select 0 ($8000-$8FFF)</span></h3>
+<pre>7  bit  0
+---------
+.... PPPP
+     ||||
+     ++++- Select 8 KB PRG ROM at $8000
+</pre>
+<h3><span class="mw-headline" id="PRG_Select_1_.28.24A000-.24AFFF.29">PRG Select 1 ($A000-$AFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... PPPP
+     ||||
+     ++++- Select 8 KB PRG ROM at $A000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="PRG_Select_2_.28.24C000-.24CFFF.29">PRG Select 2 ($C000-$CFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... PPPP
+     ||||
+     ++++- Select 8 KB PRG ROM at $C000
+</pre>
+<p><br/>
+</p>
+<h3><span class="mw-headline" id="Mirroring_Control.2C_CHR_bits_.28.249000-.249FFF.29">Mirroring Control, CHR bits ($9000-$9FFF)</span></h3>
+<pre>7  bit  0
+---------
+.... .BAM
+      |||
+      ||+- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a>  (0: Vertical; 1: Horizontal)
+      |+-- High Bit of 4 KB CHR bank at PPU $0000
+      +--- High Bit of 4 KB CHR bank at PPU $1000
+</pre>
+<p>The mirroring bit is ignored if the cartridge is wired for 4-screen VRAM, as is typical for <a href="Vs__System.xhtml" title="Vs. System">Vs. System</a> games using the VRC1.
+</p>
+<h3><span class="mw-headline" id="CHR_Select_0_.28.24E000-.24EFFF.29">CHR Select 0 ($E000-$EFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... CCCC
+     ||||
+     ++++- Low 4 bits of 4 KB CHR bank at PPU $0000
+</pre>
+<p>These bits combined with bit 1 of $9000 make a 5-bit CHR selection.
+</p><p><br/>
+</p>
+<h3><span class="mw-headline" id="CHR_Select_1_.28.24F000-.24FFFF.29">CHR Select 1 ($F000-$FFFF)</span></h3>
+<pre>7  bit  0
+---------
+.... CCCC
+     ||||
+     ++++- Low 4 bits of 4 KB CHR bank at PPU $1000
+</pre>
+<p>These bits combined with bit 2 of $9000 make a 5-bit CHR selection.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">Disch's Mapper Notes</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.060 seconds
+Real time usage: 0.065 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:93-1!*!0!!en!*!* and timestamp 20160208222522 and revision id 10008
+ -->
+<p class="categories">Categories: <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a></p></div></body></html>

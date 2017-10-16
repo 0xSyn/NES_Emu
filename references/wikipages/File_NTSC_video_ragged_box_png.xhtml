@@ -1,0 +1,35 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>File:NTSC video ragged box.png</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>File:NTSC video ragged box.png</h1><div class="article">
+<p>How an <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a> signal gets generated in the PPU and decoded by the TV
+</p><p>Horizontal scale: 1 diagram pixel = 1 NTSC <a href="Clock_rate.xhtml" title="Clock rate">master clock</a> (21.5 MHz) cycle; 4 diagram pixels = 1 NES pixel; 6 diagram pixels = 1 color subcarrier cycle
+</p><p>Top row: what goes on in the NES PPU
+</p>
+<ol><li>Generate the subcarrier for a solid red screen (color $16).</li>
+<li>A shape drawn in this color, including a 2-pixel-wide vertical line.</li>
+<li>Multiply it by 0 outside of the shape and 1 inside the shape. Notice how the subcarrier protrudes into the shape.</li></ol>
+<p>Bottom row: what goes on in the TV when separating luma from chroma
+</p>
+<ol><li>Incoming picture signal on the composite</li>
+<li>Impulse response of the low-pass filter</li>
+<li>Picture signal convolved with the low-pass filter, used as luma. Notice the ragged left and right sides of the vertical line.</li></ol>
+<p>The filter in this diagram is an FIR filter [1 4 7 8 8 8 7 4 1]/48, which factors to [1 1][1 1][1 1][1 1 1][1 0 0 1]/48. A real TV might use a Bessel filter (near-linear-phase IIR filter), but the principle is the same: filter out anything above 3 MHz.
+</p><p>Permission is granted to use this copyrighted illustration under the <a class="external text" href="http://sam.zoy.org/wtfpl/COPYING" rel="nofollow">WTFPL</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.017 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:591-1!*!0!*!*!*!* and timestamp 20160208223337 and revision id 2656
+ -->
+</div></body></html>

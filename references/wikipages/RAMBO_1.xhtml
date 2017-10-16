@@ -1,0 +1,249 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>RAMBO-1</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>RAMBO-1</h1><div class="article">
+<p><br/>
+</p>
+<div class="infobox">
+<div style="text-align: center"><b>RAMBO-1</b>
+</div>
+<table class="oddf0">
+
+<tr>
+<td> <b>Company</b>
+</td>
+<td> Tengen
+</td></tr>
+<tr>
+<td> <b>Games</b>
+</td>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=64&amp;group=groupid" rel="nofollow">5 in NesCartDB</a>
+</td></tr>
+<tr>
+<td> <b>Complexity</b>
+</td>
+<td> ASIC
+</td></tr>
+<tr>
+<td> <b>Boards</b>
+</td>
+<td> 800032
+</td></tr>
+<tr>
+<td> <b>PRG ROM capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>PRG ROM window</b>
+</td>
+<td> 3×8K + 8K fixed
+</td></tr>
+<tr>
+<td> <b>PRG RAM capacity</b>
+</td>
+<td> None
+</td></tr>
+<tr>
+<td> <b>CHR capacity</b>
+</td>
+<td> 256K
+</td></tr>
+<tr>
+<td> <b>CHR window</b>
+</td>
+<td> 1Kx8 or 2Kx2 + 1Kx4
+</td></tr>
+<tr>
+<td> <b>Nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a></b>
+</td>
+<td> H or V, switchable
+</td></tr>
+<tr>
+<td> <b><a href="Bus_conflict.xhtml" title="Bus conflict">Bus conflicts</a></b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>IRQ</b>
+</td>
+<td> Yes
+</td></tr>
+<tr>
+<td> <b>Audio</b>
+</td>
+<td> No
+</td></tr>
+<tr>
+<td> <b>iNES <a href="Mapper.xhtml" title="Mapper">mappers</a></b>
+</td>
+<td> <a class="mw-redirect" href="RAMBO_1.xhtml" title="INES Mapper 064">064</a>, <a href="INES_Mapper_158.xhtml" title="INES Mapper 158">158</a>
+</td></tr></table>
+</div>
+<div class="infobox">
+<div style="text-align: center"><b>NESCartDB</b></div>
+<table class="oddf0">
+
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?ines=64" rel="nofollow">iNES 064</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://bootgod.dyndns.org:7777/search.php?unif=TENGEN-800032" rel="nofollow">800032</a>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+</div>
+<dl><dd><i>For the mapper used in the game &quot;Rambo&quot;, see <a href="UxROM.xhtml" title="UxROM">UxROM</a>.</i></dd></dl>
+<p>The <b>Tengen RAMBO-1</b> is an <a href="Category_ASIC_mappers.xhtml" title="Category:ASIC mappers">ASIC</a> <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a>, canonically designated as <b>mapper 64</b>. This mapper is basically Tengen's version of the <a href="MMC3.xhtml" title="MMC3">MMC3</a>, but with some extra features. The RAMBO-1 came as a <a href="Tengen_RAMBO_1_pinout.xhtml" title="Tengen RAMBO-1 pinout">40-pin PDIP</a>. A variant with different mirroring control is <a href="INES_Mapper_158.xhtml" title="INES Mapper 158">mapper 158</a>.
+</p><p>Example games:
+</p>
+<ul><li> <i>Klax</i></li>
+<li> <i>Skull and Crossbones</i></li>
+<li> <i>Shinobi</i></li></ul>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Banks"><span class="tocnumber">1</span> <span class="toctext">Banks</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Bank_select_.28.248000-.249FFE.2C_even.29"><span class="tocnumber">2.1</span> <span class="toctext">Bank select ($8000-$9FFE, even)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Bank_data_.28.248001-.249FFF.2C_odd.29"><span class="tocnumber">2.2</span> <span class="toctext">Bank data ($8001-$9FFF, odd)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Mirroring_.28.24A000-.24BFFE.2C_even.29"><span class="tocnumber">2.3</span> <span class="toctext">Mirroring ($A000-$BFFE, even)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#IRQ_latch_.28.24C000-.24DFFE.2C_even.29"><span class="tocnumber">2.4</span> <span class="toctext">IRQ latch ($C000-$DFFE, even)</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#IRQ_mode_select_.2F_reload_.28.24C001-.24DFFF.2C_odd.29"><span class="tocnumber">2.5</span> <span class="toctext">IRQ mode select / reload ($C001-$DFFF, odd)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#IRQ_acknowledge_.2F_disable_.28.24E000-.24FFFE.2C_even.29"><span class="tocnumber">2.6</span> <span class="toctext">IRQ acknowledge / disable ($E000-$FFFE, even)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#IRQ_enable_.28.24E001-.24FFFF.2C_odd.29"><span class="tocnumber">2.7</span> <span class="toctext">IRQ enable ($E001-$FFFF, odd)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#IRQ_counter_operation"><span class="tocnumber">3</span> <span class="toctext">IRQ counter operation</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Variants"><span class="tocnumber">4</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#See_also"><span class="tocnumber">5</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Banks">Banks</span></h2>
+<ul><li> CPU $8000-$9FFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $A000-$BFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $C000-$DFFF: 8 KiB switchable PRG ROM bank</li>
+<li> CPU $E000-$FFFF: 8 KiB PRG ROM bank, fixed to the last bank</li>
+<li> PPU -- Three selectable configurations:
+<ol><li> 1 KiB switchable CHR banks at $0000, $0400, $0800, $0C00, $1000, $1400, $1800, $1C00</li>
+<li> 2 KiB switchable CHR banks at $0000, $0800; 1 KiB switchable CHR banks at $1000, $1400, $1800, $1C00 </li>
+<li> 2 KiB switchable CHR banks at $1000, $1800; 1 KiB switchable CHR banks at $0000, $0400, $0800, $0C00</li></ol></li></ul>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>The RAMBO-1 has four pairs of registers at $8000-$9FFF, $A000-$BFFF, $C000-$DFFF, and $E000-$FFFF - even addresses ($8000, $8002, etc.) select the low register and odd addresses ($8001, $8003, etc.) select the high register in each pair.
+</p>
+<h3><span class="mw-headline" id="Bank_select_.28.248000-.249FFE.2C_even.29">Bank select ($8000-$9FFE, even)</span></h3>
+<pre>7  bit  0
+---- ----
+CPKx RRRR
+|||  ||||
+|||  ++++- Specify which bank register to update on next write to Bank Data register
+|||        0: Select 2 (K=0) or 1 (K=1) KiB CHR bank at PPU $0000 (or $1000);
+|||        1: Select 2 (K=0) or 1 (K=1) KiB CHR bank at PPU $0800 (or $1800);
+|||        2: Select 1 KiB CHR bank at PPU $1000-$13FF (or $0000-$03FF);
+|||        3: Select 1 KiB CHR bank at PPU $1400-$17FF (or $0400-$07FF);
+|||        4: Select 1 KiB CHR bank at PPU $1800-$1BFF (or $0800-$0BFF);
+|||        5: Select 1 KiB CHR bank at PPU $1C00-$1FFF (or $0C00-$0FFF);
+|||        6: Select 8 KiB PRG ROM bank at $8000-$9FFF (or $A000-$BFFF);
+|||        7: Select 8 KiB PRG ROM bank at $A000-$BFFF (or $C000-$DFFF);
+|||        8: If K=1, Select 1 KiB CHR bank at PPU $0400 (or $1400);
+|||        9: If K=1, Select 1 KiB CHR bank at PPU $0C00 (or $1C00);
+|||        F: Select 8 KiB PRG ROM bank at $C000-$DFFF (or $8000-$9FFF);
+||+------- Full 1 KiB CHR bank mode (0: two 2 KiB banks at $0000-$0FFF (or $1000-$1FFF),
+||                                 1: four 1 KiB banks at $0000-$0FFF (or $1000-$1FFF))
+|+-------- PRG ROM bank mode (0: $8000-$9FFF uses bank selected with R:6,
+|                                $A000-$BFFF uses bank selected with R:7,
+|                                $C000-$DFFF uses bank selected with R:F;
+|                             1: $8000-$9FFF uses bank selected with R:F,
+|                                $A000-$BFFF uses bank selected with R:6, -- NOT 7
+|                                $C000-$DFFF uses bank selected with R:7) -- NOT 6
++--------- CHR A12 inversion (0: two 2 KiB banks (or four 1 KiB banks) at $0000-$0FFF,
+                                 four 1 KiB banks at $1000-$1FFF;
+                              1: two 2 KiB banks (or four 1 KiB banks) at $1000-$1FFF,
+                                 four 1 KiB banks at $0000-$0FFF)
+</pre>
+<p>In PRG ROM bank mode 1, the functions of registers 6 and 7 are <i>backward</i> compared to the corresponding mode of MMC3.
+</p>
+<h3><span class="mw-headline" id="Bank_data_.28.248001-.249FFF.2C_odd.29">Bank data ($8001-$9FFF, odd)</span></h3>
+<p>All eight bits are used for a new value for the bank based on last value written to Bank select register (as mentioned above)
+</p>
+<h3><span class="mw-headline" id="Mirroring_.28.24A000-.24BFFE.2C_even.29">Mirroring ($A000-$BFFE, even)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxM
+        |
+        +- <a href="Mirroring.xhtml" title="Mirroring">Mirroring</a> (0: vertical; 1: horizontal)
+</pre>
+<p>This applies to <b>mapper 64</b> only (see <a href="#Variants">Variants</a> below).
+</p>
+<h3><span class="mw-headline" id="IRQ_latch_.28.24C000-.24DFFE.2C_even.29">IRQ latch ($C000-$DFFE, even)</span></h3>
+<p>All eight bits of this register specifies the IRQ counter reload value. When the IRQ counter is zero (or a reload is requested through $C001), this value will be copied into the IRQ counter at the end of the current scanline.
+</p>
+<h3><span class="mw-headline" id="IRQ_mode_select_.2F_reload_.28.24C001-.24DFFF.2C_odd.29">IRQ mode select / reload ($C001-$DFFF, odd)</span></h3>
+<pre>7  bit  0
+---- ----
+xxxx xxxM
+        |
+        +- IRQ mode select (0: Scanline Mode, 1: CPU Cycle Mode)
+</pre>
+<p>Writing to this register also clears the IRQ counter so that it will be reloaded at next clock, or the next scanline, depending on the selected mode. This also resets the prescaler in cycle mode, so the next clock will occur 4 cycles later.
+</p>
+<h3><span class="mw-headline" id="IRQ_acknowledge_.2F_disable_.28.24E000-.24FFFE.2C_even.29">IRQ acknowledge / disable ($E000-$FFFE, even)</span></h3>
+<p>Writing any value to this register will disable counter interrupts AND acknowledge any pending interrupts.
+</p>
+<h3><span class="mw-headline" id="IRQ_enable_.28.24E001-.24FFFF.2C_odd.29">IRQ enable ($E001-$FFFF, odd)</span></h3>
+<p>Writing any value to this register will enable counter interrupts.
+</p>
+<h2><span class="mw-headline" id="IRQ_counter_operation">IRQ counter operation</span></h2>
+<p>The counter can be set to either scanline mode or cpu cycle mode.
+</p><p>In scanline mode, the counter is clocked using a very similar method to that used by the <a href="MMC3.xhtml" title="MMC3">MMC3</a>, and follows the same restrictions. In comparison to the <a href="MMC3.xhtml" title="MMC3">MMC3</a>, the actual interrupt triggers slightly later. Specifically, it is delayed until <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=117323#p117323" rel="nofollow">M2 falls twice after the PPU A12 rise</a> that would have triggered the MMC3 interrupt.
+</p><p>In CPU cycle mode, the counter is clocked every 4 CPU cycles. The actual interrupt triggers <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=117461#p117461" rel="nofollow">one M2 cycle later</a> than one would naively expect.
+</p><p>Whichever method is being used, the counter behaves the following way:
+</p>
+<ul><li> <b>IF</b> $C001 was written to after previous clock
+<ul><li> reload IRQ counter with IRQ Reload value <b>PLUS ONE</b> (see note)</li></ul></li>
+<li> <b>ELSE IF</b> IRQ counter is 0
+<ul><li> reload IRQ counter with IRQ Reload value</li></ul></li>
+<li> <b>ELSE</b>
+<ul><li> Decrement IRQ counter by 1</li>
+<li> <b>IF</b> IRQ counter is now 0 <b>AND</b> IRQs are enabled
+<ul><li> wait one M2 cycle, then trigger IRQ</li></ul></li></ul></li></ul>
+<p><b>Note:</b> When $C001 is written to, it's unknown as to whether reload+1 is written to the counter, or if the counter just takes an extra clock to start counting.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<p><a href="INES_Mapper_158.xhtml" title="INES Mapper 158">Mapper 158</a>, used for <i>Alien Syndrome</i>, has mirroring like <a href="INES_Mapper_118.xhtml" title="INES Mapper 118">mapper 118</a> (<a href="TLSROM.xhtml" title="TLSROM">TLSROM</a>), where CIRAM A10 is connected to CHR A17, and bit 7 of each CHR bank mapped into PPU $0000-$0FFF controls which page of CIRAM is used for the corresponding nametable in $2000-$2FFF.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a class="external text" href="http://www.romhacking.net/documents/362/" rel="nofollow">NES Mapper List</a> by Disch</li>
+<li><a class="external text" href="http://nesdev.com/mappers.zip" rel="nofollow">Comprehensive NES Mapper Document</a> by \Firebug\, information about mapper's initial state is inaccurate.</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.177 seconds
+Real time usage: 0.185 seconds
+Preprocessor visited node count: 292/1000000
+Preprocessor generated node count: 1911/1000000
+Post‐expand include size: 1740/2097152 bytes
+Template argument size: 360/2097152 bytes
+Highest expansion depth: 10/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:634-1!*!0!!en!*!* and timestamp 20160208222116 and revision id 11330
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

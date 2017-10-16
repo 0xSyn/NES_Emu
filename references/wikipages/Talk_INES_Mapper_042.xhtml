@@ -1,0 +1,26 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 042</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 042</h1><div class="article">
+<p>It seems that the mapper should disable IRQ and reset the IRQ counter when it is triggered, otherwise any ROM that uses the IRQ counter will get stuck in a loop. Please verify if this is correct.
+</p>
+<dl><dd> Because of how the 6502's IRQ input works, IRQs cannot self-acknowledge. The IRQ is level triggered, not edge triggered (unlike the NMI input), and the mapper can only acknowledge it in response to something that the CPU does.</dd>
+<dd> &quot;Something that the CPU does&quot; could be: Reads the addresses of the IRQ vector, reads some other location in memory, or writes to some location in memory. Chances are very very good that mapper 42 is identical to the other discrete logic FDS ports (<a href="INES_Mapper_040.xhtml" title="INES Mapper 040">iNES Mapper 040</a> and <a href="INES_Mapper_050.xhtml" title="INES Mapper 050">iNES Mapper 050</a>) —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 15:26, 22 August 2016 (MDT)</dd>
+<dd> FCEUX implements the IRQ as: a 15 bit up counter where IRQ is asserted while the two MSBs are high. Nestopia implements it as the same, but obfuscated. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 15:41, 22 August 2016 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.035 seconds
+Real time usage: 0.037 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1685-1!*!0!*!*!*!* and timestamp 20160823013221 and revision id 12819
+ -->
+</div></body></html>

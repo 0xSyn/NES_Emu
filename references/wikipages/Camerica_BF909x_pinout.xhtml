@@ -1,0 +1,46 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Camerica BF909x pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Camerica BF909x pinout</h1><div class="article">
+<p>Camerica BF9093, BF9096: 20-pin 0.3&quot; PDIP (Canonically <a href="INES_Mapper_071.xhtml" title="INES Mapper 071">iNES Mapper 071</a> <a href="NES_2_0_submappers.xhtml#iNES_Mapper_071" title="NES 2.0 submappers">submapper 0</a> and <a href="INES_Mapper_232.xhtml" title="INES Mapper 232">iNES Mapper 232</a>, respectively)
+</p>
+<pre>                .--v--.
+         +5V -- |01 20| &lt;- CPU A14 (n)
+ (n) /ROMSEL -&gt; |02 19| &lt;- CPU A13 (nr)
+ (r) PRG /CE &lt;- |03 18| -&gt; PRG A15 (r)
+ (r) PRG A14 &lt;- |04 17| -&gt; PRG A16 (r)
+      (n) M2 -&gt; |05 16| -- GND
+ (nr) CPU A0 -&gt; |06 15| &lt;- R/W (n)
+ (nr) CPU D0 -&gt; |07 14| -&gt; PRG A17 (r)
+ (nr) CPU D1 -&gt; |08 13| -&gt; CIC stun
+ (nr) CPU D2 -&gt; |09 12| &lt;- CPU D4 (nr)
+         GND -- |10 11| &lt;- CPU D3 (nr)
+                '-----'
+</pre>
+<p>Camerica BF9097: 20-pin 0.3&quot; PDIP (Canonically <a href="INES_Mapper_071.xhtml" title="INES Mapper 071">iNES Mapper 071</a> <a href="NES_2_0_submappers.xhtml#iNES_Mapper_071" title="NES 2.0 submappers">submapper 1</a>)
+</p>
+<pre> (r) PRG /CE &lt;- |03 18| -&gt; PRG A15 (r)
+ (r) PRG A14 &lt;- |04 17| -&gt; <b>CIRAM A10 (n)</b>
+      (n) M2 -&gt; |05 16| <b>-&gt; PRG A16 (r)</b>
+ (nr) CPU A0 -&gt; |06 15| <b>-- GND</b>
+ (nr) CPU D0 -&gt; |07 14| <b>&lt;- R/W (n)</b>
+ (nr) CPU D1 -&gt; |08 13| -&gt; CIC stun
+</pre>
+<p>Source: <a class="external text" href="http://kevtris.org/mappers/camerica/" rel="nofollow">Kevtris</a>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1216-1!*!0!*!*!*!* and timestamp 20160208224845 and revision id 7601
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

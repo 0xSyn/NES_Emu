@@ -1,0 +1,1012 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VT03</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VT03</h1><div class="article">
+<p>The <strong class="selflink">VT03</strong> is a famiclone with added capabilities.  It uses &quot;OneBus&quot; instead of separate CPU and PPU buses, and supports a 4-bit color mode.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#System_Registers"><span class="tocnumber">1.1</span> <span class="toctext">System Registers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Program_Bank_1.2C_Video_Bank_2_.28.244100.29_.3E_write"><span class="tocnumber">1.1.1</span> <span class="toctext">Program Bank 1, Video Bank 2 ($4100) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Timer_Interrupt_Preload_Times_.28.244101.29_.3E_write"><span class="tocnumber">1.1.2</span> <span class="toctext">Timer Interrupt Preload Times ($4101) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Load_Timer_Interrupt_Value_.28.244102.29_.3E_write"><span class="tocnumber">1.1.3</span> <span class="toctext">Load Timer Interrupt Value ($4102) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Timer_Interrupt_Disable_.28.244103.29_.3E_write"><span class="tocnumber">1.1.4</span> <span class="toctext">Timer Interrupt Disable ($4103) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Timer_Interrupt_Enable_.28.244104.29_.3E_write"><span class="tocnumber">1.1.5</span> <span class="toctext">Timer Interrupt Enable ($4104) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#V_Bank_0_decode_type.2C_P_Bank_0_decode_type.2C_Inter_Char_VRAM_.28.244105.29_.3E_write"><span class="tocnumber">1.1.6</span> <span class="toctext">V Bank 0 decode type, P Bank 0 decode type, Inter Char VRAM ($4105) &gt; write</span></a>
+<ul>
+<li class="toclevel-4 tocsection-9"><a href="#Program_Bank_0_Decoding"><span class="tocnumber">1.1.6.1</span> <span class="toctext">Program Bank 0 Decoding</span></a></li>
+<li class="toclevel-4 tocsection-10"><a href="#Video_Bank_0_Decoding"><span class="tocnumber">1.1.6.2</span> <span class="toctext">Video Bank 0 Decoding</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-11"><a href="#Horizontal.2FVertical_Scrolling_Selector_.28.244106.29_.3E_write"><span class="tocnumber">1.1.7</span> <span class="toctext">Horizontal/Vertical Scrolling Selector ($4106) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Program_Bank_0_Register_0_.28.244107.29_.3E_write"><span class="tocnumber">1.1.8</span> <span class="toctext">Program Bank 0 Register 0 ($4107) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Program_Bank_0_Register_1_.28.244108.29_.3E_write"><span class="tocnumber">1.1.9</span> <span class="toctext">Program Bank 0 Register 1 ($4108) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Program_Bank_0_Register_2_.28.244109.29_.3E_write"><span class="tocnumber">1.1.10</span> <span class="toctext">Program Bank 0 Register 2 ($4109) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Program_Bank_0_Register_3_.28.24410A.29_.3E_write"><span class="tocnumber">1.1.11</span> <span class="toctext">Program Bank 0 Register 3 ($410A) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Timer_interrupt_clock_selector.2C_Program_Bank_0_register_2_enable.2Fdisable.2C_RS232_enable.2Fdisable.2C_Bus_output_normal.2Ftristate.2C_Program_Bank_0_selector_.28.24410B.29_.3E_write"><span class="tocnumber">1.1.12</span> <span class="toctext">Timer interrupt clock selector, Program Bank 0 register 2 enable/disable, RS232 enable/disable, Bus output normal/tristate, Program Bank 0 selector ($410B) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#I.2FO_Port_Control_.28.24410D.29_.3E_write"><span class="tocnumber">1.1.13</span> <span class="toctext">I/O Port Control ($410D) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#I.2FO_Port_Output_Data.2C_Ports_0_and_1_.28.24410E.29_.3C.3E_read.2Fwrite"><span class="tocnumber">1.1.14</span> <span class="toctext">I/O Port Output Data, Ports 0 and 1 ($410E) &lt;&gt; read/write</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#I.2FO_Port_Output_Data.2C_Ports_2_and_3_.28.24410F.29_.3C.3E_read.2Fwrite"><span class="tocnumber">1.1.15</span> <span class="toctext">I/O Port Output Data, Ports 2 and 3 ($410F) &lt;&gt; read/write</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#RS232_Timer"><span class="tocnumber">1.1.16</span> <span class="toctext">RS232 Timer</span></a>
+<ul>
+<li class="toclevel-4 tocsection-21"><a href="#RS232_Timer_Low_Byte_.28.244114.29_.3E_write"><span class="tocnumber">1.1.16.1</span> <span class="toctext">RS232 Timer Low Byte ($4114) &gt; write</span></a></li>
+<li class="toclevel-4 tocsection-22"><a href="#RS232_Timer_High_Byte_.28.244115.29_.3E_write"><span class="tocnumber">1.1.16.2</span> <span class="toctext">RS232 Timer High Byte ($4115) &gt; write</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-23"><a href="#RS232_Register_.28.244119.29_.3E_write"><span class="tocnumber">1.1.17</span> <span class="toctext">RS232 Register ($4119) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#RS232_Flags_.28.244119.29_.3C_read"><span class="tocnumber">1.1.18</span> <span class="toctext">RS232 Flags ($4119) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#RS232_TX_data_.28.24411A.29_.3E_write"><span class="tocnumber">1.1.19</span> <span class="toctext">RS232 TX data ($411A) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#RS232_RX_data_.28.24411B.29_.3C_read"><span class="tocnumber">1.1.20</span> <span class="toctext">RS232 RX data ($411B) &lt; read</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-27"><a href="#Graphics_Registers"><span class="tocnumber">1.2</span> <span class="toctext">Graphics Registers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-28"><a href="#PPU_Control_.28.242000.29_.3E_write"><span class="tocnumber">1.2.1</span> <span class="toctext">PPU Control ($2000) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#PPU_Mask_.28.242001.29_.3E_write"><span class="tocnumber">1.2.2</span> <span class="toctext">PPU Mask ($2001) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="#PPU_Status_.28.242002.29_.3C_read"><span class="tocnumber">1.2.3</span> <span class="toctext">PPU Status ($2002) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#OAM_Address_.28.242003.29_.3E_write"><span class="tocnumber">1.2.4</span> <span class="toctext">OAM Address ($2003) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#OAM_Data_.28.242004.29_.3E_write"><span class="tocnumber">1.2.5</span> <span class="toctext">OAM Data ($2004) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-33"><a href="#PPU_Scroll_.28.242005.29_.3E.3E_write_x2"><span class="tocnumber">1.2.6</span> <span class="toctext">PPU Scroll ($2005) &gt;&gt; write x2</span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#PPU_Address_.28.242006.29_.3E.3E_write_x2"><span class="tocnumber">1.2.7</span> <span class="toctext">PPU Address ($2006) &gt;&gt; write x2</span></a></li>
+<li class="toclevel-3 tocsection-35"><a href="#PPU_Data_.28.242007.29_.3C.3E_read.2Fwrite"><span class="tocnumber">1.2.8</span> <span class="toctext">PPU Data ($2007) &lt;&gt; read/write</span></a></li>
+<li class="toclevel-3 tocsection-36"><a href="#Extended_Graphics_Control_1_.28.242010.29_.3E_write"><span class="tocnumber">1.2.9</span> <span class="toctext">Extended Graphics Control 1 ($2010) &gt; write</span></a>
+<ul>
+<li class="toclevel-4 tocsection-37"><a href="#New_Color_Mapping_Mode"><span class="tocnumber">1.2.9.1</span> <span class="toctext">New Color Mapping Mode</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-38"><a href="#Extended_Graphics_Control_2_.28.242011.29_.3E_write"><span class="tocnumber">1.2.10</span> <span class="toctext">Extended Graphics Control 2 ($2011) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-39"><a href="#Video_Bank_0_Register_0_.28.242012.29_.3E_write"><span class="tocnumber">1.2.11</span> <span class="toctext">Video Bank 0 Register 0 ($2012) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-40"><a href="#Video_Bank_0_Register_1_.28.242013.29_.3E_write"><span class="tocnumber">1.2.12</span> <span class="toctext">Video Bank 0 Register 1 ($2013) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-41"><a href="#Video_Bank_0_Register_2_.28.242014.29_.3E_write"><span class="tocnumber">1.2.13</span> <span class="toctext">Video Bank 0 Register 2 ($2014) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-42"><a href="#Video_Bank_0_Register_3_.28.242015.29_.3E_write"><span class="tocnumber">1.2.14</span> <span class="toctext">Video Bank 0 Register 3 ($2015) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-43"><a href="#Video_Bank_0_Register_4_.28.242016.29_.3E_write"><span class="tocnumber">1.2.15</span> <span class="toctext">Video Bank 0 Register 4 ($2016) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-44"><a href="#Video_Bank_0_Register_5_.28.242017.29_.3E_write"><span class="tocnumber">1.2.16</span> <span class="toctext">Video Bank 0 Register 5 ($2017) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-45"><a href="#Video_Bank_1_Register.2C_BKPAGE.2C_Video_RW_Bank_.28.242018.29_.3E_write"><span class="tocnumber">1.2.17</span> <span class="toctext">Video Bank 1 Register, BKPAGE, Video RW Bank ($2018) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-46"><a href="#Gun_Port_Reset_.28.242019.29_.3E_write"><span class="tocnumber">1.2.18</span> <span class="toctext">Gun Port Reset ($2019) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-47"><a href="#Video_Bank_0_Register_6.2C_Video_Bank_0_Selector_.28.24201A.29_.3E_write"><span class="tocnumber">1.2.19</span> <span class="toctext">Video Bank 0 Register 6, Video Bank 0 Selector ($201A) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-48"><a href="#Gun_Port_1_X_Coordinate_.28.24201C.29_.3C_read"><span class="tocnumber">1.2.20</span> <span class="toctext">Gun Port 1 X Coordinate ($201C) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-49"><a href="#Gun_Port_1_Y_Coordinate_.28.24201D.29_.3C_read"><span class="tocnumber">1.2.21</span> <span class="toctext">Gun Port 1 Y Coordinate ($201D) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-50"><a href="#Gun_Port_2_X_Coordinate_.28.24201E.29_.3C_read"><span class="tocnumber">1.2.22</span> <span class="toctext">Gun Port 2 X Coordinate ($201E) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-51"><a href="#Gun_Port_2_Y_Coordinate_.28.24201F.29_.3C_read"><span class="tocnumber">1.2.23</span> <span class="toctext">Gun Port 2 Y Coordinate ($201F) &lt; read</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-52"><a href="#Sound_Registers"><span class="tocnumber">1.3</span> <span class="toctext">Sound Registers</span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#Miscellaneous_Registers"><span class="tocnumber">1.4</span> <span class="toctext">Miscellaneous Registers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-54"><a href="#DMA_Source_Address_High_Byte_.28.244014.29_.3E_write"><span class="tocnumber">1.4.1</span> <span class="toctext">DMA Source Address High Byte ($4014) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-55"><a href="#DMA_Settings_.28.244034.29_.3E_write"><span class="tocnumber">1.4.2</span> <span class="toctext">DMA Settings ($4034) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-56"><a href="#Enable.2FDisable_XOP1_.26_DWS_IRQ_.28.244015.29_.3E_write"><span class="tocnumber">1.4.3</span> <span class="toctext">Enable/Disable XOP1 &amp; DWS IRQ ($4015) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-57"><a href="#Read_XOP1_Flag_.28.244015.29_.3C_read"><span class="tocnumber">1.4.4</span> <span class="toctext">Read XOP1 Flag ($4015) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-58"><a href="#Enable.2FDisable_XOP2_.28.244035.29_.3E_write"><span class="tocnumber">1.4.5</span> <span class="toctext">Enable/Disable XOP2 ($4035) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-59"><a href="#Read_XOP2_Flag_.28.244035.29_.3C_read"><span class="tocnumber">1.4.6</span> <span class="toctext">Read XOP2 Flag ($4035) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-60"><a href="#Set_Output_Pin_XQ.5B2:0.5D_.28.244016.29_.3E_write"><span class="tocnumber">1.4.7</span> <span class="toctext">Set Output Pin XQ[2:0] ($4016) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-61"><a href="#Read_peripheral_data_.28.244016.29_.3C_read"><span class="tocnumber">1.4.8</span> <span class="toctext">Read peripheral data ($4016) &lt; read</span></a></li>
+<li class="toclevel-3 tocsection-62"><a href="#APU_Frame_Counter_.28.244017.29_.3E_write"><span class="tocnumber">1.4.9</span> <span class="toctext">APU Frame Counter ($4017) &gt; write</span></a></li>
+<li class="toclevel-3 tocsection-63"><a href="#Read_peripheral_data_.28.244017.29_.3C_read"><span class="tocnumber">1.4.10</span> <span class="toctext">Read peripheral data ($4017) &lt; read</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-64"><a href="#References"><span class="tocnumber">2</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="System_Registers">System Registers</span></h3>
+<h4><span class="mw-headline" id="Program_Bank_1.2C_Video_Bank_2_.28.244100.29_.3E_write">Program Bank 1, Video Bank 2 ($4100) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+PPPP VVVV
+|||| ||||
+|||| ++++- Video Bank 2   (VA24, VA23, VA22, VA21)
+++++------ Program Bank 1 (PA24, PA23, PA22, PA21)
+</pre>
+<h4><span class="mw-headline" id="Timer_Interrupt_Preload_Times_.28.244101.29_.3E_write">Timer Interrupt Preload Times ($4101) &gt; write</span></h4>
+<p>When TSYNEN is 0, this register sets &quot;the number of AD12 switching high low&quot;. When TSYNEN is 1, this register sets &quot;the number of HSYNC switching high low&quot; instead. (See $410B.)
+</p>
+<h4><span class="mw-headline" id="Load_Timer_Interrupt_Value_.28.244102.29_.3E_write">Load Timer Interrupt Value ($4102) &gt; write</span></h4>
+<p>Writing any value to this register will set the timer's value and start counting.
+</p>
+<h4><span class="mw-headline" id="Timer_Interrupt_Disable_.28.244103.29_.3E_write">Timer Interrupt Disable ($4103) &gt; write</span></h4>
+<p>Writing any value to this register will disable the timer interrupt.
+</p>
+<h4><span class="mw-headline" id="Timer_Interrupt_Enable_.28.244104.29_.3E_write">Timer Interrupt Enable ($4104) &gt; write</span></h4>
+<p>Writing any value to this register will enable the timer interrupt.
+</p>
+<h4><span class="mw-headline" id="V_Bank_0_decode_type.2C_P_Bank_0_decode_type.2C_Inter_Char_VRAM_.28.244105.29_.3E_write">V Bank 0 decode type, P Bank 0 decode type, Inter Char VRAM ($4105) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+VPIx xxxx
+|||| ||||
+|||+-++++- unused
+||+------- Internal VRAM as CHR RAM (0: disabled; 1: enabled)
+|+-------- Program Bank 0 Decoding (see below table)
++--------- Video Bank 0 Decoding (see below table)
+</pre>
+<h5><span class="mw-headline" id="Program_Bank_0_Decoding">Program Bank 0 Decoding</span></h5>
+<table class="wikitable">
+<tr>
+<th> PQ2EN ($410B) </th>
+<th> COMR6 </th>
+<th> A[14:13] (CPU) </th>
+<th> TPA20 </th>
+<th> TPA19 </th>
+<th> TPA18 </th>
+<th> TPA17 </th>
+<th> TPA16 </th>
+<th> TPA15 </th>
+<th> TPA14 </th>
+<th> TPA13
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">0
+</td>
+<td> PQ07 </td>
+<td> PQ06 </td>
+<td> PQ05 </td>
+<td> PQ04 </td>
+<td> PQ03 </td>
+<td> PQ02 </td>
+<td> PQ01 </td>
+<td> PQ00
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">1
+</td>
+<td> PQ17 </td>
+<td> PQ16 </td>
+<td> PQ15 </td>
+<td> PQ14 </td>
+<td> PQ13 </td>
+<td> PQ12 </td>
+<td> PQ11 </td>
+<td> PQ10
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">2
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">3
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">4
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">5
+</td>
+<td> PQ17 </td>
+<td> PQ16 </td>
+<td> PQ15 </td>
+<td> PQ14 </td>
+<td> PQ13 </td>
+<td> PQ12 </td>
+<td> PQ11 </td>
+<td> PQ10
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">6
+</td>
+<td> PQ07 </td>
+<td> PQ06 </td>
+<td> PQ05 </td>
+<td> PQ04 </td>
+<td> PQ03 </td>
+<td> PQ02 </td>
+<td> PQ01 </td>
+<td> PQ00
+</td></tr>
+<tr>
+<td> 0
+</td>
+<td colspan="2">7
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">0
+</td>
+<td> PQ07 </td>
+<td> PQ06 </td>
+<td> PQ05 </td>
+<td> PQ04 </td>
+<td> PQ03 </td>
+<td> PQ02 </td>
+<td> PQ01 </td>
+<td> PQ00
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">1
+</td>
+<td> PQ17 </td>
+<td> PQ16 </td>
+<td> PQ15 </td>
+<td> PQ14 </td>
+<td> PQ13 </td>
+<td> PQ12 </td>
+<td> PQ11 </td>
+<td> PQ10
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">2
+</td>
+<td> PQ27 </td>
+<td> PQ26 </td>
+<td> PQ25 </td>
+<td> PQ24 </td>
+<td> PQ23 </td>
+<td> PQ22 </td>
+<td> PQ21 </td>
+<td> PQ20
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">3
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">4
+</td>
+<td> PQ27 </td>
+<td> PQ26 </td>
+<td> PQ25 </td>
+<td> PQ24 </td>
+<td> PQ23 </td>
+<td> PQ22 </td>
+<td> PQ21 </td>
+<td> PQ20
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">5
+</td>
+<td> PQ17 </td>
+<td> PQ16 </td>
+<td> PQ15 </td>
+<td> PQ14 </td>
+<td> PQ13 </td>
+<td> PQ12 </td>
+<td> PQ11 </td>
+<td> PQ10
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">6
+</td>
+<td> PQ07 </td>
+<td> PQ06 </td>
+<td> PQ05 </td>
+<td> PQ04 </td>
+<td> PQ03 </td>
+<td> PQ02 </td>
+<td> PQ01 </td>
+<td> PQ00
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td colspan="2">7
+</td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> 1
+</td></tr></table>
+<h5><span class="mw-headline" id="Video_Bank_0_Decoding">Video Bank 0 Decoding</span></h5>
+<table class="wikitable">
+<tr>
+<th> COMR7 </th>
+<th> AD[12:10] </th>
+<th> TVA17 </th>
+<th> TVA16 </th>
+<th> TVA15 </th>
+<th> TVA14 </th>
+<th> TVA13 </th>
+<th> TVA12 </th>
+<th> TVA11 </th>
+<th> TVA10
+</th></tr>
+<tr>
+<td colspan="2">0,1,C,D
+</td>
+<td> RV47 </td>
+<td> RV46 </td>
+<td> RV45 </td>
+<td> RV44 </td>
+<td> RV43 </td>
+<td> RV42 </td>
+<td> RV41 </td>
+<td> AD10
+</td></tr>
+<tr>
+<td colspan="2">2,3,E,F
+</td>
+<td> RV57 </td>
+<td> RV56 </td>
+<td> RV55 </td>
+<td> RV54 </td>
+<td> RV53 </td>
+<td> RV52 </td>
+<td> RV51 </td>
+<td> AD10
+</td></tr>
+<tr>
+<td colspan="2">4,8
+</td>
+<td> RV07 </td>
+<td> RV06 </td>
+<td> RV05 </td>
+<td> RV04 </td>
+<td> RV03 </td>
+<td> RV02 </td>
+<td> RV01 </td>
+<td> RV00
+</td></tr>
+<tr>
+<td colspan="2">5,9
+</td>
+<td> RV17 </td>
+<td> RV16 </td>
+<td> RV15 </td>
+<td> RV14 </td>
+<td> RV13 </td>
+<td> RV12 </td>
+<td> RV11 </td>
+<td> RV10
+</td></tr>
+<tr>
+<td colspan="2">6,A
+</td>
+<td> RV27 </td>
+<td> RV26 </td>
+<td> RV25 </td>
+<td> RV24 </td>
+<td> RV23 </td>
+<td> RV22 </td>
+<td> RV21 </td>
+<td> RV20
+</td></tr>
+<tr>
+<td colspan="2">7,B
+</td>
+<td> RV37 </td>
+<td> RV36 </td>
+<td> RV35 </td>
+<td> RV34 </td>
+<td> RV33 </td>
+<td> RV32 </td>
+<td> RV31 </td>
+<td> RV30
+</td></tr></table>
+<h4><span class="mw-headline" id="Horizontal.2FVertical_Scrolling_Selector_.28.244106.29_.3E_write">Horizontal/Vertical Scrolling Selector ($4106) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+VPIx xxxx
+|||| ||||
+|||| |||+- H/V scrolling selector (0: Horizontal; 1: Vertical)
+++++-+++-- unused
+</pre>
+<h4><span class="mw-headline" id="Program_Bank_0_Register_0_.28.244107.29_.3E_write">Program Bank 0 Register 0 ($4107) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+PPPP PPPP
+|||| ||||
+|||| |||+- PQ00
+|||| ||+-- PQ01
+|||| |+--- PQ02
+|||| +---- PQ03
+|||+------ PQ04
+||+------- PQ05
+|+-------- PQ06
++--------- PQ07
+</pre>
+<h4><span class="mw-headline" id="Program_Bank_0_Register_1_.28.244108.29_.3E_write">Program Bank 0 Register 1 ($4108) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+PPPP PPPP
+|||| ||||
+|||| |||+- PQ10
+|||| ||+-- PQ11
+|||| |+--- PQ12
+|||| +---- PQ13
+|||+------ PQ14
+||+------- PQ15
+|+-------- PQ16
++--------- PQ17
+</pre>
+<h4><span class="mw-headline" id="Program_Bank_0_Register_2_.28.244109.29_.3E_write">Program Bank 0 Register 2 ($4109) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+PPPP PPPP
+|||| ||||
+|||| |||+- PQ20
+|||| ||+-- PQ21
+|||| |+--- PQ22
+|||| +---- PQ23
+|||+------ PQ24
+||+------- PQ25
+|+-------- PQ26
++--------- PQ27
+</pre>
+<h4><span class="mw-headline" id="Program_Bank_0_Register_3_.28.24410A.29_.3E_write">Program Bank 0 Register 3 ($410A) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+PPPP PPPP
+|||| ||||
+|||| |||+- PQ30
+|||| ||+-- PQ31
+|||| |+--- PQ32
+|||| +---- PQ33
+|||+------ PQ34
+||+------- PQ35
+|+-------- PQ36
++--------- PQ37
+</pre>
+<h4><span class="mw-headline" id="Timer_interrupt_clock_selector.2C_Program_Bank_0_register_2_enable.2Fdisable.2C_RS232_enable.2Fdisable.2C_Bus_output_normal.2Ftristate.2C_Program_Bank_0_selector_.28.24410B.29_.3E_write">Timer interrupt clock selector, Program Bank 0 register 2 enable/disable, RS232 enable/disable, Bus output normal/tristate, Program Bank 0 selector ($410B) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+TpRB XPPP
+|||| ||||
+|||| |+++- Program Bank 0 Selector
+|||| +---- XRWB switch (0: Writes to $6000-$FFFF will not activate XRWB; 1: writes to $6000-$FFFF will activate XRWB)
+|||+------ Bus output control (0: Normal bus output; 1: Tri-state bus)
+||+------- RS232 (0: disabled; 1: enabled)
+|+-------- Program Bank 0 Register 2 enable (0: disabled; 1: enabled)
++--------- Timer interrupt clock select (0: AD12; 1: HSYNC)
+</pre>
+<h4><span class="mw-headline" id="I.2FO_Port_Control_.28.24410D.29_.3E_write">I/O Port Control ($410D) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+DdCc BbAa
+|||| ||||
+|||| |||+- I/O port 0 mode (0: input; 1: output)
+|||| ||+-- I/O port 0 enable (0: disabled; 1:enabled)
+|||| |+--- I/O port 1 mode (0: input; 1: output)
+|||| +---- I/O port 1 enable (0: disabled; 1:enabled)
+|||+------ I/O port 2 mode (0: input; 1: output)
+||+------- I/O port 2 enable (0: disabled; 1:enabled)
+|+-------- I/O port 3 mode (0: input; 1: output)
++--------- I/O port 3 enable (0: disabled; 1:enabled)
+</pre>
+<ul><li> Bits d0-d3 must be set to $A if using flash memory in 16-bit mode.</li>
+<li> External SRAM is not available if using flash memory in 16-bit mode.</li></ul>
+<h4><span class="mw-headline" id="I.2FO_Port_Output_Data.2C_Ports_0_and_1_.28.24410E.29_.3C.3E_read.2Fwrite">I/O Port Output Data, Ports 0 and 1 ($410E) &lt;&gt; read/write</span></h4>
+<pre>7  bit  0
+---- ----
+DDDD dddd
+|||| ||||
+|||| ++++- I/O port 0 data (XVD3, XVD2, XVD1, XVD0)
+++++------ I/O port 1 data (XVD7, XVD6, XVD5, XVD4)
+</pre>
+<h4><span class="mw-headline" id="I.2FO_Port_Output_Data.2C_Ports_2_and_3_.28.24410F.29_.3C.3E_read.2Fwrite">I/O Port Output Data, Ports 2 and 3 ($410F) &lt;&gt; read/write</span></h4>
+<pre>7  bit  0
+---- ----
+DDDD dddd
+|||| ||||
+|||| ++++- I/O port 2 data (XAD12, XAD11, XAD10, XRA10)
+++++------ I/O port 3 data (XVRW, VXOEB, XRCB, XRC)
+</pre>
+<h4><span class="mw-headline" id="RS232_Timer">RS232 Timer</span></h4>
+<p>&quot;In PAL system, CK21M is 26.601712MHz, in NTSC system is 21.47727MHz. RS232T=#4115,#4114 data. Baud rate will be CK21M/((RS232T+2)*2). For example, In PAL system, the baud rate 9600, RS232T=0567.&quot;
+</p>
+<h5><span class="mw-headline" id="RS232_Timer_Low_Byte_.28.244114.29_.3E_write">RS232 Timer Low Byte ($4114) &gt; write</span></h5>
+<p>Write the low byte of the RS232 timer.
+</p>
+<h5><span class="mw-headline" id="RS232_Timer_High_Byte_.28.244115.29_.3E_write">RS232 Timer High Byte ($4115) &gt; write</span></h5>
+<p>Write the high byte of the RS232 timer.
+</p>
+<h4><span class="mw-headline" id="RS232_Register_.28.244119.29_.3E_write">RS232 Register ($4119) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+xxBx xxxT
+|||| ||||
+|||| |||+- TX bit 8
+|||+-+++-- unused
+||+------- Bit 8 enable (0: 10 bits mode including start, end bits, and bit 7-0 data; 1: 11 bits mode including start, end bits, bit 8 and bit7-0 data)
+++-------- unused
+</pre>
+<h4><span class="mw-headline" id="RS232_Flags_.28.244119.29_.3C_read">RS232 Flags ($4119) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+rsTF PxER
+|||| ||||
+|||| |||+- RX bit 8
+|||| ||+-- RERRF (If 1, receiving error occurred)
+|||| |+--- unused
+|||| +---- XPORN (0: NTSC; 1: PAL)
+|||+------ XF5OR6 (0: 60Hz; 1: 50Hz)
+||+------- RINGF (If 1, currently receiving data)
+|+-------- TIFLAG (If 1, completed sending data)
++--------- RIFLAG (If 1, completed receiving data)
+</pre>
+<h4><span class="mw-headline" id="RS232_TX_data_.28.24411A.29_.3E_write">RS232 TX data ($411A) &gt; write</span></h4>
+<p>Write RS232 data (bits 7-0).
+</p>
+<h4><span class="mw-headline" id="RS232_RX_data_.28.24411B.29_.3C_read">RS232 RX data ($411B) &lt; read</span></h4>
+<p>Read RS232 data (bits 7-0).
+</p>
+<h3><span class="mw-headline" id="Graphics_Registers">Graphics Registers</span></h3>
+<h4><span class="mw-headline" id="PPU_Control_.28.242000.29_.3E_write">PPU Control ($2000) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+VxHB SINN
+|||| ||||
+|||| ||++- Base nametable address
+|||| ||    (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
+|||| |+--- VRAM address increment (0: +1/horizontal; 1: +32/vertical)
+|||| +---- Sprite pattern table address (0: $0000; 1: $1000)
+|||+------ Background pattern table address (0: $0000; 1: $1000)
+||+------- Sprite Size (0: Small Sprite (8x8 or 16x8); 1: Big Sprite (8x16 or 16x16))
+|+-------- unused (&quot;Test pin control I/O&quot;)
++--------- NMI control (0: enabled; 1: disabled)
+</pre>
+<h4><span class="mw-headline" id="PPU_Mask_.28.242001.29_.3E_write">PPU Mask ($2001) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+xxxs bMmG
+|||| ||||
+|||| |||+- Grayscale (0: Color; 1: Grayscale)
+|||| ||+-- &quot;Background initial coordinate&quot; (0: &quot;righter&quot;; 1: &quot;lefter&quot;)
+|||| |+--- &quot;Sprite initial coordinate&quot; (0: &quot;righter&quot;; 1: &quot;lefter&quot;)
+|||| +---- Show background (0: disabled; 1: enabled)
+|||+------ Show sprites (0: disabled; 1: enabled)
++++------- unused
+</pre>
+<h4><span class="mw-headline" id="PPU_Status_.28.242002.29_.3C_read">PPU Status ($2002) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+VSOx xxxx
+|||| ||||
+|||+-++++- unused
+||+------- Sprite overload indicator
+|+-------- &quot;Priority indicator&quot;
++--------- Blanking indicator (0: display; 1: blanking)
+</pre>
+<h4><span class="mw-headline" id="OAM_Address_.28.242003.29_.3E_write">OAM Address ($2003) &gt; write</span></h4>
+<p>&quot;Set sprite pool counter initial data by this register.&quot;
+</p>
+<pre>7  bit  0
+---- ----
+AAAA AAAA
+|||| ||||
+++++-++++- Initial sprite data address
+</pre>
+<h4><span class="mw-headline" id="OAM_Data_.28.242004.29_.3E_write">OAM Data ($2004) &gt; write</span></h4>
+<p>&quot;Write data into sprite pool and increment sprite counter.&quot;
+</p>
+<pre>7  bit  0
+---- ----
+DDDD DDDD
+|||| ||||
+++++-++++- Data to write
+</pre>
+<h4><span class="mw-headline" id="PPU_Scroll_.28.242005.29_.3E.3E_write_x2">PPU Scroll ($2005) &gt;&gt; write x2</span></h4>
+<h4><span class="mw-headline" id="PPU_Address_.28.242006.29_.3E.3E_write_x2">PPU Address ($2006) &gt;&gt; write x2</span></h4>
+<h4><span class="mw-headline" id="PPU_Data_.28.242007.29_.3C.3E_read.2Fwrite">PPU Data ($2007) &lt;&gt; read/write</span></h4>
+<h4><span class="mw-headline" id="Extended_Graphics_Control_1_.28.242010.29_.3E_write">Extended Graphics Control 1 ($2010) &gt; write</span></h4>
+<p>&quot;Old color compatible, Background/Sprite address Extension enable, Sprite 16 colors or 16 pixels enable, Background 16 colors enable, Sprite 16 colors or 16 pixels selector.&quot;
+</p>
+<pre>7  bit  0
+---- ----
+Cxxb sSBM
+|||| ||||
+|||| |||+- Sprite mode (0: 16 colors; 1: 16 pixels)
+|||| ||+-- 16 color backgrounds (0: disabled, 1: enabled)
+|||| |+--- 16 color/pixel sprites (0: disabled, 1: enabled)
+|||| +---- Sprite address extension (0: disabled; 1: enabled)
+|||+------ Background address extension (0: disabled; 1: enabled)
+|++------- unused
++--------- Color Mode (0: old/compatible; 1: new color mapping)
+</pre>
+<h5><span class="mw-headline" id="New_Color_Mapping_Mode">New Color Mapping Mode</span></h5>
+<table class="wikitable">
+<tr>
+<th> RC=1
+</th>
+<td colspan="6"> $3F80,$3F81,$3F82...
+</td>
+<td colspan="6"> $3F00,$3F01,$3F02...
+</td></tr>
+<tr>
+<th> Data
+</th>
+<td> D5 </td>
+<td> D4 </td>
+<td> D3 </td>
+<td> D2 </td>
+<td> D1 </td>
+<td> D0
+</td>
+<td> D5 </td>
+<td> D4 </td>
+<td> D3 </td>
+<td> D2 </td>
+<td> D1 </td>
+<td> D0
+</td></tr>
+<tr>
+<th> Function
+</th>
+<td> SAT3 </td>
+<td> SAT2 </td>
+<td> SAT1 </td>
+<td> SAT0 </td>
+<td> LUM3 </td>
+<td> LUM2
+</td>
+<td> LUM1 </td>
+<td> LUM0 </td>
+<td> PHA3 </td>
+<td> PHA2 </td>
+<td> PHA1 </td>
+<td> PHA0
+</td></tr></table>
+<blockquote><pre>4 &lt;= LUM[3:0] X 2 + SAT[3:0] &lt;= 1F
+If you set LUM = F, SAT must be &lt;= 1.
+LUM = E, SAT must be &lt;= 3.
+.
+.
+.
+LUM = 3, SAT must be &lt;= 2.
+LUM = 2, SAT must be = 0.</pre></blockquote>
+<h4><span class="mw-headline" id="Extended_Graphics_Control_2_.28.242011.29_.3E_write">Extended Graphics Control 2 ($2011) &gt; write</span></h4>
+<p>&quot;Option of Vertical line number of LCD display, B/W 2 color mode, Composted Video DA Enable, Video
+Extension Address EVA12 selector, Enable the internal VRAM or not&quot;
+</p>
+<pre>7  bit  0
+---- ----
+xxVV IBCE
+|||| ||||
+|||| |||+- Video Extension Address EVA selector (0: reg. BKPAGE; 1: HV)
+|||| ||+-- Composited Video DA (0: enabled; 1: disabled)
+|||| |+--- Black/White two color mode (0: disabled; 1: enabled)
+|||| +---- Internal VRAM enable (0: enabled; 1: disabled)
+||++------ LCD display vertical lines (0: 240 lines; 1: 160 lines; 2: 120 lines; 3: 80 lines)
+++-------- unused
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_0_.28.242012.29_.3E_write">Video Bank 0 Register 0 ($2012) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV00
+|||| ||+-- RV01
+|||| |+--- RV02
+|||| +---- RV03
+|||+------ RV04
+||+------- RV05
+|+-------- RV06
++--------- RV07
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_1_.28.242013.29_.3E_write">Video Bank 0 Register 1 ($2013) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV10
+|||| ||+-- RV11
+|||| |+--- RV12
+|||| +---- RV13
+|||+------ RV14
+||+------- RV15
+|+-------- RV16
++--------- RV17
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_2_.28.242014.29_.3E_write">Video Bank 0 Register 2 ($2014) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV20
+|||| ||+-- RV21
+|||| |+--- RV22
+|||| +---- RV23
+|||+------ RV24
+||+------- RV25
+|+-------- RV26
++--------- RV27
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_3_.28.242015.29_.3E_write">Video Bank 0 Register 3 ($2015) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV30
+|||| ||+-- RV31
+|||| |+--- RV32
+|||| +---- RV33
+|||+------ RV34
+||+------- RV35
+|+-------- RV36
++--------- RV37
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_4_.28.242016.29_.3E_write">Video Bank 0 Register 4 ($2016) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV40
+|||| ||+-- RV41
+|||| |+--- RV42
+|||| +---- RV43
+|||+------ RV44
+||+------- RV45
+|+-------- RV46
++--------- RV47
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_5_.28.242017.29_.3E_write">Video Bank 0 Register 5 ($2017) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+7654 3210
+|||| ||||
+|||| |||+- RV50
+|||| ||+-- RV51
+|||| |+--- RV52
+|||| +---- RV53
+|||+------ RV54
+||+------- RV55
+|+-------- RV56
++--------- RV57
+</pre>
+<h4><span class="mw-headline" id="Video_Bank_1_Register.2C_BKPAGE.2C_Video_RW_Bank_.28.242018.29_.3E_write">Video Bank 1 Register, BKPAGE, Video RW Bank ($2018) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+xRRR BVVV
+|||| ||||
+|||| |+++- Video bank when accessing video data
+|||| +---- Reg. BKPAGE address is EVA12 when EVA12S=0
+|+++------ Video Bank 1 Register
++--------- unused
+</pre>
+<h4><span class="mw-headline" id="Gun_Port_Reset_.28.242019.29_.3E_write">Gun Port Reset ($2019) &gt; write</span></h4>
+<p>Writing any value to this register will reset the X and Y coordinates of the guns in ports 1 and 2.
+</p>
+<h4><span class="mw-headline" id="Video_Bank_0_Register_6.2C_Video_Bank_0_Selector_.28.24201A.29_.3E_write">Video Bank 0 Register 6, Video Bank 0 Selector ($201A) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+RRRR RBBB
+|||| ||||
+|||| |+++- Video Bank 0 selector
+++++-+---- Video Bank 0 register 6
+</pre>
+<h4><span class="mw-headline" id="Gun_Port_1_X_Coordinate_.28.24201C.29_.3C_read">Gun Port 1 X Coordinate ($201C) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+XXXX XXXX
+|||| ||||
+++++-++++- Gun port 1 X coordinate
+</pre>
+<h4><span class="mw-headline" id="Gun_Port_1_Y_Coordinate_.28.24201D.29_.3C_read">Gun Port 1 Y Coordinate ($201D) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+YYYY YYYY
+|||| ||||
+++++-++++- Gun port 1 Y coordinate
+</pre>
+<h4><span class="mw-headline" id="Gun_Port_2_X_Coordinate_.28.24201E.29_.3C_read">Gun Port 2 X Coordinate ($201E) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+XXXX XXXX
+|||| ||||
+++++-++++- Gun port 2 X coordinate
+</pre>
+<h4><span class="mw-headline" id="Gun_Port_2_Y_Coordinate_.28.24201F.29_.3C_read">Gun Port 2 Y Coordinate ($201F) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+YYYY YYYY
+|||| ||||
+++++-++++- Gun port 2 Y coordinate
+</pre>
+<h3><span class="mw-headline" id="Sound_Registers">Sound Registers</span></h3>
+<h3><span class="mw-headline" id="Miscellaneous_Registers">Miscellaneous Registers</span></h3>
+<h4><span class="mw-headline" id="DMA_Source_Address_High_Byte_.28.244014.29_.3E_write">DMA Source Address High Byte ($4014) &gt; write</span></h4>
+<p>Two bytes are required to set a DMA source address. This register sets the high
+byte of the address ($[XX]X0). Writing to this register also starts the DMA.
+The VT03 is capable of DMA for both video and sprite data; see register $4034 for
+more details.
+</p>
+<pre>7  bit  0
+---- ----
+AAAA AAAA
+|||| ||||
+++++-++++- DMA source address high byte
+</pre>
+<h4><span class="mw-headline" id="DMA_Settings_.28.244034.29_.3E_write">DMA Settings ($4034) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+SSSS LLLT
+|||| ||||
+|||| |||+- DMA type (0: Sprite data, using $2004; 1: Video data, using $2007)
+|||| +++-- DMA length (000: 256 bytes; 100: 16 bytes; 101: 32 bytes; 110: 64 bytes; 111: 128 bytes)
++++------- DMA source address low byte (d7-d4)
+</pre>
+<p>&quot;Under 64byte mode, VT03 cut the memory into 4 pieces. If you want to access complete
+64 bytes. The low byte of address must be 00H, 40H, 80H or C0H, because VT03 will
+stop accessing when address counted to 3FH, 7FH, BFH or FFH respectively. Under 16
+byte mode, VT03 cut the memory into 16 pieces. Under 128 byte mode, VT03 cut the
+memory into 2 pieces.&quot;
+</p>
+<h4><span class="mw-headline" id="Enable.2FDisable_XOP1_.26_DWS_IRQ_.28.244015.29_.3E_write">Enable/Disable XOP1 &amp; DWS IRQ ($4015) &gt; write</span></h4>
+<p>Similar to <a href="APU.xhtml#Status_.28.244015.29" title="APU">$4015 on the NES APU</a>.
+</p>
+<pre>7  bit  0
+---- ----
+xxxD NT21
+|||| ||||
+|||| |||+- Rhythm/Pulse A (0: stop; 1: start)
+|||| ||+-- Rhythm/Pulse B (0: stop; 1: start)
+|||| |+--- Envelope/Triangle (0: stop; 1: start)
+|||| +---- Noise (0: stop; 1: start)
+|||+------ DWS/PCM (0: stop; 1: start)
++++------- unused
+</pre>
+<h4><span class="mw-headline" id="Read_XOP1_Flag_.28.244015.29_.3C_read">Read XOP1 Flag ($4015) &lt; read</span></h4>
+<p>Similar to [<a class="external text" href="APU.xhtml#Status_.28.244015.29%7C$4015" rel="nofollow">on the NES APU</a>].
+</p>
+<pre>7  bit  0
+---- ----
+IFxD NT21
+|||| ||||
+|||| |||+- Rhythm/Pulse A (0: ended; 1: playing)
+|||| ||+-- Rhythm/Pulse B (0: ended; 1: playing)
+|||| |+--- Envelope/Triangle (0: ended; 1: playing)
+|||| +---- Noise (0: ended; 1: playing)
+|||+------ DWS/PCM (0: ended; 1: playing)
+||+------- unused
+|+-------- IRQ (0: inactive; 1: active)
++--------- DWS/PCM IRQ (0: inactive; 1: active)
+</pre>
+<h4><span class="mw-headline" id="Enable.2FDisable_XOP2_.28.244035.29_.3E_write">Enable/Disable XOP2 ($4035) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx NT21
+|||| ||||
+|||| |||+- Rhythm/Pulse A (0: stop; 1: start)
+|||| ||+-- Rhythm/Pulse B (0: stop; 1: start)
+|||| |+--- Envelope/Triangle (0: stop; 1: start)
+|||| +---- Noise (0: stop; 1: start)
+++++------ unused
+</pre>
+<h4><span class="mw-headline" id="Read_XOP2_Flag_.28.244035.29_.3C_read">Read XOP2 Flag ($4035) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx NT21
+|||| ||||
+|||| |||+- Rhythm/Pulse A (0: ended; 1: playing)
+|||| ||+-- Rhythm/Pulse B (0: ended; 1: playing)
+|||| |+--- Envelope/Triangle (0: ended; 1: playing)
+|||| +---- Noise (0: ended; 1: playing)
+++++------ unused
+</pre>
+<h4><span class="mw-headline" id="Set_Output_Pin_XQ.5B2:0.5D_.28.244016.29_.3E_write">Set Output Pin XQ[2:0] ($4016) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx x210
+|||| ||||
+|||| |||+- Set output pin XQ0
+|||| ||+-- Set output pin XQ1
+|||| |+--- Set output pin XQ2
+++++-+---- unused
+</pre>
+<h4><span class="mw-headline" id="Read_peripheral_data_.28.244016.29_.3C_read">Read peripheral data ($4016) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+xxxx xMFJ
+|||| ||||
+|||| |||+- First joystick data
+|||| ||+-- Floppy disk data
+|||| |+--- Microphone data
+++++-+---- unused
+</pre>
+<h4><span class="mw-headline" id="APU_Frame_Counter_.28.244017.29_.3E_write">APU Frame Counter ($4017) &gt; write</span></h4>
+<pre>7  bit  0
+---- ----
+MIxx xxxx
+|||| ||||
+||++-++++- unused
+|+-------- Clock IRQ (0: enabled, 60Hz; 1: disabled)
++--------- BLCK1/BLCK2 (0: BLCK1=250Hz, BLCK2=120Hz; 1: BLCK1=200Hz, BLCK2=100Hz)
+</pre>
+<h4><span class="mw-headline" id="Read_peripheral_data_.28.244017.29_.3C_read">Read peripheral data ($4017) &lt; read</span></h4>
+<pre>7  bit  0
+---- ----
+xxxF FFFJ
+|||| ||||
+|||| |||+- Second joystick data
+|||+-+++-- Floppy disk data
++++------- unused
+</pre>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a class="external text" href="http://www.vrt.com.tw/datasheet.htm" rel="nofollow">Datasheets</a></li>
+<li> <a class="external text" href="http://www.vrt.com.tw/download.htm" rel="nofollow">Downloads</a> (including EmuVT)</li></ul>
+<p><s>Template:Stub</s>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.205 seconds
+Real time usage: 0.209 seconds
+Preprocessor visited node count: 265/1000000
+Preprocessor generated node count: 288/1000000
+Post‐expand include size: 18/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1673-1!*!0!!en!*!* and timestamp 20160701183359 and revision id 12683
+ -->
+</div></body></html>

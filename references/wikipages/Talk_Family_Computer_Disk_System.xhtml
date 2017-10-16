@@ -1,0 +1,62 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:Family Computer Disk System</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:Family Computer Disk System</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Typo.3F"><span class="tocnumber">1</span> <span class="toctext">Typo?</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.24eb13"><span class="tocnumber">2</span> <span class="toctext">$eb13</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#VRAM_Buffer"><span class="tocnumber">3</span> <span class="toctext">VRAM Buffer</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Pinout"><span class="tocnumber">4</span> <span class="toctext">Pinout</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#QDI_format"><span class="tocnumber">5</span> <span class="toctext">QDI format</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Typo.3F">Typo?</span></h2>
+<p>I think there was a mistake in the document, it said that GetDiskInfo was at E23A, and that makes no sense since it overlaps with another function.  Another document said it was E32A (not E23A), so I changed it. --<s>Dwedit</s> 21:37, 11 October 2010 (UTC)
+</p><p>Yes, it was a typo. Thank you for correcting it Bregalad 11:14, 12 October 2010 (UTC)
+</p>
+<h2><span class="mw-headline" id=".24eb13">$eb13</span></h2>
+<p>Given a few minutes of analysis, the routine at $eb13 appears to read the <a class="mw-redirect" href="Family_BASIC_Keyboard.xhtml" title="Family basic keyboard">Family basic keyboard</a> state into $00-$08. --<a href="User_Quietust.xhtml" title="User:Quietust">Quietust</a> 13:31, 13 October 2010 (UTC)
+</p><p>Great finding Q ! What about completing the article about it ?  Now only $e8b3 and $e94f are still somewhat obscure. Bregalad 21:03, 13 October 2010 (UTC)
+</p>
+<h2><span class="mw-headline" id="VRAM_Buffer">VRAM Buffer</span></h2>
+<p>I'm trying to learn how the FDS works (hence my efforts to tidy up descriptions and such), and I'm a little confused. There's a buffer at $3xx which is what the various PrepareVRAMString routines and such copy to/from, but it doesn't support fills and doesn't support 32-byte increment? WriteVRAMBuffer is what you use to actually copy the $3xx buffer into VRAM, correct?
+</p><p>That seems a little less useful than just simply using VRAMStructWrite, pointing to $0302, and gaining access to the extra features like fill and 32-byte increment. --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 17:27, 26 February 2012 (PST)
+</p><p><br/>
+You are correct. The missing future are fill, 32-byte increment, but also sub-structures. The advantage, however, is that the second routine (WriteVRAMBuffer) is way faster than the first (VRAMStructWrite), as it doesn't have to check for those flags (which aren't available any longer), and uses direct addressing $302,X instead of indirect addressing to access the buffer. So the second routine is more suited to do VRAM updates during VBlank, while the first routine is more suited to do bulk updates during forced blanking, although technically both can do both.
+BTW thanks for fixing/correcting my work.Bregalad 12:33, 27 February 2012 (PST)
+</p>
+<dl><dd>VRAM updates during VBlank like writing a column of a horizontally scrolling background? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> 12:38, 27 February 2012 (PST)</dd></dl>
+<p>Well.......
+Then you either upload it a tile at a time or call the slow routine (both will be slow) or write your own (fast).Bregalad 13:18, 27 February 2012 (PST)
+</p><p>Thanks! I wanted to see if it would be better to use the one in the BIOS first, before I went straight to just using my own. Thank you for clearing that up for me. :D --<a href="User_Drag.xhtml" title="User:Drag">Drag</a> 18:01, 27 February 2012 (PST)
+</p>
+<h2><span class="mw-headline" id="Pinout">Pinout</span></h2>
+<p>Do you have information of Famicom Disk System pinout? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> 11:43, 28 September 2012 (MDT)
+</p>
+<h2><span class="mw-headline" id="QDI_format">QDI format</span></h2>
+<p>I want to mention this here in case someone finds it useful. A .QDI file is a raw disk image for a single side of a single disk (including gaps, checksums, full size, etc). In order for an emulator to support it, I recommend the following:
+</p>
+<ul><li> If loading a .NES ROM image with mapper 20, it should treat it as a BIOS ROM and start the FDS with no disk inserted. If a hard or soft reset is requested, and any .QDI is inserted, it should boot that disk side; if none is inserted, it should boot from no disk.</li>
+<li> If loading a .FDS disk image, it should enable the &quot;insert disk 1 side A&quot; and so on, and treat it as it already does. (Some emulators may make a private copy in the user's home directory for saving (maybe even converting to .QDI upon first loading!); others may overwrite the existing .FDS instead.)</li>
+<li> If loading a .QDI disk image, it should boot from that one, and have a &quot;insert .QDI&quot; option.</li>
+<li> If possible, the emulator should use the underlying filesystem's read-only flag (or otherwise determine if it is read-only) to determine how to set the write-protect flag in the FDS registers.</li></ul>
+<p>--<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 10:31, 4 November 2013 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.066 seconds
+Real time usage: 0.172 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:502-1!*!0!!en!*!* and timestamp 20160603204804 and revision id 12562
+ -->
+</div></body></html>

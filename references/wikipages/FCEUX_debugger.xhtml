@@ -1,0 +1,152 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>FCEUX debugger</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>FCEUX debugger</h1><div class="article">
+<p>Tips for using the <a class="external text" href="http://www.fceux.com" rel="nofollow">FCEUX</a> debugger.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Memory"><span class="tocnumber">1</span> <span class="toctext">Memory</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Inline_assembler"><span class="tocnumber">2</span> <span class="toctext">Inline assembler</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Breakpoints"><span class="tocnumber">3</span> <span class="toctext">Breakpoints</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Conditional_breakpoints"><span class="tocnumber">4</span> <span class="toctext">Conditional breakpoints</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Example_conditions"><span class="tocnumber">4.1</span> <span class="toctext">Example conditions</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#A_story"><span class="tocnumber">4.2</span> <span class="toctext">A story</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Memory">Memory</span></h2>
+<p>The memory pane displays the current contents of the NES' RAM and ROM. The following memory ranges may display useful data for inspection:
+</p>
+<pre>0000-00FF - zero page
+0100-01FF - stack
+0200-07FF - ram
+4018-FFFF - mapper controlled
+</pre>
+<p>Memory contents are displayed in this form:
+</p>
+<pre>0F:C0A8:24 1F     BIT $001F = #$80
+bb:mmmm:dd dd dd  iiiiiiiiiiiiiiii
+</pre>
+<pre>bb   - 16k iNES bank, designates which 16k bank from the iNES file is mapped here
+mmmm - physical address on the NES CPU data bus
+dd   - data bytes belonging to the instruction beginning at this address
+iiii - description of the instruction
+</pre>
+<p>An instruction description with &quot;= #$xx&quot; at the end indicates the value currently in memory at the address referenced by the instruction (before that instruction executes).
+</p><p>When debugging an NSF program, the bank designation will be a 4k NSF bank instead of the 16k iNES bank.
+</p><p>There is an empty column to the left of the memory view. Hovering the mouse here will display at the bottom of the window more detailed information about the location of this code in the iNES file. Left clicking on this column will open the inline assembler, which allows you to patch the ROM at runtime. Right clicking on this column will open the hex editor, which allows you to directly edit the ROM.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Inline_assembler">Inline assembler</span></h2>
+<p>Open the inline assembler by clicking in the empty column to the left of the memory view.
+</p><p>The starting memory address is displayed in the PC field at the top of the inline assembler window. Type a line of assembly to add in the empty field just below this, and hit enter. The assembled code of your patch will appear line by line below.
+</p><p>Click apply to apply your patch to the ROM in memory. Click undo to remove the last assembled line. After applying a patch, clicking Save will allow you to save this patch directly to the ROM file.
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Breakpoints">Breakpoints</span></h2>
+<p>To create a breakpoint, click the Add button in the BreakPoints frame in the upper right corner of the debugger.
+</p><p>Each breakpoint has an address range to watch (use only the left address field if you wish to watch a single byte address). Check one or more of the options to watch for Read, Write, or Execute at an address. Note that fetching of code from an address will not break as a Read; use the Execute box for this.
+</p><p>Double click on a breakpoint in the BreakPoints frame to quickly disable or enable it.
+</p><p>The Forbid option creates an anti-breakpoint that will prevent the specified address from triggering any of the other breakpoints. These can also be enabled and disabled as needed.
+</p><p>Breakpoints are listed in the following form:
+</p>
+<pre>aaaa: EmRWXF : nnnn
+aaaa-aaaa: EmRWXF : nnnn
+</pre>
+<pre>aaaa - address of breakpoint
+E    - enabled
+m    - memory area C = CPU, P = PPU, S = sprite
+R    - read
+W    - write
+X    - execute
+F    - forbid
+nnnn - name of breakpoint
+</pre>
+<p>When entering the address of a breakpoint, a small number of convenient strings may be used instead of the hexadecimal memory address:
+</p><p>NES special addresses:
+</p>
+<ul><li> NMI/VBL - non-maskable interrupt vector at FFFA</li>
+<li> RST     - reset vector at FFFC</li>
+<li> IRQ     - interrupt vector at FFFE</li></ul>
+<p>FDS special addresses:
+</p>
+<ul><li> NMI1 - non-maskable interrupt vector at DFF6</li>
+<li> NMI2 - non-maskable interrupt vector at DFF8</li>
+<li> NMI3 - non-maskable interrupt vector at DFFA</li>
+<li> RST  - reset vector at DFFC</li>
+<li> IRQ  - interrupt vector at DFFE</li></ul>
+<p>NSF special addresses:
+</p>
+<ul><li> LOAD - NSF LOAD address</li>
+<li> INIT - NSF INIT address</li>
+<li> PLAY - NSF PLAY address</li></ul>
+<h2><span class="mw-headline" id="Conditional_breakpoints">Conditional breakpoints</span></h2>
+<p>Breakpoints may have a conditional statement that cause them to execute only if that statement evaluates to true. They can be used as runtime assertions: put the opposite of your assertion in the condition, and it will trigger only when your assertion fails. The conditional breakpoint grammar has this form:
+</p>
+<pre>* P         -&gt; Connect
+* Connect   -&gt; Compare {('||' | '&amp;&amp;') Compare}
+* Compare   -&gt; Sum {('==' | '!=' | '&lt;=' | '&gt;=' | '&lt;' | '&gt;') Sum}
+* Sum       -&gt; Product {('+' | '-') Product}
+* Product   -&gt; Primitive {('*' | '/') Primitive}
+* Primitive -&gt; Number | Address | Register | Flag | PC Bank | '(' Connect ')'
+* Number    -&gt; '#' [1-9A-F]*
+* Address   -&gt; '$' [1-9A-F]* | '$' '[' Connect ']'
+* Register  -&gt; 'A' | 'X' | 'Y' | 'P'
+* Flag      -&gt; 'N' | 'C' | 'Z' | 'I' | 'B' | 'V'
+* PC Bank   -&gt; 'K'
+</pre>
+<p>The parser is very strict. All numbers are hexadecimal. Always prefix a number with # for an immediate value, or $ for a memory address. If a memory address needs to be calculated use $[] with the calculation inside the brackets. After entering a condition in the condition field, you should click Ok and then reopen the breakpoint with the Edit button. If there was a problem parsing your condition, it will have been erased.
+</p>
+<h3><span class="mw-headline" id="Example_conditions">Example conditions</span></h3>
+<p>break if register A is less than value at memory address $0005:
+</p>
+<pre>A &lt; $0005
+</pre>
+<p>break if the program counter is 8123:
+</p>
+<pre>P == #8123
+</pre>
+<p>break if the value at the indirect address on zeropage $10 is not equal to FF:
+</p>
+<pre>#FF != $[$10+($11*#100)]
+</pre>
+<p>break if flag N is clear or A is not equal to 00:
+</p>
+<pre>(N==#0 || A!=#0)
+</pre>
+<h3><span class="mw-headline" id="A_story">A story</span></h3>
+<p>Once upon a time, an NES programmer was trying to determine where in the code a surprising value was being written to a specific memory location.
+Specifically, when the value $EE was being written to location $0028.
+To figure out what can be put into the &quot;condition&quot; text input field in the breakpoint dialog box, he dug into the source code for FCEUX and found <a class="external text" href="http://fceux.sourcearchive.com/documentation/2.1.4aplus-prepack-0ubuntu1/conddebug_8cpp-source.html" rel="nofollow">the parser</a>, whose grammar is listed near the top of the source file.
+</p><p>After the programmer had been staring at the problem for too long, a fox came and helped him.
+</p>
+<ol><li> Address: <code>28</code></li>
+<li> Click &quot;Write&quot;</li>
+<li> Memory: <code>CPU</code> (the default)</li>
+<li> Condition: <code>A == #ee || X == #ee || Y == #ee</code> if you don't know what CPU register is used for the write or <code>X == #ee</code> if you know it's X. The # is important; leaving it out will screw it up.</li></ol>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ul><li><a class="external text" href="http://www.fceux.com/web/help/fceux.html?Debug.html" rel="nofollow">FCEUX online debug documentation</a></li>
+<li><a class="external text" href="http://www.fceux.com/web/help/fceux.html?DebuggerUsageIntermediate.html" rel="nofollow">FCEUX debugger usage guide</a></li>
+<li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=75485#p75485" rel="nofollow">Forum post about conditional breakpoints</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.033 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 27/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:840-1!*!*!!en!*!* and timestamp 20160208222206 and revision id 4499
+ -->
+</div></body></html>

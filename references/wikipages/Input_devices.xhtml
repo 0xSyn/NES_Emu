@@ -1,0 +1,58 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Input devices</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Input devices</h1><div class="article">
+<p>The NES has two <a href="Controller_port_pinout.xhtml" title="Controller port pinout">general-purpose controller ports</a> on the front of the console, as well as a (rarely used) <a href="NES_expansion_port_pinout.xhtml" title="NES expansion port pinout">48-pin expansion port</a> underneath.
+</p><p>The Famicom's standard controllers are hardwired to the front of the unit, and a special <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">15-pin expansion port</a> is commonly used for third-party controllers. The AV Famicom, however, features detachable controllers using the same ports as the NES.
+</p><p>The NES and Famicom have a set of I/O ports used for controllers and other peripherals, consisting of the following:
+</p>
+<ul><li> One output port, 3 bits wide, accessible by writing the bottom 3 bits of $4016.
+<ul><li> The values latched by $4016/write appear on the <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">OUT0-OUT2</a> output pins of the 2A03/07, where OUT0 is routed to the controller ports and OUT0-OUT2 to the expansion port on the NES.</li></ul></li>
+<li> Two input ports, each 5 bits wide, accessible by reading the bottom 5 bits of $4016 and $4017. Reading $4016 and $4017 activates the <a href="CPU_pin_out_and_signal_description.xhtml" title="CPU pin out and signal description">/OE1 and /OE2</a> signals, respectively, which are routed to the controller ports and the expansion port.
+<ul><li> On the NES, only D0, D3, and D4 are connected to both controller ports, while all of D0-D4 are connected to the expansion port. </li>
+<li> On the original Famicom, the two ports differ: $4016 D0 and D2 and $4017 D0 are permanently connected to both controllers, while $4016 D1 and all of $4017's D0-D4 are connected to the expansion port.</li>
+<li> On the AV Famicom, only D0 is connected to the controller ports. The expansion port is unchanged.</li></ul></li></ul>
+<h3><span class="mw-headline" id="Programmer.27s_reference">Programmer's reference</span></h3>
+<ul><li> <a href="Controller_port_registers.xhtml" title="Controller port registers">Registers</a></li></ul>
+<h3><span class="mw-headline" id="Hardware">Hardware</span></h3>
+<ul><li> <a href="Controller_port_pinout.xhtml" title="Controller port pinout">Controller port pinout</a></li>
+<li> Controllers
+<ul><li> <a href="Arkanoid_controller.xhtml" title="Arkanoid controller">Arkanoid controller</a></li>
+<li> <a href="Family_BASIC_Keyboard.xhtml" title="Family BASIC Keyboard">Family BASIC Keyboard</a></li>
+<li> <a href="Four_Score.xhtml" title="Four Score">Four Score/NES Satellite</a> four-player adapters</li>
+<li> <a href="Power_Pad.xhtml" title="Power Pad">Power Pad</a></li>
+<li> <a href="Standard_controller.xhtml" title="Standard controller">Standard controller</a></li>
+<li> <a href="Zapper.xhtml" title="Zapper">Zapper</a> lightgun</li>
+<li> <a href="Oeka_Kids_tablet.xhtml" title="Oeka Kids tablet">Oeka Kids tablet</a></li>
+<li> <s>Miracle Piano</s></li>
+<li> <s>RacerMate Bicycle</s></li>
+<li> <s>Power Glove</s></li>
+<li> <s>U-Force</s></li>
+<li> <a href="Mouse.xhtml" title="Mouse">Mouse</a> (SNES Mouse, Subor Mouse)</li>
+<li> <s>Mahjong</s></li>
+<li> <s>Doremikko Keyboard</s></li>
+<li> <s>Coconuts Pachinko</s></li></ul></li></ul>
+<h3><span class="mw-headline" id="Other_I.2FO_devices">Other I/O devices</span></h3>
+<ul><li> <a href="Famicom_3D_glasses.xhtml" title="Famicom 3D glasses">Famicom 3D glasses</a></li>
+<li> <a href="Family_BASIC_Data_Recorder.xhtml" title="Family BASIC Data Recorder">Family BASIC Data Recorder</a></li>
+<li> <s>R. O. B.</s></li>
+<li> <s>Battle Box</s></li>
+<li> <s>Turbo File</s></li>
+<li> <s>Barcode Battler</s></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.056 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:64-1!*!0!!*!*!* and timestamp 20160827112343 and revision id 12859
+ -->
+</div></body></html>

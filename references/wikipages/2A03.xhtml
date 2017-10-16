@@ -1,0 +1,155 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>2A03</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>2A03</h1><div class="article">
+<p>The <b>2A03</b>, short for RP2A03[G], is the common name of the NTSC <a href="CPU.xhtml" title="CPU">NES CPU</a> chip. It consists of a MOS Technology 6502 processor (lacking decimal mode) and audio generation logic.
+The 2A03 is used only in NTSC consoles; PAL systems are equipped with an RP2A07G chip, whose only major changes are a different clock divider (divide by 16 instead of 12) and adjusted PCM playback speeds.
+</p>
+<h2><span class="mw-headline" id="2A03_register_map">2A03 register map</span></h2>
+<p>In addition to the registers in the 6502 core, the 2A03 contains 22 memory-mapped registers for sound generation (see <a href="APU.xhtml" title="APU">NES APU</a>), joystick reading, and OAM DMA transferring. Unlike the addresses of <a href="PPU.xhtml" title="PPU">PPU</a> registers and <a class="mw-redirect" href="Mapper.xhtml" title="MMC">mapper</a> registers, CPU register addresses are completely decoded, which means that the entire space from the end of CPU registers to the top of address space ($4020 through $FFFF) is available to the Game Pak.
+</p><p>The range $4018-$401F does nothing on a retail NES. It was intended for 2A03 functionality that never made it to production. Various revisions of the 2A03 include <a href="CPU_Test_Mode.xhtml" title="CPU Test Mode">test registers</a> (which are disabled in normal operation) or <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=9&amp;t=14421" rel="nofollow">remnants of an incompletely implemented IRQ counter</a> that was disconnected from the rest of the circuit.
+</p>
+<table class="wikitable">
+<tr>
+<td>$4000 </td>
+<td> SQ1_VOL </td>
+<td> Duty and volume for <a href="APU_Pulse.xhtml" title="APU Pulse">square wave 1</a>
+</td></tr>
+<tr>
+<td>$4001 </td>
+<td> SQ1_SWEEP </td>
+<td> Sweep control register for square wave 1
+</td></tr>
+<tr>
+<td>$4002 </td>
+<td> SQ1_LO </td>
+<td> Low byte of period for square wave 1
+</td></tr>
+<tr>
+<td>$4003 </td>
+<td> SQ1_HI </td>
+<td> High byte of period and length counter value for square wave 1
+</td></tr>
+<tr>
+<td>$4004 </td>
+<td> SQ2_VOL </td>
+<td> Duty and volume for <a href="APU_Pulse.xhtml" title="APU Pulse">square wave 2</a>
+</td></tr>
+<tr>
+<td>$4005 </td>
+<td> SQ2_SWEEP </td>
+<td> Sweep control register for square wave 2
+</td></tr>
+<tr>
+<td>$4006 </td>
+<td> SQ2_LO </td>
+<td> Low byte of period for square wave 2
+</td></tr>
+<tr>
+<td>$4007 </td>
+<td> SQ2_HI </td>
+<td> High byte of period and length counter value for square wave 2
+</td></tr>
+<tr>
+<td>$4008 </td>
+<td> TRI_LINEAR </td>
+<td> <a href="APU_Triangle.xhtml" title="APU Triangle">Triangle wave</a> linear counter
+</td></tr>
+<tr>
+<td>$4009 </td>
+<td> </td>
+<td> Unused, but is eventually accessed in memory-clearing loops
+</td></tr>
+<tr>
+<td>$400A </td>
+<td> TRI_LO </td>
+<td> Low byte of period for triangle wave
+</td></tr>
+<tr>
+<td>$400B </td>
+<td> TRI_HI </td>
+<td> High byte of period and length counter value for triangle wave
+</td></tr>
+<tr>
+<td>$400C </td>
+<td> NOISE_VOL </td>
+<td> Volume for <a href="APU_Noise.xhtml" title="APU Noise">noise generator</a>
+</td></tr>
+<tr>
+<td>$400D </td>
+<td> </td>
+<td> Unused, but is eventually accessed in memory-clearing loops
+</td></tr>
+<tr>
+<td>$400E </td>
+<td> NOISE_LO </td>
+<td> Period and waveform shape for noise generator
+</td></tr>
+<tr>
+<td>$400F </td>
+<td> NOISE_HI </td>
+<td> Length counter value for noise generator
+</td></tr>
+<tr>
+<td>$4010 </td>
+<td> DMC_FREQ </td>
+<td> Play mode and frequency for <a href="APU_DMC.xhtml" title="APU DMC">DMC samples</a>
+</td></tr>
+<tr>
+<td>$4011 </td>
+<td> DMC_RAW </td>
+<td> 7-bit DAC
+</td></tr>
+<tr>
+<td>$4012 </td>
+<td> DMC_START </td>
+<td> Start of DMC waveform is at address $C000 + $40*$xx
+</td></tr>
+<tr>
+<td>$4013 </td>
+<td> DMC_LEN </td>
+<td> Length of DMC waveform is $10*$xx + 1 bytes (128*$xx + 8 samples)
+</td></tr>
+<tr>
+<td>$4014 </td>
+<td> <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDMA">OAMDMA</a> </td>
+<td> Writing $xx copies 256 bytes by reading from $xx00-$xxFF and writing to <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMDATA">OAMDATA</a> ($2004)
+</td></tr>
+<tr>
+<td>$4015 </td>
+<td> SND_CHN </td>
+<td> <a class="mw-redirect" href="APU.xhtml" title="APU Status">Sound channels enable and status</a>
+</td></tr>
+<tr>
+<td>$4016 </td>
+<td> JOY1 </td>
+<td> <a href="Input_devices.xhtml" title="Input devices">Joystick 1 data (R) and joystick strobe (W)</a>
+</td></tr>
+<tr>
+<td>$4017 </td>
+<td> JOY2 </td>
+<td> Joystick 2 data (R) and <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame counter</a> control (W)
+</td></tr>
+<tr>
+<td colspan="2"> $4018-$401F </td>
+<td> APU and I/O functionality that is normally disabled. See <a href="CPU_Test_Mode.xhtml" title="CPU Test Mode">CPU Test Mode</a>.
+</td></tr></table>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li><a href="CPU.xhtml" title="CPU">NES CPU</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.050 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:53-1!*!0!!*!*!* and timestamp 20160709004543 and revision id 12699
+ -->
+</div></body></html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Compound NSF</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Compound NSF</h1><div class="article">
+<p>This is a draft proposal of &quot;Compound NSF&quot; format. The file is a Hamster archive. All chunks are optional other than <tt>PAYLOAD.NSF</tt>. Unrecognized chunks should be ignored. An implementation does not need to read all chunks; it can skip any chunk that it doesn't need.
+</p><p><b>Hamster archive</b> is an <a class="external text" href="http://rpg.hamsterrepublic.com/ohrrpgce/RPG_format" rel="nofollow">archive format used by OHRRPGCE</a>.
+Each file in the archive, or &quot;lump&quot;, consists of an ASCII filename, a NUL byte ($00), a length in PDP-11 byte order (medium high byte, high byte, low byte, medium low byte), and the file contents. Filenames are case-insensitive, and contents are uncompressed.
+The <a class="external text" href="http://rpg.hamsterrepublic.com/ohrrpgce/Ohrtool1#HAMARC" rel="nofollow">HAMARC tool</a> manipulates Hamster archives.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#COMMENT.TXT"><span class="tocnumber">1</span> <span class="toctext">COMMENT.TXT</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#COMPOSER.TXT"><span class="tocnumber">2</span> <span class="toctext">COMPOSER.TXT</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#CONTROLS.BIN"><span class="tocnumber">3</span> <span class="toctext">CONTROLS.BIN</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#DURATION.TXT"><span class="tocnumber">4</span> <span class="toctext">DURATION.TXT</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#METADATA.RDF"><span class="tocnumber">5</span> <span class="toctext">METADATA.RDF</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#PAYLOAD.NSF"><span class="tocnumber">6</span> <span class="toctext">PAYLOAD.NSF</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#SONGTYPE.BIN"><span class="tocnumber">7</span> <span class="toctext">SONGTYPE.BIN</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#TITLE.TXT"><span class="tocnumber">8</span> <span class="toctext">TITLE.TXT</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="COMMENT.TXT">COMMENT.TXT</span></h2>
+<p>Contains arbitrary text, and is a comment made by the composer and/or programmer.
+</p>
+<h2><span class="mw-headline" id="COMPOSER.TXT">COMPOSER.TXT</span></h2>
+<p>List of composers of each song, one per each line. First line for song $00, second line for song $01, etc.
+</p>
+<h2><span class="mw-headline" id="CONTROLS.BIN">CONTROLS.BIN</span></h2>
+<p>Contains a number of small-endian 16-bit numbers for various optional features. List using word offsets (not byte offsets):
+</p>
+<ul><li> $00: Start RAM offset to load random data into.</li>
+<li> $01: End RAM offset to load random data into. If supported, all from the start and end offset but not including the end offset, must be RAM addresses, and are filled with random data before calling init.</li>
+<li> $02: If nonzero, write to this RAM address (just before calling play) to request to start a sound effect. The play routine should clear it if it wants to keep track when the same data is written again.</li>
+<li> $03: If nonzero, write to this RAM address to request to stop a sound effect.</li>
+<li> $04: If nonzero, read this RAM address just after play/init returns for trigger events (similar to FastTracker's Wxx command).</li>
+<li> $05: The suggested console variant to emulate for mixing purposes: 0=nothing specified, 1=RF Famicom, 2=AV Famicom, 3=NTSC NES, 4=PAL NES.</li></ul>
+<p>Notes:
+</p>
+<ul><li> If the start and end address of random data are both the same (such as both zero), then this function is not used.</li>
+<li> If random data isn't supported, the contents of RAM will be zeroed out, as per the standard NSF specification.</li>
+<li> The RAM addresses to request sound effects would probably not be used when playing back on an actual NES/Famicom, nor in most other cases. It may be used when the NSF is used in a game for PC or another system; for example if MegaZeux hypothetically supported this format, the MOD SAM command would poke its second parameter into the RAM address given at word offset $02 (and ignore the first parameter).</li>
+<li> Requesting to start a sound effect here does not necessarily actually mean to start a sound effect; the NSF code may do other things with it, such as add/remove/change accompaniment, change the playback rate, play the music an octave lower, transpose into a minor key, start playing backwards from the current point, etc.</li>
+<li> The trigger events also aren't used in an actual NES/Famicom (although it is still possible, such as to implement visuals) nor in most other cases.</li>
+<li> The console variant field is not used for hardware playback. Emulators may choose to use this information to decide mixing volume in order to sound more like the console that the game was tested on or that the music was written for. People who make up their own NSF though should be aware that this can be ignored like everything else outside of the PAYLOAD.NSF lump.</li></ul>
+<h2><span class="mw-headline" id="DURATION.TXT">DURATION.TXT</span></h2>
+<p>Default duration for each song when using with playlists, in frames.
+</p>
+<h2><span class="mw-headline" id="METADATA.RDF">METADATA.RDF</span></h2>
+<p>Contains data in RDF Turtle format which is irrelevant to playback software/hardware. Uses may include:
+</p>
+<ul><li> Media library software may use it to fill in additional data (and/or alternate data for title such as if the actual title is longer) when adding records into its media library database.</li>
+<li> Submission to servers on the internet that host such music (whether only NSF or other kinds too) may use this to full in additional data (and/or alternate data) when adding records to its database.</li></ul>
+<p>Notes:
+</p>
+<ul><li> Unless whoever makes this data is using it with specific software and knows how it uses this lump, you should be aware that any other program will possibly ignore some or all of the data in this lump.</li>
+<li> You might use <a class="external free" href="gopher://zzo38computer.org/1ns/meta:primary" rel="nofollow">gopher://zzo38computer.org/1ns/meta:primary</a> to specify which node (may be a URI, blank node, or possibly the default base URI) is the identifier of this music file.</li></ul>
+<h2><span class="mw-headline" id="PAYLOAD.NSF">PAYLOAD.NSF</span></h2>
+<p>This chunk has the same as ordinary <a href="NSF.xhtml" title="NSF">NSF</a> (version 1) except the header modified as follows:
+</p>
+<ul><li> Offset $003: If this is &quot;<tt>M</tt>&quot;, then it is a normal NSF. If this is &quot;<tt>m</tt>&quot;, then it is a interrupt-based NSF; see below.</li>
+<li> Offset $006: If this is zero, then there are 256 songs in total.</li>
+<li> Offset $007: If this is zero, then the default song is number $FF.</li>
+<li> Offset $07C: Volume controls. Bit3 is MMC5 volume and bit2-bit0 is N163 volume. Other bits should always be clear. (This may be subject to moving to another offset for compatibility with NSF2)</li></ul>
+<p>MMC5 volume:
+</p>
+<ul><li> 0 = use default (same as 2A03 square waves)</li>
+<li> 1 = use marked resistance value</li></ul>
+<p>N163 volume:
+</p>
+<ul><li> 0 = default (automatically)</li>
+<li> 1 = 3.6x (Final Lap)</li>
+<li> 2 = 4.0x (Megami Tensei II)</li>
+<li> 3 = 6.0x</li>
+<li> 4 = 6.5x (Rolling Thunder)</li>
+<li> 5 = 7.3x (King of Kings)</li>
+<li> 6 = 8.0x</li>
+<li> 7 = 8.5x (Erika to Satoru no Yumebouken)</li></ul>
+<p>Interrupt-based NSF:
+</p>
+<ul><li> The play address and playback rates are not used at all, and must be zero.</li>
+<li> IRQ can now be used, including DPCM IRQ, APU frame counter IRQ, MMC5 PCM IRQ, and the new one mentioned below.</li>
+<li> IRQ is initially disabled (you can use the CLI instruction to enable it).</li>
+<li> The IRQ vector is no longer reserved by the host, therefore it can be reprogrammed by bankswitching.</li>
+<li> Init should not return. (If it does return, it is an error.)</li>
+<li> Address $401C is low 16-bits of IRQ reload value, write-only.</li>
+<li> Address $401D is high 16-bits of IRQ reload value, write-only.</li>
+<li> Address $401F is IRQ status. Write 0 to turn off timer, write 1 to turn on timer, read/write anything to acknowledge.</li></ul>
+<p>Notes:
+</p>
+<ul><li> Adding ADPCM would be a mess (for several reasons, including that different cartridges use different addresses, and that it won't be able to load a copy of the ROM into original hardware (although it may still be usable with clone hardware)), although it is unlikely that ADPCM would be needed for music, so it is probably OK to not add it.</li>
+<li> An expansion chip that may be added in future though may be <a href="UNIF_UNL_DripGame.xhtml" title="UNIF/UNL-DripGame">UNL-DripGame</a>. (Would probably use $5000 read-only and $5800 read-only and $8000-$8007 write-only.)</li>
+<li> If the new features listed above aren't used, then you can simply extract this lump into a separate file and use any ordinary NSF playback program. It might also be possible to use the volume controls without confusing some existing software (although the playback volume might then be wrong).</li>
+<li> Interrupt-based NSF is based somewhat on NSF2, but now it does not interfere with APU test mode.</li>
+<li> It is recommended not to use interrupt-based NSF if you can avoid it. However, sometimes it is useful.</li></ul>
+<h2><span class="mw-headline" id="SONGTYPE.BIN">SONGTYPE.BIN</span></h2>
+<p>Starting bit7 of first byte for song $00, bit6 for song $01, etc, having 32 bytes in total, bit is set if it is a sound effect rather than a full song.
+</p>
+<h2><span class="mw-headline" id="TITLE.TXT">TITLE.TXT</span></h2>
+<p>List of song titles, one per each line. First line for song $00, second line for song $01, etc.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.059 seconds
+Real time usage: 0.063 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1489-1!*!0!!en!*!* and timestamp 20160208230544 and revision id 9921
+ -->
+</div></body></html>

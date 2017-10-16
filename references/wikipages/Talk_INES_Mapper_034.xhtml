@@ -1,0 +1,32 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 034</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 034</h1><div class="article">
+<h2><span class="mw-headline" id="Emulating_both">Emulating both</span></h2>
+<p>Isn't it possible to emulate this mapper as a single &quot;mapper&quot; (that is without distinguishing between BNROM and NINA) with the following setup :
+</p>
+<ul><li> 1 PRG bankswitching register at $7ffd and $8000-$ffff</li>
+<li> 2 CHR bankswitching registers at $7ffe and $7fff, initialized to 0 and 1 respectively on powerup.</li></ul>
+<p>That way, the BNROM game starts up with the right CHR banks switched in, bus conflicts aren't emulated, but aren't required for emulation anyways. The NINA game should work well as long as it doesn't write to $8000-$ffff (I fail to see why it would do this).
+</p><p>The only problem is that this doesn't support BNROM + SRAM extension, but no game was ever made using this anyways.
+<s>Bregalad</s> (<a href="User_talk_Bregalad.xhtml" title="User talk:Bregalad">talk</a>) 14:20, 17 March 2014 (MDT)
+</p>
+<dl><dd>I'm not familiar with the two games to know for sure they don't write to conflicting places, but as the mappers are described, yes I believe that is fine as a mapper that supports both. If you'd like to check them both with a debugger to verify that this is the case, it might help resolve this question. If it's safe, we should probably add to that second paragraph in the lead section to mention this. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 19:20, 17 March 2014 (MDT)</dd>
+<dd>The PowerPak emulates both at once, as do many emulators that don't implement NES 2.0. But the Holy Diver Batman multi-mapper test ROM is designed to test BxROM + <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">PRG RAM circuit</a>, and the overlaid NINA logic causes it to fail on PowerPak. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 22:32, 17 March 2014 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.032 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1335-1!*!0!*!*!*!* and timestamp 20160208224106 and revision id 8402
+ -->
+</div></body></html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:CPU addressing modes</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:CPU addressing modes</h1><div class="article">
+<h2><span class="mw-headline" id=".28d.29.2Cy_addressing_typo">(d),y addressing typo</span></h2>
+<p>For (d),y adressing, shouldn't the formula be:
+</p><p>PEEK(PEEK(arg) + (PEEK((arg + 1) % 256) * 256) + y) 
+</p><p>instead of 
+</p><p>PEEK(PEEK(arg) + PEEK((arg + 1) % 256) + y) 
+</p><p>?
+</p><p><small><span class="autosigned">— Preceding unsigned comment added by <s>135.23.206.197</s> (<s>talk</s> • <s>contribs</s>) </span></small>
+</p>
+<dl><dd>Yes. Amended. - <a href="User_Rainwarrior.xhtml" title="User:Rainwarrior">Rainwarrior</a> (<s>talk</s>) 15:39, 9 February 2016 (MST)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.055 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 3/1000000
+Preprocessor generated node count: 14/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1616-1!*!0!*!*!*!* and timestamp 20160603204747 and revision id 12557
+ -->
+</div></body></html>

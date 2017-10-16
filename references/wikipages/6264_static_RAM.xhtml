@@ -1,0 +1,114 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>6264 static RAM</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>6264 static RAM</h1><div class="article">
+<p>The <b>6264</b> is an 8kB static RAM, available in 70 to 200 nanosecond access time variants. It can function on both the NES PPU's 8080 style bus (separate /WE and /OE strobes) or on the CPU's 6500 style bus (by grounding /OE and connecting the R/W signal to /WE). The <b>62256</b> is similar but has 32kB of RAM instead.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#6116"><span class="tocnumber">1</span> <span class="toctext">6116</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#6264_Pinout_.2862256_in_parentheses.29"><span class="tocnumber">2</span> <span class="toctext">6264 Pinout (62256 in parentheses)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#621024_Pinout_.2862512_in_parentheses.29"><span class="tocnumber">3</span> <span class="toctext">621024 Pinout (62512 in parentheses)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Signal_descriptions"><span class="tocnumber">4</span> <span class="toctext">Signal descriptions</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="6116">6116</span></h2>
+<p>Certain Konami VRC boards take a 24-pin 2Kx8 SRAM:
+</p>
+<pre>
+      ,---\/---.
+ A7 --| 1    24|-- Vcc
+ A6 --| 2    23|-- A8
+ A5 --| 3    22|-- A9
+ A4 --| 4    21|o- /WE
+ A3 --| 5    20|o- /OE
+ A2 --| 6    19|-- A10
+ A1 --| 7    18|o- /CS1
+ A0 --| 8    17|-- D7
+ D0 --| 9    16|-- D6
+ D1 --|10    15|-- D5
+ D2 --|11    14|-- D4
+Vss --|12    13|-- D3
+      `--------
+</pre>
+<p>(Source: <a class="external text" href="http://matthieu.benoit.free.fr/cross/data_sheets/MB8416-20.pdf" rel="nofollow">MB8416</a>; <a class="external text" href="https://www.idt.com/document/dst/6116sala-data-sheet" rel="nofollow">6116</a>)
+</p>
+<h2><span class="mw-headline" id="6264_Pinout_.2862256_in_parentheses.29">6264 Pinout (62256 in parentheses)</span></h2>
+<p>The 6264 has been used for work RAM and save RAM in numerous NES games, commonly <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">decoded at $6000-$7FFF</a>.
+The 62256 is used in <i>RacerMate Challenge II</i>, <i>Romance of the Three Kingdoms II</i>, and a few Famicom games.
+</p>
+<ul><li> 6264: 8Kx8-bit SRAM</li>
+<li> 62256: 32Kx8-bit SRAM</li></ul>
+<pre>           .----\/----.
+(A14) nc - |01      28| - +5V
+     A12 - |02      27| - /WE
+      A7 - |03      26| - CS2 (A13) 
+      A6 - |04      25| - A8      
+      A5 - |05      24| - A9      
+      A4 - |06      23| - A11       
+      A3 - |07      22| - /OE       
+      A2 - |08      21| - A10       
+      A1 - |09      20| - /CS1    
+      A0 - |10      19| - D7      
+      D0 - |11      18| - D6      
+      D1 - |12      17| - D5      
+      D2 - |13      16| - D4      
+     GND - |14      15| - D3      
+           `----------'
+</pre>
+<h2><span class="mw-headline" id="621024_Pinout_.2862512_in_parentheses.29">621024 Pinout (62512 in parentheses)</span></h2>
+<p>In the NES, these chips might be used in &quot;EPROM emulators&quot;, or devices into which a game is loaded from an external source (such as a connected personal computer or a NAND flash) before it runs.
+</p>
+<ul><li> 621024: 128Kx8-bit SRAM</li>
+<li> 62512: 512Kx8-bit SRAM (breaks name pattern)</li></ul>
+<pre>           .----\/----.
+(A18) nc - |01      32| - +5V
+     A16 - |02      31| - A15
+     A14 - |03      30| - CS2 (A17)
+     A12 - |04      29| - /WE
+      A7 - |05      28| - A13
+      A6 - |06      27| - A8      
+      A5 - |07      26| - A9      
+      A4 - |08      25| - A11       
+      A3 - |09      24| - /OE       
+      A2 - |10      23| - A10       
+      A1 - |11      22| - /CS1    
+      A0 - |12      21| - D7      
+      D0 - |13      20| - D6      
+      D1 - |14      19| - D5      
+      D2 - |15      18| - D4      
+     GND - |16      17| - D3      
+           `----------'
+</pre>
+<h2><span class="mw-headline" id="Signal_descriptions">Signal descriptions</span></h2>
+<dl><dt>A0-A12(-A14) </dt>
+<dd> address</dd>
+<dt>D0-D7 </dt>
+<dd> data</dd>
+<dt>/CS1 and (when present) CS2 (chip selects 1 and 2) </dt>
+<dd> when /CS1 is low and CS2 is high, the chip is selected and will accept input or provide output to the data bus.</dd>
+<dt>/WE (write enable) </dt>
+<dd> When the chip is selected, if this pin is low, the eight-bit data D will be written to the address inside the RAM specified by A</dd>
+<dt>/OE (output enable) </dt>
+<dd> When the chip is selected, if this pin is low and /WE is high, the eight bit data in the RAM at address A will be output onto the pins D.</dd></dl>
+<p>The difference between /OE and the chip selects is that the 6264 responds much faster to /OE, but it draws less power when the chip selects are deasserted.
+</p><p>A circuit to generate /CS1 for decoding a 6264 RAM at $6000-$7FFF is described at <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">PRG RAM circuit</a>.
+It can also be used to decode a 62256 if you have latches available to control A13 and A14.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.041 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 24/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:80-1!*!0!!en!*!* and timestamp 20160515170100 and revision id 12377
+ -->
+<p class="categories">Categories: <a href="Category_Integrated_circuits.xhtml">Integrated circuits</a></p></div></body></html>

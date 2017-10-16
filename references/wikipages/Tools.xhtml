@@ -1,0 +1,101 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Tools</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Tools</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Assemblers.2C_compilers.2C_and_PRG-oriented_tools"><span class="tocnumber">1</span> <span class="toctext">Assemblers, compilers, and PRG-oriented tools</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Assemblers"><span class="tocnumber">1.1</span> <span class="toctext">Assemblers</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Disassemblers"><span class="tocnumber">1.2</span> <span class="toctext">Disassemblers</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#IDEs"><span class="tocnumber">1.3</span> <span class="toctext">IDEs</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Compilers"><span class="tocnumber">1.4</span> <span class="toctext">Compilers</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Converters"><span class="tocnumber">1.5</span> <span class="toctext">Converters</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Pre-processors_and_other_code_.28PRG.29_tools"><span class="tocnumber">1.6</span> <span class="toctext">Pre-processors and other code (PRG) tools</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Emulator-oriented_tools"><span class="tocnumber">2</span> <span class="toctext">Emulator-oriented tools</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Tile_.28CHR.29_editors"><span class="tocnumber">3</span> <span class="toctext">Tile (CHR) editors</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Map_.28nametable.29_editors"><span class="tocnumber">4</span> <span class="toctext">Map (nametable) editors</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Music_tools"><span class="tocnumber">5</span> <span class="toctext">Music tools</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Trackers.2Fsequencers"><span class="tocnumber">5.1</span> <span class="toctext">Trackers/sequencers</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#DMC_conversion_tools"><span class="tocnumber">5.2</span> <span class="toctext">DMC conversion tools</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Miscellaneous_other_tools"><span class="tocnumber">6</span> <span class="toctext">Miscellaneous other tools</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Assemblers.2C_compilers.2C_and_PRG-oriented_tools">Assemblers, compilers, and PRG-oriented tools</span></h2>
+<h3><span class="mw-headline" id="Assemblers">Assemblers</span></h3>
+<ul><li> <a class="external text" href="http://neshla.sourceforge.net/" rel="nofollow">NESHLA</a> by Brian Provinciano. A 6502 assembler specifically geared towards NES development.</li>
+<li> <a class="external text" href="http://www.cc65.org/" rel="nofollow">CC65</a> - A portable 6502/65c02/65c816 assembler, linker, and C compiler.</li>
+<li> <a class="external text" href="http://nesdev.com/x816112f.zip" rel="nofollow">x816 v1.12f</a> by minus. An assembler for 6502/65c02/65c816.  MS-DOS only.</li>
+<li> <a class="external text" href="http://www.magicengine.com/mkit/" rel="nofollow">Nintendo Assembler (MagicKit)</a> by Charles Doty, David Michel, and J.H. Van Ornum.</li>
+<li> <a class="external text" href="http://zzo38computer.org/nes_program/ppmck.zip" rel="nofollow">Unofficial MagicKit</a> by <a href="User_Zzo38.xhtml" title="User:Zzo38">zzo38</a> (based on MagicKit but with many improvements; includes PPMCK as well)</li>
+<li> <a class="external text" href="http://www.esw-heim.tu-clausthal.de/~marco/smorbrod/acme/" rel="nofollow">ACME</a> - Marco Baye's ACME 6502/65c02/65c816 cross-assembler. Runs on several platforms, including Amiga, DOS, and Linux. Supports macros, local labels, and many other features.</li>
+<li> <a class="external text" href="http://www.floodgap.com/retrotech/xa/" rel="nofollow">xa65</a> - Andre Fachat's open-source cross-assembler; written in C and supports the standard 6502 and 65c816 opcode lists.  Sports a C-like preprocessor and supports label-hiding in a block structure.  Produces plain binary files, as well as special o65 object files. Further tools include a linker, file and relocation utilities for o65 files.</li>
+<li> <a class="external text" href="http://bisqwit.iki.fi/source/nescom.html" rel="nofollow">nescom</a> - Joel Yliluoma's 6502 assembler; written in C++, based on xa65 and largely compatible with it, including with the o65 object file format.</li>
+<li> <a class="external text" href="http://nesdev.com/fasm10.zip" rel="nofollow">FASM v1.0</a> by <a class="external text" href="http://www.mobygames.com/developer/sheet/view/developerId,11349/" rel="nofollow">Toshi Morita</a>. FASM was written as a quick replacement for the 2500 AD assembler for Nintendo 8-bit development.  Licensed under the GPL.</li>
+<li> <a class="external text" href="http://hkn.eecs.berkeley.edu/~mcmartin/P65/" rel="nofollow">P65 Assembler</a> - A portable 6502 assembler written in Perl.</li>
+<li> <a class="external text" href="http://www.villehelin.com/wla.html" rel="nofollow">WLA DX</a> - A portable GB-Z80/Z80/6502/6510/65816 macro assembler. Linux and MS-DOS versions are also available.</li>
+<li> <a class="external text" href="http://home.comcast.net/~tasm/" rel="nofollow">Telemark Cross Assembler</a> - A shareware assembler for numerous 8-bit processors, including the 6502, Z80, and 8051.</li>
+<li> <a class="external text" href="http://neotoxin.moccamagic.com/XORcyst.htm" rel="nofollow">The XORcyst</a> - &quot;... a rather platform-independent set of tools and languages for 6502 software development&quot; written by Kent Hanson, aka Snowbro.</li>
+<li> <a class="external text" href="http://3dscapture.com/NES/asm6.zip" rel="nofollow">ASM6</a> - written by Loopy because most other assemblers &quot;were either too finicky, had weird syntax, took too much work to set up, or too bug-ridden to be useful&quot;.</li>
+<li> <a class="external text" href="http://www.obelisk.demon.co.uk/6502/downloads.html/" rel="nofollow">AS65</a> - written by Andrew John Jacobs. A macro assembler for 8 and 16-bit 65xx. Available for DOS/Win32 and Java. The Java port is strongly recommended</li>
+<li> <a class="external text" href="http://www.bipom.com/products/us/676.html" rel="nofollow">XTOOLS</a> - table-based assembler and toolkit. Includes an assembler, disassembler, and several tools. Shareware (US$49); registered version includes a table-based assembly source translator. Note: files are generated as Motorola formatted hex files; you will need a converter (see <a href="#Converters">Converters</a> below)</li></ul>
+<h3><span class="mw-headline" id="Disassemblers">Disassemblers</span></h3>
+<ul><li> <a class="external text" href="http://www.zophar.net/utilities/nesdev/6502d-disassembler.html" rel="nofollow">6502d</a> - by Cortez Ralph.  Win32 (GUI-based) rewrite of original 6502 disassembler (MS-DOS) by Bart Trzynadlowski.</li>
+<li> <a class="external text" href="http://bisqwit.iki.fi/source/nescom.html" rel="nofollow">clever-disasm</a> - by <a href="User_Bisqwit.xhtml" title="User:Bisqwit">Bisqwit/Joel Yliluoma</a>.  Part of the nescom assembler suite (see above).</li>
+<li> <a class="external text" href="http://www.cc65.org/doc/da65.html" rel="nofollow">da65</a> - part of the cc65 suite.  Primarily intended for individuals using tools in the cc65 suite (ex. ca65).</li>
+<li> <a class="external text" href="http://dasm-dillon.sourceforge.net/" rel="nofollow">dasm</a> - by Matthew Dillon of the DragonflyBSD project.  Intended for 6502, 6507, 6803, HD6303, 68HC11, 68705, and F8 architectures.</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?t=7466" rel="nofollow">disasm6</a> - PHP-based 6502 (NES-oriented) disassembler intended for use with asm6 assembler.  Pre-compiled Windows binaries are available.</li>
+<li> <a class="external text" href="http://www.zophar.net/utilities/nesdev/nes-disassembler.html" rel="nofollow">NES Disassember</a> - by Morgan Johansson.  MS-DOS.</li>
+<li> <a class="external text" href="http://www.zophar.net/utilities/nesdev/tracer.html" rel="nofollow">TRaCER</a> - by <a href="User_Koitsu.xhtml" title="User:Koitsu">Y0SHi/koitsu</a>.  6502/65816 disassembler intended for NES and SNES platforms.  MS-DOS.  (Does contain a confirmed bug related to one 65816-specific opcode)</li></ul>
+<h3><span class="mw-headline" id="IDEs">IDEs</span></h3>
+<ul><li> <a class="external text" href="http://www.wudsn.com/" rel="nofollow">WUSDN</a> A New NES IDE as of 2012 by the WUSDN team, Originally for Atari 8-Bit computers, Now also comes with NES capability, Requires Java Runtime Environment and Eclipse to run!</li></ul>
+<ul><li> <a class="external text" href="https://github.com/christopherpow/nesicide" rel="nofollow">NESICIDE</a> (WIP) source code only, Github link for the NESICIDE IDE by cpow (Chris Pow)</li></ul>
+<h3><span class="mw-headline" id="Compilers">Compilers</span></h3>
+<ul><li> <a class="external text" href="http://www.cc65.org/" rel="nofollow">CC65</a> - A portable 6502/65c02/65c816 assembler, linker, and C compiler.</li></ul>
+<h3><span class="mw-headline" id="Converters">Converters</span></h3>
+<ul><li> <a class="external text" href="http://www.batlabs.com/fileutil.html" rel="nofollow">Converters for INTEL/MOTOROLA HEX formats</a> to Binary (BIN) and back, for assemblers like XTOOLS.</li></ul>
+<h3><span class="mw-headline" id="Pre-processors_and_other_code_.28PRG.29_tools">Pre-processors and other code (PRG) tools</span></h3>
+<h2><span class="mw-headline" id="Emulator-oriented_tools">Emulator-oriented tools</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/NEStress.zip" rel="nofollow">NEStress</a> ROM for testing emulators (includes source code)</li></ul>
+<h2><span class="mw-headline" id="Tile_.28CHR.29_editors">Tile (CHR) editors</span></h2>
+<ul><li> <a class="external text" href="http://pineight.com/pc/#ted" rel="nofollow">8ted</a> by Damian Yerrick</li>
+<li> <a class="external text" href="http://zzo38computer.org/nes_program/famitile.zip" rel="nofollow">Famitile</a> - Includes command-line and graphical mode.</li>
+<li> <a href="YY_CHR.xhtml" title="YY-CHR">YY-CHR</a></li></ul>
+<h2><span class="mw-headline" id="Map_.28nametable.29_editors">Map (nametable) editors</span></h2>
+<ul><li> <a class="external text" href="http://pineight.com/pc/#ted" rel="nofollow">8name</a> by Damian Yerrick</li>
+<li> <a class="external text" href="http://zzo38computer.org/nes_program/famitile.zip" rel="nofollow">Famitile</a> - Includes command-line and graphical mode; support standard nametables and <a href="MMC5.xhtml" title="MMC5">MMC5</a> extension nametables.</li></ul>
+<h2><span class="mw-headline" id="Music_tools">Music tools</span></h2>
+<h3><span class="mw-headline" id="Trackers.2Fsequencers">Trackers/sequencers</span></h3>
+<ul><li> <a class="external text" href="http://nesdev.com/nt2/" rel="nofollow">Nerd Tracker II</a> tracker-style music editor</li>
+<li> <a class="external text" href="http://www.geocities.co.jp/Playtown-Denei/9628/" rel="nofollow">MCK driver</a> and MML translator for music creation (includes source code)</li>
+<li> <a class="external text" href="http://zzo38computer.org/nes_program/ppmck.zip" rel="nofollow">PPMCK unofficial version</a> by <a href="User_Zzo38.xhtml" title="User:Zzo38">zzo38</a> (includes MagicKit as well)</li>
+<li> <a class="external text" href="http://famitracker.com/" rel="nofollow">FamiTracker</a> tracker-style music editor</li>
+<li> <a class="external text" href="http://kkfos.aspekt.fi/projects/nes/tools/musetracker" rel="nofollow">Musetracker</a> tracker-style music editor (formerly known as PornoTracker).</li></ul>
+<h3><span class="mw-headline" id="DMC_conversion_tools">DMC conversion tools</span></h3>
+<ul><li> <a class="external text" href="http://famitracker.com/" rel="nofollow">FamiTracker</a> can import .wav files and convert to DMC samples, which can then be exported as .dmc files.</li>
+<li> <a class="external text" href="http://user.tninet.se/~zxy965r/ft/nsf.zip" rel="nofollow">NSF Live!</a> NSF player that can export DMC samples from NSF songs as .dmc files.</li></ul>
+<h2><span class="mw-headline" id="Miscellaneous_other_tools">Miscellaneous other tools</span></h2>
+<ul><li> <a class="external text" href="http://nesdev.com/#PC" rel="nofollow">More development tools</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.066 seconds
+Real time usage: 0.068 seconds
+Preprocessor visited node count: 54/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:248-1!*!0!!en!*!* and timestamp 20160730152124 and revision id 12766
+ -->
+</div></body></html>

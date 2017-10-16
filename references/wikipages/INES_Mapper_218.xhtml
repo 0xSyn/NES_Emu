@@ -1,0 +1,63 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 218</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 218</h1><div class="article">
+<p><b>iNES Mapper 218</b> is used by the homebrew Magic Floor game. The cartridge contains only one single PRG-ROM chip (and a CIC, if required).
+</p><p>There's no CHR-ROM or CHR-RAM. Instead, the console's internal 2Kbyte Name Table RAM is mapped as CHR-RAM. The 2K RAM is permanently selected (/VCS wired to GND), and can be used in four modes by wiring VA10 to one of the PPU.A10..A13 address lines:
+</p>
+<table class="tabular">
+<tr>
+<th> VA10 connection </th>
+<th> Effect on nametables </th>
+<th> <a href="INES.xhtml" title="INES">iNES</a> Flags 6 </th>
+<th> UNIF &quot;MIRR&quot; bit 7-0
+</th></tr>
+<tr>
+<td> PPU.A10 </td>
+<td> Two-Screen, Vertical Mirroring   </td>
+<td> $A1 (0001) </td>
+<td> $01
+</td></tr>
+<tr>
+<td> PPU.A11 </td>
+<td> Two-Screen, Horizontal Mirroring </td>
+<td> $A0 (0000) </td>
+<td> $00
+</td></tr>
+<tr>
+<td> PPU.A12 </td>
+<td> One-Screen, BLK0                 </td>
+<td> $A8 (1000) </td>
+<td> $02
+</td></tr>
+<tr>
+<td> PPU.A13 </td>
+<td> One-Screen, BLK1                 </td>
+<td> $A9 (1001) </td>
+<td> $03
+</td></tr></table>
+<p>Note: Bit 3 in Byte 6 of iNES header would be usually Four-Screen flag, but, for this mapper it is used as One-Screen flag.
+</p><p>The VA10 connection does, of course, also affect the CHR-RAM mapping at 0000h-1FFFh. BLK1 would be the most common case (1K NT plus 1K CHR-RAM). BLK0 would allow to swap CHR RAM via Port 2000h.Bit3-4. Two-Screen would allow to use two NTs (and to squeeze CHR data into unused NT areas). Two-Screen would also allow to use 2K OBJ tiles (when leaving BG unused).
+</p><p>Note: 1K CHR-RAM allows to use as much as 64 tiles of 2bpp (or, with suitable color attributes, 128 monochrome tiles of 1bpp).
+</p><p>Also note that the PPU.A13 variant can be adequately emulated as <a href="AxROM.xhtml" title="AxROM">AxROM</a> provided the program never writes to $8000-$FFFF and is marked as having 1024 bytes of CHR RAM in <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a>.
+</p>
+<ul><li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=9342" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=9342</a> - nesdev forum, Post subject: Single Chip Cartridge</li>
+<li> <a class="external free" href="http://forums.nesdev.com/viewtopic.php?t=5156" rel="nofollow">http://forums.nesdev.com/viewtopic.php?t=5156</a> - nesdev forum, Post subject: Using the NES's PPU RAM as CHR RAM?</li>
+<li> <a class="external free" href="http://problemkaputt.de/magicflr.htm" rel="nofollow">http://problemkaputt.de/magicflr.htm</a> - Magic Floor game</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.016 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:856-1!*!0!*!*!*!* and timestamp 20160208225429 and revision id 9122
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a></p></div></body></html>

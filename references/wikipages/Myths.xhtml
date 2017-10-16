@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Myths</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Myths</h1><div class="article">
+<p>This page documents some <b>myths</b> about the NES hardware that originate in obsolete documents and emulators.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#NTSC_picture_height"><span class="tocnumber">1</span> <span class="toctext">NTSC picture height</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Scrolling_registers"><span class="tocnumber">2</span> <span class="toctext">Scrolling registers</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Mappers"><span class="tocnumber">3</span> <span class="toctext">Mappers</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Largest_game"><span class="tocnumber">4</span> <span class="toctext">Largest game</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Old_programs"><span class="tocnumber">5</span> <span class="toctext">Old programs</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Old_tutorials"><span class="tocnumber">6</span> <span class="toctext">Old tutorials</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#PPU_details"><span class="tocnumber">7</span> <span class="toctext">PPU details</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Color_emphasis"><span class="tocnumber">8</span> <span class="toctext">Color emphasis</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="NTSC_picture_height">NTSC picture height</span></h2>
+<p><b>Myth:</b> The NTSC NES picture is only 224 pixels tall. (Seen in <a class="external text" href="http://nesdev.com/nesfreq.txt" rel="nofollow">nesfreq.txt</a>, <a class="external text" href="http://ngemu.com/threads/true-resolution-of-psx-320x224.59392/#post-826552" rel="nofollow">a post by chaotic_thought on ngemu.com</a>, and elsewhere)
+</p><p><b>Fact:</b> The NTSC NES picture is 242 pixels tall: 240 lines of picture and 2 lines of vertical border.
+The PPU fetches and generates a signal for all 240 lines, even if TVs <a href="Overscan.xhtml" title="Overscan">cut off the edges</a>.
+</p><p>Ideally, NES games place nametable <a href="Mirroring.xhtml" title="Mirroring">mirroring</a> glitches in the overscan, and some emulators simulate overscan in order to hide these glitches. For example, <a class="extiw" href="http://en.wikipedia.org/wiki/PocketNES" title="wikipedia:PocketNES">PocketNES</a> for Game Boy Advance hides the top 16 pixels, the bottom 11, and 8 on the left and right sides. The Mega Man Anniversary Collection (GameCube/XBOX/PS2) likewise hides the top/bottom 8 lines, plus an extra left/right clipping to hide the attribute color glitch on scrolling. Also, the Wii Virtual Console (NES) does not display the top and bottom 8 lines.
+</p>
+<h2><span class="mw-headline" id="Scrolling_registers">Scrolling registers</span></h2>
+<p><b>Myth:</b> You always need to use the <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a> ($2006) register to scroll. (Seen in <a href="Nestech_txt.xhtml#Programming_the_NES" title="Nestech.txt">Nestech.txt section 10: Programming the NES</a>)
+</p><p><b>Fact:</b> The proper way to <a href="PPU_scrolling.xhtml" title="PPU scrolling">set the scroll position</a> is to write the upper bits of the X and Y coordinates to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a> ($2000), and then bits 0-7 of the X and Y coordinates to <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUSCROLL">PPUSCROLL</a> ($2005). The NES will update the VRAM address register for you near the end of the pre-render scanline (261 on NTSC, 311 on PAL).
+</p><p>You need to use PPUADDR to scroll only if you're trying to change the vertical part of the scroll position during rendering time. This could happen if you turn rendering on late to free up more VRAM update time or if you are splitting the screen.
+Nintendo's <i>Super Mario Bros.</i> zeroes PPUADDR to set the scroll, but given that this was one of the first games with a scroll split, it might just be another example of imperfect hardware understanding.
+Launch titles tend to be full of these in part because the hardware itself may have been a moving target during the game's development.
+Another example is the horrible code in <i>Tetris</i> for Game Boy.
+</p>
+<h2><span class="mw-headline" id="Mappers">Mappers</span></h2>
+<p><b>Myth:</b> The VRC6 is a very complex mapper even superior to the MMC5.
+</p><p><b>Fact:</b> The <a href="VRC6.xhtml" title="VRC6">VRC6</a> is a decent mapper able to do standard PRG and CHR bankswitching, a CPU cycle counter, and 3 extra sound channels. The <a href="MMC5.xhtml" title="MMC5">MMC5</a> has extended video possibilities, a true scanline counter, and countless features that the VRC6 lacks, but only has 2 extra sound channels. Rumor has been made that the VRC6 was superior to the MMC5  because the MMC5 <i>Castlevania III: Dracula's Curse</i> was censored, and (like other 72-pin games) didn't use extra sound. But in fact, <i>Castlevania III</i> doesn't even come close to using all MMC5 capabilities, and it likely used MMC5 because it supported the VRC6's PRG ROM and CHR ROM bankswitching modes and was cheaper than Konami getting the VRC6 approved through Nintendo of America and Nintendo of Europe.
+</p>
+<h2><span class="mw-headline" id="Largest_game">Largest game</span></h2>
+<p><b>Myth:</b> Dragon Quest/Warrior IV (DQ4) is the largest NES game, having 1 MiB (1048576 bytes) of ROM. (Source: <a class="external text" href="http://nesdev.com/NESTechFAQ.htm#biggestgame" rel="nofollow">NESTechFAQ.htm</a> via <a class="external text" href="https://www.reddit.com/r/todayilearned/comments/2qdz5q/til_the_biggest_offical_nes_game_ever_made_was/" rel="nofollow">Reddit</a>)
+</p><p><b>Fact:</b> Both the japanese <i>Dragon Quest IV</i> and the american <i>Dragon Warrior IV</i> releases use <a class="mw-redirect" href="SxROM.xhtml" title="SUROM">SUROM</a>, as pictured at <a class="external text" href="http://bootgod.dyndns.org:7777/profile.php?id=1276" rel="nofollow">NesCartDB's entry for <i>Dragon Warrior IV</i></a>. They use 512 KiB PRG ROM and 8 KiB CHR RAM, which is not larger than quite a few other licensed games. This rumor was due to a 1MB overdump of DQ4 floating around.
+</p><p>Games larger than DQ4 include the following:
+</p>
+<ul><li> The largest licensed Famicom game is <i>Metal Slader Glory</i> (512 KiB PRG + 512 KiB CHR + <a href="MMC5.xhtml" title="MMC5">MMC5</a>).</li>
+<li> The largest licensed NES game is <i>Kirby's Adventure</i> (512 KiB PRG + 256 KiB CHR + <a href="MMC3.xhtml" title="MMC3">MMC3</a>).</li>
+<li> The largest unlicensed non-pirate NES game is <i>Action 52</i> (1536 KiB PRG + 512 KiB CHR + <a href="INES_Mapper_228.xhtml" title="INES Mapper 228">custom mapper</a>).</li>
+<li> One large &quot;Hong Kong Original&quot; port is <i><a class="extiw" href="http://en.wikipedia.org/wiki/Final_Fantasy_VII_(Famicom)" title="wikipedia:Final Fantasy VII (Famicom)">Final Fantasy VII</a></i> (2048 KiB PRG + CHR RAM).</li>
+<li> Some pirate multicarts are 4 MiB or larger. These cannot be represented in the the original <a href="INES.xhtml" title="INES">iNES</a> format, which has a practical limit of 2048 KiB PRG ROM and 1024 KiB CHR ROM. Use <a href="NES_2_0.xhtml" title="NES 2.0">NES 2.0</a> instead.</li></ul>
+<h2><span class="mw-headline" id="Old_programs">Old programs</span></h2>
+<p><b>Myth:</b> If a binary file has a .nes file extension, it will work as intended on an NES, and I should tweak my emulator to match how it is supposed to work.
+</p><p><b>Fact:</b> No. Especially older NES programs tend to have been tested only on bad emulators. Your college-project emulator should match the behavior of an NES or at least that of an accurate emulator. Dirty iNES headers might break it.
+</p><p>A lot of emulators, especially prior to about 2005, were based on incomplete knowledge of how the NES works. Some old demos expect all internal memory ($0000-$07FF) to be $00. Since then, public knowledge of the <a href="Errata.xhtml" title="Errata">quirks of the NES hardware behavior</a> has grown, and emulators such as Nintendulator and Nestopia more faithfully reproduce the misbehaviors in sloppy or <a class="extiw" href="http://en.wikipedia.org/wiki/Cargo_cult_programming" title="wikipedia:Cargo cult programming">cargo-cult-programmed</a> code.
+See <a class="mw-redirect" href="Program_compatibility.xhtml" title="Program Compatibility">Program Compatibility</a> for a list of homebrew known to have problems on an NES.
+</p>
+<h2><span class="mw-headline" id="Old_tutorials">Old tutorials</span></h2>
+<p><b>Myth:</b> <a class="external text" href="http://patater.com/gbaguy/nesasm.htm" rel="nofollow">GBAGuy's NES tutorial</a> is worth following.
+</p><p><b>Fact:</b> Old tutorials like these are full of cargo-cult programming because the authors apparently didn't fully understand the hardware. For example, this tutorial in particular treats the <a href="PPU_registers.xhtml" title="PPU registers">OAM address</a> register as 16-bit (just like <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUADDR">PPUADDR</a>) and attempts to initialize variables in <a class="extiw" href="http://en.wikipedia.org/wiki/.bss" title="wikipedia:.bss">system RAM</a> using .db statements - a lot of the programs don't even work on a NES. <a class="external text" href="http://nesdev.com/NES101.zip" rel="nofollow">NES 101</a> and <a class="external text" href="http://nintendoage.com/forum/messageview.cfm?catid=22&amp;threadid=7155" rel="nofollow">Nerdy Nights</a> are considered better. Even the webmaster of Patater.com now recommends Nerdy Nights.
+</p>
+<h2><span class="mw-headline" id="PPU_details">PPU details</span></h2>
+<p><b>Myth:</b> <a class="mw-redirect" href="PPU_registers.xhtml" title="OAMADDR">OAMADDR</a> ($2003) must be cleared on VBlank ending.
+</p><p><b>Fact:</b> The PPU itself sets the sprite address to zero at the end of VBlank, but due to a design flaw it can result in minor sprite RAM corruption if it was nonzero beforehand - in particular, it can cause values from one 8-byte &quot;page&quot; of sprite RAM to leak into another due to its lack of proper memory refreshing. Some Chinese games actually rely on this behavior and will lock up otherwise.
+</p>
+<h2><span class="mw-headline" id="Color_emphasis">Color emphasis</span></h2>
+<p><b>Myth:</b> Enabling more than one color emphasis bit at once will damage the PPU, or at least cause the TV to lose sync. (Source: <a class="external text" href="http://fms.komkon.org/EMUL8/NES.html" rel="nofollow">Nintendo Entertainment System Architecture</a> by Marat)
+</p><p><b>Fact:</b> Enabling multiple color emphasis bits is perfectly safe - in fact, <a href="Colour_emphasis_games.xhtml" title="Colour-emphasis games">some licensed games</a> including <i>Felix the Cat</i> and <i>Just Breed</i> enable all of them simultaneously to dim the screen. On the other hand, enabling all emphasis bits results in an unreadable white screen on an RGB PPU, such as that in the Famicom Titler or the Famicom TV. Worse, setting the PPU into <i>slave</i> mode (by setting the <i>master/slave</i> bit in <a class="mw-redirect" href="PPU_registers.xhtml" title="PPUCTRL">PPUCTRL</a>) is definitely capable of causing damage, as it results in extremely high current draw from the EXT pins (due to them trying to output +5V despite being wired to GND).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.063 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 33/1000000
+Preprocessor generated node count: 40/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:402-1!*!0!!en!*!* and timestamp 20160208225628 and revision id 11357
+ -->
+</div></body></html>

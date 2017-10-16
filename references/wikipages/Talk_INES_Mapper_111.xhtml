@@ -1,0 +1,29 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Talk:INES Mapper 111</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Talk:INES Mapper 111</h1><div class="article">
+<h2><span class="mw-headline" id="Like_MMC1.2C_except_direct_access_to_registers.3F">Like MMC1, except direct access to registers?</span></h2>
+<p>NesterJ's source code has a definition for Mapper 111 that implies that it is similar to the MMC1 except that the registers are directly accessible instead of needing to be fed 1 bit at a time. It is intended for a Chinese translation of Ninja Gaiden.
+</p><p>8000-9FFF: ...C PPMM (Control register)
+</p><p>A000-BFFF: ...C CCCC (CHR bank 0)
+</p><p>C000-DFFF: ...C CCCC (CHR bank 1)
+</p><p>E000-FFFF: ...R PPPP (PRG bank)
+</p><p>The code is poorly organized, so I don't know if the reset bit (originally set by writing 0x80 to any register) is implemented at all.
+</p><p><s>184.97.108.106</s> 00:38, 29 March 2015 (MDT)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.022 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 8/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1491-1!*!*!*!*!*!* and timestamp 20160208224133 and revision id 9922
+ -->
+</div></body></html>

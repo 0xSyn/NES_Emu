@@ -1,0 +1,168 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Programming Basics</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Programming Basics</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Opcodes_and_their_operands"><span class="tocnumber">1</span> <span class="toctext">Opcodes and their operands</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#The_stack"><span class="tocnumber">3</span> <span class="toctext">The stack</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Math_operations"><span class="tocnumber">4</span> <span class="toctext">Math operations</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Simple_operations"><span class="tocnumber">4.1</span> <span class="toctext">Simple operations</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Addition_and_subtraction"><span class="tocnumber">4.1.1</span> <span class="toctext">Addition and subtraction</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Bitwise_.28factor_of_2.29_multiplication_and_division"><span class="tocnumber">4.1.2</span> <span class="toctext">Bitwise (factor of 2) multiplication and division</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Complex_operations"><span class="tocnumber">4.2</span> <span class="toctext">Complex operations</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Multiplication_of_arbitrary_numbers"><span class="tocnumber">4.2.1</span> <span class="toctext">Multiplication of arbitrary numbers</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Division_of_arbitrary_numbers"><span class="tocnumber">4.2.2</span> <span class="toctext">Division of arbitrary numbers</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Floating-point_numbers"><span class="tocnumber">4.2.3</span> <span class="toctext">Floating-point numbers</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Gaming:_keeping_score"><span class="tocnumber">4.2.4</span> <span class="toctext">Gaming: keeping score</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Making_simple_sounds"><span class="tocnumber">5</span> <span class="toctext">Making simple sounds</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Controller_input"><span class="tocnumber">6</span> <span class="toctext">Controller input</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Graphics_.28should_be_covered_elsewhere.21.29"><span class="tocnumber">7</span> <span class="toctext">Graphics (should be covered elsewhere!)</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#.22Hello.2C_world.21.22_program"><span class="tocnumber">8</span> <span class="toctext">&quot;Hello, world!&quot; program</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Opcodes_and_their_operands">Opcodes and their operands</span></h2>
+<p>To be written.
+</p>
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<p>To be written.
+</p>
+<h2><span class="mw-headline" id="The_stack">The stack</span></h2>
+<dl><dd><i>Main article: <a href="Stack.xhtml" title="Stack">Stack</a></i></dd></dl>
+<h2><span class="mw-headline" id="Math_operations">Math operations</span></h2>
+<h3><span class="mw-headline" id="Simple_operations">Simple operations</span></h3>
+<h4><span class="mw-headline" id="Addition_and_subtraction">Addition and subtraction</span></h4>
+<p><i>To be written.</i>
+</p>
+<h4><span class="mw-headline" id="Bitwise_.28factor_of_2.29_multiplication_and_division">Bitwise (factor of 2) multiplication and division</span></h4>
+<p>To multiply the value in A by two, use the instruction ASL A.
+</p><p>To divide the value in A by two, use the instruction LSR A.
+</p><p><i>To be written.</i>
+</p>
+<h3><span class="mw-headline" id="Complex_operations">Complex operations</span></h3>
+<h4><span class="mw-headline" id="Multiplication_of_arbitrary_numbers">Multiplication of arbitrary numbers</span></h4>
+<p>The following routine multiplies two unsigned 16-bit numbers, and returns an unsigned 32-bit value.
+</p>
+<pre>
+mulplr	= $c0		; ZP location = $c0
+partial	= mulplr+2	; ZP location = $c2
+mulcnd	= partial+2	; ZP location = $c4
+
+_usmul:
+  pha
+  tya
+  pha
+
+_usmul_1:
+  ldy #$10	; Setup for 16-bit multiply
+_usmul_2:
+  lda mulplr	; Is low order bit set?
+  lsr a
+  bcc _usmul_4
+
+  clc		; Low order bit set -- add mulcnd to partial product
+  lda partial
+  adc mulcnd
+  sta partial
+  lda partial+1
+  adc mulcnd+1
+  sta partial+1
+;
+; Shift result into mulplr and get the next bit of the multiplier into the low order bit of mulplr.
+;
+_usmul_4:
+  ror partial+1
+  ror partial
+  ror mulplr+1
+  ror mulplr
+  dey
+  bne _usmul_2
+  pla
+  tay
+  pla
+  rts
+</pre>
+<p>Here's an example of the above <tt>_usmul</tt> routine in action, which multiplies 340*268:
+</p>
+<pre>
+  lda #&lt;340	; Low byte of 16-bit decimal value 340  (value: $54)
+  sta mulplr
+  lda #&gt;340	; High byte of 16-bit decimal value 340 (value: $01) (makes $0154)
+  sta mulplr+1
+  lda #&lt;268	; Low byte of 16-bit decimal value 268  (value: $0C)
+  sta mulcnd
+  lda #&gt;268	; High byte of 16-bit decimal value 268 (value: $01) (makes $010C)
+  sta mulcnd+1
+  lda #0		; Must be set to zero (0)!
+  sta partial
+  sta partial+1
+  jsr _usmul	; Perform multiplication
+;
+; RESULTS
+;    mulplr    = Low byte of lower word  (bits 0 through 7)
+;    mulplr+1  = High byte of lower word (bits 8 through 15)
+;    partial   = Low byte of upper word  (bits 16 through 23)
+;    partial+1 = High byte of upper word (bits 24 through 31)
+;
+</pre>
+<h4><span class="mw-headline" id="Division_of_arbitrary_numbers">Division of arbitrary numbers</span></h4>
+<p>To be written.
+</p>
+<h4><span class="mw-headline" id="Floating-point_numbers">Floating-point numbers</span></h4>
+<p>To be written.
+</p>
+<h4><span class="mw-headline" id="Gaming:_keeping_score">Gaming: keeping score</span></h4>
+<p>To be written.
+</p><p>If you keep score in a binary number, you must convert it to a sequence of digits before displaying it. The article <a href="16_bit_BCD.xhtml" title="16-bit BCD">16-bit BCD</a> lists a subroutine to do this.
+</p>
+<h2><span class="mw-headline" id="Making_simple_sounds">Making simple sounds</span></h2>
+<p>To be written.
+</p>
+<h2><span class="mw-headline" id="Controller_input">Controller input</span></h2>
+<p>To be written.
+</p>
+<h2><span class="mw-headline" id="Graphics_.28should_be_covered_elsewhere.21.29">Graphics (should be covered elsewhere!)</span></h2>
+<h2><span class="mw-headline" id=".22Hello.2C_world.21.22_program">&quot;Hello, world!&quot; program</span></h2>
+<p>Since the NES can't easily do something like <code>printf()</code> (or <code>echo</code> for those familiar with scripting), one of the easiest ways to test code is to output some audio.  Something along the lines of...
+</p>
+<pre>
+reset:
+  lda #$01	; square 1
+  sta $4015
+  lda #$08	; period low
+  sta $4002
+  lda #$02	; period high
+  sta $4003
+  lda #$bf	; volume
+  sta $4000
+forever:
+  jmp forever
+</pre>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.043 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 89/1000000
+Preprocessor generated node count: 152/1000000
+Post‐expand include size: 28/2097152 bytes
+Template argument size: 5/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:245-1!*!0!!en!*!* and timestamp 20160208225749 and revision id 9026
+ -->
+</div></body></html>

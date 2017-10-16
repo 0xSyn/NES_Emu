@@ -1,0 +1,48 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 047</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 047</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 047          =
+ ========================
+ 
+ Example Game:
+ --------------------------
+ Super Spike V'Ball + Nintendo World Cup
+ 
+ 
+ Notes:
+ ---------------------------
+ 
+ Yet another <a href="MMC3.xhtml" title="MMC3">MMC3</a> multicart.  See <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 004</a> for info on MMC3.
+ 
+ There is no PRG-RAM.  The multicart reg lies at $6000-7FFF, but is only writable when MMC3 PRG-RAM is enabled
+ and writable (see $A001)
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+   $6000-7FFF:  [.... ...B]  Block select
+   $8000-FFFF:  Same as MMC3 for selected block
+ 
+ 
+ Each block has 128k PRG and 128k CHR.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:654-1!*!0!*!*!*!* and timestamp 20160208225110 and revision id 10795
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_In_NesCartDB.xhtml">In NesCartDB</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

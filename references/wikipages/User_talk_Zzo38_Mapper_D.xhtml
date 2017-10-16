@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User talk:Zzo38/Mapper D</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User talk:Zzo38/Mapper D</h1><div class="article">
+<h2><span class="mw-headline" id="Common_init_code">Common init code</span></h2>
+<p>I like your idea to make an MMC5 subset: it's more or less UNROM with banked PRG RAM but can be tested in any emulator with rudimentary support for MMC5 and NES 2.0. You may want to add two things: a canonical set of init code to get the MMC5 into a state where it acts like this mapper, and a caveat about writes to the RAM mirror at $1000-$1FFF. --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 08:32, 11 August 2013 (MDT)
+</p>
+<dl><dd>Thank you; I think you are correct, and I will add this information. (I did, in fact, create it specifically because emulators do not support the mappers that I just made up by myself!) (Also, if you don't need more than 64K RAM, then you don't need an emulator supporting NES 2.0, either.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 09:47, 11 August 2013 (MDT)
+<dl><dd>If it's marked as MMC5, the NES 2.0 header is needed to get the emulator to provide more than 8K of memory in the first place. And do you intend to hardwire 8 KiB of CHR ROM/RAM, or do you intend to make it respond to $5xxB as if it were CNROM? --<a href="User_Tepples.xhtml" title="User:Tepples">Tepples</a> (<a href="User_talk_Tepples.xhtml" title="User talk:Tepples">talk</a>) 15:19, 11 August 2013 (MDT)
+<dl><dd>Hardwire 8K CHR ROM or CHR RAM. (Also, when I read it, it seems to me that it means the default amount of PRG RAM for MMC5 is 64K, isn't it? It is 8K for most mappers but for some the default amount is supposed to even be zero? Disch's notes specify the default amount of PRG RAM for MMC5 is 64K because existing games do not depend on the mirrors of the RAM, I think.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 15:49, 11 August 2013 (MDT)</dd></dl></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Hardware_required">Hardware required</span></h2>
+<ul><li> 74'138, wired to select <i>M2=high</i>, <i>R/W=low</i>, <i>A13=low</i>, <i>A12=high</i>, and <i>A4=address input</i>
+<ul><li> There is one spare input, which is probably most usefully connected to A14=high.</li></ul></li>
+<li> 6 bit latch for ROM banking, such as 74'174</li>
+<li> 3 bit latch for RAM banking, such as 74'161</li>
+<li> 1 or 2 74'32s, for 256KiB PRG ROM or more, respectively</li></ul>
+<p>—<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 19:21, 4 January 2014 (MST)
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.023 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 6/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1138-1!*!0!!*!*!* and timestamp 20160208230128 and revision id 7954
+ -->
+</div></body></html>

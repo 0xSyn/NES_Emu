@@ -1,0 +1,81 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>CPU status flag behavior</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>CPU status flag behavior</h1><div class="article">
+<p>The <b>flags</b> register, also called <b>processor status</b> or just <b>P</b>, is one of the six architectural registers on the 6502 family CPU.
+It is composed of six one-bit registers (see <a href="Status_flags.xhtml" title="Status flags">Status flags</a>); instructions modify one or more bits and leave others unchanged.
+</p><p>Instructions that save or restore the flags map them to bits in the architectural 'P' register as follows:
+</p>
+<pre>7  bit  0
+---- ----
+NVss DIZC
+|||| ||||
+|||| |||+- Carry: 1 if last addition or shift resulted in a carry, or if
+|||| |||     last subtraction resulted in no borrow
+|||| ||+-- Zero: 1 if last operation resulted in a 0 value
+|||| |+--- Interrupt: Interrupt inhibit
+|||| |       (0: /IRQ and /NMI get through; 1: only /NMI gets through)
+|||| +---- Decimal: 1 to make ADC and SBC use binary-coded decimal arithmetic
+||||         (ignored on second-source 6502 like that in the NES)
+||++------ s: No effect, used by the stack copy, see note below
+|+-------- Overflow: 1 if last ADC or SBC resulted in signed overflow,
+|            or D6 from last BIT
++--------- Negative: Set to bit 7 of the last operation
+</pre>
+<h2><span class="mw-headline" id="The_B_flag">The B flag</span></h2>
+<p>There are six and only six flags in the processor status register within the CPU.
+Despite what some 6502 references might appear to claim on a first reading, there is no &quot;B flag&quot; stored within the CPU's status register.
+</p><p>Two interrupts (/<a href="IRQ.xhtml" title="IRQ">IRQ</a> and /<a href="NMI.xhtml" title="NMI">NMI</a>) and two instructions (PHP and BRK) push the flags to the stack. In the byte pushed, bit 5 is always set to 1, and bit 4 is 1 if from an instruction (PHP or BRK) or 0 if from an interrupt line being pulled low (/IRQ or /NMI).  This is the only time and place where the B flag actually exists: not in the status register itself, but in bit 4 of the copy that is written to the stack.
+</p>
+<table class="tabular">
+
+<tr>
+<th> Instruction </th>
+<th> Bits 5 and 4 </th>
+<th> Side effects after pushing
+</th></tr>
+<tr>
+<td> PHP </td>
+<td> 11 </td>
+<td> None
+</td></tr>
+<tr>
+<td> BRK </td>
+<td> 11 </td>
+<td> I is set to 1
+</td></tr>
+<tr>
+<td> /<a href="IRQ.xhtml" title="IRQ">IRQ</a> </td>
+<td> 10 </td>
+<td> I is set to 1
+</td></tr>
+<tr>
+<td> /<a href="NMI.xhtml" title="NMI">NMI</a> </td>
+<td> 10 </td>
+<td> I is set to 1
+</td></tr></table>
+<p>Two instructions (PLP and RTI) pull a byte from the stack and set all the flags. They ignore bits 5 and 4.
+</p><p>The only way for an IRQ handler to distinguish /IRQ from BRK is to read the flags byte from the stack and test bit 4.
+The slowness of this is one reason why BRK wasn't used as a syscall mechanism.
+Instead, it was more often used to trigger a patching mechanism that hung off the /IRQ vector: a single byte in PROM, UVEPROM, flash, etc. would be forced to 0, and the IRQ handler would pick something to do instead based on the program counter.
+</p><p>Unlike bits 5 and 4, bit 3 actually exists in P, even though it doesn't affect the ALU operation on the 2A03 or 2A07 CPU the way it does in MOS Technology's own chips.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=64224#p64224" rel="nofollow">koitsu's explanation</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.023 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:37-1!*!0!!*!*!* and timestamp 20160208224839 and revision id 9531
+ -->
+</div></body></html>

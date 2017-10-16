@@ -1,0 +1,27 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>File talk:Neswires.jpg</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>File talk:Neswires.jpg</h1><div class="article">
+<p>It looks to me like the diagram for the RF Famicom (the description says NES, but I think it is clearly the RF Famicom, not the NES). I find this very helpful to me! It seems the audio from the microphone is also send to the cartridge, together with the square/triangle/noise/DPCM (does any mapper use this?), and now I can also see exactly how the expansion port is wired. It could help with many things, including to make a hardware clone (including one with a microphone). I suppose it means the device on the expansion port could read the inputs from the second controller, and I suppose as well as the expansion port to trigger IRQ, it can be used to communicate another signal directly between the expansion port and the cartridge. (If making a hardware clone, I suppose we can program the CPU, APU, PPU, and possibly some other components in Verilog, and then wire other things using discrete components, so it resembles this diagram; however, NES controller ports can then be added, and the microphone could be connected to an extra port. Of course, I suppose things like the Visual2A03 and so on can also help when making a hardware clone.) --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 12:55, 22 May 2013 (MDT)
+</p>
+<hr/>
+<p>What are the direct output levels of the AUX A and AUX B of the 2A03 and video of the PPU (ignoring any resistors/etc which aren't in the IC)? What is the output level and impedance of the microphone (again, ignoring the resistors and so on shown in the schematic)? --<a href="User_Zzo38.xhtml" title="User:Zzo38">Zzo38</a> (<a href="User_talk_Zzo38.xhtml" title="User talk:Zzo38">talk</a>) 00:52, 26 May 2013 (MDT)
+</p>
+<dl><dd> Output levels of the PPU are known: <a href="NTSC_video.xhtml" title="NTSC video">NTSC video</a>. Otherwise, I can only give you ranges: the expected input impedence from the microphone is 5kΩ or less. Typical electric microphones have an impedence around 1-2kΩ, but the famicom amplifies it: <a class="external free" href="http://atariusa.com/Famicom_Schematics/FC%20Control%20Pads%204021B%20RF%20and%20Power%20Schematics.png" rel="nofollow">http://atariusa.com/Famicom_Schematics/FC%20Control%20Pads%204021B%20RF%20and%20Power%20Schematics.png</a> . The output of the 2A03's audio stage doesn't have a canonical voltage because it's a current-mode device: in the absence of the external 100Ω resistors it will &quot;output&quot; 5V always. —<a href="User_Lidnariq.xhtml" title="User:Lidnariq">Lidnariq</a> (<a href="User_talk_Lidnariq.xhtml" title="User talk:Lidnariq">talk</a>) 12:18, 26 May 2013 (MDT)</dd></dl>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1058-1!*!0!*!*!*!* and timestamp 20160208223845 and revision id 6440
+ -->
+</div></body></html>

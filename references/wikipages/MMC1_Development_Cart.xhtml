@@ -1,0 +1,179 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>MMC1 Development Cart</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>MMC1 Development Cart</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#NOTICE"><span class="tocnumber">1</span> <span class="toctext">NOTICE</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Goals_and_Project_Outline"><span class="tocnumber">2</span> <span class="toctext">Goals and Project Outline</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parts_and_Materials"><span class="tocnumber">3</span> <span class="toctext">Parts and Materials</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Notes"><span class="tocnumber">3.1</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="NOTICE">NOTICE</span></h1>
+<p>This page describes a work-in-progress. At this time my ROM programmer is not cooperating with me, so I do not know if the below parts list is correct.
+</p>
+<h1><span class="mw-headline" id="Goals_and_Project_Outline">Goals and Project Outline</span></h1>
+<p>The goal of this project is to create a development cartridge for NES homebrew development. This cartridge will support the popular MMC1 mapper, 256KB of PRG-ROM, 8KB CHR-RAM and 8KB of battery-backed PRG-RAM. This configuration is commonly known as SNROM. For reference, this is the same configuration used in The Legend of Zelda, but with double the ROM space.
+</p><p>The cartridge described here is not the kind you plug into your computer to update the code. Rather you remove the ROM chip from the cartridge and use an external chip programmer to place the code onto the ROM chip. This provides a slower cycle time compared to other methods. The benefit of this cartridge is that it can be made from readily available parts with only basic soldering skills.
+</p>
+<h1><span class="mw-headline" id="Parts_and_Materials">Parts and Materials</span></h1>
+<p>The following basic tools and materials will be required for this project:
+</p>
+<ul><li>A soldering iron, 15W-30</li>
+<li>Solder</li>
+<li>De-Soldering Braid (optional)</li>
+<li>A Number 1 Philips Head Screw Driver</li>
+<li>Electrical Tape (optional)</li></ul>
+<p>The following parts are required for construction:
+</p>
+<table>
+<tr>
+<th>Part Name
+</th>
+<th>Count
+</th>
+<th>Supplier Used
+</th>
+<th>Supplier Link
+</th>
+<th>Cost Per Unit
+</th></tr>
+<tr>
+<td>ReproPak MMC1
+</td>
+<td>1
+</td>
+<td>RetroZone
+</td>
+<td><a class="external free" href="http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=43" rel="nofollow">http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=43</a>
+</td>
+<td>$9.00
+</td></tr>
+<tr>
+<td>CIClone
+</td>
+<td>1
+</td>
+<td>RetroZone
+</td>
+<td><a class="external free" href="http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=37" rel="nofollow">http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=37</a>
+</td>
+<td>$4.00
+</td></tr>
+<tr>
+<td>Blue Case (or any other color you like)
+</td>
+<td>1
+</td>
+<td>RetroZone
+</td>
+<td><a class="external free" href="http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=39" rel="nofollow">http://www.retrousb.com/product_info.php?cPath=24&amp;products_id=39</a>
+</td>
+<td>$4.00
+</td></tr>
+<tr>
+<td>6462P-12 8Kx8 SRAM
+</td>
+<td>2
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=42930" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=42930</a>
+</td>
+<td>$2.49
+</td></tr>
+<tr>
+<td>28F020-12 256Kx8 Flash ROM
+</td>
+<td>1
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=242616" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=242616</a>
+</td>
+<td>$7.95
+</td></tr>
+<tr>
+<td>28-Pin Low-Profile ZIF Socket
+</td>
+<td>1
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=102745" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=102745</a>
+</td>
+<td>$7.95
+</td></tr>
+<tr>
+<td>General-Purpose Diode (Sold in Packs of 10) (Optional)
+</td>
+<td>2
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=655613" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=655613</a>
+</td>
+<td>$0.02
+</td></tr>
+<tr>
+<td>BR2330 Memory Battery (or any other 3V coin battery) (Optional)
+</td>
+<td>1
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=2113691" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=2113691</a>
+</td>
+<td>$2.45
+</td></tr>
+<tr>
+<td>1KOhm Carbon Film Resistor (Sold in Packs of 100) (Optional)
+</td>
+<td>1
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/Product_10001_10001_690865_-1" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/Product_10001_10001_690865_-1</a>
+</td>
+<td>$0.02
+</td></tr>
+<tr>
+<td>28-Pin DIP Socket (Sold in Packs of 10) (Optional)
+</td>
+<td>2
+</td>
+<td>Jameco
+</td>
+<td><a class="external free" href="https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=112272" rel="nofollow">https://www.jameco.com/webapp/wcs/stores/servlet/ProductDisplay?storeId=10001&amp;langId=-1&amp;catalogId=10001&amp;productId=112272</a>
+</td>
+<td>$0.22
+</td></tr></table>
+<p><i>All prices are in USD and are accurate as of 03/31/2011</i>
+</p><p>In addition to the parts and materials you will need a chip programmer compatible with standard 29F020 Flash ROM chips. Something like the Willem GQ-3X or TOP853 should work. I have a Willem PCB 5.0, which is an obsolete parallel programmer. They can still be found on eBay for under $50 shipped, but you have to have a (real) parallel port.
+</p>
+<h2><span class="mw-headline" id="Notes">Notes</span></h2>
+<p>The Diodes, Battery and Resistor are only needed if you want battery-backed PRG-RAM (that is if you want save files like The Legend of Zelda, not passwords like Metroid).
+</p><p>If you can find a 3V coin battery with solder leads on it that would be ideal. These instructions include soldering leads onto the battery, which is certainly not ideal.
+</p><p>The 28-Pin DIP Sockets are only needed if you are super paranoid like me and want to be able to easily replace your RAM chips. Note that this will not allow you to swap in CHR-ROM latter. For that you will have to de-solder the 28-Pin DIP Socket used for CHR-RAM.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.032 seconds
+Real time usage: 0.033 seconds
+Preprocessor visited node count: 14/1000000
+Preprocessor generated node count: 20/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:559-1!*!*!!en!*!* and timestamp 20160208225551 and revision id 2511
+ -->
+</div></body></html>

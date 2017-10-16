@@ -1,0 +1,73 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 182</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 182</h1><div class="article">
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 182          =
+ ========================
+ 
+ 
+ Example Games:
+ --------------------------
+ Pocahontas
+ Super Donkey Kong
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ This mapper is an <a href="MMC3.xhtml" title="MMC3">MMC3</a> with its registers all scrambled to hell.  Rather than a typical register outline,
+ this section will &quot;translate&quot; mapper 182 registers to their coresponding &quot;normal&quot; MMC3 counterpart.  For MMC3
+ details, see <a class="mw-redirect" href="MMC3.xhtml" title="INES Mapper 004">mapper 004</a>.
+ 
+ Range, Mask:   $8000-FFFF, $E001
+ 
+ 
+    Mapper 182    MMC3
+   --------------------
+      $8000        -
+      $8001      $A000
+      $A000      $8000 (addresses further scrambled, see below)
+      $A001        -
+      $C000      $8001
+      $C001      $C000+$C001 *
+      $E000      $E000
+      $E001      $E001
+ 
+ 
+ A write to $C001 would be like a write to both $C000 and $C001 on a normal MMC3 (sets reload value, and
+ clears the IRQ counter).
+ 
+ The Address/Data port registers are further scrambled:
+ 
+ 
+    Mapper 182    MMC3
+   --------------------
+        R:0       R:0
+        R:1       R:3
+        R:2       R:1
+        R:3       R:5
+        R:4       R:6
+        R:5       R:7
+        R:6       R:2
+        R:7       R:4
+ 
+ Other than this scrambling mess, the mapper operates exactly like a normal MMC3.
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.014 seconds
+Real time usage: 0.015 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 12/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:693-1!*!0!*!*!*!* and timestamp 20160606132108 and revision id 10780
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_with_scanline_IRQs.xhtml">Mappers with scanline IRQs</a>, <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_MMC3_like_mappers.xhtml">MMC3-like mappers</a></p></div></body></html>

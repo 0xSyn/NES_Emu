@@ -1,0 +1,195 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Zzo38/Mapper E</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Zzo38/Mapper E</h1><div class="article">
+<p><br/>
+This is a mapper for multigame cartridges, although it has other features useful for other purposes, too. Compare also <a href="INES_Mapper_028.xhtml" title="INES Mapper 028">iNES Mapper 028</a>.
+</p><p>You may be able to make multiple programs using mappers such as:
+</p>
+<ul><li> <a href="NROM.xhtml" title="NROM">NROM</a></li>
+<li> <a href="CNROM.xhtml" title="CNROM">CNROM</a></li>
+<li> <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM</a></li>
+<li> <a class="mw-redirect" href="UxROM.xhtml" title="UNROM">UNROM</a></li>
+<li> <a href="UxROM.xhtml" title="UxROM">UxROM</a></li>
+<li> <a href="AxROM.xhtml" title="AxROM">AxROM</a></li>
+<li> <a href="BNROM.xhtml" title="BNROM">BNROM</a></li>
+<li> <a class="mw-redirect" href="GxROM.xhtml" title="MHROM">MHROM</a></li>
+<li> <a href="INES_Mapper_029.xhtml" title="INES Mapper 029">iNES Mapper 029</a></li>
+<li> <a href="INES_Mapper_038.xhtml" title="INES Mapper 038">iNES Mapper 038</a></li>
+<li> <a href="INES_Mapper_070.xhtml" title="INES Mapper 070">iNES Mapper 070</a></li>
+<li> <a href="INES_Mapper_078.xhtml" title="INES Mapper 078">iNES Mapper 078</a></li>
+<li> <a href="INES_Mapper_087.xhtml" title="INES Mapper 087">iNES Mapper 087</a></li>
+<li> <a href="INES_Mapper_089.xhtml" title="INES Mapper 089">iNES Mapper 089</a></li>
+<li> <a href="INES_Mapper_094.xhtml" title="INES Mapper 094">UN1ROM</a></li>
+<li> <a href="INES_Mapper_101.xhtml" title="INES Mapper 101">iNES Mapper 101</a></li>
+<li> <a href="INES_Mapper_107.xhtml" title="INES Mapper 107">iNES Mapper 107</a></li>
+<li> <a href="INES_Mapper_140.xhtml" title="INES Mapper 140">iNES Mapper 140</a></li>
+<li> <a href="INES_Mapper_152.xhtml" title="INES Mapper 152">iNES Mapper 152</a></li>
+<li> <a href="INES_Mapper_184.xhtml" title="INES Mapper 184">iNES Mapper 184</a></li>
+<li> <a href="INES_Mapper_203.xhtml" title="INES Mapper 203">iNES Mapper 203</a></li>
+<li> <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">iNES Mapper 218</a></li>
+<li> <a href="Color_Dreams.xhtml" title="Color Dreams">Color Dreams</a></li>
+<li> <a href="INES_Mapper_086.xhtml" title="INES Mapper 086">JF-13</a></li></ul>
+<p>Depending on ROM/RAM sizes and submapper numbers, it might not be possible to use all combinations.
+</p><p>Expansion audio is not supported. Audio registers in the mapper should not be written to, since they might conflict with others in this mapper.
+</p><p>Some mappers may have bus conflicts, but this one doesn't, so programs relying on bus conflicts will not run properly.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Registers"><span class="tocnumber">1</span> <span class="toctext">Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Bankswitching_masks"><span class="tocnumber">1.1</span> <span class="toctext">Bankswitching masks</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Control_register"><span class="tocnumber">1.2</span> <span class="toctext">Control register</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#User_register"><span class="tocnumber">1.3</span> <span class="toctext">User register</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Supervisor_ROM"><span class="tocnumber">2</span> <span class="toctext">Supervisor ROM</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#PRG_RAM"><span class="tocnumber">3</span> <span class="toctext">PRG RAM</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Trainer_ROM"><span class="tocnumber">4</span> <span class="toctext">Trainer ROM</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#ROM.2FRAM_sizes"><span class="tocnumber">5</span> <span class="toctext">ROM/RAM sizes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Type_5.2C0.2C0"><span class="tocnumber">5.1</span> <span class="toctext">Type 5,0,0</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Examples"><span class="tocnumber">6</span> <span class="toctext">Examples</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Registers">Registers</span></h2>
+<h3><span class="mw-headline" id="Bankswitching_masks">Bankswitching masks</span></h3>
+<pre>[0101 .... .... ..xy]
+</pre>
+<p>Writing to these four registers (of eight bits each, regardless of ROM size) controls the bankswitching masks:
+</p>
+<ul><li> The &quot;x&quot; bit is 0 for PRG banks or 1 for CHR banks (CHR banks can be ROM or RAM; see below section).</li>
+<li> The &quot;y&quot; bit is 0 for AND masks or 1 for XOR masks.</li></ul>
+<p>This produces four ports visible to the program:
+</p>
+<ul><li> $5000: PRG AND mask</li>
+<li> $5001: PRG XOR mask</li>
+<li> $5002: CHR AND mask</li>
+<li> $5003: CHR XOR mask</li></ul>
+<h3><span class="mw-headline" id="Control_register">Control register</span></h3>
+<pre>[0101 .... .... .1..]
+</pre>
+<p>Writing to this register will write the control register (one of the mask registers will also be set at the same time).
+</p>
+<pre> 7654 3210
+[BBUE EEMM]
+ |||| ||||
+ |||| ||++- Nametable mirroring
+ |||+-++--- CIRAM enable
+ ||+------- User register at $6000-$7FFF
+ ++-------- PRG bank mode
+</pre>
+<p>The meaning of nametable mirroring controls is determining what CIRAM A10 is connected to:
+</p>
+<ul><li> 00 = PA10</li>
+<li> 01 = PA11</li>
+<li> 10 = PA12</li>
+<li> 11 = PA13 XOR bit4 of user register (bit3 instead, if bit3 of submapper number is set)</li></ul>
+<p>The CIRAM enable bits are as follows (if the bit is set, CIRAM is enabled):
+</p>
+<ul><li> bit2 = PPU address $0000-$0FFF</li>
+<li> bit3 = PPU address $1000-$1FFF</li>
+<li> bit4 = PPU address $2000-$3FFF</li></ul>
+<p>The user registers at $6000-$7FFF means, if this bit is set, writes to $6000-$FFFF will write the user register; if cleared, the user register is at $8000-$FFFF.
+</p><p>The PRG bank mode can be:
+</p>
+<ul><li> 00 = 32K in $8000-$FFFF; let PRG ROM A14 signal from cartridge connector signal</li>
+<li> 01 = Fixed bank (as if user register = $FF) in $C000-$FFFF, switchable bank in $8000-$BFFF, fix PRG ROM A14 high</li>
+<li> 10 = Fixed bank (as if user register = $FF) in $C000-$FFFF, switchable bank in $8000-$BFFF, fix PRG ROM A14 low</li>
+<li> 11 = Fixed bank (as if user register = $00) in $8000-$BFFF, switchable bank in $C000-$FFFF, fix PRG ROM A14 high</li></ul>
+<h3><span class="mw-headline" id="User_register">User register</span></h3>
+<p>The user register is mapped at either $6000-$FFFF or $8000-$FFFF. There is no bus conflicts. Calling the registers &quot;pa&quot; (PRG AND), &quot;px&quot; (PRG XOR), &quot;ca&quot; (CHR AND), &quot;cx&quot; (CHR XOR), and &quot;u&quot; (User), the bank selection is as follows:
+</p>
+<ul><li> 32K PRG bank at $8000-$FFFF: (u AND pa) XOR px</li>
+<li> 8K CHR bank at $0000-$1FFF and $2000-$3FFF: (u AND ca) XOR cx</li></ul>
+<p>If the ROM is small enough that eight bits are not used, the bits of the result are ORed together to determine what bank to select.
+</p>
+<h2><span class="mw-headline" id="Supervisor_ROM">Supervisor ROM</span></h2>
+<p>Reading from $5000-$5FFF reads from PRG ROM as if the PRG AND mask and PRG XOR mask are both zero (then it will be the same data at $D000-$DFFF).
+</p>
+<h2><span class="mw-headline" id="PRG_RAM">PRG RAM</span></h2>
+<p>There is 8K PRG RAM at $6000-$7FFF (optional feature). Sometimes the user register is also mapped here, but it might not be. There is no bus conflicts.
+</p>
+<h2><span class="mw-headline" id="Trainer_ROM">Trainer ROM</span></h2>
+<p>If trainer ROM and PRG RAM are both present, then the $5000-$5FFF area is the trainer ROM (mirrored to fill the entire address range). This may be used to program individual games which are on such a cartridge, so that they can still be tested in the emulator, and then later you can combine them into one without a trainer ROM.
+</p>
+<h2><span class="mw-headline" id="ROM.2FRAM_sizes">ROM/RAM sizes</span></h2>
+<p>PRG bankswitching is ROM only, although CHR may be ROM and/or RAM. Subtypes of bankswitching are bit1 of the submapper number for PRG, and bit0 for CHR.
+</p><p>In the table below, &quot;ROM&quot; and &quot;RAM&quot; means the number of bits needed to select the bank; &quot;-&quot; means the ROM/RAM is not present. The column &quot;sub&quot; means the submapper number.
+</p>
+<pre> ROM   RAM   sub   calc
+   -     0     0   No bankswitching
+   -     0     1   MIR=[7]
+   -     1     0   RAM=[76543210]
+   -     2     0   RAM=[7531 6420]
+   -     2     1   RAM=[7654 3210]
+   0     -     0   No bankswitching
+   0     -     1   SC=[7]
+   0     0     0   EN=[76543210]
+   0     0     1   Split ROM=[7531] RAM=[6420]
+   0     1     0   EN=[7] RAM=[6543210]
+   0     1     1   EN=[0] RAM=[7654321]
+   1     -     0   ROM=[76543210]
+   1     0     0   EN=[75] ROM=[643210]
+   1     0     1   Split ROM=[64 210] RAM=[7531]
+   2     -     0   ROM=[7531 6420]
+   2     -     1   ROM=[7654 3210]
+   3     -     0   ROM=[70 642 531]
+   3     -     1   ROM=[72 641 530]
+   4     -     0   ROM=[73 62 51 40]
+   4     -     1   ROM=[75 64 31 20]
+   4     0     0   EN=[76] ROM=[3 2 51 40]
+   4     0     1   EN=[75] ROM=[63 2 51 40]
+   4     1     0   EN=[76] ROM=[3 2 51 40] RAM=[543210]
+   4     1     1   EN=[75] ROM=[63 2 51 40] RAM=[743210]
+   4     2     0   EN=[76] ROM=[3 2 51 40] RAM=[542 310]
+   4     2     1   EN=[76] ROM=[3 2 51 40] RAM=[531 420]
+   4     3     0   EN=[76] ROM=[3 2 51 40] RAM=[52 41 30]
+   5     -     0   ROM=[7 3 62 51 40]
+   5     -     1   ROM=[7 0 64 53 21]
+   5     0     0   Special
+   6     -     0   ROM=[7 6 5 42 31 0]
+   6     -     1   ROM=[7 6 53 42 1 0]
+   6     0     0   EN=[6] ROM=[5 4 3 2 1 0] SC=[7]
+   7     -     0   ROM=[7 6 5 43 2 1 0]
+   7     -     1   ROM=[7 65 4 3 2 1 0]
+   7     0     0   EN=[7] ROM=[6 5 4 3 2 1 0]
+   7     0     1   EN=[0] ROM=[7 6 5 4 3 2 1]
+   7     1     0   EN=[7] ROM=[6 5 4 3 2 1 0] RAM=[6543210]
+   7     1     1   EN=[0] ROM=[7 6 5 4 3 2 1] RAM=[7654321]
+   7     2     0   EN=[7] ROM=[6 5 4 3 2 1 0] RAM=[641 5320]
+   7     2     1   EN=[0] ROM=[7 6 5 4 3 2 1] RAM=[652 7431]
+   8     -     0   ROM=[7 6 5 4 3 2 1 0]
+   8     -     1   ROM=[7 6 5 4 3 2 1 0] MIR=[3]
+</pre>
+<p>Notation in brackets means, any numbers without spaces between means those bits are ORed together; if there are spaces, that designates the separate bits of the bank number. &quot;EN&quot; means if RAM is enabled. &quot;MIR&quot; means the bit0 of the control register will be XOR by this value. &quot;SC&quot; means if nametable mirroring is set to PA12, it instead uses this value for CIRAM A10. &quot;Split&quot; means $0xxx is ROM, $1xxx is RAM, and 4K banks are used.
+</p>
+<h3><span class="mw-headline" id="Type_5.2C0.2C0">Type 5,0,0</span></h3>
+<p>This is a special type, acting differently than the above, as follows:
+</p>
+<ul><li> CHR-RAM is enabled if bit5 of control register is cleared.</li>
+<li> The CHR banks in ROM mode are 4K each.</li>
+<li> ROM bank at $0xxx: <tt>ROM=[p q 7 6 5 4]</tt></li>
+<li> ROM bank at $1xxx: <tt>ROM=[p q 3 2 1 0]</tt></li>
+<li> In the above, &quot;p&quot; and &quot;q&quot; are bit1 and bit0 of the PRG bank number.</li></ul>
+<h2><span class="mw-headline" id="Examples">Examples</span></h2>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.067 seconds
+Real time usage: 0.070 seconds
+Preprocessor visited node count: 39/1000000
+Preprocessor generated node count: 44/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1258-1!*!0!!en!*!* and timestamp 20160208230604 and revision id 7903
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

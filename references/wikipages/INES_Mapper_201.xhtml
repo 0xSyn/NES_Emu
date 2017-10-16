@@ -1,0 +1,61 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>INES Mapper 201</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>INES Mapper 201</h1><div class="article">
+<p><b>iNES Mapper 201</b> has been assigned to a multicart mapper designed to contain multiple NROM-256 games.
+It acts like <a href="BNROM.xhtml" title="BNROM">BNROM</a> and <a href="CNROM.xhtml" title="CNROM">CNROM</a> overlaid, where one bank number controls both 32 KiB PRG banks and 8 KiB CHR banks, except it uses the address bus instead of the data bus.
+</p>
+<pre> Here are Disch's original notes:  
+ ========================
+ =  Mapper 201          =
+ ========================
+ 
+ Example Games:
+ --------------------------
+ 8-in-1
+ 21-in-1 (2006-CA) (Unl)
+ 
+ 
+ Registers:
+ ---------------------------
+ 
+ 
+   $8000-FFFF:  A~[.... ....  RRRR RRRR]
+     R = PRG/CHR Reg
+ 
+ 
+ CHR Setup:
+ ---------------------------
+ 
+       $0000   $0400   $0800   $0C00   $1000   $1400   $1800   $1C00 
+     +---------------------------------------------------------------+
+     |                             $8000                             |
+     +---------------------------------------------------------------+
+ 
+ 
+ PRG Setup:
+ ---------------------------
+ 
+      $8000   $A000   $C000   $E000  
+     +-------------------------------+
+     |             $8000             |
+     +-------------------------------+
+</pre>
+<p>All known games on this mapper use only the two least significant bits (128KiB PRG / 32KiB CHR).
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.013 seconds
+Real time usage: 0.014 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:701-1!*!0!*!*!*!* and timestamp 20160208225409 and revision id 6304
+ -->
+<p class="categories">Categories: <a href="Category_INES_Mappers.xhtml">INES Mappers</a>, <a href="Category_Multicart_mappers.xhtml">Multicart mappers</a></p></div></body></html>

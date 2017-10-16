@@ -1,0 +1,99 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>APU Envelope</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>APU Envelope</h1><div class="article">
+<p>In a synthesizer, an <a class="extiw" href="https://en.wikipedia.org/wiki/ADSR_envelope" title="wikipedia:ADSR envelope">envelope</a> is the way a sound's parameter changes over time.
+The NES <a href="APU.xhtml" title="APU">APU</a> has an envelope generator that controls the volume in one of two ways: it can generate a decreasing saw envelope (like a decay phase of an <a class="external text" href="http://en.wikipedia.org/wiki/Synthesizer#ADSR_envelope" rel="nofollow">ADSR</a>) with optional looping, or it can generate a constant volume that a more sophisticated software envelope generator can manipulate.
+</p><p>Each volume envelope unit contains the following: start flag, <a class="mw-redirect" href="APU.xhtml" title="APU Misc">divider</a>, and decay level counter.
+</p>
+<pre>
+                                   Loop flag
+                                        |
+               Start flag  +--------.   |   Constant volume
+                           |        |   |        flag
+                           v        v   v          |
+Quarter frame clock --&gt; Divider --&gt; Decay --&gt; |    | 
+                           ^        level     |    v
+                           |                  | Select --&gt; Envelope output
+                           |                  |
+        Envelope parameter +----------------&gt; |                   
+</pre>
+<table class="wikitable">
+<tr>
+<th> Address </th>
+<th> Bitfield </th>
+<th> Description
+</th></tr>
+<tr>
+<td> <b>$4000</b> </td>
+<td> <tt>ddLC.VVVV</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 1</a></b> duty and volume/envelope (write)
+</td></tr>
+<tr>
+<td> <b>$4004</b> </td>
+<td> <tt>ddLC.VVVV</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 2</a></b> duty and volume/envelope (write)
+</td></tr>
+<tr>
+<td> <b>$400C</b> </td>
+<td> <tt>--LC.VVVV</tt> </td>
+<td> <b><a href="APU_Noise.xhtml" title="APU Noise">Noise channel</a></b> volume/envelope (write)
+</td></tr>
+<tr>
+<td> bit 5 </td>
+<td> <tt>--L- ----</tt> </td>
+<td> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">APU Length Counter</a> halt flag/envelope loop flag
+</td></tr>
+<tr>
+<td> bit 4 </td>
+<td> <tt>---C ----</tt> </td>
+<td> Constant volume flag (0: use volume from envelope; 1: use constant volume)
+</td></tr>
+<tr>
+<td> bits 3-0 </td>
+<td> <tt>---- VVVV</tt> </td>
+<td> Used as the volume in constant volume (C set) mode. Also used as the reload value for the envelope's divider (the period becomes V + 1).
+</td></tr>
+<tr>
+<td colspan="3">  
+</td></tr>
+<tr>
+<td> <b>$4003</b> </td>
+<td> <tt>LLLL.Lttt</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 1</a></b> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter load</a> and <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a> (write)
+</td></tr>
+<tr>
+<td> <b>$4007</b> </td>
+<td> <tt>LLLL.Lttt</tt> </td>
+<td> <b><a href="APU_Pulse.xhtml" title="APU Pulse">Pulse channel 2</a></b> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter load</a> and <a class="mw-redirect" href="APU.xhtml" title="APU Misc">timer</a> (write)
+</td></tr>
+<tr>
+<td> <b>$400F</b> </td>
+<td> <tt>LLLL.L---</tt> </td>
+<td> <b><a href="APU_Noise.xhtml" title="APU Noise">Noise channel</a></b> <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter load</a> (write)
+</td></tr>
+<tr>
+<td colspan="2"> Side effects </td>
+<td> Sets start flag
+</td></tr></table>
+<p>When clocked by the <a href="APU_Frame_Counter.xhtml" title="APU Frame Counter">frame counter</a>, one of two actions occurs: if the start flag is clear, the divider is clocked, otherwise the start flag is cleared, the decay level counter is loaded with 15, and the divider's period is immediately reloaded.
+</p><p>When the divider is clocked while at 0, it is loaded with V and clocks the decay level counter. Then one of two actions occurs: If the counter is non-zero, it is decremented, otherwise if the loop flag is set, the decay level counter is loaded with 15.
+</p><p>The envelope unit's volume output depends on the constant volume flag: if set, the envelope parameter directly sets the volume, otherwise the decay level is the current volume. The constant volume flag has no effect besides selecting the volume source; the decay level will still be updated when constant volume is selected.
+</p><p>Each of the three envelope units' output is fed through additional gates at the <a href="APU_Sweep.xhtml" title="APU Sweep">sweep unit</a> (pulse only), waveform generator (sequencer or LFSR), and <a href="APU_Length_Counter.xhtml" title="APU Length Counter">length counter</a>.
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.065 seconds
+Real time usage: 0.074 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:182-1!*!0!*!*!*!* and timestamp 20160620194715 and revision id 12664
+ -->
+<p class="categories">Categories: <a href="Category_APU.xhtml">APU</a></p></div></body></html>

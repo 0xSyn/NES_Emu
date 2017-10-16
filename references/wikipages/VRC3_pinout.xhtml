@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>VRC3 pinout</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>VRC3 pinout</h1><div class="article">
+<p><a href="VRC3.xhtml" title="VRC3">VRC3</a>: 18-pin PDIP (<b>mapper 73</b>)
+</p>
+<pre>r: connects to PRG ROM
+f: connects to Famicom
+w: connects to PRG RAM
+                 .-\_/-.
+  (r) PRG A16 &lt;- |01 18| -- +5V
+  (r) PRG /CE &lt;- |02 17| -&gt; WRAM /CE (w)
+  (r) PRG A14 &lt;- |03 16| &lt;- CPU RnW  (wfr)
+  (r) PRG A15 &lt;- |04 15| &lt;- CPU D3   (wfr)
+  (f)  CPU M2 -&gt; |05 14| &lt;- CPU D0   (wfr)
+(wfr) CPU A12 -&gt; |06 13| &lt;- CPU D1   (wfr)
+ (rf) CPU A13 -&gt; |07 12| &lt;- CPU D2   (wfr)
+  (f) CPU A14 -&gt; |08 11| &lt;- nROMSEL  (f)
+          Gnd -- |09 10| -&gt; nIRQ     (f)
+                 '-----'
+</pre>
+<!-- 
+NewPP limit report
+CPU time usage: 0.009 seconds
+Real time usage: 0.010 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:844-1!*!0!*!*!*!* and timestamp 20160208225942 and revision id 8654
+ -->
+<p class="categories">Categories: <a href="Category_Pinouts.xhtml">Pinouts</a></p></div></body></html>

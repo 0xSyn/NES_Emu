@@ -1,0 +1,190 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>UNIF/UNL-DripGame</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>UNIF/UNL-DripGame</h1><div class="article">
+<p>UNL-DripGame is an FPGA mapper comparable in capability to ASIC mappers, invented by Quietust for a <a class="external text" href="http://www.qmtpro.com/~nes/drip/" rel="nofollow">port of a game</a>.
+</p><p>No iNES number is currently assigned. The UNIF name is &quot;UNL-DripGame&quot;.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Memory_map"><span class="tocnumber">1</span> <span class="toctext">Memory map</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Readable_registers"><span class="tocnumber">2</span> <span class="toctext">Readable registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.244800-.244FFF_.28Status.29"><span class="tocnumber">2.1</span> <span class="toctext">$4800-$4FFF (Status)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.245000-.2457FF_.28Sound_channel_0_status.29"><span class="tocnumber">2.2</span> <span class="toctext">$5000-$57FF (Sound channel 0 status)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.245800-.245FFF_.28Sound_channel_1_status.29"><span class="tocnumber">2.3</span> <span class="toctext">$5800-$5FFF (Sound channel 1 status)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Writable_registers"><span class="tocnumber">3</span> <span class="toctext">Writable registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#.248000_.28Sound_channel_0_silence_register.29"><span class="tocnumber">3.1</span> <span class="toctext">$8000 (Sound channel 0 silence register)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.248001_.28Sound_channel_0_data.29"><span class="tocnumber">3.2</span> <span class="toctext">$8001 (Sound channel 0 data)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.248002_.28Sound_channel_0_low_period.29"><span class="tocnumber">3.3</span> <span class="toctext">$8002 (Sound channel 0 low period)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.248003_.28Sound_channel_0_high_period.29"><span class="tocnumber">3.4</span> <span class="toctext">$8003 (Sound channel 0 high period)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.248004_.28Sound_channel_1_silence_register.29"><span class="tocnumber">3.5</span> <span class="toctext">$8004 (Sound channel 1 silence register)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.248005_.28Sound_channel_1_data.29"><span class="tocnumber">3.6</span> <span class="toctext">$8005 (Sound channel 1 data)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.248006_.28Sound_channel_1_low_period.29"><span class="tocnumber">3.7</span> <span class="toctext">$8006 (Sound channel 1 low period)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.248007_.28Sound_channel_1_high_period.29"><span class="tocnumber">3.8</span> <span class="toctext">$8007 (Sound channel 1 high period)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.248008_.28Low_IRQ_register.29"><span class="tocnumber">3.9</span> <span class="toctext">$8008 (Low IRQ register)</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.248009_.28High_IRQ_register.29"><span class="tocnumber">3.10</span> <span class="toctext">$8009 (High IRQ register)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.24800A_.28Control.29"><span class="tocnumber">3.11</span> <span class="toctext">$800A (Control)</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.24800B_.28PRG_bank.29"><span class="tocnumber">3.12</span> <span class="toctext">$800B (PRG bank)</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.24800C_.28CHR_bank_0.29"><span class="tocnumber">3.13</span> <span class="toctext">$800C (CHR bank 0)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.24800D_.28CHR_bank_1.29"><span class="tocnumber">3.14</span> <span class="toctext">$800D (CHR bank 1)</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.24800E_.28CHR_bank_2.29"><span class="tocnumber">3.15</span> <span class="toctext">$800E (CHR bank 2)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.24800F_.28CHR_bank_3.29"><span class="tocnumber">3.16</span> <span class="toctext">$800F (CHR bank 3)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Extended_attribute_tables"><span class="tocnumber">4</span> <span class="toctext">Extended attribute tables</span></a></li>
+<li class="toclevel-1 tocsection-24"><a href="#IRQ"><span class="tocnumber">5</span> <span class="toctext">IRQ</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Audio"><span class="tocnumber">6</span> <span class="toctext">Audio</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#See_also"><span class="tocnumber">7</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Memory_map">Memory map</span></h2>
+<p>CPU:
+</p>
+<ul><li> $4800-$5FFF = Readable registers</li>
+<li> $6000-$7FFF = PRG RAM</li>
+<li> $8000-$BFFF = Switchable bank</li>
+<li> $C000-$FFFF = Fixed to the last bank</li></ul>
+<h2><span class="mw-headline" id="Readable_registers">Readable registers</span></h2>
+<h3><span class="mw-headline" id=".244800-.244FFF_.28Status.29">$4800-$4FFF (Status)</span></h3>
+<pre>[DSSS SSSS]
+ |||| ||||
+ |+++-++++---- Ready flag; $64 if ready
+ +------------ DIP switch
+</pre>
+<p>Other registers must not be read or written until the mapper is ready.
+The reference implementation of the mapper is an FPGA that loads its fusemap from another on-board memory, and until the FPGA signals that it is ready, its behavior is undefined other than that the fixed PRG bank is fixed.
+</p>
+<h3><span class="mw-headline" id=".245000-.2457FF_.28Sound_channel_0_status.29">$5000-$57FF (Sound channel 0 status)</span></h3>
+<pre>[FE.. ....]
+ ||
+ |+----------- Buffer is empty
+ +------------ Buffer is full
+</pre>
+<h3><span class="mw-headline" id=".245800-.245FFF_.28Sound_channel_1_status.29">$5800-$5FFF (Sound channel 1 status)</span></h3>
+<p>Similar to $5000 but for the second channel.
+</p>
+<h2><span class="mw-headline" id="Writable_registers">Writable registers</span></h2>
+<p>All of these registers are mirrored at $8000-$BFFF; the low four bits select the register number.
+</p>
+<h3><span class="mw-headline" id=".248000_.28Sound_channel_0_silence_register.29">$8000 (Sound channel 0 silence register)</span></h3>
+<p>Writing anything silences channel 0 and clears the buffer.
+</p>
+<h3><span class="mw-headline" id=".248001_.28Sound_channel_0_data.29">$8001 (Sound channel 0 data)</span></h3>
+<p>Writing data inserts it into the buffer.
+</p>
+<h3><span class="mw-headline" id=".248002_.28Sound_channel_0_low_period.29">$8002 (Sound channel 0 low period)</span></h3>
+<pre>[PPPP PPPP]
+</pre>
+<p>Specify low 8-bits of period of channel 0.
+</p>
+<h3><span class="mw-headline" id=".248003_.28Sound_channel_0_high_period.29">$8003 (Sound channel 0 high period)</span></h3>
+<pre>[VVVV PPPP]
+ |||| ||||
+ |||| ++++---- High 4-bits of period
+ ++++--------- Volume control
+</pre>
+<p>Specify high 4-bits of period of channel 0, and volume control.
+</p>
+<h3><span class="mw-headline" id=".248004_.28Sound_channel_1_silence_register.29">$8004 (Sound channel 1 silence register)</span></h3>
+<p>Writing anything silences channel 1 and clears the buffer.
+</p>
+<h3><span class="mw-headline" id=".248005_.28Sound_channel_1_data.29">$8005 (Sound channel 1 data)</span></h3>
+<p>Writing data inserts it into the buffer.
+</p>
+<h3><span class="mw-headline" id=".248006_.28Sound_channel_1_low_period.29">$8006 (Sound channel 1 low period)</span></h3>
+<pre>[PPPP PPPP]
+</pre>
+<p>Specify low 8-bits of period of channel 1.
+</p>
+<h3><span class="mw-headline" id=".248007_.28Sound_channel_1_high_period.29">$8007 (Sound channel 1 high period)</span></h3>
+<pre>[VVVV PPPP]
+ |||| ||||
+ |||| ++++---- High 4-bits of period
+ ++++--------- Volume control
+</pre>
+<p>Specify high 4-bits of period of channel 1, and volume control.
+</p>
+<h3><span class="mw-headline" id=".248008_.28Low_IRQ_register.29">$8008 (Low IRQ register)</span></h3>
+<pre>[XXXX XXXX]
+ |||| ||||
+ ++++-++++---- Low 8-bits of IRQ value
+</pre>
+<h3><span class="mw-headline" id=".248009_.28High_IRQ_register.29">$8009 (High IRQ register)</span></h3>
+<pre>[EXXX XXXX]
+ |||| ||||
+ |+++-++++---- High 7-bits of IRQ value
+ +------------ Enable flag
+</pre>
+<p>IRQ is automatically disabled when it is overflows. Writes to this register additionally acknowledge the interrupt.
+</p>
+<h3><span class="mw-headline" id=".24800A_.28Control.29">$800A (Control)</span></h3>
+<pre>[.... SAMM]
+      ||||
+      ||++---- Nametable mirroring (00=V, 01=H, 10=1sc-A, 11=1sc-B)
+      |+------ Enable extended attribute table
+      +------- Enable writing to SRAM
+</pre>
+<h3><span class="mw-headline" id=".24800B_.28PRG_bank.29">$800B (PRG bank)</span></h3>
+<pre>[.... PPPP]
+      ||||
+      ++++---- Select 16K PRG bank at $8000-$BFFF
+</pre>
+<h3><span class="mw-headline" id=".24800C_.28CHR_bank_0.29">$800C (CHR bank 0)</span></h3>
+<pre>[.... CCCC]
+      ||||
+      ++++---- Select 2K CHR bank at $0000-$07FF
+</pre>
+<h3><span class="mw-headline" id=".24800D_.28CHR_bank_1.29">$800D (CHR bank 1)</span></h3>
+<pre>[.... CCCC]
+      ||||
+      ++++---- Select 2K CHR bank at $0800-$0FFF
+</pre>
+<h3><span class="mw-headline" id=".24800E_.28CHR_bank_2.29">$800E (CHR bank 2)</span></h3>
+<pre>[.... CCCC]
+      ||||
+      ++++---- Select 2K CHR bank at $1000-$17FF
+</pre>
+<h3><span class="mw-headline" id=".24800F_.28CHR_bank_3.29">$800F (CHR bank 3)</span></h3>
+<pre>[.... CCCC]
+      ||||
+      ++++---- Select 2K CHR bank at $1800-$1FFF
+</pre>
+<h2><span class="mw-headline" id="Extended_attribute_tables">Extended attribute tables</span></h2>
+<p>This memory is write-only and is mapped at $C000-$C3FF for first nametable, and $C400-$C7FF for last nametable. It is mirrored across $C000-$FFFF.
+</p><p>Only the two LSB of data are used, and they control the palette of the corresponding tile position in a nametable. (i.e. the bits written to CPU $C523 correspond to the tile at CIRAM $523, which if mirrored horizontally would correspond to the tile at PPU $2923 and $2D23)
+</p>
+<h2><span class="mw-headline" id="IRQ">IRQ</span></h2>
+<p>Data written to the low IRQ register is stored in a buffer but won't reload the counter until the high IRQ register is programmed.
+</p><p>IRQ is count down per cycle, and then trigger the IRQ and stop the timer when it expires.
+</p>
+<h2><span class="mw-headline" id="Audio">Audio</span></h2>
+<p>There are two channels, both of which function in the same way.
+</p><p>The buffers are &quot;first in first out&quot; buffers which store unsigned sample data with $80 meaning no signal.
+</p><p>Each buffer stores 256 bytes which can be written in sequence. If a channel is inactive, filling the buffer with even one byte activates that channel immediately.
+</p><p>Changes to the period are delayed until the sample is finished playing. However, the volume control can be changed at any time.
+</p><p>The channel becomes inactive as soon as the buffer becomes empty.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a class="external text" href="http://www.qmtpro.com/~nes/drip/dripmap.txt" rel="nofollow">Quietust's mapper document</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.050 seconds
+Real time usage: 0.052 seconds
+Preprocessor visited node count: 103/1000000
+Preprocessor generated node count: 108/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1405-1!*!*!!en!*!* and timestamp 20160208222754 and revision id 10931
+ -->
+<p class="categories">Categories: <a href="Category_Mappers_using__4020__5FFF.xhtml">Mappers using $4020-$5FFF</a>, <a href="Category_ASIC_mappers.xhtml">ASIC mappers</a>, <a href="Category_Mappers_with_cycle_IRQs.xhtml">Mappers with cycle IRQs</a></p></div></body></html>

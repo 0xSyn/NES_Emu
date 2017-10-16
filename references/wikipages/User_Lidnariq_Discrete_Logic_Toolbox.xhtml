@@ -1,0 +1,111 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Lidnariq/Discrete Logic Toolbox</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Lidnariq/Discrete Logic Toolbox</h1><div class="article">
+<p>The <b>Discrete Logic Toolbox</b> is an exercise in building interesting NES extensions using minimal additional hardware. Sometimes it gets a little overly ambitious.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#0_ICs"><span class="tocnumber">1</span> <span class="toctext">0 ICs</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#1_IC"><span class="tocnumber">2</span> <span class="toctext">1 IC</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#2_ICs"><span class="tocnumber">3</span> <span class="toctext">2 ICs</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#One_latch_and_one_other_IC"><span class="tocnumber">4</span> <span class="toctext">One latch and one other IC</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#One_latch_and_more_than_one_other_IC"><span class="tocnumber">5</span> <span class="toctext">One latch and more than one other IC</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#CHR_compression"><span class="tocnumber">5.1</span> <span class="toctext">CHR compression</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="0_ICs">0 ICs</span></h2>
+<ul><li> <a href="INES_Mapper_099.xhtml" title="INES Mapper 099">iNES Mapper 099</a>:
+<ul><li> (Famicom) Connect OUT2 from <a href="Famicom_expansion_port_pinout.xhtml" title="Famicom expansion port pinout">expansion port</a> to /IRQ; connect /IRQ to CHR A13: lose ability to use APU IRQs.</li>
+<li> (NES) Connect OUT2 from <a href="NES_expansion_port_pinout.xhtml" title="NES expansion port pinout">expansion port</a> to unused EXP pins; connect those pin to CHR A13. (Optionally, connect OUT1 also)</li></ul></li></ul>
+<h2><span class="mw-headline" id="1_IC">1 IC</span></h2>
+<ul><li> One <a href="7400.xhtml" title="7400">7400</a>: <a href="User_Zzo38_Mapper_C.xhtml" title="User:Zzo38/Mapper C">User:Zzo38/Mapper C</a> (MMC4-style CHR bankswitching, BNROM-style PRG bankswitching)</li>
+<li> One AY-3-8910: <a href="User_Zzo38_Mapper_A.xhtml" title="User:Zzo38/Mapper A">User:Zzo38/Mapper A</a> (<a href="Sunsoft_5B_audio.xhtml" title="Sunsoft 5B audio">expansion audio</a> and GNROM-style banking)</li>
+<li> Any one inverter (⅙ <a href="7404.xhtml" title="7404">7404</a>, 05, 06, 07, 14, 16, 19, ¼ <a href="7400.xhtml" title="7400">7400</a>, 01, <a href="7402.xhtml" title="7402">7402</a>, 03, 24, 25, 26, 28, 33, 36, 37, 38, 39, 86, ⅓ 7410, 12, 27, ½ 7413, 18, 20, 22, 23, 25, 40)
+<ul><li> Prevent bus conflicts on bankswitch writes by making <tt>ROM /OE ← NOT R/W</tt></li></ul></li>
+<li> Selecting logic such as 7420, <a href="74138.xhtml" title="74138">74138</a>, <a href="74139.xhtml" title="74139">74139</a>
+<ul><li> <a href="PRG_RAM_circuit.xhtml" title="PRG RAM circuit">PRG RAM circuit</a> (Add up to 8KiB WRAM mapped from $6000-$7fff)</li>
+<li> Split 32KiB into 16KiB RAM from $8000-$BFFF and 16KiB ROM from $C000-$FFFF</li></ul></li>
+<li> <a href="7485.xhtml" title="7485">7485</a> (4-bit comparator)
+<ul><li> <a href="NROM_368.xhtml" title="NROM-368">NROM-368</a> (Map up to 46KiB from $4800-$FFFF)</li>
+<li> Map up to 44KiB from $5000-$FFFF without bus conflicts</li></ul></li>
+<li> Any latch with an active-low clock enable, such as <a href="74161.xhtml" title="74161">74161</a>, <a href="74377.xhtml" title="74377">74377</a>
+<ul><li> Most of Nintendo's discrete-logic mappers (<a href="AxROM.xhtml" title="AxROM">AxROM</a>, <a href="BNROM.xhtml" title="BNROM">BNROM</a>, <a href="CNROM.xhtml" title="CNROM">CNROM</a>, <a class="mw-redirect" href="GxROM.xhtml" title="GNROM">GNROM or MHROM</a>)
+<ul><li> <a href="UxROM.xhtml" title="UxROM">UxROM</a> can be emulated on a BNROM-class board by manually mirroring the upper bank before burning. (A 128KiB UNROM game with banks 01234567 would become a 256 KiB BNROM with banks 0717273747576777)</li></ul></li>
+<li> Arbitrary GNROM-style mappers with 32KiB PRG banks and 8KiB CHR banks</li>
+<li> Mapper-controlled 1-screen mirroring (a la AxROM)</li>
+<li> Oeka Kids-style dynamic banking of CHR with zones as small as the size of an attribute byte (32x32 pixel), by connecting <tt>Latch./CLKEN ← /PPUA13</tt> and <tt>Latch.CLK ← /RD</tt></li>
+<li> Additionally, a simple circuit (diode, resistor, capacitor) can automatically clear a 74161 on reset</li></ul></li>
+<li> Any sufficiently large binary counter, such as (74)4020
+<ul><li> Interrupts for 2ⁿ X every 2⁽ⁿ⁺¹⁾ X, where X could be (A12 rises = scanlines·8, cpu cycles, PPU reads)</li></ul></li>
+<li> 74253 (Tristatable dual 4-input multiplexer) in lieu of CHR ROM, plus 8 ≈5kΩ resistors:
+<ul><li> Game Genie style low-resolution graphics, where each 4-by-4 pixel zone is individually controllable and can have any color <tt>D3…D0←SEL(A3…A2,A11…A8)</tt> and <tt>D7…D4←SEL(A3…A2,A7…A4)</tt></li></ul></li>
+<li> 74'153 or 74'157, plus 8 ≈5kΩ resistors:
+<ul><li> Extends <a href="INES_Mapper_218.xhtml" title="INES Mapper 218">iNES Mapper 218</a> to allow selective disabling of 1kB NT RAM to allow individual access of bitplanes without palette hacks. <tt>CIRAM/SEL ← SEL(A3,A10,A11)</tt>, <tt>SEL/E ← A13</tt>, <tt>D0…D7 ← A12 through resistors</tt></li></ul></li></ul>
+<h2><span class="mw-headline" id="2_ICs">2 ICs</span></h2>
+<ul><li> Any obsolete RAM such as 74170, 670, 189, 219, 289 plus decoding logic (<a href="7432.xhtml" title="7432">7432</a>)
+<ul><li> 4 (for the two 74?70) or 16 (for the three 74??9) independently controlled banks.
+<ul><li> This is not exactly the same as <a href="User_Zzo38_Mapper_B.xhtml" title="User:Zzo38/Mapper B">User:Zzo38/Mapper B</a>; we omit the fixed 4KiB topmost bank for simplicity.</li></ul></li></ul></li>
+<li> 7485 + 74(4078) (comparator+8-input NOR)
+<ul><li> Map almost 48KiB from $4020-$FFFF without bus conflicts</li></ul></li>
+<li> Any latch plus decoding logic, such as 7400, 02, 32, 133, 138 + 7474, 173, 174, 176
+<ul><li> GNROM-style mappers as made by not-Nintendo</li></ul></li>
+<li> Timer/counter plus decoding logic, such as 7400 + 555/(74)4020/74123
+<ul><li> Acknowledgable interrupts</li></ul></li>
+<li> Inverter (such as 7400, 7404, 7486) + 8KB RAM
+<ul><li> Map 8KB RAM into PPU $0xxx and $2xxx for 4KB CHR-RAM slice and 4-screen mirroring, inverter makes <tt>NOT PPU A12</tt> to decode 4KB ROM (or 4KB window) in $1xxx</li></ul></li></ul>
+<h2><span class="mw-headline" id="One_latch_and_one_other_IC">One latch and one other IC</span></h2>
+<p>&quot;Latch&quot; in this case means a <a href="74161.xhtml" title="74161">74161</a> or a <a href="74377.xhtml" title="74377">74377</a>, i.e. those with an active-low clock enable.
+</p>
+<ul><li> Masking logic, such as 7400, 02, 08, 32
+<ul><li> <a href="UxROM.xhtml" title="UxROM">UxROM</a> and similar with a fixed bank of PRG, to a maximum of 256 KiB (16 KiB × 2⁴)</li>
+<li> PPU equivalent of UxROM (<a href="CPROM.xhtml" title="CPROM">CPROM</a>, <a href="INES_Mapper_168.xhtml" title="INES Mapper 168">Racermate</a>), with a fixed bank of CHR, to a maximum of 64 KiB (4 KiB × 2⁴)</li></ul></li>
+<li> Inverting masking logic, such as 7400, 02
+<ul><li> UxROM without bus conflicts and similar with a fixed bank of PRG or CHR (max 3 bits of banking)</li></ul></li>
+<li> a quad 1-of-2 multiplexer (74157)
+<ul><li> Two independently controllable banks</li>
+<li> Two independently controllable banks and two duplicate fixed banks</li></ul></li>
+<li> Tristatable quad 1-2 multiplexer (74'257) and four ≈5kΩ resistors
+<ul><li> Two independently controllable banks and two different fixed banks (128kiB PRG example: Three resistors pull ROM A14..A16 high. The last connects CPU A13→ROM A13 but can be overridden by the mux)</li></ul></li>
+<li> ½ dual 1-of-4 multiplexer (74153)
+<ul><li> Controllable horizontal/vertical/1screen mirroring</li></ul></li>
+<li> A single 1-of-2 multiplexer (7400)
+<ul><li> Controllable horizontal/vertical mirroring (as used by Holy Diver)</li></ul></li></ul>
+<h2><span class="mw-headline" id="One_latch_and_more_than_one_other_IC">One latch and more than one other IC</span></h2>
+<p>The traditional emulator oversize variant of <a href="UxROM.xhtml" title="UxROM">UxROM</a> requires an additional 7432 OR gate in order to keep the upper bank fixed to the absolutely topmost bank. Much like the preceding note that BNROM can emulate UNROM, an alternative board that resembles <a href="SxROM.xhtml" title="SxROM">SUROM</a> can emulate an oversize UxROM by omitting the second 7432 and having each 16th bank be duplicates.
+</p>
+<h3><span class="mw-headline" id="CHR_compression">CHR compression</span></h3>
+<p>CHR compression techniques allow the use of a smaller CHR ROM, or automatic conversion of data in CHR RAM, for animation or palette swapping. The <tt>ControlLine</tt> mentioned below could be a PPU address line or a latch output. The forms mentioned here explicitly modify the entire PPU space; more useful and restrictive versions (that only affect some of the PPU address space) are possible by adding additional ICs such as a <a href="74138.xhtml" title="74138">74138</a> with a tristateable latch or AND gates.
+</p>
+<ul><li> 7486 (quad XOR)
+<ul><li> Reorder colors of fetched tiles from 0123 to 0213 by <tt>CHR A3 ← ControlLine XOR PPU A3</tt></li>
+<li> Flip fetched tiles vertically by <tt>CHR A0…A2 ← ControlLine XOR PPU A0…A2</tt></li></ul></li>
+<li> 74283 (4-bit full adder)
+<ul><li> Allows tile cycling of each 16 tile range by <tt>CHR A4…A7 ← Latched4bit + PPU A4…A7</tt>. (Remove upper address line to reduce range)</li></ul></li>
+<li> Two 74283 (making an 8-bit full adder)
+<ul><li> Vertical scrolling of each 32 tile range by <tt>CHR A0…A2,A4…A8 ← Latched8bit + A0…A2,A4…A8</tt>.</li></ul></li>
+<li> Two <a href="74157.xhtml" title="74157">74157</a> (quad 1-of-2 multiplexer)
+<ul><li> Flip fetched tiles horizontally by <tt>PPU D0…D7 ← SELECT(ControlLine,CHR D0…D7,CHR D7…D0)</tt>—can reorder columns arbitrarily (ROM only)</li></ul></li>
+<li> Two 7486 (quad XOR)
+<ul><li> Reorder colors of fetched tiles from 0123 to 3210 by <tt>PPU D0…D7  ← CHR D0…D7 XOR ControlLine</tt> (ROM only)</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.071 seconds
+Real time usage: 0.073 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1341-1!*!0!!en!*!* and timestamp 20160208230413 and revision id 8675
+ -->
+</div></body></html>

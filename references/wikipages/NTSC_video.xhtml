@@ -1,0 +1,697 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>NTSC video</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>NTSC video</h1><div class="article">
+<p>Unlike many other game consoles, the NES does not generate RGB or YUV and then encode that to composite.
+Instead, it generates <b>NTSC video</b> directly in the composite domain, which leads to interesting artifacts.
+</p><p>NTSC Master clock is 21.47727273 MHz and each PPU pixel lasts four clocks; PAL master clock is 26.6017125 MHz, and each PPU pixel lasts five clocks. $xy refers to a palette color in the range $00 to $3F.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Scanline_Timing"><span class="tocnumber">1</span> <span class="toctext">Scanline Timing</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Brightness_Levels"><span class="tocnumber">2</span> <span class="toctext">Brightness Levels</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Initial_measurement"><span class="tocnumber">2.1</span> <span class="toctext">Initial measurement</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Terminated_measurement"><span class="tocnumber">2.2</span> <span class="toctext">Terminated measurement</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Color_Phases"><span class="tocnumber">3</span> <span class="toctext">Color Phases</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Color_Tint_Bits"><span class="tocnumber">4</span> <span class="toctext">Color Tint Bits</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Example_Waveform"><span class="tocnumber">5</span> <span class="toctext">Example Waveform</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Emulating_in_C.2B.2B_code"><span class="tocnumber">6</span> <span class="toctext">Emulating in C++ code</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Interactive_Demo"><span class="tocnumber">7</span> <span class="toctext">Interactive Demo</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#See_also"><span class="tocnumber">8</span> <span class="toctext">See also</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#References"><span class="tocnumber">9</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Scanline_Timing">Scanline Timing</span></h2>
+<p>Values in PPU pixels (341 total per scanline).
+</p><p>Rendering scanlines (n=240):
+</p>
+<table class="wikitable">
+<tr>
+<th> name </th>
+<th> start </th>
+<th> duration </th>
+<th> row </th>
+<th> notes
+</th></tr>
+<tr>
+<td> short sync </td>
+<td> 280 </td>
+<td> 25 </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> black (back porch) </td>
+<td> 305 </td>
+<td> 4 </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> colorburst </td>
+<td> 309 </td>
+<td> 15  </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> black (the rest of back porch) </td>
+<td> 324 </td>
+<td> 5  </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> pulse (background color in grayscale) </td>
+<td> 329 </td>
+<td> 1  </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> left border (background color) </td>
+<td> 330 </td>
+<td> 15  </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> active </td>
+<td> 4 </td>
+<td> 256  </td>
+<td> 0-239 </td>
+<td> if background rendering is disabled, border will be rendered instead
+</td></tr>
+<tr>
+<td> right border (background color) </td>
+<td> 260 </td>
+<td> 11  </td>
+<td> 0-239 </td>
+<td>
+</td></tr>
+<tr>
+<td> black (front porch) </td>
+<td> 271 </td>
+<td> 9 </td>
+<td> 0-239 </td>
+<td>
+</td></tr></table>
+<p>Post-render scanlines (n=2):
+</p>
+<table class="wikitable">
+<tr>
+<th> name </th>
+<th> start </th>
+<th> duration </th>
+<th> row
+</th></tr>
+<tr>
+<td> short sync </td>
+<td> 280 </td>
+<td> 25 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> black (back porch) </td>
+<td> 305 </td>
+<td> 4 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> colorburst </td>
+<td> 309 </td>
+<td> 15 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> black (the rest of back porch) </td>
+<td> 324 </td>
+<td> 5 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> pulse (background color in grayscale) </td>
+<td> 329 </td>
+<td> 1 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> bottom border (background color) </td>
+<td> 330 </td>
+<td> 282 </td>
+<td> 240-241
+</td></tr>
+<tr>
+<td> black (front porch) </td>
+<td> 271 </td>
+<td> 9 </td>
+<td> 240-241
+</td></tr></table>
+<p>Post-render blanking scanlines (n=3):
+</p>
+<table class="wikitable">
+<tr>
+<th> name </th>
+<th> start </th>
+<th> duration </th>
+<th> row
+</th></tr>
+<tr>
+<td> short sync </td>
+<td> 280 </td>
+<td> 25 </td>
+<td> 242-244
+</td></tr>
+<tr>
+<td> black (back porch) </td>
+<td> 305 </td>
+<td> 4 </td>
+<td> 242-244
+</td></tr>
+<tr>
+<td> colorburst </td>
+<td> 309 </td>
+<td> 15 </td>
+<td> 242-244
+</td></tr>
+<tr>
+<td> black </td>
+<td> 324 </td>
+<td> 297 </td>
+<td> 242-244
+</td></tr></table>
+<p>Vertical sync scanlines (n=3):
+</p>
+<table class="wikitable">
+<tr>
+<th> name </th>
+<th> start </th>
+<th> duration </th>
+<th> row
+</th></tr>
+<tr>
+<td> long sync </td>
+<td> 280 </td>
+<td> 318 </td>
+<td> 245-247
+</td></tr>
+<tr>
+<td> black (sync separator) </td>
+<td> 257 </td>
+<td> 23 </td>
+<td> 245-247
+</td></tr></table>
+<p>Pre-render blanking scanlines (n=14):
+</p>
+<table class="wikitable">
+<tr>
+<th> name </th>
+<th> start </th>
+<th> duration </th>
+<th> row </th>
+<th> notes
+</th></tr>
+<tr>
+<td> short sync </td>
+<td> 280 </td>
+<td> 25 </td>
+<td> 248-261 </td>
+<td>
+</td></tr>
+<tr>
+<td> black (back porch) </td>
+<td> 305 </td>
+<td> 4 </td>
+<td> 248-261 </td>
+<td>
+</td></tr>
+<tr>
+<td> colorburst </td>
+<td> 309 </td>
+<td> 15 </td>
+<td> 248-261 </td>
+<td> 14 columns on end of row 261 for odd frames, if either background or sprite rendering is enabled
+</td></tr>
+<tr>
+<td> black </td>
+<td> 324 </td>
+<td> 297 </td>
+<td> 248-261 </td>
+<td>
+</td></tr></table>
+<p>For a total of 262 scanlines.
+</p><p>This video timing is non-standard.
+In standard NTSC, a scanline is 227.5 subcarrier cycles long (equivalent to 341.25 NES pixels), and each field is 262 or 263 lines tall with the vertical sync pulse in one frame half a scanline late to make the TV draw the other field of the interlaced frame half a scanline up.
+The NES and most other pre-Dreamcast consoles draw the fields on top of each other, resulting in a non-standard low-definition &quot;progressive&quot; or &quot;double struck&quot; video mode sometimes called <a class="external text" href="http://junkerhq.net/xrgb/index.php/240p_video" rel="nofollow">240p</a>.
+Some high-definition displays and upscalers cannot handle 240p video, instead introducing artifacts that make the video appear as if it were interlaced.
+Artemio Urbana's <a class="external text" href="http://junkerhq.net/xrgb/index.php/240p_test_suite" rel="nofollow">240p test suite</a>, which has been <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=157634#p157634" rel="nofollow">ported to NES</a> by <a href="User_Tepples.xhtml" title="User:Tepples">Damian Yerrick</a>, contains a set of test patterns to diagnose problems with decoding 240p composite video.
+</p>
+<h2><span class="mw-headline" id="Brightness_Levels">Brightness Levels</span></h2>
+<p>$xE/$xF output the same voltage as $1D. $x1-$xC output a square wave alternating between levels for $xD and $x0. Colors $20 and $30 are exactly the same.
+</p><p>When grayscale is active, all colors between $x1-$xD are treated as $x0. Notably this behavior extends to the first pixel of the border color, which acts as a sync pulse on every visible scanline.
+</p>
+<h3><span class="mw-headline" id="Initial_measurement">Initial measurement</span></h3>
+<p>Voltage levels used by the PPU are as follows - absolute, relative to synch, and normalized between black level and white:
+</p>
+<table class="wikitable">
+<tr>
+<th> Type </th>
+<th> Absolute </th>
+<th> Relative </th>
+<th> Normalized
+</th></tr>
+<tr>
+<td> Synch </td>
+<td> 0.781 </td>
+<td> 0.000 </td>
+<td> -0.359
+</td></tr>
+<tr>
+<td> Colorburst L </td>
+<td> 1.000 </td>
+<td> 0.218 </td>
+<td> -0.208
+</td></tr>
+<tr>
+<td> Colorburst H </td>
+<td> 1.712 </td>
+<td> 0.931 </td>
+<td> 0.286
+</td></tr>
+<tr>
+<td>Color 0D </td>
+<td> 1.131 </td>
+<td> 0.350 </td>
+<td> -0.117
+</td></tr>
+<tr>
+<td>Color 1D (black) </td>
+<td> 1.300 </td>
+<td> 0.518 </td>
+<td> 0.000
+</td></tr>
+<tr>
+<td>Color 2D </td>
+<td> 1.743 </td>
+<td> 0.962 </td>
+<td> 0.308
+</td></tr>
+<tr>
+<td>Color 3D </td>
+<td> 2.331 </td>
+<td> 1.550 </td>
+<td> 0.715
+</td></tr>
+<tr>
+<td>Color 00 </td>
+<td> 1.875 </td>
+<td> 1.090 </td>
+<td> 0.397
+</td></tr>
+<tr>
+<td>Color 10 </td>
+<td> 2.287 </td>
+<td> 1.500 </td>
+<td> 0.681
+</td></tr>
+<tr>
+<td>Color 20 </td>
+<td> 2.743 </td>
+<td> 1.960 </td>
+<td> 1.000
+</td></tr>
+<tr>
+<td>Color 30 </td>
+<td> 2.743 </td>
+<td> 1.960 </td>
+<td> 1.000
+</td></tr></table>
+<p>These levels don't quite match the standard levels.
+Ideally, the composite signal is 1000 microvolts from peak to peak (1.0 Vp-p) when loaded with a 75 Ω output impedance.
+(Unloaded levels may be twice that amount, which may explain the levels seen above.)
+Levels are commonly measured in units called IRE.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup><sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+<h3><span class="mw-headline" id="Terminated_measurement">Terminated measurement</span></h3>
+<p>Standard video (not NES) looks like this:
+</p>
+<table class="wikitable">
+<tr>
+<th> Type </th>
+<th> IRE level </th>
+<th> Voltage (mV)
+</th></tr>
+<tr>
+<td> Peak white </td>
+<td> 120 </td>
+<td>
+</td></tr>
+<tr>
+<td> White </td>
+<td> 100 </td>
+<td> 714
+</td></tr>
+<tr>
+<td> Colorburst H </td>
+<td> 20 </td>
+<td> 143
+</td></tr>
+<tr>
+<td> Black </td>
+<td> 7.5 </td>
+<td> 53.6
+</td></tr>
+<tr>
+<td> Blanking </td>
+<td> 0 </td>
+<td> 0
+</td></tr>
+<tr>
+<td> Colorburst L </td>
+<td> -20 </td>
+<td> -143
+</td></tr>
+<tr>
+<td> Sync </td>
+<td> -40 </td>
+<td> -286
+</td></tr></table>
+<p>The following <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=159266#p159266" rel="nofollow">measurements by lidnariq</a> into a properly terminated (75 Ω) TV have about 10 mV of noise and 4 mV of quantization error, which implies an error of ±2 IRE:
+</p>
+<table class="wikitable">
+<tr>
+<th> Signal </th>
+<th> Potential </th>
+<th> IRE
+</th></tr>
+<tr>
+<td> SYNC </td>
+<td> 48 mV </td>
+<td> -37 IRE
+</td></tr>
+<tr>
+<td> CBL </td>
+<td> 148 mV </td>
+<td> -23 IRE
+</td></tr>
+<tr>
+<td> 0D </td>
+<td> 228 mV </td>
+<td> -12 IRE
+</td></tr>
+<tr>
+<td> 1D </td>
+<td> 312 mV </td>
+<td> ≡ 0 IRE
+</td></tr>
+<tr>
+<td> CBH </td>
+<td> 524 mV </td>
+<td> 30 IRE
+</td></tr>
+<tr>
+<td> 2D </td>
+<td> 552 mV </td>
+<td> 34 IRE
+</td></tr>
+<tr>
+<td> 00 </td>
+<td> 616 mV </td>
+<td> 43 IRE
+</td></tr>
+<tr>
+<td> 10 </td>
+<td> 840 mV </td>
+<td> 74 IRE
+</td></tr>
+<tr>
+<td> 3D </td>
+<td> 880 mV </td>
+<td> 80 IRE
+</td></tr>
+<tr>
+<td> 20 </td>
+<td> 1100 mV </td>
+<td> 110 IRE
+</td></tr>
+<tr>
+<td> 0Dem </td>
+<td> 192 mV </td>
+<td> -17 IRE
+</td></tr>
+<tr>
+<td> 1Dem </td>
+<td> 256 mV </td>
+<td> -8 IRE
+</td></tr>
+<tr>
+<td> 2Dem </td>
+<td> 448 mV </td>
+<td> 19 IRE
+</td></tr>
+<tr>
+<td> 00em </td>
+<td> 500 mV </td>
+<td> 26 IRE
+</td></tr>
+<tr>
+<td> 10em </td>
+<td> 676 mV </td>
+<td> 51 IRE
+</td></tr>
+<tr>
+<td> 3Dem </td>
+<td> 712 mV </td>
+<td> 56 IRE
+</td></tr>
+<tr>
+<td> 20em </td>
+<td> 896 mV </td>
+<td> 82 IRE
+</td></tr></table>
+<p>Unlike PAL, NTSC has a &quot;setup&quot;, or a difference between blanking and black level.
+</p>
+<h2><span class="mw-headline" id="Color_Phases">Color Phases</span></h2>
+<pre>111111------
+22222------2
+3333------33
+444------444
+55------5555
+6------66666
+------777777
+-----888888-
+----999999--
+---AAAAAA---
+--BBBBBB----
+-CCCCCC-----
+</pre>
+<p>The color generator is clocked by the rising <i>and</i> falling edges of the ~21.48 MHz clock, resulting in an effective ~42.95 MHz clock rate. There are 12 color square waves, spaced at regular phases. Each runs at the ~3.58 MHz colorburst rate. On NTSC, color $xY uses the wave shown in row Y from the table. NTSC color burst (pure shade -U) uses color phase 8 (with voltages listed above); PAL color burst is believed to alternate between 6 (-U+V) and 9 (-U-V), so hue is rotated by 15° from NTSC. <a class="extiw" href="https://en.wikipedia.org/wiki/PAL" title="wikipedia:PAL">PAL</a> alternates the broadcast sign of the V component, so on PAL every odd scanline will use the appropriate opposite phase—e.g. phases 5-C are respectively replaced with C-5.
+</p>
+<h2><span class="mw-headline" id="Color_Tint_Bits">Color Tint Bits</span></h2>
+<p>There are three color modulation channels controlled by the top three bits of $2001. Each channel uses one of the color square waves (see above diagram) and enables attenuation of the video signal when the color square wave is high. A single attenuator is shared by all channels.
+</p>
+<table class="wikitable">
+<tr>
+<th> $2001 </th>
+<th> Active phase </th>
+<th> Complement
+</th></tr>
+<tr>
+<td> Bit 7 </td>
+<td> Color 8 </td>
+<td> Color 2 (blue)
+</td></tr>
+<tr>
+<td> Bit 6 </td>
+<td> Color 4 </td>
+<td> Color A (green)
+</td></tr>
+<tr>
+<td> Bit 5 </td>
+<td> Color C </td>
+<td> Color 6 (red)
+</td></tr></table>
+<p>When signal attenuation is enabled by one or more of the channels and the current pixel is a color other than $xE/$xF (black), the signal is attenuated as follows (calculations given for both relative and absolute values as shown in the voltage table above):
+</p><p><tt>relative = relative * 0.746</tt>
+</p><p><tt>normalized = normalized * 0.746 - 0.0912</tt>
+</p><p>For example, when $2001 bit 6 is true, the attenuator will be active during the phases of color 4.
+This means the attenuator is not active during its complement (color A), and the screen appears to have a tint of color A, which is green.
+</p><p>Note that on the Dendy and PAL NES, the green and red bits swap meaning.
+</p><p>A <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=160669#p160669" rel="nofollow">test performed on NTSC NES</a> shows that while emphasis affects color $1D, it does <i>not</i> affect colors $0E, $0F, $1E, $1F, $2E, $2F, $3E, and $3F.
+</p>
+<h2><span class="mw-headline" id="Example_Waveform">Example Waveform</span></h2>
+<p>This waveform steps through various grays and then stops on a color.
+</p>
+<pre>
+ 1.0               +--+
+ 0.9               |  |
+ 0.8               |  |
+ 0.7            +--+  | +-+ +-+
+ 0.6            |     | | | | |
+ 0.5            |     | | | | |
+ 0.4         +--+     | | | | |
+ 0.3      +--+        | | | | |
+ 0.2      |           | | | | |
+ 0.1      |           | | | | |
+ 0.0 . +--+ . . . . . +-+ +-+ + . .
+-0.1 --+
+     0D 0F 2D 00 10 30   11
+</pre>
+<p>The PPU's shortcut method of NTSC modulation often produces artifacts in which vertical lines appear slightly ragged, as the chroma spills over into luma.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:258px;"><a class="image" href="File_NTSC_video_ragged_box_png.xhtml"><img alt="" class="thumbimage" height="160" src="../wiki-images/NTSC_video_ragged_box.png" width="256"/></a>  <div class="thumbcaption">Generation and demodulation of a red corner</div></div></div>
+<p><br clear="all"/>
+</p><p><br/>
+</p>
+<h2><span class="mw-headline" id="Emulating_in_C.2B.2B_code">Emulating in C++ code</span></h2>
+<p>Calculating the momentary NTSC signal level can be done as follows in C++:
+</p>
+<pre>
+// pixel = Pixel color (9-bit) given as input. Bitmask format: &quot;eeellcccc&quot;.
+// phase = Signal phase (0..11). It is a variable that increases by 8 each pixel.
+float NTSCsignal(int pixel, int phase)
+{
+    // Voltage levels, relative to synch voltage
+    static const float black=.518f, white=1.962f, attenuation=.746f,
+        levels[8] = {.350f, .518f, .962f,1.550f,  // Signal low
+                    1.094f,1.506f,1.962f,1.962f}; // Signal high
+
+    // Decode the NES color.
+    int color = (pixel &amp; 0x0F);    // 0..15 &quot;cccc&quot;
+    int level = (pixel &gt;&gt; 4) &amp; 3;  // 0..3  &quot;ll&quot;
+    int emphasis = (pixel &gt;&gt; 6);   // 0..7  &quot;eee&quot;
+    if(color &gt; 13) { level = 1;  } // For colors 14..15, level 1 is forced.
+
+    // The square wave for this color alternates between these two voltages:
+    float low  = levels[0 + level];
+    float high = levels[4 + level];
+    if(color == 0) { low = high; } // For color 0, only high level is emitted
+    if(color &gt; 12) { high = low; } // For colors 13..15, only low level is emitted
+
+    // Generate the square wave
+    auto InColorPhase = [=](int color) { return (color + phase) % 12 &lt; 6; }; // Inline function
+    float signal = InColorPhase(color) ? high : low;
+
+    // When de-emphasis bits are set, some parts of the signal are attenuated:
+    if( ((emphasis &amp; 1) &amp;&amp; InColorPhase(0))
+    ||  ((emphasis &amp; 2) &amp;&amp; InColorPhase(4))
+    ||  ((emphasis &amp; 4) &amp;&amp; InColorPhase(8)) ) signal = signal * attenuation;
+
+    return signal;
+}
+</pre>
+<p>The process of generating NTSC signal for a single pixel can be simulated with the following C++ code:
+</p>
+<pre>
+void RenderNTSCpixel(unsigned x, int pixel, int PPU_cycle_counter)
+{
+    int phase = PPU_cycle_counter * 8;
+    for(int p=0; p&lt;8; ++p) // Each pixel produces distinct 8 samples of NTSC signal.
+    {
+        float signal = NTSCsignal(pixel, phase + p); // Calculated as above
+        // Optionally apply some lowpass-filtering to the signal here.
+        // Optionally normalize the signal to 0..1 range:
+        static const float black=.518f, white=1.962f;
+        signal = (signal-black) / (white-black);
+        // Save the signal for this pixel.
+        signal_levels[ x*8 + p ] = signal;
+    }
+}
+
+</pre>
+<p>It is important to note that while the NES only generates eight (8) samples of NTSC signal per pixel, the wavelength for chroma is 12 samples long. This means that the colors of adjacent pixels get mandatorily mixed up to some degree. For the same reason, narrow black&amp;white details can be interpreted as colors.
+</p><p>Because the scanline length is uneven (341*8 is not an even multiple of 12), the color mixing shifts a little each scanline. This appears visually as a sawtooth effect at the edges of colors at high resolution. The sawtooth cycles every 3 scanlines.
+</p><p>Because also the frame length is uneven (neither 262*341*8 nor (262*341-1)*8 is an even multiple of 12), the color mixing also changes a little every frame. When rendering is normally enabled, the screen is alternatingly 89342 and 89341 cycles long. The combination of these (89342+89341)*8 <i>is</i> an even multiple of 12, which means that the artifact pattern cycles every 2 frames. The pattern of cycling can be changed by disabling rendering during the end of the pre-render scanline; it forces the screen length to 89342 cycles, even if would be 89341 otherwise.
+</p><p>The process of decoding NTSC signal (convert it into RGB) is subject to a lot of study, and there are many patents and different techniques for it. A simple method suitable for emulation is covered below. It is not accurate, because in reality the chroma is blurred much more than is done here (the region of signal sampled for I and Q is wider than 12 samples), and the filter used here is a simple box FIR filter rather than an IIR filter, but it already produces a quite authentic looking picture. In addition, the border region (total of 26 pixels of background color around the 256-pixel scanline) is not sampled.
+</p>
+<pre>
+    float signal_levels[256*8] = {...}; // Eight signal levels for each pixel, normalized to 0..1 range. 
+Calculated as above.
+
+    unsigned Width; // Input: Screen width. Can be not only 256, but anything up to 2048.
+    float phase;    // Input: This should the value that was PPU_cycle_counter * 8 + 3.9
+                    // at the BEGINNING of this scanline. It should be modulo 12.
+                    // It can additionally include a floating-point hue offset.
+    for(unsigned x = 0; x &lt; Width; ++x)
+    {
+        // Determine the region of scanline signal to sample. Take 12 samples.
+        int center = x * (256*8) / Width + 0;
+        int begin = center - 6; if(begin &lt; 0)     begin = 0;
+        int end   = center + 6; if(end   &gt; 256*8) end   = 256*8;
+        float y = 0.f, i = 0.f, q = 0.f; // Calculate the color in YIQ.
+        for(int p = begin; p &lt; end; ++p) // Collect and accumulate samples
+        {
+            float level = signal_levels[p] / 12.f;
+            y  =  y + level;
+            i  =  i + level * cos( M_PI * (phase+p) / 6 );
+            q  =  q + level * sin( M_PI * (phase+p) / 6 );
+        }
+        render_pixel(y,i,q); // Send the YIQ color for rendering.
+    }
+</pre>
+<p>The NTSC decoder here produces pixels in YIQ color space.
+</p><p>If you want more saturated colors, just multiply <code>i</code> and <code>q</code> with a factor of your choosing, such as 1.7. If you want brighter colors, just multiply <code>y</code>, <code>i</code> and <code>q</code> with a factor of your choosing, such as 1.1. If you want to adjust the hue, just add or subtract a value from/to <code>phase</code>. If you want to see so called chroma dots, change the begin and end in such manner that you collect a number of samples that is not divisible with 12. If you want to blur the video horizontally, change the begin and end in such manner that the samples are collected from a wider region.
+</p><p>The YIQ colors can be converted into sRGB colors with the following formula, using the FCC-sanctioned YIQ-to-RGB conversion matrix. This produces a value that can be saved to e.g. framebuffer:
+</p>
+<pre>
+    float gamma = 2.0f; // Assumed display gamma
+    auto gammafix = [=](float f) { return f &lt;= 0.f ? 0.f : pow(f, 2.2f / gamma); };
+    auto clamp    = [](int v) { return v&gt;255 ? 255 : v; };
+    unsigned rgb =
+        0x10000*clamp(255.95 * gammafix(y +  0.946882f*i +  0.623557f*q))
+      + 0x00100*clamp(255.95 * gammafix(y + -0.274788f*i + -0.635691f*q))
+      + 0x00001*clamp(255.95 * gammafix(y + -1.108545f*i +  1.709007f*q));
+</pre>
+<p>The two images below illustrate the NTSC artifacts.
+In the left side image, 12 samples of NTSC signal were generated for each NES pixel,
+and each display pixel was separately rendered by decoding that 12-sample signal.
+In the right side image, 8 samples of NTSC signal were generated for each NES pixel,
+and each display pixel was rendered by decoding 12 samples of NTSC signal from the
+corresponding location within the scanline.<br clear="all"/>
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr><td colspan="2"><div class="thumb tleft"><div class="thumbinner" style="width:586px;"><a class="image" href="File_Nes_ntsc_perpixel_png.xhtml"><img alt="" class="thumbimage" height="480" src="../wiki-images/Nes_ntsc_perpixel.png" width="584"/></a>  <div class="thumbcaption">Per-pixel rendering: 12 samples of NTSC signal per input pixel; the same 12 samples are decoded for each output pixel</div></div></div></td>
+<td colspan="2"><div class="thumb tleft"><div class="thumbinner" style="width:586px;"><a class="image" href="File_Nes_ntsc_perscanline_gif.xhtml"><img alt="" class="thumbimage" height="480" src="../wiki-images/Nes_ntsc_perscanline.gif" width="584"/></a>  <div class="thumbcaption">Per-scanline rendering: 8 samples of NTSC signal per input pixel; 12 samples are decoded for each output pixel</div></div></div></td></tr>
+<tr><td><div class="thumb tleft"><div class="thumbinner" style="width:258px;"><a class="image" href="File_Nes_ntsc_perpixel_small_png.xhtml"><img alt="" class="thumbimage" height="240" src="../wiki-images/Nes_ntsc_perpixel_small.png" width="256"/></a>  <div class="thumbcaption">Same as above, but rendered at 256x240 without upscaling</div></div></div></td>
+<td><div class="thumb tleft"><div class="thumbinner" style="width:258px;"><a class="image" href="File_Nes_ntsc_perpixel_small_bw_png.xhtml"><img alt="" class="thumbimage" height="240" src="../wiki-images/Nes_ntsc_perpixel_small_bw.png" width="256"/></a>  <div class="thumbcaption">Same in grayscale (zero saturation). This illustrates well how the different color values have exactly the same luminosity; only the chroma phase differs.</div></div></div></td>
+<td><div class="thumb tleft"><div class="thumbinner" style="width:258px;"><a class="image" href="File_Nes_ntsc_perscanline_small_gif.xhtml"><img alt="" class="thumbimage" height="240" src="../wiki-images/Nes_ntsc_perscanline_small.gif" width="256"/></a>  <div class="thumbcaption">Same as above, but rendered at 256x240 rather than at 2048x240 and then downscaled</div></div></div></td>
+<td><div class="thumb tleft"><div class="thumbinner" style="width:258px;"><a class="image" href="File_Nes_ntsc_perscanline_small_bw_gif.xhtml"><img alt="" class="thumbimage" height="240" src="../wiki-images/Nes_ntsc_perscanline_small_bw.gif" width="256"/></a>  <div class="thumbcaption">Same in grayscale</div></div></div></td></tr></table>
+<p>The source code of the program that generated both images can be read at <a class="external autonumber" href="http://bisqwit.iki.fi/jutut/kuvat/programming_examples/nesemu1/ntsc_test.phps" rel="nofollow">[1]</a>. Note that even though the image resembles the well-known Philips PM5544 test card, it is not the same; the exact same
+colors could not be reproduced with NES colors. In addition, some parts were changed to better test NES features. For example, the backgrounds for the &quot;station ID&quot; regions (the black rectangles at the top and at the bottom inside the circle) are generated using the various blacks within the NES palette.
+</p><p>Later, Bisqwit made a generic <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=172329#p172329" rel="nofollow">integer-based decoder in C++</a>. This takes a signal at 12 times color burst and can be used to emulate other systems that use shortcuts when generating NTSC video, such as Apple II (where <i>every</i> color in <code>HGR</code> is an artifact color) and Atari 7800 (whose game <i>Tower Toppler</i> seriously exploits artifact colors).
+</p>
+<h2><span class="mw-headline" id="Interactive_Demo">Interactive Demo</span></h2>
+<p>The following C source code implements the above described algorithm and displays it on screen with interactive mouse control of phase using <a class="external text" href="http://www.libsdl.org/index.php" rel="nofollow">SDL</a>.
+</p>
+<ul><li> <a class="external text" href="http://slack.net/~ant/libs/ntsc.html" rel="nofollow">blargg's nes_ntsc library</a></li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?f=21&amp;t=11947" rel="nofollow">Windows executable</a> - see blargg_ntsc.txt for usage</li>
+<li> <s>nes_ntsc_palette.c</s> - a sample NTSC palette generator program</li></ul>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <a href="PAL_video.xhtml" title="PAL video">PAL video</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a class="external text" href="https://www.maximintegrated.com/en/app-notes/index.mvp/id/1184" rel="nofollow">Tutorial 1184: Understanding Analog Video Signals</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="#cite_ref-2">↑</a></span> <span class="reference-text"><a class="external text" href="http://www.ni.com/white-paper/4750/en/" rel="nofollow">Analog Video 101</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.347 seconds
+Real time usage: 0.362 seconds
+Preprocessor visited node count: 136/1000000
+Preprocessor generated node count: 320/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:58-1!*!0!!en!5!* and timestamp 20160620194722 and revision id 12656
+ -->
+</div></body></html>

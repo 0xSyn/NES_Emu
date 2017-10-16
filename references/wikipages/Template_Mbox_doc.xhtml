@@ -1,0 +1,330 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Template:Mbox/doc</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Template:Mbox/doc</h1><div class="article">
+<p>This is the <tt>{{<a href="Template_Mbox.xhtml" title="Template:Mbox">mbox</a>}}</tt> or <b>message box</b> meta-template.
+</p><p>It is used to build <i>message box</i> templates such as <tt>{{<s>security</s>}}</tt>. It offers several different colours, uses default images if no image parameter is given and it has some other features.
+</p><p>This meta-template uses the mbox CSS classes in <a href="MediaWiki_Common_css.xhtml" title="MediaWiki:Common.css">MediaWiki:Common.css</a>. The classes can also be used directly in a <s>wikitable</s> if special functionality is needed. See the <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Ambox_CSS_classes" title="wikipedia:Wikipedia:Ambox CSS classes">how-to guide</a> for that.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Usage"><span class="tocnumber">1</span> <span class="toctext">Usage</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Message_box_types"><span class="tocnumber">2</span> <span class="toctext">Message box types</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Other_images"><span class="tocnumber">3</span> <span class="toctext">Other images</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#More_examples"><span class="tocnumber">4</span> <span class="toctext">More examples</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Parameters"><span class="tocnumber">5</span> <span class="toctext">Parameters</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#The_small_parameters"><span class="tocnumber">5.1</span> <span class="toctext">The small parameters</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Technical_details"><span class="tocnumber">6</span> <span class="toctext">Technical details</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#See_also"><span class="tocnumber">7</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Usage">Usage</span></h3>
+<p>Simple usage example:
+</p>
+<pre>
+{{mbox | text = Some text.}}
+</pre>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> Some text. </td>
+</tr>
+</table>
+<p>Complex example:
+</p>
+<pre>
+{{mbox
+| type       = style
+| small      = left
+| image      = [[File:Emblem-question-yellow.svg|40px|alt=Question mark]]
+| smallimage = [[File:Emblem-question-yellow.svg|20px|alt=Question mark]]
+| textstyle  = color: red; font-weight: bold; font-style: italic;
+| text       = Text for a big box, for the top of articles.
+| smalltext  = Text for the top of article sections.
+}}
+</pre>
+<table class="metadata plainlinks mbox mbox-small-left mbox-caution" style="">
+<tr>
+<td class="mbox-image">
+  <a href="File_Emblem_question_yellow_svg.xhtml" title="File:Emblem-question-yellow.svg">File:Emblem-question-yellow.svg</a></td>
+<td class="mbox-text" style="color: red; font-weight: bold; font-style: italic;"> Text for the top of article sections. </td>
+</tr>
+</table>
+<p>But you are not really supposed to use red bold italic text.
+</p>
+<h3><span class="mw-headline" id="Message_box_types">Message box types</span></h3>
+<p>The following examples use different <b>type</b> parameters but use no image parameters thus they use the default images for each type.
+</p>
+<table class="metadata plainlinks mbox mbox-critical" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_speedy_deletion.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>critical</u> – Urgent warnings, such as <tt>{{<s>XSS alert</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-important" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_deletion.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>important</u> – Serious problems, such as <tt>{{<s>delete</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-warning" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_content.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>warning</u> – Other problems, such as <tt>{{<s>deprecated</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-caution" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Edit_clear_svg.xhtml" title="File:Edit-clear.svg">File:Edit-clear.svg</a></div></td>
+<td class="mbox-text" style=""> type=<u>caution</u> – Points of concern, but not so serious, such as <tt>{{<s>description missing</s>}}</tt> and <tt>{{<s>inuse</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-notice" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>style</u> – Points of information, such as <tt>{{<s>oldupgradenotes</s>}}</tt> and <tt>{{<s>copyrightNotice</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>(blank)</u> – Default; general 'box'. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-move" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_move.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>move</u> – Merge, split and transwiki proposals, such as <tt>{{<s>split</s>}}</tt> and <tt>{{<s>MoveToCommons</s>}}</tt>. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-protection" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_protection.png" width="40"/></div></td>
+<td class="mbox-text" style=""> type=<u>protection</u> – Protection notices.. </td>
+</tr>
+</table>
+<h3><span class="mw-headline" id="Other_images">Other images</span></h3>
+<p>The default images shown above are mostly for convenience. In many cases it is more appropriate to use more specific images. These examples use the <b>image</b> parameter to specify an image other than the default images.
+</p>
+<table class="metadata plainlinks mbox mbox-warning" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Unbalanced_scales_svg.xhtml" title="File:Unbalanced scales.svg">File:Unbalanced scales.svg</a></div></td>
+<td class="mbox-text" style=""> type = content <br/> image = [[File:Unbalanced scales.svg|40px|link=|alt=]] <br/> This image is often used for <tt>{{<s>POV</s>}}</tt> and similar issues. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-notice" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Wikitext_svg.xhtml" title="File:Wikitext.svg">File:Wikitext.svg</a></div></td>
+<td class="mbox-text" style=""> type = style <br/> image = [[File:Wikitext.svg|50px|link=|alt=]] <br/> This image is often used for <tt>{{<s>wikify</s>}}</tt> etc. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-move" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Merge_arrows_svg.xhtml" title="File:Merge-arrows.svg">File:Merge-arrows.svg</a></div></td>
+<td class="mbox-text" style=""> type = move <br/> image = [[File:Merge-arrows.svg|50px|link=|alt=]] <br/> This image is used for <tt>{{<a href="Template_Merge.xhtml" title="Template:Merge">merge</a>}}</tt> etc. </td>
+</tr>
+</table>
+<h3><span class="mw-headline" id="More_examples">More examples</span></h3>
+<p>Some other parameter combinations.
+</p>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> No type and no image given (<b>default</b>) </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-empty-cell"/>
+<td class="mbox-text" style=""> No type and <b>image=none</b> – No image is used and the <b>text</b> uses the whole message box area. </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Gnome_globe_current_event_svg.xhtml" title="File:Gnome globe current event.svg">File:Gnome globe current event.svg</a></div></td>
+<td class="mbox-text" style=""> image = [[File:Gnome globe current event.svg|42px|alt=Clock over a larger globe]] <br/> imageright = [[File:Nuvola apps bookcase.svg|40px|alt=Three stacked books]] </td>
+<td class="mbox-imageright"><div style="width: 52px;"> <a href="File_Nuvola_apps_bookcase_svg.xhtml" title="File:Nuvola apps bookcase.svg">File:Nuvola apps bookcase.svg</a> </div></td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <a href="File_Gnome_globe_current_event_svg.xhtml" title="File:Gnome globe current event.svg">File:Gnome globe current event.svg</a></div></td>
+<td class="mbox-text" style=""> <b>This article or section documents a current <s>spaceflight</s>.</b>
+<br/>Content may change as the mission progresses. </td>
+<td class="mbox-imageright"><div style="width: 52px;"> <a href="File_Shuttle_svg.xhtml" title="File:Shuttle.svg">File:Shuttle.svg</a> </div></td>
+</tr>
+</table>
+<h3><span class="mw-headline" id="Parameters">Parameters</span></h3>
+<p>List of all parameters:
+</p>
+<pre>
+{{mbox
+| type  = critical / serious / warning / notice / / move / protection
+| image = none / [[File:...|40px|...]]
+| imageright = [[File:...|40px|...]]
+| style = CSS values
+| textstyle = CSS values
+| text  = The message body text.
+| small = {{{small|}}} / left
+| smallimage = none / [[File:...|20px|...]]
+| smallimageright = none / [[File:...|20px|...]]
+| smalltext  = A shorter message body text.
+}}
+</pre>
+<p><b>type</b>
+</p>
+<dl><dd>If no <b>type</b> parameter is given the template has a 'blank' style. </dd></dl>
+<p><b>image</b>
+</p>
+<dl><dd><b>No parameter</b> = If no <b>image</b> parameter is given the template uses a default image. Which default image it uses depends on the <b>type</b> parameter.</dd>
+<dd><b>An image</b> = Should be an image with usual wiki notation. Widths of 40px - 50px are usually about right. (Images over 52 pixels wide will cause padding problems.)
+<dl><dd> Often an icon is <a class="extiw" href="http://en.wikipedia.org/wiki/Alternative_text_for_images#Purely_decorative_images" title="wikipedia:Alternative text for images">purely decorative</a> in the W3C sense that it repeats the text. To improve <a class="extiw" href="http://en.wikipedia.org/wiki/Accessibility" title="wikipedia:Accessibility">accessibility</a>, it is desirable to not have it be announced by <s>screen readers</s>, as well as to avoid it linking to an irrelevant page. If (and only if) the image license allows this, it can be marked with &quot;<tt>|link=</tt><tt>|alt=</tt>&quot;. For example:
+<dl><dd><code>image = [[File:Unbalanced scales.svg|40px|link=|alt=]]</code></dd></dl></dd>
+<dd> Conversely, an icon that does not use &quot;<tt>|link=</tt><tt>|alt=</tt>&quot;, and which therefore is announced to visually impaired readers, should use an &quot;<tt>|alt=<var><a class="extiw" href="http://en.wikipedia.org/wiki/Alternative_text_for_images" title="wikipedia:Alternative text for images">alt text</a></var></tt>&quot; parameter that describes the icon. With no <tt>|link=</tt> parameter (using the default link), the alt text should describe the icon's visual appearance. For example:
+<dl><dd><code>image = [[File:Gnome globe current event.svg|40px|alt=Clock over a larger globe]]</code></dd></dl></dd>
+<dd> With a nonempty &quot;<tt>|link=<var>Page</var></tt>&quot; the alt text should describe the icon's function. For example:
+<dl><dd><code>image = [[File:Purple question mark.svg|40px|link=Special:Random|alt=Random article]]</code></dd></dl></dd>
+<dd> An icon whose license requires attribution may have alt text, but <i>must keep the default link</i>. Although public domain images do not require a link, many licenses do require one. Please see <i><a class="extiw" href="http://en.wikipedia.org/wiki/Alternative_text_for_images#Purely_decorative_images" title="wikipedia:Alternative text for images">Purely decorative images</a></i> for more information about licensing.</dd></dl></dd>
+<dd><b>none</b> = Means that no image is used.</dd>
+<dd><s><b>blank</b></s> = This parameter is now deprecated. If you see it in use, change it to &quot;image=none&quot;.</dd></dl>
+<p><b>imageright</b>
+</p>
+<dl><dd><b>No parameter</b> = If no <b>imageright</b> parameter is given then no image is shown on the right side.</dd>
+<dd><b>An image</b> = Should be an image with usual wiki notation. 40px - 50px width are usually about right depending on the image height to width ratio. (Images over 52 pixels width will cause padding problems.) For example:
+<dl><dd><code>imageright = [[File:Nuvola apps bookcase.png|40px|alt=Three stacked books]]</code></dd></dl></dd>
+<dd><b>Anything</b> = Any other object that you want to show on the right side.</dd></dl>
+<p><b>style</b>
+</p>
+<dl><dd>Optional <s>CSS</s> values used by the entire message box table. Without quotation marks <code>&quot; &quot;</code> but with the ending semicolons <code>;</code>. For example:
+<dl><dd><code>style = margin-bottom: 0.5em;</code></dd></dl></dd></dl>
+<p><b>textstyle</b>
+</p>
+<dl><dd>Optional <s>CSS</s> values used by the text cell. For example:
+<dl><dd><code>textstyle = text-align: center;</code></dd></dl></dd></dl>
+<p><b>text</b>
+</p>
+<dl><dd>The message body text.</dd></dl>
+<h4><span class="mw-headline" id="The_small_parameters">The small parameters</span></h4>
+<p>The small article message boxes are meant for the top of sections. Normally they should only contain one or two lines of text.
+</p><p><b>small</b>
+</p>
+<dl><dd><b>left</b> = Makes it a smaller left aligned message box. This also makes the default images smaller. Note that any data fed to the <b>smallimage</b>, <b>smallimageright</b> and <b>smalltext</b> parameters is only used if &quot;small=left&quot;. To make it so your template also understands the small parameter you can use this code:
+<dl><dd><code>small = {{{small|}}}</code></dd></dl></dd></dl>
+<table class="metadata plainlinks mbox mbox-small-left" style="">
+<tr>
+<td class="mbox-image">
+  <img alt="" height="20" src="../wiki-images/Ambox_notice.png" srcset="/w/images/thumb/c/c8/Ambox_notice.png/30px-Ambox_notice.png 1.5x, /w/images/c/c8/Ambox_notice.png 2x" width="20"/></td>
+<td class="mbox-text" style=""> small = left </td>
+</tr>
+</table>
+<table class="metadata plainlinks mbox mbox-small-left mbox-caution" style="">
+<tr>
+<td class="mbox-image">
+  <img alt="" height="20" src="../wiki-images/Ambox_notice.png" srcset="/w/images/thumb/c/c8/Ambox_notice.png/30px-Ambox_notice.png 1.5x, /w/images/c/c8/Ambox_notice.png 2x" width="20"/></td>
+<td class="mbox-text" style=""> type = style <br/> small = left </td>
+</tr>
+</table>
+<p><b>smallimage</b>
+</p>
+<dl><dd><b>No parameter</b> = If no <b>smallimage</b> parameter is given then this template falls back to use the <b>image</b> parameter. If the <b>image</b> parameter also is empty then a small default image is used.</dd>
+<dd><b>An image</b> = Should be an image with usual wiki notation. 20px width is usually about right for boxes with one line of text, while 25px width is usually about right for boxes with two lines of text. For example:
+<dl><dd><code>smallimage = [[File:Gnome globe current event.svg|20px|alt=Clock over a larger globe]]</code></dd></dl></dd>
+<dd><b>none</b> = Means that no image is used. This overrides any image fed to <b>image</b>, when &quot;small=left&quot;.</dd></dl>
+<table class="metadata plainlinks mbox mbox-small-left" style="">
+<tr>
+<td class="mbox-image">
+  <a href="File_Replacement_filing_cabinet_svg.xhtml" title="File:Replacement filing cabinet.svg">File:Replacement filing cabinet.svg</a></td>
+<td class="mbox-text" style=""> small = left <br/> image = [[File:Replacement filing cabinet.svg|50px|link=|alt=]] <br/> smallimage = [[File:Replacement filing cabinet.svg|25px|link=|alt=]] </td>
+</tr>
+</table>
+<p><b>smallimageright</b>
+</p>
+<dl><dd><b>No parameter</b> = If no <b>smallimageright</b> parameter is given then this template falls back to use the <b>imageright</b> parameter. If the <b>imageright</b> parameter also is empty then no image is shown on the right side.</dd>
+<dd><b>An image</b> = Should be an image with usual wiki notation. 20px - 25px width is usually about right. For example:
+<dl><dd><code>smallimageright = [[File:Nuvola apps bookcase.png|20px|alt=Three stacked books]]</code></dd></dl></dd>
+<dd><b>Anything</b> = Any other object that you want to show on the right side.</dd>
+<dd><b>none</b> = Means that no right side image is used. This overrides any image fed to <b>imageright</b>, when &quot;small=left&quot;.</dd></dl>
+<table class="metadata plainlinks mbox mbox-small-left" style="">
+<tr>
+<td class="mbox-image">
+  <img alt="" height="20" src="../wiki-images/Ambox_notice.png" srcset="/w/images/thumb/c/c8/Ambox_notice.png/30px-Ambox_notice.png 1.5x, /w/images/c/c8/Ambox_notice.png 2x" width="20"/></td>
+<td class="mbox-text" style=""> small = left <br/> imageright = [[File:Gnome globe current event.svg|50px|alt=Clock over a larger globe]] <br/> smallimageright = none </td>
+</tr>
+</table>
+<p><b>smalltext</b>
+</p>
+<dl><dd>A shorter version of the message body text. If no <b>smalltext</b> parameter is given then this template falls back to use the <b>text</b> parameter.</dd></dl>
+<h3><span class="mw-headline" id="Technical_details">Technical details</span></h3>
+<p>If you need to use special characters in the text parameter then you need to escape them like this:
+</p>
+<pre>
+{{mbox
+| text  = &lt;div&gt;
+Equal sign = and a start and end brace { } work fine as they are.
+But here is a pipe &amp;#124; and two end braces &lt;nowiki&gt;}}&lt;/nowiki&gt;.
+And now a pipe and end braces &lt;nowiki&gt;|}}&lt;/nowiki&gt;.
+&lt;/div&gt;
+}}
+</pre>
+<table class="metadata plainlinks mbox" style="">
+<tr>
+<td class="mbox-image"><div style="width: 52px;">
+  <img alt="" height="40" src="../wiki-images/Ambox_notice.png" width="40"/></div></td>
+<td class="mbox-text" style=""> <div>
+<p>Equal sign = and a start and end brace { } work fine as they are.
+But here is a pipe | and two end braces }}.
+And now a pipe and end braces |}}.
+</p>
+</div> </td>
+</tr>
+</table>
+<p>The <code>&lt;div&gt;</code> tags that surround the text in the example above are usually not needed. But if the text contains line breaks then sometimes we get weird line spacing. This especially happens when using vertical dotted lists. Then use the div tags to fix that.
+</p><p>This template uses CSS classes in <a href="MediaWiki_Common_css.xhtml" title="MediaWiki:Common.css">MediaWiki:Common.css</a> for most of its looks, thus it is fully skinnable.
+</p><p>This template calls <tt>{{<a href="Template_Mbox_core.xhtml" title="Template:Mbox/core">mbox/core</a>}}</tt> which holds most of the code for <tt>{{<a href="Template_Mbox.xhtml" title="Template:Mbox">mbox</a>}}</tt>, while <tt>{{<a href="Template_Mbox.xhtml" title="Template:Mbox">mbox</a>}}</tt> itself does parameter preprocessing.
+</p><p>Internally this meta-template uses HTML wikimarkup instead of wikimarkup for the table code. That is the usual way we make meta-templates since wikimarkup has several drawbacks. For instance it makes it harder to use <s>parser functions</s> and some special characters in parameters.
+</p><p>The default images for this meta-template are in png format instead of svg format. The main reason is that some older web browsers have trouble with the transparent background that MediaWiki renders for svg images. The png images here have hand optimised transparent background colour so they look good in all browsers. Note that svg icons only look somewhat bad in the old browsers, thus such hand optimisation is only worth the trouble for very widely used icons.
+</p><p>For more technical details see the <s>talk page</s> and the &quot;See also&quot; links below.
+</p>
+<h3><span class="mw-headline" id="See_also">See also</span></h3>
+<p>Other pages:
+</p>
+<ul><li> <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Ambox_CSS_classes" title="wikipedia:Wikipedia:Ambox CSS classes">wikipedia:Wikipedia:Ambox CSS classes</a> – Describes how to use the ambox CSS classes directly in <s>wikitables</s> and <a class="extiw" href="http://en.wikipedia.org/wiki/HTML_element#Tables" title="wikipedia:HTML element">HTML tables</a>.</li>
+<li> <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia:Article_message_boxes" title="wikipedia:Wikipedia:Article message boxes">wikipedia:Wikipedia:Article message boxes</a> – The style guideline for creating article message boxes.</li>
+<li> <a class="extiw" href="http://en.wikipedia.org/wiki/Wikipedia_talk:Article_message_boxes" title="wikipedia:Wikipedia talk:Article message boxes">wikipedia:Wikipedia talk:Article message boxes</a> – For discussion about these matters.</li></ul>
+<p><br/>
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.936 seconds
+Real time usage: 0.961 seconds
+Preprocessor visited node count: 2674/1000000
+Preprocessor generated node count: 3534/1000000
+Post‐expand include size: 34217/2097152 bytes
+Template argument size: 9428/2097152 bytes
+Highest expansion depth: 7/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:601-1!*!0!!en!5!* and timestamp 20160208223737 and revision id 7469
+ -->
+</div></body></html>

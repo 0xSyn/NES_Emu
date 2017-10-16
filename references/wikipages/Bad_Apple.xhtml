@@ -1,0 +1,47 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Bad Apple</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Bad Apple</h1><div class="article">
+<p><b>Bad Apple!! PV-FC 2</b> is a homebrew NES ROM based on a fan-made shadow art music video for a fan-made cover of the song &quot;Bad Apple!!&quot; from a <i>Touhou</i> game.
+It uses the <a href="MMC3.xhtml" title="MMC3">MMC3</a> and a 512 KiB PRG ROM and 8 KiB CHR RAM.
+It plays 3 minutes and 39 seconds of 15 fps video at 64x60 pixel resolution, using a blocky video mode that puts four pixels in each tile like the Game Genie.
+</p>
+<h2><span class="mw-headline" id="Compression">Compression</span></h2>
+<p>The video format used by this ROM was reverse engineered by <a href="User_Tepples.xhtml" title="User:Tepples">tepples</a> on September 30, 2012.
+</p><p>Code starting at $F557 decodes the slice to a framebuffer at $400-$5DF and expands it to a transfer buffer at $600-$6FF, and then the next NMI handler copies it to memory.
+There are I-frames (frame type $01) and long chains of P-frames (frame type $02).
+An I-frame (&quot;intra&quot;) or keyframe is just 480 bytes of nibbles; there are fewer than half a dozen in the whole video.
+Each P-frame (&quot;predicted&quot;) or delta frame consists of four slices of 8 tile rows (16 pixels) each.
+In each slice, a 0 bit means the entire row is unchanged from the previous frame, and a 1 bit means there will be a 2-byte word stating which of the sixteen 4x2-pixel nibble pairs in a row of tiles should be replaced with new data for this frame, followed by as many nibble pairs as there are 1 bits in the word.
+The bits in a nibble pair are mapped to pixels as follows:
+</p>
+<pre>
+4 5 0 1
+6 7 2 3
+</pre>
+<p>There are also D-frames (&quot;deleted&quot;, frame type $00), which copy the whole frame from the previous frame.
+These are used for occasional short freezes such as those at the very beginning and end (black), and when Marisa grabs the apple (around frame 221), saving 4 bytes over using a P-frame.
+Frames never cross 8 KiB bank boundaries; a special terminator code ($03) is used instead of a frame type after the last frame in a bank.
+</p><p>There is a later 30 fps version that uses 512 KiB PRG ROM, 256 KiB CHR ROM, and 8 KiB PRG RAM, the same configuration as <i>Kirby's Adventure</i>. This has not been cracked.
+</p>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<ul><li><a class="external text" href="http://knowyourmeme.com/videos/29502-bad-apple" rel="nofollow">Original music video</a> mirrored on knowyourmeme.com (was originally hosted on nicovideo, which requires registration and is not available in English)</li>
+<li><a class="external text" href="http://www.geocities.jp/littlimi/bad_apple_2.htm" rel="nofollow">NES version download page</a></li>
+<li><a class="external text" href="http://www.youtube.com/watch?v=AZehH55i_wg" rel="nofollow">NES version running on a PowerPak</a></li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.019 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:859-1!*!0!!*!*!* and timestamp 20160208224756 and revision id 4714
+ -->
+</div></body></html>

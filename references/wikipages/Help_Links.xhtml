@@ -1,0 +1,251 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Help:Links</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>Help:Links</h1><div class="article">
+<table style="color:#000000; border:solid 1px #A8A8A8; padding:0.5em; margin:0.5em 0; background-color:#FFFFFF;font-size:95%; vertical-align:middle;">
+<tr>
+<td style="padding:1em;width: 40px">
+</td>
+<td><b>Important note:</b> When you edit this page, you agree to release your contribution into the <a class="mw-redirect" href="Public_domain.xhtml" title="En:Public domain">public domain</a>. If you don't want this or can't do this because of license restrictions, please don't edit. This page is one of the <s>Public Domain Help Pages</s>, which can be freely copied into fresh wiki installations and/or distributed with MediaWiki software.}}
+</td>
+<td style="padding:1em;width: 40px">
+</td></tr></table>
+<p>[[Media:
+]]There are four sorts of links in MediaWiki: 
+</p>
+<ol><li> <b><a href="#Internal_links">internal links</a></b> to other pages in the wiki</li>
+<li> <b><a href="#External_links">external links</a></b> to other websites</li>
+<li> <b><a href="#Interwiki_links">interwiki links</a></b> to other websites registered to the wiki in advance</li>
+<li> <b><a href="#Interlanguage_links">Interlanguage links</a></b> to other websites registered as other language versions of the wiki</li></ol>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Internal_links"><span class="tocnumber">1</span> <span class="toctext">Internal links</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#External_links"><span class="tocnumber">2</span> <span class="toctext">External links</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#How_to_avoid_auto-links"><span class="tocnumber">2.1</span> <span class="toctext">How to avoid auto-links</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Interwiki_links"><span class="tocnumber">3</span> <span class="toctext">Interwiki links</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Interlanguage_links"><span class="tocnumber">3.1</span> <span class="toctext">Interlanguage links</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#See_also"><span class="tocnumber">4</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Internal_links">Internal links</span></h2>
+<p>To add an internal link, enclose the name of the page you want to link to in double square brackets. When you save the page, you'll see the new link pointing to your page. If the page exists already it is displayed in blue, if it does not, in red.
+Selflinks to the current page are not transformed in URLs but displayed in bold.
+(If you really want to link to the current page, use an anchor (see below), or [[#top|current page]] which always links to the top.)
+</p><p>The first letter of the target page is automatically capitalized, unless otherwise set by the admins, and spaces are represented as underscores (typing an underscore in the link will have a similar effect as typing a space, but is not recommended, since the underscore will also be shown in the text).
+</p>
+<table border="1" class="wikitable">
+<tr>
+<th>Description
+</th>
+<th>You type
+</th>
+<th>You get
+</th></tr>
+<tr>
+<td>Internal link
+</td>
+<td><pre>[[Main Page]]</pre>
+</td>
+<td><s>Main Page</s>
+</td></tr>
+<tr>
+<td>Piped link
+</td>
+<td><pre>[[Main Page|different text]]</pre>
+</td>
+<td><s>different text</s>
+</td></tr>
+<tr>
+<td>Shortened sort-of-piped link
+</td>
+<td><pre>[[Internationalisation]]s</pre>
+</td>
+<td><s>Internationalisations</s>
+</td></tr>
+<tr>
+<td>Redirect
+</td>
+<td><pre>#REDIRECT [[Main Page]]</pre>
+<p>See also <s>Help:Redirects</s>
+</p>
+</td>
+<td> → <s>Main Page</s>
+</td></tr>
+<tr>
+<td>Internal link to an anchor
+</td>
+<td><pre>[[#See also]]</pre>
+<p><a href="Help_Formatting.xhtml" title="Help:Formatting">Section headings</a> and the <a href="#top">top</a> of the page are automatically anchored.
+</p>
+</td>
+<td><a href="#See_also">#See also</a>
+</td></tr>
+<tr>
+<td>Internal link to an anchor at another page
+</td>
+<td><pre>[[Help:Images#See also]]</pre>
+</td>
+<td><a href="Help_Images.xhtml#See_also" title="Help:Images">Help:Images#See also</a>
+</td></tr>
+<tr>
+<td>Internal link to the current page's talk page
+</td>
+<td><pre>[[{{TALKPAGENAME}}|Discussion]]</pre>
+<p>See also <s>Help:Magic_words#Page_names</s>
+</p>
+</td>
+<td><s>Discussion</s>
+</td></tr>
+<tr>
+<td>Internal link to a subpage
+</td>
+<td><pre>[[/example]]</pre>
+<p>Shortcut for [[Help:Links/example]]. See also <s>Help:Subpages</s>.
+</p>
+</td>
+<td><s>/example</s>
+</td></tr>
+<tr>
+<td>Internal link to a category page
+</td>
+<td><pre>[[:Category:Help]]</pre>
+<p>See also <s>Help:Categories</s>
+</p>
+</td>
+<td><a href="Category_Help.xhtml" title="Category:Help">Category:Help</a>
+</td></tr>
+<tr>
+<td>Internal link to an image or a file of other types
+</td>
+<td><pre>[[media:example.jpg]]
+
+[[media:example.pdf]]</pre>
+<p>See also <a href="Help_Images.xhtml" title="Help:Images">Help:Images</a>
+</p>
+</td>
+<td><a class="internal" href="/w/images/a/a9/Example.jpg" title="Example.jpg">media:example.jpg</a>
+<p><s>media:example.pdf</s>
+</p>
+</td></tr></table>
+<h2><span class="mw-headline" id="External_links">External links</span></h2>
+<table border="1" class="wikitable">
+<tr>
+<th style="width:15%">Description
+</th>
+<th style="width:45%">You type
+</th>
+<th style="width:40%">You get
+</th></tr>
+<tr>
+<td>External link
+</td>
+<td><pre>http://mediawiki.org</pre>
+</td>
+<td><a class="external free" href="http://mediawiki.org">http://mediawiki.org</a>
+</td></tr>
+<tr>
+<td>External link with different label
+</td>
+<td><pre>[http://mediawiki.org MediaWiki]</pre>
+</td>
+<td><a class="external text" href="http://mediawiki.org">MediaWiki</a>
+</td></tr>
+<tr>
+<td>External link numbered
+</td>
+<td><pre>[http://mediawiki.org]</pre>
+</td>
+<td><a class="external autonumber" href="http://mediawiki.org">[1]</a>
+</td></tr>
+<tr>
+<td>External link icons
+</td>
+<td><pre>
+[http://en.wikipedia.org/wiki/.avi video]
+[http://en.wikipedia.org/wiki/.wav sound]
+[http://en.wikipedia.org/wiki/.pdf document]
+</pre>
+<p>External link icons may differ depending on the file type of the target.
+</p>
+</td>
+<td>
+<p><a class="external text" href="http://en.wikipedia.org/wiki/.avi" rel="nofollow">video</a>
+<a class="external text" href="http://en.wikipedia.org/wiki/.wav" rel="nofollow">sound</a>
+<a class="external text" href="http://en.wikipedia.org/wiki/.pdf" rel="nofollow">document</a>
+</p>
+</td></tr>
+<tr>
+<td>External link to the same host
+</td>
+<td><pre>[http://{{SERVERNAME}}/pagename]</pre>
+</td>
+<td><a class="external autonumber" href="http://wiki.nesdev.com/pagename" rel="nofollow">[2]</a>
+</td></tr>
+<tr>
+<td>External link to other host passing the pagename
+</td>
+<td><pre>[http://google.com/search?q={{PAGENAMEE}}]</pre>
+</td>
+<td><a class="external autonumber" href="http://google.com/search?q=Links" rel="nofollow">[3]</a>
+</td></tr>
+<tr>
+<td>Mailto link
+</td>
+<td><pre>[mailto:info@example.org email me]</pre>
+</td>
+<td><a class="external text" href="mailto:info@example.org" rel="nofollow">email me</a>
+</td></tr>
+<tr>
+<td>Mailto named with subject line and body
+</td>
+<td><pre>[mailto:info@example.org?Subject=URL%20Encoded%20Subject&amp;body=Body%20Text info]</pre>
+</td>
+<td><a class="external text" href="mailto:info@example.org?Subject=URL%20Encoded%20Subject&amp;body=Body%20Text" rel="nofollow">info</a>
+</td></tr></table>
+<p><s>Template:Admin tip</s>
+<s>Template:Admin tip</s>
+</p>
+<h3><span class="mw-headline" id="How_to_avoid_auto-links">How to avoid auto-links</span></h3>
+<p>By default, when you write a URL as is, it will be transformed to an external link.
+</p><p>To avoid that effect, put the URL between <code>&lt;nowiki&gt;</code> tags as in:
+</p>
+<pre>&lt;nowiki&gt;http://mediawiki.org&lt;/nowiki&gt;
+</pre>
+<h2><span class="mw-headline" id="Interwiki_links">Interwiki links</span></h2>
+<p>Interwiki links are links with the internal link markup to a website registered in advance. For example, you can link to the Sunflower article on <a class="external free" href="http://en.wikipedia.org" rel="nofollow">http://en.wikipedia.org</a> by typing <code>[[wikipedia:Sunflower]]</code>, which will result in a link <a class="extiw" href="http://en.wikipedia.org/wiki/Sunflower" title="wikipedia:Sunflower">wikipedia:Sunflower</a>. This is because <code>http://en.wikipedia.org/wiki/</code> is registered to your wiki by default with the prefix of <code>wikipedia</code>. <i>This link may not work properly, if the admin of your wiki has changed the setting.</i>
+</p><p>Similar to internal page links, you can create piped links, with alternate link label, e.g. <code>[[wikipedia:Sunflower|big yellow flower]]</code>.
+</p><p>Basically this is an abbreviation for longer URLs. A very similar link could be created as a normal external link by typing <code>[http://en.wikipedia.org/wiki/Sunflower Sunflower]</code>, but interwiki links allow you to type out an easy and compact link, almost as if you are linking to a page on your own wiki.
+</p><p><s>Template:Admin tip</s>
+</p>
+<h3><span class="mw-headline" id="Interlanguage_links">Interlanguage links</span></h3>
+<p>If your wiki has other language versions, you may find “interlanguage links” in the <s>sidebar</s>, just below <s>toolbox</s> in the box named “in other languages.”
+</p><p>Interlanguage links behave similar to interwiki links, except that they are listed in the sidebar. To create an interlanguage link from a page, just type <code>[[<i>language prefix</i>:pagename]]</code> wherever you like in the page; the language prefix is the prefix specified at your wiki for the other language version (typically the <a class="extiw" href="http://en.wikipedia.org/wiki/ISO_639" title="wikipedia:ISO 639">ISO language code</a>).
+</p><p>If you want to make the interlanguage link to appear in the content of the page, you can add a colon before the language prefix, e. g.  <code>[[:en:Sunflower]]</code>.
+</p>
+<h2><span class="mw-headline" id="See_also">See also</span></h2>
+<ul><li> <s>Linked images</s></li></ul>
+<p>. . . . . . . . . .
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.152 seconds
+Real time usage: 0.157 seconds
+Preprocessor visited node count: 294/1000000
+Preprocessor generated node count: 742/1000000
+Post‐expand include size: 781/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:305-1!*!0!!en!*!* and timestamp 20160208230148 and revision id 820
+ -->
+<p class="categories">Categories: <a href="Category_Help.xhtml">Help</a>, <a href="Category_Link.xhtml">Link</a></p></div></body></html>

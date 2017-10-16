@@ -1,0 +1,157 @@
+<?xml version="1.0" ?><!DOCTYPE html  PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'  'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns="http://www.w3.org/1999/xhtml"><head><title>User:Koitsu/Game cheats</title>
+<meta content="width=display-width" name="viewport"/>
+<link href="w.css" rel="stylesheet" type="text/css"/>
+<script src="w.js" type="text/javascript"/>
+</head><body><h1>User:Koitsu/Game cheats</h1><div class="article">
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Game_cheats"><span class="tocnumber">1</span> <span class="toctext">Game cheats</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#1943_-_The_Battle_of_Midway"><span class="tocnumber">1.1</span> <span class="toctext">1943 - The Battle of Midway</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Adventures_of_Dino_Riki.2C_The"><span class="tocnumber">1.2</span> <span class="toctext">Adventures of Dino Riki, The</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Code_Name:_Viper"><span class="tocnumber">1.3</span> <span class="toctext">Code Name: Viper</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Legend_of_Zelda.2C_The"><span class="tocnumber">1.4</span> <span class="toctext">Legend of Zelda, The</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Mega_Man_2"><span class="tocnumber">1.5</span> <span class="toctext">Mega Man 2</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#River_City_Ransom"><span class="tocnumber">1.6</span> <span class="toctext">River City Ransom</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Game_cheats">Game cheats</span></h1>
+<p>Throughout the years I've reverse-engineered a lot of games, as well as Game Genie or Pro Action Replay/Rocky codes, to figure out the internals.  In most cases I do this because I don't want have to &quot;grind&quot; -- given enough time, I'd be able to accomplish the task at hand, so why not skip all that nonsense?  A good example is gold/currency.  I paid my dues sitting in front of a TV for hours as a kid, so I think I've earned the right.  :-)
+</p><p>Anyway, I wanted to make a list of games and memory locations locations of such things.  I tend to focus on just zero page/RAM data and not stuff in ROM, but technically any memory location can be used (the tricky part with NES games is being precise about which PRG page has the cheat applied to it -- that's one of the reasons many emulators have a &quot;Compare&quot; field alongside &quot;Location&quot; and &quot;Value&quot;!).
+</p><p>All below games are assumed to be the NTSC versions.  I'll try to denote differences between game versions (e.g. PRG0 vs. PRG1) if it applies.
+</p>
+<h2><span class="mw-headline" id="1943_-_The_Battle_of_Midway">1943 - The Battle of Midway</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $0410 </td>
+<td> Current energy, ones place.  Range $00 to $09
+</td></tr>
+<tr>
+<td> $0411 </td>
+<td> Current energy, tenths place.  Range $00 to $09
+</td></tr>
+<tr>
+<td> $0412 </td>
+<td> Current energy, hundredths place.  Range $00 to $09
+</td></tr>
+</table>
+<ul><li> For infinite energy, setting $0410, $0411, and $0412 all to $09 is needed -- just $0412 by itself is insufficient: you CAN die in some situations!</li></ul>
+<h2><span class="mw-headline" id="Adventures_of_Dino_Riki.2C_The">Adventures of Dino Riki, The</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $0089 </td>
+<td> Current health (energy) value.  Range $00 to $04
+</td></tr>
+<tr>
+<td> $009D </td>
+<td> Active weapon type: $00 = rock, $01 = axe, $02 = boomerang, $03 = torch.  Other values result in glitches and/or game crashing
+</td></tr>
+<tr>
+<td> $009E </td>
+<td> Wings status: $00 = player lacks wings, $01 or greater = player has wings
+</td></tr>
+</table>
+<h2><span class="mw-headline" id="Code_Name:_Viper">Code Name: Viper</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $06E0 </td>
+<td> Handgun bullet count.  Range $00 to $80
+</td></tr>
+<tr>
+<td> $06E2 </td>
+<td> Machine gun bullet count.  Range $00 to $80
+</td></tr>
+<tr>
+<td> $06F8 </td>
+<td> Current health (energy) value.  Range $00 to $04
+</td></tr>
+</table>
+<ul><li> The current health (energy) value can exceed the number of health containers (ex. if health container count is 2 and $06F8 = $04, then player will actually have 4 health)</li></ul>
+<h2><span class="mw-headline" id="Legend_of_Zelda.2C_The">Legend of Zelda, The</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $04F0 </td>
+<td> Invincibility timer value.  Range $00 to $FF.  See below notes
+</td></tr>
+<tr>
+<td> $0658 </td>
+<td> Current bombs.  Range $00 to $10, though game core will work with values up to $FF
+</td></tr>
+<tr>
+<td> $066D </td>
+<td> Current rupies.  Range $00 to FF
+</td></tr>
+<tr>
+<td> $066E </td>
+<td> Current keys.  Range $00 to $09, but game core will work with values up to $FF
+</td></tr>
+</table>
+<ul><li> Invincibility timer: the game core decrements this by 1 fairly quickly (a value of $FF will reach $00 in approximately 8 seconds).  For &quot;visually accurate&quot; permanent invincibility, use a value $FF with a compare value of $00 (i.e. timer resets to $FF once reaching $00)</li>
+<li> <a class="external text" href="http://forums.nesdev.com/viewtopic.php?p=173537#p173537" rel="nofollow">Details of how the bomb/rupie/key printing code works</a></li></ul>
+<h2><span class="mw-headline" id="Mega_Man_2">Mega Man 2</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $004B </td>
+<td> Invincibility timer value.  Range $00 to $FF.  See below notes
+</td></tr>
+</table>
+<ul><li> Invincibility timer: the game core decrements this by 1 fairly quickly (a value of $FF will reach $00 in approximately 4 seconds).  For &quot;visually accurate&quot; permanent invincibility, use a value $FF with a compare value of $00 (i.e. timer resets to $FF once reaching $00)</li></ul>
+<h2><span class="mw-headline" id="River_City_Ransom">River City Ransom</span></h2>
+<table class="wikitable">
+<tr>
+<th> Location </th>
+<th> Description
+</th></tr>
+<tr>
+<td> $04C7 </td>
+<td> Player 1 money, cents value.  BCD encoded.  Range $00 to $99
+</td></tr>
+<tr>
+<td> $04C8 </td>
+<td> Player 1 money, dollars value.  BCD encoded.  Range $00 to $99
+</td></tr>
+<tr>
+<td> $04C9 </td>
+<td> Player 1 money, 100-dollars value.  BCD encoded.  Range $00 to $09
+</td></tr>
+</table>
+<ul><li> Money example: for player 1 to have $367.49, you'd need $04C7 = $49, $04C8 = $67, $04C9 = $03</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.040 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key nesdev_wiki-mw1_:pcache:idhash:1677-1!*!*!!en!*!* and timestamp 20160629132022 and revision id 12678
+ -->
+</div></body></html>
