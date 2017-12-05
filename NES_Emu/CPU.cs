@@ -8,7 +8,7 @@ namespace NES_Emu {
   class CPU {// 6502 microprocessor 
 
     static byte SP;//8-bit stack pointer(fixed at RAM address $100, so can address $100 -$1ff)
-    public static UInt16 PC;//16 - bit program counter
+    static UInt16 PC;//16 - bit program counter
     static UInt16 opcode;
     static int cycle_num;
     static bool DEBUG = true;
@@ -66,14 +66,22 @@ namespace NES_Emu {
       X = 0x0;
       Y = 0x0;
       S = 0x20;// bit 5 = 1
-      Print_status();
+      
       CPU_Memory.Init_mem();
       //CPU_Memory.Load_NES(@"D:\Projects\NES_Emu\ff.nes");
       CPU_Memory.Load_NES(@"D:\Projects\NES_Emu\dk.nes");
-      //CPU_Memory.Print_mem();
-
-      //Console.WriteLine("1 && 1 ==" + (1 && 1));
+      PC = (UInt16)((CPU_Memory.memory[0xFFFC]<<8)| CPU_Memory.memory[0xFFFD]);//Reset Vector
+      //Print_status();
+      runProgram();
     }
+
+    public static void runProgram() {
+      while (true) {
+        CPU.Emulation_cycle();
+      }
+    }
+
+
 
     //___________________________________________________________________________________________________________________________________________
     //                                                                                                                                      DEBUG
@@ -85,7 +93,12 @@ namespace NES_Emu {
       } 
     }
     public static void Print_status() {
-      string result = Convert.ToString(S, 2).PadLeft(8, '0') + "   0x" + A.ToString("X").PadRight(5, ' ') + "0x" + X.ToString("X").PadRight(5, ' ') + "0x" + Y.ToString("X").PadRight(5, ' ') + "0x" + PC.ToString("X").PadRight(7, ' ') + "0x" + SP.ToString("X").PadRight(5, ' ');
+      string result = Convert.ToString(S, 2).PadLeft(8, '0') + 
+        "   0x" + A.ToString("X").PadRight(5, ' ') + 
+        "0x" + X.ToString("X").PadRight(5, ' ') + 
+        "0x" + Y.ToString("X").PadRight(5, ' ') + 
+        "0x" + PC.ToString("X").PadRight(7, ' ') + 
+        "0x" + SP.ToString("X").PadRight(5, ' ');
       Console.Write("\nSTATUS: nv1bdizc   A      X      Y      PC       SP");
       Console.Write("\n        " + result);
       //Console.WriteLine("      " + (0x80 & S) + " " + (0x40 & S) + " " + (0x20 & S) + " " + (0x10 & S) + " " + (0x8 & S) + " " + (0x8 & S) + " " + (0x2 & S) + " " + (0x1 & S));
@@ -94,6 +107,10 @@ namespace NES_Emu {
       while (DEBUG) {
         DEBUG = false;
         switch (Console.ReadKey().Key) {
+          case ConsoleKey.I:
+            CPU_Memory.Print_header();
+            DEBUG = true;
+            break;
           case ConsoleKey.P:
             CPU_Memory.Print_mem();
             DEBUG = true;
@@ -281,13 +298,16 @@ namespace NES_Emu {
     //                                                                                                                            EMULATION CYCLE
     //___________________________________________________________________________________________________________________________________________
 
-    public static void Emulation_cycle(byte[] data) {
+    public static void Emulation_cycle() {
       Print_select();
       Console.WriteLine("\n_______________\nCycle# " + cycle_num);
+      Print_status();
       cycle_num++;
       byte src = 0;
-      UInt16 addr = (UInt16)((data[PC] << 8) | (data[PC + 1]));
-      opcode = (data[PC]);
+      UInt16 addr = (UInt16)((CPU_Memory.memory[PC] << 8) | (CPU_Memory.memory[PC + 1]));
+
+      Console.Write("\n\n$"+ PC.ToString("X") + " contains: "+addr.ToString("X")+"\n");
+      opcode = (CPU_Memory.memory[PC]);
 
       //Print_status();
 
@@ -375,7 +395,7 @@ namespace NES_Emu {
             SET_CARRY(tmp > 0xff);
           }
           A = ((byte)tmp);
-
+          PC += 2;
           break;
 
 
@@ -442,6 +462,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           A = src;
+          PC += 2;
           break;
 
 
@@ -498,6 +519,7 @@ namespace NES_Emu {
           //STORE src in memory or accumulator depending on addressing mode.
           //A=src;
           //STORE(addr, src)
+          PC += 2;
           break;
 
 
@@ -520,6 +542,7 @@ namespace NES_Emu {
           //    PC = REL_ADDR(PC, src);
           //}
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -543,6 +566,7 @@ namespace NES_Emu {
           //    clk += ((PC & 0xFF00) != (REL_ADDR(PC, src) & 0xFF00) ? 2 : 1);
           //    PC = REL_ADDR(PC, src);
           //}
+          PC += 2;
           break;
 
 
@@ -566,7 +590,7 @@ namespace NES_Emu {
           //    clk += ((PC & 0xFF00) != (REL_ADDR(PC, src) & 0xFF00) ? 2 : 1);
           //    PC = REL_ADDR(PC, src);
           //}
-
+          PC += 2;
           break;
 
 
@@ -601,7 +625,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_OVERFLOW((byte)(0x40 & src));   /* Copy bit 6 to OVERFLOW flag. */
           SET_ZERO((byte)(src & A));
-
+          PC += 2;
           break;
 
 
@@ -627,7 +651,7 @@ namespace NES_Emu {
           //    clk += ((PC & 0xFF00) != (REL_ADDR(PC, src) & 0xFF00) ? 2 : 1);
           //    PC = REL_ADDR(PC, src);
           //}
-
+          PC += 2;
           break;
 
 
@@ -656,6 +680,7 @@ namespace NES_Emu {
           //    clk += ((PC & 0xFF00) != (REL_ADDR(PC, src) & 0xFF00) ? 2 : 1);
           //    PC = REL_ADDR(PC, src);
           //}
+          PC += 2;
           break;
 
 
@@ -680,7 +705,7 @@ namespace NES_Emu {
           //    clk += ((PC & 0xFF00) != (REL_ADDR(PC, src) & 0xFF00) ? 2 : 1);
           //    PC = REL_ADDR(PC, src);
           //}
-
+          PC += 2;
           break;
 
 
@@ -701,14 +726,14 @@ namespace NES_Emu {
           dbg[0] = "00 - BRK - Force Break ";
           dbg[0xF] = "BROKEN";
 
-          PC++;///????
+          //PC++;///????
           PUSH((byte)((PC >> 8) & 0xFF));//Push return address onto the stack
           PUSH((byte)(PC & 0xFF));
           SET_FLAG('b', 1);//Set Break Flag
           PUSH(S);//Push Status register onto stack
           SET_FLAG('i', 1);//Set Interrupt Flag
           PC = (UInt16)(CPU_Memory.Get_addr(0xFFFE) | (CPU_Memory.Get_addr(0xFFFF) << 8));
-
+          
           break;
 
 
@@ -727,6 +752,7 @@ namespace NES_Emu {
         case 0x50:
           dbg[0x0] = "50 - BVC - Branch on overflow clear";
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -744,7 +770,7 @@ namespace NES_Emu {
         case 0x70:
           dbg[0x0] = "70 - BVS - Branch on overflow set ";
           dbg[0xF] = "BROKEN";
-
+          PC += 2;
           break;
 
 
@@ -762,6 +788,7 @@ namespace NES_Emu {
           dbg[0] = "18 - CLC - Clear carry flag ";
           dbg[0xF] = "OK";
           SET_FLAG('c', 0);
+          PC += 2;
           break;
 
 
@@ -779,6 +806,7 @@ namespace NES_Emu {
           dbg[0x0] = "D8 - CLD - Clear decimal mode ";
           SET_FLAG('d', 0);
           dbg[0xF] = "OK";
+          PC += 2;
           break;
 
 
@@ -798,6 +826,7 @@ namespace NES_Emu {
           dbg[0x0] = "58 - CLI - Clear interrupt disable bit ";
           SET_FLAG('i', 0);
           dbg[0xF] = "OK";
+          PC += 2;
           break;
 
 
@@ -817,6 +846,7 @@ namespace NES_Emu {
           dbg[0x0] = "B8 - CLV - Clear overflow flag";
           dbg[0xF] = "ok";
           SET_FLAG('v', 0);
+          PC += 2;
           break;
 
 
@@ -873,12 +903,13 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
 
         /*
-          CPX Compare Memory and Index X                               N Z C I D V                                                
+          CPX - Compare Memory and Index X                             N Z C I D V                                                
           Operation:  X - M                                            / / / _ _ _                                                  
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
@@ -903,6 +934,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
 
           break;
 
@@ -911,7 +943,7 @@ namespace NES_Emu {
 
 
         /*
-          CPY CPY Compare memory and index Y                           N Z C I D V                                                    
+          CPY - Compare memory and index Y                             N Z C I D V                                                    
           Operation:  Y - M                                            / / / _ _ _                                                  
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
@@ -936,14 +968,14 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
-
+          PC += 2;
           break;
 
 
 
 
         /*
-          DEC DEC Decrement memory by one                              N Z C I D V
+          DEC - Decrement memory by one                                N Z C I D V
           Operation:  M - 1 -> M                                       / / _ _ _ _ 
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
@@ -972,6 +1004,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -995,6 +1028,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           X = (src);
+          PC += 2;
           break;
 
 
@@ -1018,6 +1052,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           Y = (src);
+          PC += 2;
           break;
 
 
@@ -1091,6 +1126,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           A = src;
+          PC += 2;
           break;
 
 
@@ -1128,6 +1164,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1145,6 +1182,7 @@ namespace NES_Emu {
         case 0xE8:
           dbg[0x0] = "E8 - INX - Increment Index X by one ";
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1163,6 +1201,7 @@ namespace NES_Emu {
         case 0xC8:
           dbg[0x0] = "C8 - INY - Increment Index Y by one ";
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1276,6 +1315,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1320,6 +1360,7 @@ namespace NES_Emu {
 
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1363,6 +1404,7 @@ namespace NES_Emu {
 
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1409,6 +1451,7 @@ namespace NES_Emu {
 
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1430,6 +1473,7 @@ namespace NES_Emu {
         case 0xEA:
           dbg[0x0] = "EA - NOP - No operation ";
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1495,6 +1539,7 @@ namespace NES_Emu {
           SET_FLAG('n', src);
           SET_FLAG('z', src);
           A = src;
+          PC += 2;
           break;
 
 
@@ -1509,7 +1554,7 @@ namespace NES_Emu {
 
         /*
           PHA - Push accumulator on stack                               N Z C I D V
-          Operation:  A toS                                             _ _ _ _ _ _       
+          Operation:  A to S                                             _ _ _ _ _ _       
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
           +----------------+-----------------------+---------+---------+----------+
@@ -1518,7 +1563,9 @@ namespace NES_Emu {
          */
         case 0x48:
           dbg[0x0] = "48 - PHA - Push accumulator on stack";
-          dbg[0xF] = "BROKEN";
+          dbg[0xF] = "---OK---";
+          PUSH(A);
+          PC += 2;
           break;
 
 
@@ -1537,7 +1584,9 @@ namespace NES_Emu {
          */
         case 0x08:
           dbg[0x0] = "08 - PHP - Push processor status on stack";
-          dbg[0xF] = "BROKEN";
+          dbg[0xF] = "---OK---";
+          PUSH(S);
+          PC += 2;
           break;
 
 
@@ -1548,7 +1597,7 @@ namespace NES_Emu {
 
         /*
           PLA - Pull accumulator from stack                             N Z C I D V
-          Operation:  A fromS                                           _ _ _ _ _ _ 
+          Operation:  A from S                                           _ _ _ _ _ _ 
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
           +----------------+-----------------------+---------+---------+----------+
@@ -1557,7 +1606,9 @@ namespace NES_Emu {
          */
         case 0x68:
           dbg[0x0] = "68 - PLA - Pull accumulator from stack ";
-          dbg[0xF] = "BROKEN";
+          dbg[0xF] = "---OK---";
+          A = PULL();
+          PC += 2;
           break;
 
 
@@ -1574,7 +1625,9 @@ namespace NES_Emu {
          */
         case 0x28:
           dbg[0x0] = "28 - PLP - Pull processor status from stack";
-          dbg[0xF] = "BROKEN";
+          dbg[0xF] = "---OK---";
+          S = PULL();
+          PC += 2;
           break;
 
 
@@ -1621,6 +1674,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1669,6 +1723,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1702,7 +1757,7 @@ namespace NES_Emu {
 
         /*
           RTS - Return from subroutine                                 N Z C I D V
-          Operation:  PC fromS, PC + 1 -> PC                           _ _ _ _ _ _     
+          Operation:  PC from S, PC + 1 -> PC                           _ _ _ _ _ _     
           +----------------+-----------------------+---------+---------+----------+
           | Addressing Mode| Assembly Language Form| OP CODE |No. Bytes|No. Cycles|
           +----------------+-----------------------+---------+---------+----------+
@@ -1773,6 +1828,7 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          PC += 2;
           break;
 
 
@@ -1790,8 +1846,9 @@ namespace NES_Emu {
          */
         case 0x38:
           dbg[0x0] = "38 - SEC - Set carry flag ";
-          dbg[0xF] = "ok";
+          dbg[0xF] = "---OK---";
           SET_FLAG('c', 1);
+          PC += 2;
           break;
 
 
@@ -1807,8 +1864,9 @@ namespace NES_Emu {
          */
         case 0xF8:
           dbg[0x0] = "F8 - SED - Set decimal mode";
-          dbg[0xF] = "ok";
+          dbg[0xF] = "---OK---";
           SET_FLAG('d', 1);
+          PC += 2;
           break;
 
 
@@ -1823,8 +1881,9 @@ namespace NES_Emu {
          */
         case 0x78:
           dbg[0x0] = "78 - SEI - Set interrupt disable status ";
-          dbg[0xF] = "ok";
+          dbg[0xF] = "---OK---";
           SET_FLAG('i', 1);
+          PC += 2;
           break;
 
 
@@ -1891,6 +1950,7 @@ namespace NES_Emu {
           }
 
           STORE(addr, (src));
+          PC += 2;
           break;
 
 
@@ -1920,10 +1980,14 @@ namespace NES_Emu {
               break;
             case 0x8E:
               dbg[0x0] = "8E - STX - Absolute";
+              dbg[0x1] = "addr=" + addr.ToString("X");
+              dbg[0x2] = "8E - STX - Absolute";
+              src = X;
               break;
           }
           dbg[0xF] = "BROKEN";
           STORE(addr, (src));
+          PC += 2;
           break;
 
 
@@ -1956,6 +2020,7 @@ namespace NES_Emu {
           }
           dbg[0xF] = "BROKEN";
           STORE(addr, (src));
+          PC += 2;
           break;
 
 
@@ -1979,6 +2044,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           X = (src);
+          PC += 2;
           break;
 
 
@@ -2003,6 +2069,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           Y = (src);
+          PC += 2;
           break;
 
 
@@ -2023,6 +2090,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           X = (src);
+          PC += 2;
           break;
 
 
@@ -2043,6 +2111,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           A = (src);
+          PC += 2;
           break;
 
 
@@ -2061,6 +2130,7 @@ namespace NES_Emu {
           dbg[0xF] = "ok";
           //src = X;
           SP = X;
+          PC += 2;
           break;
 
 
@@ -2081,6 +2151,7 @@ namespace NES_Emu {
           SET_SIGN(src);
           SET_ZERO(src);
           A = (src);
+          PC += 2;
           break;
 
 
@@ -2094,111 +2165,111 @@ namespace NES_Emu {
 
 
 
-        case 0x02: dbg[0] = "02 - Future Expansion"; break;
-        case 0x03: dbg[0] = "03 - Future Expansion"; break;
-        case 0x04: dbg[0] = "04 - Future Expansion"; break;
-        case 0x07: dbg[0] = "07 - Future Expansion"; break;
-        case 0x0B: dbg[0] = "0B - Future Expansion"; break;
-        case 0x0C: dbg[0] = "0C - Future Expansion"; break;
-        case 0x0F: dbg[0] = "0F - Future Expansion"; break;
-        case 0x12: dbg[0] = "12 - Future Expansion"; break;
-        case 0x13: dbg[0] = "13 - Future Expansion"; break;
-        case 0x14: dbg[0] = "14 - Future Expansion"; break;
-        case 0x17: dbg[0] = "17 - Future Expansion"; break;
-        case 0x1A: dbg[0] = "1A - Future Expansion"; break;
-        case 0x1B: dbg[0] = "1B - Future Expansion"; break;
-        case 0x1C: dbg[0] = "1C - Future Expansion"; break;
-        case 0x1F: dbg[0] = "1F - Future Expansion"; break;
-        case 0x22: dbg[0] = "22 - Future Expansion"; break;
-        case 0x23: dbg[0] = "23 - Future Expansion"; break;
-        case 0x27: dbg[0] = "27 - Future Expansion"; break;
-        case 0x2B: dbg[0] = "2B - Future Expansion"; break;
-        case 0x2F: dbg[0] = "2F - Future Expansion"; break;
-        case 0x32: dbg[0] = "32 - Future Expansion"; break;
-        case 0x33: dbg[0] = "33 - Future Expansion"; break;
-        case 0x34: dbg[0] = "34 - Future Expansion"; break;
-        case 0x37: dbg[0] = "37 - Future Expansion"; break;
-        case 0x3A: dbg[0] = "3A - Future Expansion"; break;
-        case 0x3B: dbg[0] = "3B - Future Expansion"; break;
-        case 0x3C: dbg[0] = "3C - Future Expansion"; break;
-        case 0x3F: dbg[0] = "3F - Future Expansion"; break;
-        case 0x42: dbg[0] = "42 - Future Expansion"; break;
-        case 0x43: dbg[0] = "43 - Future Expansion"; break;
-        case 0x44: dbg[0] = "44 - Future Expansion"; break;
-        case 0x47: dbg[0] = "47 - Future Expansion"; break;
-        case 0x4B: dbg[0] = "4B - Future Expansion"; break;
-        case 0x4F: dbg[0] = "4F - Future Expansion"; break;
-        case 0x52: dbg[0] = "52 - Future Expansion"; break;
-        case 0x53: dbg[0] = "53 - Future Expansion"; break;
-        case 0x54: dbg[0] = "54 - Future Expansion"; break;
-        case 0x57: dbg[0] = "57 - Future Expansion"; break;
-        case 0x5A: dbg[0] = "5A - Future Expansion"; break;
-        case 0x5B: dbg[0] = "5B - Future Expansion"; break;
-        case 0x5C: dbg[0] = "5C - Future Expansion"; break;
-        case 0x5F: dbg[0] = "5F - Future Expansion"; break;
-        case 0x62: dbg[0] = "62 - Future Expansion"; break;
-        case 0x63: dbg[0] = "63 - Future Expansion"; break;
-        case 0x64: dbg[0] = "64 - Future Expansion"; break;
-        case 0x67: dbg[0] = "67 - Future Expansion"; break;
-        case 0x6B: dbg[0] = "6B - Future Expansion"; break;
-        case 0x6F: dbg[0] = "6F - Future Expansion"; break;
-        case 0x72: dbg[0] = "72 - Future Expansion"; break;
-        case 0x73: dbg[0] = "73 - Future Expansion"; break;
-        case 0x74: dbg[0] = "74 - Future Expansion"; break;
-        case 0x77: dbg[0] = "77 - Future Expansion"; break;
-        case 0x7A: dbg[0] = "7A - Future Expansion"; break;
-        case 0x7B: dbg[0] = "7B - Future Expansion"; break;
-        case 0x7C: dbg[0] = "7C - Future Expansion"; break;
-        case 0x7F: dbg[0] = "7F - Future Expansion"; break;
-        case 0x80: dbg[0] = "80 - Future Expansion"; break;
-        case 0x82: dbg[0] = "82 - Future Expansion"; break;
-        case 0x83: dbg[0] = "83 - Future Expansion"; break;
-        case 0x87: dbg[0] = "87 - Future Expansion"; break;
-        case 0x89: dbg[0] = "89 - Future Expansion"; break;
-        case 0x8B: dbg[0] = "8B - Future Expansion"; break;
-        case 0x8F: dbg[0] = "8F - Future Expansion"; break;
-        case 0x92: dbg[0] = "92 - Future Expansion"; break;
-        case 0x93: dbg[0] = "93 - Future Expansion"; break;
-        case 0x97: dbg[0] = "97 - Future Expansion"; break;
-        case 0x9B: dbg[0] = "9B - Future Expansion"; break;
-        case 0x9C: dbg[0] = "9C - Future Expansion"; break;
-        case 0x9E: dbg[0] = "9E - Future Expansion"; break;
-        case 0x9F: dbg[0] = "9F - Future Expansion"; break;
-        case 0xA3: dbg[0] = "A3 - Future Expansion"; break;
-        case 0xA7: dbg[0] = "A7 - Future Expansion"; break;
-        case 0xAB: dbg[0] = "AB - Future Expansion"; break;
-        case 0xAF: dbg[0] = "AF - Future Expansion"; break;
-        case 0xB2: dbg[0] = "B2 - Future Expansion"; break;
-        case 0xB3: dbg[0] = "B3 - Future Expansion"; break;
-        case 0xB7: dbg[0] = "B7 - Future Expansion"; break;
-        case 0xBB: dbg[0] = "BB - Future Expansion"; break;
-        case 0xBF: dbg[0] = "BF - Future Expansion"; break;
-        case 0xC2: dbg[0] = "C2 - Future Expansion"; break;
-        case 0xC3: dbg[0] = "C3 - Future Expansion"; break;
-        case 0xC7: dbg[0] = "C7 - Future Expansion"; break;
-        case 0xCB: dbg[0] = "CB - Future Expansion"; break;
-        case 0xCF: dbg[0] = "CF - Future Expansion"; break;
-        case 0xD2: dbg[0] = "D2 - Future Expansion"; break;
-        case 0xD3: dbg[0] = "D3 - Future Expansion"; break;
-        case 0xD4: dbg[0] = "D4 - Future Expansion"; break;
-        case 0xD7: dbg[0] = "D7 - Future Expansion"; break;
-        case 0xDA: dbg[0] = "DA - Future Expansion"; break;
-        case 0xDB: dbg[0] = "DB - Future Expansion"; break;
-        case 0xDC: dbg[0] = "DC - Future Expansion"; break;
-        case 0xDF: dbg[0] = "DF - Future Expansion"; break;
-        case 0xE2: dbg[0] = "E2 - Future Expansion"; break;
-        case 0xE3: dbg[0] = "E3 - Future Expansion"; break;
-        case 0xE7: dbg[0] = "E7 - Future Expansion"; break;
-        case 0xEB: dbg[0] = "EB - Future Expansion"; break;
-        case 0xEF: dbg[0] = "EF - Future Expansion"; break;
-        case 0xF2: dbg[0] = "F2 - Future Expansion"; break;
-        case 0xF3: dbg[0] = "F3 - Future Expansion"; break;
-        case 0xF4: dbg[0] = "F4 - Future Expansion"; break;
-        case 0xF7: dbg[0] = "F7 - Future Expansion"; break;
-        case 0xFA: dbg[0] = "FA - Future Expansion"; break;
-        case 0xFB: dbg[0] = "FB - Future Expansion"; break;
-        case 0xFC: dbg[0] = "FC - Future Expansion"; break;
-        case 0xFF: dbg[0] = "FF - Future Expansion"; break;
+        case 0x02: PC += 2; dbg[0] = "02 - Future Expansion"; break;
+        case 0x03: PC += 2; dbg[0] = "03 - Future Expansion"; break;
+        case 0x04: PC += 2; dbg[0] = "04 - Future Expansion"; break;
+        case 0x07: PC += 2; dbg[0] = "07 - Future Expansion"; break;
+        case 0x0B: PC += 2; dbg[0] = "0B - Future Expansion"; break;
+        case 0x0C: PC += 2; dbg[0] = "0C - Future Expansion"; break;
+        case 0x0F: PC += 2; dbg[0] = "0F - Future Expansion"; break;
+        case 0x12: PC += 2; dbg[0] = "12 - Future Expansion"; break;
+        case 0x13: PC += 2; dbg[0] = "13 - Future Expansion"; break;
+        case 0x14: PC += 2; dbg[0] = "14 - Future Expansion"; break;
+        case 0x17: PC += 2; dbg[0] = "17 - Future Expansion"; break;
+        case 0x1A: PC += 2; dbg[0] = "1A - Future Expansion"; break;
+        case 0x1B: PC += 2; dbg[0] = "1B - Future Expansion"; break;
+        case 0x1C: PC += 2; dbg[0] = "1C - Future Expansion"; break;
+        case 0x1F: PC += 2; dbg[0] = "1F - Future Expansion"; break;
+        case 0x22: PC += 2; dbg[0] = "22 - Future Expansion"; break;
+        case 0x23: PC += 2; dbg[0] = "23 - Future Expansion"; break;
+        case 0x27: PC += 2; dbg[0] = "27 - Future Expansion"; break;
+        case 0x2B: PC += 2; dbg[0] = "2B - Future Expansion"; break;
+        case 0x2F: PC += 2; dbg[0] = "2F - Future Expansion"; break;
+        case 0x32: PC += 2; dbg[0] = "32 - Future Expansion"; break;
+        case 0x33: PC += 2; dbg[0] = "33 - Future Expansion"; break;
+        case 0x34: PC += 2; dbg[0] = "34 - Future Expansion"; break;
+        case 0x37: PC += 2; dbg[0] = "37 - Future Expansion"; break;
+        case 0x3A: PC += 2; dbg[0] = "3A - Future Expansion"; break;
+        case 0x3B: PC += 2; dbg[0] = "3B - Future Expansion"; break;
+        case 0x3C: PC += 2; dbg[0] = "3C - Future Expansion"; break;
+        case 0x3F: PC += 2; dbg[0] = "3F - Future Expansion"; break;
+        case 0x42: PC += 2; dbg[0] = "42 - Future Expansion"; break;
+        case 0x43: PC += 2; dbg[0] = "43 - Future Expansion"; break;
+        case 0x44: PC += 2; dbg[0] = "44 - Future Expansion"; break;
+        case 0x47: PC += 2; dbg[0] = "47 - Future Expansion"; break;
+        case 0x4B: PC += 2; dbg[0] = "4B - Future Expansion"; break;
+        case 0x4F: PC += 2; dbg[0] = "4F - Future Expansion"; break;
+        case 0x52: PC += 2; dbg[0] = "52 - Future Expansion"; break;
+        case 0x53: PC += 2; dbg[0] = "53 - Future Expansion"; break;
+        case 0x54: PC += 2; dbg[0] = "54 - Future Expansion"; break;
+        case 0x57: PC += 2; dbg[0] = "57 - Future Expansion"; break;
+        case 0x5A: PC += 2; dbg[0] = "5A - Future Expansion"; break;
+        case 0x5B: PC += 2; dbg[0] = "5B - Future Expansion"; break;
+        case 0x5C: PC += 2; dbg[0] = "5C - Future Expansion"; break;
+        case 0x5F: PC += 2; dbg[0] = "5F - Future Expansion"; break;
+        case 0x62: PC += 2; dbg[0] = "62 - Future Expansion"; break;
+        case 0x63: PC += 2; dbg[0] = "63 - Future Expansion"; break;
+        case 0x64: PC += 2; dbg[0] = "64 - Future Expansion"; break;
+        case 0x67: PC += 2; dbg[0] = "67 - Future Expansion"; break;
+        case 0x6B: PC += 2; dbg[0] = "6B - Future Expansion"; break;
+        case 0x6F: PC += 2; dbg[0] = "6F - Future Expansion"; break;
+        case 0x72: PC += 2; dbg[0] = "72 - Future Expansion"; break;
+        case 0x73: PC += 2; dbg[0] = "73 - Future Expansion"; break;
+        case 0x74: PC += 2; dbg[0] = "74 - Future Expansion"; break;
+        case 0x77: PC += 2; dbg[0] = "77 - Future Expansion"; break;
+        case 0x7A: PC += 2; dbg[0] = "7A - Future Expansion"; break;
+        case 0x7B: PC += 2; dbg[0] = "7B - Future Expansion"; break;
+        case 0x7C: PC += 2; dbg[0] = "7C - Future Expansion"; break;
+        case 0x7F: PC += 2; dbg[0] = "7F - Future Expansion"; break;
+        case 0x80: PC += 2; dbg[0] = "80 - Future Expansion"; break;
+        case 0x82: PC += 2; dbg[0] = "82 - Future Expansion"; break;
+        case 0x83: PC += 2; dbg[0] = "83 - Future Expansion"; break;
+        case 0x87: PC += 2; dbg[0] = "87 - Future Expansion"; break;
+        case 0x89: PC += 2; dbg[0] = "89 - Future Expansion"; break;
+        case 0x8B: PC += 2; dbg[0] = "8B - Future Expansion"; break;
+        case 0x8F: PC += 2; dbg[0] = "8F - Future Expansion"; break;
+        case 0x92: PC += 2; dbg[0] = "92 - Future Expansion"; break;
+        case 0x93: PC += 2; dbg[0] = "93 - Future Expansion"; break;
+        case 0x97: PC += 2; dbg[0] = "97 - Future Expansion"; break;
+        case 0x9B: PC += 2; dbg[0] = "9B - Future Expansion"; break;
+        case 0x9C: PC += 2; dbg[0] = "9C - Future Expansion"; break;
+        case 0x9E: PC += 2; dbg[0] = "9E - Future Expansion"; break;
+        case 0x9F: PC += 2; dbg[0] = "9F - Future Expansion"; break;
+        case 0xA3: PC += 2; dbg[0] = "A3 - Future Expansion"; break;
+        case 0xA7: PC += 2; dbg[0] = "A7 - Future Expansion"; break;
+        case 0xAB: PC += 2; dbg[0] = "AB - Future Expansion"; break;
+        case 0xAF: PC += 2; dbg[0] = "AF - Future Expansion"; break;
+        case 0xB2: PC += 2; dbg[0] = "B2 - Future Expansion"; break;
+        case 0xB3: PC += 2; dbg[0] = "B3 - Future Expansion"; break;
+        case 0xB7: PC += 2; dbg[0] = "B7 - Future Expansion"; break;
+        case 0xBB: PC += 2; dbg[0] = "BB - Future Expansion"; break;
+        case 0xBF: PC += 2; dbg[0] = "BF - Future Expansion"; break;
+        case 0xC2: PC += 2; dbg[0] = "C2 - Future Expansion"; break;
+        case 0xC3: PC += 2; dbg[0] = "C3 - Future Expansion"; break;
+        case 0xC7: PC += 2; dbg[0] = "C7 - Future Expansion"; break;
+        case 0xCB: PC += 2; dbg[0] = "CB - Future Expansion"; break;
+        case 0xCF: PC += 2; dbg[0] = "CF - Future Expansion"; break;
+        case 0xD2: PC += 2; dbg[0] = "D2 - Future Expansion"; break;
+        case 0xD3: PC += 2; dbg[0] = "D3 - Future Expansion"; break;
+        case 0xD4: PC += 2; dbg[0] = "D4 - Future Expansion"; break;
+        case 0xD7: PC += 2; dbg[0] = "D7 - Future Expansion"; break;
+        case 0xDA: PC += 2; dbg[0] = "DA - Future Expansion"; break;
+        case 0xDB: PC += 2; dbg[0] = "DB - Future Expansion"; break;
+        case 0xDC: PC += 2; dbg[0] = "DC - Future Expansion"; break;
+        case 0xDF: PC += 2; dbg[0] = "DF - Future Expansion"; break;
+        case 0xE2: PC += 2; dbg[0] = "E2 - Future Expansion"; break;
+        case 0xE3: PC += 2; dbg[0] = "E3 - Future Expansion"; break;
+        case 0xE7: PC += 2; dbg[0] = "E7 - Future Expansion"; break;
+        case 0xEB: PC += 2; dbg[0] = "EB - Future Expansion"; break;
+        case 0xEF: PC += 2; dbg[0] = "EF - Future Expansion"; break;
+        case 0xF2: PC += 2; dbg[0] = "F2 - Future Expansion"; break;
+        case 0xF3: PC += 2; dbg[0] = "F3 - Future Expansion"; break;
+        case 0xF4: PC += 2; dbg[0] = "F4 - Future Expansion"; break;
+        case 0xF7: PC += 2; dbg[0] = "F7 - Future Expansion"; break;
+        case 0xFA: PC += 2; dbg[0] = "FA - Future Expansion"; break;
+        case 0xFB: PC += 2; dbg[0] = "FB - Future Expansion"; break;
+        case 0xFC: PC += 2; dbg[0] = "FC - Future Expansion"; break;
+        case 0xFF: PC += 2; dbg[0] = "FF - Future Expansion"; break;
 
 
 
@@ -2229,8 +2300,9 @@ namespace NES_Emu {
       }
       Print_dbg();
       Clear_dbg();
-      Print_status();
-      PC++;
+      
+      //Print_status();
+      
     }
   }
 }
