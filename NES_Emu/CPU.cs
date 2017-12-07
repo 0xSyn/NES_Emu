@@ -10,6 +10,7 @@ namespace NES_Emu {
     static byte SP;//8-bit stack pointer(fixed at RAM address $100, so can address $100 -$1ff)
     static UInt16 PC;//16 - bit program counter
     static UInt16 opcode;
+    static UInt16 addr;
     static int cycle_num;
     static bool DEBUG = true;
     static string[] dbg = new string[0x10];
@@ -285,13 +286,81 @@ namespace NES_Emu {
     }
 
 
-
+    //___________________________________________________________________________________________________________________________________________
+    //                                                                                                                            ADRESSING MODES
+    //___________________________________________________________________________________________________________________________________________
     // ZERO PAGE == addr & 0x00FF
     // addr == $7F3E --- zero page addr == $003E
     // $7F is the high order byte, aka page
     // $3e is the low order
 
-    // ABS == addr & 0xFFFF
+    /// <summary>
+    /// a,x == addr + X index
+    /// a,y == addr + Y index
+    /// a   == addr
+    /// </summary>
+    /// <param name="addr"></param>
+    public static void Absolute(UInt16 addr) {
+      addr = PEEK((UInt16)(addr));
+    }
+
+
+
+    /// <summary>
+    /// Zero Page Indexed
+    /// d,x == addr + X index
+    /// d,y == addr + Y index
+    /// d   == addr
+    /// </summary>
+    /// <param name="addr">addr == d,x | d,y</param>
+    /// <returns></returns>
+    public static void ZeroPage(UInt16 addr) {
+      addr = PEEK((UInt16)(addr % 256));
+      //addr = (UInt16)(addr & 0x00FF);
+    }
+
+
+
+
+    public static void Indexed_Indirect_dx(UInt16 addr) {
+      addr = PEEK((UInt16)(PEEK((UInt16)((addr + X) % 256)) + PEEK((UInt16)(((addr + X + 1) % 256) * 256))));
+    }
+    public static void Indexed_Indirect_dy(UInt16 addr) {
+      //addr = PEEK(PEEK(addr) + (UInt16)(PEEK((addr + 1) % 256) * 256 + Y));
+    }
+    public static void Accumulator(UInt16 addr) {
+      addr = (UInt16)(addr & 0x00FF);
+    }
+    public static void Implied(UInt16 addr) {
+      addr = (UInt16)(addr & 0x00FF);
+    }
+
+    /// <summary>
+    /// Uses the 8-bit operand itself as the value for the operation, rather than fetching a value from a memory address. 
+    /// </summary>
+    /// <param name="addr"></param>
+    public static void Immediate() {
+      addr = (UInt16)((PC>>8) & 0x00FF);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //___________________________________________________________________________________________________________________________________________
@@ -304,10 +373,11 @@ namespace NES_Emu {
       Print_status();
       cycle_num++;
       byte src = 0;
+      opcode = (CPU_Memory.memory[PC++]);
       UInt16 addr = (UInt16)((CPU_Memory.memory[PC] << 8) | (CPU_Memory.memory[PC + 1]));
 
       Console.Write("\n\n$"+ PC.ToString("X") + " contains: "+addr.ToString("X")+"\n");
-      opcode = (CPU_Memory.memory[PC]);
+      
 
       //Print_status();
 
@@ -1980,7 +2050,7 @@ namespace NES_Emu {
               break;
             case 0x8E:
               dbg[0x0] = "8E - STX - Absolute";
-              dbg[0x1] = "addr=" + addr.ToString("X");
+              dbg[0x1] = "Store X("+X.ToString("X")+") Into mem addr:" + addr.ToString("X");
               dbg[0x2] = "8E - STX - Absolute";
               src = X;
               break;
