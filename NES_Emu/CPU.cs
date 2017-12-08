@@ -11,6 +11,7 @@ namespace NES_Emu {
     static UInt16 PC;//16 - bit program counter
     static UInt16 opcode;
     static UInt16 addr;
+    static byte src;
     static int cycle_num;
     static bool DEBUG = true;
     static string[] dbg = new string[0x10];
@@ -176,6 +177,13 @@ namespace NES_Emu {
       return CPU_Memory.memory[++SP+0x100];
     }
 
+
+    /// <summary>
+    /// Returns the value located at the input address
+    /// <br>16bit arg ... returns 8bits</br>
+    /// </summary>
+    /// <param name="arg">UInt16 Address</param>
+    /// <returns>Byte memory[address]</returns>
     public static byte PEEK(UInt16 arg) {
       return CPU_Memory.memory[arg];
     }
@@ -184,9 +192,9 @@ namespace NES_Emu {
 /// Store Byte in Memory
 /// </summary>
 /// <param name="dest"></param>
-/// <param name="src"></param>
-    public static void STORE(UInt16 dest, byte src) {
-      CPU_Memory.memory[dest] = src;
+/// <param name="srcbyte"></param>
+    public static void STORE(UInt16 dest, byte srcbyte) {
+      CPU_Memory.memory[dest] = srcbyte;
     }
     public static UInt16 LOAD_MEM(UInt16 atAddr) {
       return CPU_Memory.memory[atAddr];
@@ -299,9 +307,10 @@ namespace NES_Emu {
     /// a,y == addr + Y index
     /// a   == addr
     /// </summary>
-    /// <param name="addr"></param>
+    /// <param name="addr">addr == a+x | a+y | a</param>
     public static void Absolute(UInt16 addr) {
-      addr = PEEK((UInt16)(addr));
+      Console.Write("Addressing Mode Absolute() -- Assumed Working");
+      src = PEEK(addr);
     }
 
 
@@ -312,27 +321,35 @@ namespace NES_Emu {
     /// d,y == addr + Y index
     /// d   == addr
     /// </summary>
-    /// <param name="addr">addr == d,x | d,y</param>
+    /// <param name="addr">addr == d+x | d+y | d</param>
     /// <returns></returns>
     public static void ZeroPage(UInt16 addr) {
-      addr = PEEK((UInt16)(addr % 256));
+      Console.Write("Addressing Mode ZeroPage() -- Assumed Working");
+      src = PEEK((UInt16)(addr % 256));
       //addr = (UInt16)(addr & 0x00FF);
     }
 
 
 
 
-    public static void Indexed_Indirect_dx(UInt16 addr) {
-      addr = PEEK((UInt16)(PEEK((UInt16)((addr + X) % 256)) + PEEK((UInt16)(((addr + X + 1) % 256) * 256))));
+    public static void Indexed_Indirect_dx() {
+      Console.Write("Addressing Mode Indexed Indirect (d,x) -- Assumed Working");
+      src = PEEK((UInt16)(PEEK((UInt16)((addr + X) % 256)) + PEEK((UInt16)(((addr + X + 1) % 256) * 256))));
     }
-    public static void Indexed_Indirect_dy(UInt16 addr) {
-      //addr = PEEK(PEEK(addr) + (UInt16)(PEEK((addr + 1) % 256) * 256 + Y));
+    public static void Indexed_Indirect_dy() {
+      Console.Write("Addressing Mode Indexed Indirect (d),y -- BROKEN");
+      //src = (UInt16)(PEEK((UInt16)((addr + 1) % 256))* 256 + Y);
+      src = PEEK(PEEK(addr));
+      src = PEEK((UInt16)(PEEK(addr) + (UInt16)(PEEK((UInt16)((addr + 1) % 256)) * 256 + Y)));
+      //src = PEEK(PEEK(addr) + (UInt16)(PEEK((addr + 1) % 256) * 256 + Y));
     }
     public static void Accumulator(UInt16 addr) {
-      addr = (UInt16)(addr & 0x00FF);
+      Console.Write("Addressing Mode Accumulator -- BROKEN");
+      src = (byte)(addr & 0x00FF);
     }
-    public static void Implied(UInt16 addr) {
-      addr = (UInt16)(addr & 0x00FF);
+    public static void Implied() {
+      Console.Write("Addressing Mode Implied -- BROKEN");
+      src = (byte)(addr & 0x00FF);
     }
 
     /// <summary>
@@ -340,7 +357,8 @@ namespace NES_Emu {
     /// </summary>
     /// <param name="addr"></param>
     public static void Immediate() {
-      addr = (UInt16)((PC>>8) & 0x00FF);
+      Console.Write("Addressing Mode Immediate -- Assumed Working");
+      src = (byte)((PC>>8) & 0x00FF);
     }
 
 
@@ -372,7 +390,6 @@ namespace NES_Emu {
       Console.WriteLine("\n_______________\nCycle# " + cycle_num);
       Print_status();
       cycle_num++;
-      byte src = 0;
       opcode = (CPU_Memory.memory[PC++]);
       UInt16 addr = (UInt16)((CPU_Memory.memory[PC] << 8) | (CPU_Memory.memory[PC + 1]));
 
@@ -416,31 +433,32 @@ namespace NES_Emu {
             case 0x65:
               dbg[0x0] = "65 - ADC - Zero Page";
               dbg[0xF] = "BROKEN";
-              src = PEEK((UInt16)(addr % 256));
+              ZeroPage(addr);
               break;
             case 0x75:
               dbg[0x0] = "75 - ADC - Zero Page,X";
               dbg[0xF] = "BROKEN";
-              src = (byte)(X & 0xFF);
+              ZeroPage((byte)(addr+X));
               break;
             case 0x6D:
               dbg[0x0] = "6D - ADC - Absolute";
               dbg[0xF] = "BROKEN";
-              src = (byte)(addr);
+              Absolute(addr);
               break;
             case 0x7D:
               dbg[0x0] = "7D - ADC - Absolute,X";
               dbg[0xF] = "BROKEN";
-              src = (byte)(X);
+              Absolute((byte)(addr + X));
               break;
             case 0x79:
               dbg[0x0] = "79 - ADC - Absolute,Y";
               dbg[0xF] = "BROKEN";
-              src = (byte)(Y);
+              Absolute((byte)(addr + Y));
               break;
             case 0x61:
               dbg[0x0] = "61 - ADC - (Indirect,X)";
               dbg[0xF] = "BROKEN";
+              Indexed_Indirect_dx();
               break;
             case 0x71:
               dbg[0x0] = "71 - ADC - (Indirect),Y";
@@ -952,6 +970,7 @@ namespace NES_Emu {
               break;
             case 0xC5:
               dbg[0x0] = "C5 - CMP - Zero Page";
+              ZeroPage(addr);
               break;
             case 0xD5:
               dbg[0x0] = "D5 - CMP - Zero Page,X";
@@ -973,6 +992,10 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          CPU.src = (byte)(A - CPU.src);
+          SET_CARRY(CPU.src < 0x100);
+          SET_SIGN(CPU.src);
+          SET_ZERO(CPU.src &= 0xff);
           PC += 2;
           break;
 
