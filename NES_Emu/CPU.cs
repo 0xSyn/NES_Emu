@@ -72,7 +72,8 @@ namespace NES_Emu {
       CPU_Memory.Init_mem();
       //CPU_Memory.Load_NES(@"D:\Projects\NES_Emu\ff.nes");
       CPU_Memory.Load_NES(@"D:\Projects\NES_Emu\dk.nes");
-      PC = (UInt16)((CPU_Memory.memory[0xFFFC]<<8)| CPU_Memory.memory[0xFFFD]);//Reset Vector
+      //PC = (UInt16)((CPU_Memory.memory[0xFFFC]<<8)| CPU_Memory.memory[0xFFFD]);//Reset Vector
+      PC = CPU_Memory.RESET_VECTOR;
       //Print_status();
       runProgram();
     }
@@ -337,9 +338,7 @@ namespace NES_Emu {
       src = PEEK((UInt16)(PEEK((UInt16)((addr + X) % 256)) + PEEK((UInt16)(((addr + X + 1) % 256) * 256))));
     }
     public static void Indexed_Indirect_dy() {
-      Console.Write("Addressing Mode Indexed Indirect (d),y -- BROKEN");
-      //src = (UInt16)(PEEK((UInt16)((addr + 1) % 256))* 256 + Y);
-      src = PEEK(PEEK(addr));
+      Console.Write("Addressing Mode Indexed Indirect (d),y -- Assumed Working");
       src = PEEK((UInt16)(PEEK(addr) + (UInt16)(PEEK((UInt16)((addr + 1) % 256)) * 256 + Y)));
       //src = PEEK(PEEK(addr) + (UInt16)(PEEK((addr + 1) % 256) * 256 + Y));
     }
@@ -390,9 +389,11 @@ namespace NES_Emu {
       Console.WriteLine("\n_______________\nCycle# " + cycle_num);
       Print_status();
       cycle_num++;
-      opcode = (CPU_Memory.memory[PC++]);
-      UInt16 addr = (UInt16)((CPU_Memory.memory[PC] << 8) | (CPU_Memory.memory[PC + 1]));
 
+      //addr = (UInt16)((CPU_Memory.memory[PC+1] << 8) | (CPU_Memory.memory[PC]));
+
+      addr = CPU_Memory.memory[PC];
+      opcode = CPU_Memory.memory[PC];
       Console.Write("\n\n$"+ PC.ToString("X") + " contains: "+addr.ToString("X")+"\n");
       
 
@@ -991,11 +992,11 @@ namespace NES_Emu {
               dbg[0x0] = "D1 - CMP - (Indirect),Y";
               break;
           }
-          dbg[0xF] = "BROKEN";
-          CPU.src = (byte)(A - CPU.src);
-          SET_CARRY(CPU.src < 0x100);
-          SET_SIGN(CPU.src);
-          SET_ZERO(CPU.src &= 0xff);
+          dbg[0xF] = "---OK---";
+          src = (byte)(A - src);
+          SET_CARRY(src < 0x100);
+          SET_SIGN(src);
+          SET_ZERO(src &= 0xff);
           PC += 2;
           break;
 
@@ -1344,6 +1345,11 @@ namespace NES_Emu {
         case 0x20:
           dbg[0x0] = "20 - JSR - Jump to new location saving return address";
           dbg[0xF] = "BROKEN";
+          //PC--;
+          Absolute(addr);
+          PUSH((byte)((PC >> 8) & 0xFF)); /* Push return address onto the stack. */
+          PUSH((byte)(PC & 0xFF));
+          PC = (src);
           break;
 
 
@@ -1384,6 +1390,7 @@ namespace NES_Emu {
           switch (opcode & 0x00FF) {
             case 0xA9:
               dbg[0x0] = "A9 - LDA - Immediate";
+              Immediate();
               break;
             case 0xA5:
               dbg[0x0] = "A5 - LDA - Zero Page";
@@ -1408,6 +1415,9 @@ namespace NES_Emu {
               break;
           }
           dbg[0xF] = "BROKEN";
+          SET_SIGN(src);
+          SET_ZERO(src);
+          A = (src);
           PC += 2;
           break;
 
@@ -2019,6 +2029,7 @@ namespace NES_Emu {
             case 0x8D:
               dbg[0x0] = "8D - STA - Absolute";
               dbg[0xF] = "BROKEN";
+              Absolute(addr);
               break;
             case 0x9D:
               dbg[0x0] = "9D - STA - Absolute,X";
@@ -2073,13 +2084,16 @@ namespace NES_Emu {
               break;
             case 0x8E:
               dbg[0x0] = "8E - STX - Absolute";
-              dbg[0x1] = "Store X("+X.ToString("X")+") Into mem addr:" + addr.ToString("X");
+              Absolute(addr);
+              dbg[0x1] = "Store X("+X.ToString("X")+") Into mem addr:" + src.ToString("X");
               dbg[0x2] = "8E - STX - Absolute";
+              
               src = X;
               break;
           }
           dbg[0xF] = "BROKEN";
-          STORE(addr, (src));
+          //STORE(addr, (src));
+          STORE(src, (X));
           PC += 2;
           break;
 

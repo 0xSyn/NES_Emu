@@ -11,6 +11,7 @@ namespace NES_Emu {
     public static byte[] memory = new byte[0x10000];//65,536 addresses
     public static UInt16 rom_lowBank = 0x8000;
     public static UInt16 rom_highBank = 0xC000;
+    public static UInt16 RESET_VECTOR;//=0xFFFC;
     /*     
      *                            -------- CPU Memory Map --------
      *                            ________________________________
@@ -37,9 +38,9 @@ namespace NES_Emu {
     $0-$07FF mirror                  $1000-$17FF        |        $800-$1FFF
     -------------------------------------------- $1000 -| 
     $0-$07FF mirror                  $800-$FFF          |
-    -------------------------------------------- $800  -|----------------------------
+    -------------------------------------------- $800---|----------------------------
                                                         |    2kB Internal RAM,
-    -----------------------------------------$1FF----   |    mirrored 4 times
+    ------------------------- ---------$1FF             |    mirrored 4 times
     Stack (Starts at $1FF)                              |    actual 0x800 bytes ea
     -----------------------------------$FF              |
     Zero Page                                           |    AND address w/ 07FF to get the effective address
@@ -88,6 +89,7 @@ namespace NES_Emu {
                 //}
                 Console.Write("\nFile: "+file);
                 detectMapping();
+                RESET_VECTOR = (UInt16)((UInt16)(memory[0xFFFD] << 8) | memory[0xFFFC]);
                 Print_dbgcmds();
                 
         
